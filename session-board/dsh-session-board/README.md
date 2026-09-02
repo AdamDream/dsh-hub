@@ -34,3 +34,4 @@
 - **3B/token 为工程近似上界**：字节硬截断以 UTF-8 字节为准（M1），并不对任意 tokenizer 提供硬保证；对 DeepSeek/GPT 系（含 CJK）保守。
 - **快照累积靠 compaction 收敛**：`pre-step` 通道下 500 token 为单快照硬上限而非累计预算，板高频变化时快照线性累积，依赖会话 compaction 收敛（必要时可评估提高 compaction 触发或引入 snapshot replace）。
 - 状态板为非权威账本：落盘不做 fsync，JSON 损坏按空骨架容忍，锁孤儿需按 `dsh-atomic-write` 语义由操作者清理。
+- **repo 身份变更/组迁移**：分组键按 cwd → `git rev-parse --git-common-dir` → realpath 归一分组，带 TTL（默认 60s，模块常量，不入配置）再解析。当同一 cwd 下 `.git` 出现/消失或 worktree 迁移时，会话会在下一个 TTL 窗口内重新解析到新分组键；活跃 peer 在 TTL 窗口后收敛到新键并互相可见，切换窗口内可能出现短暂「新键文件为空」，属预期过渡态。旧键落盘文件不再被写入（retention 清理仅在 `upsertPeer` 锁内、即同键下一次发布时触发），故其孤儿条目不会被自动清理，而是永久留存；但组迁移后无会话再读旧键，属无害死文件（若干 KB），无需数据迁移，如需回收可手动删除 `~/.dsh/session-board/peers/<旧键哈希>.json`。

@@ -66,7 +66,7 @@
 
 ```js
 export function resolveGroupKey(cwd)          // 纯函数，无缓存，永不 throw
-export function createGrouping()              // 工厂，返回 { groupKeyFor, groupKeySync }
+export function createGrouping(deps?)         // 工厂，返回 { groupKeyFor, groupKeySync }（TTL 再解析）
 ```
 
 **函数完整签名（JSDoc）**：
@@ -81,15 +81,21 @@ export function createGrouping()              // 工厂，返回 { groupKeyFor, 
 export async function resolveGroupKey(cwd) {}
 
 /**
- * 创建每-apply 一份的分组键缓存工厂。
+ * 创建每-apply 一份的分组键缓存工厂（TTL 再解析，见下）。
+ * @param {{
+ *   ttlMs?: number,       // 分组键再解析 TTL，默认 GROUP_KEY_TTL_MS（60_000）；测试可缩短
+ *   onChange?: (sessionId: string, oldKey: GroupKey, newKey: GroupKey) => void,  // 键变化回调（warn 日志）
+ *   resolveKey?: (cwd: string | undefined) => Promise<GroupKey>   // 解析函数注入点，默认 resolveGroupKey（测试用）
+ * }} [deps]
  * @returns {{ groupKeyFor: Function, groupKeySync: Function }}
  */
-export function createGrouping() {}
+export function createGrouping(deps) {}
 ```
 
 ```js
 /**
- * 取某会话的分组键（异步，按 session.id 缓存一次）。
+ * 取某会话的分组键（异步；TTL 内复用缓存，TTL 过期后再解析）。
+ * 再解析成功且键变化时经 deps.onChange 通知；失败保留旧值。
  * @param {{ id: string, header: { cwd: string | undefined } }} session
  * @returns {Promise<GroupKey>}
  */
@@ -104,10 +110,19 @@ groupKeySync(sessionId)
 ```
 
 **实现约束**（契约内必须满足）：
-- 工厂内部维护两个 Map：`pending: Map<sessionId, Promise<GroupKey>>`（去重并发解析）与 `resolved: Map<sessionId, GroupKey>`（`resolveGroupKey` 完成后回填）。
-- `groupKeyFor`：`session.header.cwd` 为空 → 直接返回 `"no-cwd"` 并写入 `resolved`；否则走 `pending` 去重，成功后写 `resolved`。
-- `groupKeySync`：只读 `resolved`，未命中返回 `undefined`（**绝不**同步触发异步解析）。
+- 工厂内部维护三张 Map：`pending: Map<sessionId, Promise<GroupKey>>`（在飞解析去重，settle 后清除）、
+  `resolved: Map<sessionId, GroupKey>`（`resolveGroupKey` 成功后回填，供同步读）、
+  `resolvedAt: Map<sessionId, number>`（最近成功解析的 epoch ms，TTL 判断基准）。
+- `groupKeyFor`：`session.header.cwd` 为空 → 直接返回 `"no-cwd"` 并写入 `resolved`/`resolvedAt`；
+  否则：有在飞 `pending` → 返回它；`resolved` 存在且 `Date.now() - resolvedAt < ttlMs` → 返回旧值
+  （不发 git）；过期或首次 → 重新 `resolveKey(cwd)`，**成功后**才原子写 `resolved`+`resolvedAt`，
+  键变化时调 `onChange(sessionId, oldKey, newKey)`；**失败保留旧值**（`resolved`/`resolvedAt` 不动，
+  返回 `prev ?? "no-cwd"`，下轮重试）。
+- `groupKeySync`：只读 `resolved`，未命中返回 `undefined`（**绝不**同步触发异步解析）；因 `resolved`
+  仅在成功时写，再解析期间返回旧值，**绝不因再解析出现 `undefined` 抖动**。
 - `resolveGroupKey` 用 `execFile("git", ["-C", cwd, "rev-parse", "--git-common-dir"], { encoding:"utf8", timeout:2000, windowsHide:true })`；相对结果用 `resolve(cwd, rel)` 拼成绝对路径后 `realpath`。**必须用 `--git-common-dir`，禁用 `--git-dir`**（后者对链接 worktree 返回私有路径，会切组）。
+- `GROUP_KEY_TTL_MS = 60_000` 为模块常量，不入 Config（同 `storage.js` 的 `RETENTION_MS` 先例，§9-A2）；
+  仅测试经 `deps.ttlMs` 覆盖。
 
 **允许 import 的包清单**：
 - `node:child_process`（`execFile`）
@@ -466,7 +481,9 @@ export function createQueryPeersTool(deps)     // 工厂，返回 registry-ready
  *   current: () => Config,
  *   groupKeyFor: (session: object) => Promise<GroupKey>,
  *   peerFile: (groupKey: GroupKey) => string,
- *   readPeerFile: (filePath: string) => Promise<GroupFile>
+ *   readPeerFile: (filePath: string) => Promise<GroupFile>,
+ *   mirrorLoad: (groupKey: GroupKey, peers: Record<string, PeerStatus>) => void,
+ *   mirrorRead: (groupKey: GroupKey) => Record<string, PeerStatus>
  * }} deps
  * @returns {object} defineTool(...) 的返回值（registry-ready）
  */
@@ -498,8 +515,11 @@ export function createQueryPeersTool(deps) {}
 - `execute(args, exec)`：
   1. `const agent = exec.agent; if (!agent) throw new Error("query_peers requires a calling agent (exec.agent was undefined)");`（§6 工具失败语义）
   2. `const groupKey = await groupKeyFor(agent.session);`（分组键**只从调用方 cwd 推导**，不接受外部路径，防越组读）
-  3. `const board = await readPeerFile(peerFile(groupKey));`
-  4. `const peers = Object.values(board.peers).filter(p => p.sessionId !== agent.session.id).filter(p => matches(p, args.query)).sort((a,b) => b.lastActivityAt - a.lastActivityAt).slice(0, args.limit ?? current().queryLimit);`
+  3. `const file = await readPeerFile(peerFile(groupKey)); mirrorLoad(groupKey, file.peers);`
+     （读前先做一次与 refreshGroup 等价的磁盘加载，把组文件整组替换进镜像，统一数据源）
+     `const peersObj = mirrorRead(groupKey);`（与注入侧同源读镜像；`readPeerFile` 损坏/缺失已兜底空骨架，
+     故 `mirrorRead` 得到 `{}`，读失败按空组处理，不抛）
+  4. `const peers = Object.values(peersObj).filter(p => p !== null && typeof p === "object").filter(p => p.sessionId !== agent.session.id).filter(p => matches(p, args.query)).sort((a,b) => b.lastActivityAt - a.lastActivityAt).slice(0, 防御式 limit（负数/非有限回退 current().queryLimit）);`
   5. `return { groupKey, peers: peers.map(enrich) };`
 - `matches(p, query)`：`query` 为空 → true；否则大小写不敏感子串匹配 `p.sessionId / p.label / p.cwd / p.goal?.objective / p.todos?.items[]`。
 - `enrich(p)` → `{ sessionId, label, active: Date.now()-p.lastActivityAt <= activeWindowMs, lastActivityAt, goal: p.goal, todos: p.todos, recentFiles: p.recentFiles, recentAssistantTail: p.recentAssistantTail }`（`activeWindowMs = current().activeWindowMinutes * 60 * 1000`）。**不返回** `cwd/groupKey/isSubagent/publishedAt/turn/lastTurnReason`。
@@ -601,7 +621,11 @@ export function apply(ctx, config) {
 
   /* 1. 工厂装配 */
   const lastTurn = new Map();                                        // sessionId -> turn（发布幂等，仅 index.js 持有）
-  const { groupKeyFor, groupKeySync } = createGrouping();            // §1.1
+  const { groupKeyFor, groupKeySync } = createGrouping({             // §1.1（TTL 再解析）
+    onChange: (sessionId, oldKey, newKey) => {                       // 键变诊断（兼未解渲染异常定位）
+      (ctx.logger?.warn ?? console.warn)(`session-board group key changed for session ${sessionId}: ${oldKey} -> ${newKey}`);
+    }
+  });
   const { readPeerFile, upsertPeer, mirrorSet, mirrorLoad, mirrorRead } = createStorage();  // §1.2
   const projections = ctx.get("sessionProjections");                 // F18；可能 undefined（M2）
   const { isSubagent, trackRecent, captureStatus } = createCapture({ // §1.4
@@ -612,8 +636,8 @@ export function apply(ctx, config) {
   const { register } = createInjector({                              // §1.5
     ctx, current, groupKeySync, mirrorRead
   });
-  const queryPeersTool = createQueryPeersTool({                      // §1.6
-    current, groupKeyFor, peerFile, readPeerFile
+  const queryPeersTool = createQueryPeersTool({                      // §1.6（读前 mirrorLoad，与注入侧同源）
+    current, groupKeyFor, peerFile, readPeerFile, mirrorLoad, mirrorRead
   });
 
   /* 2. 镜像初始化：ctx.agents.roots()（仅顶层，非 list()，F21/L4） */

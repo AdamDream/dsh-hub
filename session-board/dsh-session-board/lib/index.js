@@ -83,7 +83,14 @@ export function apply(ctx, config) {
 
 	/* 1. 工厂装配（每-apply 一份；跨模块只经契约接口，§8-3） */
 	const lastTurn = new Map(); // sessionId -> turn（发布幂等守卫，仅 index.js 持有，§1.4 职责边界）
-	const { groupKeyFor, groupKeySync } = createGrouping(); // §1.1：异步解析缓存 + 同步读
+	const { groupKeyFor, groupKeySync } = createGrouping({ // §1.1（TTL 再解析，FIX-PROPOSAL.md B1）
+		// 键变诊断（兼未解渲染异常定位线索）：记录「谁、旧键、新键、何时」
+		onChange: (sessionId, oldKey, newKey) => {
+			(ctx.logger?.warn ?? console.warn)(
+				`session-board group key changed for session ${sessionId}: ${oldKey} -> ${newKey}`
+			);
+		}
+	}); // §1.1：异步解析缓存（TTL 过期再解析）+ 同步读
 	const { readPeerFile, upsertPeer, mirrorSet, mirrorLoad, mirrorRead } = createStorage(); // §1.2
 	// M2：projections 经 ctx.get（F18）取值一次，可能 undefined（headless）；不进 inject 组合（§3）
 	const projections = ctx.get("sessionProjections");
@@ -93,7 +100,7 @@ export function apply(ctx, config) {
 		queryDetailBytes: current().queryDetailBytes
 	}); // §1.4（isSubagent 为独立具名导出，见文件头适配注记 1）
 	const { register } = createInjector({ ctx, current, groupKeySync, mirrorRead }); // §1.5
-	const queryPeersTool = createQueryPeersTool({ current, groupKeyFor, peerFile, readPeerFile }); // §1.6
+	const queryPeersTool = createQueryPeersTool({ current, groupKeyFor, peerFile, readPeerFile, mirrorLoad, mirrorRead }); // §1.6（B2：读前经 mirrorLoad 刷镜像，与注入侧同源）
 
 	/* 2. 镜像初始化：ctx.agents.roots()（仅顶层，非 list()，F21） */
 	for (const agent of ctx.agents.roots()) void refreshGroup(agent.session);
@@ -149,7 +156,7 @@ export function apply(ctx, config) {
 		} catch { /* 读失败：保留旧镜像，下个周期重试（§3 骨架同义） */ }
 	}
 
-	/** 对全部存活顶层 agent 重刷镜像（组键缓存使重复调用去重，§1.1）。 */
+	/** 对全部存活顶层 agent 重刷镜像（B1 再解析集成点：TTL 内重复调用复用缓存，过期自动触发再解析）。 */
 	function refreshLiveGroups() {
 		for (const agent of ctx.agents.roots()) void refreshGroup(agent.session);
 	}

@@ -138,16 +138,21 @@ const outputSchema = {
 /**
  * 创建 registry-ready 的 `query_peers` 工具定义（CONTRACT §1.6，PROPOSAL §8）。
  * 分组键**只从调用方 agent.session 的 cwd 推导**（deps.groupKeyFor），绝不接受外部传入路径，防越组读。
+ * 读路径与注入侧同源（FIX-PROPOSAL.md B2）：execute 先做一次与 refreshGroup 等价的磁盘加载
+ * （readPeerFile → mirrorLoad 整组替换镜像），再经 mirrorRead 读镜像——与注入 renderBoardFor
+ * 共用同一数据源，板上与工具结果不再互相矛盾。
  * @param {{
  *   current: () => BoardConfig,
  *   groupKeyFor: (session: object) => Promise<GroupKey>,
  *   peerFile: (groupKey: GroupKey) => string,
- *   readPeerFile: (filePath: string) => Promise<GroupFile>
+ *   readPeerFile: (filePath: string) => Promise<GroupFile>,
+ *   mirrorLoad: (groupKey: GroupKey, peers: Record<string, PeerStatus>) => void,
+ *   mirrorRead: (groupKey: GroupKey) => Record<string, PeerStatus>
  * }} deps - 由 lib/index.js 装配注入（CONTRACT §3 步骤 1）
  * @returns {object} defineTool(...) 的返回值（registry-ready；由 index.js 调 ctx.tools.register 注册）
  */
 export function createQueryPeersTool(deps) {
-	const { current, groupKeyFor, peerFile, readPeerFile } = deps;
+	const { current, groupKeyFor, peerFile, readPeerFile, mirrorLoad, mirrorRead } = deps;
 	return defineTool({
 		name: "query_peers",
 		description:
@@ -180,14 +185,19 @@ export function createQueryPeersTool(deps) {
 			if (!agent) throw new Error("query_peers requires a calling agent (exec.agent was undefined)"); // §6.3 契约原句
 			// 分组键只从调用方 cwd 推导（deps.groupKeyFor → grouping.js），不接受外部路径（PROPOSAL §8 防越组读）
 			const groupKey = await groupKeyFor(agent.session);
-			// 直读组文件（最新）；readPeerFile 对 JSON 损坏/不存在兜底空骨架不抛（CONTRACT §1.2），故不把文件损坏抛给模型（§6.3）
-			const board = await readPeerFile(peerFile(groupKey));
+			// 读前先做一次与 refreshGroup 等价的磁盘加载（FIX-PROPOSAL.md B2 统一数据源）：
+			// readPeerFile（磁盘最新；JSON 损坏/不存在兜底空骨架不抛，CONTRACT §1.2）→
+			// mirrorLoad（整组替换镜像，等价 refreshGroup 的每周期语义）→
+			// mirrorRead（与注入侧 renderBoardFor 同源读镜像）
+			const file = await readPeerFile(peerFile(groupKey));
+			mirrorLoad(groupKey, file.peers);
+			const peersObj = mirrorRead(groupKey);
 			const now = Date.now();
 			const activeWindowMs = current().activeWindowMinutes * 60 * 1000; // §5 运行时派生，每次读 current()
 			const rawLimit = args?.limit;
 			// args.limit ?? current().queryLimit（契约步骤 4）；对非法数值（负数/非有限）回退默认，避免 slice 负参从尾部反剥
 			const limit = typeof rawLimit === "number" && Number.isFinite(rawLimit) && rawLimit >= 0 ? Math.floor(rawLimit) : current().queryLimit;
-			const peers = Object.values(board?.peers ?? {})
+			const peers = Object.values(peersObj)
 				.filter((p) => p !== null && typeof p === "object") // 防御旧版/脏条目（§6.3 精神：脏数据降级为跳过，不抛给模型）
 				.filter((p) => p.sessionId !== agent.session.id) // 排除自己（裁决 A5：统一 agent.session.id，与 PeerStatus.sessionId 同源）
 				.filter((p) => matches(p, args?.query))
