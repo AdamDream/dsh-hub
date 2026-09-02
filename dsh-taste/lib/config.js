@@ -75,9 +75,13 @@ function mergeConfig(value) {
 			includeSubagents: booleanOr(injection.includeSubagents, DEFAULT_CONFIG.injection.includeSubagents),
 		},
 		observer: {
-			// M0 ships inherit-only routing (§10.5): any configured modelMode is
-			// normalized away until custom routing lands in P1.
-			modelMode: DEFAULT_CONFIG.observer.modelMode,
+			// Model routing (§4/§10.5): "inherit" follows the triggering agent's
+			// provider/model, "custom" routes the learner to observer.provider/model;
+			// any other value normalizes to "inherit" so a hand-edited config can
+			// never poison the learner's routing.
+			modelMode: observer.modelMode === "inherit" || observer.modelMode === "custom"
+				? observer.modelMode
+				: DEFAULT_CONFIG.observer.modelMode,
 			provider: stringOr(observer.provider, DEFAULT_CONFIG.observer.provider),
 			model: stringOr(observer.model, DEFAULT_CONFIG.observer.model),
 			maxInputChars: boundedNumber(observer.maxInputChars, BOUNDS.observerMaxInputChars, DEFAULT_CONFIG.observer.maxInputChars),

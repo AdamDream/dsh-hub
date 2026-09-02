@@ -82,6 +82,7 @@ function setup(t, { config } = {}) {
 		contexts: [],
 		handlers: new Map(),
 		commands: [],
+		handles: [],
 		effects: [],
 		warnings: [],
 		createCalls: [],
@@ -101,6 +102,18 @@ function setup(t, { config } = {}) {
 			state.handlers.set(event, list);
 		},
 		commands: { register: (spec) => state.commands.push(spec) },
+		// Web GUI bridge (design §5.1 note): apply() registers the read-only
+		// /taste rpc channel on the connection service.
+		connection: {
+			rpc: {
+				handle: (channel, handler, options) => {
+					state.handles.push({ channel, handler, options });
+					return () => {
+						state.disposed += 1;
+					};
+				},
+			},
+		},
 		agents: {
 			withInitiator: (parent, operation) => operation(parent),
 			create: async (options) => {
@@ -153,7 +166,7 @@ describe("plugin surface", () => {
 	it("declares the exact inject set, the context registration, and the command wiring", (t) => {
 		const h = setup(t);
 		assert.equal(name, "taste");
-		assert.deepEqual(inject, ["agents", "commands", "systemPrompt"]);
+		assert.deepEqual(inject, ["agents", "commands", "systemPrompt", "connection"]);
 		assert.deepEqual(h.state.contexts, [{ name: "taste", order: 40, text: h.injectFn }]);
 		assert.deepEqual([...h.state.handlers.keys()], ["agent/turn-stopping"]);
 		assert.equal(h.state.commands.length, 1);

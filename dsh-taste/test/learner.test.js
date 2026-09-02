@@ -113,14 +113,59 @@ describe("runLearner", () => {
 		assert.deepEqual(result.output, [{ type: "text", text: "no changes" }]);
 	});
 
-	it("stays on inherit routing even when a custom modelMode is configured (M0, §10.5)", async () => {
+	it("routes custom modelMode to the configured observer provider/model", async () => {
 		const agents = createFakeAgents();
 		await runLearner({
 			...DEFAULT_ARGS(),
 			agents,
-			config: { observer: { modelMode: "custom", provider: "custom-provider", model: "custom-model" } },
+			config: { observer: { modelMode: "custom", provider: "adam", model: "deepseek-v4-pro" } },
 		});
+		assert.equal(agents.calls.create.length, 1);
+		assert.deepEqual(agents.calls.create[0].agentOptions, { provider: "adam", model: "deepseek-v4-pro" });
+	});
+
+	it("falls back to inherit routing with a warning when custom routing is incomplete", async () => {
+		const agents = createFakeAgents();
+		const warnings = [];
+		const originalWarn = console.warn;
+		console.warn = (message) => warnings.push(String(message));
+		try {
+			// missing model
+			await runLearner({
+				...DEFAULT_ARGS(),
+				agents,
+				config: { observer: { modelMode: "custom", provider: "adam", model: "" } },
+			});
+			// missing provider (non-string counts as missing)
+			await runLearner({ ...DEFAULT_ARGS(), agents, config: { observer: { modelMode: "custom", provider: 42, model: "m" } } });
+		} finally {
+			console.warn = originalWarn;
+		}
+		assert.equal(agents.calls.create.length, 2);
+		for (const options of agents.calls.create) {
+			assert.deepEqual(options.agentOptions, { provider: "parent-provider", model: "parent-model" });
+		}
+		assert.equal(warnings.length, 2, warnings.join("\n"));
+		assert.match(warnings[0], /falling back to inherit/);
+		assert.match(warnings[1], /falling back to inherit/);
+	});
+
+	it("never warns and keeps the parent route for inherit mode", async () => {
+		const agents = createFakeAgents();
+		const warnings = [];
+		const originalWarn = console.warn;
+		console.warn = (message) => warnings.push(String(message));
+		try {
+			await runLearner({
+				...DEFAULT_ARGS(),
+				agents,
+				config: { observer: { modelMode: "inherit", provider: "unused-provider", model: "unused-model" } },
+			});
+		} finally {
+			console.warn = originalWarn;
+		}
 		assert.deepEqual(agents.calls.create[0].agentOptions, { provider: "parent-provider", model: "parent-model" });
+		assert.equal(warnings.length, 0);
 	});
 
 	it("passes the caller's session id and signal through to create", async () => {
@@ -179,5 +224,56 @@ describe("runLearner", () => {
 		const agents = createFakeAgents();
 		await runLearner({ ...DEFAULT_ARGS(), agents, config: { observer: { maxInputChars: undefined } } });
 		assert.deepEqual(agents.calls.followups[0].content, [{ type: "text", text: "NEW messages to analyze" }]);
+	});
+
+	it("propagates the parent's cwd and agentPreset into the learner session meta (persona {{cwd}} incident)", async () => {
+		// 2026-09-02 incident: without meta.cwd the learner's system-prompt
+		// assembly died on {{cwd}} in the deployment persona section before
+		// any model call. Mirrors dsh-subagent childSessionMeta.
+		const agents = createFakeAgents();
+		const parent = {
+			session: { id: "parent-session", header: { id: "parent-session", cwd: "/home/user/project", agentPreset: "standard-glm" } },
+			options: { provider: "p", model: "m" },
+		};
+		await runLearner({ ...DEFAULT_ARGS(), parentAgent: parent, agents, config: {} });
+		const meta = agents.calls.create[0].meta;
+		assert.equal(meta.cwd, "/home/user/project");
+		assert.equal(meta.agentPreset, "standard-glm");
+		assert.equal(meta.parentSession, "parent-session");
+		assert.equal(meta.origin, "subagent");
+	});
+
+	it("omits cwd/agentPreset from meta when the parent header lacks them", async () => {
+		const agents = createFakeAgents();
+		const parent = { session: { id: "parent-session", header: { id: "parent-session" } }, options: { provider: "p", model: "m" } };
+		await runLearner({ ...DEFAULT_ARGS(), parentAgent: parent, agents, config: {} });
+		const meta = agents.calls.create[0].meta;
+		assert.equal("cwd" in meta, false);
+		assert.equal("agentPreset" in meta, false);
+	});
+
+	it("rejects when the learner turn ends in error instead of booking a silent success", async () => {
+		// An errored learner turn resolves whenIdle normally with no assistant
+		// output; runLearner must surface it so the queue counts a failure and
+		// the breaker can trip (observable via /taste status).
+		let disposed = 0;
+		const agents = createFakeAgents({
+			createImpl: () => {
+				const agent = {
+					options: {},
+					followup: () => {},
+					whenIdle: async () => {},
+					session: {
+						events: [
+							{ type: "turn/start", data: { turn: 1 } },
+							{ type: "turn/end", data: { turn: 1, reason: { kind: "error", error: { message: 'prompt variable "{{cwd}}" has no value for this assembly' } } } },
+						],
+					},
+				};
+				return { agent, dispose: async () => void (disposed += 1) };
+			},
+		});
+		await assert.rejects(() => runLearner({ ...DEFAULT_ARGS(), agents, config: {} }), /learner turn failed: prompt variable/);
+		assert.equal(disposed, 1); // finally still disposes on the failure path
 	});
 });

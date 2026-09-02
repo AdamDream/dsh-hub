@@ -60,9 +60,28 @@ test("loadConfig merges whitelisted keys and drops unknown ones", async () => {
 	assert.deepEqual(await loadConfig(dir), {
 		learningEnabled: false,
 		injection: { enabled: true, maxChars: 5000, includeSubagents: false },
-		observer: { modelMode: "inherit", provider: "deepseek", model: "m", maxInputChars: 20000, timeoutMs: 60000, maxTurns: 5 },
+		observer: { modelMode: "custom", provider: "deepseek", model: "m", maxInputChars: 20000, timeoutMs: 60000, maxTurns: 5 },
 		storage: { categoriesEnabled: false },
 	});
+});
+
+test("loadConfig whitelists modelMode inherit/custom and normalizes anything else to inherit", async () => {
+	const cases = [
+		["inherit", "inherit"],
+		["custom", "custom"],
+		["", "inherit"],
+		["CUSTOM", "inherit"],
+		["weird", "inherit"],
+		[7, "inherit"],
+		[null, "inherit"],
+		[undefined, "inherit"],
+	];
+	for (const [mode, expected] of cases) {
+		const dir = await tempDir();
+		await writeRawConfig(dir, JSON.stringify({ observer: { modelMode: mode } }));
+		const config = await loadConfig(dir);
+		assert.equal(config.observer.modelMode, expected, `modelMode: ${JSON.stringify(mode)}`);
+	}
 });
 
 test("loadConfig keeps defaults for partial configs and non-record sections", async () => {

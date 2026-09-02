@@ -199,9 +199,16 @@ async function showPaths(deps, invocation) {
 	return { kind: "success", text: lines.join("\n") };
 }
 
-/** `/taste model`: show the learner model route (M0 ships inherit-only, §10.5; custom routing is P1). */
-async function showModel() {
-	return { kind: "success", text: "learner model route: inherit (the triggering agent's provider and model)" };
+/** `/taste model`: the learner's model route plus observer budgets, read from the live config. */
+async function showModel(deps) {
+	const config = await deps.loadConfig(deps.globalDir());
+	const observer = config.observer ?? {};
+	const route =
+		observer.modelMode === "custom"
+			? `custom (provider ${observer.provider || "(unset)"}, model ${observer.model || "(unset)"})`
+			: "inherit (follows main model)";
+	const lines = [`learner model route: ${route}`, `observer: timeoutMs ${observer.timeoutMs}, maxTurns ${observer.maxTurns}`];
+	return { kind: "success", text: lines.join("\n") };
 }
 
 const USAGE = "Usage: /taste <status|on|off|list|remember|forget|paths|model>";
@@ -226,7 +233,7 @@ async function handleInvocation(invocation, deps) {
 			case "remember": return await rememberPreference(deps, argument);
 			case "forget": return await forgetPreferences(deps, invocation, argument);
 			case "paths": return await showPaths(deps, invocation);
-			case "model": return await showModel();
+			case "model": return await showModel(deps);
 			default: return { kind: "error", text: `Unknown subcommand ${JSON.stringify(verb)}. ${USAGE}` };
 		}
 	} catch (error) {

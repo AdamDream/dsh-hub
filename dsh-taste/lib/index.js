@@ -9,6 +9,7 @@ import {
 	clipText,
 	ensureProjectTasteDir,
 	listTasteFiles,
+	loadCommandCodeTaste,
 	loadTasteSnapshot,
 	normalizePreferenceKey,
 	parseTasteFile,
@@ -21,6 +22,7 @@ import {
 } from "./storage.js";
 import { buildLearnerInput, runLearner } from "./learner.js";
 import { createJobQueue } from "./queue.js";
+import { registerTasteBridge } from "./bridge.js";
 import { registerTasteCommands } from "./commands.js";
 //#region lib/index.js
 /**
@@ -43,7 +45,9 @@ import { registerTasteCommands } from "./commands.js";
  */
 
 const name = "taste";
-const inject = ["agents", "commands", "systemPrompt"];
+// `connection` (design §2.4): the host-half of the Web GUI's read-only RPC
+// channel lives on the connection service (ctx.connection.rpc.handle).
+const inject = ["agents", "commands", "systemPrompt", "connection"];
 
 /** Declarative config surface (proposal §8 defaults); runtime values hot-read `config.json`. */
 const Config = z.object({
@@ -507,6 +511,19 @@ function apply(ctx, config) {
 		storageFns: { parseTasteFile, renderTasteFile, readTasteFile, listTasteFiles, withTasteLock, writeFileAtomicTaste, normalizePreferenceKey },
 		queue,
 		logger: ctx.logger,
+	});
+
+	// Web GUI bridge (design §2): read-only `/taste` RPC channel on the
+	// connection service, scoped to this plugin's lifetime via ctx.effect.
+	registerTasteBridge(ctx, {
+		queue,
+		globalDir: () => globalDir,
+		projectDirForCwd,
+		loadConfig,
+		listTasteFiles,
+		readTasteFile,
+		parseTasteFile,
+		loadCommandCodeTaste,
 	});
 
 	// Shutdown (R3): registered before the teardown-signal effect so disposal

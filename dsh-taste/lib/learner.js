@@ -101,7 +101,7 @@ export function buildLearnerInput({ tasteTree, newMessages, priorWindow } = {}) 
  * @param {object} args - run arguments.
  * @param {object} args.agents - DSH agents service (`withInitiator`/`create`).
  * @param {object} args.parentAgent - triggering agent; its session id becomes
- *   `parentSession`, and `inherit` model routing reads its options.
+ *   `parentSession`, and inherit (or custom-fallback) model routing reads its options.
  * @param {string} args.input - learner input text from {@link buildLearnerInput}.
  * @param {object} [args.config] - taste configuration (§8 shape).
  * @param {() => string} args.resolveGlobalDir - absolute global taste directory.
@@ -130,10 +130,23 @@ export async function runLearner({
 		throw new TypeError("runLearner: input must be a non-empty string");
 	}
 	const observer = config?.observer ?? {};
-	// Model routing (§4/§10.5): M0 ships `inherit` only — the learner follows
-	// the triggering agent's provider/model. `custom` routing is a P1 item;
-	// observer.modelMode/provider/model stay accepted config fields, unused here.
-	const agentOptions = { provider: parentAgent.options?.provider, model: parentAgent.options?.model };
+	// Model routing (§4/§10.5): `custom` sends the learner to the observer's
+	// configured provider/model when both are present; an incomplete custom
+	// entry falls back to inherit routing with a warning. Otherwise (`inherit`,
+	// the default) the learner follows the triggering agent's provider/model.
+	const parentRoute = { provider: parentAgent.options?.provider, model: parentAgent.options?.model };
+	let agentOptions = parentRoute;
+	if (observer.modelMode === "custom") {
+		const provider = typeof observer.provider === "string" ? observer.provider : "";
+		const model = typeof observer.model === "string" ? observer.model : "";
+		if (provider && model) {
+			agentOptions = { provider, model };
+		} else {
+			console.warn(
+				`taste learner: observer.modelMode "custom" needs both provider and model (got provider ${JSON.stringify(provider)}, model ${JSON.stringify(model)}); falling back to inherit`,
+			);
+		}
+	}
 	// The observer's input budget bounds the whole learner message; an absent
 	// or unusable budget leaves the input unclipped (storage clipText fails
 	// closed to "" for one, which would silently drop the input).
@@ -151,11 +164,21 @@ export async function runLearner({
 				? AbortSignal.any([signal, AbortSignal.timeout(timeoutMs)])
 				: signal;
 	let handle;
+	// Session meta mirrors dsh-subagent's childSessionMeta: `cwd` (and
+	// `agentPreset`) must ride along, or the child's system-prompt assembly
+	// dies on `{{cwd}}` inside the deployment persona section — the learner
+	// turn then errors with UNKNOWN before any model call (2026-09-02 incident).
+	const parentHeader = parentAgent.session?.header ?? {};
 	try {
 		handle = await agents.withInitiator(parentAgent, () =>
 			agents.create({
 				sessionId,
-				meta: { parentSession: parentAgent.session.id, origin: "subagent" },
+				meta: {
+					...(parentHeader.cwd !== undefined ? { cwd: parentHeader.cwd } : {}),
+					...(parentHeader.agentPreset !== undefined ? { agentPreset: parentHeader.agentPreset } : {}),
+					parentSession: parentAgent.session.id,
+					origin: "subagent",
+				},
 				agentOptions,
 				signal: runSignal,
 				setup(childCtx) {
@@ -171,7 +194,17 @@ export async function runLearner({
 			}),
 		);
 		await handle.agent.whenIdle();
-		return { output: finalAssistantOutput(handle.agent.session.events) };
+		// An errored learner turn (e.g. prompt-assembly failure) resolves
+		// whenIdle normally and yields no assistant output; without this
+		// check the queue would book it as success and silently retry every
+		// turn — the breaker would never trip and /taste status would lie.
+		const events = handle.agent.session.events;
+		const lastTurnEnd = [...events].reverse().find((event) => event?.type === "turn/end");
+		if (lastTurnEnd?.data?.reason?.kind === "error") {
+			const message = lastTurnEnd.data.reason.error?.message ?? "unknown error";
+			throw new Error(`taste learner turn failed: ${message}`);
+		}
+		return { output: finalAssistantOutput(events) };
 	} finally {
 		try {
 			await handle?.dispose?.();

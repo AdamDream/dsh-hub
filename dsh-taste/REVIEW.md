@@ -120,3 +120,11 @@
 
 - **Issue #1 已由主代理直接修复**：`isSubagent` 第三判据改为 `Math.max(options.subagentDepth, header.delegationDepth) > 0`，完全对齐 dsh-subagent `delegationDepthOf` 权威语义（复核建议的 `??` 链在 options=0/header=2 场景会漏判，故按 max 实现并加注释）。修复后 106/106 全绿 + 冒烟通过。
 - Issue #2（R5 偏差说明）与 #4（clip 文案）已吸收进 README；Issue #3 维持现状（测试已钉死该行为）。
+
+## 6. 运行期事故修复（主代理，2026-09-02）
+
+首次真实学习触发的现场事故（learner 会话 `24a3c2f5`，10:03:14）：管线全链路正确触发，但 learner 轮次在模型调用前夭折——`prompt variable "{{cwd}}" has no value for this assembly (section "deployment:persona")`。根因与修复：
+
+1. **meta 漏传 cwd**：`agents.create` 的 meta 未带 `cwd`/`agentPreset`（对照 dsh-subagent `childSessionMeta` 权威实现），learner 会话无 cwd → persona 段 `{{cwd}}` 插值 throw。修复：meta 按条件展开补齐两字段。
+2. **静默失败**：errored turn 经 `whenIdle` 正常返回、无 assistant 输出，队列误记成功——熔断永不触发、每轮无感重试。修复：`whenIdle` 后扫描最后一个 `turn/end`，`reason.kind==="error"` 则 throw，让队列计数失败、熔断可见（`/taste status`）。
+3. 回归测试 ×3（meta 传播 / 缺省省略 / errored turn 拒绝且 finally 仍 dispose）；126/126 全绿；装机副本已同步。
