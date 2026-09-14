@@ -1,123 +1,50 @@
-/**
- * Turn-scoped visible-text collection for the taste learner.
- *
- * Pure functions over session event arrays: this module imports nothing,
- * never touches the filesystem, and never throws on malformed event shapes —
- * malformed events and blocks are skipped (audit R1 sunk to the unit layer).
- * Clipping mirrors storage's `clipText` semantics inline because the
- * collector must not import storage.
- * @module lib/collector
- */
+/** Deterministic provenance-aware visible-text collection for taste learning. */
 const CLIP_MARKER = "[...clipped...]";
-/** The two newlines around the marker are part of the reserved clip budget. */
-const CLIP_RESERVE = CLIP_MARKER.length + 2;
-/** Below this budget no marker fits; clipping degrades to plain truncation. */
-const CLIP_MIN_CHARS = 64;
-
-/**
- * Whether one session event is a user message the learner may read.
- * Plugin-authored user messages (e.g. runtime-context snapshots) are the only
- * excluded source kind; an event without a source is not a plugin message.
- * @param event - session event candidate (element of `session.events`).
- * @returns true when the event is a learnable user message.
- */
-export function isLearnableUserEvent(event) {
-	return event?.type === "user/message" && event.data?.source?.kind !== "plugin";
+const AUTOMATION = new Set(["plugin","tool","system","runtime-context","agent","rpc","subagent","automation","inbox","spliced"]);
+const MODELS = new Set(["assistant","model","llm"]);
+const plain = (x) => x && typeof x === "object" && !Array.isArray(x);
+function sourceKind(data) {
+ if (!Object.prototype.hasOwnProperty.call(data,"source")) {
+  // Nested assistant envelope (design §8.1: assistant body lives in
+  // data.message) carries its provenance inside the message record.
+  if (plain(data.message) && Object.prototype.hasOwnProperty.call(data.message,"source")) {
+   const m=data.message.source;
+   if (typeof m === "string") return {present:true,kind:m};
+   if (plain(m) && typeof m.kind === "string") return {present:true,kind:m.kind};
+   return {present:true,kind:null};
+  }
+  return {present:false};
+ }
+ const s=data.source;
+ if (typeof s === "string") return {present:true, kind:s};
+ if (plain(s) && typeof s.kind === "string") return {present:true,kind:s.kind};
+ return {present:true,kind:null};
 }
-
-/**
- * Collect the visible user and assistant text of one turn.
- *
- * The slice runs from after the last `turn/start` event with
- * `data.turn === turn` to the end of the array; a missing `turn/end` is
- * expected because the current turn is still open when collection runs. Every
- * learnable user message contributes its text parts and every assistant
- * message contributes its `type: "text"` blocks; parts join with "\n". Each
- * joined text is redacted with `opts.redactFn` (caller-injected, defaults to
- * identity) and only then clipped to its character budget.
- *
- * @param events - session event array (elements carry `.type`/`.data`/`.seq`).
- * @param turn - turn number to slice; a non-finite value yields empty texts.
- * @param opts - `{ userMaxChars, assistantMaxChars, redactFn }`; an invalid
- *   budget leaves the text unclipped, and `redactFn` exceptions propagate.
- * @returns `{ userText, assistantText }`, both `""` when nothing survived.
- */
-export function collectTurnTexts(events, turn, opts = {}) {
-	const slice = turnSlice(events, turn);
-	return {
-		userText: finishText(joinParts(userTextParts(slice)), opts.redactFn, opts.userMaxChars),
-		assistantText: finishText(joinParts(assistantTextParts(slice)), opts.redactFn, opts.assistantMaxChars),
-	};
+function embeddedAutomation(value) {
+ if (!value) return false;
+ if (Array.isArray(value)) return value.some(embeddedAutomation);
+ if (!plain(value)) return false;
+ if (typeof value.type === "string" && (value.type === "agent/inbox" || value.type === "agent/inbox/spliced" || value.type.startsWith("tool/") || value.type.startsWith("rpc/") || value.type === "system" || value.type === "runtime-context")) return true;
+ if (plain(value.source) && (typeof value.source.kind !== "string" || AUTOMATION.has(value.source.kind))) return true;
+ return Object.values(value).some((v)=>plain(v)||Array.isArray(v) ? embeddedAutomation(v) : false);
 }
-
-/** Events after the last `turn/start` for `turn`, through the array end. */
-function turnSlice(events, turn) {
-	if (!Array.isArray(events) || typeof turn !== "number" || !Number.isFinite(turn)) return [];
-	for (let index = events.length - 1; index >= 0; index -= 1) {
-		const event = events[index];
-		if (event?.type === "turn/start" && event.data?.turn === turn) return events.slice(index + 1);
-	}
-	return [];
+export function classifyEventForTaste(event) {
+ if (!plain(event)||!plain(event.data)||typeof event.type!=="string"||(event.type!=="user/message"&&event.type!=="assistant/message")) return {kind:"reject",reason:"event-shape-or-type"};
+ const data=event.data, src=sourceKind(data);
+ if (src.present && (typeof src.kind!=="string" || AUTOMATION.has(src.kind))) return {kind:"reject",reason:"unknown-or-automated-source"};
+ const user=event.type==="user/message";
+ if (data.role!==undefined && data.role!==(user?"user":"assistant")) return {kind:"reject",reason:"role-mismatch"};
+ if (user) { if (src.present && src.kind!=="user") return {kind:"reject",reason:"unknown-or-automated-source"}; }
+ else if (!src.present || !MODELS.has(src.kind)) return {kind:"reject",reason:"unknown-or-automated-source"};
+ if (user && (embeddedAutomation(data.message)||embeddedAutomation(data.source))) return {kind:"reject",reason:"embedded-automation-record"};
+ const content = !user && Object.prototype.hasOwnProperty.call(data,"message") ? data.message?.content : data.content;
+ if (!Array.isArray(content)) return {kind:"reject",reason:"content-shape"};
+ if (!content.some((b)=>b?.type==="text"&&typeof b.text==="string"&&b.text.trim())) return {kind:"reject",reason:"no-visible-text"};
+ return {kind:user?"user-primary":"assistant-secondary",reason:user?"user-message":"assistant-message"};
 }
-
-/** Non-blank `type: "text"` string parts of one content array; the rest is skipped. */
-function textParts(content) {
-	const parts = [];
-	if (!Array.isArray(content)) return parts;
-	for (const block of content) {
-		if (block?.type !== "text" || typeof block.text !== "string" || !block.text.trim()) continue;
-		parts.push(block.text);
-	}
-	return parts;
-}
-
-/** Text parts of the slice's learnable user messages (DSH shape: data is the message). */
-function userTextParts(slice) {
-	const parts = [];
-	for (const event of slice) {
-		if (isLearnableUserEvent(event)) parts.push(...textParts(event.data?.content));
-	}
-	return parts;
-}
-
-/**
- * Text parts of the slice's assistant messages. DSH nests the message at
- * `data.message`; a flat `data.content` is tolerated against shape drift.
- */
-function assistantTextParts(slice) {
-	const parts = [];
-	for (const event of slice) {
-		if (event?.type !== "assistant/message") continue;
-		const data = event.data;
-		if (Array.isArray(data?.message?.content)) parts.push(...textParts(data.message.content));
-		else parts.push(...textParts(data?.content));
-	}
-	return parts;
-}
-
-function joinParts(parts) {
-	return parts.join("\n");
-}
-
-/** Redact first, then clip; a non-string redactor output fails closed to "". */
-function finishText(text, redactFn, maxChars) {
-	const redacted = typeof redactFn === "function" ? redactFn(text) : text;
-	return clipText(typeof redacted === "string" ? redacted : "", maxChars);
-}
-
-/**
- * Keep the 35% head and the tail of over-budget text with a marker between,
- * never exceeding `maxChars`. An invalid budget (non-finite or negative)
- * leaves the text unclipped.
- * @param value - text to bound.
- * @param maxChars - character budget.
- * @returns the bounded text.
- */
-function clipText(value, maxChars) {
-	if (typeof maxChars !== "number" || !Number.isFinite(maxChars) || maxChars < 0) return value;
-	if (value.length <= maxChars) return value;
-	if (maxChars < CLIP_MIN_CHARS) return value.slice(0, Math.floor(maxChars));
-	const head = Math.floor(maxChars * 0.35);
-	const tail = maxChars - head - CLIP_RESERVE;
-	return `${value.slice(0, head)}\n${CLIP_MARKER}\n${value.slice(-tail)}`;
-}
+export function isLearnableUserEvent(event){return classifyEventForTaste(event).kind==="user-primary";}
+function turnSlice(events,turn){if(!Array.isArray(events)||!Number.isFinite(turn))return [];for(let i=events.length-1;i>=0;i--)if(events[i]?.type==="turn/start"&&events[i].data?.turn===turn)return events.slice(i+1);return [];}
+function parts(content){return content.filter((b)=>b?.type==="text"&&typeof b.text==="string"&&b.text.trim()).map((b)=>b.text);}
+function clip(v,n){if(typeof n!=="number"||!Number.isFinite(n)||n<0||v.length<=n)return v;if(n<64)return v.slice(0,Math.floor(n));const h=Math.floor(n*.35),t=n-h-(CLIP_MARKER.length+2);return `${v.slice(0,h)}\n${CLIP_MARKER}\n${v.slice(-t)}`;}
+export function collectTurnEvidence(events,turn,opts={}){const user=[],assistant=[];for(const e of turnSlice(events,turn)){const c=classifyEventForTaste(e);if(c.kind==="reject")continue;const p=parts((e.type==="assistant/message"&&Object.prototype.hasOwnProperty.call(e.data,"message"))?e.data.message.content:e.data.content);if(!p.length)continue;const text=clip(typeof opts.redactFn==="function"?opts.redactFn(p.join("\n")):p.join("\n"),c.kind==="user-primary"?opts.userMaxChars:opts.assistantMaxChars);if(text)(c.kind==="user-primary"?user:assistant).push({role:c.kind==="user-primary"?"user":"assistant",provenance:c.kind,text});}return {user,assistant};}
+export function collectTurnTexts(events,turn,opts={}){const e=collectTurnEvidence(events,turn,opts);return {userText:e.user.map(x=>x.text).join("\n"),assistantText:e.assistant.map(x=>x.text).join("\n")};}

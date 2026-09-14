@@ -20,9 +20,9 @@ import {
  * @module dsh-taste/learner-tools
  */
 const SCOPE_VALUES = ["global", "project"];
-const PATH_RULES = 'taste file must be "taste.md" or "{category}/taste.md"';
+const PATH_RULES = "偏好文件路径必须是 taste.md 或 {category}/taste.md";
 const UNPARSABLE_HINT =
-	'error: content holds no valid taste entries ("- statement. Confidence: 0.9"); re-read the file with read_taste_file and use edit_taste_file to amend it instead of overwriting';
+	"错误：内容不含有效偏好条目（- 中文陈述 Confidence: 0.88）；请先用 read_taste_file 重读，再用 edit_taste_file 修改，不要覆盖";
 
 /** Flatten any thrown value into one message line. */
 function errorText(error) {
@@ -39,13 +39,13 @@ function resolveTarget(deps, scope, relPath) {
 	try {
 		scopeDir = scope === "project" ? deps.resolveProjectDir() : deps.resolveGlobalDir();
 	} catch (error) {
-		return `error: cannot resolve ${scope} taste directory: ${errorText(error)}`;
+		return `错误：无法解析${scope}偏好目录：${errorText(error)}`;
 	}
-	if (!isValidTasteFilePath(relPath)) return `error: ${PATH_RULES}`;
+	if (!isValidTasteFilePath(relPath)) return `错误：偏好文件路径必须是 taste.md 或 {category}/taste.md`;
 	try {
-		return { absolute: resolveTastePath(scopeDir, relPath) };
+		return { absolute: resolveTastePath(scopeDir, relPath), scopeDir };
 	} catch (error) {
-		return `error: ${errorText(error)}`;
+		return `错误：${errorText(error)}`;
 	}
 }
 
@@ -74,8 +74,8 @@ async function executeRead(deps, args) {
 	try {
 		return await readFile(target.absolute, "utf8");
 	} catch (error) {
-		if (error?.code === "ENOENT") return "(file does not exist)";
-		return `error: ${errorText(error)}`;
+		if (error?.code === "ENOENT") return "（文件不存在）";
+		return `错误：${errorText(error)}`;
 	}
 }
 
@@ -88,12 +88,12 @@ async function executeRead(deps, args) {
 async function executeWrite(deps, args) {
 	const target = resolveTarget(deps, args.scope, args.path);
 	if (typeof target === "string") return target;
-	const { absolute } = target;
+	const { absolute, scopeDir } = target;
 	try {
 		// The lock sibling is created inside the target directory, which may be
 		// brand new, so the directory must exist before the lock is acquired.
 		await mkdir(dirname(absolute), { recursive: true, mode: 0o700 });
-		let result = `wrote ${args.path}`;
+		let result = `已写入 ${args.path}`;
 		await withTasteLock(absolute, async () => {
 			let current = "";
 			try {
@@ -117,7 +117,7 @@ async function executeWrite(deps, args) {
 		});
 		return result;
 	} catch (error) {
-		return `error: ${errorText(error)}`;
+		return `错误：${errorText(error)}`;
 	}
 }
 
@@ -128,7 +128,7 @@ async function executeWrite(deps, args) {
 async function executeEdit(deps, args) {
 	const target = resolveTarget(deps, args.scope, args.path);
 	if (typeof target === "string") return target;
-	if (args.old_text.length === 0) return "error: old_text must be a non-empty string";
+	if (args.old_text.length === 0) return "错误：old_text 必须是非空字符串";
 	const { absolute } = target;
 	try {
 		// Existence probe first: a missing file must report cleanly (and create
@@ -138,10 +138,10 @@ async function executeEdit(deps, args) {
 		try {
 			await stat(absolute);
 		} catch (error) {
-			if (error?.code === "ENOENT") return "error: file does not exist";
-			return `error: ${errorText(error)}`;
+			if (error?.code === "ENOENT") return "错误：文件不存在";
+			return `错误：${errorText(error)}`;
 		}
-		let result = `edited ${args.path}`;
+		let result = `已编辑 ${args.path}`;
 		await withTasteLock(absolute, async () => {
 			let current;
 			try {
@@ -152,18 +152,18 @@ async function executeEdit(deps, args) {
 			}
 			const hits = current.split(args.old_text).length - 1;
 			if (hits === 0) {
-				result = "error: old_text not found";
+				result = "错误：未找到 old_text";
 				return;
 			}
 			if (hits > 1) {
-				result = `error: old_text matches ${hits} locations; provide a longer snippet that matches exactly one`;
+				result = `错误：old_text 匹配 ${hits} 处，请提供只匹配一处的更长片段`;
 				return;
 			}
 			await writeFileAtomicTaste(absolute, current.replace(args.old_text, args.new_text));
 		});
 		return result;
 	} catch (error) {
-		return `error: ${errorText(error)}`;
+		return `错误：${errorText(error)}`;
 	}
 }
 
@@ -177,18 +177,18 @@ const stringOutput = {
 function readTasteFileTool(deps) {
 	return defineTool({
 		name: "read_taste_file",
-		description: 'Read a taste file. Path is relative to the taste directory: "taste.md" or "{category}/taste.md".',
+		description: '读取中文偏好文件。路径相对于偏好目录，只能是 taste.md 或 {category}/taste.md。',
 		parameters: {
 			scope: {
 				type: "string",
 				required: true,
 				enum: SCOPE_VALUES,
-				description: 'Taste directory to read: "global" (user-wide) or "project" (current repository).',
+				description: '要读取的偏好范围：global（用户全局）或 project（当前项目）。',
 			},
 			path: {
 				type: "string",
 				required: true,
-				description: 'Relative taste path: "taste.md" or "{category}/taste.md".',
+				description: '相对偏好路径：taste.md 或 {category}/taste.md。',
 			},
 		},
 		output: stringOutput,
@@ -200,24 +200,24 @@ function readTasteFileTool(deps) {
 function writeTasteFileTool(deps) {
 	return defineTool({
 		name: "write_taste_file",
-		description: 'Create or replace a taste file with "- statement. Confidence: 0.9" entries. Entries already on disk that the content does not state are kept. Path MUST be "taste.md" or "{category}/taste.md".',
+		description: '创建或更新中文偏好文件，条目格式为「- 中文陈述 Confidence: 0.88」。磁盘中未被新内容提及的条目会保留。路径必须是 taste.md 或 {category}/taste.md。',
 		parameters: {
 			scope: {
 				type: "string",
 				required: true,
 				enum: SCOPE_VALUES,
-				description: 'Taste directory to write: "global" (user-wide) or "project" (current repository).',
+				description: '要写入的偏好范围：global（用户全局）或 project（当前项目）。',
 			},
 			path: {
 				type: "string",
 				required: true,
-				description: 'Relative taste path: "taste.md" or "{category}/taste.md".',
+				description: '相对偏好路径：taste.md 或 {category}/taste.md。',
 			},
 			content: {
 				type: "string",
 				required: true,
-				description: 'Full target content as taste entries ("- statement. Confidence: 0.9" lines).',
-			},
+				description: '完整目标内容，使用中文偏好条目（「- 中文陈述 Confidence: 0.88」）。',
+			}
 		},
 		output: stringOutput,
 		execute: (args) => executeWrite(deps, args),
@@ -228,7 +228,7 @@ function writeTasteFileTool(deps) {
 function editTasteFileTool(deps) {
 	return defineTool({
 		name: "edit_taste_file",
-		description: "Replace exactly one occurrence of old_text with new_text in a taste file; old_text must match uniquely. Path MUST be \"taste.md\" or \"{category}/taste.md\".",
+		description: "在偏好文件中精确替换唯一一处 old_text；old_text 必须只匹配一处。路径必须是 taste.md 或 {category}/taste.md。",
 		parameters: {
 			scope: {
 				type: "string",
@@ -239,40 +239,28 @@ function editTasteFileTool(deps) {
 			path: {
 				type: "string",
 				required: true,
-				description: 'Relative taste path: "taste.md" or "{category}/taste.md".',
+				description: '相对偏好路径：taste.md 或 {category}/taste.md。',
 			},
 			old_text: {
 				type: "string",
 				required: true,
-				description: "Exact text to replace; must occur exactly once in the file.",
+				description: "要替换的原文；必须在文件中恰好出现一次。",
 			},
 			new_text: {
 				type: "string",
 				required: true,
-				description: "Replacement text (may be empty to delete).",
-			},
+				description: "替换文本（可为空以删除）。",
+			}
 		},
 		output: stringOutput,
 		execute: (args) => executeEdit(deps, args),
 	});
 }
 
-/**
- * Build the learner's three taste-file tools.
- * @param {object} deps - directory resolvers called lazily per execution, plus
- *   an optional log sink for refusals.
- * @param {() => string} deps.resolveGlobalDir - absolute global taste directory.
- * @param {() => string} deps.resolveProjectDir - absolute project taste directory.
- * @param {(message: string) => void} [deps.log] - diagnostic sink.
- * @returns {Array<object>} `read_taste_file`, `write_taste_file`, and
- *   `edit_taste_file` definitions ready for tool registration.
- */
-export function createTasteTools({ resolveGlobalDir, resolveProjectDir, log }) {
-	const deps = {
-		resolveGlobalDir,
-		resolveProjectDir,
-		log: typeof log === "function" ? log : () => {},
-	};
-	return [readTasteFileTool(deps), writeTasteFileTool(deps), editTasteFileTool(deps)];
-}
+
 //#endregion
+
+export function createTasteTools({ resolveGlobalDir, resolveProjectDir, log }) {
+ const deps = { resolveGlobalDir, resolveProjectDir, log: typeof log === "function" ? log : () => {} };
+ return [readTasteFileTool(deps), writeTasteFileTool(deps), editTasteFileTool(deps)];
+}

@@ -1,0 +1,246 @@
+{
+  "checks": [
+    {
+      "name": "U05 user_version = 1",
+      "pass": true,
+      "detail": "user_version=1"
+    },
+    {
+      "name": "U05 reopen idempotent",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "U05 schema has dedup_key/is_subagent",
+      "pass": true,
+      "detail": "id,data_source,session_id,dedup_key,ts,model,provider,project,turn,step,is_subagent,input_tokens,output_tokens,cache_read_tokens,cache_write_tokens"
+    },
+    {
+      "name": "U05 same dedup_key not re-inserted",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "U05 latest ts wins (later observation overwrites)",
+      "pass": true,
+      "detail": "ts=2 input=9 output=9"
+    },
+    {
+      "name": "U05 stale ts does not overwrite",
+      "pass": true,
+      "detail": "ts=2 input=9"
+    },
+    {
+      "name": "U05 cc NULL turn/step dedup by message.id",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "U05 cc latest ts wins too",
+      "pass": true,
+      "detail": "ts=4 input=5 output=5"
+    },
+    {
+      "name": "U04 real file lines ≥ 82000",
+      "pass": true,
+      "detail": "82430 lines, /home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-dsh--/session-6a7367fe-7bd8-4b8d-b3fa-7c22a7d9b616/session.jsonl.zstd"
+    },
+    {
+      "name": "U04 first line is session record",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "U04 completeBytes ≤ file size",
+      "pass": true,
+      "detail": "completeBytes=22808279 size=22808279"
+    },
+    {
+      "name": "U04 torn tail → tornStart, no throw",
+      "pass": true,
+      "detail": "tornStart=0 frames=0"
+    },
+    {
+      "name": "U04 two-frame scan → 2 frames",
+      "pass": true,
+      "detail": "frames=2"
+    },
+    {
+      "name": "U06 full dsh scan",
+      "pass": true,
+      "detail": "scanned=1691 new=49346 failed=0"
+    },
+    {
+      "name": "U06 dsh event count vs baseline 47846 (drift note)",
+      "pass": true,
+      "detail": "usage_events(dsh)=49346 baseline=47846 drift=+3.14% (live growth since audit scan; files 1691 now)"
+    },
+    {
+      "name": "U06 dsh failedFiles = 0",
+      "pass": true,
+      "detail": "[]"
+    },
+    {
+      "name": "U06/U07 frozen second run adds 0 (idempotent)",
+      "pass": true,
+      "detail": "pass1 dsh=9889 cc=14311 total=24200; pass2 dsh=0 cc=0"
+    },
+    {
+      "name": "U06 frozen parse-union == DB fold (exact)",
+      "pass": true,
+      "detail": "parse=9889 db=9889 (25 files)"
+    },
+    {
+      "name": "U06 provider/model attribution (≥100 events)",
+      "pass": true,
+      "detail": "checked=191 matched=191"
+    },
+    {
+      "name": "U07 full cc scan",
+      "pass": true,
+      "detail": "scanned=388 new=22700 failed=0"
+    },
+    {
+      "name": "U07 cc deduped count = review baseline 22700",
+      "pass": true,
+      "detail": "deduped=22700 raw=41071 (41071 = raw lines incl. 18371 streaming re-records; P2 verdict: baseline = deduped 22700)"
+    },
+    {
+      "name": "U07 cc failedFiles = 0",
+      "pass": true,
+      "detail": "[]"
+    },
+    {
+      "name": "P1 cc DB == last-record-per-key sums (exact)",
+      "pass": true,
+      "detail": "db(req=22700,out=12767817,cr=1385726932,cw=42529305) lastWins(req=22700,out=12767817,cr=1385726932,cw=42529305) firstWins(out=4977433,cr=1103100139,cw=51005431) raw=41071"
+    },
+    {
+      "name": "P1 cc zero-output rows collapsed (observation)",
+      "pass": true,
+      "detail": "cc rows with output_tokens=0: 98 / 22700 (review pre-fix: 6782 — partial first records frozen by INSERT OR IGNORE)"
+    },
+    {
+      "name": "U07 B3 recompute (≥50 events)",
+      "pass": true,
+      "detail": "checked=50 ok=50"
+    },
+    {
+      "name": "U07 subagent is_subagent=1 + parent session_id (≥50)",
+      "pass": true,
+      "detail": "checked=50 ok=50"
+    },
+    {
+      "name": "U07 decodeCcProjectDir('-home-CNS…-Proj')",
+      "pass": true,
+      "detail": "/home/CNS2026495165_Dexterous_Hand_23Dof"
+    },
+    {
+      "name": "U05/U08 summary query runs",
+      "pass": true,
+      "detail": "requests=72046"
+    },
+    {
+      "name": "U08 registerUsageRpc registers /usage",
+      "pass": true,
+      "detail": "channel=/usage"
+    },
+    {
+      "name": "U08 summary endpoint {ok,value}",
+      "pass": true,
+      "detail": "requests=72046"
+    },
+    {
+      "name": "U08 timeseries endpoint {ok,value}",
+      "pass": true,
+      "detail": "days=26"
+    },
+    {
+      "name": "U08 heatmap endpoint {ok,value}",
+      "pass": true,
+      "detail": "cells=10"
+    },
+    {
+      "name": "U08 byModel/byProject/byDay endpoints {ok,value}",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "U08 sessions endpoint {ok,value} (limit honored)",
+      "pass": true,
+      "detail": "rows=5"
+    },
+    {
+      "name": "U08 status endpoint {ok,value}",
+      "pass": true,
+      "detail": "eventsDsh=49346 eventsCc=22700"
+    },
+    {
+      "name": "U08 refresh calls ingest + returns status",
+      "pass": true,
+      "detail": "ingestCalled=1"
+    },
+    {
+      "name": "U08 invalid from → {ok:false,invalid-params}",
+      "pass": true,
+      "detail": "code=invalid-params"
+    },
+    {
+      "name": "U08 from>to → {ok:false,invalid-params}",
+      "pass": true,
+      "detail": "code=invalid-params"
+    },
+    {
+      "name": "U08 invalid granularity → {ok:false,invalid-params}",
+      "pass": true,
+      "detail": "code=invalid-params"
+    },
+    {
+      "name": "U08 invalid dataSources → {ok:false,invalid-params}",
+      "pass": true,
+      "detail": "code=invalid-params"
+    },
+    {
+      "name": "U08 invalid sessions limit → {ok:false,invalid-params}",
+      "pass": true,
+      "detail": "code=invalid-params"
+    },
+    {
+      "name": "U08 unknown endpoint → {ok:false,unknown-endpoint}",
+      "pass": true,
+      "detail": "code=unknown-endpoint"
+    }
+  ],
+  "dshScanned": 1691,
+  "dshNewEvents": 49346,
+  "ccScanned": 388,
+  "ccNewEvents": 22700,
+  "ccLastWins": {
+    "requests": 22700,
+    "input": 2734521348,
+    "output": 12767817,
+    "cacheRead": 1385726932,
+    "cacheWrite": 42529305
+  },
+  "ccFirstWins": {
+    "requests": 22700,
+    "input": 2913039320,
+    "output": 4977433,
+    "cacheRead": 1103100139,
+    "cacheWrite": 51005431
+  },
+  "ccRawRecords": 41071,
+  "dshTotal": 49346,
+  "ccTotal": 22700,
+  "summary": {
+    "requests": 72046,
+    "input_tokens": 3196325224,
+    "output_tokens": 74238449,
+    "cache_read_tokens": 5807193732,
+    "cache_write_tokens": 42529305,
+    "hit_rate": 0.6449915594535457,
+    "sessions": 1692
+  },
+  "dbPath": "/home/CNS2026495165/dsh/dsh-usage/data/verify.db",
+  "pass": true
+}

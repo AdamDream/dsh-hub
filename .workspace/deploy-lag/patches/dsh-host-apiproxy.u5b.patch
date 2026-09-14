@@ -1,0 +1,31 @@
+--- dsh-host-apiproxy/lib/index.js
++++ dsh-host-apiproxy/lib/index.js
+@@ -1093,6 +1093,11 @@
+ }
+ /** SSE 帧队列上限：溢出丢最旧帧保 UI 响应（仅在消费者积压时触发）。 */
+ const MAX_QUEUED_FRAMES = 4096;
++/** 应答帧（approval/question 类，阻塞用户操作）永不丢弃；溢出只允许丢普通推送帧（丢最旧策略保持）。 */
++function isAnswerableFrame(item) {
++	const type = item?.payload?.type;
++	return type === "approval/requested" || type === "approval/resolved" || type === "question/requested" || type === "question/resolved";
++}
+ /** Simple async queue: core callbacks push, the AsyncIterable pulls; abort/return cleans up. */
+ var FrameQueue = class {
+ 	buffer = [];
+@@ -1100,7 +1105,15 @@
+ 	done = false;
+ 	push(item) {
+ 		if (this.done) return;
+-		if (this.buffer.length >= MAX_QUEUED_FRAMES) this.buffer.shift();
++		if (this.buffer.length >= MAX_QUEUED_FRAMES) {
++			// 应答帧永不丢弃：新帧为应答帧时直接入队（临时超出上限，阻塞型帧优先送达）；
++			// 新帧为普通帧时从最旧起找第一个可丢的普通帧；缓冲区全为应答帧则丢本次普通帧。
++			if (!isAnswerableFrame(item)) {
++				const drop = this.buffer.findIndex((buffered) => !isAnswerableFrame(buffered));
++				if (drop >= 0) this.buffer.splice(drop, 1);
++				else return;
++			}
++		}
+ 		this.buffer.push(item);
+ 		this.waiter?.();
+ 	}

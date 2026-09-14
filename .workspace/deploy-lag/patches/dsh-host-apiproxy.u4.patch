@@ -1,0 +1,40 @@
+--- dsh-host-apiproxy/lib/index.js
++++ dsh-host-apiproxy/lib/index.js
+@@ -1155,7 +1155,8 @@
+ 	return args;
+ }
+ /** Queue the subscription baseline frame. */
+-function subscribeSession(queue, session) {
++function subscribeSession(queue, subscribed, session) {
++	subscribed.add(session.id);
+ 	queue.push(frame({
+ 		type: "session/subscribed",
+ 		sessionId: session.id,
+@@ -3523,8 +3524,9 @@
+ 		events: {
+ 			mux(_request, signal) {
+ 				const queue = new FrameQueue();
++				const subscribed = /* @__PURE__ */ new Set();
+ 				muxQueues.add(queue);
+-				for (const session of ctx.sessions.list()) subscribeSession(queue, session);
++				for (const session of ctx.sessions.list()) subscribeSession(queue, subscribed, session);
+ 				for (const pending of pendingQuestions.values()) queue.push({
+ 					rpcId: pending.rpcId,
+ 					payload: {
+@@ -3554,6 +3556,7 @@
+ 				const openCalls = /* @__PURE__ */ new Map();
+ 				const disposers = [
+ 					ctx.on("session/event", (session, event) => {
++						if (!subscribed.has(session.id)) return;
+ 						if (event.type === "tool/call") {
+ 							const data = event.data;
+ 							try {
+@@ -3574,7 +3577,7 @@
+ 						}));
+ 					}),
+ 					ctx.on("session/created", (session) => {
+-						subscribeSession(queue, session);
++						subscribeSession(queue, subscribed, session);
+ 						const views = jobs === void 0 ? [] : jobViews(jobs.list(ctx.agents.get(session.id)));
+ 						if (views.length > 0) queue.push(frame({
+ 							type: "session/jobs",

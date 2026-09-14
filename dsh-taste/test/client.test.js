@@ -34,6 +34,8 @@ function requireMock() {
 			IconPersonalizationOutline16: () => null,
 			IconRefreshOutline16: () => null,
 			IconCloseOutline16: () => null,
+			IconTrashOutline16: () => null,
+			IconSettingsOutline16: () => null,
 		},
 	};
 	return (spec) => {
@@ -67,6 +69,7 @@ describe("client bundle registration (design §3.1)", () => {
 		loadBundle();
 	});
 });
+
 
 describe("client bundle factory (design §5.2)", () => {
 	it("exports { apply, inject } with the documented service-name list", () => {
@@ -183,6 +186,34 @@ describe("client bundle factory (design §5.2)", () => {
 			},
 		});
 		assert.equal(absentOptions.inject().useSessionCwd(), void 0, "absent sessions service must yield undefined cwd");
+	});
+});
+
+describe("client bundle mutation surface (gui-mutation-design §4/§6.5)", () => {
+	it("carries the delete/confirm/read-only/settings markers and the three mutation endpoints", () => {
+		// String gates over the handwritten bundle (same idiom as the zh-display
+		// gates above): they pin the mutation UI without rendering it.
+		assert.ok(code.includes('rpc.call(CHANNEL, "deleteEntry"'), "delete wired to the deleteEntry endpoint");
+		assert.ok(code.includes('rpc.call(CHANNEL, "setObserver"'), "settings save wired to the setObserver endpoint");
+		assert.ok(code.includes('rpc.call(CHANNEL, "getSettings"'), "settings form wired to the getSettings endpoint");
+		assert.ok(code.includes("ts_deleteBtn"), "per-entry delete button CSS class present");
+		assert.ok(code.includes("ts_confirm"), "inline two-step delete confirm present");
+		assert.ok(code.includes("ts_readonly"), "Command Code read-only badge present");
+		assert.ok(code.includes("ts_settings"), "model settings view CSS class present");
+		assert.ok(code.includes('scopeName !== "commandCode"'), "the Command Code source still never shows the untranslated tag");
+		assert.ok(code.includes("IconTrashOutline16"), "delete button uses the primitives trash icon");
+		assert.ok(code.includes("IconSettingsOutline16"), "settings entry uses the primitives settings icon");
+		// Negative gate: the bundle must never reference host-only modules.
+		assert.ok(!code.includes("readProviderModels"), "the client bundle must not reference the host-side registry reader");
+	});
+
+	it("carries the confidence-gate display markers (threshold chip, gated hint, gated empty state)", () => {
+		// 门控判定在 bridge 服务端；bundle 只消费展示（裁决 3/4）。
+		assert.ok(code.includes("minConfidence"), "the chip/hints read injection.minConfidence via getStatus");
+		assert.ok(code.includes("gatedCount"), "the tree payload's gatedCount is consumed");
+		assert.ok(code.includes('"empty.gated"'), "the all-gated empty-state key is present");
+		assert.ok(code.includes('"gated.hint"'), "the gated-count hint key is present");
+		assert.ok(code.includes("ts_hint"), "the hint row reuses the existing .ts_hint style");
 	});
 });
 //#endregion

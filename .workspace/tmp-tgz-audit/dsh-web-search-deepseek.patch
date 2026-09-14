@@ -1,0 +1,12 @@
+--- dsh-web-search-deepseek/lib/index.js
++++ dsh-web-search-deepseek/lib/index.js
+@@ -137,7 +137,8 @@
+ 					"anthropic-version": options.apiVersion,
+ 					"content-type": "application/json",
+ 					"accept": "application/json",
+-					"user-agent": USER_AGENT
++					"user-agent": USER_AGENT,
++					"x-opencode-session": crypto.randomUUID()
+ 				},
+ 				body: JSON.stringify(body),
+ 				...signal !== void 0 ? { signal } : {}

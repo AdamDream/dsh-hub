@@ -1,0 +1,19 @@
+--- dsh-host-apiproxy/lib/index.js
++++ dsh-host-apiproxy/lib/index.js
+@@ -1091,6 +1091,8 @@
+ 		}
+ 	});
+ }
++/** SSE 帧队列上限：溢出丢最旧帧保 UI 响应（仅在消费者积压时触发）。 */
++const MAX_QUEUED_FRAMES = 4096;
+ /** Simple async queue: core callbacks push, the AsyncIterable pulls; abort/return cleans up. */
+ var FrameQueue = class {
+ 	buffer = [];
+@@ -1098,6 +1100,7 @@
+ 	done = false;
+ 	push(item) {
+ 		if (this.done) return;
++		if (this.buffer.length >= MAX_QUEUED_FRAMES) this.buffer.shift();
+ 		this.buffer.push(item);
+ 		this.waiter?.();
+ 	}

@@ -1,0 +1,135 @@
+--- dsh-subagent/lib/index.js
++++ dsh-subagent/lib/index.js
+@@ -1179,6 +1179,75 @@
+ 		return this.submitMaterialized(activation, content, options.source, parent, options.signal);
+ 	}
+ 	/**
++	* Materialize a persisted continuable child without delivering any message:
++	* no model turn, no inbox work, no settlement. A resident child returns its
++	* current live Agent; an absent one is cold-resumed from its persisted
++	* Session exactly like {@link coldResume}, but the recovered Activation is
++	* parked — the settlement watcher never disposes it while the manager owns
++	* residency — so the caller (e.g. a host attaching a side conversation under
++	* the child) can use the recovered parent Agent stably. The Activation stays
++	* resident until this manager drains or its exact parent leaves the registry.
++	* @param parent - the exact live direct parent authorizing materialization.
++	* @param childId - durable child session id to materialize.
++	* @param options - caller cancellation, which stops lookup and materialization
++	*   only before residency is established.
++	* @returns the live recovered child Agent.
++	* @throws {SubagentError} when continuation services are unavailable, parent
++	*   authority is rejected, or the persisted Session is missing or not
++	*   continuable.
++	*/
++	async materializeContinuableChild(parent, childId, options) {
++		return this.locks.run(childId, async () => {
++			const live = this.activations.get(childId);
++			if (live !== void 0) {
++				if (disposalOf(live) !== void 0) {
++					/* v8 ignore next -- a mid-disposal read needs a delivery that lost
++					* the race with final disposal, which no test schedules deterministically. */
++					await live.disposal;
++				} else {
++					this.authorizeLineage(parent, childId, live.handle.agent.session.header.parentSession);
++					return live.handle.agent;
++				}
++			}
++			const persistence = this.requirePersistence();
++			let loaded;
++			try {
++				loaded = await persistence.inspect(childId, options.signal);
++			} catch (error) {
++				options.signal.throwIfAborted();
++				throw new SubagentError(`subagent "${childId}" is unavailable`, "NOT_RESUMABLE", { cause: error });
++			}
++			options.signal.throwIfAborted();
++			this.assertAdmitting(parent);
++			this.authorizeLineage(parent, childId, loaded.meta.parentSession);
++			const descriptor = foldSubagentDescriptor(loaded.events.slice(loaded.meta.seedLength ?? 0));
++			if (descriptor === void 0 || descriptor.mode !== "continuable") throw new SubagentError(`subagent "${childId}" has no supported continuation state and cannot be materialized`, "NOT_RESUMABLE");
++			let activation;
++			try {
++				activation = await this.materialize({
++					childId,
++					provider: descriptor.provider,
++					parent,
++					agentOptions: {
++						...descriptor.agentProvider !== void 0 ? { provider: descriptor.agentProvider } : {},
++						...descriptor.agentModel !== void 0 ? { model: descriptor.agentModel } : {}
++					},
++					composition: {
++						persona: descriptor.persona,
++						toolFilter: descriptor.toolFilter
++					},
++					parked: true,
++					signal: options.signal
++				});
++			} catch (error) {
++				options.signal.throwIfAborted();
++				if (error instanceof SubagentError) throw error;
++				throw new SubagentError(`subagent "${childId}" is unavailable`, "NOT_RESUMABLE", { cause: error });
++			}
++			return activation.handle.agent;
++		});
++	}
++	/**
+ 	* Submit to a freshly materialized Activation or roll it back completely.
+ 	* @param activation - the just-published Activation to admit or release.
+ 	* @param content - the initial or resumed message content.
+@@ -1277,7 +1346,7 @@
+ 			await this.rollbackUnpublished(activation).catch(() => void 0);
+ 			throw error;
+ 		}
+-		this.watchSettlement(activation);
++		if (inputs.parked !== true) this.watchSettlement(activation);
+ 		return activation;
+ 	}
+ 	/**
+@@ -2439,6 +2508,23 @@
+ 		return this.requireContinuations().followup(parent, childId, content, options);
+ 	}
+ 	/**
++	* Materialize a persisted continuable subagent session without delivering any
++	* message: no model turn, no inbox work, no settlement. A resident child
++	* returns its current live Agent; a cold one is recovered from its persisted
++	* Session and kept resident (parked) so hosts can attach work under it.
++	* @param parent - the exact live direct parent authorizing materialization.
++	* @param childId - durable child session id to materialize.
++	* @param options - caller cancellation, which stops lookup and materialization
++	*   only before residency is established.
++	* @returns the live recovered child Agent.
++	* @throws {SubagentError} when continuation services are unavailable, parent
++	*   authority is rejected, or the persisted Session is missing or not
++	*   continuable.
++	*/
++	async materializeContinuableChild(parent, childId, options) {
++		return this.requireContinuations().materializeContinuableChild(parent, childId, options);
++	}
++	/**
+ 	* Interrupt one live continuable child's current turn under a human parent
+ 	* address or an exact live ancestor Agent. Fire-and-return: the cancel
+ 	* signal is issued before this returns, but the target may keep running
+--- dsh-subagent/lib/types/index.d.ts
++++ dsh-subagent/lib/types/index.d.ts
+@@ -135,6 +135,21 @@
+      */
+     followup(parent: Agent, childId: SessionId, content: ContentBlock[], options: SubagentFollowupOptions): Promise<MessageId>;
+     /**
++     * Materialize a persisted continuable subagent session without delivering any
++     * message: no model turn, no inbox work, no settlement. A resident child
++     * returns its current live Agent; a cold one is recovered from its persisted
++     * Session and kept resident (parked) so hosts can attach work under it.
++     * @param parent - the exact live direct parent authorizing materialization.
++     * @param childId - durable child session id to materialize.
++     * @param options - caller cancellation, which stops lookup and materialization
++     *   only before residency is established.
++     * @returns the live recovered child Agent.
++     * @throws {SubagentError} when continuation services are unavailable, parent
++     *   authority is rejected, or the persisted Session is missing or not
++     *   continuable.
++     */
++    materializeContinuableChild(parent: Agent, childId: SessionId, options: { readonly signal?: AbortSignal }): Promise<Agent>;
++    /**
+      * Interrupt one live continuable child's current turn under a human parent
+      * address or an exact live ancestor Agent. Fire-and-return: the cancel
+      * signal is issued before this returns, but the target may keep running

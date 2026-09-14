@@ -1,0 +1,6 @@
+# usage 插件 insert 片段 —— 追加到 ~/.dsh/profiles/web/cordis.patch.yml 顶层数组
+# （与 web2 cordis.patch.yml 末尾的 usage 条目逐字对齐；deploy-side.sh 会自动追加并幂等）
+# settings 键：无 —— 插件运行时自注册 `dsh-usage` 命名空间（空 schema）。
+- insert:
+    - id: usage
+      name: '@local/dsh-usage'

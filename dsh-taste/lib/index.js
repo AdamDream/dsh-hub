@@ -4,10 +4,13 @@ import { join, resolve } from "node:path";
 import z from "@deepseek-ai/schemastery";
 import { dshHomePath } from "@deepseek-ai/dsh-home-paths";
 import { loadConfig, saveConfig } from "./config.js";
-import { collectTurnTexts, isLearnableUserEvent } from "./collector.js";
+import { classifyEventForTaste, collectTurnEvidence, isLearnableUserEvent } from "./collector.js";
 import {
 	clipText,
+	deleteTasteEntries,
 	ensureProjectTasteDir,
+	gateTasteEntries,
+	isValidTasteFilePath,
 	listTasteFiles,
 	loadCommandCodeTaste,
 	loadTasteSnapshot,
@@ -20,7 +23,11 @@ import {
 	withTasteLock,
 	writeFileAtomicTaste,
 } from "./storage.js";
+import { readProviderModels } from "./model-registry.js";
 import { buildLearnerInput, runLearner } from "./learner.js";
+
+import { BLOCK_MAX_CHARS, buildBackfillBlocks } from "./backfill.js";
+
 import { createJobQueue } from "./queue.js";
 import { registerTasteBridge } from "./bridge.js";
 import { registerTasteCommands } from "./commands.js";
@@ -57,6 +64,10 @@ const Config = z.object({
 			enabled: z.boolean().default(true),
 			maxChars: z.number().default(16000),
 			includeSubagents: z.boolean().default(false),
+			// Confidence-gate threshold (keep in sync with config.js DEFAULT_CONFIG
+			// and storage.js DEFAULT_MIN_CONFIDENCE); no range decoration — the
+			// gate itself clamps defensively.
+			minConfidence: z.number().default(0.7),
 		})
 		.default({}),
 	observer: z
@@ -79,6 +90,14 @@ const TURN_ASSISTANT_MAX_CHARS = 12_000;
 /** Previously-analyzed window bounds for the learner input (proposal §4). */
 const PRIOR_WINDOW_LIMIT = 20;
 const PRIOR_ENTRY_MAX_CHARS = 4_000;
+
+/**
+ * Consecutive failed backfill blocks that stop the waterfall (§6); mirrors
+ * queue.js' failLimit so both breakers trip on the same third failure — the
+ * driver counts deterministically via `onSettled(error)`, the queue arms the
+ * shared cooldown.
+ */
+const BACKFILL_FAIL_LIMIT = 3;
 
 /** Mirrors config.js' private filename; keep in sync. */
 const CONFIG_FILENAME = "config.json";
@@ -221,8 +240,16 @@ function accumulateScope(merged, seen, dir) {
 	}
 }
 
-/** Sync equivalent of storage.loadTasteSnapshot: project, global, then Command Code stores. */
-function readSnapshotSync(globalDir, projectDir) {
+/**
+ * Sync equivalent of storage.loadTasteSnapshot: project, global, then Command
+ * Code stores — then the confidence gate: entries below `minConfidence`
+ * (boundary-inclusive: an entry exactly at the threshold stays) never reach
+ * the system prompt. The filter runs AFTER merge+dedupe so the
+ * project>global>Command Code precedence is unchanged: a gated low-confidence
+ * project entry still wins its key and drops; it never resurrects the older
+ * global twin it shadowed.
+ */
+function readSnapshotSync(globalDir, projectDir, minConfidence) {
 	const merged = [];
 	const seen = new Set();
 	accumulateScope(merged, seen, projectDir);
@@ -243,22 +270,25 @@ function readSnapshotSync(globalDir, projectDir) {
 			}
 		}
 	}
-	return renderTasteFile(merged);
+	return renderTasteFile(gateTasteEntries(merged, minConfidence));
 }
 
 /**
  * Snapshot reader with an mtime-gated cache: the file set (and each file's
  * mtime+size) is re-stamped on every call — a few stats — and the text is
- * re-read only when something changed. Bounded per project scope.
+ * re-read only when something changed. The cache key carries the confidence
+ * threshold beside the project scope: a threshold change invalidates the
+ * cached text even when no dependency file moved (the stamp cannot see it).
+ * Bounded per project scope.
  */
 function createSnapshotReader(globalDir) {
 	const cache = new Map();
-	return (projectDir) => {
-		const key = projectDir ?? "";
+	return (projectDir, minConfidence) => {
+		const key = `${projectDir ?? ""}\u0000${minConfidence}`;
 		const stamp = snapshotStamp(snapshotDependencyPaths(globalDir, projectDir));
 		const cached = cache.get(key);
 		if (cached && cached.stamp === stamp) return cached.text;
-		const text = readSnapshotSync(globalDir, projectDir);
+		const text = readSnapshotSync(globalDir, projectDir, minConfidence);
 		if (cache.size > 32) cache.clear();
 		cache.set(key, { stamp, text });
 		return text;
@@ -318,14 +348,11 @@ function collectPriorWindow(events, turn) {
 	const history = boundary < 0 ? events : events.slice(0, boundary);
 	const entries = [];
 	for (const event of history) {
-		if (isLearnableUserEvent(event)) {
-			const text = joinVisibleText(event.data?.content);
-			if (text) entries.push({ role: "user", content: [{ type: "text", text: clipText(redactSensitive(text), PRIOR_ENTRY_MAX_CHARS) }] });
-		} else if (event?.type === "assistant/message") {
-			const data = event.data;
-			const text = joinVisibleText(Array.isArray(data?.message?.content) ? data.message.content : data?.content);
-			if (text) entries.push({ role: "assistant", content: [{ type: "text", text: clipText(redactSensitive(text), PRIOR_ENTRY_MAX_CHARS) }] });
-		}
+		const kind = classifyEventForTaste(event).kind;
+		if (kind !== "user-primary" && kind !== "assistant-secondary") continue;
+		const data = event.data;
+		const text = joinVisibleText(event.type === "assistant/message" && Array.isArray(data?.message?.content) ? data.message.content : data?.content);
+		if (text) entries.push({ role: event.type === "assistant/message" ? "assistant" : "user", provenance: kind, content: [{ type: "text", text: clipText(redactSensitive(text), PRIOR_ENTRY_MAX_CHARS) }] });
 	}
 	return entries.slice(-PRIOR_WINDOW_LIMIT);
 }
@@ -337,6 +364,10 @@ function collectPriorWindow(events, turn) {
  */
 function apply(ctx, config) {
 	const globalDir = dshHomePath("taste");
+	// Model registry source for the GUI's learner-route dropdown
+	// (gui-mutation-design §3.2): the same dshHomePath root/precedence as
+	// globalDir — DSH_HOME override honored, official settings default path.
+	const settingsYamlPath = dshHomePath("settings.yaml");
 	const projectDirForCwd = createProjectDirResolver();
 	const logWarn = (message) => {
 		try {
@@ -410,7 +441,7 @@ function apply(ctx, config) {
 			// and the in-flight check below are the authoritative guards.
 			if (isSubagent(agent) && !active.injection.includeSubagents) return "";
 			if (inFlightLearners.has(agent.session.id)) return "";
-			const snapshot = readSnapshot(projectDirForCwd(agent.session.header?.cwd));
+			const snapshot = readSnapshot(projectDirForCwd(agent.session.header?.cwd), active.injection.minConfidence);
 			if (!snapshot) return "";
 			const maxChars = Number(active.injection.maxChars);
 			const bounded = Number.isFinite(maxChars) && maxChars > 0 ? clipText(snapshot, maxChars) : snapshot;
@@ -434,7 +465,9 @@ function apply(ctx, config) {
 			listTasteFiles(globalDir),
 			projectDir ? listTasteFiles(projectDir) : Promise.resolve([]),
 		]);
-		const newMessages = [
+		// Backfill blocks arrive with a pre-built NEW section (§1); turn-stopping
+		// jobs keep building theirs from the turn texts.
+		const newMessages = job.newMessages ?? [
 			job.userText ? { role: "user", content: [{ type: "text", text: job.userText }] } : null,
 			job.assistantText ? { role: "assistant", content: [{ type: "text", text: job.assistantText }] } : null,
 		].filter(Boolean);
@@ -464,6 +497,10 @@ function apply(ctx, config) {
 		inFlightLearners.add(sessionId);
 		try {
 			await runTasteJob(job, sessionId);
+			job.onSettled?.(); // 成功
+		} catch (error) {
+			job.onSettled?.(error); // 失败：传给驱动做确定性 3 连败计数
+			throw error; // 仍抛给队列 schedule() 喂共享熔断
 		} finally {
 			inFlightLearners.delete(sessionId);
 		}
@@ -484,16 +521,15 @@ function apply(ctx, config) {
 			// and the in-flight check below are the authoritative guards.
 			if (isSubagent(agent)) return;
 			if (inFlightLearners.has(agent.session.id)) return;
-			const { userText, assistantText } = collectTurnTexts(agent.session.events, turn, {
+			const evidence = collectTurnEvidence(agent.session.events, turn, {
 				userMaxChars: TURN_USER_MAX_CHARS,
 				assistantMaxChars: TURN_ASSISTANT_MAX_CHARS,
 				redactFn: redactSensitive,
 			});
-			if (!userText) return;
+			if (!evidence.user.length) return;
 			queue.push({
 				agent,
-				userText,
-				assistantText,
+				newMessages: [...evidence.user.map(({ text, provenance }) => ({ role: "user", provenance, content: [{ type: "text", text }] })), ...evidence.assistant.map(({ text, provenance }) => ({ role: "assistant", provenance, content: [{ type: "text", text }] }))],
 				priorWindow: collectPriorWindow(agent.session.events, turn),
 				cwd: agent.session.header?.cwd,
 			});
@@ -502,19 +538,129 @@ function apply(ctx, config) {
 		}
 	});
 
+	/**
+	 * Backfill progress singleton (§5.3). `active` doubles as the command
+	 * re-entry gate (§6): a second `/taste backfill` while a waterfall runs is
+	 * rejected instead of starting a second driver, and the progress singleton
+	 * is never overwritten mid-run.
+	 */
+	const backfillProgress = { active: false, total: 0, done: 0 };
+
+	/**
+	 * Background backfill waterfall (§5.2): push one block at a time into the
+	 * shared queue and wait for it to settle before advancing. Before every
+	 * push the driver waits until the queue is fully idle
+	 * (`running=false && pending=0`, via `drain()` plus a synchronous re-check
+	 * with no await before push) — pushing into a full cap=3 pending lane would
+	 * evict the oldest regular turn-stopping job (audit blocker #1), so
+	 * backfill yields to regular learning instead. Three consecutive failed
+	 * blocks (counted deterministically via `onSettled(error)`, §6) or a
+	 * cooling breaker stop the remaining blocks; every exit path clears
+	 * `backfillProgress.active`.
+	 */
+	const startBackfill = async ({ agent, blocks }) => {
+		let consecutiveFailures = 0;
+		try {
+			for (const block of blocks) {
+				if (teardown.signal.aborted) return;
+				if (queue.stats().cooldownUntil > Date.now()) {
+					logWarn("taste: backfill stopped: learner breaker cooling down");
+					return;
+				}
+				// 防驱逐（审计 blocker #1）：等队列完全空闲再推，检查与 push 同一同步 tick、中间不 await。
+				while (queue.stats().running || queue.stats().pending > 0) {
+					if (teardown.signal.aborted) return;
+					await queue.drain();
+				}
+				if (teardown.signal.aborted) return;
+				let settle;
+				const settled = new Promise((resolve) => {
+					settle = resolve;
+				});
+				const accepted = queue.push({
+					agent,
+					newMessages: block.newMessages,
+					priorWindow: block.priorWindow,
+					cwd: agent?.session?.header?.cwd,
+					kind: "backfill",
+					onSettled: (error) => {
+						consecutiveFailures = error ? consecutiveFailures + 1 : 0;
+						settle();
+					},
+				});
+				if (!accepted) {
+					logWarn("taste: backfill stopped: learner breaker cooling down");
+					return;
+				}
+				await settled; // 等本块 learner 彻底 settle（成功或失败）
+				backfillProgress.done += 1; // settled blocks count, failed or skipped included (§9)
+				if (consecutiveFailures >= BACKFILL_FAIL_LIMIT) {
+					logWarn(`taste: backfill stopped after ${consecutiveFailures} consecutive block failures`);
+					return;
+				}
+			}
+		} catch (error) {
+			logWarn(`taste: backfill driver failed: ${describeError(error)}`);
+		} finally {
+			backfillProgress.active = false;
+		}
+	};
+
+	/**
+	 * Slice the session's completed historical turns into backfill blocks and
+	 * start the waterfall (§1/§2). The block budget is
+	 * `min(BLOCK_MAX_CHARS, observer.maxInputChars ?? BLOCK_MAX_CHARS)` read
+	 * hot from config.json (audit issue #4) so a whole block is never silently
+	 * re-clipped by runLearner.
+	 * @param {object} [request] - backfill request.
+	 * @param {object} [request.agent] - triggering agent (becomes the learner's parent).
+	 * @param {Array} [request.events] - session events to mine.
+	 * @param {number} [request.n=Infinity] - backfill only the last n completed turns.
+	 * @returns {Promise<{blocks: number, turns: number}|null>} enqueued block and
+	 *   turn counts, or null when nothing is learnable.
+	 */
+	const enqueueBackfill = async ({ agent, events, n = Infinity } = {}) => {
+		const active = await loadConfig(globalDir);
+		const maxInputChars = Number(active?.observer?.maxInputChars);
+		const blockMaxChars = Math.min(BLOCK_MAX_CHARS, Number.isFinite(maxInputChars) && maxInputChars > 0 ? maxInputChars : BLOCK_MAX_CHARS);
+		const blocks = buildBackfillBlocks(events, { n, blockMaxChars });
+		if (blocks.length === 0) return null;
+		// Every enqueued turn contributes exactly one user message (empty and
+		// command turns are filtered), so counting user messages counts turns.
+		const turns = blocks.reduce((count, block) => count + block.newMessages.filter((message) => message?.role === "user").length, 0);
+		backfillProgress.active = true;
+		backfillProgress.total = blocks.length;
+		backfillProgress.done = 0;
+		void startBackfill({ agent, blocks }); // fire-and-forget: the command returns immediately (§2)
+		return { blocks: blocks.length, turns };
+	};
+
 	registerTasteCommands(ctx, {
 		loadConfig,
 		saveConfig: saveConfigTracked,
 		globalDir: () => globalDir,
 		projectDir: (cwd) => projectDirForCwd(cwd),
 		loadTasteSnapshot,
-		storageFns: { parseTasteFile, renderTasteFile, readTasteFile, listTasteFiles, withTasteLock, writeFileAtomicTaste, normalizePreferenceKey },
+		storageFns: {
+			parseTasteFile,
+			renderTasteFile,
+			readTasteFile,
+			listTasteFiles,
+			withTasteLock,
+			writeFileAtomicTaste,
+			normalizePreferenceKey,
+									deleteTasteEntries,
+		},
 		queue,
+		enqueueBackfill,
+		backfillProgress: () => backfillProgress,
 		logger: ctx.logger,
 	});
 
-	// Web GUI bridge (design §2): read-only `/taste` RPC channel on the
-	// connection service, scoped to this plugin's lifetime via ctx.effect.
+	// Web GUI bridge (design §2): read + curated-mutation `/taste` RPC channel
+	// on the connection service, scoped to this plugin's lifetime via
+	// ctx.effect. Writes ride the SAME storage/config seams the commands use
+	// (deleteTasteEntries / saveConfigTracked) — no new write primitives.
 	registerTasteBridge(ctx, {
 		queue,
 		globalDir: () => globalDir,
@@ -524,6 +670,14 @@ function apply(ctx, config) {
 		readTasteFile,
 		parseTasteFile,
 		loadCommandCodeTaste,
+		gateTasteEntries,
+			normalizePreferenceKey,
+		isValidTasteFilePath,
+		deleteTasteEntries,
+		saveConfig: saveConfigTracked,
+		settingsPath: settingsYamlPath,
+		readProviderModels,
+		logger: ctx.logger,
 	});
 
 	// Shutdown (R3): registered before the teardown-signal effect so disposal

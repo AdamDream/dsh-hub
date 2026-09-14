@@ -128,3 +128,22 @@
 1. **meta 漏传 cwd**：`agents.create` 的 meta 未带 `cwd`/`agentPreset`（对照 dsh-subagent `childSessionMeta` 权威实现），learner 会话无 cwd → persona 段 `{{cwd}}` 插值 throw。修复：meta 按条件展开补齐两字段。
 2. **静默失败**：errored turn 经 `whenIdle` 正常返回、无 assistant 输出，队列误记成功——熔断永不触发、每轮无感重试。修复：`whenIdle` 后扫描最后一个 `turn/end`，`reason.kind==="error"` 则 throw，让队列计数失败、熔断可见（`/taste status`）。
 3. 回归测试 ×3（meta 传播 / 缺省省略 / errored turn 拒绝且 finally 仍 dispose）；126/126 全绿；装机副本已同步。
+
+## 7. 运行期事故修复 II：工具注册展开错误（主代理，2026-09-02 午后）
+
+现场：Dexterous 主会话多轮学习全部"完成"但 taste.md 零落盘，GUI 空数据。learner 会话（`fbb8430d` 等）显示 `Error: unknown tool "write_taste_file"` ×18——模型行为完全正确（v4-pro 路由生效、参数合法、目标分类路径正确），**工具注册环节失败**：
+
+1. **根因**：真实 `ToolRuntime.register(definition)` 只取**单个**工具定义；`lib/learner.js` setup 里写的是 `register(...createTasteTools(...))` 展开传 3 个——只有第一个 `read_taste_file` 被注册，`write/edit` 作为多余实参被静默丢弃。官方惯例（dsh-tool-web、dsh-session-board）均为逐个 `register(tool)`。
+2. **为何单测没挡住**：假服务 `register: (...tools) => push(...tools)` 恰好宽容了错误签名——假服务必须镜像真实签名才构成回归护栏。修复后假服务改为单参数 `(tool) => push(tool)`，展开写法将立刻挂掉 3 名断言。
+3. **教训**：假服务型单测无法发现"与真实 API 的签名错配"，只有真实运行时验证（本次现场调试）能抓到此类缺陷。
+4. 修复：learner.js 逐工具循环注册 + 测试假服务签名镜像；160/160 全绿；装机副本已同步。
+
+## 8. 运行期事故修复 III：GUI 面板误报"会话记录损坏"（主代理，2026-09-02 晚）
+
+现场：`/taste backfill` 运行后，GUI 子代理面板将 learner 子会话显示为"会话记录损坏"。backfill 本身成功（全局 taste.md +2 条本会话历史偏好，注入生效）。
+
+1. **根因**：GUI 面板冷读识别子会话依赖日志中的 `subagent/descriptor` 事件（dsh-subagent `foldSubagentDescriptor`）；无该事件 → identity undefined → 判 corrupt（dsh-subagent:1908-1912）。该事件由 subagent 工具的 seed 流程写入（`seedDescriptorTurn`），而 learner 是裸 `agents.create` 创建、从不携带——**纯误报，会话数据完好**。
+2. **修复**：learner setup 里经 `childCtx.agent.session.append("subagent/descriptor", {version:2, mode:"one-shot", provider:"taste", label:"taste learner"})` 补写最小 one-shot 描述符（键集严格对齐 ONE_SHOT_DESCRIPTOR_KEYS）；append 失败仅 warn 不阻断学习（装饰性信息，绝不致命）。
+3. **残留**：修复前产生的旧 learner 会话（无 descriptor）在面板中仍显示损坏——历史工件，无数据损失，不作回填修补。
+4. 回归测试 ×2（descriptor 追加形状断言 / append 失败不影响学习）；162/162 全绿；装机副本已同步。
+5. **三个运行期事故的共性教训**：learner 的"插件直连 DSH 内核 API"路径（agents.create/tools.register/session.append）没有官方先例可抄的完整组合，每个接触点都可能签名错配——真实运行时验证是该类缺陷的唯一可靠防线。

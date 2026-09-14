@@ -1,0 +1,37 @@
+# ============================================================
+# vision-adam 段最终形态（btw 插件升级 v2，R1-4/R1-5 落地）
+# 部署：替换 ~/.dsh/settings.yaml 中现有 vision-adam 段（现为
+#   vision-adam:
+#     model: glm-5.3-flash
+#     maxTokens: 100000
+# ），替换后重启 DSH（npx @deepseek-ai/dsh web）。
+# ============================================================
+#
+# 说明：
+# - 识图通道已从 adam 网关切换为 opencode 网关 deepseek-v4.1-flash
+#   （真实看图，证据 .workspace/opencode-deepseek-v4-flash-probe.md）。
+# - 旧键兼容：{model, maxTokens} 显式值优先；未配字段回落插件新默认
+#   （baseURL=https://opencode.ai/zen/go/v1、apiKeyEnv=OPENCODE_GO_API_KEY、
+#   maxTokens=2000、xApiKey/sessionHeader=true）。
+
+vision-adam:
+  # 识图模型（默认 deepseek-v4.1-flash；旧值 glm-5.3-flash 若继续使用，
+  # 须确认其在 opencode 网关可用——建议直接改用新默认）
+  model: deepseek-v4.1-flash
+  # 网关 baseURL（默认 https://opencode.ai/zen/go/v1）
+  baseURL: https://opencode.ai/zen/go/v1
+  # 凭据引用（.credentials.yaml 中的 OPENCODE_GO_API_KEY，opencode 三头认证；
+  # 旧键 ADAM_API_KEY 不再作为默认）
+  apiKeyEnv: OPENCODE_GO_API_KEY
+  # 每次分析最大生成 token（probe 实测 completion 含 reasoning，≥2000）
+  maxTokens: 2000
+  # ---- 以下为可选键（不配即默认，注释展示即可）----
+  # 发送 x-api-key 头（opencode 三头之一；默认 true）
+  # xApiKey: true
+  # 发送 x-opencode-session 随机 UUID 头（opencode 三头之一；默认 true）
+  # sessionHeader: true
+  # 字面 API key 覆盖（secret 类型，优先于 apiKeyEnv；一般不需要）
+  # apiKey: sk-...
+  # 单图/单视频字节上限（默认 20971520 / 52428800）
+  # maxBytes: 20971520
+  # maxVideoBytes: 52428800

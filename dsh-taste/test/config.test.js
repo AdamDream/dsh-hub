@@ -7,7 +7,7 @@ import { DEFAULT_CONFIG, loadConfig, saveConfig } from "../lib/config.js";
 
 const EXPECTED_DEFAULT = {
 	learningEnabled: true,
-	injection: { enabled: true, maxChars: 16_000, includeSubagents: false },
+	injection: { enabled: true, maxChars: 16_000, includeSubagents: false, minConfidence: 0.7 },
 	observer: { modelMode: "inherit", provider: "", model: "", maxInputChars: 16_000, timeoutMs: 120_000, maxTurns: 20 },
 	storage: { categoriesEnabled: true },
 };
@@ -59,7 +59,7 @@ test("loadConfig merges whitelisted keys and drops unknown ones", async () => {
 	}));
 	assert.deepEqual(await loadConfig(dir), {
 		learningEnabled: false,
-		injection: { enabled: true, maxChars: 5000, includeSubagents: false },
+		injection: { enabled: true, maxChars: 5000, includeSubagents: false, minConfidence: 0.7 },
 		observer: { modelMode: "custom", provider: "deepseek", model: "m", maxInputChars: 20000, timeoutMs: 60000, maxTurns: 5 },
 		storage: { categoriesEnabled: false },
 	});
@@ -89,7 +89,7 @@ test("loadConfig keeps defaults for partial configs and non-record sections", as
 	await writeRawConfig(dir, JSON.stringify({ injection: { maxChars: 8000 }, observer: "garbage", storage: null }));
 	assert.deepEqual(await loadConfig(dir), {
 		learningEnabled: true,
-		injection: { enabled: true, maxChars: 8000, includeSubagents: false },
+		injection: { enabled: true, maxChars: 8000, includeSubagents: false, minConfidence: 0.7 },
 		observer: EXPECTED_DEFAULT.observer,
 		storage: EXPECTED_DEFAULT.storage,
 	});
@@ -147,8 +147,39 @@ test("saveConfig persists only whitelisted, normalized fields and accepts the fr
 	await saveConfig(dirty, { learningEnabled: false, unknown: 1, injection: { maxChars: 2 }, observer: { modelMode: "weird" } });
 	assert.deepEqual(JSON.parse(await readFile(join(dirty, "config.json"), "utf8")), {
 		learningEnabled: false,
-		injection: { enabled: true, maxChars: 1_000, includeSubagents: false },
+		injection: { enabled: true, maxChars: 1_000, includeSubagents: false, minConfidence: 0.7 },
 		observer: EXPECTED_DEFAULT.observer,
 		storage: EXPECTED_DEFAULT.storage,
 	});
+});
+
+test("injection.minConfidence clamps into [0, 1] WITHOUT rounding and falls back on unusable values", async () => {
+	// 钉死 unitIntervalNumber vs boundedNumber：0.7 绝不能被 Math.round 撑成 1
+	//（那会把门控退化为"仅 confidence=1 的条目通过"）。
+	const cases = [
+		[0.65, 0.65],
+		[0.7, 0.7],
+		[0.69, 0.69],
+		[1.5, 1],
+		[-0.2, 0],
+		["high", 0.7],
+	];
+	for (const [value, expected] of cases) {
+		const dir = await tempDir();
+		await writeRawConfig(dir, JSON.stringify({ injection: { minConfidence: value } }));
+		const config = await loadConfig(dir);
+		assert.equal(config.injection.minConfidence, expected, `minConfidence: ${JSON.stringify(value)}`);
+	}
+	// 缺省（未写键）→ 默认 0.7
+	const missingDir = await tempDir();
+	await writeRawConfig(missingDir, JSON.stringify({ injection: { maxChars: 8000 } }));
+	assert.equal((await loadConfig(missingDir)).injection.minConfidence, 0.7, "a missing key falls back to the default");
+	// NaN / Infinity（非有限值；JSON 无法承载，经 saveConfig 的 JS 对象入口）→ 0.7
+	for (const unusable of [NaN, Infinity]) {
+		const dir = await tempDir();
+		await saveConfig(dir, { injection: { minConfidence: unusable } });
+		const config = await loadConfig(dir);
+		assert.equal(config.injection.minConfidence, 0.7, `minConfidence: ${unusable}`);
+	}
+	assert.equal(Object.isFrozen(DEFAULT_CONFIG.injection), true, "DEFAULT_CONFIG.injection stays frozen");
 });

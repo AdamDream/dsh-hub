@@ -1,0 +1,25 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -2749,7 +2749,13 @@
+ 				const hasImage = content.some((part) => part.type === "image");
+ 				const admit = async () => {
+ 					try {
++						let effective = content;
+ 						if (hasImage) {
++							const transformed = await ctx.waterfall("session/prompt-image-transform", { agent, content }, () => void 0);
++							if (transformed !== void 0) effective = transformed;
++						}
++						const nowHasImage = effective.some((part) => part.type === "image");
++						if (nowHasImage) {
+ 							const current = selectionFor(agent).current;
+ 							const modelInfo = await ctx.llm.resolveModelInfo(current.provider, current.model);
+ 							if (modelInfo.inputModalities !== void 0 && !modelInfo.inputModalities.includes("image")) return err(request, {
+@@ -2759,7 +2765,7 @@
+ 							});
+ 						}
+ 						const message = createUserMessage({
+-							content: await durablePromptContent(ctx, content),
++							content: await durablePromptContent(ctx, effective),
+ 							source
+ 						});
+ 						if (mode === "steer") agent.steer(message);

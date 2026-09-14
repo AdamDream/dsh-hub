@@ -1,0 +1,19 @@
+--- dsh-agent-loop/lib/index.js
++++ dsh-agent-loop/lib/index.js
+@@ -609,6 +609,7 @@
+ 		const { turn, step, abort: { signal } } = this.phase;
+ 		signal.throwIfAborted();
+ 		const system = renderPrompt(assembly);
++		const isSubagent = (this.options.subagentDepth ?? 0) > 0 || (this.session.header?.delegationDepth ?? 0) > 0;
+ 		while (true) {
+ 			const { request, preparedCall } = await this.buildRequest(turn, step, assembly.tools, system, this.session.deriveMessages(), signal);
+ 			const assembler = new BlockAssembler();
+@@ -618,7 +619,7 @@
+ 				signal.throwIfAborted();
+ 				for await (const chunk of stream) {
+ 					signal.throwIfAborted();
+-					chunkSeqs.push(this.session.append("assistant/chunk", {
++					if (!isSubagent) chunkSeqs.push(this.session.append("assistant/chunk", {
+ 						turn,
+ 						step,
+ 						chunk

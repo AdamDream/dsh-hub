@@ -1,0 +1,52 @@
+# ============================================================
+# settings-lag-fix.snippet.yaml — subagent 多开卡顿修复 settings 修改片段
+# 交付单元：U-6 / U-7 / U-8（lag-fix-audit.md §3）
+# 部署位：~/.dsh/settings.yaml（本修复不直接改部署位；由主代理部署期
+#         应用，或运行 ../replay-lag-fix.sh 自动改写）
+# ============================================================
+#
+# 三处改动的最终形态（与 settings.yaml.diff 精确对应）：
+#
+# [U-6] llm-pi-ai.providers.adam.models[deepseek-v4-flash].maxTokens
+#       786432 -> 990000（现值 L80，全文件唯一；主 agent 默认模型，随本键生效）
+# [U-7] llm-pi-ai.providers.opencode-go.models 追加 deepseek-v4.1-flash
+#       条目（maxTokens 990000，与同族 deepseek-v4-flash 格式一致；
+#       同族 v4-flash 的 384000 不在裁决范围、不改）
+# [U-8] vision-adam 段整体替换（与已产出 .workspace/deploy/
+#       settings-vision-adam.snippet.yaml L17-27 合并，二者键值一致；
+#       新 lib 默认 DEFAULT_MAX_TOKENS=2000 不动、settings 显式 2000 优先，
+#       相等无冲突；其余可选键不写即回落 lib 默认）
+#
+# 应用方式二选一：
+#   1) 结构化改写（推荐，幂等）：python3 pyyaml 改写 + 写回前解析断言
+#      （replay-lag-fix.sh 内嵌实现，settings.yaml 全文件无注释，改写安全）
+#   2) 手工文本替换：按下方「精确改动」锚点替换（settings.yaml.diff 同源）
+#
+# 精确改动（相对当前 settings.yaml）：
+#   a) `          maxTokens: 786432`        -> `          maxTokens: 990000`   （唯一锚点）
+#   b) `          maxTokens: 500000` 之后（grok-4.5 条目尾、`    adam:` 之前）插入：
+#   c) `vision-adam:` 段（现 3 行）整体替换为下方 vision-adam 段（5 行）
+# ------------------------------------------------------------------
+
+# ---- [U-7] opencode-go.models 追加条目（插在 grok-4.5 之后、adam 之前）----
+        - id: deepseek-v4.1-flash
+          name: DeepSeek V4.1 Flash
+          contextWindow: 1000000
+          maxTokens: 990000
+
+# ---- [U-6] adam.models deepseek-v4-flash 条目（maxTokens 一行改值）----
+        - id: deepseek-v4-flash
+          maxTokens: 990000
+
+# ---- [U-8] vision-adam 段（完整新段，替换现有 3 行旧段）----
+vision-adam:
+  # 识图模型（与 settings-vision-adam.snippet.yaml 合并后的最终值；
+  # 旧值 glm-5.3-flash 若继续使用须确认其在 opencode 网关可用）
+  model: deepseek-v4.1-flash
+  # 网关 baseURL（opencode 网关，与 web-search-deepseek 同网关）
+  baseURL: https://opencode.ai/zen/go/v1
+  # 凭据引用（.credentials.yaml 中的 OPENCODE_GO_API_KEY，opencode 三头认证）
+  apiKeyEnv: OPENCODE_GO_API_KEY
+  # 每次分析最大生成 token（识图专用预算；新 lib 默认 2000，settings 显式优先，
+  # 二者相等无冲突——与 deepseek-v4-flash 的 990000 是不同键、互不影响）
+  maxTokens: 2000

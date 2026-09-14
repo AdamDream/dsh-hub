@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { collectTurnTexts, isLearnableUserEvent } from "../lib/collector.js";
+import { classifyEventForTaste, collectTurnEvidence, collectTurnTexts, isLearnableUserEvent } from "../lib/collector.js";
 
 let nextSeq = 1;
 
@@ -16,9 +16,9 @@ function userMessage(parts, kind = "user") {
 	return ev("user/message", { id: "u", role: "user", source: { kind }, content: parts.map(text) });
 }
 
-function assistantMessage(parts, nested = true) {
-	const message = { id: "a", role: "assistant", source: { kind: "model", provider: "deepseek", model: "m" }, content: parts.map(text) };
-	return ev("assistant/message", nested ? { message } : { content: message.content });
+function assistantMessage(parts, nested = true, kind = "model") {
+	const message = { id: "a", role: "assistant", source: { kind, provider: "deepseek", model: "m" }, content: parts.map(text) };
+	return ev("assistant/message", nested ? { message } : { content: message.content, source: { kind } });
 }
 
 function turnStart(turn) {
@@ -29,15 +29,172 @@ function turnEnd(turn) {
 	return ev("turn/end", { turn });
 }
 
-test("isLearnableUserEvent accepts real user messages and rejects plugin sources and junk", () => {
+test("classifyEventForTaste is the only classification API with the strict {kind, reason} shape", () => {
+	assert.deepEqual(classifyEventForTaste(userMessage(["hello"])), { kind: "user-primary", reason: "user-message" });
+	assert.deepEqual(classifyEventForTaste(assistantMessage(["hi"])), { kind: "assistant-secondary", reason: "assistant-message" });
+	// 事件类型闸门：非 message 类型、缺 type、data 非对象一律 event-shape-or-type。
+	for (const event of [turnStart(1), ev("tool/call", {}), ev("tool/result", {}), ev("agent/inbox", {}), ev("agent/inbox/spliced", {}), ev("system", {}), ev("runtime-context", {}), ev("rpc/x", {}), ev("turn/end", {}), null, undefined, 42, "a string", {}, { type: "user/message" }, { type: "user/message", data: null }]) {
+		assert.deepEqual(classifyEventForTaste(event), { kind: "reject", reason: "event-shape-or-type" }, JSON.stringify(event?.type ?? event));
+	}
+});
+
+test("source gate: automation kinds, unknown values and invalid shapes fail closed", () => {
+	for (const kind of ["plugin", "tool", "system", "runtime-context", "agent", "rpc", "subagent", "automation", "inbox", "spliced", "something-new"]) {
+		assert.deepEqual(classifyEventForTaste(userMessage(["x"], kind)), { kind: "reject", reason: "unknown-or-automated-source" }, kind);
+	}
+	// source 为对象但缺字符串 kind：invalid，不走“缺失 source”兼容放行。
+	assert.deepEqual(
+		classifyEventForTaste(ev("user/message", { role: "user", source: {}, content: [{ type: "text", text: "x" }] })),
+		{ kind: "reject", reason: "unknown-or-automated-source" },
+	);
+	// source 为非字符串非对象：同样 fail-closed。
+	assert.deepEqual(
+		classifyEventForTaste(ev("user/message", { role: "user", source: 42, content: [{ type: "text", text: "x" }] })),
+		{ kind: "reject", reason: "unknown-or-automated-source" },
+	);
+	// 兼容 shape：字符串 source === "user" 放行。
+	assert.deepEqual(
+		classifyEventForTaste(ev("user/message", { role: "user", source: "user", content: [{ type: "text", text: "x" }] })),
+		{ kind: "user-primary", reason: "user-message" },
+	);
+});
+
+test("missing source: only user/message with role absent or exactly user proceeds; assistant never", () => {
+	assert.deepEqual(
+		classifyEventForTaste(ev("user/message", { role: "user", content: [{ type: "text", text: "x" }] })),
+		{ kind: "user-primary", reason: "user-message" },
+		"missing source is compatibly accepted for a role-checked user message",
+	);
+	assert.deepEqual(
+		classifyEventForTaste(ev("user/message", { content: [{ type: "text", text: "x" }] })),
+		{ kind: "user-primary", reason: "user-message" },
+		"missing role with missing source is accepted (audited compat)",
+	);
+	assert.deepEqual(
+		classifyEventForTaste(ev("assistant/message", { content: [{ type: "text", text: "x" }] })),
+		{ kind: "reject", reason: "unknown-or-automated-source" },
+		"assistant without a provable model source fails closed",
+	);
+	assert.deepEqual(
+		classifyEventForTaste(ev("assistant/message", { message: { role: "assistant", content: [{ type: "text", text: "x" }] } })),
+		{ kind: "reject", reason: "unknown-or-automated-source" },
+		"nested assistant envelope without source also fails closed",
+	);
+});
+
+test("assistant source must be exactly assistant/model/llm (flat and nested shapes)", () => {
+	assert.deepEqual(
+		classifyEventForTaste(ev("assistant/message", { content: [{ type: "text", text: "x" }], source: { kind: "model" } })),
+		{ kind: "assistant-secondary", reason: "assistant-message" },
+	);
+	assert.deepEqual(
+		classifyEventForTaste(ev("assistant/message", { content: [{ type: "text", text: "x" }], source: "assistant" })),
+		{ kind: "assistant-secondary", reason: "assistant-message" },
+	);
+	assert.deepEqual(
+		classifyEventForTaste(ev("assistant/message", { content: [{ type: "text", text: "x" }], source: { kind: "user" } })),
+		{ kind: "reject", reason: "unknown-or-automated-source" },
+	);
+	// 嵌套信封：来源在 data.message.source（设计 §8.1 的真实 assistant shape）。
+	assert.deepEqual(
+		classifyEventForTaste(ev("assistant/message", { message: { role: "assistant", source: { kind: "model" }, content: [{ type: "text", text: "x" }] } })),
+		{ kind: "assistant-secondary", reason: "assistant-message" },
+	);
+});
+
+test("role gate: present role must match the event type", () => {
+	assert.deepEqual(
+		classifyEventForTaste(ev("user/message", { role: "assistant", source: { kind: "user" }, content: [{ type: "text", text: "x" }] })),
+		{ kind: "reject", reason: "role-mismatch" },
+	);
+	assert.deepEqual(
+		classifyEventForTaste(ev("assistant/message", { role: "user", content: [{ type: "text", text: "x" }], source: { kind: "model" } })),
+		{ kind: "reject", reason: "role-mismatch" },
+	);
+});
+
+test("content gate: only non-blank {type:'text', text:string} blocks count; containers fail closed", () => {
+	assert.deepEqual(
+		classifyEventForTaste(ev("user/message", { role: "user", source: { kind: "user" }, content: "not an array" })),
+		{ kind: "reject", reason: "content-shape" },
+	);
+	// 嵌套 assistant：message 存在但 content 非数组 → content-shape，不回退 flat。
+	assert.deepEqual(
+		classifyEventForTaste(ev("assistant/message", { message: { role: "assistant", source: { kind: "model" }, content: "nope" }, content: [{ type: "text", text: "x" }] })),
+		{ kind: "reject", reason: "content-shape" },
+	);
+	assert.deepEqual(
+		classifyEventForTaste(ev("user/message", { role: "user", source: { kind: "user" }, content: [{ type: "image", url: "x" }, { type: "thinking" }, { type: "text", text: "   " }] })),
+		{ kind: "reject", reason: "no-visible-text" },
+	);
+});
+
+test("embedded automation records fail closed without scanning ordinary user text keywords", () => {
+	// 外层 agent/inbox 直接作为 data.message。
+	assert.deepEqual(
+		classifyEventForTaste(ev("user/message", { role: "user", source: { kind: "user" }, message: { type: "agent/inbox", payload: 1 }, content: [{ type: "text", text: "x" }] })),
+		{ kind: "reject", reason: "embedded-automation-record" },
+	);
+	// 内层 spliced/记录嵌套在 source 对象里。
+	assert.deepEqual(
+		classifyEventForTaste(ev("user/message", { role: "user", source: { kind: "user", note: { type: "agent/inbox/spliced" } }, content: [{ type: "text", text: "x" }] })),
+		{ kind: "reject", reason: "embedded-automation-record" },
+	);
+	// 嵌套记录 source.kind 自动化/未知。
+	assert.deepEqual(
+		classifyEventForTaste(ev("user/message", { role: "user", source: { kind: "user" }, message: { type: "note", source: { kind: "inbox" } }, content: [{ type: "text", text: "x" }] })),
+		{ kind: "reject", reason: "embedded-automation-record" },
+	);
+	// tool/rpc/system/runtime 嵌套记录。
+	for (const nestedType of ["tool/call", "rpc/req", "system", "runtime-context"]) {
+		assert.deepEqual(
+			classifyEventForTaste(ev("user/message", { role: "user", source: { kind: "user" }, message: { type: nestedType }, content: [{ type: "text", text: "x" }] })),
+			{ kind: "reject", reason: "embedded-automation-record" },
+			nestedType,
+		);
+	}
+	// 真实用户讨论工具/inbox 字样不被关键词误伤。
+	assert.deepEqual(
+		classifyEventForTaste(userMessage(["请用 query_peers 查看 agent inbox，再 read_taste_file 检查 taste"])),
+		{ kind: "user-primary", reason: "user-message" },
+	);
+	// 用户引用 assistant 的纠正仍是 user-primary。
+	assert.deepEqual(
+		classifyEventForTaste(userMessage(["assistant 说错了，我偏好 Y"])),
+		{ kind: "user-primary", reason: "user-message" },
+	);
+});
+
+test("isLearnableUserEvent only compares classifyEventForTaste's kind", () => {
 	assert.equal(isLearnableUserEvent(userMessage(["hello"])), true);
-	assert.equal(isLearnableUserEvent(userMessage(["snapshot"], "plugin")), false, "plugin-kind user messages are excluded");
-	assert.equal(isLearnableUserEvent(ev("user/message", { role: "user", content: [] })), true, "missing source is not a plugin source");
+	assert.equal(isLearnableUserEvent(userMessage(["snapshot"], "plugin")), false);
+	assert.equal(isLearnableUserEvent(ev("user/message", { role: "user", source: { kind: "user" }, content: [] })), false, "no visible text is not learnable");
 	assert.equal(isLearnableUserEvent(assistantMessage(["hi"])), false);
 	assert.equal(isLearnableUserEvent(turnStart(1)), false);
 	assert.equal(isLearnableUserEvent(null), false);
 	assert.equal(isLearnableUserEvent(undefined), false);
 	assert.equal(isLearnableUserEvent(42), false);
+});
+
+test("collectTurnEvidence emits {role, provenance, text} items, user before assistant", () => {
+	const events = [
+		turnStart(2),
+		userMessage(["A1"]),
+		assistantMessage(["B1"]),
+		userMessage(["A2"]),
+		assistantMessage(["B2"]),
+	];
+	const evidence = collectTurnEvidence(events, 2);
+	assert.deepEqual(evidence, {
+		user: [
+			{ role: "user", provenance: "user-primary", text: "A1" },
+			{ role: "user", provenance: "user-primary", text: "A2" },
+		],
+		assistant: [
+			{ role: "assistant", provenance: "assistant-secondary", text: "B1" },
+			{ role: "assistant", provenance: "assistant-secondary", text: "B2" },
+		],
+	});
 });
 
 test("slices from the matching turn/start to the array end without a turn/end", () => {
@@ -55,7 +212,7 @@ test("slices from the matching turn/start to the array end without a turn/end", 
 	assert.deepEqual(collectTurnTexts(events, 99), { userText: "", assistantText: "" }, "an unknown turn yields empty texts");
 });
 
-test("joins multiple messages and multiple text parts with newlines", () => {
+test("joins multiple messages and multiple text parts with newlines; tool blocks are skipped", () => {
 	const events = [
 		turnStart(3),
 		userMessage(["first part", { type: "image", url: "x" }, "second part"]),
@@ -99,7 +256,7 @@ test("skips malformed events and blocks without throwing (R1)", () => {
 		}),
 		ev("assistant/message", null),
 		ev("assistant/message", { message: null }),
-		ev("assistant/message", { message: { role: "assistant", content: [null, { type: "text", text: "ok-assistant" }] } }),
+		ev("assistant/message", { message: { role: "assistant", source: { kind: "model" }, content: [null, { type: "text", text: "ok-assistant" }] } }),
 		ev("turn/start", null),
 	];
 	assert.deepEqual(collectTurnTexts(events, 7), { userText: "good", assistantText: "ok-assistant" });
@@ -113,9 +270,17 @@ test("tolerates non-array event inputs and non-number turns", () => {
 	assert.deepEqual(collectTurnTexts([userMessage(["x"])], Number.NaN), { userText: "", assistantText: "" });
 });
 
-test("accepts a flat assistant data shape (content directly on data)", () => {
-	const events = [turnStart(8), assistantMessage(["flat reply"], false)];
-	assert.deepEqual(collectTurnTexts(events, 8), { userText: "", assistantText: "flat reply" });
+test("accepts a flat assistant data shape only with a provable model source", () => {
+	assert.deepEqual(
+		collectTurnTexts([turnStart(8), assistantMessage(["flat reply"], false)], 8),
+		{ userText: "", assistantText: "flat reply" },
+		"flat assistant with source {kind:'model'} is collected",
+	);
+	assert.deepEqual(
+		collectTurnTexts([turnStart(80), ev("assistant/message", { content: [{ type: "text", text: "no source" }] })], 80),
+		{ userText: "", assistantText: "" },
+		"flat assistant without source fails closed",
+	);
 });
 
 test("applies redactFn to both texts and defaults to identity", () => {

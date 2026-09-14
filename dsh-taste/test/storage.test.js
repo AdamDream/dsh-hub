@@ -67,11 +67,11 @@ async function snapshotTree(dir) {
 /** Six workflow bullets — one past the reorganize threshold of five. */
 const sixWorkflowBullets = () =>
 	[
-		["one", "0.9"],
-		["two", "0.8"],
-		["three", "0.7"],
-		["four", "0.6"],
-		["five", "0.5"],
+		["one", "0.90"],
+		["two", "0.80"],
+		["three", "0.70"],
+		["four", "0.60"],
+		["five", "0.50"],
 		["six", "0.4"],
 	]
 		.map(([word, confidence]) => bullet(`Workflow entry ${word} needs recording.`, confidence))
@@ -96,6 +96,8 @@ describe("storage contract surface", () => {
 			"reorganizeIfNeeded",
 			"loadCommandCodeTaste",
 			"loadTasteSnapshot",
+			"formatTasteConfidence",
+			"gateTasteEntries",
 		]) {
 			assert.equal(typeof storage[name], "function", `export ${name}`);
 		}
@@ -107,9 +109,9 @@ describe("parseTasteFile / renderTasteFile", () => {
 		const text = [
 			"# Notes",
 			"",
-			"- Prefers pnpm over npm. Confidence: 0.9",
-			"- 提交信息使用中文。Confidence: 0.8",
-			"- Uses tabs over spaces. Confidence: 0.5",
+			"- Prefers pnpm over npm. Confidence: 0.90",
+			"- 提交信息使用中文。Confidence: 0.80",
+			"- Uses tabs over spaces. Confidence: 0.50",
 			"prose lines and headings are ignored",
 		].join("\n");
 		const entries = parseTasteFile(text);
@@ -120,15 +122,15 @@ describe("parseTasteFile / renderTasteFile", () => {
 		]);
 		assert.deepEqual(parseTasteFile(renderTasteFile(entries)), entries);
 		for (const line of renderTasteFile(entries).trimEnd().split("\n")) {
-			assert.match(line, /^- .+ Confidence: \d\.\d$/);
+			assert.match(line, /^- .+ Confidence: \d\.\d{2}$/);
 		}
 	});
 
 	test("tolerates a Chinese full stop with or without a space before Confidence", () => {
-		assert.deepEqual(parseTasteFile("- 提交信息使用中文。Confidence: 0.8"), [
+		assert.deepEqual(parseTasteFile("- 提交信息使用中文。Confidence: 0.80"), [
 			{ statement: "提交信息使用中文。", confidence: 0.8 },
 		]);
-		assert.deepEqual(parseTasteFile("- 提交信息使用中文。 Confidence: 0.8"), [
+		assert.deepEqual(parseTasteFile("- 提交信息使用中文。 Confidence: 0.80"), [
 			{ statement: "提交信息使用中文。", confidence: 0.8 },
 		]);
 	});
@@ -137,7 +139,7 @@ describe("parseTasteFile / renderTasteFile", () => {
 		const text = [
 			"# Heading",
 			"plain prose",
-			"- ab Confidence: 0.9",
+			"- ab Confidence: 0.90",
 			"- This statement lacks confidence",
 			"-   Spaced bullet statement.   Confidence:   0.6   ",
 		].join("\n");
@@ -158,13 +160,54 @@ describe("parseTasteFile / renderTasteFile", () => {
 	test("renders the exact line sequence with a trailing newline", () => {
 		assert.equal(
 			renderTasteFile([{ statement: "Uses tabs over spaces.", confidence: 0.9 }]),
-			"- Uses tabs over spaces. Confidence: 0.9\n",
+			"- Uses tabs over spaces. Confidence: 0.90\n",
 		);
 		assert.equal(
 			renderTasteFile([{ statement: "Big statement about tests.", confidence: 1 }]),
-			"- Big statement about tests. Confidence: 1.0\n",
+			"- Big statement about tests. Confidence: 1.00\n",
 		);
 		assert.equal(renderTasteFile([]), "");
+	});
+
+	test("parses one-decimal, two-decimal and integer confidences alike", () => {
+		assert.deepEqual(parseTasteFile("- Prefers pnpm over npm. Confidence: 0.88"), [
+			{ statement: "Prefers pnpm over npm.", confidence: 0.88 },
+		]);
+		assert.deepEqual(parseTasteFile("- Prefers pnpm over npm. Confidence: 0.90"), [
+			{ statement: "Prefers pnpm over npm.", confidence: 0.9 },
+		]);
+		assert.deepEqual(parseTasteFile("- Prefers pnpm over npm. Confidence: 1"), [
+			{ statement: "Prefers pnpm over npm.", confidence: 1 },
+		]);
+	});
+});
+
+describe("gateTasteEntries (injection/GUI confidence gate)", () => {
+	test("keeps confidence >= threshold (boundary-inclusive), clamps the threshold and falls back defensively", () => {
+		const entries = [
+			{ statement: "Fifty percent statement.", confidence: 0.5 },
+			{ statement: "Sixty-nine percent statement.", confidence: 0.69 },
+			{ statement: "Seventy percent statement.", confidence: 0.7 },
+			{ statement: "Eighty-five percent statement.", confidence: 0.85 },
+			{ statement: "Full confidence statement.", confidence: 1 },
+		];
+		// 阈值 0.7：边界 0.70 含入，0.50/0.69（含 clamp 0.5 回退产物）一律门控
+		assert.deepEqual(
+			storage.gateTasteEntries(entries, 0.7).map((entry) => entry.statement),
+			["Seventy percent statement.", "Eighty-five percent statement.", "Full confidence statement."],
+		);
+		// 阈值 5 → 钳 1：仅 confidence 1 通过
+		assert.deepEqual(storage.gateTasteEntries(entries, 5).map((entry) => entry.statement), ["Full confidence statement."]);
+		// 不可用阈值（非数字/缺省）→ 回退默认 0.7
+		for (const unusable of ["abc", undefined, null, NaN]) {
+			assert.deepEqual(
+				storage.gateTasteEntries(entries, unusable).map((entry) => entry.statement),
+				["Seventy percent statement.", "Eighty-five percent statement.", "Full confidence statement."],
+				`threshold: ${JSON.stringify(unusable) ?? "undefined"}`,
+			);
+		}
+		// 非数组输入 → []
+		assert.deepEqual(storage.gateTasteEntries(null, 0.7), []);
 	});
 });
 
@@ -341,7 +384,7 @@ describe("clipText", () => {
 describe("normalizePreferenceKey", () => {
 	test("lowercases, strips punctuation/whitespace and the confidence marker", () => {
 		assert.equal(normalizePreferenceKey("Prefer pnpm, over npm!"), "prefer pnpm over npm");
-		assert.equal(normalizePreferenceKey("Use tabs. Confidence: 0.9"), "use tabs");
+		assert.equal(normalizePreferenceKey("Use tabs. Confidence: 0.90"), "use tabs");
 		assert.equal(normalizePreferenceKey("ＡＬＷＡＹＳ　tabs"), "always tabs");
 	});
 
@@ -433,10 +476,10 @@ describe("reorganizeIfNeeded", () => {
 		const testCase = await makeCase("reorgsmall");
 		t.after(testCase.cleanup);
 		const fiveBullets = ["a", "b", "c", "d", "e"]
-			.map((word) => bullet(`Small entry ${word} stays put.`, "0.5"))
+			.map((word) => bullet(`Small entry ${word} stays put.`, "0.50"))
 			.join("\n");
 		const sevenBullets = ["a", "b", "c", "d", "e", "f", "g"]
-			.map((word) => bullet(`Headless entry ${word} stays put.`, "0.5"))
+			.map((word) => bullet(`Headless entry ${word} stays put.`, "0.50"))
 			.join("\n");
 		const scopeDir = testCase.path("scope");
 		await seed(join(scopeDir, "taste.md"), `# Small\n${fiveBullets}\n`);
@@ -493,11 +536,11 @@ describe("loadCommandCodeTaste", () => {
 		t.after(testCase.cleanup);
 		const home = testCase.path("home");
 		const projectRoot = testCase.path("repo");
-		await seed(join(home, ".commandcode", "taste", "taste.md"), "- Cc global root entry. Confidence: 0.9\n");
-		await seed(join(home, ".commandcode", "taste", "coding", "taste.md"), "- Cc coding entry. Confidence: 0.7\n");
-		await seed(join(home, ".commandcode", "taste", "--skip", "taste.md"), "- Cc skipped entry. Confidence: 0.6\n");
-		await seed(join(home, ".commandcode", "taste", "has space", "taste.md"), "- Cc spaced entry. Confidence: 0.6\n");
-		await seed(join(projectRoot, ".commandcode", "taste", "taste.md"), "- Cc project entry. Confidence: 0.5\n");
+		await seed(join(home, ".commandcode", "taste", "taste.md"), "- Cc global root entry. Confidence: 0.90\n");
+		await seed(join(home, ".commandcode", "taste", "coding", "taste.md"), "- Cc coding entry. Confidence: 0.70\n");
+		await seed(join(home, ".commandcode", "taste", "--skip", "taste.md"), "- Cc skipped entry. Confidence: 0.60\n");
+		await seed(join(home, ".commandcode", "taste", "has space", "taste.md"), "- Cc spaced entry. Confidence: 0.60\n");
+		await seed(join(projectRoot, ".commandcode", "taste", "taste.md"), "- Cc project entry. Confidence: 0.50\n");
 		const before = await snapshotTree(testCase.root);
 		const entries = await loadCommandCodeTaste(home, projectRoot);
 		assert.deepEqual(entries, [
@@ -513,8 +556,8 @@ describe("loadCommandCodeTaste", () => {
 		t.after(testCase.cleanup);
 		const home = testCase.path("home");
 		const projectRoot = testCase.path("repo");
-		await seed(join(home, ".commandcode", "taste", "taste.md"), "- Duplicate statement here. Confidence: 0.9\n");
-		await seed(join(projectRoot, ".commandcode", "taste", "taste.md"), "- duplicate  statement here! Confidence: 0.4\n");
+		await seed(join(home, ".commandcode", "taste", "taste.md"), "- Duplicate statement here. Confidence: 0.90\n");
+		await seed(join(projectRoot, ".commandcode", "taste", "taste.md"), "- duplicate  statement here! Confidence: 0.40\n");
 		assert.deepEqual(await loadCommandCodeTaste(home, projectRoot), [
 			{ statement: "Duplicate statement here.", confidence: 0.9 },
 		]);
@@ -535,27 +578,27 @@ describe("loadTasteSnapshot", () => {
 		const projectDir = testCase.path("project", ".dsh", "taste");
 		await seed(
 			join(globalDir, "taste.md"),
-			"- Global only statement. Confidence: 0.5\n- Shared statement here. Confidence: 0.4\n",
+			"- Global only statement. Confidence: 0.50\n- Shared statement here. Confidence: 0.40\n",
 		);
-		await seed(join(globalDir, "coding", "taste.md"), "- Global category statement. Confidence: 0.8\n");
+		await seed(join(globalDir, "coding", "taste.md"), "- Global category statement. Confidence: 0.80\n");
 		await seed(
 			join(projectDir, "taste.md"),
-			"# Project\n- Project statement alpha. Confidence: 0.9\n- Shared statement here. Confidence: 1.0\n",
+			"# Project\n- Project statement alpha. Confidence: 0.90\n- Shared statement here. Confidence: 1.00\n",
 		);
 		await seed(
 			testCase.path(".commandcode", "taste", "taste.md"),
-			"- Commandcode statement. Confidence: 0.6\n- Global only statement. Confidence: 0.3\n",
+			"- Commandcode statement. Confidence: 0.60\n- Global only statement. Confidence: 0.3\n",
 		);
-		await seed(testCase.path("project", ".commandcode", "taste", "taste.md"), "- Project cc statement. Confidence: 0.7\n");
+		await seed(testCase.path("project", ".commandcode", "taste", "taste.md"), "- Project cc statement. Confidence: 0.70\n");
 		assert.equal(
 			await loadTasteSnapshot(globalDir, projectDir),
 			[
-				"- Project statement alpha. Confidence: 0.9",
-				"- Shared statement here. Confidence: 1.0",
-				"- Global only statement. Confidence: 0.5",
-				"- Global category statement. Confidence: 0.8",
-				"- Commandcode statement. Confidence: 0.6",
-				"- Project cc statement. Confidence: 0.7",
+				"- Project statement alpha. Confidence: 0.90",
+				"- Shared statement here. Confidence: 1.00",
+				"- Global only statement. Confidence: 0.50",
+				"- Global category statement. Confidence: 0.80",
+				"- Commandcode statement. Confidence: 0.60",
+				"- Project cc statement. Confidence: 0.70",
 			].join("\n") + "\n",
 		);
 	});
@@ -574,7 +617,73 @@ describe("loadTasteSnapshot", () => {
 		const testCase = await makeCase("snapglobal");
 		t.after(testCase.cleanup);
 		const globalDir = testCase.path("global", "taste");
-		await seed(join(globalDir, "taste.md"), "- Global alone statement. Confidence: 0.4\n");
-		assert.equal(await loadTasteSnapshot(globalDir), "- Global alone statement. Confidence: 0.4\n");
+		await seed(join(globalDir, "taste.md"), "- Global alone statement. Confidence: 0.40\n");
+		assert.equal(await loadTasteSnapshot(globalDir), "- Global alone statement. Confidence: 0.40\n");
+	});
+});
+
+describe("deleteTasteEntries (gui-mutation-design §2: shared forget/GUI deletion core)", () => {
+	test("exports the shared deletion core", () => {
+		assert.equal(typeof storage.deleteTasteEntries, "function");
+	});
+
+	test("removes one entry by normalized key and keeps the other (§6.2.1)", async (t) => {
+		const testCase = await makeCase("delete-single");
+		t.after(testCase.cleanup);
+		const scopeDir = testCase.path("scope");
+		await seed(
+			join(scopeDir, "taste.md"),
+			`${bullet("First statement stays put.", 0.9)}\n${bullet("Second statement is doomed.", 0.5)}\n`,
+		);
+		const removed = await storage.deleteTasteEntries([
+			{ scopeDir, relPath: "taste.md", keys: [normalizePreferenceKey("Second statement is doomed.")] },
+		]);
+		assert.equal(removed, 1);
+		const remaining = parseTasteFile(await readFile(join(scopeDir, "taste.md"), "utf8"));
+		assert.deepEqual(remaining, [{ statement: "First statement stays put.", confidence: 0.9 }]);
+	});
+
+	test("writes an emptied file as \"\" and never unlinks it (§6.2.2, forget-aligned)", async (t) => {
+		const testCase = await makeCase("delete-empty");
+		t.after(testCase.cleanup);
+		const scopeDir = testCase.path("scope");
+		await seed(join(scopeDir, "taste.md"), `${bullet("Only entry goes away.", 0.8)}\n`);
+		const removed = await storage.deleteTasteEntries([
+			{ scopeDir, relPath: "taste.md", keys: [normalizePreferenceKey("Only entry goes away.")] },
+		]);
+		assert.equal(removed, 1);
+		assert.equal(await readFile(join(scopeDir, "taste.md"), "utf8"), "");
+	});
+
+	test("merges repeated targets of one file into a single locked rewrite (§6.2.5)", async (t) => {
+		const testCase = await makeCase("delete-merge");
+		t.after(testCase.cleanup);
+		const scopeDir = testCase.path("scope");
+		await seed(
+			join(scopeDir, "taste.md"),
+			`${bullet("Keep me around.", 0.9)}\n${bullet("Gone one.", 0.5)}\n${bullet("Gone two.", 0.4)}\n`,
+		);
+		const removed = await storage.deleteTasteEntries([
+			{ scopeDir, relPath: "taste.md", keys: [normalizePreferenceKey("Gone one.")] },
+			{ scopeDir, relPath: "taste.md", keys: [normalizePreferenceKey("Gone two.")] },
+		]);
+		assert.equal(removed, 2);
+		const remaining = parseTasteFile(await readFile(join(scopeDir, "taste.md"), "utf8"));
+		assert.deepEqual(remaining, [{ statement: "Keep me around.", confidence: 0.9 }]);
+	});
+
+	test("removes every duplicate of one key defensively and counts them (§6.2.7)", async (t) => {
+		const testCase = await makeCase("delete-duplicate");
+		t.after(testCase.cleanup);
+		const scopeDir = testCase.path("scope");
+		await seed(
+			join(scopeDir, "taste.md"),
+			`${bullet("Duplicated statement appears twice.", 0.9)}\n${bullet("Duplicated statement appears twice.", 0.6)}\n`,
+		);
+		const removed = await storage.deleteTasteEntries([
+			{ scopeDir, relPath: "taste.md", keys: [normalizePreferenceKey("Duplicated statement appears twice.")] },
+		]);
+		assert.equal(removed, 2);
+		assert.equal(await readFile(join(scopeDir, "taste.md"), "utf8"), "");
 	});
 });

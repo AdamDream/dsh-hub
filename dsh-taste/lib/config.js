@@ -22,7 +22,7 @@ const BOUNDS = Object.freeze({
 /** Frozen `§8` defaults; shared references can never drift. */
 export const DEFAULT_CONFIG = Object.freeze({
 	learningEnabled: true,
-	injection: Object.freeze({ enabled: true, maxChars: 16_000, includeSubagents: false }),
+	injection: Object.freeze({ enabled: true, maxChars: 16_000, includeSubagents: false, minConfidence: 0.7 }),
 	observer: Object.freeze({
 		modelMode: "inherit",
 		provider: "",
@@ -61,6 +61,19 @@ function boundedNumber(value, bounds, fallback) {
 	return Math.round(Math.min(bounds.max, Math.max(bounds.min, value)));
 }
 
+/**
+ * Coerce one untrusted probability into [0, 1] WITHOUT rounding; unusable
+ * values fall back to the default. minConfidence rides this helper —
+ * `boundedNumber`'s Math.round would turn 0.7 into 1 and gate everything.
+ * @param value - candidate from untrusted JSON.
+ * @param fallback - default taken when the value is unusable.
+ * @returns the coerced probability.
+ */
+function unitIntervalNumber(value, fallback) {
+	if (typeof value !== "number" || !Number.isFinite(value)) return fallback;
+	return Math.min(1, Math.max(0, value));
+}
+
 /** Whitelist merge of one untrusted config value over the defaults. */
 function mergeConfig(value) {
 	const input = isRecord(value) ? value : {};
@@ -73,6 +86,7 @@ function mergeConfig(value) {
 			enabled: booleanOr(injection.enabled, DEFAULT_CONFIG.injection.enabled),
 			maxChars: boundedNumber(injection.maxChars, BOUNDS.injectionMaxChars, DEFAULT_CONFIG.injection.maxChars),
 			includeSubagents: booleanOr(injection.includeSubagents, DEFAULT_CONFIG.injection.includeSubagents),
+			minConfidence: unitIntervalNumber(injection.minConfidence, DEFAULT_CONFIG.injection.minConfidence),
 		},
 		observer: {
 			// Model routing (§4/§10.5): "inherit" follows the triggering agent's

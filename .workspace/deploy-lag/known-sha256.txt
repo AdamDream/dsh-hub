@@ -1,0 +1,9 @@
+# known-sha256.txt — replay-lag-fix.sh 校验锚点（U-1..U-3 字节全等基准）
+# 来源：lag-fix-audit.md §1.1（审计实测良值）；tgz 内路径 → sha256
+# 用途：U-1..U-3 从 tgz 解包后先比对（防 tgz 损坏/被换），再 cp 覆盖 live
+b20d42dcf3aa8f5775cb6e50abe278b1539cd2277c8647daab0733cfcbfc53e6  dsh-agent-loop/lib/index.js
+ac7cbb972b126c7770a0c494c60795e2114ce642e2fc3a1d98c946fce9a31a04  dsh-client-ui-subagent/lib/client.js
+9e48db07dcaed014f7ad2a487deec9e421a01c52afa3d994c8820c7d481f579c  dsh-web-search-deepseek/lib/index.js
+
+# 参考（非脚本强制校验项；U-4/U-5 以锚点 grep + node --check 为准）：
+# dd0e0b29d463bc357807d7a59d692210b84d9fd0ef717db4655e6133efd06692  dsh-host-apiproxy/lib/index.js（加固后完整文件）

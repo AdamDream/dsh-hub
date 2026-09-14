@@ -1,0 +1,66 @@
+--- dsh-client-ui-subagent/lib/client.js
++++ dsh-client-ui-subagent/lib/client.js
+@@ -69,6 +69,17 @@
+ 			if (value < 1e6) return `${scaled(value / 1e3)}K`;
+ 			return `${scaled(value / 1e6)}M`;
+ 		}
++		/** Decode-throughput figure: whole tokens from ten up, one decimal below. */
++		function formatTokensPerSecond(tps) {
++			const clamped = Math.max(0, tps);
++			return clamped >= 10 ? String(Math.round(clamped)) : String(Math.round(clamped * 10) / 10);
++		}
++		/** Whole-window decode rate from the same sessionStats projection the stats strip reads. */
++		function decodeTokensPerSecond(summary) {
++			const stats = summary?.projectionValues?.sessionStats;
++			if (stats === void 0 || stats.decodeMs <= 0) return void 0;
++			return stats.decodeTokens / (stats.decodeMs / 1e3);
++		}
+ 		/** Sum the four disjoint durable provider-usage buckets. */
+ 		function tokenTotal(usage) {
+ 			return usage === void 0 ? void 0 : usage.uncachedInputTokens + usage.outputTokens + usage.cacheReadTokens + usage.cacheWriteTokens;
+@@ -258,11 +269,14 @@
+ 					const totalTokens = tokenTotal(summary?.projectionValues?.tokenUsage);
+ 					const durationMs = activityDuration(summary, entry.activity, now);
+ 					const tokenMetric = totalTokens === void 0 ? void 0 : `${formatTokens(totalTokens)} tok`;
++					const tps = decodeTokensPerSecond(summary);
++					const speedMetric = tps === void 0 ? void 0 : `${formatTokensPerSecond(tps)} tok/s`;
+ 					const durationMetric = durationMs === void 0 ? void 0 : {
+ 						compact: formatDuration(durationMs, t),
+ 						exact: formatExactDuration(durationMs, t)
+ 					};
+-					const metrics = [tokenMetric, durationMetric?.exact].filter((value) => value !== void 0).join(" · ");
++					const headMetric = [tokenMetric, speedMetric].filter((value) => value !== void 0).join(" · ");
++					const metrics = [headMetric, durationMetric?.exact].filter((value) => value !== void 0 && value !== "").join(" · ");
+ 					const open = () => {
+ 						openChild({
+ 							parentSessionId,
+@@ -326,9 +340,9 @@
+ 									}),
+ 									metrics !== "" && (0, react_jsx_runtime.jsxs)("span", {
+ 										className: SubagentHeaderLineage_module_css_default.metrics,
+-										children: [tokenMetric !== void 0 && (0, react_jsx_runtime.jsx)("span", {
++										children: [headMetric !== "" && (0, react_jsx_runtime.jsx)("span", {
+ 											className: SubagentHeaderLineage_module_css_default.metricToken,
+-											children: tokenMetric
++											children: headMetric
+ 										}), durationMetric !== void 0 && (0, react_jsx_runtime.jsx)("span", {
+ 											className: SubagentHeaderLineage_module_css_default.metricDuration,
+ 											title: t("duration.exactTitle", { duration: durationMetric.exact }),
+@@ -696,12 +710,15 @@
+ 		* @param props - selector-owned read-only reason plus standard slot props.
+ 		* @returns A read-only composer replacement.
+ 		*/
+-		function SubagentReadOnlyComposer({ matched, t }) {
++		function SubagentReadOnlyComposer({ matched, t, useProjection }) {
+ 			const oneShot = matched.reason === "one-shot";
++			const stats = typeof useProjection === "function" ? useProjection("sessionStats") : void 0;
++			const tps = stats === void 0 || stats.decodeMs <= 0 ? void 0 : stats.decodeTokens / (stats.decodeMs / 1e3);
++			const speed = tps === void 0 ? void 0 : `${formatTokensPerSecond(tps)} tok/s`;
+ 			return (0, react_jsx_runtime.jsxs)("div", {
+ 				className: SubagentReadOnlyComposer_module_css_default.frame,
+ 				role: "status",
+-				children: [(0, react_jsx_runtime.jsx)("strong", { children: t(oneShot ? "readonly.oneShot.title" : "readonly.title") }), (0, react_jsx_runtime.jsx)("span", { children: t(oneShot ? "readonly.oneShot.body" : "readonly.body") })]
++				children: [(0, react_jsx_runtime.jsx)("strong", { children: t(oneShot ? "readonly.oneShot.title" : "readonly.title") }), (0, react_jsx_runtime.jsx)("span", { children: t(oneShot ? "readonly.oneShot.body" : "readonly.body") }), speed !== void 0 && (0, react_jsx_runtime.jsx)("span", { children: speed })]
+ 			});
+ 		}
+ 		//#endregion

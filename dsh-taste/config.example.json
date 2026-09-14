@@ -3,12 +3,13 @@
 	"injection": {
 		"enabled": true,
 		"maxChars": 16000,
-		"includeSubagents": false
+		"includeSubagents": false,
+		"minConfidence": 0.7
 	},
 	"observer": {
 		"modelMode": "custom",
 		"provider": "adam",
-		"model": "deepseek-v4-pro",
+		"model": "glm-5.3",
 		"maxInputChars": 16000,
 		"timeoutMs": 120000,
 		"maxTurns": 20

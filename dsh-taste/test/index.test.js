@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, it } from "node:test";
 import { renderContextSections } from "@deepseek-ai/dsh-system-prompt";
 import { DEFAULT_CONFIG } from "../lib/config.js";
 import { apply, inject, name } from "../lib/index.js";
+import { normalizePreferenceKey, parseTasteFile, projectRootFor } from "../lib/storage.js";
 //#region test/index.test.js
 /**
  * apply()-level integration tests for the plugin glue (proposal §3/§6.4/§9):
@@ -172,7 +173,7 @@ describe("plugin surface", () => {
 		assert.equal(h.state.commands.length, 1);
 		assert.equal(h.state.commands[0].name, "taste");
 		assert.equal(h.state.commands[0].recordInput, false);
-		assert.deepEqual(h.state.commands[0].input, { hint: "<status|on|off|list|remember|forget|paths|model>" });
+		assert.deepEqual(h.state.commands[0].input, { hint: "<status|on|off|list|remember|forget|paths|model|backfill>" });
 	});
 });
 
@@ -183,7 +184,7 @@ describe("context injection sanitize (R9, §6.4/§9)", () => {
 			join(h.globalTasteDir, "taste.md"),
 			[
 				"- Prefer {{model}} for quick checks. Confidence: 0.9",
-				"- Treat {{unknown}} placeholders as typos. Confidence: 0.5",
+				"- Treat {{unknown}} placeholders as typos. Confidence: 0.75",
 				"- Keep pairs {{like this}} and lone }} braces. Confidence: 0.8",
 			].join("\n") + "\n",
 			"utf8",
@@ -211,6 +212,56 @@ describe("context injection sanitize (R9, §6.4/§9)", () => {
 		);
 		const [corrupted] = renderContextSections({ contexts: [{ name: "taste", text: "see {{model}} now" }], variables: { model: "GLM-X" } });
 		assert.equal(corrupted.text, "see GLM-X now");
+	});
+});
+
+describe("injection confidence gate (injection.minConfidence)", () => {
+	it("gates entries below the threshold, keeps the boundary and yields \"\" when all are gated", (t) => {
+		const h = setup(t);
+		writeFileSync(
+			join(h.globalTasteDir, "taste.md"),
+			[
+				"- Fifty confidence statement stays out. Confidence: 0.50",
+				"- Sixty-nine confidence statement stays out. Confidence: 0.69",
+				"- Seventy confidence statement stays in. Confidence: 0.70",
+				"- Eighty-five confidence statement stays in. Confidence: 0.85",
+			].join("\n") + "\n",
+			"utf8",
+		);
+		const injected = h.injectFn({ agent: topLevelAgent({ cwd: h.work }) });
+		assert.match(injected, /^<taste>\n/);
+		// 边界含入：恰为 0.70 的条目保留；0.50/0.69（含 clamp 0.5 回退语义）一律门控
+		assert.ok(injected.includes("Seventy confidence statement stays in."), injected);
+		assert.ok(injected.includes("Eighty-five confidence statement stays in."), injected);
+		assert.ok(!injected.includes("Fifty confidence"), injected);
+		assert.ok(!injected.includes("Sixty-nine confidence"), injected);
+
+		// 全部低于阈值 → 空快照走既有 if (!snapshot) 短路，不产生空 <taste> 包裹
+		writeFileSync(join(h.globalTasteDir, "taste.md"), "- All below threshold goes away. Confidence: 0.5\n", "utf8");
+		assert.equal(h.injectFn({ agent: topLevelAgent({ cwd: h.work }) }), "");
+	});
+
+	it("invalidates the snapshot cache when the threshold changes hot (taste files untouched)", async (t) => {
+		const h = setup(t);
+		writeFileSync(
+			join(h.globalTasteDir, "taste.md"),
+			[
+				"- Sixty-five confidence statement goes away. Confidence: 0.65",
+				"- Eighty-five confidence statement survives. Confidence: 0.85",
+			].join("\n") + "\n",
+			"utf8",
+		);
+		const agent = topLevelAgent({ cwd: h.work });
+		assert.ok(h.injectFn({ agent }).includes("Eighty-five confidence statement survives."));
+		assert.ok(!h.injectFn({ agent }).includes("Sixty-five confidence"));
+
+		// taste 文件一字节不动：仅改 config.json 的阈值。若缓存键漏掉阈值，旧文本将永不过期。
+		writeFileSync(join(h.globalTasteDir, "config.json"), JSON.stringify({ injection: { minConfidence: 0.9 } }), "utf8");
+		await waitFor(() => !h.injectFn({ agent }).includes("Eighty-five confidence statement survives."));
+
+		// 改回 0.7（写成 0.70：与 0.9 版字节数不同，stamp 必变）→ 条目回归
+		writeFileSync(join(h.globalTasteDir, "config.json"), '{"injection":{"minConfidence":0.70}}', "utf8");
+		await waitFor(() => h.injectFn({ agent }).includes("Eighty-five confidence statement survives."));
 	});
 });
 
@@ -291,7 +342,7 @@ describe("turn-stopping hook (R1)", () => {
 		assert.equal(h.state.followups[0].role, "user");
 		assert.deepEqual(h.state.followups[0].source, { kind: "plugin", plugin: "taste", form: "snapshot" });
 		assert.ok(h.state.followups[0].content[0].text.includes("I prefer tabs over spaces"), h.state.followups[0].content[0].text);
-		assert.ok(h.state.followups[0].content[0].text.includes("NEW messages to analyze"));
+		assert.ok(h.state.followups[0].content[0].text.includes("NEW 消息（只能从这里学习）"));
 	});
 
 	it("does not enqueue when learningEnabled is off", async (t) => {
@@ -386,6 +437,52 @@ describe("in-flight learner set (R5)", () => {
 		await settle();
 		assert.equal(h.state.createCalls.length, 1, "the handler's in-flight guard prevented a second learner");
 		assert.equal(h.state.disposals, 1);
+	});
+});
+//#endregion
+
+//#region /taste forget over the shared deleteTasteEntries core (gui-mutation-design §2.2/§6.4)
+describe("/taste forget via the shared deletion core (gui-mutation-design §6.4)", () => {
+	it("removes a keyword match and reports the count (§6.4.1)", async (t) => {
+		const h = setup(t);
+		writeFileSync(
+			join(h.globalTasteDir, "taste.md"),
+			"- Keeper statement about tabs. Confidence: 0.9\n- Doomed statement about spacing. Confidence: 0.5\n",
+			"utf8",
+		);
+		const result = await h.state.commands[0].handler({ rawInput: "forget doomed", agent: topLevelAgent({ cwd: h.work }) });
+		assert.deepEqual(result, { kind: "success", text: "已移除 1 条偏好。" });
+		assert.deepEqual(parseTasteFile(readFileSync(join(h.globalTasteDir, "taste.md"), "utf8")), [
+			{ statement: "Keeper statement about tabs.", confidence: 0.9 },
+		]);
+	});
+
+	it("removes by list number and errors without a match (§6.4.2)", async (t) => {
+		const h = setup(t);
+		writeFileSync(
+			join(h.globalTasteDir, "taste.md"),
+			"- First numbered preference entry. Confidence: 0.9\n- Second numbered preference entry. Confidence: 0.8\n",
+			"utf8",
+		);
+		const numbered = await h.state.commands[0].handler({ rawInput: "forget 1", agent: topLevelAgent({ cwd: h.work }) });
+		assert.deepEqual(numbered, { kind: "success", text: "已移除 1 条偏好。" });
+		assert.deepEqual(parseTasteFile(readFileSync(join(h.globalTasteDir, "taste.md"), "utf8")), [
+			{ statement: "Second numbered preference entry.", confidence: 0.8 },
+		]);
+		const noMatch = await h.state.commands[0].handler({ rawInput: "forget zilch-nothing", agent: topLevelAgent({ cwd: h.work }) });
+		assert.equal(noMatch.kind, "error");
+	});
+
+	it("removes across project and global scopes and reports the total (§6.4.3)", async (t) => {
+		const h = setup(t);
+		const projectTasteDir = join(projectRootFor(h.work), ".dsh", "taste");
+		mkdirSync(projectTasteDir, { recursive: true });
+		writeFileSync(join(projectTasteDir, "taste.md"), "- Shared keyword lives in project. Confidence: 0.7\n", "utf8");
+		writeFileSync(join(h.globalTasteDir, "taste.md"), "- Shared keyword lives in global. Confidence: 0.6\n", "utf8");
+		const result = await h.state.commands[0].handler({ rawInput: "forget shared keyword", agent: topLevelAgent({ cwd: h.work }) });
+		assert.deepEqual(result, { kind: "success", text: "已移除 2 条偏好。" });
+		assert.equal(readFileSync(join(projectTasteDir, "taste.md"), "utf8"), "");
+		assert.equal(readFileSync(join(h.globalTasteDir, "taste.md"), "utf8"), "");
 	});
 });
 //#endregion

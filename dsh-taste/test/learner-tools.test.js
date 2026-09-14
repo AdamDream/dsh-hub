@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
+import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { describe, test } from "node:test";
 import { createTasteTools } from "../lib/learner-tools.js";
+import { normalizePreferenceKey } from "../lib/storage.js";
 
 /** Bullet lines with a Confidence marker, the parseable taste entry shape. */
 const bullet = (statement, confidence) => `- ${statement} Confidence: ${confidence}`;
@@ -79,7 +81,7 @@ describe("createTasteTools", () => {
 		const scopes = await makeScopes();
 		t.after(scopes.cleanup);
 		const [read] = setup(scopes);
-		assert.equal(await read.execute({ scope: "global", path: "taste.md" }, {}), "(file does not exist)");
+		assert.equal(await read.execute({ scope: "global", path: "taste.md" }, {}), "（文件不存在）");
 	});
 
 	test("read_taste_file rejects paths outside the whitelist", async (t) => {
@@ -88,7 +90,7 @@ describe("createTasteTools", () => {
 		const [read] = setup(scopes);
 		for (const path of ["notes.md", "a/b/taste.md", "../escape.md", "sub/dir/deep/taste.md", ""]) {
 			const result = await read.execute({ scope: "global", path }, {});
-			assert.match(result, /^error: /, `path ${JSON.stringify(path)} must be rejected`);
+			assert.match(result, /^(错误：|（)/, `path ${JSON.stringify(path)} must be rejected`);
 		}
 	});
 
@@ -98,7 +100,7 @@ describe("createTasteTools", () => {
 		const [, write] = setup(scopes);
 		const content = bullet("Write tooling stays pnpm.", 0.9) + "\n";
 		const result = await write.execute({ scope: "project", path: "taste.md", content }, {});
-		assert.equal(result, "wrote taste.md");
+		assert.equal(result, "已写入 taste.md");
 		assert.equal(await readFile(join(scopes.projectDir, "taste.md"), "utf8"), content);
 	});
 
@@ -110,7 +112,7 @@ describe("createTasteTools", () => {
 			{ scope: "global", path: "workflow/taste.md", content: bullet("Prefer small PRs.", 0.7) + "\n" },
 			{},
 		);
-		assert.equal(result, "wrote workflow/taste.md");
+		assert.equal(result, "已写入 workflow/taste.md");
 		assert.ok(await readFile(join(scopes.globalDir, "workflow", "taste.md"), "utf8"));
 	});
 
@@ -124,7 +126,7 @@ describe("createTasteTools", () => {
 			{ scope: "global", path: "taste.md", content: bullet("Prefers pnpm over npm.", 0.8) + "\n" },
 			{},
 		);
-		assert.equal(result, "wrote taste.md");
+		assert.equal(result, "已写入 taste.md");
 		const saved = await readFile(file, "utf8");
 		assert.match(saved, /Always use tabs over spaces\./);
 		assert.match(saved, /Prefers pnpm over npm\./);
@@ -141,7 +143,7 @@ describe("createTasteTools", () => {
 			{ scope: "project", path: "taste.md", content: "just some prose notes, no taste entries" },
 			{},
 		);
-		assert.match(result, /^error: /);
+		assert.match(result, /^(错误：|（)/);
 		assert.match(result, /edit_taste_file/);
 		assert.equal(await readFile(file, "utf8"), existing + "\n");
 	});
@@ -153,7 +155,7 @@ describe("createTasteTools", () => {
 		const [, write] = setup(scopes);
 		const content = "raw replacement text\n";
 		const result = await write.execute({ scope: "global", path: "taste.md", content }, {});
-		assert.equal(result, "wrote taste.md");
+		assert.equal(result, "已写入 taste.md");
 		assert.equal(await readFile(file, "utf8"), content);
 	});
 
@@ -177,7 +179,7 @@ describe("createTasteTools", () => {
 		t.after(scopes.cleanup);
 		const [, write] = setup(scopes);
 		const result = await write.execute({ scope: "global", path: "../evil.md", content: bullet("No.", 0.5) }, {});
-		assert.match(result, /^error: /);
+		assert.match(result, /^(错误：|（)/);
 	});
 
 	test("edit_taste_file replaces a unique match", async (t) => {
@@ -192,7 +194,7 @@ describe("createTasteTools", () => {
 			{ scope: "global", path: "taste.md", old_text: "Confidence: 0.7", new_text: "Confidence: 0.95" },
 			{},
 		);
-		assert.equal(result, "edited taste.md");
+		assert.equal(result, "已编辑 taste.md");
 		const saved = await readFile(file, "utf8");
 		assert.match(saved, /Confidence: 0\.95/);
 		assert.doesNotMatch(saved, /Confidence: 0\.7\b/);
@@ -208,7 +210,7 @@ describe("createTasteTools", () => {
 			{ scope: "project", path: "testing/taste.md", old_text: "Run tests before commit.", new_text: "Run lint before commit." },
 			{},
 		);
-		assert.equal(result, "edited testing/taste.md");
+		assert.equal(result, "已编辑 testing/taste.md");
 		assert.match(await readFile(file, "utf8"), /Run lint before commit\./);
 	});
 
@@ -222,8 +224,8 @@ describe("createTasteTools", () => {
 			{ scope: "global", path: "taste.md", old_text: "not present anywhere", new_text: "x" },
 			{},
 		);
-		assert.match(result, /^error: /);
-		assert.match(result, /not found/);
+		assert.match(result, /^(错误：|（)/);
+		assert.match(result, /未找到|not found/);
 		assert.equal(await readFile(file, "utf8"), existing + "\n");
 	});
 
@@ -237,8 +239,8 @@ describe("createTasteTools", () => {
 			{ scope: "global", path: "taste.md", old_text: "Duplicated entry appears twice.", new_text: "clobbered" },
 			{},
 		);
-		assert.match(result, /^error: /);
-		assert.match(result, /exactly one|matches 2/);
+		assert.match(result, /^(错误：|（)/);
+		assert.match(result, /只匹配一处|匹配 2 处|exactly one|matches 2/);
 		assert.equal(await readFile(file, "utf8"), entry + "\n" + entry + "\n");
 	});
 
@@ -250,7 +252,7 @@ describe("createTasteTools", () => {
 			{ scope: "project", path: "taste.md", old_text: "a", new_text: "b" },
 			{},
 		);
-		assert.equal(result, "error: file does not exist");
+		assert.equal(result, "错误：文件不存在");
 	});
 
 	test("edit_taste_file rejects an empty old_text", async (t) => {
@@ -258,7 +260,7 @@ describe("createTasteTools", () => {
 		t.after(scopes.cleanup);
 		const [, , edit] = setup(scopes);
 		const result = await edit.execute({ scope: "global", path: "taste.md", old_text: "", new_text: "x" }, {});
-		assert.match(result, /^error: /);
+		assert.match(result, /^(错误：|（)/);
 	});
 
 	test("argument validation rejects an unknown scope before any filesystem work", async (t) => {

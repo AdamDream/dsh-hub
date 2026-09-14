@@ -1,13 +1,15 @@
 import { mkdir, readdir } from "node:fs/promises";
 import { join } from "node:path";
+import { parseBackfillArg } from "./backfill.js";
 //#region lib/commands.js
 /**
- * The `/taste` command family (proposal §7, audit R7): eight subcommands —
- * status, on, off, list, remember, forget, paths, model — dispatched on the
- * first word of `invocation.rawInput`. Every handler is async, resolves to a
- * `{ kind, text }` command result, and catches its own failures: a command
- * never throws into the conversation (a thrown handler renders as a command
- * error anyway, but the result shape stays ours).
+ * The `/taste` command family (proposal §7, audit R7; backfill-design §2):
+ * nine subcommands — status, on, off, list, remember, forget, paths, model,
+ * backfill — dispatched on the first word of `invocation.rawInput`. Every
+ * handler is async, resolves to a `{ kind, text }`
+ * command result, and catches its own failures: a command never throws into
+ * the conversation (a thrown handler renders as a command error anyway, but
+ * the result shape stays ours).
  * @module lib/commands
  */
 
@@ -64,13 +66,18 @@ async function showStatus(deps, invocation) {
 	const total = deps.storageFns.parseTasteFile(snapshot).length;
 	const cooldownMinutes = Math.max(0, Math.ceil((stats.cooldownUntil - Date.now()) / 60_000));
 	const lines = [
-		`learning: ${config.learningEnabled ? "on" : "off"}`,
-		`injection: ${config.injection.enabled ? "on" : "off"} (max ${config.injection.maxChars} chars, subagents ${config.injection.includeSubagents ? "included" : "excluded"})`,
-		`queue: ${stats.pending} pending, ${stats.running ? "running" : "idle"}, ${stats.failCount} consecutive failure(s)`,
-		`breaker: ${stats.cooldownUntil > Date.now() ? `cooling down for ~${cooldownMinutes} more minute(s)` : "armed (no cooldown)"}`,
-		`preferences: ${total}`,
-		`model route: ${config.observer.modelMode}`,
+		`学习：${config.learningEnabled ? "开启" : "关闭"}`,
+		`注入：${config.injection.enabled ? "开启" : "关闭"}（≤${config.injection.maxChars} 字符，子代理：${config.injection.includeSubagents ? "包含" : "排除"}）`,
+		`队列：${stats.pending} 待处理，${stats.running ? "运行中" : "空闲"}，${stats.failCount} 次连续失败`,
+		`熔断：${stats.cooldownUntil > Date.now() ? `冷却中（约 ${cooldownMinutes} 分钟后恢复）` : "已就绪（无冷却）"}`,
+		`偏好：${total} 条`,
+		`模型路由：${config.observer.modelMode}`,
 	];
+	// Backfill progress while a waterfall runs (§5.3); the line doubles as the
+	// user-visible half of the re-entry gate (§6). "backfill:" 前缀为协议词，与
+	// 命令错误文案保持一致。
+	const progress = deps.backfillProgress?.();
+	if (progress?.active) lines.push(`backfill: ${progress.done}/${progress.total} 块`);
 	return { kind: "success", text: lines.join("\n") };
 }
 
@@ -79,22 +86,22 @@ async function setLearning(deps, enabled) {
 	const dir = deps.globalDir();
 	const config = await deps.loadConfig(dir);
 	if (config.learningEnabled === enabled) {
-		return { kind: "success", text: `taste learning is already ${enabled ? "on" : "off"}.` };
+		return { kind: "success", text: `偏好学习已经是${enabled ? "开启" : "关闭"}状态。` };
 	}
 	config.learningEnabled = enabled;
 	await deps.saveConfig(dir, config);
-	return { kind: "success", text: `taste learning ${enabled ? "enabled" : "disabled"}.` };
+	return { kind: "success", text: enabled ? "已开启偏好学习。" : "已关闭偏好学习。" };
 }
 
 /** `/taste list [n]`: numbered statements with confidence. */
 async function listPreferences(deps, invocation, argument) {
 	const entries = await enumerateEntries(deps, invocation);
-	if (entries.length === 0) return { kind: "success", text: "No preferences recorded yet." };
+	if (entries.length === 0) return { kind: "success", text: "还没有任何偏好记录。" };
 	const limit = /^\d+$/.test(argument) ? Math.min(entries.length, Math.max(1, Number.parseInt(argument, 10))) : LIST_DEFAULT_LIMIT;
 	const lines = entries.slice(0, limit).map(
-		(entry, index) => `${index + 1}. [${entry.dir === deps.globalDir() ? "global" : "project"}] ${entry.statement} (Confidence: ${entry.confidence.toFixed(1)})`,
+		(entry, index) => `${index + 1}. [${entry.dir === deps.globalDir() ? "global" : "project"}] ${entry.statement}（Confidence: ${entry.confidence.toFixed(2)}）`,
 	);
-	if (entries.length > limit) lines.push(`… ${entries.length - limit} more (usage: /taste list <n>)`);
+	if (entries.length > limit) lines.push(`… 还有 ${entries.length - limit} 条（用法：/taste list <n>）`);
 	return { kind: "success", text: lines.join("\n") };
 }
 
@@ -106,7 +113,7 @@ async function listPreferences(deps, invocation, argument) {
 async function rememberPreference(deps, argument) {
 	const { parseTasteFile, renderTasteFile, readTasteFile, withTasteLock, writeFileAtomicTaste, normalizePreferenceKey } = deps.storageFns;
 	const statement = argument.trim();
-	if (!statement) return { kind: "error", text: "Usage: /taste remember <preference text>" };
+	if (!statement) return { kind: "error", text: "用法：/taste remember <偏好文本>" };
 	const dir = deps.globalDir();
 	const absolute = join(dir, "taste.md");
 	await mkdir(dir, { recursive: true, mode: 0o700 });
@@ -126,8 +133,8 @@ async function rememberPreference(deps, argument) {
 		recorded = true;
 	});
 	return recorded
-		? { kind: "success", text: `Recorded (global, Confidence: 1.0): ${statement}` }
-		: { kind: "success", text: "Already recorded — no change." };
+		? { kind: "success", text: `已记录（全局，Confidence: 1.00）：${statement}` }
+		: { kind: "success", text: "已存在相同偏好，未做更改。" };
 }
 
 /**
@@ -137,49 +144,35 @@ async function rememberPreference(deps, argument) {
  */
 async function forgetPreferences(deps, invocation, argument) {
 	const keyword = argument.trim();
-	if (!keyword) return { kind: "error", text: "Usage: /taste forget <number|keyword>" };
+	if (!keyword) return { kind: "error", text: "用法：/taste forget <编号|关键词>" };
 	const entries = await enumerateEntries(deps, invocation);
-	if (entries.length === 0) return { kind: "success", text: "No preferences recorded yet." };
+	if (entries.length === 0) return { kind: "success", text: "还没有任何偏好记录。" };
 	const numeric = /^\d+$/.test(keyword) ? Number.parseInt(keyword, 10) : undefined;
 	const matches =
 		numeric !== undefined
 			? entries.filter((_, index) => index + 1 === numeric)
 			: entries.filter((entry) => entry.statement.toLowerCase().includes(keyword.toLowerCase()));
 	if (matches.length === 0) {
-		return { kind: "error", text: `No preference matches ${JSON.stringify(keyword)}; use /taste list to see numbers.` };
+		return { kind: "error", text: `没有匹配 ${JSON.stringify(keyword)} 的偏好；可用 /taste list 查看编号。` };
 	}
-	const { parseTasteFile, renderTasteFile, readTasteFile, withTasteLock, writeFileAtomicTaste, normalizePreferenceKey } = deps.storageFns;
-	const byFile = new Map();
-	for (const match of matches) {
-		const fileKey = `${match.dir}\u0000${match.relPath}`;
-		if (!byFile.has(fileKey)) byFile.set(fileKey, { dir: match.dir, relPath: match.relPath, keys: new Set() });
-		byFile.get(fileKey).keys.add(normalizePreferenceKey(match.statement));
-	}
-	let removed = 0;
-	for (const file of byFile.values()) {
-		const absolute = join(file.dir, file.relPath);
-		await withTasteLock(absolute, async () => {
-			let content;
-			try {
-				content = await readTasteFile(file.dir, file.relPath);
-			} catch {
-				return;
-			}
-			const before = parseTasteFile(content);
-			const remaining = before.filter((entry) => !file.keys.has(normalizePreferenceKey(entry.statement)));
-			if (remaining.length === before.length) return;
-			await writeFileAtomicTaste(absolute, renderTasteFile(remaining));
-			removed += before.length - remaining.length;
-		});
-	}
-	return { kind: "success", text: `Removed ${removed} preference(s).` };
+	// Shared deletion core (gui-mutation-design §2): the GUI's deleteEntry and
+	// this command call ONE implementation — locked RMW per file, emptied files
+	// HARD-depend on the injected helper (no degraded prune-less path left).
+	const { normalizePreferenceKey, deleteTasteEntries } = deps.storageFns;
+	const targets = matches.map((match) => ({
+		scopeDir: match.dir,
+		relPath: match.relPath,
+		keys: [normalizePreferenceKey(match.statement)],
+	}));
+	const removed = await deps.storageFns.deleteTasteEntries(targets, (message) => deps.logger?.warn?.(message));
+	return { kind: "success", text: `已移除 ${removed} 条偏好。` };
 }
 
 /** `/taste paths`: scope directories plus residual `*.lock` hints. */
 async function showPaths(deps, invocation) {
 	const globalDir = deps.globalDir();
 	const projectDir = deps.projectDir(invocation?.agent?.session?.header?.cwd);
-	const lines = [`global: ${globalDir}`, `project: ${projectDir ?? "(not inside a repository — global scope only)"}`];
+	const lines = [`global: ${globalDir}`, `project: ${projectDir ?? "（不在仓库内——仅全局 scope）"}`];
 	const locks = [];
 	for (const dir of [projectDir, globalDir]) {
 		if (!dir) continue;
@@ -193,8 +186,8 @@ async function showPaths(deps, invocation) {
 	}
 	lines.push(
 		locks.length === 0
-			? "locks: none"
-			: `locks: ${locks.length} residual lock file(s) — safe to delete when no taste writer is active:\n  ${locks.join("\n  ")}`,
+			? "locks: 无"
+			: `locks: ${locks.length} 个残留锁文件——确认没有偏好写入进程后可安全删除：\n  ${locks.join("\n  ")}`,
 	);
 	return { kind: "success", text: lines.join("\n") };
 }
@@ -205,13 +198,36 @@ async function showModel(deps) {
 	const observer = config.observer ?? {};
 	const route =
 		observer.modelMode === "custom"
-			? `custom (provider ${observer.provider || "(unset)"}, model ${observer.model || "(unset)"})`
-			: "inherit (follows main model)";
-	const lines = [`learner model route: ${route}`, `observer: timeoutMs ${observer.timeoutMs}, maxTurns ${observer.maxTurns}`];
+			? `custom（provider ${observer.provider || "（未设置）"}，model ${observer.model || "（未设置）"}）`
+			: "inherit（跟随主模型）";
+	const lines = [`learner 模型路由：${route}`, `observer 预算：timeoutMs ${observer.timeoutMs}，maxTurns ${observer.maxTurns}`];
 	return { kind: "success", text: lines.join("\n") };
 }
 
-const USAGE = "Usage: /taste <status|on|off|list|remember|forget|paths|model>";
+const USAGE = "用法：/taste <status|on|off|list|remember|forget|paths|model|backfill>";
+
+/**
+ * `/taste backfill [n]` (backfill-design §2): re-learn the last n completed
+ * historical turns (default: all) in serial background blocks. Pre-checks run
+ * in the design's order — argument, learning switch, breaker cooldown,
+ * re-entry gate (§6 blocker #2) — then the enqueue returns immediately; the
+ * learner runs behind the command and results land in taste.md (check
+ * `/taste list` or the file afterwards).
+ */
+async function backfillCommand(deps, invocation, argument) {
+	const parsed = parseBackfillArg(argument);
+	if (!parsed.ok) return { kind: "error", text: `用法：/taste backfill [n]。${parsed.reason}` };
+	const config = await deps.loadConfig(deps.globalDir());
+	if (!config.learningEnabled) return { kind: "error", text: "backfill: 学习已关闭（/taste on 开启）。" };
+	if (deps.queue.stats().cooldownUntil > Date.now()) return { kind: "error", text: "backfill: learner 熔断冷却中，请稍后再试。" };
+	const progress = deps.backfillProgress?.();
+	if (progress?.active) return { kind: "error", text: `backfill: 已在运行中（${progress.done}/${progress.total} 块），请稍候。` };
+	if (typeof deps.enqueueBackfill !== "function") return { kind: "error", text: "backfill: 不可用（enqueueBackfill 未注入）。" };
+	const result = await deps.enqueueBackfill({ agent: invocation?.agent, events: invocation?.agent?.session?.events, n: parsed.n });
+	if (!result || result.blocks === 0) return { kind: "error", text: "backfill: 没有可补学的历史轮。" };
+	return { kind: "success", text: `已排入 ${result.blocks} 块（${result.turns} 轮），learner 后台串行补学；结果见 /taste list 或 taste.md。` };
+}
+
 
 /**
  * Dispatch one invocation on the first input word; a bare `/taste` shows
@@ -234,7 +250,9 @@ async function handleInvocation(invocation, deps) {
 			case "forget": return await forgetPreferences(deps, invocation, argument);
 			case "paths": return await showPaths(deps, invocation);
 			case "model": return await showModel(deps);
-			default: return { kind: "error", text: `Unknown subcommand ${JSON.stringify(verb)}. ${USAGE}` };
+			case "backfill": return await backfillCommand(deps, invocation, argument);
+
+			default: return { kind: "error", text: `未知子命令 ${JSON.stringify(verb)}。${USAGE}` };
 		}
 	} catch (error) {
 		deps.logger?.warn?.(`taste: command failed: ${describeError(error)}`);
@@ -251,15 +269,16 @@ async function handleInvocation(invocation, deps) {
  * @param {() => string} deps.globalDir - absolute global taste directory.
  * @param {(cwd: string) => (string|undefined)} deps.projectDir - project taste directory for a session cwd.
  * @param {(globalDir: string, projectDir?: string) => Promise<string>} deps.loadTasteSnapshot - merged injectable snapshot.
- * @param {object} deps.storageFns - storage helpers (parseTasteFile, renderTasteFile, readTasteFile, listTasteFiles, withTasteLock, writeFileAtomicTaste, normalizePreferenceKey).
  * @param {{stats(): object}} deps.queue - the job queue (status reads its state).
+ * @param {({agent?: object, events?: Array, n?: number}) => Promise<{blocks: number, turns: number}|null>} deps.enqueueBackfill - slice the session's completed history into backfill blocks and start the background waterfall (§1/§2); resolves to the enqueued block/turn counts, or null when nothing is learnable.
+ * @param {() => {active: boolean, total: number, done: number}} deps.backfillProgress - backfill progress accessor; `active` is the command re-entry gate (§5.3/§6) and `/taste status` renders it while active.
  * @param {object} [deps.logger] - diagnostic sink.
  */
 export function registerTasteCommands(ctx, deps) {
 	ctx.commands.register({
 		name: "taste",
-		description: "local preference learning",
-		input: { hint: "<status|on|off|list|remember|forget|paths|model>" },
+		description: "本地偏好学习：从对话中沉淀并注入你的持久偏好",
+		input: { hint: "<status|on|off|list|remember|forget|paths|model|backfill>" },
 		recordInput: false,
 		handler: (invocation) => handleInvocation(invocation, deps),
 	});

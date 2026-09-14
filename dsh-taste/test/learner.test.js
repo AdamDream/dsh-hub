@@ -4,7 +4,7 @@ import { LEARNER_PROMPT, buildLearnerInput, runLearner } from "../lib/learner.js
 
 /** Build a fake DSH agents service recording every create/withInitiator call. */
 function createFakeAgents({ createImpl } = {}) {
-	const calls = { create: [], setups: [], sections: [], tools: [], followups: [], disposed: 0 };
+	const calls = { create: [], setups: [], sections: [], tools: [], followups: [], disposed: 0, sessionAppends: [] };
 	const agents = {
 		calls,
 		withInitiator: (parent, operation) => operation(parent),
@@ -12,7 +12,12 @@ function createFakeAgents({ createImpl } = {}) {
 			calls.create.push(options);
 			if (createImpl) return createImpl(options);
 			const childCtx = {
-				tools: { register: (...tools) => calls.tools.push(...tools) },
+				// Mirrors the real child context: agent.session.append(type, data)
+				// backs the subagent/descriptor event, and ToolRuntime.register
+				// takes ONE tool per call (a spread-style register would push only
+				// the first tool here and fail the 3-name assertion below).
+				agent: { session: { append: (type, data) => calls.sessionAppends.push({ type, data }) } },
+				tools: { register: (tool) => calls.tools.push(tool) },
 				systemPrompt: { section: (section) => calls.sections.push(section) },
 			};
 			options.setup(childCtx);
@@ -45,13 +50,14 @@ const DEFAULT_ARGS = () => ({
 });
 
 describe("LEARNER_PROMPT", () => {
-	it("carries the pi-taste contract: NEW-only learning, reference-only prior window, no-changes exit", () => {
-		assert.match(LEARNER_PROMPT, /Learn ONLY from the NEW messages/);
-		assert.match(LEARNER_PROMPT, /never to be re-learned/);
-		assert.match(LEARNER_PROMPT, /Do NOT re-record a preference that already exists/);
-		assert.match(LEARNER_PROMPT, /reply "no changes"/);
-		assert.match(LEARNER_PROMPT, /write_taste_file|edit_taste_file|read_taste_file/);
-	});
+ it("is Chinese-first and enforces core boundaries", () => {
+  assert.match(LEARNER_PROMPT, /只分析 NEW 消息中的真实用户偏好/);
+  assert.match(LEARNER_PROMPT, /无变化/);
+  assert.match(LEARNER_PROMPT, /Confidence: 0\.88/);
+  for (const tool of ["read_taste_file", "write_taste_file", "edit_taste_file"]) assert.match(LEARNER_PROMPT, new RegExp(tool));
+  assert.match(LEARNER_PROMPT, /assistant 只能辅助佐证/);
+  assert.match(LEARNER_PROMPT, /汰换/);
+ });
 });
 
 describe("buildLearnerInput", () => {
@@ -61,17 +67,17 @@ describe("buildLearnerInput", () => {
 			newMessages: [{ role: "user", content: [{ type: "text", text: "I prefer tabs" }] }],
 			priorWindow: [{ role: "assistant", content: [{ type: "text", text: "sure" }] }],
 		});
-		assert.match(input, /^Current taste structure:\n├── taste\.md \(2 learnings\)\n\n/);
-		assert.match(input, /Previously analyzed conversation \(context only[^\n]*do NOT learn from it again\):\n\[.*"assistant".*\]\n\n/s);
-		assert.match(input, /NEW messages to analyze \(learn ONLY from these\):\n\[\s*\{\s*"role": "user"/s);
-		assert.ok(input.indexOf("Previously analyzed") < input.indexOf("NEW messages"));
+		assert.match(input, /^当前 taste 结构：\n├── taste\.md \(2 learnings\)\n\n/);
+		assert.match(input, /此前已分析的对话（仅供指代，不得再次学习）：\n\[.*"assistant".*\]\n\n/s);
+		assert.match(input, /NEW 消息（只能从这里学习）：\n\[\s*\{\s*"role": "user"/s);
+		assert.ok(input.indexOf("此前已分析") < input.indexOf("NEW 消息"));
 	});
 
 	it("falls back to the pi-taste empty-structure marker and (none)/(empty) windows", () => {
 		const input = buildLearnerInput({ tasteTree: "", newMessages: [], priorWindow: [] });
-		assert.match(input, /Current taste structure:\n\(empty - no taste files yet\)/);
-		assert.match(input, /do NOT learn from it again\):\n\(none\)/);
-		assert.match(input, /NEW messages to analyze \(learn ONLY from these\):\n\[\]/);
+		assert.match(input, /当前 taste 结构：\n（暂无 taste\.md 条目）/);
+		assert.match(input, /不得再次学习）：\n（无）/);
+		assert.match(input, /NEW 消息（只能从这里学习）：\n\[\]/);
 	});
 
 	it("caps the prior window at the last 20 visible entries and drops non-text shapes", () => {
@@ -81,7 +87,7 @@ describe("buildLearnerInput", () => {
 		}));
 		priorWindow.unshift({ role: "system", content: [{ type: "text", text: "hidden" }] });
 		const input = buildLearnerInput({ tasteTree: "t", newMessages: [], priorWindow });
-		const previous = input.slice(input.indexOf("again):\n") + 8, input.indexOf("\n\nNEW messages"));
+		const previous = input.slice(input.indexOf("此前已分析的对话") + input.slice(input.indexOf("此前已分析的对话")).indexOf("["), input.indexOf("\n\nNEW 消息"));
 		const parsed = JSON.parse(previous);
 		assert.equal(parsed.length, 20);
 		assert.equal(parsed[0].content[0].text, "m10"); // the 10 oldest were dropped
@@ -214,10 +220,17 @@ describe("runLearner", () => {
 		assert.equal(agents.calls.disposed, 0);
 	});
 
-	it("rejects on structurally invalid arguments", async () => {
+	it("rejects structurally invalid arguments", async () => {
 		await assert.rejects(() => runLearner({ ...DEFAULT_ARGS(), agents: {}, config: {} }), /agents service/);
 		await assert.rejects(() => runLearner({ ...DEFAULT_ARGS(), agents: createFakeAgents(), parentAgent: {}, config: {} }), /parentAgent/);
 		await assert.rejects(() => runLearner({ ...DEFAULT_ARGS(), agents: createFakeAgents(), config: {}, input: "  " }), /input/);
+	});
+
+	it("keeps the default prompt and three learning tools when no override is given (zero behavior change)", async () => {
+		const agents = createFakeAgents();
+		await runLearner({ ...DEFAULT_ARGS(), agents, config: {} });
+		assert.deepEqual(agents.calls.tools.map((tool) => tool.name), ["read_taste_file", "write_taste_file", "edit_taste_file"]);
+		assert.deepEqual(agents.calls.sections, [{ name: "taste-learner", order: 190, text: LEARNER_PROMPT }]);
 	});
 
 	it("leaves the input unclipped without a usable maxInputChars budget", async () => {
@@ -241,6 +254,54 @@ describe("runLearner", () => {
 		assert.equal(meta.agentPreset, "standard-glm");
 		assert.equal(meta.parentSession, "parent-session");
 		assert.equal(meta.origin, "subagent");
+	});
+
+	it("appends a one-shot subagent/descriptor event so the GUI panel does not mislabel the learner corrupt", async () => {
+		// 2026-09-02 incident: the GUI subagent panel folds subagent/descriptor
+		// to identify cold children (dsh-subagent foldSubagentDescriptor);
+		// a raw agents.create child without the event lists as "会话记录损坏".
+		const agents = createFakeAgents();
+		await runLearner({ ...DEFAULT_ARGS(), agents, config: {} });
+		const descriptor = agents.calls.sessionAppends.find((entry) => entry.type === "subagent/descriptor");
+		assert.ok(descriptor, "setup must append subagent/descriptor");
+		// Exactly the ONE_SHOT_DESCRIPTOR_KEYS set: version/mode/provider/label.
+		assert.deepEqual(Object.keys(descriptor.data).sort(), ["label", "mode", "provider", "version"]);
+		assert.equal(descriptor.data.version, 2);
+		assert.equal(descriptor.data.mode, "one-shot");
+		assert.equal(typeof descriptor.data.provider, "string");
+		assert.equal(typeof descriptor.data.label, "string");
+	});
+
+	it("keeps learning alive when the descriptor append fails (cosmetic, warn-only)", async () => {
+		const agents = createFakeAgents({
+			createImpl: (options) => {
+				const childCtx = {
+					agent: { session: { append: () => { throw new Error("append boom"); } } },
+					tools: { register: (tool) => agents.calls.tools.push(tool) },
+					systemPrompt: { section: (section) => agents.calls.sections.push(section) },
+				};
+				options.setup(childCtx);
+				const agent = {
+					options: options.agentOptions,
+					followup: (message) => agents.calls.followups.push(message),
+					whenIdle: async () => {},
+					session: { events: [{ type: "assistant/message", data: { message: { content: [{ type: "text", text: "no changes" }] } } }] },
+				};
+				return { agent, dispose: async () => void (agents.calls.disposed += 1) };
+			},
+		});
+		const warnings = [];
+		const originalWarn = console.warn;
+		console.warn = (message) => warnings.push(String(message));
+		try {
+			const result = await runLearner({ ...DEFAULT_ARGS(), agents, config: {} });
+			assert.deepEqual(result.output, [{ type: "text", text: "no changes" }]);
+		} finally {
+			console.warn = originalWarn;
+		}
+		assert.equal(agents.calls.tools.length, 3); // tools still registered
+		assert.equal(warnings.length, 1);
+		assert.match(warnings[0], /descriptor append failed: append boom/);
 	});
 
 	it("omits cwd/agentPreset from meta when the parent header lacks them", async () => {

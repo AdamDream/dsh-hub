@@ -1,0 +1,8 @@
+# session-board 插件 insert 片段 —— 追加到 ~/.dsh/profiles/web/cordis.patch.yml 顶层数组
+# （挂载 id "session-status-board" 与 install.sh / README / lib/index.js 一致；deploy-side.sh 会自动追加并幂等）
+# settings 键：无 —— 插件运行时自注册 `session-status-board` 命名空间，Config 默认值：
+#   enabled=true / maxBoardTokens=500 / injection=runtime-context / activeWindowMinutes=30 /
+#   refreshIntervalSeconds=10 / queryLimit=5 / queryDetailBytes=2048 / queryTotalBytes=8192 / maxPeerEntries=8
+- insert:
+    - id: session-status-board
+      name: '@deepseek-ai/dsh-session-board'

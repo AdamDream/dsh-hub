@@ -107,10 +107,12 @@ function categorySlug(name) {
 
 /**
  * Parse `taste.md` content into entries. Only bullet lines shaped
- * `- statement. Confidence: 0.9` count; headings, prose, non-bullet lines and
+ * `- statement. Confidence: 0.88` count; headings, prose, non-bullet lines and
  * statements shorter than four characters are skipped (pi-taste semantics).
- * A Chinese full stop directly before `Confidence:` is tolerated, so
- * `- 陈述。Confidence: 0.9` parses alongside the spaced form.
+ * One or two decimals are both legal — legacy one-decimal (`0.9`) and integer
+ * (`1`) confidences parse alongside the two-decimal form the learner now
+ * writes. A Chinese full stop directly before `Confidence:` is tolerated, so
+ * `- 陈述。Confidence: 0.88` parses alongside the spaced form.
  * @param {string} text - taste file content.
  * @returns {Array<{statement: string, confidence: number}>} parsed entries.
  */
@@ -127,8 +129,43 @@ export function parseTasteFile(text) {
 }
 
 /**
- * Render entries back into the `- statement. Confidence: 0.9` line sequence
- * (one decimal, trailing newline); an empty list renders as `""`.
+ * Render one confidence value for a taste-file line: rounded to two decimals,
+ * then formatted with one decimal when the second decimal is zero — legacy
+ * snapshots stay byte-identical (`0.9→"0.9"`, `1→"1.0"`) while fresh
+ * two-decimal learnings survive unrounded (`0.88→"0.88"`, `0.95→"0.95"`).
+ * @param {unknown} value - confidence value (clamped into `[0, 1]`).
+ * @returns {string} one- or two-decimal rendering.
+ */
+export function formatTasteConfidence(value) {
+	const rounded = Math.round(normalizedConfidence(value) * 100) / 100;
+	const two = rounded.toFixed(2);
+	return two;
+}
+
+/** Fallback gate threshold when the caller-supplied value is unusable (keep in sync with config.js / index.js). */
+const DEFAULT_MIN_CONFIDENCE = 0.7;
+
+/**
+ * Entries clearing the injection/GUI confidence gate: confidence >=
+ * minConfidence (boundary-inclusive — an entry exactly at the threshold
+ * stays). The threshold is defensively clamped into [0, 1]; an unusable
+ * threshold falls back to the default. Non-array input yields [].
+ * Read-side filter only — nothing is removed from storage.
+ * @param {Array<{statement: string, confidence: number}>} entries - parsed taste entries.
+ * @param {unknown} minConfidence - gate threshold (untrusted, from config).
+ * @returns {Array<{statement: string, confidence: number}>} entries that clear the gate.
+ */
+export function gateTasteEntries(entries, minConfidence) {
+	const threshold = typeof minConfidence === "number" && Number.isFinite(minConfidence)
+		? Math.min(1, Math.max(0, minConfidence))
+		: DEFAULT_MIN_CONFIDENCE;
+	return (Array.isArray(entries) ? entries : []).filter((entry) => normalizedConfidence(entry?.confidence) >= threshold);
+}
+
+/**
+ * Render entries back into the `- statement. Confidence: 0.88` line sequence
+ * via {@link formatTasteConfidence} (one decimal for exact tenths, two
+ * otherwise; trailing newline); an empty list renders as `""`.
  * @param {Array<{statement: string, confidence: number}>} preferences - entries to render.
  * @returns {string} taste file content.
  */
@@ -137,7 +174,7 @@ export function renderTasteFile(preferences) {
 	return entries.length === 0
 		? ""
 		: `${entries
-				.map((entry) => `- ${entry.statement} Confidence: ${normalizedConfidence(entry.confidence).toFixed(1)}`)
+				.map((entry) => `- ${entry.statement} Confidence: ${formatTasteConfidence(entry.confidence)}`)
 				.join("\n")}\n`;
 }
 
@@ -464,13 +501,61 @@ async function readScopeEntries(scopeDir) {
 }
 
 /**
+ * Shared deletion core (`/taste forget` + GUI deleteEntry, gui-mutation-design
+ * §2): for each target file, remove every entry whose
+ * {@link normalizePreferenceKey} is in that target's keys — one locked
+ * read-modify-write per file while preserving the one-way lock order.
+ * behavior and every learner write tool. An emptied file is written as `""`
+ * (never unlinked). Targets are regrouped per `${scopeDir}\0${relPath}` so
+ * repeated keys merge into one locked rewrite; a file that cannot be read is
+ * silently skipped (forget semantics); keys are pruned of empty strings — a
+ * punctuation-only statement normalizes to `""` and is never a deletion key
+ * @param {Array<{scopeDir: string, relPath: string, keys: Iterable<string>}>} targets -
+ *   callers pass ALREADY-NORMALIZED keys ({@link normalizePreferenceKey}).
+ * @param {(message: string) => void} [warn] - optional diagnostic sink for prune failures.
+ * @returns {Promise<number>} total entries removed (0 = nothing matched).
+ */
+export async function deleteTasteEntries(targets, warn) {
+	const byFile = new Map();
+	for (const target of Array.isArray(targets) ? targets : []) {
+		if (typeof target?.scopeDir !== "string" || !target.scopeDir) continue;
+		if (typeof target?.relPath !== "string" || !target.relPath) continue;
+		const fileKey = `${target.scopeDir}\u0000${target.relPath}`;
+		if (!byFile.has(fileKey)) byFile.set(fileKey, { scopeDir: target.scopeDir, relPath: target.relPath, keys: new Set() });
+		const file = byFile.get(fileKey);
+		for (const key of target.keys ?? []) {
+			if (typeof key === "string" && key) file.keys.add(key);
+		}
+	}
+	let removed = 0;
+	for (const file of byFile.values()) {
+		const absolute = join(file.scopeDir, file.relPath);
+		await withTasteLock(absolute, async () => {
+			let content;
+			try {
+				content = await readTasteFile(file.scopeDir, file.relPath);
+			} catch {
+				return; // A vanished/unreadable file is skipped, like forget's loop.
+			}
+			const before = parseTasteFile(content);
+			const remaining = before.filter((entry) => !file.keys.has(normalizePreferenceKey(entry.statement)));
+			if (remaining.length === before.length) return; // No change → no write.
+			await writeFileAtomicTaste(absolute, renderTasteFile(remaining));
+			removed += before.length - remaining.length;
+		});
+	}
+	return removed;
+}
+
+/**
  * Build the injection snapshot: project scope first, then global scope, then
  * the Command Code compatibility stores, deduped by
  * {@link normalizePreferenceKey} with project entries winning, rendered as
  * bullet lines. The Command Code stores sit two levels above each scope
  * directory in the standard layout (`~/.dsh/taste` → `~/.commandcode/taste`,
  * `<root>/.dsh/taste` → `<root>/.commandcode/taste`). An empty harvest
- * renders as `""`.
+ * renders as `""`. 不门控（by design）：`/taste status` 计全量库；注入侧门控
+ * 见 index.js readSnapshotSync / gateTasteEntries。
  * @param {string} globalDir - global taste scope directory.
  * @param {string} [projectDir] - project taste scope directory, when inside a repository.
  * @returns {Promise<string>} snapshot text.
