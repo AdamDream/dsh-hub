@@ -1,0 +1,109 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -390,6 +390,39 @@
+ 	return Buffer.concat(chunks, bytes);
+ }
+ /**
++* Read the bytes at `[offset, offset + length)` of a regular file with no
++* decoding or binary rejection. The window is the bound: the stream opens at
++* `offset` and closes after `length` bytes, so no more than the window is ever
++* buffered whatever the file's size; a window at or past the end is empty.
++* @param target - the resolved file to read.
++* @param range - `offset`, the 0-based first byte, and `length`, the largest byte count.
++* @param signal - aborts the read (`FS_ABORTED`).
++* @returns the window's bytes, at most `length` long.
++*/
++async function readByteWindow(target, range, signal) {
++	await statRegularFile(target, "read", signal);
++	if (range.length === 0) return new Uint8Array(0);
++	const stream = createReadStream(target.targetKey, {
++		start: range.offset,
++		end: range.offset + range.length - 1,
++		...signal ? { signal } : {}
++	});
++	const chunks = [];
++	let bytes = 0;
++	try {
++		for await (const chunk of stream) {
++			chunks.push(chunk);
++			bytes += chunk.length;
++		}
++	} catch (error) {
++		/* v8 ignore next 2 -- a mid-stream abort needs cancellation racing an active read; pre-abort is deterministic. */
++		if (isAbortError(error)) throw new FsError("read aborted", "FS_ABORTED");
++		/* v8 ignore next -- any other stream failure needs an I/O fault after a successful stat. */
++		throw error;
++	}
++	return Buffer.concat(chunks, bytes);
++}
++/**
+ * Stream a whole regular UTF-8 text file as decoded text chunks. Same text
+ * semantics as {@link readWholeText} (regular-file check, binary/NUL rejection,
+ * cross-chunk UTF-8 decoding), but never holds the whole file in memory.
+@@ -713,6 +746,9 @@
+ 	processPath(target) {
+ 		return String(target.targetKey);
+ 	}
++	processPathFromHostPath(hostPath) {
++		return isAbsolute(hostPath) ? resolve(hostPath) : void 0;
++	}
+ 	fileUrl(target) {
+ 		return pathToFileURL(this.processPath(target)).href;
+ 	}
+@@ -761,6 +797,12 @@
+ 			targetKey: target.targetKey
+ 		}, signal, maxBytes, this.internals);
+ 	}
++	async readByteRange(target, range, signal) {
++		return readByteWindow({
++			displayPath: target.displayPath,
++			targetKey: target.targetKey
++		}, range, signal);
++	}
+ 	async listDir(target, signal) {
+ 		return (await listDirectory({
+ 			displayPath: target.displayPath,
+--- a/lib/types/index.d.ts
++++ b/lib/types/index.d.ts
+@@ -43,6 +43,7 @@
+         signal?: AbortSignal;
+     }): Promise<FsTarget>;
+     processPath(target: FsTarget): string;
++    processPathFromHostPath(hostPath: string): string | undefined;
+     fileUrl(target: FsTarget): string;
+     contains(parent: FsTarget, child: FsTarget): boolean;
+     stat(target: FsTarget, signal?: AbortSignal): Promise<FsInfo | undefined>;
+@@ -52,6 +53,10 @@
+     readText(target: FsTarget, signal?: AbortSignal): Promise<string>;
+     streamText(target: FsTarget, signal?: AbortSignal): Promise<AsyncIterable<string>>;
+     readBytes(target: FsTarget, signal: AbortSignal | undefined, maxBytes: number): Promise<Uint8Array>;
++    readByteRange(target: FsTarget, range: {
++        offset: number;
++        length: number;
++    }, signal?: AbortSignal): Promise<Uint8Array>;
+     listDir(target: FsTarget, signal?: AbortSignal): Promise<FsDirEntry[]>;
+     writeText(target: FsTarget, content: string, expected?: FsWriteIntent, signal?: AbortSignal): Promise<FsWriteOutcome>;
+     editText(target: FsTarget, edit: FsEditRequest, expected?: {
+--- a/lib/types/fsio.d.ts
++++ b/lib/types/fsio.d.ts
+@@ -115,6 +115,20 @@
+  */
+ export declare function readWholeBytes(target: LocalTarget, signal: AbortSignal | undefined, maxBytes: number, internals?: FsIoInternals): Promise<Uint8Array>;
+ /**
++ * Read the bytes at `[offset, offset + length)` of a regular file with no
++ * decoding or binary rejection. The window is the bound: the stream opens at
++ * `offset` and closes after `length` bytes, so no more than the window is ever
++ * buffered whatever the file's size; a window at or past the end is empty.
++ * @param target - the resolved file to read.
++ * @param range - `offset`, the 0-based first byte, and `length`, the largest byte count.
++ * @param signal - aborts the read (`FS_ABORTED`).
++ * @returns the window's bytes, at most `length` long.
++ */
++export declare function readByteWindow(target: LocalTarget, range: {
++    offset: number;
++    length: number;
++}, signal?: AbortSignal): Promise<Uint8Array>;
++/**
+  * Stream a whole regular UTF-8 text file as decoded text chunks. Same text
+  * semantics as {@link readWholeText} (regular-file check, binary/NUL rejection,
+  * cross-chunk UTF-8 decoding), but never holds the whole file in memory.

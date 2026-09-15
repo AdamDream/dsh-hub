@@ -42,8 +42,8 @@ export const VISION_DEFAULTS: VisionOptions = Object.freeze({
   maxTokens: 2000,
 })
 
-/** Default analysis question sent with every pasted image (audit U-I). */
-export const VISION_DEFAULT_QUESTION = '请用中文简洁描述这张图片的内容、主体颜色与图中文字。'
+/** Default analysis question sent with every pasted image (audit U-I; 2026-09-14 全落点改版：完整转录 + 审美/设计合理性分析). */
+export const VISION_DEFAULT_QUESTION = '请用中文尽可能完整转录这张图片的全部可见内容（文字逐字、布局、颜色、元素位置），并附审美与设计合理性分析（配色、层级、对齐、可读性、改进建议）。'
 
 function errorText(error: unknown): string {
   return error instanceof Error ? error.message : String(error)

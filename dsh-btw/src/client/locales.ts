@@ -15,6 +15,7 @@ export type SideChatLocaleKey =
   | 'drawer.jumpLoading' | 'drawer.jumpEmpty' | 'drawer.jumpCurrent' | 'drawer.jumpRunning'
   | 'drawer.jumpJustNow' | 'drawer.jumpMinutesSuffix' | 'drawer.jumpHoursSuffix' | 'drawer.jumpDaysSuffix'
   | 'drawer.attachments' | 'drawer.attachmentRemove' | 'drawer.attachmentOpen'
+  | 'drawer.lightboxClose'
   | 'drawer.bannerOutputting' | 'drawer.bannerCurrentAction' | 'drawer.toolRunning'
 
 declare module '@deepseek-ai/dsh-client-ui-slots' {
@@ -51,6 +52,7 @@ export const en: Record<SideChatLocaleKey, string> = {
   'drawer.jumpHoursSuffix': 'h ago', 'drawer.jumpDaysSuffix': 'd ago',
   'drawer.attachments': 'Attached images', 'drawer.attachmentRemove': 'Remove image',
   'drawer.attachmentOpen': 'Open image',
+  'drawer.lightboxClose': 'Close preview',
   'drawer.bannerOutputting': 'Outputting…', 'drawer.bannerCurrentAction': 'current action',
   'drawer.toolRunning': 'Running…',
 }
@@ -85,6 +87,7 @@ export const zh: Record<SideChatLocaleKey, string> = {
   'drawer.jumpHoursSuffix': ' 小时前', 'drawer.jumpDaysSuffix': ' 天前',
   'drawer.attachments': '已附加图片', 'drawer.attachmentRemove': '移除图片',
   'drawer.attachmentOpen': '查看图片',
+  'drawer.lightboxClose': '关闭预览',
   'drawer.bannerOutputting': '输出中…', 'drawer.bannerCurrentAction': '当前动作',
   'drawer.toolRunning': '运行中…',
 }

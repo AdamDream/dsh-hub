@@ -1,0 +1,37 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -5,6 +5,7 @@
+ import { BlockAssembler, LlmError, assertNever, createAssistantMessage, createToolResultMessage, createUserMessage, deepFreeze, errorChain, markAgentLoopRequest } from "@deepseek-ai/dsh-llm";
+ import { installSettingsSection, settingsNamespace } from "@deepseek-ai/dsh-settings";
+ import { SessionId, SessionPreparation, canonicalHeader, headerEquals, isReplacementSurfaceEvent } from "@deepseek-ai/dsh-session";
++import { SessionPersistenceNotFoundError } from "@deepseek-ai/dsh-session-persistence";
+ import { createScope } from "@deepseek-ai/dsh-scope";
+ import { joinContextSections, renderContextSections, renderPrompt } from "@deepseek-ai/dsh-system-prompt";
+ import { TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER } from "@deepseek-ai/dsh-tools";
+@@ -699,7 +700,8 @@
+ 			provider: this.options.provider ?? "",
+ 			model: this.options.model ?? ""
+ 		};
+-		const reasoningEffort = persistedConfig?.provider === route.provider && persistedConfig.model === route.model && persistedHeader?.adapterDefaults?.reasoningEffort !== true ? persistedConfig.reasoningEffort : void 0;
++		const persistedReasoningEffort = persistedConfig?.provider === route.provider && persistedConfig.model === route.model && persistedHeader?.adapterDefaults?.reasoningEffort !== true ? persistedConfig.reasoningEffort : void 0;
++		const reasoningEffort = this.options.reasoningEffort ?? persistedReasoningEffort;
+ 		const maxTokens = this.options.maxTokens;
+ 		const seedConfig = deepFreeze(structuredClone(this.requestHeaderLogged ? requestProposal(persistedHeader) : {
+ 			...route,
+@@ -989,6 +991,7 @@
+ 			sessionId: z.string().min(1),
+ 			provider: z.string(),
+ 			model: z.string(),
++			reasoningEffort: z.string().min(1),
+ 			maxTokens: z.number().step(1).min(1).max(Number.MAX_SAFE_INTEGER),
+ 			cwd: z.string(),
+ 			resumeSessionId: z.string()
+@@ -1080,7 +1083,7 @@
+ 			return;
+ 		} catch (error) {
+ 			if (!this.ownership.isActive()) return;
+-			if ((await persistence.list()).some((header) => header.id === sessionId)) throw error;
++			if (!(error instanceof SessionPersistenceNotFoundError)) throw error;
+ 		}
+ 		this.create(sessionId, agentOptions, meta);
+ 	}

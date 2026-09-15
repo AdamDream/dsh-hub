@@ -1,0 +1,2088 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/README.i18n.yaml	2026-09-11 14:27:15.193964006 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/README.i18n.yaml	2026-09-12 14:56:16.205199433 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/core/agent-loop/README.md
+-README.md: 31316e4b9259362951824fc13375a820035ba849
+-README.zh.md: 06ad80f32fd20d76aa367b8203700235e39072fb
++README.md: 907bbe75fd687388be044916f4c4509e1c552177
++README.zh.md: 76a73155a3d9f811931cf0f86c227e6ab3dc1c32
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/README.md	2026-09-11 14:27:15.124963025 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/README.md	2026-09-12 14:56:16.200792568 +0800
+@@ -1,163 +1,102 @@
+----
+-description: "The default agent driver for users and maintainers choosing, configuring, or debugging how agents are created and how turns and steps run."
+-kind: "package-reference"
+----
+-
+-# @deepseek-ai/dsh-agent-loop
++# dsh-agent-loop
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-`dsh-agent-loop` creates fresh agents or resumes persisted sessions, then drives each turn through model requests, streamed responses, tool execution, and durable session history. Mount it for standard agent compositions; declarative entries start agents at boot, while the public `ctx.agents` API supports programmatic creation and resume. `maxParallelToolCalls` limits concurrent parallel-safe calls, and exclusive calls retain ordering. Cancellation preserves streamed text already delivered to the user. Choose a custom `Agent` implementation only when the standard "call model, run tools, repeat" lifecycle is insufficient.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## Use this package
++THE concrete agent plugin and loop driver. Its package-internal implementation satisfies the `Agent` interface and drives the session/turn/step lifecycle.
+ 
+-Mount `dsh-agent-loop` in any composition that should run agents. It supplies the driver behind `ctx.agents` and starts any agents you declare in its config; both [`dsh-base`](../../bundle/base/README.md) and [`dsh-sdk-minimal`](../../bundle/sdk-minimal/README.md) mount it as an explicit row.
++This is the only package in the harness that contains concrete loop logic. Everything else is an abstract service or a plugin against extension points — new behavior goes into plugins, not here.
+ 
+-### Configure declarative agents
+-
+-Agents declared in the config start automatically when the plugin loads. Each entry needs an `id` label; a model call additionally requires both `provider` and `model` (`agent/request` may supply a missing pair before dispatch).
+-
+-```yaml
+-- name: '@deepseek-ai/dsh-agent-loop'
+-  config:
+-    maxParallelToolCalls: 10
+-    agents:
+-      - id: 'main'
+-        provider: deepseek
+-        model: deepseek-chat
+-        reasoningEffort: high
+-        cwd: /workspace
+-```
+-
+-| Field | Default | Meaning |
+-|---|---|---|
+-| `maxParallelToolCalls` | `10` | Parallel-safe tool calls in flight per step; `1` is serial |
+-| `agents[].id` | required | Stable label; a fresh session mints `${id}-session-<uuid>` unless `sessionId` is set |
+-| `agents[].provider` / `agents[].model` | — | Model route; both required before dispatch |
+-| `agents[].reasoningEffort` | — | Non-empty initial reasoning effort; `agent/request` may override it |
+-| `agents[].maxTokens` | — | Positive per-request output-token cap |
+-| `agents[].cwd` | — | Workspace directory for a fresh session |
+-| `agents[].sessionId` | — | Exact identity: first use creates, a remount resumes materialized history |
+-| `agents[].resumeSessionId` | — | Load this persisted session instead of creating one; mutually exclusive with `sessionId` |
+-
+-The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-agent-loop) is the exhaustive source for every accepted field. The adapter validates the effective reasoning effort and the loop records it in the request header. `maxParallelToolCalls` is also the whole `agent-loop` settings section, so a user layer over this entry caps the next tool group without a restart.
+-
+-### Create or resume agents programmatically
+-
+-Plugins and hosts create agents through `ctx.agents.create()` and resume persisted sessions through `ctx.agents.resume()`; both return an `AgentHandle` whose `dispose()` owns exact teardown. The loop runs each created agent to completion — the handle is only needed when the caller must tear the agent down itself.
+-
+-```text
+-const handle = await ctx.agents.create({
+-  sessionId,
+-  agentOptions: { provider: 'deepseek', model: 'deepseek-chat' },
+-  setup: (agentCtx, agent) => { /* scoped registrations plus explicit unpublished Agent */ },
+-})
+-```
++## Service: `AgentLoop` (ctx key: `agentLoop`)
+ 
+-Every inbox mutation commits one normalized `agent/inbox/spliced` event. The projection registry folds that event synchronously, so the live projection reflects the splice when `Session.append()` returns. Insertions, edits, removals, claiming, and cancellation replay through the same standard splice coordinates. Ordinary removals carry `outcome: 'canceled'` and emit `agent/inbox/discarded { message }`; claiming uses pure deletions with no outcome and emits `agent/inbox/claimed`. Every insertion emits `agent/inbox/inserted { message }`. `MessageId` stays unique across both pending lists. Consumers that need a removed message use the claimed or discarded notification instead of depending on a pre-splice `session/event` view.
++### Public API
+ 
+-### What a step does
++Creation and resume are one rollback-covered transaction: construct a private session, concrete agent, and scoped context; await optional setup; enter both registries; announce `session/created` then `agent/created`; emit `agent/session-start`; and only then start the driver. Setup receives the full scoped `Context` as trusted same-process composition code and must not drive the unpublished agent. Ordinary typed identity and option inputs are borrowed under their readonly contract, while seed events and session metadata are validated and snapshotted because they cross the durable session boundary. An optional `AbortSignal` cancels only load/setup/publication and is detached before the returned handle becomes visible.
+ 
+-Each step sends the session's derived history — with the latest non-empty `system/message` node as the effective prompt, or no system messages when the rendered prompt is empty — and its visible tool schemas; the model's tool calls run through the guarded tool pipeline and every accepted fact is appended to the session log before the next step derives from it. Parallel-safe calls may overlap up to `maxParallelToolCalls`; exclusive calls run alone as ordering barriers. Cancellation is cooperative: `agent.cancel()` aborts the current activity and, unless `keepInbox` is set, clears pending work; a cancelled stream finalizes the text already delivered to the user.
++The caller fiber and the AgentLoop provider are co-owners. `AgentFactory.createAgent(ownerCtx, options)` and `resume(ownerCtx, options)` receive caller ownership explicitly, while the factory keeps its own dependency context for `sessions`/`llm`/`tools`/`systemPrompt`; this lets a caller inject only `agents` without shrinking the new agent's service set. Caller unload, handle disposal, or provider unload converge on one memoized quiescence boundary. Provider shutdown waits both resource teardown and the public create/resume wrapper that observed deactivation, so no continuation can publish after dependencies disappear.
+ 
+------
++Each agent and its session share one caller-chosen `SessionId`, assumed globally unique; accidental UUID collisions are outside the supported model. Two concurrent operations with the same id may both prepare, but the final `enter()` calls arbitrate publication and every loser rolls its private resources back. Each detach is bound to the exact entered object, so a stale disposer cannot remove a later same-id replacement. A detach requested during a synchronous creation notification waits for that dispatch to unwind, preserving created/disposed pairing. Teardown runs stop and drain → unwind scope → detach agent → detach session; the id becomes reusable after private scope cleanup. Ordinary non-vetoing `agent/*` notifications go through `agentEvents(ctx, agent)`, and per-step assembly goes through `assembleContextFor(agent)`.
+ 
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
++- `ctx.agentLoop.create(id: SessionId, options?: AgentOptions, meta?: { cwd?: string }): Agent` — synchronous no-setup create under the exact shared agent/session id, disposed with the calling fiber. Declarative config treats `agents[].id` as a stable label and normally mints `${label}-session-<uuid>` before calling this boundary. An app may instead supply a stable exact `sessionId`: first use creates it, while a remount with persistence already present resumes its materialized history. `resumeSessionId` requires and loads an existing persisted id and is mutually exclusive with `sessionId`. This keeps default fresh restarts collision-free without retaining a second live routing identity.
+ 
+-<details>
+-<summary>Implementation internals — click to expand</summary>
++`AgentLoop` also implements the `AgentFactory` contract and registers itself via `ctx.agents.setFactory(this)`, so plugins create/resume agents through `ctx.agents`:
+ 
+-This section explains how the package realizes the behavior above; the observable contract is covered in [Use this package](#use-this-package).
++- `ctx.agents.create({ sessionId, meta?, seed?, agentOptions?, setup?, signal? }): Promise<AgentHandle>` — programmatic create under the caller-supplied shared id. It awaits the unpublished setup transaction before returning; `meta` carries cwd/lineage/seed-boundary metadata and `seed` reconstructs a forked child prefix after the session boundary validates and snapshots the durable values. `signal` applies only until this promise settles. The resolved [`AgentHandle`](../agent/README.md) owns exact teardown.
++- `ctx.agents.resume({ resumeSessionId, agentOptions?, setup?, signal? }): Promise<AgentHandle>` — load a persisted session via `ctx.sessionPersistence` ([session persistence](../../../.agents/notes/implemented/architecture/2026-06-14-session-persistence.md)), register the agent under that same id, reconstruct its history, then await setup against a fresh unpublished agent scope before rollback-covered publication. Turn numbering and derived history continue from the loaded log. Requires a session-persistence backend (NOT hard-injected — non-persistent demos still work; `resume` rejects with a clear error when persistence is absent). `signal` is creation-only. Returns an `AgentHandle`.
+ 
+-### Design concept
++The config-driven `ctx.agentLoop.create()` path keeps its agent owned by the loop fiber (it discards the handle). For a programmatic agent, the handle holder is the only consumer-facing teardown capability; AgentLoop provider unload is the independent structural teardown edge, not another handle exposed to application code.
+ 
+-The package is the one concrete implementation of the public `Agent` contract. It registers itself as the `AgentFactory` on `ctx.agents`, so consumers never import this package; ownership of each created agent lives with the caller fiber and the loop provider, converging on one memoized quiescence boundary. Every observable effect happens through session events and the `agent/*` taxonomy — package internals are never part of the public surface.
++### Injected services
+ 
+-### Request headers and adapter defaults
++`agents`, `sessions`, `llm`, `tools`, `systemPrompt` — all five interface services.
+ 
+-After `agent/request`, `ctx.llm.prepareCall()` validates adapter-owned fields and resolves reasoning-effort and output-token defaults under the active turn signal. The loop retains that exact adapter through resolution, `request/header` logging, and dispatch. It writes a full header for the first request, a changed envelope (config or tools — the prompt is not part of the header), an explicit message-series start, a request after surface replacement (an in-place prompt replacement or compaction), and resume; unchanged steps, retries, and ordinary later turns in the same series inherit the latest header, and an in-history prompt append is not a replacement, so the request that follows it inherits the header too. Beside the header, the loop logs `request/context` — provider, model, `contextWindow`, and the route's `systemPromptUpdate` mode from `prepareCall()` — only when one of those differs from the latest snapshot. Before the next waterfall, the loop removes adapter-default fields so the current route resolves them again, while explicit settings persist. An unhandled route still fails with `NO_ADAPTER`.
++### Invariant companion
+ 
+-The loop deep-freezes each derived message identity on its first request and reuses that proof only within the same agent. Restored messages keep their identity; request construction does not freeze their containing event wrappers. Each request freezes its local canonical header, fresh message array, and envelope while leaving the cancellation signal live. The [request-freeze decision](../../../.agents/notes/implemented/simplification/2026-09-06-agent-request-freeze-provenance.md) explains ownership and measurement.
++The optional `@deepseek-ai/dsh-agent-loop/invariant` companion registers request reconstruction with `ctx.invariants`. The loop records each exact frozen request in the process-local identity set owned by `dsh-llm`; the companion then requires a live session and independently rebuilds the message boundary and folded request header from the log. Direct one-shot calls remain outside this contract even when callers freeze them or attach a session id.
+ 
+-### Source map
++### Configuration (schemastery)
+ 
+-| File | Role |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | Plugin entry: `AgentLoop` service, config schema, declarative agent startup, factory registration |
+-| [`src/agent.ts`](src/agent.ts) | The concrete `ReactLoopAgent` driver: inbox, turn/step machine, cancellation |
+-| [`src/inbox.ts`](src/inbox.ts) | Package-internal `ReactLoopInbox`: durable projection, structural commands, and loop-only claim state |
+-| [`src/tool-calls.ts`](src/tool-calls.ts) | Tool scheduling: exclusive barriers and the bounded parallel pool |
+-| [`src/runtime-context.ts`](src/runtime-context.ts) | Per-step runtime-context snapshot handling |
+-| [`src/constants.ts`](src/constants.ts) | `DEFAULT_MAX_PARALLEL_TOOL_CALLS` |
+-| [`src/invariant.ts`](src/invariant.ts) | Invariant companion: request reconstruction from the session log |
+-
+-### Creation and teardown
+-
+-Creation is one rollback-covered transaction: construct a private session, concrete agent, and scoped context; await optional setup with the context and Agent passed separately; enter both registries; announce `session/created` then `agent/created`; emit `agent/session-start`; only then start the driver. A caller creating a runtime child sets `options.parentAgent`; the caller Context separately owns the transaction and live handle. A setup throw, commit failure, or owner disposal rolls the transaction back without publishing either id. Teardown runs stop-and-drain, closes the session's write path, unwinds the scope, detaches the agent, then detaches the session, and every detach is bound to the exact entered object so a stale disposer cannot remove a later same-id replacement.
++```ts
++interface Config {
++  maxParallelToolCalls?: number // default 10; 1 is serial
++  agents: Array<{
++    id: string                 // required
++    provider?: string
++    model?: string
++    maxTokens?: number         // positive per-request output-token cap
++    resumeSessionId?: string   // load this persisted session instead of creating one
++    cwd?: string               // optional workspace cwd for the fresh session
++  }>
++}
++```
+ 
+-### Persistence integration
++Configured agents start automatically. A model call requires both `provider` and `model`; `agent/request` may supply a missing pair before dispatch. An optional positive `maxTokens` seeds each conversation request's output cap and is logged in its request header. `maxParallelToolCalls` bounds every agent's rolling pool for parallel-safe calls and defaults to `10`; it is also the whole of the `agent-loop` Settings section, so a user layer over this entry caps the next tool group without a restart, and a value that is not a positive integer is refused at the write rather than at that group. `agents` is deliberately absent from that section — it is consumed once when the service starts, so a stored change could only look like it had an effect. `cwd` applies only to fresh sessions, while `resumeSessionId` retains persisted metadata. Configured agents use the deployment persona, and programmatic setup can shadow it per agent. This plugin supplies the per-agent `provider`, `model`, and `cwd` prompt variables; harness identity and deployment persona belong to `dsh-system-prompt`.
+ 
+-The loop is the production acquisition point for session write handles. When `ctx.sessionPersistence` is mounted, `create`/`createAgent` call `persistence.create(header)` — storing the durable identity and taking write ownership before publication — and append the constructor seed through the handle; `resume` calls `persistence.open(id, 'write')` first (excluding a concurrent resume of the same id), reads the physically valid log through the handle, and appends `interruptedTurnClosers` for a log crashed mid-turn as an ordinary batch — semantic crash repair is the agent layer's job, not a storage entry point. Immediately before publication, `appendUnstoredSuffix` stores any events appended during the setup window (seed markers, delegation policy records), which never re-emit through `session/event`. Once published, the mounted backend routes the session's `session/event` batches, `session/flush` barriers, and `session/disposed` retirement into the active write handle by session id; the loop touches storage only through the handle it owns. The memoized teardown closes the handle — close drains any routed buffer — after the loop commits the session's closing events, provably releasing write ownership. Without a backend, sessions are memory-only and nothing else changes.
++### Internal concrete driver
+ 
+-### Turn and step flow
++The concrete `ReactLoopAgent`, its inbox, and run controls are package-internal. The package root exports only the plugin/service/config contract, and the package exports map exposes no `./src/*` escape hatch; lifecycle owners create agents through `ctx.agents` rather than naming, constructing, or starting driver internals. One prepared session can be claimed by only one concrete driver, and everything observable happens through session events and the `agent/*` event taxonomy.
+ 
+-The driver owns one agent for its lifetime and runs inside `ctx.agents.withInitiator(agent, ...)`. Its package-internal `ReactLoopInbox` constructor registers the standard `inbox` projection on the agent scope, then uses that projection for structural commands and loop-only claims. Registry reference counting keeps the shared key active until the last agent scope unloads. At a turn boundary it opens the durable turn, then atomically claims pending next-step input plus one queued prompt; between steps it claims only next-step input. The driver assembles the prompt and tools, projects runtime context, and runs `agent/pre-step`. A rejected decision or empty first batch opens no step. On the first attempt after acceptance, `step/start` precedes the `agent/request` waterfall and `prepareCall()`; neither async phase sees the pending system prompt or accepted users committed to history, and cancellation during either commits neither. For every attempt, the loop then synchronously reconciles the rendered prompt against the surviving `system/message` nodes using the prepared call capability, appends the accepted `user/message` batch only on the first attempt, logs the header and context as needed, and derives and freezes the request before streaming through that bound prepared call. Retries reuse the same rendered assembly without repeating assembly, `agent/pre-step`, or user admission. Reconciliation sees pre-step and retry compaction; a broken series consolidates the prompt at the head rather than appending an update after already-committed users. The request is `header.config`, `deriveMessages()`, and `header.tools`; it carries no `system` field. Each model attempt emits one process-local `start`, emits every `chunk` only after the matching durable assistant-frame settlement, and emits exactly one terminal `end`; final assembly or message-append failure settles it as `aborted`, while `committed` follows the durable `assistant/message`. Each successful model call appends one message anchor, and a cancelled stream appends an `interrupted: true` anchor with the delivered prefix so the next request contains what the user saw. Within a step, exclusive calls form barriers and parallel-safe calls use the bounded rolling pool; policy, durable results... (line truncated to 2000 chars)
++The unified `send()` primitive routes content and source by (`target` × `wakeup`); `followup`/`steer`/`inject` are its fixed-preset aliases. `followup()` appends to the `next-turn` FIFO and wakes the driver, `steer()` appends to the `next-step` inbox and wakes it, and `inject()` appends to that same `next-step` inbox without waking it. At a turn boundary the driver opens the durable turn, then atomically claims pending next-step input plus one queued prompt; between steps it claims only next-step input. Claiming removes the batch through pure deletion splices and emits `agent/inbox/claimed { message, turn }` once per message. `agent/pre-step` then returns either rejection or the complete messages entering the proposed step. Rejection leaves the claimed batch removed and closes the turn without a step; input inserted after the claim remains pending, and idle injection waits until follow-up or steering wakes the driver.
+ 
+-Prompt admission uses the actual `prepareCall()` result, not the preceding `request/context`. With no system node, even an empty prompt is appended (reserving node 0 without a wire message). On an incapable route or at a new request series, a non-empty rendering is consolidated at the first system node: each non-empty later system node receives a logged per-node empty replacement, then the head is rewritten if needed. Dormant empty tails need no replacement and do not determine the effective text. Consolidation applies even when the latest effective text is unchanged. On a continuing `in-history` series, an unchanged effective prompt produces no event and a non-empty change appends. An empty rendering clears every non-empty later system node through a logged per-node empty replacement, then empties the head if needed, regardless of route or series state. No older instructions remain model-visible. An empty head with no active later system node means no prompt; repeated clears and resume leave it empty. A restored non-empty prompt follows the same route/series rule: a continuing capable route may append it, while an incapable route or new series refills the head. A step starts a series when the pre-step decision declares `startsRequestSeries`, when the surface replace generation changed since attachment or the last request (compaction or any replacement), or when visible tool schemas changed. Resume and a provider or model swap alone continue the series; the prepared route still governs admission. Per-node empty replacements preserve intervening history without a surface delete operation.
++Every inbox mutation publishes one normalized `agent/inbox/spliced` event before changing the live projection. Insertions, edits, removals, claiming, and cancellation replay through the same standard splice coordinates. Ordinary removals carry `outcome: 'canceled'` and emit `agent/inbox/discarded { message }`; claiming uses pure deletions with no outcome, after which the loop emits `agent/inbox/claimed`. Every insertion emits `agent/inbox/inserted { message }`. `MessageId` stays unique across both pending lists, and synchronous durable-event observers can reconstruct removed values from the pre-splice projection.
+ 
+-### Failure and cancellation
++### Loop lifecycle (`agent.ts`)
+ 
+-Final adapter selection, dispatch, and iteration failures arrive as terminal finishes and enter `agent/request-error`; a handling listener returns `{ kind: 'retry' }` without calling `next()`, while an unhandled failure is terminal. Middleware, result-processing, tool, and other extension failures remain thrown and close the turn directly — plugin failure ends the turn, not the loop. Undispatched model tool calls after cancellation receive synthetic `tool/call` plus `ABORTED_BEFORE_DISPATCH` result pairs. The [explicit-cancellation decision](../../../.agents/notes/implemented/architecture/2026-07-16-explicit-turn-cancellation.md) owns the signal lifecycle.
++The driver owns one agent for its lifetime and runs inside `ctx.agents.withInitiator(agent, ...)`. Package-private orchestration entry points recover the exact Agent, derive `agent.session` once, and let operation-local helpers capture it instead of forwarding the concrete driver or per-operation `Session` through shallow interfaces. A helper keeps an explicit `Session` when that is its actual interface, while creation, persistence load, unpublished setup, services, workers, processes, persistence, and wire protocols retain their explicit identities. The [agent service](../agent/README.md#initiating-agent-scope) owns propagation, teardown, and detached-work rules.
+ 
+-</details>
++Every provider call that reaches a successful finish appends exactly one `assistant/message` completion anchor, including content-less calls and `max-tokens` finishes. The anchor records the assembled content as-is, lists the exact chunk seqs in `sourceEventSeqs` (`[]` for a stream with no chunks), and includes usage when available; empty content stays out of derived message history. A turn cancellation that interrupts streaming also appends an `interrupted: true` anchor when non-empty text or reasoning has reached the user. The anchor cites those chunk seqs and places the rendered prefix in derived message history, so the next request contains what the user saw. Undispatched tool calls are omitted, and an empty or tool-only stream produces no anchor; provider failures still commit no assistant content ([decision](../../../.agents/notes/implemented/architecture/2026-08-10-cancelled-stream-prefix-finalize.md)).
+ 
+------
++After `agent/request` returns a provider/model call config, the loop asks `ctx.llm.prepareCall()` to validate adapter-owned fields and materialize configured reasoning-effort and output-token defaults under the active turn signal. The prepared call retains the exact adapter registration across this asynchronous resolution, `request/header` logging, and terminal dispatch, so HMR cannot mix one adapter's capability result with another adapter's request. The header records the effective config and which fields came from the adapter. Before the next waterfall, the loop removes those marked fields from the proposal so the current exact route rematerializes its own defaults; unmarked explicit settings persist across steps and route changes. A route with no registered adapter preserves the proposed config so an `llm/stream` listener can own and short-circuit it; unhandled terminal dispatch still fails with `NO_ADAPTER`. A new loop instance follows the same adapter-default marker rule when resuming.
+ 
+-<a id="further-exploration"></a>
+-## Further Exploration
++Plugin failure ends the current turn, not the loop. Final adapter selection, dispatch, and iteration failures arrive from `ctx.llm` as terminal error or aborted finishes and enter `agent/request-error`; middleware, result processing, tools, and other extension failures remain thrown and close directly. Recovery receives request coordinates, immutable provider facts, the immutable retry policy captured by the prepared adapter registration, and the turn signal; the policy is absent when middleware owns an unprepared route. A handling listener returns `{ kind: 'retry' }`; an unhandled failure is terminal. AgentLoop owns one cancellation signal for the current admission or turn. An effective `cancel(cause)` clears pending work unless `keepInbox` is set and cooperatively aborts that signal; idle cancellation is a no-op. Waking input that lands after the abort fires but before the activity converges to idle is latched (`wakeRequested`) and replayed at the driver's own convergence boundary, so it runs without a further waking send; a `disposed` cancel never latches, and a wake submitted while already idle always opens its turn boundary (status shows a transient `idle → running → idle` pair even when the message was cleared). Durable `turn/end` records `aborted` for `user` and `parent`, while disposal records `disposed`; undispatched model tool calls receive synthetic `tool/call` and `ABORTED_BEFORE_DISPATCH` result pairs. The cancellation cause changes reporting, not how result context finalized after cancellation is handled. Disposal waits for signal-ignoring work before registry removal. The [explicit-cancellation decision](../../../.agents/notes/implemented/architecture/2026-07-16-explicit-turn-cancellation.md) and the [cancel-convergence wake latch](../../../.agents/notes/implemented/bug-fix/2026-08-07-cancel-convergence-wake-latch.md) own the lifecycle and race contract.
+ 
+-The package-level contract is enough for most consumers; read these when you need the surrounding domain and the design rationale.
++Within a step, exclusive calls form barriers; parallel-safe calls use a bounded rolling pool and are reclassified before start. Only dispatch/body overlaps. Policy, durable results, and result context remain model-ordered. Abort stops new calls, drains started results, and retains their finalized result context without distinguishing the cancellation cause. An internal scheduler failure stops new dispatches, waits for already-started dispatches, and reaches the turn error boundary without fabricating tool results.
+ 
+-- [agent package](../agent/README.md) — the `Agent` handle, registry, and `agent/*` events this loop implements.
+-- [Core subsystem](../../../docs/subsystems/core.md) — the turn flow and interception decisions.
+-- [Session subsystem](../../../docs/subsystems/session.md) — the durable log the loop writes and derives from.
+-- [Tools subsystem](../../../docs/subsystems/tools.md) — the pipeline the loop dispatches through.
+-- [Explicit-cancellation Agent Note](../../../.agents/notes/implemented/architecture/2026-07-16-explicit-turn-cancellation.md) — signal lifetime and cancellation races.
+-- [Core group map](../README.md) — how the core packages compose.
++### What belongs to plugins
+ 
+------
++Everything that goes beyond "call the model, run the tools, repeat" belongs to plugins listening on the event taxonomy:
++- Hooks and policy: the relevant `agent/*` checkpoints plus the guarded `tools/pre-execute` → `tools/execute` → `tools/post-execute` → definition-owned `finalizeContent` → `tools/result` pipeline; exact event signatures and modes live in the generated regions of [core.md](../../../docs/subsystems/core.md#cordis-surface) and [tools.md](../../../docs/subsystems/tools.md#cordis-surface)
++- Compaction: pressure on `agent/pre-step`; canonical overflow repair on `agent/request-error`
++- Model-request recovery: `dsh-llm-retry` records and waits exact-provider normal or unbounded backoff on `agent/request-error`, emits non-surface `llm/retry` status, then returns a retry action
++- Sandbox, permission, plan mode: `tools/pre-execute` for extensible deny/ask, `tools.guard()` for monotonic owner policy, `tools/post-execute` for result decisions, and `tools/result` for final observation
++- Sub-agents: implemented outside the loop as `ctx.subagents` providers; in-process providers use `ctx.agents.create()` and owned `AgentHandle` teardown, while generic [`ctx.jobs`](../../jobs/jobs/) plus [`dsh-tool-subagent`](../../subagent/tool-subagent/) own background collection.
++- Persistence: eager write-behind from `session/event`; `session/flush` is an explicit observation barrier
++- UI: `session/event` (assistant token stream, boundaries, tool activity) + `agent/*` control events (`agent/status`, `agent/created`/`agent/disposed`)
+ 
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+ ### Complete conversation request
+ 
+ #### What the model sees
+ 
+-For each step, the loop sends the session's derived messages and visible tool schemas. Non-empty `system/message` nodes carry the prompt, with the latest as the effective version; an empty rendering clears all prompt versions from derived history. It supplies `provider`, `model`, and `cwd` variable values but no additional fixed prose.
++For each step, the loop sends the rendered per-agent system prompt, visible tool schemas, and the session's derived messages. It supplies `provider`, `model`, and `cwd` variable values but no additional fixed prose.
+ 
+ #### Token effect
+ 
+-System text and schemas are paid again on every step, and on an `in-history` route every retained prompt version is paid until compaction shadows it or prompt reconciliation empties it. Per-agent scoping chooses the contributions, while the authoritative assembly waterfall can alter the final request and makes its listener responsible for protocol coherence.
++System text and schemas are paid again on every step. Per-agent scoping chooses the contributions, while the authoritative assembly waterfall can alter the final request and makes its listener responsible for protocol coherence.
+ 
+ #### KV Cache effect
+ 
+-Append-only only while system text, schemas, and earlier history remain byte-identical under the same provider and model route. An unchanged rendered prompt keeps the cached prefix unless an incapable route or a new request series must consolidate retained in-history system nodes. A prompt change that replaces a system node in place makes the request differ from that node's first token — in full when the node is node 0 — so the provider prefix cache misses from there; when the prepared call declares `systemPromptUpdate: 'in-history'`, a non-empty prompt change inside a continuing request series is appended after the cached history, so the prefix through that history stays reusable. A schema or composition change invalidates reuse from the first altered request token.
++Append-only only while system text, schemas, and earlier history remain byte-identical under the same provider and model route. A token-bearing assembly rewrite or composition change may invalidate reuse from the first altered request token.
+ 
+ ### Retained message history
+ 
+@@ -189,22 +128,7 @@
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits define when the loop needs special care. They are current package constraints, not a task backlog.
+-
+ - **Classification is unary** — calls whose safety depends on comparing siblings or resources must remain exclusive ([rationale](../../../.agents/notes/implemented/feature/2026-07-10-parallel-tool-call-execution.md)).
+ - **Config labels are fresh by default** — omitting `sessionId` creates a fresh `${id}-session-<uuid>` on every startup; exact resume-or-create behavior requires an explicit stable `sessionId`, while `resumeSessionId` requires existing persisted history.
+-- **Config agents have no per-agent persona field or setup hook** — they use the deployment persona; scoped persona and tool composition are available only through the programmatic `ctx.agents.create()` / `resume()` factory options.
++- **Config agents have no per-agent persona field or setup hook** — they use the deployment persona; scoped persona/tool composition is available only through the programmatic `ctx.agents.create()` / `resume()` factory options.
+ - **No built-in turn budget** — tool calls or steering continue the current turn; a policy that bounds runaway turns must cancel from an existing lifecycle extension point such as `agent/turn-stopping`.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-None.
+-
+-</details>
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/README.zh.md	2026-09-11 14:27:15.130963110 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/README.zh.md	2026-09-12 14:56:16.203793010 +0800
+@@ -1,173 +1,112 @@
+----
+-description: "面向用户与维护者的默认 agent 驱动器说明，用于选择、配置或调试 agent 的创建方式以及轮次与步骤的运行方式。"
+-kind: "package-reference"
+----
+-
+-# @deepseek-ai/dsh-agent-loop
++# dsh-agent-loop
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-`dsh-agent-loop` 创建全新 agent 或恢复持久化会话，随后通过模型请求、流式响应、工具执行和持久会话历史驱动每个轮次。标准 agent 组合应挂载本包；声明式条目会在启动时启动 agent，公开的 `ctx.agents` API 则支持以编程方式创建和恢复 agent。`maxParallelToolCalls` 限制同时运行的并行安全调用数量，独占调用保留顺序。取消会保留已经流式交付给用户的文本。只有标准的「调用模型、运行工具、重复」生命周期无法满足需求时，才应选择自定义 `Agent` 实现。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## 使用本包
++agent（智能体）的唯一具体实现插件和循环驱动器。其包内部实现满足 `Agent` 接口，并驱动会话、轮次和步骤的生命周期。
+ 
+-在任何应运行 agent 的组合中挂载 `dsh-agent-loop`。它提供 `ctx.agents` 背后的驱动器，并启动你在配置中声明的 agent；[`dsh-base`](../../bundle/base/README.zh.md) 与 [`dsh-sdk-minimal`](../../bundle/sdk-minimal/README.zh.md) 都将它作为显式配置行挂载。
++这是 harness 中唯一包含具体循环逻辑的包。其他所有内容要么是抽象服务，要么是针对扩展点的插件：新行为应放入插件，而不是这里。
+ 
+-### 配置声明式 agent
+-
+-配置中声明的 agent 会在插件加载时自动启动。每个条目需要一个 `id` 标签；模型调用还同时需要 `provider` 与 `model`（`agent/request` 可以在分发前补齐缺失的这一对值）。
+-
+-```yaml
+-- name: '@deepseek-ai/dsh-agent-loop'
+-  config:
+-    maxParallelToolCalls: 10
+-    agents:
+-      - id: 'main'
+-        provider: deepseek
+-        model: deepseek-chat
+-        reasoningEffort: high
+-        cwd: /workspace
+-```
+-
+-| 字段 | 默认值 | 含义 |
+-|---|---|---|
+-| `maxParallelToolCalls` | `10` | 每个步骤同时在途的并行安全工具调用数；`1` 为串行 |
+-| `agents[].id` | 必填 | 稳定标签；未设置 `sessionId` 时，全新会话会生成 `${id}-session-<uuid>` |
+-| `agents[].provider` / `agents[].model` | — | 模型路由；分发前两者都必须存在 |
+-| `agents[].reasoningEffort` | — | 非空的初始推理等级；`agent/request` 可以覆盖它 |
+-| `agents[].maxTokens` | — | 正数的逐请求输出 token 上限 |
+-| `agents[].cwd` | — | 全新会话的工作目录 |
+-| `agents[].sessionId` | — | 确切身份：首次使用创建，重新挂载时恢复已实体化的历史 |
+-| `agents[].resumeSessionId` | — | 加载这个持久化会话而不是创建新会话；与 `sessionId` 互斥 |
+-
+-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-agent-loop)是每个受支持字段的穷尽式真源。适配器会校验有效推理等级，循环则把它记录在请求头中。`maxParallelToolCalls` 也是整个 `agent-loop` 设置分节，因此叠加在该条目之上的用户层无需重启即可限制下一组工具调用。
+-
+-### 以编程方式创建或恢复 agent
+-
+-插件与宿主通过 `ctx.agents.create()` 创建 agent，通过 `ctx.agents.resume()` 恢复持久化会话；两者都返回 `AgentHandle`，其 `dispose()` 拥有确切的 teardown 能力。循环会把每个创建的 agent 运行到完成——只有调用方需要自行拆除 agent 时才需要句柄。
+-
+-```text
+-const handle = await ctx.agents.create({
+-  sessionId,
+-  agentOptions: { provider: 'deepseek', model: 'deepseek-chat' },
+-  setup: (agentCtx, agent) => { /* scoped registrations plus explicit unpublished Agent */ },
+-})
+-```
++## 服务：`AgentLoop`（ctx 键：`agentLoop`）
+ 
+-每次 inbox 变更都会提交一条规范化的 `agent/inbox/spliced` 事件。投影注册表会同步折叠该事件，因此 `Session.append()` 返回时，实时投影已经反映该 splice。插入、编辑、移除、领取与取消都通过同一组标准 splice 坐标回放。普通删除携带 `outcome: 'canceled'` 并发出 `agent/inbox/discarded { message }`；领取使用不带 outcome 的纯删除，并发出 `agent/inbox/claimed`。每次插入都会发出 `agent/inbox/inserted { message }`。`MessageId` 在两个待处理列表之间保持唯一。需要被移除消息的消费方应使用 claimed 或 discarded 通知，而不依赖 splice 前的 `session/event` 投影视图。
++### 公开 API
+ 
+-### 一个步骤做什么
++创建与恢复属于同一个受回滚保护的事务：构造私有会话、具体 agent 和带作用域的上下文；等待可选 setup；进入两个注册表；依次宣告 `session/created` 和 `agent/created`；发出 `agent/session-start`；此后才启动驱动器。Setup 作为受信任的同进程组合代码，接收完整的带作用域 `Context`，并且不得驱动尚未发布的 agent。普通的类型化身份与选项输入按只读约定借用；seed 事件和会话元数据会跨越持久会话边界，因此系统会对其进行验证并创建快照。可选的 `AbortSignal` 只取消加载／setup／发布，并在返回的 handle 可见前分离。
+ 
+-每个步骤都会发送会话的派生历史——最新的非空 `system/message` 节点是有效提示词，渲染提示词为空时则没有系统消息——及其可见工具 schema；模型的工具调用经过受守卫的工具流水线，每个被接纳的事实都会在下一步据此派生之前追加到会话日志。并行安全调用最多可重叠 `maxParallelToolCalls` 个；独占调用单独运行并构成排序屏障。取消是协作式的：`agent.cancel()` 中止当前活动，并在未设置 `keepInbox` 时清除待处理工作；被取消的流会终结已送达用户的文本。
++调用方 fiber 与 AgentLoop 提供方共同拥有 agent。`AgentFactory.createAgent(ownerCtx, options)` 与 `resume(ownerCtx, options)` 显式接收调用方所有权，而工厂为 `sessions`/`llm`/`tools`/`systemPrompt` 保留自身的依赖上下文；这样，调用方可以只注入 `agents`，而不会缩减新 agent 的服务接口。调用方卸载、handle dispose（资源释放）或提供方卸载都会汇合到同一个记忆化的完全停稳边界。提供方关闭会同时等待资源 teardown，以及已经观测到停用的公开 create/resume 包装层，因此依赖消失后，任何 continuation 都无法继续发布。
+ 
+------
++每个 agent 与其会话共享一个由调用方选择的 `SessionId`，并假设它在全局唯一；意外的 UUID 冲突不属于受支持模型。两个使用同一 id 的并发操作都可以进行准备，但最终的 `enter()` 调用会裁决发布，所有失败方都会回滚各自的私有资源。每次 detach 都绑定到确切进入的对象，因此陈旧 disposer 无法移除之后出现的同 id 替代项。在同步创建通知期间请求的 detach 会等待该次分发退栈，从而保留 created/disposed 配对。Teardown 按以下顺序执行：停止并排空 → 撤销作用域 → detach agent → detach 会话。私有作用域清理完成后，该 id 即可复用。不具否决能力的普通 `agent/*` 通知通过 `agentEvents(ctx, agent)` 发出；逐步骤组装通过 `assembleContextFor(agent)` 完成。
+ 
+-<a id="understand-the-implementation"></a>
+-## 理解实现
++- `ctx.agentLoop.create(id: SessionId, options?: AgentOptions, meta?: { cwd?: string }): Agent`：在确切共享的 agent／会话 id 下同步创建，不运行 setup，并随调用方 fiber 一同 dispose。声明式配置把 `agents[].id` 视为稳定 label，通常会先生成 `${label}-session-<uuid>`，再调用此边界。应用也可以提供稳定且确切的 `sessionId`：首次使用时创建；重新挂载且持久化内容已存在时，则恢复已经实体化的历史。`resumeSessionId` 要求并加载现有的持久化 id，且与 `sessionId` 互斥。这样，默认情况下每次重启都会创建新会话，从而避免冲突，也无需保留第二个实时路由身份。
+ 
+-<details>
+-<summary>实现细节——点击展开</summary>
++`AgentLoop` 还实现 `AgentFactory` 约定，并通过 `ctx.agents.setFactory(this)` 注册自身，因此插件会通过 `ctx.agents` 创建／恢复 agent：
+ 
+-本节解释该包如何实现上述行为；可观察约定已在[使用本包](#use-this-package)中完整说明。
++- `ctx.agents.create({ sessionId, meta?, seed?, agentOptions?, setup?, signal? }): Promise<AgentHandle>`：使用调用方提供的共享 id 以编程方式创建。它会等待尚未发布的 setup 事务，然后才返回；`meta` 携带 cwd／谱系／seed 边界元数据，`seed` 则在会话边界验证并快照持久值后，重建 fork 子级的前缀。`signal` 只在此 Promise 结算前生效。返回的 [`AgentHandle`](../agent/README.zh.md) 拥有确切的 teardown 能力。
++- `ctx.agents.resume({ resumeSessionId, agentOptions?, setup?, signal? }): Promise<AgentHandle>`：通过 `ctx.sessionPersistence` 加载持久化会话（参见[会话持久化](../../../.agents/notes/implemented/architecture/2026-06-14-session-persistence.zh.md)），使用同一 id 注册 agent，重建历史，然后针对全新且尚未发布的 agent 作用域等待 setup，再执行受回滚保护的发布。轮次编号和派生历史从已加载日志继续。此操作要求存在会话持久化后端（不会硬注入，因此非持久化 demo 仍能工作；缺少持久化时，`resume` 会以明确错误拒绝）。`signal` 仅用于创建。返回 `AgentHandle`。
+ 
+-### 设计理念
++配置驱动的 `ctx.agentLoop.create()` 路径让循环 fiber 拥有其 agent（该路径会丢弃 handle）。对于以编程方式创建的 agent，handle 持有者是唯一面向消费方的 teardown 能力；AgentLoop 提供方卸载是一条独立的结构性 teardown 边，而不是向应用代码公开的另一个 handle。
+ 
+-该包是公开 `Agent` 约定的唯一具象实现。它在 `ctx.agents` 上把自身注册为 `AgentFactory`，因此消费方从不导入本包；每个创建 agent 的所有权归属于调用方 fiber 与循环提供方，并汇合到同一个记忆化的完全停稳边界。每个可观察效果都通过会话事件与 `agent/*` 分类体系发生——包内部从不属于公开表面。
++### 注入的服务
+ 
+-### 请求 header 与适配器默认值
++`agents`、`sessions`、`llm`、`tools`、`systemPrompt`：全部 5 个接口服务。
+ 
+-`agent/request` 返回后，`ctx.llm.prepareCall()` 会在活跃轮次信号下校验适配器持有的字段，并解析推理强度和输出 token 默认值。循环会在解析、`request/header` 记录与分派期间保留同一个适配器。循环会为首次请求、变化的 envelope（config 或 tools——提示词不属于 header）、显式消息序列起点、surface 替换（原地替换提示词或压缩（compaction））后的请求及恢复写入完整 header；同一序列内内容未变的步骤、重试与普通后续轮次继承最新 header，历史内追加提示词不是替换，因此紧随其后的请求同样继承 header。在 header 之外，循环还会记录 `request/context`——提供方、模型、`contextWindow` 以及来自 `prepareCall()` 的路由 `systemPromptUpdate` 模式——且仅在其中任何一项与最新快照不同时记录。下一次 waterfall 前，循环移除适配器默认字段，使当前路由重新解析它们；显式设置则保留。未处理的路由仍以 `NO_ADAPTER` 失败。
++### 不变量配套入口
+ 
+-循环在每个派生消息对象首次进入请求时执行深冻结，并且仅在同一 agent 内复用该证明。恢复的消息保留对象身份；构造请求不会冻结包含消息的事件包装对象。每个请求都会冻结本地规范化 header、新消息数组和请求封装，同时保留取消信号的可变性。[请求冻结决策](../../../.agents/notes/implemented/simplification/2026-09-06-agent-request-freeze-provenance.zh.md)解释了所有权与测量依据。
++可选的 `@deepseek-ai/dsh-agent-loop/invariant` 配套入口会向 `ctx.invariants` 注册请求重建。循环会把每个确切的冻结请求记录在 `dsh-llm` 拥有的进程本地身份集合中；随后，配套入口要求存在实时会话，并根据日志独立重建消息边界和折叠后的请求 header。即使调用方冻结直接的一次性调用，或为其附加会话 id，这类调用仍不属于该约定。
+ 
+-### 源码地图
++### 配置（Schemastery）
+ 
+-| 文件 | 职责 |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | 插件入口：`AgentLoop` 服务、配置 schema、声明式 agent 启动、工厂注册 |
+-| [`src/agent.ts`](src/agent.ts) | 具体 `ReactLoopAgent` 驱动器：收件箱、轮次／步骤状态机、取消 |
+-| [`src/inbox.ts`](src/inbox.ts) | 包内部的 `ReactLoopInbox`：持久投影、结构化命令与仅供循环使用的领取状态 |
+-| [`src/tool-calls.ts`](src/tool-calls.ts) | 工具调度：独占屏障与有界并行池 |
+-| [`src/runtime-context.ts`](src/runtime-context.ts) | 每步骤 runtime-context 快照处理 |
+-| [`src/constants.ts`](src/constants.ts) | `DEFAULT_MAX_PARALLEL_TOOL_CALLS` |
+-| [`src/invariant.ts`](src/invariant.ts) | 不变式配套：从会话日志重建请求 |
+-
+-### 创建与拆除
+-
+-创建是同一个受回滚保护的事务：构造私有会话、具象 agent 与带作用域上下文；等待分别传入上下文与 Agent 的可选 setup；进入两个注册表；依次宣告 `session/created` 与 `agent/created`；发出 `agent/session-start`；此后才启动驱动器。创建运行时子 Agent 的调用方设置 `options.parentAgent`；调用方 Context 则单独拥有事务和存活 handle。Setup 抛出、commit 失败或所有者 dispose 都会回滚事务而不发布任一 id。Teardown 顺序是停止并排空、关闭会话的写路径、撤销作用域、detach agent、再 detach 会话，且每次 detach 都绑定到确切进入的对象，因此陈旧 disposer 无法移除之后出现的同 id 替代项。
++```ts
++interface Config {
++  maxParallelToolCalls?: number // default 10; 1 is serial
++  agents: Array<{
++    id: string                 // required
++    provider?: string
++    model?: string
++    maxTokens?: number         // positive per-request output-token cap
++    resumeSessionId?: string   // load this persisted session instead of creating one
++    cwd?: string               // optional workspace cwd for the fresh session
++  }>
++}
++```
+ 
+-### 持久化集成
++通过配置创建的 agent 会自动启动。模型调用同时需要 `provider` 和 `model`；`agent/request` 可以在分发前补齐缺失的这一对值。可选的正数 `maxTokens` 会为每次对话请求提供初始输出上限，并记录在请求 header 中。`maxParallelToolCalls` 限制每个 agent 针对并行安全调用使用的滚动池，默认值为 `10`；它同时也是 `agent-loop` Settings 段的全部内容，因此叠加在该条目之上的用户层无需重启即可限制下一组工具调用，而非正整数的值会在写入时被拒绝，而不是到那一组时才失败。`agents` 刻意不在该段中——它在服务启动时被消费一次，所以存储的改动只会看起来生效。`cwd` 仅应用于全新会话，而 `resumeSessionId` 保留持久化元数据。通过配置创建的 agent 使用部署 persona；编程式 setup 可以按 agent 遮蔽它。该插件为每个 agent 提供 `provider`、`model` 和 `cwd` 提示词变量；harness 身份与部署 persona 属于 `dsh-system-prompt`。
+ 
+-循环是会话写句柄在生产环境中的获取点。挂载 `ctx.sessionPersistence` 后，`create`/`createAgent` 调用 `persistence.create(header)`——在发布之前存储持久身份并取得写所有权——并通过句柄追加构造 seed；`resume` 先调用 `persistence.open(id, 'write')`（排除同 id 的并发恢复），通过句柄读取物理上有效的日志，并为在轮次中途崩溃的日志把 `interruptedTurnClosers` 作为普通批次追加——语义崩溃修复是 agent 层的职责，而非存储入口。发布前的最后一刻，`appendUnstoredSuffix` 存储 setup 窗口期间追加的事件（seed 标记、委派策略记录），它们绝不会经由 `session/event` 重新发出。发布之后，挂载的后端按会话 id 把该会话的 `session/event` 批次、`session/flush` 屏障与 `session/disposed` 退役路由进活跃写句柄；循环只通过它拥有的句柄触碰存储。记忆化的 teardown 在循环提交会话的收尾事件之后关闭句柄——close 会排空任何已路由的缓冲——可证明地释放写所有权。没有后端时，会话只存在于内存中，其余一切不变。
++### 包内部具体驱动器
+ 
+-### 轮次与步骤流程
++具体 `ReactLoopAgent`、其 inbox 与运行控制均为包内部实现。包根只导出插件／服务／配置约定，包导出映射不提供 `./src/*` 逃逸路径；生命周期拥有方通过 `ctx.agents` 创建 agent，而不是点名、构造或启动驱动器内部组件。一个准备完成的会话只能由一个具体驱动器认领；所有可观测行为都通过会话事件和 `agent/*` 事件分类体系发生。
+ 
+-驱动器在其整个生命周期内拥有一个 agent，并在 `ctx.agents.withInitiator(agent, ...)` 内运行。其包内部 `ReactLoopInbox` 构造函数在 agent 作用域上注册标准 `inbox` 投影，随后将该投影用于结构化命令与仅供 loop 使用的领取操作。注册表引用计数会使共享 key 持续有效，直至最后一个 agent 作用域卸载。在轮次边界，它先打开持久轮次，再原子领取待处理的 next-step 输入与一条排队提示词；在步骤之间则只领取 next-step 输入。驱动器组装提示词与工具、投影 runtime 上下文，并运行 `agent/pre-step`。被拒绝的决定或空的首批输入不打开步骤。接纳后的首次尝试先记录 `step/start`，再运行 `agent/request` waterfall 与 `prepareCall()`；这两个异步阶段都看不到待提交的系统提示词与已接纳用户消息进入历史，在任一阶段取消都不会提交这两者。每次尝试时，循环随后依据已准备调用的能力，同步将渲染后的提示词与存活的 `system/message` 节点协调一致、仅在首次尝试追加已接纳的 `user/message` 批次、按需记录 header 与 context，再派生并冻结请求，通过该绑定的已准备调用发起流式请求。重试复用同一份已渲染组装结果，不重复组装、`agent/pre-step` 或用户消息准入。协调过程可见 pre-step 与重试中的压缩；序列中断时将提示词归并到头部，而非在已提交用户消息之后追加更新。请求由 `header.config`、`deriveMessages()` 与 `header.tools` 构成，不携带 `system` 字段。每次模型尝试会发出一个进程本地 `start`，仅在匹配的持久 assistant-frame 结算之后发出各个 `chunk`，并恰好发出一个终态 `end`；最终组装或消息追加失败时以 `aborted` 结算，`committed` 则出现在持久 `assistant/message` 之后。每次成功的模型调用都恰好追加一个 message 锚点，被取消的流则追加带 `interrupted: true` 的锚点并携带已交付前缀，使下一次请求包含用户看到的内容。在步骤内，独占调用形成屏障，并行安全调用使用有界滚动池；策略、持久结果与结果上下文保持模型顺序。
++统一的 `send()` 原语按（`target` × `wakeup`）路由内容与来源；`followup`/`steer`/`inject` 是它的固定预设别名。`followup()` 追加到 `next-turn` FIFO 并唤醒驱动器，`steer()` 追加到 `next-step` inbox 并唤醒驱动器，`inject()` 则追加到同一个 `next-step` inbox，但不唤醒驱动器。在轮次边界，驱动器会先打开持久轮次，再原子领取待处理的 next-step 输入和一条排队提示词；在步骤之间则只领取 next-step 输入。领取操作通过仅执行删除的 splice 移除整批消息，并为每条消息各发出一次 `agent/inbox/claimed { message, turn }`。随后 `agent/pre-step` 返回拒绝结果，或返回将进入拟议步骤的完整消息。拒绝后，已领取批次保持已删除，并关闭不含步骤的轮次；领取后插入的输入仍等待后续处理，而空闲注入会一直等待，直到 follow-up 或 steering 唤醒驱动器。
+ 
+-提示词准入依据实际的 `prepareCall()` 结果，而非先前的 `request/context`。没有系统节点时，即使提示词为空也追加（预留第 0 号节点，但不产生协议消息）。在不具备能力的路由上或新请求序列开始时，非空渲染文本归并到首个系统节点：每个非空的后续系统节点分别收到有日志记录的空内容替换，随后按需重写头节点。未生效的空尾节点无需替换，也不决定有效文本。即使最新有效文本未变，也执行归并。延续中的 `in-history` 序列在有效提示词不变时不产生事件，非空变更则追加。无论路由或序列状态如何，空渲染文本都会通过有日志记录的逐节点空内容替换清除每个非空的后续系统节点，再按需清空头节点。模型不会继续看到旧指令。空头节点且没有生效的后续系统节点表示没有提示词；重复清除与恢复会话都保持为空。重新提供的非空提示词遵循同一路由／序列规则：延续中的具备能力路由可以追加它，不具备能力的路由或新序列则重新填充头节点。以下情况开启序列：pre-step 决定声明 `startsRequestSeries`、surface 替换 generation 自附接或上次请求以来发生变化（压缩或任何替换）、可见工具 schema 变化。恢复与单纯的提供方或模型切换都延续序列；准入仍由已准备的路由决定。逐节点的空内容替换保留其间历史，无需 surface 删除操作。
++每次 inbox 变更都会在修改实时投影之前，先发布一条规范化的 `agent/inbox/spliced` 事件。因此，插入、编辑、移除、领取与取消都通过同一组标准 splice 坐标回放。普通删除携带 `outcome: 'canceled'` 并发出 `agent/inbox/discarded { message }`；领取使用不带 outcome 的纯删除，随后由循环发出 `agent/inbox/claimed`。每次插入都会发出 `agent/inbox/inserted { message }`。`MessageId` 在两个待处理列表之间保持唯一，持久事件的同步观察方可以从 splice 前投影重建被移除的值。
+ 
+-### 失败与取消
++### 循环生命周期（`agent.ts`）
+ 
+-最终适配器选择、分发与迭代失败以终止结束的形式到达并进入 `agent/request-error`；拥有恢复权的监听器返回 `{ kind: 'retry' }` 且不调用 `next()`，未被处理的失败则是终态。Middleware、结果处理、工具及其他扩展失败仍会抛出并直接关闭轮次——插件失败结束的是轮次，不是循环。取消后未分发的模型工具调用会收到合成的 `tool/call` 加 `ABORTED_BEFORE_DISPATCH` 结果对。[显式取消决策](../../../.agents/notes/implemented/architecture/2026-07-16-explicit-turn-cancellation.zh.md) 拥有信号生命周期。
++驱动器在其整个生命周期内拥有一个 agent，并在 `ctx.agents.withInitiator(agent, ...)` 内运行。包私有的编排入口点会恢复确切的 Agent，一次性派生 `agent.session`，并让操作局部的辅助函数捕获它，而不是通过浅层接口继续传递具体驱动器或每次操作的 `Session`。如果显式 `Session` 正是辅助函数的实际接口，该辅助函数会保留它；创建、持久化加载、未发布 setup、服务、worker、进程、持久化和 wire 协议则继续保留各自的显式身份。[agent 服务](../agent/README.zh.md#initiating-agent-scope)规定传播、teardown 和分离工作规则。
+ 
+-</details>
++每次提供方调用成功结束时，都会恰好追加一个 `assistant/message` 完成锚点，包括无内容调用和以 `max-tokens` 结束的调用。该锚点原样记录组装后的内容，在 `sourceEventSeqs` 中列出确切的分片 seq（流没有分片时为 `[]`），并在用量可用时包含用量；空内容不会进入派生消息历史。轮次取消打断流式输出时，如果非空文本或推理内容已送达用户，循环也会追加一个带 `interrupted: true` 的锚点。该锚点引用对应的分片 seq，并把已渲染的前缀放入派生消息历史，使下一次请求包含用户看到的内容。未分派的工具调用会被省略，空流或只包含工具调用的流不会生成锚点；提供方故障也不提交 assistant 内容（[决策](../../../.agents/notes/implemented/architecture/2026-08-10-cancelled-stream-prefix-finalize.zh.md)）。
+ 
+------
++在 `agent/request` 返回提供方／模型调用配置后，循环会调用 `ctx.llm.prepareCall()`，在活跃轮次信号的控制下校验由适配器负责的字段，并填入配置的推理（reasoning）强度和输出 token 默认值。准备完成的调用会在这次异步解析、`request/header` 日志记录和最终分派期间保留同一项确切的适配器注册，因此 HMR（热模块替换）不会把某个适配器的能力解析结果与另一适配器的请求混用。请求 header 会记录生效配置以及哪些字段来自适配器。下一次 waterfall（瀑布式事件）前，循环会从提议中移除这些带标记字段，使当前精确路由重新填入自身默认值；未带标记的显式设置会跨步骤和路由变化保留。没有已注册适配器的路由会保留原定配置，使 `llm/stream` 监听器可以接管并短路该请求；最终分派仍会以 `NO_ADAPTER` 拒绝未得到处理的路由。新循环实例在恢复时会遵循同一套适配器默认值标记规则。
+ 
+-<a id="further-exploration"></a>
+-## 进一步探索
++插件失败会结束当前轮次，而不是结束循环。最终适配器选择、分发与迭代失败会以终止错误或中止结束的形式由 `ctx.llm` 传来，并进入 `agent/request-error`；middleware、结果处理、工具及其他扩展失败仍会抛出并直接关闭轮次。恢复逻辑会接收请求坐标、不可变的提供方事实、准备完成的适配器注册所捕获的不可变重试策略以及轮次信号；middleware 接管未准备路由时，该策略缺失。处理失败的监听器返回 `{ kind: 'retry' }`；未被处理的失败是终态。AgentLoop 为当前准入操作或轮次拥有一个取消信号。有效的 `cancel(cause)` 在未设置 `keepInbox` 时清除待处理工作，并以协作方式中止该信号；空闲取消是空操作。abort 触发后、活动收敛到空闲前到达的唤醒输入会被锁存（`wakeRequested`），并在 driver 自身的收敛边界重放，无需再发一条唤醒 send 即可执行；`disposed` 取消从不锁存，而 agent 已处于空闲时发送的唤醒总是打开自己的 turn 边界（即使消息已被清除，状态也会显示瞬态 `idle → running → idle` 对）。持久 `turn/end` 为 `user` 和 `parent` 记录 `aborted`，dispose 则记录 `disposed`；未分发的模型工具调用会收到合成的 `tool/call` 与 `ABORTED_BEFORE_DISPATCH` 结果对。取消原因只影响报告方式，不影响如何处理在取消后完成终结的结果上下文。dispose 会等待忽略信号的工作完成，然后才从注册表移除。[显式取消决策](../../../.agents/notes/implemented/architecture/2026-07-16-explicit-turn-cancellation.zh.md)与[取消收敛窗口唤醒锁存](../../../.agents/notes/implemented/bug-fix/2026-08-07-cancel-convergence-wake-latch.zh.md)规定生命周期与竞态约定。
+ 
+-包级约定对大多数消费方已经足够；需要周边领域与设计原理时再阅读以下页面。
++在步骤内，独占调用形成屏障；并行安全调用使用有界滚动池，并在启动前重新分类。只有分发和调用主体的执行会发生重叠。策略、持久结果和结果上下文仍保持模型顺序。中止会阻止启动新的调用，等待已启动调用的结果处理完毕，并保留其完成终结后的结果上下文，不区分取消原因。内部调度器故障会停止新的分发，等待已启动的分发，然后在不虚构工具结果的情况下到达轮次错误边界。
+ 
+-- [agent 包](../agent/README.zh.md)——本循环实现的 `Agent` 句柄、注册表与 `agent/*` 事件。
+-- [Core 子系统](../../../docs/subsystems/core.zh.md)——轮次流与拦截决策。
+-- [会话子系统](../../../docs/subsystems/session.zh.md)——循环写入并据此派生的持久日志。
+-- [工具子系统](../../../docs/subsystems/tools.zh.md)——循环分发所经过的流水线。
+-- [显式取消 Agent Note](../../../.agents/notes/implemented/architecture/2026-07-16-explicit-turn-cancellation.zh.md)——信号生命周期与取消竞态。
+-- [core 分组地图](../README.zh.md)——core 各包如何组合。
++### 插件负责的内容
+ 
+------
++超出「调用模型、运行工具、重复」的所有内容，都属于监听事件分类体系的插件：
++- 钩子与策略：相关的 `agent/*` 检查点，加上受守卫保护的 `tools/pre-execute` → `tools/execute` → `tools/post-execute` → 定义拥有的 `finalizeContent` → `tools/result` 流水线；确切事件签名与 mode 位于 [core.md](../../../docs/subsystems/core.zh.md#cordis-surface) 与 [tools.md](../../../docs/subsystems/tools.zh.md#cordis-surface) 的生成区块
++- 压缩（compaction）：在 `agent/pre-step` 上观测压力；在 `agent/request-error` 上进行规范的溢出修复
++- 模型请求恢复：`dsh-llm-retry` 在 `agent/request-error` 上记录并等待针对确切提供方配置的 normal 或无界退避，发出不进入表层的 `llm/retry` 状态，然后返回重试动作
++- 沙箱、权限、计划模式：使用 `tools/pre-execute` 提供可扩展的拒绝／询问，使用 `tools.guard()` 提供单调拥有方策略，使用 `tools/post-execute` 处理结果决定，并使用 `tools/result` 进行最终观测
++- subagent：在循环外部实现为 `ctx.subagents` 提供方；进程内提供方使用 `ctx.agents.create()` 创建 agent，并通过其拥有的 `AgentHandle` 执行 teardown，而通用的 [`ctx.jobs`](../../jobs/jobs/) 与 [`dsh-tool-subagent`](../../subagent/tool-subagent/) 负责后台收集。
++- 持久化：`session/event` 发生后立即安排延后写入；`session/flush` 是显式观测屏障
++- UI：`session/event`（assistant token 流、边界、工具活动）+ `agent/*` 控制事件（`agent/status`、`agent/created`/`agent/disposed`）
+ 
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+ ### 完整对话请求
+ 
+-#### 模型看到什么
++#### 模型看到的内容
+ 
+-每个步骤中，循环会发送会话的派生消息与可见工具 schema。非空的 `system/message` 节点承载提示词，最新一条是有效版本；空渲染文本会从派生历史中清除所有提示词版本。它提供 `provider`、`model` 与 `cwd` 变量值，但不添加固定文案。
++每个步骤中，循环会发送针对该 agent 呈现的系统提示词、可见工具 schema 和会话派生消息。它提供 `provider`、`model` 与 `cwd` 变量值，但不添加固定文案。
+ 
+ #### Token 影响
+ 
+-系统文本与 schema 在每个步骤都会再次计入，在 `in-history` 路由上，每个保留的提示词版本都会持续计入，直到压缩将其遮蔽或提示词协调将其清空。逐 agent 作用域决定贡献，而权威组装 waterfall 可以改变最终请求，并使其监听器负责保持协议连贯。
++每个步骤都会再次计入系统文本与 schema。逐 agent 作用域决定贡献，而权威组装 waterfall 可以改变最终请求，并使其监听器负责保持协议连贯。
+ 
+ #### KV Cache 影响
+ 
+-只有在同一提供方与模型路由下，且系统文本、schema 与此前历史都保持逐字节一致时，请求才保持仅追加。渲染后的提示词未变时，缓存前缀得以保留，除非不具备能力的路由或新请求序列必须归并保留的历史内系统节点。原地替换某个系统节点的提示词变更会使请求从该节点的第一个 token 起就不同——该节点是第 0 号节点时则整个请求都不同——因此提供方前缀缓存从那里开始未命中；当已准备调用声明 `systemPromptUpdate: 'in-history'` 时，同一请求序列延续期间的非空提示词变更会追加到已缓存历史之后，因此直到该历史末尾的前缀仍可复用。schema 或组合变更则从第一个改变的请求 token 起使复用失效。
++只有在同一提供方和模型路由下，且系统文本、schema 与此前历史都保持逐字节一致时，请求 token 序列才保持仅追加。携带 token 的组装改写或组合变更可能从第一个改变的请求 token 起使复用失效。
+ 
+ ### 保留的消息历史
+ 
+-#### 模型看到什么
++#### 模型看到的内容
+ 
+-已接纳的 user 消息、assistant 消息、工具调用与结果、注入上下文与 steering 都会记录，并在后续步骤中发送。原始流分片、生命周期边界与其他仅写入日志的事件会被排除。
++已接纳的 user 消息、assistant 消息、工具调用与结果、注入上下文和 steering（中途引导）都会记录，并在后续步骤中发送。原始流分片、生命周期边界和其他仅写入日志的事件会被排除。
+ 
+ #### Token 影响
+ 
+-输入会随每条表层消息增长，直到压缩（compaction）替换遮蔽较旧节点；包含多个步骤的工具轮次会在每个步骤重新发送累积的历史。
++输入会随每条表层消息增长，直到压缩替换遮蔽较旧节点；包含多个步骤的工具轮次会在每个步骤重新发送累积的历史。
+ 
+ #### KV Cache 影响
+ 
+@@ -175,7 +114,7 @@
+ 
+ ### 取消后未分发的调用
+ 
+-#### 模型看到什么
++#### 模型看到的内容
+ 
+ 如果后续请求回放一个中止的步骤，取消所阻止分发的每个工具调用都有错误码 `ABORTED_BEFORE_DISPATCH`，结果文本为 `Error: tool call aborted before dispatch`。
+ 
+@@ -187,24 +126,9 @@
+ 
+ 仅追加；每个合成结果都位于可复用请求前缀之后，不会使现有 KV Cache 条目失效。
+ 
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
++## 已知限制与暂缓事项
+ 
+-这些限制说明循环何时需要特别留意。它们是当前包约束，不是任务积压。
+-
+-- **分类是一元的**：安全性取决于比较同级调用或资源的调用必须保持独占（[原理](../../../.agents/notes/implemented/feature/2026-07-10-parallel-tool-call-execution.zh.md)）。
+-- **配置标签默认对应新会话**：省略 `sessionId` 时，每次启动都会创建新的 `${id}-session-<uuid>`；如需确切的恢复或创建行为，必须显式提供稳定的 `sessionId`，而 `resumeSessionId` 要求已有持久化历史。
+-- **配置 agent 没有逐 agent persona 字段或 setup 钩子**：它们使用部署 persona；只有编程式 `ctx.agents.create()` / `resume()` 工厂选项支持带作用域的 persona 与工具组合。
++- **分类是一元的**：安全性取决于比较同级调用或资源的调用必须保持独占（参见[设计原理](../../../.agents/notes/implemented/feature/2026-07-10-parallel-tool-call-execution.zh.md)）。
++- **配置 label 默认对应新会话**：省略 `sessionId` 时，每次启动都会创建新的 `${id}-session-<uuid>`；如需确切的恢复或创建行为，必须显式提供稳定的 `sessionId`，而 `resumeSessionId` 要求已有持久化历史。
++- **配置 agent 没有逐 agent persona 字段或 setup 钩子**：它们使用部署 persona；只有编程式 `ctx.agents.create()` / `resume()` 工厂选项支持带作用域的 persona／工具组合。
+ - **没有内置轮次预算**：工具调用或 steering 会让当前轮次继续；限制失控轮次的策略必须从既有生命周期扩展点（如 `agent/turn-stopping`）执行取消。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
+-
+-无。
+-
+-</details>
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/lib/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/lib/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/lib/index.js	2026-09-11 14:27:15.095962613 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/lib/index.js	2026-09-12 16:08:32.777647260 +0800
+@@ -1,220 +1,16 @@
+ import { Service } from "@deepseek-ai/cordis";
+ import { randomUUID } from "node:crypto";
+ import z from "@deepseek-ai/schemastery";
+-import { z as z$1 } from "zod";
+-import { brandString } from "@deepseek-ai/dsh-brand";
+-import { agentEvents, assembleContextFor, emitAgentEvent } from "@deepseek-ai/dsh-agent";
+-import { AssistantStreamAccumulator, BlockAssembler, LlmAttemptId, LlmError, createAssistantMessage, createSystemMessage, createToolResultMessage, createUserMessage, errorChain, markAgentLoopRequest } from "@deepseek-ai/dsh-llm";
+-import { SessionLogOffset, SessionPreparation, SessionSeq, canonicalHeader, headerEquals, interruptedTurnClosers, isReplacementSurfaceEvent } from "@deepseek-ai/dsh-session";
+-import { SessionPersistenceNotFoundError } from "@deepseek-ai/dsh-session-persistence";
+-import { assertNever, deepFreeze } from "@deepseek-ai/dsh-util-values";
++import { Inbox, agentEvents, assembleContextFor, emitAgentEvent } from "@deepseek-ai/dsh-agent";
++import { BlockAssembler, LlmError, assertNever, createAssistantMessage, createToolResultMessage, createUserMessage, deepFreeze, errorChain, markAgentLoopRequest } from "@deepseek-ai/dsh-llm";
++import { installSettingsSection, settingsNamespace } from "@deepseek-ai/dsh-settings";
++import { SessionId, SessionPreparation, canonicalHeader, headerEquals, isReplacementSurfaceEvent } from "@deepseek-ai/dsh-session";
+ import { createScope } from "@deepseek-ai/dsh-scope";
+ import { joinContextSections, renderContextSections, renderPrompt } from "@deepseek-ai/dsh-system-prompt";
+ import { TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER } from "@deepseek-ai/dsh-tools";
+-//#region lib/types/inbox.js
+-/**
+-* Driver-owned durable agent inbox projection and command facade.
+-*
+-* @module @deepseek-ai/dsh-agent-loop/inbox
+-*/
+-/** Wire validation for pending agent input reconstructed from durable inbox splices. */
+-const inboxProjectionSchema = z$1.object({
+-	"next-turn": z$1.array(z$1.custom()).readonly(),
+-	"next-step": z$1.array(z$1.custom()).readonly()
+-}).readonly();
+-/** Standard fold that reconstructs pending input and rejects invalid durable splice history. */
+-const inboxProjectionDefinition = {
+-	key: "inbox",
+-	stateSchema: inboxProjectionSchema,
+-	init: () => ({
+-		"next-turn": [],
+-		"next-step": []
+-	}),
+-	apply(state, event) {
+-		if (event.type !== "agent/inbox/spliced") return state;
+-		const splice = event.data;
+-		try {
+-			const inbox = state[splice.target];
+-			const removedCount = splice.removedCount ?? 0;
+-			if (!Number.isSafeInteger(splice.start) || splice.start < 0 || splice.start > inbox.length || !Number.isSafeInteger(removedCount) || removedCount < 0 || splice.start + removedCount > inbox.length) throw new Error("invalid inbox splice");
+-			const next = inbox.toSpliced(splice.start, removedCount, ...splice.inserted);
+-			const ids = /* @__PURE__ */ new Set();
+-			for (const message of splice.target === "next-turn" ? [...next, ...state["next-step"]] : [...state["next-turn"], ...next]) {
+-				if (ids.has(message.id)) throw new Error(`message "${message.id}" is already pending`);
+-				ids.add(message.id);
+-			}
+-			return splice.target === "next-turn" ? {
+-				"next-turn": next,
+-				"next-step": state["next-step"]
+-			} : {
+-				"next-turn": state["next-turn"],
+-				"next-step": next
+-			};
+-		} catch (error) {
+-			throw new Error(`invalid persisted inbox splice at session seq ${event.seq}`, { cause: error });
+-		}
+-	},
+-	wire: {
+-		viewSchema: inboxProjectionSchema,
+-		view: (state) => state
+-	},
+-	stateVersion: 1
+-};
+-/**
+-* Driver-owned durable Inbox implementation used by ReactLoopAgent and focused
+-* provider tests.
+-* @param projections - registry that owns the standard Inbox projection.
+-* @param session - session whose durable events store pending input.
+-* @param dispatch - agent-scoped notifications for Inbox lifecycle events.
+-*/
+-var ReactLoopInbox = class {
+-	projections;
+-	session;
+-	dispatch;
+-	constructor(projections, session, dispatch) {
+-		this.projections = projections;
+-		this.session = session;
+-		this.dispatch = dispatch;
+-		this.projections.register(inboxProjectionDefinition);
+-	}
+-	/** Prompts awaiting individual turns. */
+-	get nextTurn() {
+-		return this.current()["next-turn"];
+-	}
+-	/** Input awaiting the next step boundary. */
+-	get nextStep() {
+-		return this.current()["next-step"];
+-	}
+-	/** Whether either pending-message list contains work. */
+-	get hasPending() {
+-		const state = this.current();
+-		return state["next-turn"].length > 0 || state["next-step"].length > 0;
+-	}
+-	/** Durably cancel all pending input, clearing next-step before next-turn. */
+-	clear() {
+-		this.splice("next-step", 0, this.nextStep.length, []);
+-		this.splice("next-turn", 0, this.nextTurn.length, []);
+-	}
+-	/**
+-	* Remove and return the complete batch proposed for one step.
+-	* @param target - whether this boundary also consumes one queued turn.
+-	* @param turn - turn that will own the claimed batch.
+-	* @returns next-step input followed by the queued turn, when requested.
+-	*/
+-	claim(target, turn) {
+-		const claimed = this.mutate("next-step", 0, this.nextStep.length, [], false);
+-		if (target === "next-turn") claimed.push(...this.mutate("next-turn", 0, 1, [], false));
+-		for (const message of claimed) this.dispatch.emit("agent/inbox/claimed", {
+-			message,
+-			turn
+-		});
+-		return claimed;
+-	}
+-	/**
+-	* Append one message to a pending list.
+-	* @param target - pending list to extend.
+-	* @param message - message to append.
+-	*/
+-	append(target, message) {
+-		this.splice(target, this.current()[target].length, 0, [message]);
+-	}
+-	/**
+-	* Prepend one message to a pending list.
+-	* @param target - pending list to extend.
+-	* @param message - message to prepend.
+-	*/
+-	prepend(target, message) {
+-		this.splice(target, 0, 0, [message]);
+-	}
+-	/**
+-	* Replace one pending message in place.
+-	* @param messageId - identity of the pending message to replace.
+-	* @param newMessage - replacement message.
+-	* @returns whether the message was still pending.
+-	*/
+-	replace(messageId, newMessage) {
+-		const location = this.locate(messageId);
+-		if (location === void 0) return false;
+-		this.splice(location.target, location.index, 1, [newMessage]);
+-		return true;
+-	}
+-	/**
+-	* Remove one pending message.
+-	* @param messageId - identity of the pending message to remove.
+-	* @returns whether the message was still pending.
+-	*/
+-	remove(messageId) {
+-		const location = this.locate(messageId);
+-		if (location === void 0) return false;
+-		this.splice(location.target, location.index, 1, []);
+-		return true;
+-	}
+-	/**
+-	* Apply standard splice semantics and durably record the normalized result.
+-	* @param target - pending list to mutate.
+-	* @param start - splice position.
+-	* @param deleteCount - maximum number of messages to remove.
+-	* @param inserted - messages to insert at the resolved position.
+-	* @returns messages removed by the splice.
+-	*/
+-	splice(target, start, deleteCount, inserted) {
+-		return this.mutate(target, start, deleteCount, inserted, true);
+-	}
+-	/** Locate one pending identity across both owned lists. */
+-	locate(messageId) {
+-		const state = this.current();
+-		for (const target of ["next-turn", "next-step"]) {
+-			const index = state[target].findIndex((message) => message.id === messageId);
+-			if (index >= 0) return {
+-				target,
+-				index
+-			};
+-		}
+-	}
+-	/** Read the current durable projection state. */
+-	current() {
+-		const state = this.projections.stateOf(this.session, "inbox");
+-		/* v8 ignore next -- the constructor registers this key before any read */
+-		if (state === void 0) throw new Error(`agent "${this.session.id}" cannot read inbox state: its projection registration is not active`);
+-		return state;
+-	}
+-	/** Commit one normalized mutation and publish its live events. */
+-	mutate(target, start, deleteCount, inserted, discardRemoved) {
+-		const state = this.current();
+-		const inbox = state[target];
+-		const truncatedStart = Math.trunc(start);
+-		const offset = Number.isNaN(truncatedStart) ? 0 : truncatedStart;
+-		const actualStart = offset < 0 ? Math.max(inbox.length + offset, 0) : Math.min(offset, inbox.length);
+-		const truncatedDeleteCount = Math.trunc(deleteCount);
+-		const actualDeleteCount = Math.min(Math.max(Number.isNaN(truncatedDeleteCount) ? 0 : truncatedDeleteCount, 0), inbox.length - actualStart);
+-		if (actualDeleteCount === 0 && inserted.length === 0) return [];
+-		const candidate = inbox.toSpliced(actualStart, actualDeleteCount, ...inserted);
+-		const ids = /* @__PURE__ */ new Set();
+-		for (const message of target === "next-turn" ? [...candidate, ...state["next-step"]] : [...state["next-turn"], ...candidate]) {
+-			if (ids.has(message.id)) throw new Error(`message "${message.id}" is already pending`);
+-			ids.add(message.id);
+-		}
+-		const outcome = discardRemoved && actualDeleteCount > 0 ? "canceled" : void 0;
+-		const splice = {
+-			target,
+-			start: actualStart,
+-			...actualDeleteCount === 0 ? {} : { removedCount: actualDeleteCount },
+-			inserted,
+-			...outcome === void 0 ? {} : { outcome }
+-		};
+-		const removed = inbox.slice(actualStart, actualStart + actualDeleteCount);
+-		const event = this.session.append("agent/inbox/spliced", splice);
+-		if (discardRemoved) for (const message of removed) this.dispatch.emit("agent/inbox/discarded", { message });
+-		for (const message of event.data.inserted) this.dispatch.emit("agent/inbox/inserted", { message });
+-		return removed;
+-	}
+-};
+-//#endregion
+ //#region lib/types/runtime-context.js
+ /**
+-* Durable projection state for the two loop-owned surface messages the system
+-* prompt plugin forms: the system prompt (surface node 0 and any in-history
+-* replacement) and the dynamic runtime-context snapshot.
++* Durable projection state for dynamic runtime context.
+ * @module @deepseek-ai/dsh-agent-loop/runtime-context
+ */
+ const SOURCE = "@deepseek-ai/dsh-system-prompt";
+@@ -226,76 +22,6 @@
+ 	const [block] = message.content;
+ 	return message.content.length === 1 && block?.type === "text" ? block.text : void 0;
+ }
+-/** Committed events from the newest backward; the restore scans stop at the first match. */
+-function eventsNewestFirst(session) {
+-	return session.snapshotEvents().toReversed();
+-}
+-/**
+-* Decides how a rendered system prompt reaches the surface without owning the
+-* commit. The first prompt, even empty, reserves surface node 0.
+-* A capable continuing series appends changed nonempty text after the
+-* cached history. An incapable route, broken series, or cleared prompt instead
+-* normalizes the first system node and empties later active nodes. Dormant empty
+-* tails do not supply effective text or require repeated replacements.
+-*/
+-var SystemPromptProjection = class {
+-	session;
+-	constructor(session) {
+-		this.session = session;
+-	}
+-	/** The surviving `system/message` nodes in surface order. */
+-	systemNodes() {
+-		const nodes = [];
+-		for (const seq of this.session.surface.nodes) {
+-			const event = this.session.eventAt(seq);
+-			if (event?.type !== "system/message") continue;
+-			const text = event.data.message.content.length === 0 ? "" : textOf(event.data.message);
+-			nodes.push({
+-				seq,
+-				text
+-			});
+-		}
+-		return nodes;
+-	}
+-	/**
+-	* Reconcile effective text and retained nodes with the prepared route and series.
+-	* @param rendered - the fully rendered system prompt; `''` when none is active.
+-	* @param input - the route capability and series facts for this step.
+-	* @returns ordered per-node updates; an empty list means no update is needed.
+-	*/
+-	project(rendered, input) {
+-		const nodes = this.systemNodes();
+-		const head = nodes[0];
+-		if (head === void 0) return [{
+-			message: createSystemMessage(rendered, SOURCE),
+-			intent: { surfaceOp: "append" }
+-		}];
+-		const latest = nodes.findLast((node) => node.text !== "") ?? head;
+-		if (!input.inHistory || input.startsSeries || rendered.length === 0) {
+-			const updates = nodes.slice(1).filter((node) => node.text !== "").map((node) => this.replace(node.seq, ""));
+-			if (head.text !== rendered) updates.push(this.replace(head.seq, rendered));
+-			return updates;
+-		}
+-		if (latest.text === rendered) return [];
+-		return [{
+-			message: createSystemMessage(rendered, SOURCE),
+-			intent: { surfaceOp: "append" }
+-		}];
+-	}
+-	replace(seq, text) {
+-		return {
+-			message: createSystemMessage(text, SOURCE),
+-			intent: {
+-				surfaceOp: {
+-					op: "replace",
+-					startSeq: seq,
+-					endSeq: seq
+-				},
+-				sourceEventSeqs: [seq]
+-			}
+-		};
+-	}
+-};
+ /** Tracks the last retained runtime-context snapshot without owning its commit. */
+ var RuntimeContextProjection = class {
+ 	/** `undefined` means no snapshot ever existed; `null` means none is retained. */
+@@ -307,8 +33,9 @@
+ 	*/
+ 	constructor(ctx, session) {
+ 		const surface = new Set(session.surface.nodes);
+-		for (const event of eventsNewestFirst(session)) {
+-			if (event.type !== "user/message" || !isOwned(event.data)) continue;
++		for (let index = session.events.length - 1; index >= 0; index -= 1) {
++			const event = session.events[index];
++			if (event?.type !== "user/message" || !isOwned(event.data)) continue;
+ 			this.retained ??= null;
+ 			if (surface.has(event.seq)) {
+ 				this.retained = {
+@@ -355,128 +82,6 @@
+ 	}
+ };
+ //#endregion
+-//#region lib/types/assistant-stream.js
+-/** Process-local assistant attempt framing and durable stream accumulation. */
+-/** Folds one model attempt into one compact stream plus ordered transient frames. */
+-var AssistantStreamAttempt = class {
+-	nextRevision;
+-	turn;
+-	step;
+-	emit;
+-	accumulator = new AssistantStreamAccumulator();
+-	assembler = new BlockAssembler();
+-	index = 0;
+-	terminal = false;
+-	/** Attempt identity unique within this Agent lifecycle. */
+-	attemptId;
+-	/** Whether this started attempt has emitted its terminal frame. */
+-	get ended() {
+-		return this.terminal;
+-	}
+-	/**
+-	* @param sessionId - identity embedded only in the Agent-lifecycle-local attempt id.
+-	* @param attempt - attached-Session-local attempt counter.
+-	* @param nextRevision - allocates the next emitted frame revision.
+-	* @param turn - durable turn owning the request.
+-	* @param step - durable step owning the request.
+-	* @param emit - agent-scoped notification publisher.
+-	*/
+-	constructor(sessionId, attempt, nextRevision, turn, step, emit) {
+-		this.nextRevision = nextRevision;
+-		this.turn = turn;
+-		this.step = step;
+-		this.emit = emit;
+-		this.attemptId = LlmAttemptId(`${sessionId}:${attempt}`);
+-	}
+-	/** Publish the opening marker before the first delivered chunk. */
+-	start() {
+-		this.emit({
+-			type: "start",
+-			attemptId: this.attemptId,
+-			revision: this.nextRevision(),
+-			turn: this.turn,
+-			step: this.step
+-		});
+-	}
+-	/** Snapshot one chunk once, then feed durable compaction, assembly, and live publication. */
+-	push(chunk) {
+-		const timed = this.accumulator.push({
+-			time: Date.now(),
+-			chunk
+-		});
+-		this.assembler.push(timed.chunk);
+-		this.emit({
+-			type: "chunk",
+-			attemptId: this.attemptId,
+-			revision: this.nextRevision(),
+-			index: this.index++,
+-			time: timed.time,
+-			chunk: timed.chunk
+-		});
+-	}
+-	/**
+-	* Publish terminal settlement after the matching durable event commits.
+-	* @param eventType - durable settlement type.
+-	* @param append - synchronous durable append returning its committed seq.
+-	*/
+-	settle(eventType, append) {
+-		let seq;
+-		try {
+-			seq = append();
+-		} catch (error) {
+-			this.abandon();
+-			throw error;
+-		}
+-		this.terminal = true;
+-		this.emit({
+-			type: "end",
+-			attemptId: this.attemptId,
+-			revision: this.nextRevision(),
+-			index: this.index,
+-			outcome: {
+-				kind: "committed",
+-				eventType,
+-				seq
+-			}
+-		});
+-	}
+-	/** Publish abandonment when no durable attempt event can be committed. */
+-	abandon() {
+-		this.terminal = true;
+-		this.emit({
+-			type: "end",
+-			attemptId: this.attemptId,
+-			revision: this.nextRevision(),
+-			index: this.index,
+-			outcome: { kind: "abandoned" }
+-		});
+-	}
+-	/** Exact compact stream for the final durable event. */
+-	get stream() {
+-		return [...this.accumulator.snapshot()];
+-	}
+-	/** Canonical completed-message blocks from the same chunks. */
+-	blocks() {
+-		return this.assembler.blocks();
+-	}
+-	/** Safe visible prefix when cancellation interrupts the attempt. */
+-	interruptedBlocks() {
+-		return this.assembler.interruptedBlocks();
+-	}
+-	/** Latest adapter-reported usage in the stream. */
+-	get usage() {
+-		return this.assembler.usage;
+-	}
+-	/** Terminal reason, defaulting to stop when the stream omitted one. */
+-	get finish() {
+-		return this.assembler.finish;
+-	}
+-	/** Replay state carried by the terminal finish record. */
+-	get replayState() {
+-		return this.assembler.replayState;
+-	}
+-};
+-//#endregion
+ //#region lib/types/tool-calls.js
+ /**
+ * Schedules one assistant step's tool calls. Exclusive calls form barriers;
+@@ -558,7 +163,7 @@
+ 	const { session } = ctx.agents.requireInitiator();
+ 	const { maxParallelToolCalls } = ctx.agentLoop.config;
+ 	const slots = group.map(() => void 0);
+-	const callSeqs = group.map(() => void 0);
++	const callSeqs = group.map(() => -1);
+ 	let nextToStart = 0;
+ 	let committed = 0;
+ 	let started = 0;
+@@ -742,33 +347,35 @@
+ 	dispatch;
+ 	/** Whether this loop instance has appended its initial/resume request anchor. */
+ 	requestHeaderLogged = false;
+-	/** Surface generation at attachment or the preceding built request. */
+-	requestSurfaceGeneration;
+ 	runtimeContext;
+-	/** Process-local revision of assistant frames for this attached Session. */
+-	assistantStreamRevision = 0;
+-	assistantAttemptCounter = 0;
+-	systemPrompt;
+-	/** Identities fully frozen by this loop; weak references do not retain replaced history. */
+-	frozenMessages = /* @__PURE__ */ new WeakSet();
+ 	constructor(loopCtx, id, options, session) {
+ 		this.loopCtx = loopCtx;
+ 		this.id = id;
+ 		this.options = options;
+ 		this.session = session;
+-		this.requestSurfaceGeneration = session.surface.replaceGeneration;
+ 		this.dispatch = agentEvents(loopCtx, this);
+-		this.scope = createScope(loopCtx, this);
+-		this.ctx = this.scope.ctx;
+-		this.inbox = new ReactLoopInbox(this.ctx.sessionProjections, session, this.dispatch);
+-		/* v8 ignore next -- the loop registers its own turnBoundary unit, so the key is always present */
+-		const lastTurn = this.loopCtx.sessionProjections.stateOf(session, "turnBoundary")?.lastTurn ?? 0;
++		this.inbox = new Inbox(session, {
++			inserted: (message) => {
++				this.dispatch.emit("agent/inbox/inserted", { message });
++			},
++			discarded: (message) => {
++				this.dispatch.emit("agent/inbox/discarded", { message });
++			},
++			claimed: (message, turn) => {
++				this.dispatch.emit("agent/inbox/claimed", {
++					message,
++					turn
++				});
++			}
++		});
++		const lastTurn = session.events.findLast((event) => event.type === "turn/start")?.data.turn ?? 0;
+ 		this.phase = {
+ 			kind: "idle",
+ 			lastTurn
+ 		};
++		this.scope = createScope(loopCtx, this);
++		this.ctx = this.scope.ctx.extend({ agent: this });
+ 		this.runtimeContext = new RuntimeContextProjection(this.ctx, session);
+-		this.systemPrompt = new SystemPromptProjection(session);
+ 	}
+ 	get status() {
+ 		return this.phase.kind === "idle" || this.phase.kind === "maintenance" ? "idle" : "running";
+@@ -900,21 +507,11 @@
+ 			messages: context === void 0 ? claimed : [...claimed, context]
+ 		}));
+ 		signal.throwIfAborted();
+-		if (decision.kind === "reject") return decision;
+-		return {
++		return decision.kind === "reject" ? decision : {
+ 			...decision,
+ 			assembly
+ 		};
+ 	}
+-	/** Whether the assembled tool schemas differ from the logged request header's. */
+-	toolsChanged(tools) {
+-		const baseline = this.session.requestHeader();
+-		if (baseline === void 0) return false;
+-		return !headerEquals(baseline, canonicalHeader({
+-			...baseline,
+-			tools: [...tools]
+-		}));
+-	}
+ 	/** Open one turn before claiming its first proposed step. */
+ 	async turn() {
+ 		if (this.phase.kind !== "running") this.throwError(/* @__PURE__ */ new Error(`agent "${this.id}": turn without driver reservation`));
+@@ -954,7 +551,8 @@
+ 				});
+ 				phase.step = step;
+ 				try {
+-					const stepEnd = await this.step(decision);
++					for (const message of decision.messages) this.session.append("user/message", message, { surfaceOp: "append" });
++					const stepEnd = await this.step(decision.assembly);
+ 					if (turnEnds === null || turnEnds.kind !== "max-tokens") turnEnds = stepEnd;
+ 				} finally {
+ 					this.session.append("step/end", {
+@@ -1005,126 +603,95 @@
+ 		phase.step = 0;
+ 		return true;
+ 	}
+-	async step(decision) {
++	async step(assembly) {
+ 		/* v8 ignore next -- private callers establish the running phase before executing a step */
+ 		if (this.phase.kind !== "running") throw new Error(`agent "${this.id}": step outside running phase`);
+ 		const { turn, step, abort: { signal } } = this.phase;
+ 		signal.throwIfAborted();
+-		const { assembly } = decision;
+-		const renderedPrompt = renderPrompt(assembly);
+-		let firstAttempt = true;
++		const system = renderPrompt(assembly);
++		const isSubagent = (this.options.subagentDepth ?? 0) > 0 || (this.session.header?.delegationDepth ?? 0) > 0;
+ 		while (true) {
+-			const { config, preparedCall } = await this.prepareRequest(turn, step, signal);
+-			const startsRequestSeries = firstAttempt && decision.startsRequestSeries === true;
+-			const commits = this.systemPrompt.project(renderedPrompt, {
+-				inHistory: preparedCall?.systemPromptUpdate === "in-history",
+-				startsSeries: startsRequestSeries || this.requestSurfaceGeneration !== this.session.surface.replaceGeneration || this.toolsChanged(assembly.tools)
+-			});
+-			for (const { message, intent } of commits) this.session.append("system/message", {
+-				turn,
+-				step,
+-				message
+-			}, intent);
+-			if (firstAttempt) for (const message of decision.messages) this.session.append("user/message", message, { surfaceOp: "append" });
+-			firstAttempt = false;
+-			const request = this.buildRequest(config, preparedCall, assembly.tools, startsRequestSeries, signal);
+-			const live = new AssistantStreamAttempt(this.session.id, ++this.assistantAttemptCounter, () => ++this.assistantStreamRevision, turn, step, (frame) => {
+-				this.dispatch.emit("agent/assistant-stream", { frame });
+-			});
+-			let started = false;
++			const { request, preparedCall } = await this.buildRequest(turn, step, assembly.tools, system, this.session.deriveMessages(), signal);
++			const assembler = new BlockAssembler();
++			const chunkSeqs = [];
+ 			try {
+ 				const stream = preparedCall?.stream(request) ?? this.loopCtx.llm.stream(request);
+ 				signal.throwIfAborted();
+-				live.start();
+-				started = true;
+ 				for await (const chunk of stream) {
+ 					signal.throwIfAborted();
+-					live.push(chunk);
++					if (!isSubagent) chunkSeqs.push(this.session.append("assistant/chunk", {
++						turn,
++						step,
++						chunk
++					}).seq);
++					assembler.push(chunk);
+ 				}
+ 				signal.throwIfAborted();
+ 			} catch (error) {
+-				if (!started) throw error;
+-				try {
+-					if (signal.aborted) {
+-						const content = live.interruptedBlocks();
+-						if (content.length > 0) live.settle("assistant/message", () => this.session.append("assistant/message", {
+-							turn,
+-							step,
+-							message: createAssistantMessage({
+-								content,
+-								source: {
+-									provider: request.provider,
+-									model: request.model,
+-									...live.replayState === void 0 ? {} : { replayState: live.replayState }
+-								}
+-							}),
+-							interrupted: true,
+-							...live.usage === void 0 ? {} : { usage: live.usage },
+-							stream: live.stream
+-						}, { surfaceOp: "append" }).seq);
+-						else live.settle("assistant/attempt", () => this.session.append("assistant/attempt", {
+-							turn,
+-							step,
+-							stream: live.stream
+-						}).seq);
+-					} else live.settle("assistant/attempt", () => this.session.append("assistant/attempt", {
++				if (signal.aborted) {
++					const content = assembler.interruptedBlocks();
++					if (content.length > 0) this.session.append("assistant/message", {
+ 						turn,
+ 						step,
+-						stream: live.stream
+-					}).seq);
+-				} catch (settlementError) {
+-					throw new AggregateError([error, settlementError], "Assistant stream failed and its durable settlement was rejected", { cause: error });
++						message: createAssistantMessage({
++							content,
++							source: {
++								provider: request.provider,
++								model: request.model
++							}
++						}),
++						interrupted: true,
++						...assembler.usage === void 0 ? {} : { usage: assembler.usage }
++					}, {
++						surfaceOp: "append",
++						sourceEventSeqs: chunkSeqs
++					});
+ 				}
+ 				throw error;
+ 			}
+-			try {
+-				const finish = live.finish;
+-				if (finish.kind === "error" || finish.kind === "aborted") {
+-					live.settle("assistant/attempt", () => this.session.append("assistant/attempt", {
+-						turn,
+-						step,
+-						stream: live.stream
+-					}).seq);
+-					const action = await this.dispatch.waterfall("agent/request-error", {
+-						turn,
+-						step,
+-						provider: request.provider,
+-						failure: finish.failure,
+-						retryPolicy: preparedCall?.retryPolicy,
+-						signal
+-					}, () => Promise.resolve(void 0));
+-					signal.throwIfAborted();
+-					if (action?.kind !== "retry") throw new LlmError(finish.failure.message, finish.failure.code, finish.failure);
+-					continue;
+-				}
+-				const message = createAssistantMessage({
+-					content: live.blocks(),
+-					source: {
+-						provider: request.provider,
+-						model: request.model,
+-						...live.replayState !== void 0 ? { replayState: live.replayState } : {}
+-					}
+-				});
+-				live.settle("assistant/message", () => this.session.append("assistant/message", {
++			const finish = assembler.finish;
++			if (finish.kind === "error" || finish.kind === "aborted") {
++				const action = await this.dispatch.waterfall("agent/request-error", {
+ 					turn,
+ 					step,
+-					message,
+-					...live.usage === void 0 ? {} : { usage: live.usage },
+-					stream: live.stream
+-				}, { surfaceOp: "append" }).seq);
+-				if (finish.kind === "max-tokens") return { kind: "max-tokens" };
+-				const toolCalls = message.content.filter((block) => block.type === "tool-call");
+-				if (toolCalls.length === 0) return { kind: "completed" };
+-				const { concluded } = await executeToolCalls(this.loopCtx, turn, step, toolCalls, signal, (context) => this.inbox.splice("next-step", this.inbox.nextStep.length, 0, [context]));
+-				return concluded ? { kind: "completed" } : null;
+-			} catch (error) {
+-				if (!live.ended) live.abandon();
+-				throw error;
++					provider: request.provider,
++					failure: finish.failure,
++					retryPolicy: preparedCall?.retryPolicy,
++					signal
++				}, () => Promise.resolve(void 0));
++				signal.throwIfAborted();
++				if (action?.kind !== "retry") throw new LlmError(finish.failure.message, finish.failure.code, finish.failure);
++				continue;
+ 			}
++			const message = createAssistantMessage({
++				content: assembler.blocks(),
++				source: {
++					provider: request.provider,
++					model: request.model,
++					...assembler.replayState !== void 0 ? { replayState: assembler.replayState } : {}
++				}
++			});
++			this.session.append("assistant/message", {
++				turn,
++				step,
++				message,
++				...assembler.usage === void 0 ? {} : { usage: assembler.usage }
++			}, {
++				surfaceOp: "append",
++				sourceEventSeqs: chunkSeqs
++			});
++			if (finish.kind === "max-tokens") return { kind: "max-tokens" };
++			const toolCalls = message.content.filter((block) => block.type === "tool-call");
++			if (toolCalls.length === 0) return { kind: "completed" };
++			const { concluded } = await executeToolCalls(this.loopCtx, turn, step, toolCalls, signal, (context) => this.inbox.splice("next-step", this.inbox.nextStep.length, 0, [context]));
++			return concluded ? { kind: "completed" } : null;
+ 		}
+ 	}
+-	/** Resolve request config and bind its adapter before admitting model-visible input. */
+-	async prepareRequest(turn, step, signal) {
++	/**
++	* Compose one frozen request and bind it to the adapter registration that
++	* resolved its exact-model defaults.
++	*/
++	async buildRequest(turn, step, tools, system, boundaryMessages, signal) {
+ 		const { session } = this;
+ 		const persistedHeader = session.requestHeader();
+ 		const persistedConfig = persistedHeader?.config;
+@@ -1132,8 +699,7 @@
+ 			provider: this.options.provider ?? "",
+ 			model: this.options.model ?? ""
+ 		};
+-		const persistedReasoningEffort = persistedConfig?.provider === route.provider && persistedConfig.model === route.model && persistedHeader?.adapterDefaults?.reasoningEffort !== true ? persistedConfig.reasoningEffort : void 0;
+-		const reasoningEffort = this.options.reasoningEffort ?? persistedReasoningEffort;
++		const reasoningEffort = persistedConfig?.provider === route.provider && persistedConfig.model === route.model && persistedHeader?.adapterDefaults?.reasoningEffort !== true ? persistedConfig.reasoningEffort : void 0;
+ 		const maxTokens = this.options.maxTokens;
+ 		const seedConfig = deepFreeze(structuredClone(this.requestHeaderLogged ? requestProposal(persistedHeader) : {
+ 			...route,
+@@ -1157,22 +723,13 @@
+ 			config = proposedConfig;
+ 		}
+ 		signal.throwIfAborted();
+-		return {
+-			config,
+-			...preparedCall === void 0 ? {} : { preparedCall }
+-		};
+-	}
+-	/** Log the resolved envelope and derive a frozen request from the admitted surface. */
+-	buildRequest(config, preparedCall, tools, startsRequestSeries, signal) {
+-		const { session } = this;
+-		const surfaceGeneration = session.surface.replaceGeneration;
+ 		const header = canonicalHeader({
+ 			config,
+ 			...preparedCall === void 0 ? {} : { adapterDefaults: preparedCall.adapterDefaults },
++			...system ? { system } : {},
+ 			...tools.length > 0 ? { tools } : {}
+ 		});
+ 		const baseline = this.session.requestHeader();
+-		const startsSeries = startsRequestSeries || this.requestSurfaceGeneration !== surfaceGeneration;
+ 		if (!this.requestHeaderLogged) {
+ 			this.session.append("request/header", {
+ 				header,
+@@ -1181,40 +738,28 @@
+ 			this.requestHeaderLogged = true;
+ 		} else if (baseline === void 0 || !headerEquals(baseline, header)) this.session.append("request/header", {
+ 			header,
+-			reason: "change",
+-			...startsSeries ? { startsSeries: true } : {}
+-		});
+-		else if (startsSeries) this.session.append("request/header", {
+-			header,
+-			reason: "series"
++			reason: "change"
+ 		});
+-		this.requestSurfaceGeneration = surfaceGeneration;
+ 		const contextWindow = preparedCall?.context?.contextWindow;
+-		const systemPromptUpdate = preparedCall?.systemPromptUpdate;
+ 		const requestContext = {
+ 			provider: config.provider,
+ 			model: config.model,
+-			...contextWindow === void 0 ? {} : { contextWindow },
+-			...systemPromptUpdate === void 0 ? {} : { systemPromptUpdate }
++			...contextWindow === void 0 ? {} : { contextWindow }
+ 		};
+ 		const previousContext = session.requestContext();
+-		if (previousContext?.provider !== requestContext.provider || previousContext.model !== requestContext.model || previousContext.contextWindow !== requestContext.contextWindow || previousContext.systemPromptUpdate !== requestContext.systemPromptUpdate) session.append("request/context", requestContext);
++		if (previousContext?.provider !== requestContext.provider || previousContext.model !== requestContext.model || previousContext.contextWindow !== requestContext.contextWindow) session.append("request/context", requestContext);
+ 		signal.throwIfAborted();
+-		deepFreeze(header);
+-		const boundaryMessages = session.deriveMessages();
+-		for (const message of boundaryMessages) {
+-			if (this.frozenMessages.has(message)) continue;
+-			deepFreeze(message);
+-			this.frozenMessages.add(message);
+-		}
+-		Object.freeze(boundaryMessages);
+-		return markAgentLoopRequest(Object.freeze({
+-			...header.config,
+-			messages: boundaryMessages,
+-			...header.tools !== void 0 ? { tools: header.tools } : {},
+-			sessionId: this.session.id,
+-			signal
+-		}));
++		return {
++			request: markAgentLoopRequest(deepFreeze({
++				...header.config,
++				messages: boundaryMessages,
++				...header.system !== void 0 ? { system: header.system } : {},
++				...header.tools !== void 0 ? { tools: header.tools } : {},
++				sessionId: this.session.id,
++				signal
++			})),
++			...preparedCall === void 0 ? {} : { preparedCall }
++		};
+ 	}
+ };
+ //#endregion
+@@ -1296,55 +841,6 @@
+ 	4,
+ 	3
+ ]);
+-/** Host projection of agent turn and step boundaries. */
+-const turnBoundaryProjectionDefinition = {
+-	key: "turnBoundary",
+-	stateVersion: 2,
+-	stateSchema: z$1.object({
+-		openTurnStartSeq: z$1.number().int().nonnegative().transform(SessionSeq).nullable(),
+-		lastStepStartSeq: z$1.number().int().nonnegative().transform(SessionSeq).nullable(),
+-		lastStepBoundary: z$1.object({
+-			kind: z$1.union([z$1.literal("start"), z$1.literal("end")]),
+-			seq: z$1.number().int().nonnegative().transform(SessionSeq)
+-		}).nullable(),
+-		lastTurn: z$1.number().int().nonnegative()
+-	}),
+-	init: () => ({
+-		openTurnStartSeq: null,
+-		lastStepStartSeq: null,
+-		lastStepBoundary: null,
+-		lastTurn: 0
+-	}),
+-	apply: (state, event) => {
+-		switch (event.type) {
+-			case "turn/start": return {
+-				...state,
+-				openTurnStartSeq: event.seq,
+-				lastTurn: event.data.turn
+-			};
+-			case "turn/end": return {
+-				...state,
+-				openTurnStartSeq: null
+-			};
+-			case "step/start": return {
+-				...state,
+-				lastStepStartSeq: event.seq,
+-				lastStepBoundary: {
+-					kind: "start",
+-					seq: event.seq
+-				}
+-			};
+-			case "step/end": return {
+-				...state,
+-				lastStepBoundary: {
+-					kind: "end",
+-					seq: event.seq
+-				}
+-			};
+-			default: return state;
+-		}
+-	}
+-};
+ /** Factory-level ownership: live agent teardowns plus config startup work. */
+ var FactoryOwnership = class {
+ 	fiber;
+@@ -1460,7 +956,7 @@
+ 	});
+ }
+ /** Settings namespace carrying the tool-call parallelism a user owns. */
+-const AGENT_LOOP_SETTINGS_NAMESPACE = "agent-loop";
++const AGENT_LOOP_SETTINGS_NAMESPACE = settingsNamespace("agent-loop");
+ /** Schema of the agent-loop settings section. */
+ const AGENT_LOOP_SETTINGS_SCHEMA = z.object({ maxParallelToolCalls: z.number().step(1).min(1).default(10) });
+ /** Reject self-contained identity conflicts before any configured agent starts. */
+@@ -1483,8 +979,7 @@
+ 		"sessions",
+ 		"llm",
+ 		"tools",
+-		"systemPrompt",
+-		"sessionProjections"
++		"systemPrompt"
+ 	];
+ 	/** Runtime schema for declarative agents. */
+ 	static Config = z.object({
+@@ -1494,7 +989,6 @@
+ 			sessionId: z.string().min(1),
+ 			provider: z.string(),
+ 			model: z.string(),
+-			reasoningEffort: z.string().min(1),
+ 			maxTokens: z.number().step(1).min(1).max(Number.MAX_SAFE_INTEGER),
+ 			cwd: z.string(),
+ 			resumeSessionId: z.string()
+@@ -1516,17 +1010,14 @@
+ 				return source().maxParallelToolCalls;
+ 			}
+ 		};
+-		ctx.inject(["settings"], (settingsCtx) => {
+-			settingsCtx.settings.installSection(ctx, AGENT_LOOP_SETTINGS_NAMESPACE, AGENT_LOOP_SETTINGS_SCHEMA, entry, {
+-				validate: (value) => void resolveMaxParallelToolCalls(value.maxParallelToolCalls),
+-				setSource: (current) => {
+-					source = current;
+-				},
+-				onChange: () => {}
+-			});
++		installSettingsSection(ctx, AGENT_LOOP_SETTINGS_NAMESPACE, AGENT_LOOP_SETTINGS_SCHEMA, entry, {
++			validate: (value) => void resolveMaxParallelToolCalls(value.maxParallelToolCalls),
++			setSource: (current) => {
++				source = current;
++			},
++			onChange: () => {}
+ 		});
+ 		validateConfiguredAgents(this.config.agents);
+-		ctx.sessionProjections.register(turnBoundaryProjectionDefinition);
+ 		this.ownership = new FactoryOwnership(ctx.fiber);
+ 		this.runtime = { ctx };
+ 		ctx.effect(() => () => this.ownership.dispose(), "agentLoop.transactions()");
+@@ -1537,14 +1028,10 @@
+ 		for (const { id, sessionId, cwd, resumeSessionId, ...options } of this.config.agents) {
+ 			const meta = cwd === void 0 ? {} : { cwd };
+ 			if (resumeSessionId === void 0 || resumeSessionId === "") {
+-				const configuredId = sessionId ?? brandString(`${id}-session-${randomUUID()}`);
++				const configuredId = sessionId ?? SessionId(`${id}-session-${randomUUID()}`);
+ 				const persistence = sessionId === void 0 ? void 0 : ctx.get("sessionPersistence");
+-				if (persistence === void 0) {
+-					const startup = this.create(configuredId, options, meta).then(() => void 0, (error) => {
+-						this.reportConfiguredStartupFailure(id, "restore", configuredId, error);
+-					});
+-					this.ownership.trackStartup(startup);
+-				} else {
++				if (persistence === void 0) this.create(configuredId, options, meta);
++				else {
+ 					const startup = this.restoreOrCreateConfigured(ctx, persistence, configuredId, options, meta).catch((error) => {
+ 						this.reportConfiguredStartupFailure(id, "restore", configuredId, error);
+ 					});
+@@ -1593,9 +1080,9 @@
+ 			return;
+ 		} catch (error) {
+ 			if (!this.ownership.isActive()) return;
+-			if (!(error instanceof SessionPersistenceNotFoundError)) throw error;
++			if ((await persistence.list()).some((header) => header.id === sessionId)) throw error;
+ 		}
+-		await this.create(sessionId, agentOptions, meta);
++		this.create(sessionId, agentOptions, meta);
+ 	}
+ 	/** Wait for a draining same-id lifecycle to finish registry teardown. */
+ 	async waitForDrainingConfiguredIdentity(ownerCtx, sessionId) {
+@@ -1622,7 +1109,7 @@
+ 	* BEFORE publication, so a mid-setup unload rolls everything back; `signal`
+ 	* fuses caller cancellation with lifecycle teardown for setup awaits.
+ 	*/
+-	prepare(ownerCtx, id, options, session, callerSignal, handle, parentAgent) {
++	prepare(ownerCtx, id, options, session, callerSignal) {
+ 		assertAgentOptions(options);
+ 		ownerCtx.fiber.assertActive();
+ 		/* v8 ignore next -- unreachable backstop, see above */
+@@ -1647,49 +1134,32 @@
+ 			abort.abort(/* @__PURE__ */ new Error(`agent "${id}" lifecycle disposed`));
+ 			callerSignal?.removeEventListener("abort", onCallerAbort);
+ 			this.ownership.signal.removeEventListener("abort", onFactoryTeardown);
+-			const failures = [];
+ 			try {
+-				/* v8 ignore next -- Cordis effect teardown waits for synchronous setup before observing the machine slot. */
+ 				if (machine === void 0) await machineReady.promise;
+-				/* v8 ignore next -- setup failure untracks this disposer before resolving without a machine. */
+ 				if (machine !== void 0) {
+ 					machine.cancel({ kind: "disposed" });
+ 					await machine.whenIdle();
+ 					await machine.scope.dispose();
+ 				}
+-			} catch (error) {
+-				failures.push(error);
+-			}
+-			try {
+-				await handle?.close();
+-			} catch (error) {
+-				failures.push(error);
+-			}
+-			try {
+-				detachAgent?.();
+-				detachSession?.();
+ 			} finally {
+-				untrack();
+-				if (!ownerTriggered) await unfollowOwner();
++				try {
++					detachAgent?.();
++					detachSession?.();
++				} finally {
++					untrack();
++					if (!ownerTriggered) await unfollowOwner();
++				}
+ 			}
+-			if (failures.length === 1) throw failures[0];
+-			if (failures.length > 1) throw new AggregateError(failures, `agent "${id}" disposal failed`);
+ 		})();
+ 		const untrack = this.ownership.track(dispose);
+ 		let unfollowOwner;
+ 		try {
+-			unfollowOwner = ownerCtx.effect(function* () {
+-				machine = new ReactLoopAgent(loopCtx, id, options, session);
+-				machineReady.resolve();
+-				yield machine.scope.rawDispose;
+-				yield () => {
+-					if (disposing !== void 0) return;
+-					abort.abort(/* @__PURE__ */ new Error(`agent "${id}" setup aborted: owner disposed during setup`));
+-					return dispose(true);
+-				};
++			unfollowOwner = ownerCtx.effect(() => () => {
++				if (disposing !== void 0) return;
++				abort.abort(/* @__PURE__ */ new Error(`agent "${id}" setup aborted: owner disposed during setup`));
++				return dispose(true);
+ 			}, `agentLoop.lifecycle(${id})`);
+ 		} catch (error) {
+-			machineReady.resolve();
+ 			untrack();
+ 			callerSignal?.removeEventListener("abort", onCallerAbort);
+ 			this.ownership.signal.removeEventListener("abort", onFactoryTeardown);
+@@ -1702,9 +1172,8 @@
+ 			throw abort.signal.reason instanceof Error ? abort.signal.reason : new Error(String(abort.signal.reason));
+ 		};
+ 		try {
+-			/* v8 ignore next -- a synchronous effect exhausts the generator before returning */
+-			if (machine === void 0) throw new Error(`agent "${id}" lifecycle did not construct its driver`);
+-			const agent = machine;
++			const agent = machine = new ReactLoopAgent(loopCtx, id, options, session);
++			machineReady.resolve();
+ 			assertLive();
+ 			return {
+ 				agent,
+@@ -1712,7 +1181,7 @@
+ 				publish: (source) => {
+ 					assertLive();
+ 					detachSession = agent.ctx.sessions.enter(session);
+-					detachAgent = loopCtx.agents.enter(agent, parentAgent);
++					detachAgent = loopCtx.agents.enter(agent, ownerCtx.agent);
+ 					agent.ctx.sessions.announce(session);
+ 					assertLive();
+ 					loopCtx.agents.announce(agent);
+@@ -1728,21 +1197,20 @@
+ 			};
+ 		} catch (error) {
+ 			machineReady.resolve();
+-			dispose().catch(() => {});
++			dispose();
+ 			throw error;
+ 		}
+ 	}
+ 	/**
+ 	* Create an agent and session under one caller-supplied identity, owned by
+ 	* the accessing fiber. Constructor-driven config calls mint a fresh combined
+-	* id before entering this boundary. When a persistence backend is mounted,
+-	* the session's durable identity and any seed are stored before publication.
++	* id before entering this boundary.
+ 	* @param id - shared agent/session identity.
+ 	* @param options - concrete loop options.
+ 	* @param meta - optional fresh-session workspace metadata.
+ 	* @returns the published running agent.
+ 	*/
+-	async create(id, options = {}, meta = {}) {
++	create(id, options = {}, meta = {}) {
+ 		const env_1 = {
+ 			stack: [],
+ 			error: void 0,
+@@ -1750,19 +1218,11 @@
+ 		};
+ 		try {
+ 			const preparation = __addDisposableResource(env_1, SessionPreparation.create(this.runtime.ctx.sessions.prepare(id, { meta })), false);
+-			const stored = await this.createStoredSession(preparation.session);
+-			let prepared;
+-			try {
+-				prepared = this.prepare(this.ctx, id, options, preparation.session, void 0, stored?.handle);
+-			} catch (error) {
+-				await stored?.handle.close().catch(() => {});
+-				throw error;
+-			}
++			const prepared = this.prepare(this.ctx, id, options, preparation.session);
+ 			try {
+-				await this.appendUnstoredSuffix(stored, preparation.session);
+ 				return prepared.publish("startup").agent;
+ 			} catch (error) {
+-				prepared.dispose().catch(() => {});
++				prepared.dispose();
+ 				throw error;
+ 			}
+ 		} catch (e_1) {
+@@ -1773,71 +1233,22 @@
+ 		}
+ 	}
+ 	/**
+-	* Take a fresh session's write ownership when persistence is mounted.
+-	* Nothing is appended here: the constructor seed (which never re-emits
+-	* through `session/event`) is stored by `appendUnstoredSuffix` at the
+-	* publication commit point, so a failed or cancelled validation or setup
+-	* closes an unmaterialized handle and leaves no stored residue — the same
+-	* id can be created again.
+-	* @param session - the unpublished session to store.
+-	* @param signal - optional cancellation forwarded to the backend create.
+-	* @returns the owned handle and stored cursor, or `undefined` without a backend.
+-	*/
+-	async createStoredSession(session, signal) {
+-		const persistence = this.runtime.ctx.get("sessionPersistence");
+-		if (persistence === void 0) return void 0;
+-		return {
+-			handle: await persistence.create(session.header, {
+-				inheritedEventCount: session.inheritedEventCount,
+-				...signal === void 0 ? {} : { signal }
+-			}),
+-			storedCount: 0
+-		};
+-	}
+-	/**
+-	* Durably store the session events appended since the last stored cursor.
+-	* Pre-publication appends (constructor seed markers, setup-window events
+-	* such as delegation policy records) never re-emit through `session/event`,
+-	* so publication must flush them through the handle before live events
+-	* start routing into it.
+-	* @param stored - the session's owned handle and stored cursor, if any.
+-	* @param session - the unpublished session whose suffix is stored.
+-	*/
+-	async appendUnstoredSuffix(stored, session) {
+-		if (stored === void 0) return;
+-		const suffix = session.snapshotEvents(SessionLogOffset(stored.storedCount));
+-		if (suffix.length > 0) await stored.handle.append(suffix);
+-		stored.storedCount += suffix.length;
+-	}
+-	/**
+ 	* Create an owned agent on a caller-supplied session id.
+ 	* @param ownerCtx - caller context that structurally owns the lifecycle.
+-	* @param options - identities, optional live parent, session seed/metadata, loop options, setup, and cancellation.
++	* @param options - identities, session seed/metadata, loop options, setup, and cancellation.
+ 	* @returns the published handle.
+ 	*/
+ 	async createAgent(ownerCtx, options) {
+ 		const preparation = SessionPreparation.create(this.runtime.ctx.sessions.prepare(options.sessionId, {
+ 			...options.seed === void 0 ? {} : { seed: options.seed },
+-			...options.meta === void 0 ? {} : { meta: options.meta },
+-			...options.inheritedEventCount === void 0 ? {} : { inheritedEventCount: options.inheritedEventCount }
++			...options.meta === void 0 ? {} : { meta: options.meta }
+ 		}));
+-		const published = (async () => {
+-			let stored;
+-			try {
+-				stored = options.signal === void 0 ? await this.createStoredSession(preparation.session) : await raceAbortCall(() => this.createStoredSession(preparation.session, options.signal), options.signal, options.sessionId, (abandoned) => {
+-					abandoned?.handle.close().catch(() => {});
+-				});
+-			} catch (error) {
+-				preparation[Symbol.dispose]();
+-				throw error;
+-			}
+-			return this.setupAndPublish(ownerCtx, options.sessionId, preparation, options.agentOptions ?? {}, options.setup, options.signal, "startup", stored, options.parentAgent);
+-		})();
++		const published = this.setupAndPublish(ownerCtx, options.sessionId, preparation, options.agentOptions ?? {}, options.setup, options.signal, "startup");
+ 		this.ownership.trackWrapper(published);
+ 		return published;
+ 	}
+ 	/** Prepare one Agent around an acquired Session, run setup, and publish it. */
+-	async setupAndPublish(ownerCtx, id, preparation, agentOptions, setup, signal, source, stored, parentAgent) {
++	async setupAndPublish(ownerCtx, id, preparation, agentOptions, setup, signal, source) {
+ 		const env_2 = {
+ 			stack: [],
+ 			error: void 0,
+@@ -1845,19 +1256,12 @@
+ 		};
+ 		try {
+ 			const session = __addDisposableResource(env_2, preparation, false).session;
+-			let prepared;
+-			try {
+-				prepared = this.prepare(ownerCtx, id, agentOptions, session, signal, stored?.handle, parentAgent);
+-			} catch (error) {
+-				await stored?.handle.close().catch(() => {});
+-				throw error;
+-			}
++			const prepared = this.prepare(ownerCtx, id, agentOptions, session, signal);
+ 			try {
+-				(await raceAbort(setup?.(prepared.agent.ctx, prepared.agent), prepared.signal, id))?.commit();
+-				await this.appendUnstoredSuffix(stored, session);
++				(await raceAbort(setup?.(prepared.agent.ctx), prepared.signal, id))?.commit();
+ 				return prepared.publish(source);
+ 			} catch (error) {
+-				await prepared.dispose().catch(() => {});
++				await prepared.dispose();
+ 				throw error;
+ 			}
+ 		} catch (e_2) {
+@@ -1870,7 +1274,7 @@
+ 	/**
+ 	* Resume an owned agent from the configured persistence service.
+ 	* @param ownerCtx - caller context that owns load, setup, and the live lifecycle.
+-	* @param options - persisted identity, optional live parent, loop options, setup, and cancellation.
++	* @param options - persisted identity, loop options, setup, and cancellation.
+ 	* @returns the published handle.
+ 	*/
+ 	async resume(ownerCtx, options) {
+@@ -1891,41 +1295,20 @@
+ 				ownerAbort.signal,
+ 				this.ownership.signal
+ 			]);
+-			let handle;
+-			let stored;
+ 			let preparation;
+ 			try {
+ 				try {
+-					handle = await raceAbortCall(() => persistence.open(id, "write", { signal: fused }), fused, id, (abandoned) => {
+-						abandoned.close();
++					preparation = await raceAbortCall(() => persistence.prepare(id, fused), fused, id, (abandoned) => {
++						abandoned[Symbol.dispose]();
+ 					});
+-					const coldRead = await handle.read(0, void 0, { signal: fused });
+-					fused.throwIfAborted();
+-					const persisted = coldRead.events;
+-					const closers = interruptedTurnClosers(persisted);
+-					if (closers.length > 0) await handle.append(closers);
+-					preparation = SessionPreparation.create(this.runtime.ctx.sessions.prepare(id, {
+-						seed: [...persisted, ...closers],
+-						meta: structuredClone(handle.header),
+-						inheritedEventCount: handle.inheritedEventCount,
+-						eventState: coldRead.eventState
+-					}));
+-					stored = {
+-						handle,
+-						storedCount: persisted.length + closers.length
+-					};
+-					await this.appendUnstoredSuffix(stored, preparation.session);
+ 				} finally {
+ 					await unfollowOwner();
+ 				}
+ 				ownerCtx.fiber.assertActive();
+ 				if (!this.ownership.isActive()) throw new Error("agent loop is not active");
+-				const owned = stored;
+-				handle = void 0;
+-				return await this.setupAndPublish(ownerCtx, id, preparation, options.agentOptions ?? {}, options.setup, options.signal, "resume", owned, options.parentAgent);
++				return await this.setupAndPublish(ownerCtx, id, preparation, options.agentOptions ?? {}, options.setup, options.signal, "resume");
+ 			} finally {
+ 				preparation?.[Symbol.dispose]();
+-				await handle?.close().catch(() => {});
+ 			}
+ 		})();
+ 		this.ownership.trackWrapper(published);
+@@ -1933,4 +1316,4 @@
+ 	}
+ };
+ //#endregion
+-export { AGENT_LOOP_SETTINGS_NAMESPACE, AGENT_LOOP_SETTINGS_SCHEMA, AgentLoop, AgentLoop as default, CONFIGURED_AGENT_IDENTITIES_KEY, DEFAULT_MAX_PARALLEL_TOOL_CALLS, turnBoundaryProjectionDefinition };
++export { AGENT_LOOP_SETTINGS_NAMESPACE, AGENT_LOOP_SETTINGS_SCHEMA, AgentLoop, AgentLoop as default, CONFIGURED_AGENT_IDENTITIES_KEY, DEFAULT_MAX_PARALLEL_TOOL_CALLS };
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/lib/invariant.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/lib/invariant.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/lib/invariant.js	2026-09-11 14:27:15.108962797 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/lib/invariant.js	2026-09-12 14:56:16.199792421 +0800
+@@ -19,13 +19,13 @@
+ 		const session = ctx.sessions.get(options.sessionId);
+ 		if (!session) fail(`a loop-built request must carry a live session id, got "${String(options.sessionId)}"`);
+ 		if (!Object.isFrozen(options.messages)) fail("a loop-built request must carry a frozen messages array");
+-		const events = session.snapshotEvents();
++		const events = session.events;
+ 		if (!events.some((event) => event.type === "step/start")) return fail("a loop-built request with no step/start in its session log");
+ 		const header = foldRequestHeader(events);
+ 		if (header === void 0) return fail("a loop-built request with no request/header event in its session log");
+ 		const expected = session.deriveMessages();
+ 		if (JSON.stringify(options.messages) !== JSON.stringify(expected)) fail(`llm request for session "${String(session.id)}" diverges from the dispatch-time durable derivation (log-reconstruction desync)`);
+-		if (!(options.model === header.config.model && options.system === void 0 && options.temperature === header.config.temperature && options.maxTokens === header.config.maxTokens && JSON.stringify(options.stop) === JSON.stringify(header.config.stop) && JSON.stringify(options.tools ?? []) === JSON.stringify(header.tools ?? []))) fail(`llm request for session "${String(session.id)}" diverges from the folded request header`);
++		if (!(options.model === header.config.model && options.system === header.system && options.temperature === header.config.temperature && options.maxTokens === header.config.maxTokens && JSON.stringify(options.stop) === JSON.stringify(header.config.stop) && JSON.stringify(options.tools ?? []) === JSON.stringify(header.tools ?? []))) fail(`llm request for session "${String(session.id)}" diverges from the folded request header`);
+ 		return next();
+ 	}, {
+ 		global: true,
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/lib/types/agent.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/lib/types/agent.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/lib/types/agent.d.ts	2026-09-11 14:27:15.143963295 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/lib/types/agent.d.ts	2026-09-12 14:56:16.203793010 +0800
+@@ -4,17 +4,17 @@
+  * @module dsh-agent-loop/agent
+  */
+ import type { Agent, AgentCancelCause, AgentOptions, AgentStatus, CancelOptions, InboxTarget } from '@deepseek-ai/dsh-agent';
++import { Inbox } from '@deepseek-ai/dsh-agent';
+ import type { Scope } from '@deepseek-ai/dsh-scope';
+ import type { Session, SessionId, UserMessage } from '@deepseek-ai/dsh-session';
+ import type { Context } from '@deepseek-ai/cordis';
+-import { ReactLoopInbox } from './inbox.ts';
+ /** Drives one session through turn and step boundaries. */
+ export declare class ReactLoopAgent implements Agent {
+     private loopCtx;
+     readonly id: SessionId;
+     readonly options: AgentOptions;
+     readonly session: Session;
+-    readonly inbox: ReactLoopInbox;
++    readonly inbox: Inbox;
+     private phase;
+     private activityDone;
+     /** The agent-scoped registration boundary; the lifecycle owner unwinds it after the driver exits. */
+@@ -24,15 +24,7 @@
+     private readonly dispatch;
+     /** Whether this loop instance has appended its initial/resume request anchor. */
+     private requestHeaderLogged;
+-    /** Surface generation at attachment or the preceding built request. */
+-    private requestSurfaceGeneration;
+     private readonly runtimeContext;
+-    /** Process-local revision of assistant frames for this attached Session. */
+-    private assistantStreamRevision;
+-    private assistantAttemptCounter;
+-    private readonly systemPrompt;
+-    /** Identities fully frozen by this loop; weak references do not retain replaced history. */
+-    private readonly frozenMessages;
+     constructor(loopCtx: Context, id: SessionId, options: AgentOptions, session: Session);
+     get status(): AgentStatus;
+     /** Commit a phase and publish its externally visible status transition. */
+@@ -57,14 +49,13 @@
+     private throwError;
+     private kick;
+     private preStep;
+-    /** Whether the assembled tool schemas differ from the logged request header's. */
+-    private toolsChanged;
+     /** Open one turn before claiming its first proposed step. */
+     private turn;
+     private step;
+-    /** Resolve request config and bind its adapter before admitting model-visible input. */
+-    private prepareRequest;
+-    /** Log the resolved envelope and derive a frozen request from the admitted surface. */
++    /**
++     * Compose one frozen request and bind it to the adapter registration that
++     * resolved its exact-model defaults.
++     */
+     private buildRequest;
+ }
+ //# sourceMappingURL=agent.d.ts.map
+\ No newline at end of file
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/lib/types: assistant-stream.d.ts
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/lib/types: inbox.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/lib/types/index.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/lib/types/index.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/lib/types/index.d.ts	2026-09-11 14:27:15.178963792 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/lib/types/index.d.ts	2026-09-12 14:56:16.204978086 +0800
+@@ -6,23 +6,10 @@
+  */
+ import { Context, Service } from '@deepseek-ai/cordis';
+ import z from '@deepseek-ai/schemastery';
+-import { z as zod } from 'zod';
+-import type { Agent, AgentFactory, AgentHandle, AgentOptions, CreateAgentOptions, ResumeAgentOptions, TurnBoundaryProjection } from '@deepseek-ai/dsh-agent';
+-import type { SessionHeader, SessionId } from '@deepseek-ai/dsh-session';
++import type { Agent, AgentFactory, AgentHandle, AgentOptions, CreateAgentOptions, ResumeAgentOptions } from '@deepseek-ai/dsh-agent';
++import { SessionId } from '@deepseek-ai/dsh-session';
++import type { SessionHeader } from '@deepseek-ai/dsh-session';
+ import { DEFAULT_MAX_PARALLEL_TOOL_CALLS } from './constants.ts';
+-/** Host projection of agent turn and step boundaries. */
+-export declare const turnBoundaryProjectionDefinition: {
+-    key: "turnBoundary";
+-    stateVersion: number;
+-    stateSchema: zod.ZodType<TurnBoundaryProjection, unknown, zod.core.$ZodTypeInternals<TurnBoundaryProjection, unknown>>;
+-    init: () => {
+-        openTurnStartSeq: null;
+-        lastStepStartSeq: null;
+-        lastStepBoundary: null;
+-        lastTurn: number;
+-    };
+-    apply: (state: NoInfer<TurnBoundaryProjection>, event: import("@deepseek-ai/dsh-session").SessionEvent) => TurnBoundaryProjection;
+-};
+ declare module '@deepseek-ai/cordis' {
+     interface Context {
+         agentLoop: AgentLoop;
+@@ -76,7 +63,7 @@
+  */
+ export declare const CONFIGURED_AGENT_IDENTITIES_KEY = "configuredAgentIdentities";
+ /** Settings namespace carrying the tool-call parallelism a user owns. */
+-export declare const AGENT_LOOP_SETTINGS_NAMESPACE = "agent-loop";
++export declare const AGENT_LOOP_SETTINGS_NAMESPACE: import("@deepseek-ai/dsh-settings").SettingsNamespace;
+ /**
+  * The agent-loop fields a user owns. Deliberately a strict subset of
+  * {@link Config}: `agents` is a boot-time composition array consumed once when
+@@ -138,40 +125,17 @@
+     /**
+      * Create an agent and session under one caller-supplied identity, owned by
+      * the accessing fiber. Constructor-driven config calls mint a fresh combined
+-     * id before entering this boundary. When a persistence backend is mounted,
+-     * the session's durable identity and any seed are stored before publication.
++     * id before entering this boundary.
+      * @param id - shared agent/session identity.
+      * @param options - concrete loop options.
+      * @param meta - optional fresh-session workspace metadata.
+      * @returns the published running agent.
+      */
+-    create(id: SessionId, options?: AgentOptions, meta?: Pick<SessionHeader, 'cwd'>): Promise<Agent>;
+-    /**
+-     * Take a fresh session's write ownership when persistence is mounted.
+-     * Nothing is appended here: the constructor seed (which never re-emits
+-     * through `session/event`) is stored by `appendUnstoredSuffix` at the
+-     * publication commit point, so a failed or cancelled validation or setup
+-     * closes an unmaterialized handle and leaves no stored residue — the same
+-     * id can be created again.
+-     * @param session - the unpublished session to store.
+-     * @param signal - optional cancellation forwarded to the backend create.
+-     * @returns the owned handle and stored cursor, or `undefined` without a backend.
+-     */
+-    private createStoredSession;
+-    /**
+-     * Durably store the session events appended since the last stored cursor.
+-     * Pre-publication appends (constructor seed markers, setup-window events
+-     * such as delegation policy records) never re-emit through `session/event`,
+-     * so publication must flush them through the handle before live events
+-     * start routing into it.
+-     * @param stored - the session's owned handle and stored cursor, if any.
+-     * @param session - the unpublished session whose suffix is stored.
+-     */
+-    private appendUnstoredSuffix;
++    create(id: SessionId, options?: AgentOptions, meta?: Pick<SessionHeader, 'cwd'>): Agent;
+     /**
+      * Create an owned agent on a caller-supplied session id.
+      * @param ownerCtx - caller context that structurally owns the lifecycle.
+-     * @param options - identities, optional live parent, session seed/metadata, loop options, setup, and cancellation.
++     * @param options - identities, session seed/metadata, loop options, setup, and cancellation.
+      * @returns the published handle.
+      */
+     createAgent(ownerCtx: Context, options: CreateAgentOptions): Promise<AgentHandle>;
+@@ -180,7 +144,7 @@
+     /**
+      * Resume an owned agent from the configured persistence service.
+      * @param ownerCtx - caller context that owns load, setup, and the live lifecycle.
+-     * @param options - persisted identity, optional live parent, loop options, setup, and cancellation.
++     * @param options - persisted identity, loop options, setup, and cancellation.
+      * @returns the published handle.
+      */
+     resume(ownerCtx: Context, options: ResumeAgentOptions): Promise<AgentHandle>;
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/lib/types/runtime-context.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/lib/types/runtime-context.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/lib/types/runtime-context.d.ts	2026-09-11 14:27:15.188963934 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/lib/types/runtime-context.d.ts	2026-09-12 14:56:16.205135694 +0800
+@@ -1,52 +1,10 @@
+ /**
+- * Durable projection state for the two loop-owned surface messages the system
+- * prompt plugin forms: the system prompt (surface node 0 and any in-history
+- * replacement) and the dynamic runtime-context snapshot.
++ * Durable projection state for dynamic runtime context.
+  * @module @deepseek-ai/dsh-agent-loop/runtime-context
+  */
+ import type { ContextSnapshotSection } from '@deepseek-ai/dsh-llm';
+-import type { Session, SurfaceIntent, SystemMessage, UserMessage } from '@deepseek-ai/dsh-session';
++import type { Session, UserMessage } from '@deepseek-ai/dsh-session';
+ import type { Context } from '@deepseek-ai/cordis';
+-/** One uncommitted system-prompt surface operation for request admission or reconciliation. */
+-export interface SystemPromptCommit {
+-    /** Rendered prompt or empty content: an empty head records no prompt; empty tails are dormant. */
+-    message: SystemMessage;
+-    /** `append` for a new system node, otherwise a replacement of one surviving system node. */
+-    intent: SurfaceIntent<'system/message'>;
+-}
+-/** The request-series facts one prompt decision is made under. */
+-export interface SystemPromptDecisionInput {
+-    /** Whether the prepared route for this attempt reads a later `system` message as the effective prompt. */
+-    inHistory: boolean;
+-    /**
+-     * Whether this step's request starts a new model-message series: a pre-step
+-     * listener declared one, the surface was replaced since the last request, or
+-     * the assembled tool schemas differ from the logged header.
+-     */
+-    startsSeries: boolean;
+-}
+-/**
+- * Decides how a rendered system prompt reaches the surface without owning the
+- * commit. The first prompt, even empty, reserves surface node 0.
+- * A capable continuing series appends changed nonempty text after the
+- * cached history. An incapable route, broken series, or cleared prompt instead
+- * normalizes the first system node and empties later active nodes. Dormant empty
+- * tails do not supply effective text or require repeated replacements.
+- */
+-export declare class SystemPromptProjection {
+-    private readonly session;
+-    constructor(session: Session);
+-    /** The surviving `system/message` nodes in surface order. */
+-    private systemNodes;
+-    /**
+-     * Reconcile effective text and retained nodes with the prepared route and series.
+-     * @param rendered - the fully rendered system prompt; `''` when none is active.
+-     * @param input - the route capability and series facts for this step.
+-     * @returns ordered per-node updates; an empty list means no update is needed.
+-     */
+-    project(rendered: string, input: SystemPromptDecisionInput): SystemPromptCommit[];
+-    private replace;
+-}
+ /** Tracks the last retained runtime-context snapshot without owning its commit. */
+ export declare class RuntimeContextProjection {
+     /** `undefined` means no snapshot ever existed; `null` means none is retained. */
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-agent-loop/package.json	2026-09-11 14:27:15.112962854 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/package.json	2026-09-12 14:56:16.200792568 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-agent-loop",
+   "description": "The concrete agent loop plugin for the DeepSeek Harness",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -31,37 +31,31 @@
+   ],
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.2",
+-    "@deepseek-ai/dsh-agent": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-invariants": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-llm": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-scope": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session-persistence": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session-projection": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-settings": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-system-prompt": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-tools": "^0.1.5-rc.2"
++    "@deepseek-ai/dsh-agent": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session-persistence": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-llm": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-system-prompt": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-tools": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1",
++    "@deepseek-ai/dsh-settings": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-scope": "^0.1.1-rc.2"
+   },
+   "dependencies": {
+-    "zod": "^4.4.3",
+-    "@deepseek-ai/dsh-util-values": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-brand": "^0.1.5-rc.2",
+-    "@deepseek-ai/schemastery": "^3.18.2"
++    "@deepseek-ai/schemastery": "^3.18.1"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.2",
+-    "@deepseek-ai/dsh-llm-pi-ai": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-agent": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-invariants": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-llm": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-scope": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session-persistence": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session-persistence-jsonl": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session-projection": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-settings": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-system-prompt": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-tools": "^0.1.5-rc.2"
++    "@deepseek-ai/dsh-agent": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-llm": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-scope": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session-persistence": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session-persistence-jsonl": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-system-prompt": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-tools": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1",
++    "@deepseek-ai/dsh-settings": "^0.1.1-rc.2"
+   }
+ }
+\ No newline at end of file

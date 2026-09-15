@@ -1,0 +1,549 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-goal/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-goal/README.i18n.yaml	2026-09-11 14:27:15.152963423 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/README.i18n.yaml	2026-09-12 14:56:16.940313778 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/goal/tool-goal/README.md
+-README.md: c40b9eb302ace23c2448114433eda364083a5293
+-README.zh.md: fdd1b1a317bed56f18c9eb8cc107b448e2b85981
++README.md: f8accfaaee2b68b090bc5dfd66a260c4af170530
++README.zh.md: c5875e26531465b0c8f0373d3e587ea626156ec2
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-goal/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-goal/README.md	2026-09-11 14:27:15.095962613 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/README.md	2026-09-12 14:56:16.938901451 +0800
+@@ -1,45 +1,30 @@
+----
+-description: "The model-facing goal tools for users and maintainers choosing, composing, or debugging get_goal, create_goal, and update_goal."
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-tool-goal
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-`dsh-tool-goal` lets a model read persisted goals and infer and create a long-running goal from a direct human request. Creating, editing, pausing, or resuming requires that direct request in a top-level agent turn; completing or blocking also works in an autonomous goal round. Updates require the exact goal id and revision returned by a prior read. `resume` rearms active-but-disarmed or blocked goals, while users resume durable paused goals through Web or `/goal resume`. Autonomous blocking requires the same condition for a configurable threshold of three consecutive rounds by default.
++The model-facing control tools for [`ctx.goals`](../goal/README.md): `get_goal`, `create_goal`, and `update_goal`. The [goal-tool Agent Note](../../../.agents/notes/implemented/feature/2026-07-19-model-facing-goal-tools.md) owns the authority split and Codex-shaped UX.
+ 
+-## Table of Contents
++## Tools
+ 
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
++- `get_goal()` returns the current goal or `null`, including the compare-and-set id/revision, durable phase, admitted/capped goal rounds, any blocker reason, and current process-local activation.
++- `create_goal(objective, max_goal_rounds?)` creates one goal from a direct top-level human turn. The model may infer long-running goal intent without an exact command phrase; non-human turns and subagents are rejected at execution.
++- `update_goal(goal_id, revision, action, objective?, max_goal_rounds?, blocked_reason?)` supports `edit`, `pause`, `resume`, `complete`, and `blocked`. Replacements belong only to `edit`; `blocked_reason` is required only for `blocked` and is persisted with the stable code `model-reported`. Strict-schema empty-string and zero fillers count as omitted, while meaningful values remain limited to their action.
+ 
+------
++All calls are exclusive, so a model-ordered batch observes earlier mutations and their new revisions. UI clients receive pure generic cards: read for `get_goal`, other for mutations. Mutation cards select the first meaningful action value and otherwise show the goal id, so accepted fillers never produce blank input.
+ 
+-<a id="use-this-package"></a>
+-## Use this package
++All three canonical values match the compact JSON already rendered to Native callers: `{ goal: null }` or `{ goal: { id, revision, objective, phase, roundsStarted, maxGoalRounds, blockedReason? }, activation }`. Programmatic consumers therefore receive the same domain structure without parsing the rendered JSON.
+ 
+-Mount `dsh-tool-goal` beside the goal service when the model should create and update persisted goals itself. The tools are the model-facing half of the goal surface; the `/goal` command is the human-facing half, and the continuation driver uses the same tools to complete or block goals at the end of autonomous rounds.
++An autonomous goal round that successfully reports `complete` or `blocked` marks that tool execution with `concludeTurn()` so the physical turn stops after the step. Direct-human mutations never contribute this stop: the assistant may acknowledge the change and concurrent human steering remains available to the loop.
+ 
+-### Tools
++## Authority
+ 
+-All three tools return the same compact JSON — `{ goal: null }` when no goal is current, otherwise the goal's id, revision, objective, phase, rounds started, round cap, optional blocker reason, and whether continuation is armed — matching what Native callers already render.
++Execution requires the exact live `exec.agent`, its inherited `AgentRegistry` initiator, running status, and an open turn. Create, edit, pause, and resume additionally require an accepted `{ kind: 'user' }` message or steering event in a runtime-root agent's current turn. Durable fork lineage does not demote a resumed root; live subagent ownership does.
+ 
+-| Tool | What it does |
+-|---|---|
+-| `get_goal()` | Reads the current goal, or `null` when none is current |
+-| `create_goal(objective, max_goal_rounds?)` | Creates one goal from a direct top-level human turn |
+-| `update_goal(goal_id, revision, action, objective?, max_goal_rounds?, blocked_reason?)` | `edit`, `pause`, `resume`, `complete`, or `blocked` on the exact goal revision |
++`{ kind: 'user' }` is a host attestation. `Agent.followup()` and `steer()` assign it when their caller omits a source, so plugins, schedulers, and other non-human producers must pass their own source rather than inheriting human authority.
+ 
+-Call `get_goal` before `update_goal` and copy the exact `goal_id` and `revision`; all calls are exclusive, so a model-ordered batch observes earlier mutations and their new revisions. Replacements belong only to `edit`; `blocked_reason` is required only for `blocked` and is persisted with the stable code `model-reported`. Strict-schema empty-string and zero fillers count as omitted, while meaningful values remain limited to their action.
++Complete and blocked also accept the exact current goal round: a goal-sourced `user/message` whose id, revision, and round equal the folded current goal. A goal-round blocked call is mechanically rejected until `blockedAfterConsecutiveRounds`; the model judges whether the same condition actually persisted and must describe it in `blocked_reason`. Direct human authority may stop a goal immediately.
+ 
+-### Configure it
++## Config
+ 
+ ```yaml
+ - id: tool-goal
+@@ -48,68 +33,15 @@
+     blockedAfterConsecutiveRounds: 3
+ ```
+ 
+-The value must be a positive safe integer. It supplies both the hard lower bound on model self-blocking and the number named in model guidance. The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-tool-goal) is the exhaustive source for every accepted field.
+-
+-### Authority rules
+-
+-The tools execute only for the exact live calling agent inside its active driver with an open turn. `create`, `edit`, `pause`, and `resume` additionally require a direct human message in a runtime-root agent's current turn — a subagent or a non-human producer cannot create or edit goals. `resume` rejects a durable paused goal before the goal service runs; that state belongs to the user-facing resume path. `complete` and `blocked` also accept the exact current goal round: a goal-sourced round may complete the goal immediately, but a blocked call is mechanically rejected until the configured number of consecutive rounds has passed — the model judges whether the same condition actually persisted and must describe it in `blocked_reason`. A direct human request may stop a goal immediately.
+-
+-An autonomous round that successfully reports `complete` or `blocked` also ends the physical turn after that step, and the model receives a closing instruction to write the final message to the user. Direct-human mutations never trigger that stop: the assistant may acknowledge the change and the loop keeps concurrent human steering available.
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
+-
+-<details>
+-<summary>Implementation internals — click to expand</summary>
+-
+-This section explains how the tools enforce authority and render output; the observable contract is covered in [Use this package](#use-this-package).
+-
+-### Design
+-
+-- **Authority at execution.** Every call resolves the exact live agent, its inherited `AgentRegistry` initiator, running status, and an open turn; `create`, `edit`, `pause`, and `resume` additionally require an accepted `{ kind: 'user' }` message or steering event in a runtime-root agent's current turn. A durable paused goal fails the `resume` action with `GOAL_TOOL_RESUME_PAUSED`; the user-facing command or Web control owns that transition. Durable fork lineage does not demote a resumed root; live subagent ownership does.
+-- **Host attestation of human input.** `{ kind: 'user' }` is assigned by `Agent.followup()` and `steer()` when their caller omits a source, so plugins, schedulers, and other non-human producers must pass their own source rather than inheriting human authority.
+-- **System-prompt guidance with the configured threshold.** The package registers one `tool:goal` system-prompt section whose fixed text interpolates `blockedAfterConsecutiveRounds`; the same value is the hard lower bound enforced at execution.
+-- **Wrap-up context for terminal rounds.** A successful autonomous `complete` or `blocked` defers a closing `<goal_complete>` or `<goal_blocked>` instruction so the model addresses the user once before the turn ends; direct-human mutations never defer this context.
+-
+-### Source map
+-
+-| File | Role |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | Plugin entry: tool registration, config, system-prompt section, result rendering |
+-| [`src/authority.ts`](src/authority.ts) | Execution-time authority checks and goal-round acceptance |
+-| [`src/wrapup.ts`](src/wrapup.ts) | Closing-message instruction for terminal autonomous updates |
+-| — | No runtime invariant companion is published; this model-facing adapter owns no independent state or event protocol; accepted mutations are checked by the goal domain and authority behavior is package-tested. |
+-
+-### Tool output
++The value must be a positive safe integer. It supplies both the hard lower bound on model self-blocking and the number named in model guidance.
+ 
+-All three tools share one canonical output: the compact JSON `{ goal: null }` or `{ goal: { id, revision, objective, phase, roundsStarted, maxGoalRounds, blockedReason? }, activation }`. `activation` in a result is a live observation and never becomes replay authority. UI clients receive pure generic cards — read for `get_goal`, other for mutations.
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-The tools are the model-facing half of the goal surface; read these pages for the state they mutate and the policy they defer to.
+-
+-- [Goal service](../goal/README.md) — the goal state and lifecycle the tools mutate.
+-- [Goal group map](../README.md) — the goal packages and how they compose.
+-- [Generated tool catalog](../../../docs/tool-catalog.md#deepseek-aidsh-tool-goal) — the exact schemas the model receives.
+-- [Goal-tool Agent Note](../../../.agents/notes/implemented/feature/2026-07-19-model-facing-goal-tools.md) — the authority split and UX decisions.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+ ### System prompt
+ 
+ #### What the model sees
+ 
+-A fixed goal policy says when semantic human intent warrants creation, requires exact read-before-update refs, explains rearming after resume/fork, and limits completion/blocking claims. Durable paused resume is rejected at execution with `GOAL_TOOL_RESUME_PAUSED`; the user-facing goal control owns that transition. The configured threshold is interpolated into that guidance.
++A fixed goal policy says when semantic human intent warrants creation, requires exact read-before-update refs, explains rearming after resume/fork, and limits completion/blocking claims. The configured threshold is interpolated into that guidance.
+ 
+ ##### Goal policy
+ 
+@@ -141,23 +73,8 @@
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits define when the goal tools are a poor fit or need special care. They are current package constraints, not a task backlog.
+-
+ - **Semantic intent remains model judgment** — execution can prove that the current turn contains a direct human message, not whether the request is substantial enough to merit a goal.
+ - **Same-condition blocking remains model judgment** — the runtime enforces distinct admitted-round count, not semantic equivalence of obstacles; an independent evaluator is deferred.
+-- **No scheduling or direct human rendering** — these tools mutate state only; the same-session driver and `dsh-command-goal` are independent consumers of the same domain.
++- **No scheduling or direct human rendering** — these tools mutate state only; the same-session driver and [`dsh-command-goal`](../command-goal/README.md) are independent consumers of the same domain.
+ - **Goal-round authority requires a driver** — the autonomous `complete`/`blocked` path is dormant unless a continuation driver admits goal-sourced user turns; mounting this tool package alone does not create them.
+ - **Prompt registration is independent of filtering** — a scope may hide the tools while retaining their guidance unless the deployment scopes both registrations together.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-This Dev Note is working context for maintainers; it is explicitly non-authoritative. Open question: whether the goal-policy section should be independently scoped from the tool registrations, so a scope cannot hide the tools while keeping the guidance.
+-
+-</details>
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-goal/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-goal/README.zh.md	2026-09-11 14:27:15.100962683 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/README.zh.md	2026-09-12 14:56:16.938901451 +0800
+@@ -1,45 +1,30 @@
+----
+-description: "面向选择、组合或排查 get_goal、create_goal 与 update_goal 的用户与维护者的模型侧 goal 工具说明。"
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-tool-goal
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-`dsh-tool-goal` 让模型读取持久 goal，并根据人类直接请求推断和创建长期 goal。创建、编辑、暂停或恢复要求该直接请求出现在顶层 agent 轮次中；完成或阻塞也可以在自主 Goal Round 中执行。更新必须使用先前读取到的精确 goal id 和 revision。`resume` 会重新启用 active-but-disarmed 或 blocked 的 goal，而持久的 paused goal 由用户通过 Web 或 `/goal resume` 恢复。自主阻塞要求同一条件持续达到可配置阈值，默认是连续三个 Round。
++[`ctx.goals`](../goal/README.zh.md) 的面向模型控制 API：`get_goal`、`create_goal` 和 `update_goal`。[goal 工具 Agent Note](../../../.agents/notes/implemented/feature/2026-07-19-model-facing-goal-tools.zh.md) 负责权限拆分与 Codex 风格用户体验。
+ 
+-## 目录
++## 工具
+ 
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
++- `get_goal()` 返回当前 goal 或 `null`，包括比较并设置 id／revision、持久 phase、Goal Round 的已准入数／上限、任何 blocker reason，以及当前进程本地续行启用状态。
++- `create_goal(objective, max_goal_rounds?)` 根据人类直接发起的顶层轮次创建一个 goal。模型可以推断长期运行的 goal 意图，而无需精确命令短语；非人类轮次和 subagent 会在执行时被拒绝。
++- `update_goal(goal_id, revision, action, objective?, max_goal_rounds?, blocked_reason?)` 支持 `edit`、`pause`、`resume`、`complete` 和 `blocked`。替换值只属于 `edit`；`blocked_reason` 只有在 action 为 `blocked` 时才必填，并以稳定代码 `model-reported` 持久化。严格 schema 下的空字符串和零填充值视为省略，而有意义的值仍限定到各自 action。
+ 
+------
++所有调用都互斥，因此模型排序的批次能观察到更早变更及其新 revision。UI 客户端会收到纯通用卡片：`get_goal` 使用 read，变更使用 other。变更卡片选择第一个有意义的 action 值，否则显示 goal id，因此已接受的填充值绝不会产生空输入。
+ 
+-<a id="use-this-package"></a>
+-## 使用本包
++3 个规范值都与已经渲染给 Native 调用方的紧凑 JSON 一致：`{ goal: null }` 或 `{ goal: { id, revision, objective, phase, roundsStarted, maxGoalRounds, blockedReason? }, activation }`。因此，编程消费方无需解析渲染后的 JSON，即可收到相同领域结构。
+ 
+-当模型需要自行创建和更新持久 goal 时，把 `dsh-tool-goal` 挂在 goal 服务旁边。这些工具是 goal 表面面向模型的一半；`/goal` 命令是面向人类的一半，续行驱动器在自主 Round 结束时使用同一套工具完成或阻塞 goal。
++自主 Goal Round 成功报告 `complete` 或 `blocked` 时，会用 `concludeTurn()` 标记该次工具执行，使物理轮次在该步骤后停止。人类直接变更绝不会导致这种停止：assistant 可以确认变更，循环仍可接收并发的人类 steering（中途引导）。
+ 
+-### 工具
++## 权限
+ 
+-三个工具都返回相同的紧凑 JSON——没有当前 goal 时为 `{ goal: null }`，否则返回 goal 的 id、revision、目标、phase、已开始 Round、Round 上限、可选的 blocker reason 与续行是否已启用——与 Native 调用方已经渲染的内容一致。
++执行要求完全相同的活跃 `exec.agent`、其继承的 `AgentRegistry` initiator、running 状态与开放轮次。create、edit、pause 和 resume 还要求运行时根 agent（智能体）的当前轮次中存在已接受的 `{ kind: 'user' }` 消息或 steering 事件。持久 fork 谱系不会降低已恢复根 agent 的等级；活跃 subagent 所有权会降低。
+ 
+-| 工具 | 作用 |
+-|---|---|
+-| `get_goal()` | 读取当前 goal；没有当前 goal 时返回 `null` |
+-| `create_goal(objective, max_goal_rounds?)` | 根据人类直接发起的顶层轮次创建一个 goal |
+-| `update_goal(goal_id, revision, action, objective?, max_goal_rounds?, blocked_reason?)` | 对精确 goal revision 执行 `edit`、`pause`、`resume`、`complete` 或 `blocked` |
++`{ kind: 'user' }` 是宿主证明。`Agent.followup()` 与 `steer()` 会在调用方省略 source 时分配该值，因此插件、调度器与其他非人类生产方必须传入自己的 source，不能继承用户权限。
+ 
+-在 `update_goal` 之前调用 `get_goal`，并复制精确的 `goal_id` 与 `revision`；所有调用都互斥，因此模型排序的批次能观察到更早变更及其新 revision。替换值只属于 `edit`；`blocked_reason` 只有在 `blocked` 时才必填，并以稳定代码 `model-reported` 持久化。严格 schema 下的空字符串和零填充值视为省略，而有意义的值仍限定到各自 action。
++complete 与 blocked 还接受完全一致的当前 Goal Round：来源为 goal 的 `user/message`，其 id、revision 和 Round 编号与折叠后的当前 goal 相等。在达到 `blockedAfterConsecutiveRounds` 前，Goal Round 的 blocked 调用会被机械拒绝；模型判断同一条件是否确实持续，并必须在 `blocked_reason` 中说明。人类直接授权可以立即停止 goal。
+ 
+-### 配置
++## 配置
+ 
+ ```yaml
+ - id: tool-goal
+@@ -48,68 +33,15 @@
+     blockedAfterConsecutiveRounds: 3
+ ```
+ 
+-该值必须是正的安全整数。它既提供模型自行报告阻塞的硬下限，也决定模型指引中指明的数值。生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-tool-goal)是每个受支持字段的穷尽式真源。
+-
+-### 权限规则
+-
+-工具只为活跃驱动器内、处于开放轮次中的精确活跃调用 agent 执行。`create`、`edit`、`pause` 和 `resume` 还要求运行时根 agent（智能体）的当前轮次中存在人类直接消息——subagent 或非人类生产方不能创建或编辑 goal。`resume` 会在 goal 服务执行前拒绝持久的 paused goal；该状态只属于面向用户的恢复路径。`complete` 和 `blocked` 还接受完全一致的当前 Goal Round：来源为 goal 的 Round 可以立即完成 goal，但 blocked 调用在达到配置的连续 Round 数量之前会被机械拒绝——模型判断同一条件是否确实持续，并必须在 `blocked_reason` 中说明。人类直接请求可以立即停止 goal。
+-
+-成功报告 `complete` 或 `blocked` 的自主 Round 还会在该步骤后结束物理轮次，模型会收到一条结束指令，要求向用户写出最终消息。人类直接变更绝不会触发这种停止：assistant 可以确认变更，循环仍可接收并发的人类 steering（中途引导）。
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## 理解实现
+-
+-<details>
+-<summary>实现细节——点击展开</summary>
+-
+-本节解释工具如何强制执行权限并渲染输出；可观察约定已在[使用本包](#use-this-package)中说明。
+-
+-### 设计
+-
+-- **执行时权限。** 每次调用都解析精确活跃 agent、其继承的 `AgentRegistry` initiator、running 状态与开放轮次；`create`、`edit`、`pause` 和 `resume` 还要求运行时根 agent 的当前轮次中存在已接受的 `{ kind: 'user' }` 消息或 steering 事件。持久的 paused goal 会让 `resume` 以 `GOAL_TOOL_RESUME_PAUSED` 失败；面向用户的命令或 Web 控件拥有该转换。持久 fork 谱系不会降低已恢复根 agent 的等级；活跃 subagent 所有权会降低。
+-- **人类输入的宿主证明。** `Agent.followup()` 与 `steer()` 会在调用方省略 source 时分配 `{ kind: 'user' }`，因此插件、调度器与其他非人类生产方必须传入自己的 source，不能继承人类权限。
+-- **带配置阈值的系统提示词指引。** 本包注册一个 `tool:goal` 系统提示词章节，其固定文本插入 `blockedAfterConsecutiveRounds`；同一数值就是执行时强制执行的硬下限。
+-- **终局 Round 的结束上下文。** 成功的自主 `complete` 或 `blocked` 会延后一条 `<goal_complete>` 或 `<goal_blocked>` 结束指令，让模型在轮次结束前向用户做一次交代；人类直接变更绝不会延后该上下文。
+-
+-### 源码地图
+-
+-| 文件 | 职责 |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | 插件入口：工具注册、配置、系统提示词章节、结果渲染 |
+-| [`src/authority.ts`](src/authority.ts) | 执行时权限检查与 Goal Round 接受 |
+-| [`src/wrapup.ts`](src/wrapup.ts) | 终局自主更新的结束消息指令 |
+-| — | 不发布运行时不变式伴生入口；已接受的变更由 goal 领域负责。 |
+-
+-### 工具输出
++该值必须是正的安全整数。它既提供模型自行报告阻塞的硬下限，也决定模型指引中指明的数值。
+ 
+-三个工具共用一种规范输出：紧凑 JSON `{ goal: null }`，或 `{ goal: { id, revision, objective, phase, roundsStarted, maxGoalRounds, blockedReason? }, activation }`。结果中的 `activation` 是实时观察值，绝不会成为回放权限依据。UI 客户端收到纯通用卡片——`get_goal` 为 read，变更使用 other。
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-这些工具是 goal 表面面向模型的一半；需要了解它们变更的状态与它们交由的策略时阅读以下页面。
+-
+-- [goal 服务](../goal/README.zh.md)——工具变更的 goal 状态与生命周期。
+-- [goal 组地图](../README.zh.md)——goal 各包及其组合方式。
+-- [生成的工具目录](../../../docs/tool-catalog.zh.md#deepseek-aidsh-tool-goal)——模型接收的精确 schema。
+-- [goal 工具 Agent Note](../../../.agents/notes/implemented/feature/2026-07-19-model-facing-goal-tools.zh.md)——权限拆分与 UX 决策。
+-
+------
+-
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+ ### 系统提示词
+ 
+ #### 模型看到的内容
+ 
+-固定 goal 策略说明何种用户语义意图值得创建 goal，要求更新前先精确读取 ref，解释会话 resume／fork 后如何重新启用续行，并限制完成／阻塞声明。持久 paused 的 resume 会在执行时以 `GOAL_TOOL_RESUME_PAUSED` 拒绝；面向用户的 goal 控件拥有该转换。配置的阈值会插入该指引。
++固定 goal 策略说明何种用户语义意图值得创建 goal，要求更新前先精确读取 ref，解释会话 resume／fork 后如何重新启用续行，并限制完成／阻塞声明。配置的阈值会插入该指引。
+ 
+ ##### Goal 策略
+ 
+@@ -139,25 +71,10 @@
+ 
+ schema 的定义与可见性不变时，前缀保持稳定。调用和结果会追加到可复用请求前缀之后，不会使更早条目失效。
+ 
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制说明 goal 工具何时不合适或需要特别注意。它们是当前包约束，不是任务积压。
+-
+-- **语义意图仍由模型判断**——执行只能证明当前轮次包含一条人类直接发送的消息，无法证明请求是否足够重大而值得创建 goal。
+-- **阻塞条件是否相同仍由模型判断**——运行时强制统计互不重复的已准入 Goal Round，而不判断障碍在语义上是否等价；独立评估器的实现暂缓。
+-- **不负责调度或直接面向人类呈现**——这些工具只变更状态；同会话驱动器与 `dsh-command-goal` 是同一领域的独立消费方。
+-- **Goal Round 权限需要驱动器**——除非续行驱动器准入 goal 来源的用户轮次，否则自主 `complete`／`blocked` 路径不会启用；只挂载这个包不会创建这些轮次。
+-- **提示词注册与过滤相互独立**——某个范围可能隐藏工具，却保留指引，除非部署将两项注册限定在同一范围。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
+-
+-本开发备注是维护者的工作上下文，明确不具权威性。开放问题：goal 策略章节是否应与工具注册独立限定范围，避免某个范围隐藏工具却保留指引。
++## 已知限制与暂缓事项
+ 
+-</details>
++- **语义意图仍由模型判断**：执行只能证明当前轮次包含一条人类直接发送的消息，无法证明请求是否足够重大而值得创建 goal。
++- **阻塞条件是否相同仍由模型判断**：运行时强制统计互不重复的已准入 Goal Round，而不判断障碍在语义上是否等价；独立评估器的实现暂缓。
++- **不负责调度或直接面向人类呈现**：这些工具只变更状态；同会话驱动器与 [`dsh-command-goal`](../command-goal/README.zh.md) 是同一领域的独立消费方。
++- **Goal Round 权限需要驱动器**：除非续行驱动器准入 goal 来源的用户轮次，否则自主 `complete`／`blocked` 路径不会启用；只挂载这个包不会创建这些轮次。
++- **提示词注册与过滤相互独立**：某个范围可能隐藏工具，却保留指引，除非部署将两项注册限定在同一范围。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-goal/lib/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/lib/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-goal/lib/index.js	2026-09-11 14:27:15.075962328 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/lib/index.js	2026-09-12 14:56:16.933900714 +0800
+@@ -8,21 +8,24 @@
+ function reject(message, code = "GOAL_TOOL_AUTHORITY_REQUIRED") {
+ 	throw new HarnessError(message, code);
+ }
+-/** Resolve the immutable event cut and open-turn boundary without copying the turn suffix. */
+-function openTurnEvents(ctx, agent) {
+-	const events = agent.session.snapshotEvents();
+-	const boundary = ctx.sessionProjections.stateOf(agent.session, "turnBoundary");
+-	if (boundary === void 0 || boundary.openTurnStartSeq === null) reject("goal tools require an open model turn", "GOAL_TOOL_DRIVER_REQUIRED");
+-	return {
+-		events,
+-		openTurnStartSeq: boundary.openTurnStartSeq
+-	};
++/** Locate the open turn enclosing a model tool call. */
++function openTurn(agent) {
++	const events = agent.session.events;
++	for (let index = events.length - 1; index >= 0; index -= 1) {
++		const boundary = events[index];
++		if (boundary?.type === "turn/end") reject("goal tools require an open model turn", "GOAL_TOOL_DRIVER_REQUIRED");
++		if (boundary?.type === "turn/start") return {
++			start: boundary,
++			events: events.slice(index + 1)
++		};
++	}
++	return reject("goal tools require an open model turn", "GOAL_TOOL_DRIVER_REQUIRED");
+ }
+ /**
+ * Resolve and authenticate the calling agent and its driver boundary.
+ * @param ctx - Context carrying the live agent registry.
+ * @param exec - Tool execution metadata supplied by the registry.
+-* @returns The authenticated agent, immutable event cut, and open-turn boundary.
++* @returns The authenticated agent and its current turn window.
+ */
+ function goalToolExecution(ctx, exec) {
+ 	const agent = exec.agent;
+@@ -30,17 +33,9 @@
+ 	if (ctx.agents.get(agent.id) !== agent || agent.status !== "running" || ctx.agents.currentInitiator() !== agent) return reject("goal tools require the exact live calling agent inside its active driver", "GOAL_TOOL_DRIVER_REQUIRED");
+ 	return {
+ 		agent,
+-		...openTurnEvents(ctx, agent)
++		...openTurn(agent)
+ 	};
+ }
+-/** Whether the captured open turn contains an event accepted by `predicate`. */
+-function someOpenTurnEvent(execution, predicate) {
+-	for (let seq = execution.openTurnStartSeq + 1; seq < execution.events.length; seq += 1) {
+-		const event = execution.events[seq];
+-		if (event !== void 0 && predicate(event)) return true;
+-	}
+-	return false;
+-}
+ /**
+ * Whether host-attested human input appears in the current root-agent turn.
+ * An omitted `Agent.followup()` / `steer()` source resolves to `user`, so non-human
+@@ -48,11 +43,11 @@
+ */
+ function hasDirectHumanInput(ctx, execution) {
+ 	if (!ctx.agents.roots().includes(execution.agent)) return false;
+-	return someOpenTurnEvent(execution, (event) => event.type === "user/message" && event.data.source.kind === "user");
++	return execution.events.some((event) => event.type === "user/message" && event.data.source.kind === "user");
+ }
+ /** Whether this turn is the current goal's exact admitted round. */
+ function isMatchingGoalRound(execution, goal) {
+-	return someOpenTurnEvent(execution, (event) => event.type === "user/message" && event.data.source.kind === "goal" && event.data.source.goalId === goal.id && event.data.source.revision === goal.revision && event.data.source.round === goal.roundsStarted);
++	return execution.events.some((event) => event.type === "user/message" && event.data.source.kind === "goal" && event.data.source.goalId === goal.id && event.data.source.revision === goal.revision && event.data.source.round === goal.roundsStarted);
+ }
+ /**
+ * Require authority originating in a human message accepted by a runtime root.
+@@ -108,8 +103,7 @@
+ 	"agents",
+ 	"goals",
+ 	"tools",
+-	"systemPrompt",
+-	"sessionProjections"
++	"systemPrompt"
+ ];
+ /** Schemastery config for the goal-tool policy. */
+ const Config = z.object({ blockedAfterConsecutiveRounds: z.number().step(1).min(1).default(3) });
+@@ -258,7 +252,7 @@
+ 	const resolved = resolveConfig(config);
+ 	ctx.systemPrompt.section({
+ 		name: "tool:goal",
+-		order: ctx.systemPrompt.getSectionOrder("TOOL_GOAL"),
++		order: 114,
+ 		text: guidance(resolved.blockedAfterConsecutiveRounds)
+ 	});
+ 	ctx.tools.register(defineTool({
+@@ -348,8 +342,6 @@
+ 			if (args.action === "pause" || args.action === "resume") {
+ 				requireDirectHuman(ctx, execution);
+ 				if (hasText(args.objective) || hasRoundCap(args.max_goal_rounds) || hasText(args.blocked_reason)) throw new HarnessError("objective and max_goal_rounds are valid only with action edit; blocked_reason is valid only with action blocked", "GOAL_TOOL_INVALID_UPDATE");
+-				const current = ctx.goals.get(execution.agent);
+-				if (args.action === "resume" && current?.id === ref.id && current.revision === ref.revision && current.phase === "paused") throw new HarnessError("the model cannot resume a paused goal; the user must resume it", "GOAL_TOOL_RESUME_PAUSED");
+ 				const goal = args.action === "pause" ? ctx.goals.pause(execution.agent, ref) : ctx.goals.resume(execution.agent, ref);
+ 				return Promise.resolve(goalValue(goal));
+ 			}
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/lib: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-goal/lib/types/authority.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/lib/types/authority.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-goal/lib/types/authority.d.ts	2026-09-11 14:27:15.118962939 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/lib/types/authority.d.ts	2026-09-12 14:56:16.938901451 +0800
+@@ -2,13 +2,16 @@
+ import type { Context } from '@deepseek-ai/cordis';
+ import type { Agent } from '@deepseek-ai/dsh-agent';
+ import type { GoalView } from '@deepseek-ai/dsh-goal';
+-import type { SessionEvent, SessionSeq } from '@deepseek-ai/dsh-session';
++import type { SessionEvent } from '@deepseek-ai/dsh-session';
+ import type { ToolRunContext } from '@deepseek-ai/dsh-tools';
+-/** The calling agent plus the immutable event cut and open-turn start seq used for authority checks. */
++type TurnStartEvent = Extract<SessionEvent, {
++    type: 'turn/start';
++}>;
++/** Current open turn plus the events accepted after its start boundary. */
+ export interface GoalToolExecution {
+     readonly agent: Agent;
++    readonly start: TurnStartEvent;
+     readonly events: readonly SessionEvent[];
+-    readonly openTurnStartSeq: SessionSeq;
+ }
+ /** Hard authority granted to one state-changing call. */
+ export type GoalToolAuthority = {
+@@ -21,7 +24,7 @@
+  * Resolve and authenticate the calling agent and its driver boundary.
+  * @param ctx - Context carrying the live agent registry.
+  * @param exec - Tool execution metadata supplied by the registry.
+- * @returns The authenticated agent, immutable event cut, and open-turn boundary.
++ * @returns The authenticated agent and its current turn window.
+  */
+ export declare function goalToolExecution(ctx: Context, exec: ToolRunContext): GoalToolExecution;
+ /**
+@@ -37,4 +40,5 @@
+  * @returns The direct-human or exact-goal-round authority grant.
+  */
+ export declare function completionAuthority(ctx: Context, execution: GoalToolExecution): GoalToolAuthority;
++export {};
+ //# sourceMappingURL=authority.d.ts.map
+\ No newline at end of file
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/lib/types: invariant.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-goal/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-goal/package.json	2026-09-11 14:27:15.090962541 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/package.json	2026-09-12 14:56:16.934900861 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-tool-goal",
+   "description": "Model-facing same-session goal tools with execution-time authority checks",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -18,38 +18,41 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./src/*": "./src/*",
+     "./package.json": "./package.json"
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/types/**/*.d.ts"
+   ],
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/dsh-agent": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-goal": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-llm": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-system-prompt": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-tools": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2",
+-    "@deepseek-ai/dsh-session-projection": "^0.1.5-rc.2"
++    "@deepseek-ai/dsh-agent": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-goal": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-llm": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-tools": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-system-prompt": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   },
+   "dependencies": {
+-    "@deepseek-ai/schemastery": "^3.18.2"
++    "@deepseek-ai/schemastery": "^3.18.1"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/dsh-agent": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-agent-loop-testkit": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-agent-loop": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-goal": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis-plugin-loader": "^1.0.3",
+-    "@deepseek-ai/dsh-session": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-system-prompt": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-llm": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-tools": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2",
+-    "@deepseek-ai/dsh-session-projection": "^0.1.5-rc.2"
++    "@deepseek-ai/cordis-plugin-loader": "^1.0.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-llm": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-goal": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-agent": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-system-prompt": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-tools": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   }
+ }
+\ No newline at end of file

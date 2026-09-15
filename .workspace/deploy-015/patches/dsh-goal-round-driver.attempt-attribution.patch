@@ -1,0 +1,11 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -219,7 +219,7 @@
+ 				state.competingQueued = false;
+ 				const attempt = state.attempt;
+ 				const goal = currentGoal(state);
+-				if ((attempt?.phase === "queued" || attempt?.phase === "claimed" || attempt?.cancelled) && goal?.phase === "active" && goal.activation === "armed") {
++				if (attempt !== void 0 && (attempt.phase === "queued" || attempt.phase === "claimed" || attempt.cancelled) && goal !== void 0 && goal.phase === "active" && goal.activation === "armed" && attempt.goalId === goal.id && attempt.revision === goal.revision) {
+ 					state.attempt = void 0;
+ 					try {
+ 						ctx.goals.pause(agent, goalRef(goal));

@@ -3,6 +3,11 @@
 ## 改动（2 处，均 verified）
 文件：`~/.dsh/profiles/web/node_modules/@deepseek-ai/dsh-agent-loop/lib/index.js`
 
+> 位置说明（2026-09-15，审计 A §1 核验）：本档为 09-08 的执行证据，当时补丁落在
+> `profiles/web/node_modules`；09-15 npm 遮蔽事故修复后该路径整目录已删除，live 打补丁副本
+> 现位于全局树 `~/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/lib/index.js`
+> （运行时经 profiles 符号链接农场解析到该副本，无本地遮蔽）。
+
 1. `step()` L611 后新增：
 ```js
 const isSubagent = (this.options.subagentDepth ?? 0) > 0 || (this.session.header?.delegationDepth ?? 0) > 0;
@@ -20,20 +25,25 @@ if (!isSubagent) chunkSeqs.push(this.session.append("assistant/chunk", { ... }).
 - 判定字段可达：`this.options.subagentDepth`（dsh-subagent resolveChildAgentOptions 写入，主会话 undefined/子代理≥1）+ `this.session.header.delegationDepth`（childSessionMeta 写入，header 常驻）。
 - `sourceEventSeqs: []`：dsh-session L325 明确「empty 仅允许在 assistant/message 上」——子代理 chunkSeqs 变空后，L673/L632 的 `assistant/message` 带空 sourceEventSeqs 合法。
 - 结果读取不破：`finalAssistantOutput`（dsh-subagent L84）读 `assistant/message`（保留）；`foldConsumedWork`（dsh-agent L218）不引用 chunk/message。
-- 备份已做：`dsh-agent-loop.orig-20260908/`（完整目录拷贝）。
+- 备份已做：`dsh-agent-loop.orig-20260908/`（完整目录拷贝，**该目录现已不存在**——09-15 事故修复
+  删除 web profile node_modules 时一并移除；当前有效回滚路径见下方「回滚 Runbook」修正）。
 
 ## 回滚 Runbook（一键）
+
+> **2026-09-15 修正（审计 L-3 文档漂移）**：旧命令引用的 `$PKG.orig-20260908` 已不存在
+> （web profile 现无 node_modules），回滚改为 deploy-lag 备份 + 重放脚本：
+
 ```bash
-PKG=~/.dsh/profiles/web/node_modules/@deepseek-ai/dsh-agent-loop
-rm -rf "$PKG"
-mv "$PKG.orig-20260908" "$PKG"
+# 当前有效回滚路径：deploy-lag 备份（backup-20260912-160759/160832，实测为补丁前基线：
+# agent-loop isSubagent=0、apiproxy 加固锚点=0）+ 重放脚本 --rollback（还原 5 包 + settings.yaml）
+cd /home/CNS2026495165/dsh/.workspace/deploy-lag && bash replay-lag-fix.sh --rollback
 # 重启 DSH 后即恢复原行为
 ```
 
 ## 运行时验证 Runbook（重启后）
 ```bash
 # 1) 确认改动已装入（进程内读到 isSubagent）
-grep -n "isSubagent" ~/.dsh/profiles/web/node_modules/@deepseek-ai/dsh-agent-loop/lib/index.js
+grep -n "isSubagent" ~/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-loop/lib/index.js
 
 # 2) 重启 DSH
 npx @deepseek-ai/dsh web

@@ -1,0 +1,93 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -14,9 +14,36 @@
+ /** Default maximum file and directory candidates rendered for one query. */
+ const DEFAULT_FILE_SEARCH_MAX_RESULTS = 20;
+ /** Default maximum entries retained in one workspace search index. */
+-const DEFAULT_FILE_SEARCH_MAX_ENTRIES = 1e4;
+-/** Directory basenames omitted from traversal unless the deployment overrides them. */
+-const DEFAULT_FILE_SEARCH_EXCLUDED_DIRECTORIES = [".git", "node_modules"];
++const DEFAULT_FILE_SEARCH_MAX_ENTRIES = 5e4;
++/**
++* Directory basenames omitted from traversal unless the deployment overrides
++* them: version-control and dependency stores plus build-output names that no
++* ecosystem also uses for sources. Generated files carry the basenames of the
++* sources that produced them, so an unfiltered tree both spends the entry
++* budget twice and ranks `dist/x.js` beside `src/x.ts` for every query.
++*
++* `lib` is deliberately absent: Ruby gems and many npm packages keep their
++* sources there, and excluding it would make `@` miss those sources entirely
++* and silently. A workspace that builds into `lib` adds it through
++* `excludedDirectories`.
++*/
++const DEFAULT_FILE_SEARCH_EXCLUDED_DIRECTORIES = [
++	".git",
++	"node_modules",
++	"dist",
++	"build",
++	"out",
++	"coverage",
++	"target",
++	".next",
++	".nuxt",
++	".turbo",
++	".venv",
++	"__pycache__",
++	".pytest_cache",
++	".mypy_cache",
++	".gradle"
++];
+ /**
+ * Cancellable, reusable fuzzy index rooted at one agent working directory.
+ * Directory-scoped queries list live state; bare fuzzy queries share one
+@@ -260,7 +287,7 @@
+ 		super(ctx);
+ 		this.config = {
+ 			maxResults: config.maxResults ?? 20,
+-			maxEntries: config.maxEntries ?? 1e4,
++			maxEntries: config.maxEntries ?? 5e4,
+ 			excludedDirectories: config.excludedDirectories ?? DEFAULT_FILE_SEARCH_EXCLUDED_DIRECTORIES
+ 		};
+ 		validateConfig(this.config);
+--- a/lib/types/search.js
++++ b/lib/types/search.js
+@@ -11,9 +11,36 @@
+ /** Default maximum file and directory candidates rendered for one query. */
+ export const DEFAULT_FILE_SEARCH_MAX_RESULTS = 20;
+ /** Default maximum entries retained in one workspace search index. */
+-export const DEFAULT_FILE_SEARCH_MAX_ENTRIES = 10_000;
+-/** Directory basenames omitted from traversal unless the deployment overrides them. */
+-export const DEFAULT_FILE_SEARCH_EXCLUDED_DIRECTORIES = ['.git', 'node_modules'];
++export const DEFAULT_FILE_SEARCH_MAX_ENTRIES = 50_000;
++/**
++ * Directory basenames omitted from traversal unless the deployment overrides
++ * them: version-control and dependency stores plus build-output names that no
++ * ecosystem also uses for sources. Generated files carry the basenames of the
++ * sources that produced them, so an unfiltered tree both spends the entry
++ * budget twice and ranks `dist/x.js` beside `src/x.ts` for every query.
++ *
++ * `lib` is deliberately absent: Ruby gems and many npm packages keep their
++ * sources there, and excluding it would make `@` miss those sources entirely
++ * and silently. A workspace that builds into `lib` adds it through
++ * `excludedDirectories`.
++ */
++export const DEFAULT_FILE_SEARCH_EXCLUDED_DIRECTORIES = [
++    '.git',
++    'node_modules',
++    'dist',
++    'build',
++    'out',
++    'coverage',
++    'target',
++    '.next',
++    '.nuxt',
++    '.turbo',
++    '.venv',
++    '__pycache__',
++    '.pytest_cache',
++    '.mypy_cache',
++    '.gradle',
++];
+ /**
+  * Cancellable, reusable fuzzy index rooted at one agent working directory.
+  * Directory-scoped queries list live state; bare fuzzy queries share one

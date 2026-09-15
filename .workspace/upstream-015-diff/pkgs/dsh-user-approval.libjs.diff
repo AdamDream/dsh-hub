@@ -1,0 +1,296 @@
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-approval/lib/types/invariant.js	2026-09-11 14:27:15.139963238 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-approval/lib/types/invariant.js	2026-09-12 14:56:19.223572328 +0800
+@@ -48,7 +48,7 @@
+     const seed = (session) => {
+         const trace = { openTurn: null, pending: new Set() };
+         traces.set(session, trace);
+-        for (const event of session.snapshotEvents()) {
++        for (const event of session.events) {
+             if (event.type === 'turn/start')
+                 trace.openTurn = event.data.turn;
+             else if (event.type === 'turn/end')
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-approval/lib/types/index.js	2026-09-11 14:27:15.101962698 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-approval/lib/types/index.js	2026-09-12 14:56:19.223445696 +0800
+@@ -8,7 +8,6 @@
+ import z from '@deepseek-ai/schemastery';
+ import { createUserMessage } from '@deepseek-ai/dsh-llm';
+ import { scopeTarget } from '@deepseek-ai/dsh-scope';
+-import { SessionSeq } from '@deepseek-ai/dsh-session';
+ import { ApprovalRequestId } from "./types.js";
+ export { ApprovalRequestId } from "./types.js";
+ /** Every {@link ApprovalOutcome}, for runtime normalization of answerer returns. */
+@@ -20,15 +19,31 @@
+ /** Model-facing statement for an interactive policy that may still fail closed. */
+ const ASK_SENTENCE = 'Approval policy: ask. Operations that require approval may ask through the configured answerers; without an available answerer, the request fails closed.';
+ /**
++ * The session's approval-policy override: the last `approval/policy` event in
++ * the log, or undefined when the session never switched (callers apply the
++ * plugin's configured default). The pure fold — resume needs no catch-up
++ * machinery because replaying the log IS the state.
++ * @param events - session events in log order (other event types are skipped).
++ * @returns the policy of the last switch event, or undefined without one.
++ */
++export function effectiveApprovalPolicy(events) {
++    for (let index = events.length - 1; index >= 0; index -= 1) {
++        const event = events[index];
++        if (event.type === 'approval/policy')
++            return event.data.policy;
++    }
++    return undefined;
++}
++/**
+  * Whether the log currently sits inside an open turn (a `turn/start` not yet
+  * closed by a `turn/end`) — the {@link ApprovalService.request} precondition.
+  * The audit pair must be turn-enclosed: the turn is the durable log's
+  * commit/replay boundary, so a bare event appended between turns is
+  * indistinguishable from a crash tail and silently dropped on reload.
+  */
+-function hasOpenTurn(session) {
+-    for (let seq = session.seq - 1; seq >= 0; seq -= 1) {
+-        const type = session.eventAt(SessionSeq(seq))?.type;
++function hasOpenTurn(events) {
++    for (let index = events.length - 1; index >= 0; index -= 1) {
++        const type = events[index].type;
+         if (type === 'turn/start')
+             return true;
+         if (type === 'turn/end')
+@@ -67,7 +82,7 @@
+         ctx.inject(['systemPrompt'], (scope) => {
+             scope.systemPrompt.context({
+                 name: 'approval:policy',
+-                order: scope.systemPrompt.getContextOrder('APPROVAL_POLICY'),
++                order: 115,
+                 text: (context) => {
+                     const agent = context.agent;
+                     // A bare assemble() (tests, diagnostics) has no session to state.
+@@ -119,7 +134,7 @@
+      */
+     async request(req) {
+         const session = req.agent.session;
+-        if (!hasOpenTurn(session)) {
++        if (!hasOpenTurn(session.events)) {
+             throw new Error('approval.request() outside an open turn: the approval/asked + approval/decided audit pair '
+                 + 'must be turn-enclosed (a bare event between turns is crash-tail garbage on reload). '
+                 + 'Ask from inside the turn that needs the decision.');
+@@ -151,12 +166,7 @@
+      * @returns the last logged policy, or `undefined` without one.
+      */
+     overrideOf(session) {
+-        for (let seq = session.seq - 1; seq >= 0; seq -= 1) {
+-            const event = session.eventAt(SessionSeq(seq));
+-            if (event?.type === 'approval/policy')
+-                return event.data.policy;
+-        }
+-        return undefined;
++        return effectiveApprovalPolicy(session.events);
+     }
+     /**
+      * Dispatch the waterfall, contained and raced against the request signal.
+@@ -179,7 +189,7 @@
+         // SYNCHRONOUSLY (before its first await) must land in the same rejection
+         // path as an async one — `Promise.resolve(call())` would let it escape
+         // the containment into the caller.
+-        const answer = Promise.resolve().then(() => this.ctx.waterfall(scopeTarget(req.agent, req.agent), 'approval/request', req, () => Promise.resolve('unavailable'))).then(
++        const answer = Promise.resolve().then(() => this.ctx.waterfall(scopeTarget(this, req.agent), 'approval/request', req, () => Promise.resolve('unavailable'))).then(
+         // Normalize a rogue (non-vocabulary) answerer return to the fail-closed
+         // outcome instead of leaking it into callers' closed-union switches.
+         outcome => OUTCOMES.includes(outcome) ? outcome : 'unavailable', 
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-approval/lib/types/types.js	2026-09-11 14:27:15.150963394 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-approval/lib/types/types.js	2026-09-12 14:56:19.223765874 +0800
+@@ -1,6 +1,6 @@
+ /**
+  * Wire-safe approval identifiers and outcome vocabulary, free of
+- * cordis/service imports so browser type chains can
++ * cordis/service imports so browser type chains (apiproxy api → client) can
+  * consume them without loading this package's Context augmentation.
+  * @module @deepseek-ai/dsh-user-approval/types
+  */
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-approval/lib/invariant.js	2026-09-11 14:27:15.122962996 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-approval/lib/invariant.js	2026-09-12 14:56:19.223572328 +0800
+@@ -3,11 +3,10 @@
+ import z from "@deepseek-ai/schemastery";
+ import { createUserMessage } from "@deepseek-ai/dsh-llm";
+ import { scopeTarget } from "@deepseek-ai/dsh-scope";
+-import { SessionSeq } from "@deepseek-ai/dsh-session";
+ //#region lib/types/types.js
+ /**
+ * Wire-safe approval identifiers and outcome vocabulary, free of
+-* cordis/service imports so browser type chains can
++* cordis/service imports so browser type chains (apiproxy api → client) can
+ * consume them without loading this package's Context augmentation.
+ * @module @deepseek-ai/dsh-user-approval/types
+ */
+@@ -40,15 +39,29 @@
+ /** Model-facing statement for an interactive policy that may still fail closed. */
+ const ASK_SENTENCE = "Approval policy: ask. Operations that require approval may ask through the configured answerers; without an available answerer, the request fails closed.";
+ /**
++* The session's approval-policy override: the last `approval/policy` event in
++* the log, or undefined when the session never switched (callers apply the
++* plugin's configured default). The pure fold — resume needs no catch-up
++* machinery because replaying the log IS the state.
++* @param events - session events in log order (other event types are skipped).
++* @returns the policy of the last switch event, or undefined without one.
++*/
++function effectiveApprovalPolicy(events) {
++	for (let index = events.length - 1; index >= 0; index -= 1) {
++		const event = events[index];
++		if (event.type === "approval/policy") return event.data.policy;
++	}
++}
++/**
+ * Whether the log currently sits inside an open turn (a `turn/start` not yet
+ * closed by a `turn/end`) — the {@link ApprovalService.request} precondition.
+ * The audit pair must be turn-enclosed: the turn is the durable log's
+ * commit/replay boundary, so a bare event appended between turns is
+ * indistinguishable from a crash tail and silently dropped on reload.
+ */
+-function hasOpenTurn(session) {
+-	for (let seq = session.seq - 1; seq >= 0; seq -= 1) {
+-		const type = session.eventAt(SessionSeq(seq))?.type;
++function hasOpenTurn(events) {
++	for (let index = events.length - 1; index >= 0; index -= 1) {
++		const type = events[index].type;
+ 		if (type === "turn/start") return true;
+ 		if (type === "turn/end") return false;
+ 	}
+@@ -74,7 +87,7 @@
+ 		ctx.inject(["systemPrompt"], (scope) => {
+ 			scope.systemPrompt.context({
+ 				name: "approval:policy",
+-				order: scope.systemPrompt.getContextOrder("APPROVAL_POLICY"),
++				order: 115,
+ 				text: (context) => {
+ 					const agent = context.agent;
+ 					if (agent === void 0) return "";
+@@ -125,7 +138,7 @@
+ 	*/
+ 	async request(req) {
+ 		const session = req.agent.session;
+-		if (!hasOpenTurn(session)) throw new Error("approval.request() outside an open turn: the approval/asked + approval/decided audit pair must be turn-enclosed (a bare event between turns is crash-tail garbage on reload). Ask from inside the turn that needs the decision.");
++		if (!hasOpenTurn(session.events)) throw new Error("approval.request() outside an open turn: the approval/asked + approval/decided audit pair must be turn-enclosed (a bare event between turns is crash-tail garbage on reload). Ask from inside the turn that needs the decision.");
+ 		const id = ApprovalRequestId(randomUUID());
+ 		session.append("approval/asked", {
+ 			id,
+@@ -156,10 +169,7 @@
+ 	* @returns the last logged policy, or `undefined` without one.
+ 	*/
+ 	overrideOf(session) {
+-		for (let seq = session.seq - 1; seq >= 0; seq -= 1) {
+-			const event = session.eventAt(SessionSeq(seq));
+-			if (event?.type === "approval/policy") return event.data.policy;
+-		}
++		return effectiveApprovalPolicy(session.events);
+ 	}
+ 	/**
+ 	* Dispatch the waterfall, contained and raced against the request signal.
+@@ -171,7 +181,7 @@
+ 		const signal = req.signal;
+ 		if (signal?.aborted) return "cancelled";
+ 		if (this.effectivePolicy(session) === "never") return "rejected";
+-		const answer = Promise.resolve().then(() => this.ctx.waterfall(scopeTarget(req.agent, req.agent), "approval/request", req, () => Promise.resolve("unavailable"))).then((outcome) => OUTCOMES.includes(outcome) ? outcome : "unavailable", () => "unavailable");
++		const answer = Promise.resolve().then(() => this.ctx.waterfall(scopeTarget(this, req.agent), "approval/request", req, () => Promise.resolve("unavailable"))).then((outcome) => OUTCOMES.includes(outcome) ? outcome : "unavailable", () => "unavailable");
+ 		if (signal === void 0) return answer;
+ 		return await new Promise((resolve) => {
+ 			const onAbort = () => {
+@@ -237,7 +247,7 @@
+ 			pending: /* @__PURE__ */ new Set()
+ 		};
+ 		traces.set(session, trace);
+-		for (const event of session.snapshotEvents()) {
++		for (const event of session.events) {
+ 			if (event.type === "turn/start") trace.openTurn = event.data.turn;
+ 			else if (event.type === "turn/end") trace.openTurn = null;
+ 			const transition = validateApprovalEvent(trace, event, fail);
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-approval/lib/index.js	2026-09-11 14:27:15.070962257 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-approval/lib/index.js	2026-09-12 14:56:19.222205466 +0800
+@@ -3,11 +3,10 @@
+ import z from "@deepseek-ai/schemastery";
+ import { createUserMessage } from "@deepseek-ai/dsh-llm";
+ import { scopeTarget } from "@deepseek-ai/dsh-scope";
+-import { SessionSeq } from "@deepseek-ai/dsh-session";
+ //#region lib/types/types.js
+ /**
+ * Wire-safe approval identifiers and outcome vocabulary, free of
+-* cordis/service imports so browser type chains can
++* cordis/service imports so browser type chains (apiproxy api → client) can
+ * consume them without loading this package's Context augmentation.
+ * @module @deepseek-ai/dsh-user-approval/types
+ */
+@@ -40,15 +39,29 @@
+ /** Model-facing statement for an interactive policy that may still fail closed. */
+ const ASK_SENTENCE = "Approval policy: ask. Operations that require approval may ask through the configured answerers; without an available answerer, the request fails closed.";
+ /**
++* The session's approval-policy override: the last `approval/policy` event in
++* the log, or undefined when the session never switched (callers apply the
++* plugin's configured default). The pure fold — resume needs no catch-up
++* machinery because replaying the log IS the state.
++* @param events - session events in log order (other event types are skipped).
++* @returns the policy of the last switch event, or undefined without one.
++*/
++function effectiveApprovalPolicy(events) {
++	for (let index = events.length - 1; index >= 0; index -= 1) {
++		const event = events[index];
++		if (event.type === "approval/policy") return event.data.policy;
++	}
++}
++/**
+ * Whether the log currently sits inside an open turn (a `turn/start` not yet
+ * closed by a `turn/end`) — the {@link ApprovalService.request} precondition.
+ * The audit pair must be turn-enclosed: the turn is the durable log's
+ * commit/replay boundary, so a bare event appended between turns is
+ * indistinguishable from a crash tail and silently dropped on reload.
+ */
+-function hasOpenTurn(session) {
+-	for (let seq = session.seq - 1; seq >= 0; seq -= 1) {
+-		const type = session.eventAt(SessionSeq(seq))?.type;
++function hasOpenTurn(events) {
++	for (let index = events.length - 1; index >= 0; index -= 1) {
++		const type = events[index].type;
+ 		if (type === "turn/start") return true;
+ 		if (type === "turn/end") return false;
+ 	}
+@@ -79,7 +92,7 @@
+ 		ctx.inject(["systemPrompt"], (scope) => {
+ 			scope.systemPrompt.context({
+ 				name: "approval:policy",
+-				order: scope.systemPrompt.getContextOrder("APPROVAL_POLICY"),
++				order: 115,
+ 				text: (context) => {
+ 					const agent = context.agent;
+ 					if (agent === void 0) return "";
+@@ -130,7 +143,7 @@
+ 	*/
+ 	async request(req) {
+ 		const session = req.agent.session;
+-		if (!hasOpenTurn(session)) throw new Error("approval.request() outside an open turn: the approval/asked + approval/decided audit pair must be turn-enclosed (a bare event between turns is crash-tail garbage on reload). Ask from inside the turn that needs the decision.");
++		if (!hasOpenTurn(session.events)) throw new Error("approval.request() outside an open turn: the approval/asked + approval/decided audit pair must be turn-enclosed (a bare event between turns is crash-tail garbage on reload). Ask from inside the turn that needs the decision.");
+ 		const id = ApprovalRequestId(randomUUID());
+ 		session.append("approval/asked", {
+ 			id,
+@@ -161,10 +174,7 @@
+ 	* @returns the last logged policy, or `undefined` without one.
+ 	*/
+ 	overrideOf(session) {
+-		for (let seq = session.seq - 1; seq >= 0; seq -= 1) {
+-			const event = session.eventAt(SessionSeq(seq));
+-			if (event?.type === "approval/policy") return event.data.policy;
+-		}
++		return effectiveApprovalPolicy(session.events);
+ 	}
+ 	/**
+ 	* Dispatch the waterfall, contained and raced against the request signal.
+@@ -176,7 +186,7 @@
+ 		const signal = req.signal;
+ 		if (signal?.aborted) return "cancelled";
+ 		if (this.effectivePolicy(session) === "never") return "rejected";
+-		const answer = Promise.resolve().then(() => this.ctx.waterfall(scopeTarget(req.agent, req.agent), "approval/request", req, () => Promise.resolve("unavailable"))).then((outcome) => OUTCOMES.includes(outcome) ? outcome : "unavailable", () => "unavailable");
++		const answer = Promise.resolve().then(() => this.ctx.waterfall(scopeTarget(this, req.agent), "approval/request", req, () => Promise.resolve("unavailable"))).then((outcome) => OUTCOMES.includes(outcome) ? outcome : "unavailable", () => "unavailable");
+ 		if (signal === void 0) return answer;
+ 		return await new Promise((resolve) => {
+ 			const onAbort = () => {
+@@ -192,4 +202,4 @@
+ 	}
+ };
+ //#endregion
+-export { APPROVAL_POLICIES, ApprovalRequestId, ApprovalService, ApprovalService as default, setApprovalPolicy };
++export { APPROVAL_POLICIES, ApprovalRequestId, ApprovalService, ApprovalService as default, effectiveApprovalPolicy, setApprovalPolicy };

@@ -1,10 +1,10 @@
-// 2026-09-12 heatmap redesign — inline-copy consistency check.
-// Extracts FILLS/parseDay/formatDay/heatmapGrid from lib/charts.js (source of
-// truth, modern syntax) and from the `charts.js 内联` copy inside lib/client.js
-// (legacy concat style) and verifies:
+// 2026-09-12 heatmap redesign / 2026-09-14 tooltip — inline-copy consistency
+// check. Extracts FILLS/parseDay/formatDay/heatmapGrid/scaleBars/barRects/
+// scaleArea from lib/charts.js (source of truth, modern syntax) and from the
+// `charts.js 内联` copy inside lib/client.js (legacy concat style) and verifies:
 //   1. functional equivalence on a battery of datasets (deep-equal),
 //   2. key-token parity (all redesign literals present in both),
-//   3. a normalized textual diff of the two heatmapGrid bodies (style-only
+//   3. a normalized textual diff of the heatmapGrid bodies (style-only
 //      differences are expected and listed).
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -54,7 +54,7 @@ function extractFills(src) {
 	throw new Error("unmatched bracket for FILLS");
 }
 
-function buildModule(fillsSrc, parseDaySrc, formatDaySrc, heatmapGridSrc) {
+function buildModule(fillsSrc, parseDaySrc, formatDaySrc, heatmapGridSrc, scaleBarsSrc, barRectsSrc, scaleAreaSrc) {
 	const body =
 		fillsSrc +
 		"\n" +
@@ -63,7 +63,13 @@ function buildModule(fillsSrc, parseDaySrc, formatDaySrc, heatmapGridSrc) {
 		formatDaySrc +
 		"\n" +
 		heatmapGridSrc +
-		"\nreturn { FILLS, parseDay, formatDay, heatmapGrid };";
+		"\n" +
+		scaleBarsSrc +
+		"\n" +
+		barRectsSrc +
+		"\n" +
+		scaleAreaSrc +
+		"\nreturn { FILLS, parseDay, formatDay, heatmapGrid, scaleBars, barRects, scaleArea };";
 	return new Function(body)();
 }
 
@@ -72,12 +78,18 @@ const charts = buildModule(
 	extractFn(chartsSrc, "parseDay"),
 	extractFn(chartsSrc, "formatDay"),
 	extractFn(chartsSrc, "heatmapGrid"),
+	extractFn(chartsSrc, "scaleBars"),
+	extractFn(chartsSrc, "barRects"),
+	extractFn(chartsSrc, "scaleArea"),
 );
 const inline = buildModule(
 	extractFills(clientSrc),
 	extractFn(clientSrc, "parseDay"),
 	extractFn(clientSrc, "formatDay"),
 	extractFn(clientSrc, "heatmapGrid"),
+	extractFn(clientSrc, "scaleBars"),
+	extractFn(clientSrc, "barRects"),
+	extractFn(clientSrc, "scaleArea"),
 );
 
 // --- 1. functional equivalence --------------------------------------------
@@ -99,6 +111,15 @@ const datasets = [
 	],
 	// month boundary inside one week
 	[mkDay(2026, 7, 30, 10), mkDay(2026, 8, 1, 20), mkDay(2026, 8, 2, 30)],
+	// 7-day / 30-day / 90-day trend spans with zeros and large values
+	Array.from({ length: 7 }, (_, i) => mkDay(2026, 9, 6 + i, i % 3 === 0 ? 0 : Math.round(Math.pow(i + 2, 3) * 1000))),
+	Array.from({ length: 30 }, (_, i) => mkDay(2026, 8, 14 + i, i % 4 === 0 ? 0 : Math.round(1e8 * Math.pow(1.2, i % 9)))),
+	Array.from({ length: 90 }, (_, i) => {
+		const d = new Date(2026, 5, 15 + i);
+		const mm = String(d.getMonth() + 1).padStart(2, "0");
+		const dd = String(d.getDate()).padStart(2, "0");
+		return { day: "2026-" + mm + "-" + dd, value: (i % 5 === 0 ? 0 : Math.round(Math.pow(i % 11 + 1, 2) * 12345)) };
+	}),
 	// full year (leap-adjacent sanity, varied totals, sparse)
 	Array.from({ length: 365 }, (_, i) => {
 		const d = new Date(2026, 0, 1 + i);
@@ -115,22 +136,54 @@ const datasets = [
 	[mkDay(2025, 12, 30, 5), mkDay(2026, 1, 2, 6), mkDay(2026, 1, 5, 7)],
 ];
 
+// series for scaleBars/scaleArea: accept {day, value} or {day, total}
+function asSeries(rows) {
+	return rows.map((r) => ({ day: r.day, value: Number.isFinite(r.value) ? r.value : r.total }));
+}
+
 let failures = 0;
+const total = (label, a, b) => {
+	const sa = JSON.stringify(a);
+	const sb = JSON.stringify(b);
+	if (sa !== sb) {
+		failures += 1;
+		console.log("MISMATCH " + label + ":\n  charts : " + sa + "\n  inline : " + sb);
+		return false;
+	}
+	return true;
+};
+
+// heatmapGrid battery (unchanged from the heatmap redesign)
 const optsList = [{}, { gap: 4 }, { startWeekday: 1 }, { gap: 2, startWeekday: 6 }];
+let heatCases = 0;
 datasets.forEach((days, i) => {
 	optsList.forEach((opts, j) => {
-		const a = charts.heatmapGrid(days, 11, opts);
-		const b = inline.heatmapGrid(days, 11, opts);
-		const sa = JSON.stringify(a);
-		const sb = JSON.stringify(b);
-		if (sa !== sb) {
-			failures += 1;
-			console.log("MISMATCH dataset#" + i + " opts#" + j + ":\n  charts : " + sa + "\n  inline : " + sb);
-		}
+		heatCases += 1;
+		total("heatmapGrid dataset#" + i + " opts#" + j, charts.heatmapGrid(days, 11, opts), inline.heatmapGrid(days, 11, opts));
 	});
 });
-const totalCases = datasets.length * optsList.length;
-console.log("functional equivalence: " + (totalCases - failures) + "/" + totalCases + " datasets×opts passed");
+
+// scaleBars / scaleArea / barRects battery (tooltip day pass-through)
+let scaleCases = 0;
+datasets.forEach((rows, i) => {
+	const series = asSeries(rows);
+	[560, 300].forEach((w) => {
+		const h = 150;
+		scaleCases += 1;
+		total("scaleBars dataset#" + i + " w=" + w, charts.scaleBars(series, w, h), inline.scaleBars(series, w, h));
+		scaleCases += 1;
+		total("scaleArea dataset#" + i + " w=" + w, charts.scaleArea(series, w, h), inline.scaleArea(series, w, h));
+		[1, 2, 0].forEach((pad) => {
+			scaleCases += 1;
+			const aRects = charts.barRects(charts.scaleBars(series, w, h).rects, w, h, { pad });
+			const bRects = inline.barRects(inline.scaleBars(series, w, h).rects, w, h, { pad });
+			total("barRects dataset#" + i + " w=" + w + " pad=" + pad, aRects, bRects);
+		});
+	});
+});
+
+const totalCases = heatCases + scaleCases;
+console.log("functional equivalence: " + (totalCases - failures) + "/" + totalCases + " datasets×opts passed (heatmapGrid " + heatCases + " + scale/bar " + scaleCases + ")");
 if (failures > 0) process.exit(1);
 
 // --- 2. key-token parity ---------------------------------------------------
@@ -153,8 +206,14 @@ const geomTokens = [
 	"months",
 	"dataMonths",
 	"weeks <= 4",
+	"day: s.day",
+	"day: v.day",
+	"2026-09-14 tooltip",
 ];
-const renderTokens = ["无数据", "总用量", "峰值", "tokens/日", "灰格", "--du-heat-peak-stroke", "--du-heat-month-fill"];
+const renderTokens = [
+	"无数据", "总用量", "峰值", "tokens/日", "灰格", "--du-heat-peak-stroke", "--du-heat-month-fill",
+	"du_tip", "du_tipDay", "du_tipValue", "du_tipUnit", "du_tipMuted", "du_tipL", "du_tipR", "du_tipD", "--du-tip-ax", "--du-tip-ay", "tipTokens", "onMouseMove", "tipAtEvent", "hitAreaPoints", "hitBarRects", "hitGridCells",
+];
 let tokenFail = 0;
 for (const tok of geomTokens) {
 	const inCharts = chartsSrc.includes(tok);

@@ -1,0 +1,23 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -27,7 +27,8 @@
+ 	".svg": "image/svg+xml",
+ 	".json": "application/json",
+ 	".map": "application/json",
+-	".webmanifest": "application/manifest+json"
++	".webmanifest": "application/manifest+json",
++	".gz": "application/gzip"
+ };
+ const STATIC_MISS_CODES = new Set([
+ 	"ENOENT",
+@@ -77,7 +78,9 @@
+ function apply(ctx, config) {
+ 	const distIndex = config.distIndex;
+ 	const distRoot = dirname(distIndex);
+-	const renderIndex = async () => ctx.webServer.renderIndex(await readFile(distIndex, "utf8"));
++	const renderIndex = async () => {
++		return ctx.webServer.renderIndex(await readFile(distIndex, "utf8")).replace(/<head(?:\s[^>]*)?>/i, (open) => `${open}<base href="/">`);
++	};
+ 	ctx.effect(() => ctx.webServer.registerFallback(async (req, res) => {
+ 		if (req.method !== "GET" && req.method !== "HEAD") {
+ 			res.writeHead(405);

@@ -1,0 +1,121 @@
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-bash-local/lib/index.js	2026-09-11 14:27:15.069962243 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-bash-local/lib/index.js	2026-09-12 14:56:16.146784601 +0800
+@@ -1,10 +1,11 @@
+ import z from "@deepseek-ai/schemastery";
+ import { SHELL_SETTINGS_NAMESPACE, ShellExecutor } from "@deepseek-ai/dsh-shell";
++import { installSettingsSection } from "@deepseek-ai/dsh-settings";
+ import { MAX_TIMER_DELAY_MS, clampTimeout, deadline, timeoutOf } from "@deepseek-ai/dsh-timeout";
+ //#region lib/types/index.js
+ /**
+ * Local Service Provider for the bash capability seam over the subprocess
+-* capability seam. Public commands run as `bash -c` in a provider-managed range
++* capability seam. Public commands run as `bash -c` in a managed process group spawned
+ * through `ctx.subprocess`; subclasses may reuse the same mechanics with an
+ * explicit argv. This executor owns command defaulting, deadlines and cause
+ * classification, the model-friendly terminal environment, and the model-facing
+@@ -117,9 +118,9 @@
+ 	if (resolved.graceMs > MAX_TIMER_DELAY_MS) throw new Error(`bash-local: graceMs must be no greater than ${MAX_TIMER_DELAY_MS}`);
+ }
+ /**
+-* Local bash executor over `ctx.subprocess`. Bounded output, spill files,
+-* managed-range SIGTERM→SIGKILL escalation, and quiescence are the subprocess
+-* service's mechanics; this executor supplies their configured budgets per spawn, so a
++* Local bash executor over `ctx.subprocess`. Bounded output, spill files, and
++* process-group SIGTERM→SIGKILL escalation are the subprocess service's
++* mechanics; this executor supplies their configured budgets per spawn, so a
+ * still-running background process stays managed (killed and joined at
+ * composition teardown) even across an executor reload.
+ */
+@@ -144,14 +145,12 @@
+ 		const entry = config;
+ 		assertServiceableBashConfig(entry);
+ 		this.source = () => entry;
+-		ctx.inject(["settings"], (settingsCtx) => {
+-			settingsCtx.settings.installSection(ctx, SHELL_SETTINGS_NAMESPACE, LocalBashExecutor.Config, entry, {
+-				validate: assertServiceableBashConfig,
+-				setSource: (current) => {
+-					this.source = current;
+-				},
+-				onChange: () => {}
+-			});
++		installSettingsSection(ctx, SHELL_SETTINGS_NAMESPACE, LocalBashExecutor.Config, entry, {
++			validate: assertServiceableBashConfig,
++			setSource: (current) => {
++				this.source = current;
++			},
++			onChange: () => {}
+ 		});
+ 	}
+ 	/**
+@@ -263,20 +262,20 @@
+ 	}
+ 	/**
+ 	* Start an explicit argv with the background lifecycle, environment, output,
+-	* cancellation, and managed-range ownership semantics of this executor.
++	* cancellation, and process-tree ownership semantics of this executor.
+ 	* Subclasses use this after replacing the public command's shell argv at an
+ 	* execution boundary.
+ 	* @param spec - resolved execution settings and caller-owned command metadata.
+ 	* @param argv - exact executable and arguments to hand to `ctx.subprocess`.
+-	* @returns the live background handle; provider rejection settles it as killed.
++	* @returns the live background handle; spawn rejection settles it as killed.
+ 	*/
+ 	startArgv(spec, argv) {
+ 		const running = this.ctx.subprocess.spawn(this.spawnSpec(spec, argv, this.config.maxOutputBytes, spec.signal));
+ 		const collected = LocalBashExecutor.collected(running);
+-		let providerFailureNote;
+-		const consumeProviderFailure = () => {
+-			const note = providerFailureNote ?? "";
+-			providerFailureNote = void 0;
++		let spawnFailureNote;
++		const consumeSpawnFailure = () => {
++			const note = spawnFailureNote ?? "";
++			spawnFailureNote = void 0;
+ 			return note;
+ 		};
+ 		let stdoutOffset = 0;
+@@ -292,21 +291,15 @@
+ 				this.onProcessDone(proc, collected.stderr.readFrom(0).text, false);
+ 			}, (error) => {
+ 				proc.status = "killed";
+-				let detail = "unprintable provider failure";
+-				try {
+-					detail = String(error);
+-				} catch {}
+-				providerFailureNote = `subprocess failed before reporting an outcome: ${detail}`;
+-				this.onProcessDone(proc, providerFailureNote, true, error);
++				spawnFailureNote = `spawn failed: ${String(error)}`;
++				this.onProcessDone(proc, spawnFailureNote, true, error);
+ 			}),
+ 			readOutput: () => {
+ 				const out = collected.stdout.readFrom(stdoutOffset);
+ 				const err = collected.stderr.readFrom(stderrOffset);
+ 				stdoutOffset = out.nextOffset;
+ 				stderrOffset = err.nextOffset;
+-				const providerFailure = consumeProviderFailure();
+-				const failureSeparator = err.text.length > 0 && !err.text.endsWith("\n") ? "\n" : "";
+-				const errText = err.text + (providerFailure.length > 0 ? `${failureSeparator}${providerFailure}` : "");
++				const errText = err.text.length > 0 ? err.text : consumeSpawnFailure();
+ 				const separator = out.text.length > 0 && !out.text.endsWith("\n") ? "\n" : "";
+ 				return {
+ 					delta: out.text + (errText.length > 0 ? `${separator}[stderr]\n${errText}` : ""),
+@@ -326,15 +319,15 @@
+ 	}
+ 	/**
+ 	* Settlement hook for subclasses that attach execution facts to a process.
+-	* Called after exit facts or provider-failure output are stamped and before
++	* Called after exit facts or spawn-failure output are stamped and before
+ 	* {@link ShellProcess.done} resolves. The base implementation is intentionally
+ 	* empty.
+ 	* @param _proc - the settled process handle.
+ 	* @param _stderr - the process's retained stderr tail used by subclasses for settlement classification.
+-	* @param _providerRejected - whether the subprocess promise rejected without a direct outcome.
+-	* @param _providerError - the provider rejection reason, which may itself be undefined.
++	* @param _spawnFailed - whether the subprocess promise rejected before a process started.
++	* @param _spawnError - the original spawn rejection reason, which may itself be undefined.
+ 	*/
+-	onProcessDone(_proc, _stderr, _providerRejected, _providerError) {}
++	onProcessDone(_proc, _stderr, _spawnFailed, _spawnError) {}
+ };
+ //#endregion
+ export { ENV_OVERRIDES, LocalBashExecutor, LocalBashExecutor as default, assertServiceableBashConfig };

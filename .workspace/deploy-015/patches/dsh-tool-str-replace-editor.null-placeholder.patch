@@ -1,0 +1,73 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -154,6 +154,7 @@
+ 	return `New file created successfully at: ${target.displayPath}`;
+ }
+ async function replaceInFile(ctx, policy, path, oldStr, newStr, exec) {
++	if (newStr === null) throw new Error("Parameter `new_str` must be omitted or contain a string for command: str_replace");
+ 	const sandboxPolicy = policy.resolve(exec);
+ 	const target = await resolveTarget(ctx, path, exec.signal);
+ 	const intent = await ctx.waterfall("fs/edit-intent", target, exec, () => void 0);
+@@ -252,7 +253,7 @@
+ 			kind: "edit",
+ 			locations: [{
+ 				path: args.path,
+-				...args.insert_line === void 0 ? {} : { line: Math.max(1, args.insert_line + 1) }
++				...args.insert_line === void 0 || args.insert_line === null ? {} : { line: Math.max(1, args.insert_line + 1) }
+ 			}]
+ 		};
+ 	}
+@@ -281,25 +282,27 @@
+ 				description: "Absolute path to file or directory, e.g. `/repo/file.py` or `/repo`."
+ 			},
+ 			file_text: {
+-				type: "string",
+-				description: "Required parameter of `create` command, with the content of the file to be created."
++				oneOf: [{ type: "string" }, { type: "null" }],
++				description: "Required string parameter of `create` command, with the content of the file to be created. A null placeholder is treated as omitted by commands that do not use this parameter."
+ 			},
+ 			insert_line: {
+-				type: "integer",
+-				description: "Required parameter of `insert` command. The `new_str` will be inserted AFTER the line `insert_line` of `path`."
++				oneOf: [{ type: "integer" }, { type: "null" }],
++				description: "Required integer parameter of `insert` command. The `new_str` will be inserted AFTER the line `insert_line` of `path`. A null placeholder is treated as omitted by commands that do not use this parameter."
+ 			},
+ 			new_str: {
+-				type: "string",
+-				description: "Optional parameter of `str_replace` command containing the new string (if not given, no string will be added). Required parameter of `insert` command containing the string to insert."
++				oneOf: [{ type: "string" }, { type: "null" }],
++				description: "Optional string parameter of `str_replace` command containing the new string (if omitted, no string will be added). Required string parameter of `insert` command containing the string to insert. A null placeholder is accepted only by commands that do not use this parameter."
+ 			},
+ 			old_str: {
+-				type: "string",
+-				description: "Required parameter of `str_replace` command containing the string in `path` to replace."
++				oneOf: [{ type: "string" }, { type: "null" }],
++				description: "Required string parameter of `str_replace` command containing the string in `path` to replace. A null placeholder is treated as omitted by commands that do not use this parameter."
+ 			},
+ 			view_range: {
+-				type: "array",
+-				items: { type: "integer" },
+-				description: "Optional parameter of `view` command when `path` points to a file. If none is given, the full file is shown. If provided, the file will be shown in the indicated line number range, e.g. [11, 12] will show lines 11 and 12. Indexing at 1 to start. Setting `[start_line, -1]` shows all lines from `start_line` to the end of the file."
++				oneOf: [{
++					type: "array",
++					items: { type: "integer" }
++				}, { type: "null" }],
++				description: "Optional parameter of `view` command when `path` points to a file. If omitted or null, the full file is shown. If provided, the file will be shown in the indicated line number range, e.g. [11, 12] will show lines 11 and 12. Indexing at 1 to start. Setting `[start_line, -1]` shows all lines from `start_line` to the end of the file."
+ 			}
+ 		},
+ 		output: {
+@@ -311,10 +314,10 @@
+ 		},
+ 		async execute(args, exec) {
+ 			switch (args.command) {
+-				case "view": return viewPath(ctx, args.path, args.view_range, config.maxOutputChars, exec);
+-				case "create": return createFile(ctx, policy, args.path, args.file_text, exec);
+-				case "str_replace": return replaceInFile(ctx, policy, args.path, args.old_str, args.new_str, exec);
+-				case "insert": return insertInFile(ctx, policy, args.path, args.insert_line, args.new_str, exec);
++				case "view": return viewPath(ctx, args.path, args.view_range ?? void 0, config.maxOutputChars, exec);
++				case "create": return createFile(ctx, policy, args.path, args.file_text ?? void 0, exec);
++				case "str_replace": return replaceInFile(ctx, policy, args.path, args.old_str ?? void 0, args.new_str, exec);
++				case "insert": return insertInFile(ctx, policy, args.path, args.insert_line ?? void 0, args.new_str ?? void 0, exec);
+ 			}
+ 		},
+ 		presentCall: presentEditorCall

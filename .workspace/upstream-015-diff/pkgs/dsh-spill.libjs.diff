@@ -1,0 +1,11 @@
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-spill/lib/index.js	2026-09-11 14:27:15.069962243 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-spill/lib/index.js	2026-09-12 14:56:16.911897468 +0800
+@@ -20,7 +20,7 @@
+ //#region lib/types/index.js
+ /**
+ * Service Definition for the spill storage capability seam (`ctx.spillStore`): an abstract service defining WHAT a
+-* spill backend does — persist oversized text and return a model-facing
++* spill backend does — persist a tool's oversized text and return a model-facing
+ * locator plus retrieval guidance — without saying HOW. Implementations
+ * subclass {@link SpillStore} and register as the `spillStore` service;
+ * `@deepseek-ai/dsh-spill-local` (host filesystem) is the first.

@@ -1,0 +1,376 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-anonymous-user-id/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-anonymous-user-id/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-anonymous-user-id/README.i18n.yaml	2026-09-11 14:27:15.112962854 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-anonymous-user-id/README.i18n.yaml	2026-09-12 14:56:16.139815572 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/identity/anonymous-user-id/README.md
+-README.md: 116166ebbbf03b9070ec9ee8a5050585e2b4d136
+-README.zh.md: 8e90c0d8dd09ab9ebfd4be45db82ca7220017455
++README.md: fb9d8f8046f41aed7c0bc8aa8cede46f9bb8c93b
++README.zh.md: 738289fd6b132e3fd5b6cc5a89dbe8ca1ffb5e42
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-anonymous-user-id/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-anonymous-user-id/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-anonymous-user-id/README.md	2026-09-11 14:27:15.081962414 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-anonymous-user-id/README.md	2026-09-12 14:56:16.139285903 +0800
+@@ -1,111 +1,22 @@
+----
+-description: "Anonymous per-harness-home identity for users and maintainers tracing how telemetry, feedback acknowledgement, and DeepSeek provider requests correlate records."
+-kind: "package-library"
+----
+-
+ # @deepseek-ai/dsh-anonymous-user-id
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-DeepSeek Harness uses one anonymous identifier per harness home to correlate telemetry, feedback, and DeepSeek requests from the same installation without identifying the user. The random UUID is stored in `$DSH_HOME/.anonymous-user-id` (`~/.dsh` by default), persists across restarts, and is regenerated after you delete the file. Different harness homes use different identifiers, and the value contains no machine or account data. Built-in features create and attach it automatically; package consumers can reuse the same value for installation-scoped correlation, but cannot join records across homes.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## Use this package
+-
+-When you want the records your installation sends out to be recognizable as coming from the same harness home — telemetry, feedback, and DeepSeek requests all carry one shared id — this package is what provides it. There is nothing to install or configure: the id appears automatically, and the shipped feedback, telemetry, and DeepSeek features already use it. Do not use it to identify a user or to join records across different homes; it is anonymous and home-scoped.
+-
+-### What the id does for you
+-
+-Three things your installation sends out carry the same id, so records line up across all of them:
+-
+-- **Session telemetry** — your telemetry exports carry the id as the `user.id` resource attribute, so a collector can group an installation's records.
+-- **Feedback** — each feedback acknowledgement names the anonymous installation that recorded it.
+-- **DeepSeek requests** — every provider request carries the `x-deepseek-harness-user-id` header, so usage can be attributed per installation.
+-
+-### Observing and resetting the id
+-
+-The id lives in `$DSH_HOME/.anonymous-user-id` (`~/.dsh` by default) as a plain UUID text file. Delete that file to get a fresh id at the next launch; the running process keeps its current id until it exits. Separate harness homes keep separate ids, and no machine or account detail ever goes into the value.
+-
+-### Using it in your own package
+-
+-When you build a feature that should share the installation's anonymous id, import the value once and reuse it — telemetry, feedback, and DeepSeek already use the same id, so your records line up with theirs:
+-
+-```ts
+-import { getOrCreateAnonymousUserId } from '@deepseek-ai/dsh-anonymous-user-id'
+-
+-const userId = getOrCreateAnonymousUserId() // stable for the process lifetime
+-```
+-
+-The value is stable for the process and matches what the built-in features use; it changes only when the file is deleted and a later launch mints a replacement. Even when the home directory cannot be written, the value still works for the current run, so records keep flowing.
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
+-
+-<details>
+-<summary>Implementation internals — click to expand</summary>
+-
+-This section explains the design decisions behind the package and points at the code that realizes them; the observable behavior is fully covered in [Use this package](#use-this-package).
++Shared anonymous identity for session telemetry, direct feedback acknowledgement, and DeepSeek provider requests. `getOrCreateAnonymousUserId()` returns a random UUID v4 scoped to one harness home, persisted as the bare line `$DSH_HOME/.anonymous-user-id` (`~/.dsh/.anonymous-user-id` when `DSH_HOME` is unset). The OpenTelemetry backend reports it as Resource `user.id`; `/feedback` includes the same value in its acknowledgement; and `dsh-llm-deepseek` sends it as `x-deepseek-harness-user-id`, allowing the receiving systems to correlate records without independently generated identities.
+ 
+-### Design philosophy
++The identity is never derived from the hostname, network address, git remote, or another identifying source. Deleting `.anonymous-user-id` resets the identity on the next process launch. Separate harness homes have separate identities.
+ 
+-- **Random, never derived.** The id comes from `crypto.randomUUID()`; it is never derived from the hostname, network address, git remote, or any other identifying source, so anonymity is a property of the mint.
+-- **Synchronous and memoized.** One process touches the disk once: reads and writes are synchronous, and the result is memoized per resolved file path.
+-- **Best-effort persistence.** A write failure still returns a usable id for the run, so telemetry and feedback never block on an unwritable home.
+-- **Library, not plugin.** There is no Cordis plugin entry or config. No invariant companion is published because the package owns no event stream or public mutable relation to compare without creating the id as a side effect.
++## Storage contract
+ 
+-### Source map
++Reads and writes are synchronous because both boot-time telemetry construction and direct command execution need one API. The result is memoized per resolved file path for the process lifetime. A first writer uses exclusive creation and a concurrent loser adopts the persisted winner; a corrupt file is replaced. Persistence is best-effort, so an unwritable home still receives a process-local UUID rather than blocking telemetry or feedback.
+ 
+-| File | Role |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | Library entry: `getOrCreateAnonymousUserId`, file persistence, per-path memoization |
+-| — | No runtime invariant companion is published; the API owns one private memo and one best-effort file, with no independent event stream or public mutable relation for a companion to compare without creating the identity as a side effect. |
+-| [`tests/anonymous-user-id.spec.ts`](tests/anonymous-user-id.spec.ts) | Exercised behavior: mint, persistence, corruption, concurrency, memoization |
++## Composition
+ 
+-### The API
++This package is a shared library, not a Cordis plugin. Consumers import `getOrCreateAnonymousUserId()` directly. Its invariant companion is intentionally empty because the package owns no event stream or public mutable relation that can be checked without creating the identity as a side effect. `DSH_TELEMETRY_DISABLED` stops telemetry export only; it does not suppress direct feedback acknowledgement or the DeepSeek provider header.
+ 
+-The package exposes one function that returns the installation's anonymous id, minting and persisting it on first use; the exact signature, options, and defaults live in `src/index.ts`.
+-
+-### Storage contract
+-
+-The file is a bare UUID line named by `ANONYMOUS_USER_ID_FILE_NAME`, validated against a UUID pattern on read. A first writer uses exclusive creation (`wx`); a concurrent loser rereads and adopts the winner's value. A corrupt or unreadable file falls through to mint-and-overwrite. Memoization is keyed by resolved file path, so distinct homes never share an id.
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-Read these pages when the package-level contract is not enough. They move from the identity group map to the home-path resolution this package builds on and the features that use the id.
+-
+-- [identity group map](../README.md) — the sibling packages and group scope.
+-- [dsh-home-paths](../../util/home-paths/README.md) — owns `$DSH_HOME` and `~/.dsh` resolution.
+-- [dsh-session-telemetry-otel](../../session/session-telemetry-otel/README.md) — reports the id as the OTel Resource `user.id`.
+-- [dsh-command-feedback](../../feedback/command-feedback/README.md) — embeds the id in the feedback acknowledgement.
+-- [dsh-llm-deepseek](../../llm/llm-deepseek/README.md) — sends `x-deepseek-harness-user-id` on provider requests.
+-- [Session telemetry subsystem](../../../docs/subsystems/session-telemetry.md) — the telemetry seam and its backend contract.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+-None, as the shared identifier reaches DeepSeek only as model-hidden HTTP metadata and registers nothing model-facing.
++None, as the identifier reaches DeepSeek only as model-hidden HTTP transport metadata and never enters the request body, prompt, or model-visible content.
+ 
+ #### KV Cache effect
+ 
+@@ -113,31 +24,7 @@
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits describe when the id is a poor fit or needs special attention. They are current package constraints, not a general comparison of anonymity approaches or a task backlog.
+-
+-- **No recovery after deletion** — losing the file mints a new anonymous identity by design; recovery would require stable derivation material that weakens anonymity.
++- **No recovery after deletion** — loss mints a new anonymous identity by design; recovery would require stable derivation material that weakens anonymity.
+ - **Best-effort concurrency** — a reader landing in the narrow interval between a concurrent process's exclusive create and completed write can use a different in-memory UUID for that run; later launches converge on the persisted value.
+ - **No cross-home identity** — different `$DSH_HOME` values cannot be correlated.
+ - **Configured DeepSeek gateways receive the id** — `dsh-llm-deepseek` sends the stable header to its resolved `baseURL`, including deployment overrides, independently of telemetry sharing mode.
+-- **Deleting the file does not reset the current process** — memoization keeps the run's id until the next launch.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-This Dev Note is working context for maintainers: open questions and directions that are not decided. It is explicitly non-authoritative — shipped behavior, limits, and accepted rationale live in the sections above and the package code, and conclusions migrate there once they stabilize.
+-
+-#### Open: file-format evolution
+-
+-The persistence contract is a bare UUID line with no version marker. Adding a second value beside the id, or wrapping the line in a container, has no migration story for existing files; a versioned line format is one way to make such a change safe.
+-
+-#### Open: invariant observation point
+-
+-No invariant companion is published because no relation can be checked without creating the id as a side effect. A future observation point could support comparing a re-read of the persisted file against the memoized id.
+-
+-</details>
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-anonymous-user-id/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-anonymous-user-id/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-anonymous-user-id/README.zh.md	2026-09-11 14:27:15.087962499 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-anonymous-user-id/README.zh.md	2026-09-12 14:56:16.139285903 +0800
+@@ -1,143 +1,30 @@
+----
+-description: "面向用户与维护者的匿名按 harness home 身份说明，用于追踪遥测、反馈确认与 DeepSeek 提供方请求如何关联记录。"
+-kind: "package-library"
+----
+-
+ # @deepseek-ai/dsh-anonymous-user-id
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-DeepSeek Harness 为每个 harness home 使用一个匿名标识符，以关联同一套安装产生的遥测、反馈与 DeepSeek 请求，同时不识别用户身份。该随机 UUID 存储在 `$DSH_HOME/.anonymous-user-id`（默认 `~/.dsh`）中，可跨重启保留，并在你删除文件后重新生成。不同 harness home 使用不同的标识符，且该值不包含机器或账户数据。内置功能会自动创建并附加该值；包使用者可以复用同一个值进行安装范围的关联，但无法跨 home 关联记录。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## 使用本包
+-
+-当你希望本机安装外发的记录能被识别为来自同一个 harness home——遥测、反馈与 DeepSeek 请求都携带同一个共享 id——本包就是提供它的地方。无需安装或配置任何东西：id 会自动出现，已随附的反馈、遥测与 DeepSeek 功能已经在使用它。不要用它来识别用户，也不要用它关联不同 home 之间的记录；它是匿名的且限定于单个 home。
+-
+-### 该 id 能为你做什么
+-
+-你的安装外发的三类内容携带同一个 id，因此记录在它们之间可以相互对应：
+-
+-- **会话遥测**——你的遥测导出会以 `user.id` Resource 属性携带该 id，采集器因此可以按安装分组记录。
+-- **反馈**——每条反馈确认都会指名记录该反馈的匿名安装。
+-- **DeepSeek 请求**——每次提供方请求都会携带 `x-deepseek-harness-user-id` 标头，因此可以按安装归因用量。
+-
+-### 查看与重置 id
+-
+-该 id 存放在 `$DSH_HOME/.anonymous-user-id`（默认 `~/.dsh`）中，是一个纯 UUID 文本文件。删除该文件即可在下次启动时获得全新 id；正在运行的进程在退出前会一直保留当前 id。不同 harness home 各自保留独立 id，值中永远不会包含任何机器或账户信息。
+-
+-### 在自己的包中使用
+-
+-当你构建的功能需要共享该安装的匿名 id 时，导入该值并复用一次即可——遥测、反馈与 DeepSeek 已经在使用同一个 id，因此你的记录能与它们相互对应：
+-
+-```ts
+-import { getOrCreateAnonymousUserId } from '@deepseek-ai/dsh-anonymous-user-id'
+-
+-const userId = getOrCreateAnonymousUserId() // stable for the process lifetime
+-```
+-
+-该值在进程内保持稳定，并与内置功能使用的值一致；只有当文件被删除、后续启动生成替代值时才会改变。即使 home 目录不可写，该值在本次运行中依然可用，记录因此不会中断。
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## 理解实现
+-
+-<details>
+-<summary>实现细节——点击展开</summary>
+-
+-本节解释本包背后的设计决策，并指出实现它们的代码位置；可观察行为已在[使用本包](#use-this-package)中完整说明。
++会话遥测、直接反馈确认与 DeepSeek 提供方请求共用的匿名身份。`getOrCreateAnonymousUserId()` 返回一个限定于单个 harness home 的随机 UUID v4，并以裸行形式持久化到 `$DSH_HOME/.anonymous-user-id`（未设置 `DSH_HOME` 时为 `~/.dsh/.anonymous-user-id`）。OpenTelemetry 后端将其作为 Resource 的 `user.id` 上报；`/feedback` 在确认文本中包含同一个值；`dsh-llm-deepseek` 则通过 `x-deepseek-harness-user-id` 发送该值，使接收系统无需独立生成身份即可关联记录。
+ 
+-### 设计理念
++该身份绝不从 hostname、网络地址、git remote 或其他可用于识别身份的来源派生。删除 `.anonymous-user-id` 后，下次启动进程时会重置身份。不同 harness home 拥有不同身份。
+ 
+-- **随机生成，绝不派生。** id 来自 `crypto.randomUUID()`；绝不从 hostname、网络地址、git remote 或任何其他可识别来源派生，因此匿名性是生成过程的属性。
+-- **同步且记忆化。** 一个进程只触碰一次磁盘：读写都是同步的，结果按解析后的文件路径记忆化。
+-- **Best-effort 持久化。** 写入失败仍会为本次运行返回可用 id，遥测与反馈因此不会因 home 不可写而阻塞。
+-- **库而非插件。** 没有 Cordis 插件入口或配置。不发布不变式伴生入口，因为本包不拥有任何事件流或公开可变关系，无法在不产生创建 id 这一副作用的情况下比较。
++## 存储约定
+ 
+-### 源码地图
++读写采用同步方式，因为启动时构造遥测和直接执行命令都需要使用同一个 API。结果在进程生命周期内按解析后的文件路径缓存。首个写入方采用独占创建；并发竞争中失败的一方会采用已持久化的胜出值。损坏的文件会被替换。持久化采用 best-effort，因此即使 home 不可写，系统仍会返回进程本地 UUID，而不会阻塞遥测或反馈。
+ 
+-| 文件 | 职责 |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | 库入口：`getOrCreateAnonymousUserId`、文件持久化、按路径记忆化 |
+-| — | 不发布运行时不变式伴生入口；唯一的关系是私有的且带副作用。 |
+-| [`tests/anonymous-user-id.spec.ts`](tests/anonymous-user-id.spec.ts) | 已演练行为：生成、持久化、损坏、并发、记忆化 |
++## 组合
+ 
+-### API
++本包是共享库，并非 Cordis 插件。消费方直接导入 `getOrCreateAnonymousUserId()`。其不变式伴生插件刻意留空，因为本包既不拥有事件流，也不拥有任何可以在不触发创建身份这一副作用的情况下检查的公开可变关系。`DSH_TELEMETRY_DISABLED` 只会停止遥测导出，不会禁止直接反馈确认或 DeepSeek 提供方标头。
+ 
+-本包暴露一个函数，返回该安装的匿名 id，并在首次使用时生成并持久化；确切的签名、选项与默认值见 `src/index.ts`。
+-
+-### 存储约定
+-
+-文件是名为 `ANONYMOUS_USER_ID_FILE_NAME` 的裸 UUID 行，读取时按 UUID 模式校验。首个写入方使用独占创建（`wx`）；并发落败方重新读取并采用胜出方的值。损坏或不可读的文件会落入生成并覆盖的路径。记忆化按解析后的文件路径为键，因此不同 home 永远不会共享 id。
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-当包级约定不够用时阅读以下页面。它们从 identity 组映射逐步进入本包所依赖的 home 路径解析，以及使用该 id 的功能。
+-
+-- [identity 组映射](../README.zh.md)——兄弟包与组范围。
+-- [dsh-home-paths](../../util/home-paths/README.zh.md)——负责 `$DSH_HOME` 与 `~/.dsh` 的解析。
+-- [dsh-session-telemetry-otel](../../session/session-telemetry-otel/README.zh.md)——将该 id 作为 OTel Resource `user.id` 上报。
+-- [dsh-command-feedback](../../feedback/command-feedback/README.zh.md)——将 id 嵌入反馈确认。
+-- [dsh-llm-deepseek](../../llm/llm-deepseek/README.zh.md)——在提供方请求中发送 `x-deepseek-harness-user-id`。
+-- [会话遥测子系统](../../../docs/subsystems/session-telemetry.zh.md)——遥测 seam 及其后端约定。
+-
+------
+-
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+-无，因为该共享标识符只会作为模型不可见的 HTTP 元数据发送给 DeepSeek，且不注册任何面向模型的内容。
++无，因为该标识符只会作为模型不可见的 HTTP 传输元数据发送给 DeepSeek，绝不会进入请求正文、提示词或模型可见内容。
+ 
+ #### KV Cache 影响
+ 
+ 无；该传输标头既不会改变 token，也不会改变模型可见前缀。
+ 
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制说明该 id 何时不合适或需要特别注意。它们是当前包约束，不是匿名性方案的通用对比，也不是任务积压。
+-
+-- **删除后无法恢复**——文件丢失后会按设计生成新的匿名身份；恢复需要稳定的派生材料，这会削弱匿名性。
+-- **Best-effort 并发**——如果读取方恰好落在并发进程完成独占创建但尚未写完的狭窄时间窗内，本次运行可能使用不同的内存 UUID；后续启动会收敛到已持久化的值。
+-- **没有跨 home 身份**——不同 `$DSH_HOME` 值之间无法关联。
+-- **已配置的 DeepSeek gateway 会收到该 id**——`dsh-llm-deepseek` 会把稳定标头发送至解析后的 `baseURL`（包括部署覆盖），且不受遥测共享模式影响。
+-- **删除文件不会重置当前进程**——记忆化会让本次运行的 id 一直保留到下次启动。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
+-
+-本开发备注是维护者的工作上下文：开放问题与尚未决定的探索方向。它明确不具权威性——已交付的行为、限制与既定理由以上文和包代码为准，结论一旦稳定就迁移到对应归属。
+-
+-#### 开放：文件格式演进
+-
+-持久化约定是没有任何版本标记的裸 UUID 行。在 id 旁边增加第二个值，或用容器包裹该行，对现有文件都没有迁移方案；带版本的行格式是让此类变更安全的一种方式。
+-
+-#### 开放：不变式观测点
+-
+-不发布不变式伴生入口，因为任何关系都无法在不产生创建 id 这一副作用的情况下检查。未来若有安全的观测点，可以把重新读取的持久化文件与记忆化的 id 进行比较。
++## 已知限制与暂缓工作
+ 
+-</details>
++- **删除后无法恢复**：身份丢失后会按设计生成新的匿名身份；若要恢复身份，就需要稳定的派生材料，这会削弱匿名性。
++- **Best-effort 并发**：如果读取方恰好落在并发进程完成独占创建但尚未写完的狭窄时间窗内，本次运行可能使用不同的内存 UUID；后续启动会收敛到已持久化的值。
++- **没有跨 home 身份**：不同 `$DSH_HOME` 值之间无法关联。
++- **已配置的 DeepSeek gateway 会收到该 id**：`dsh-llm-deepseek` 会把稳定标头发送至解析后的 `baseURL`（包括部署覆盖），且不受遥测共享模式影响。
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-anonymous-user-id/lib: invariant.js
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-anonymous-user-id/lib/types: invariant.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-anonymous-user-id/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-anonymous-user-id/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-anonymous-user-id/package.json	2026-09-11 14:27:15.075962328 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-anonymous-user-id/package.json	2026-09-12 14:56:16.139285903 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-anonymous-user-id",
+   "description": "Shared anonymous user identity for DeepSeek Harness telemetry and feedback correlation",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -18,22 +18,29 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./src/*": "./src/*",
+     "./package.json": "./package.json"
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/types/**/*.d.ts"
+   ],
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/dsh-brand": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2",
+-    "@deepseek-ai/dsh-home-paths": "^0.1.5-rc.2"
++    "@deepseek-ai/dsh-brand": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-home-paths": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/dsh-brand": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-home-paths": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-brand": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-home-paths": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   }
+ }
+\ No newline at end of file

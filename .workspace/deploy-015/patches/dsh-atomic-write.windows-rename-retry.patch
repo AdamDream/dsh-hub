@@ -1,0 +1,46 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -13,6 +13,34 @@
+ * replaced; readers stay lock-free because the rename commit is atomic.
+ * @module @deepseek-ai/dsh-atomic-write
+ */
++const WINDOWS_TRANSIENT_RENAME_ERRORS = new Set([
++	"EACCES",
++	"EBUSY",
++	"EPERM"
++]);
++const WINDOWS_RENAME_RETRY_INITIAL_MS = 20;
++const WINDOWS_RENAME_RETRY_MAX_MS = 200;
++const WINDOWS_RENAME_RETRY_LIMIT = 8;
++/** Whether Windows reported temporary interference with an atomic replacement. */
++function isTransientWindowsRenameError(error) {
++	if (process.platform !== "win32") return false;
++	return WINDOWS_TRANSIENT_RENAME_ERRORS.has(error?.code ?? "");
++}
++/** Replace the target after bounded retries for transient Windows interference. */
++async function renameAtomicTemp(temp, filename) {
++	let delay = WINDOWS_RENAME_RETRY_INITIAL_MS;
++	for (let retries = 0;; retries += 1) {
++		try {
++			await rename(temp, filename);
++			return;
++		} catch (error) {
++			if (!isTransientWindowsRenameError(error)) throw error;
++			if (retries >= WINDOWS_RENAME_RETRY_LIMIT) throw error;
++		}
++		await new Promise((resolve) => setTimeout(resolve, delay));
++		delay = Math.min(delay * 2, WINDOWS_RENAME_RETRY_MAX_MS);
++	}
++}
+ /**
+ * Replace `filename` with `content` in one atomic step, creating parent
+ * directories. The content is first written to a random-suffix sibling opened
+@@ -38,7 +66,7 @@
+ 			mode: options.mode,
+ 			flag: "wx"
+ 		});
+-		await rename(temp, filename);
++		await renameAtomicTemp(temp, filename);
+ 	} catch (error) {
+ 		await rm(temp, { force: true });
+ 		throw error;

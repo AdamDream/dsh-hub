@@ -1,0 +1,78 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -468,6 +468,16 @@
+ 		this.name = "SessionFormatUnsupportedError";
+ 	}
+ };
++/** The requested Session identity has no durable log visible to this caller. */
++var SessionPersistenceNotFoundError = class extends Error {
++	sessionId;
++	/** @param sessionId - absent durable Session identity. */
++	constructor(sessionId) {
++		super(`session "${sessionId}" not found`);
++		this.sessionId = sessionId;
++		this.name = "SessionPersistenceNotFoundError";
++	}
++};
+ /**
+ * Direction-aware refusal text for a stored session whose format version this
+ * build does not read. Shared by the coordinator's load-time check and by
+@@ -944,7 +954,7 @@
+ 				throw error;
+ 			}
+ 			signal?.throwIfAborted();
+-			if (suffix === void 0) throw new Error(`session "${id}" not found`);
++			if (suffix === void 0) throw new SessionPersistenceNotFoundError(id);
+ 			this.assertStoredId(id, suffix.meta);
+ 			this.assertVersion(suffix.meta);
+ 			if (suffix.events.some(needsLegacyPrefix)) {
+@@ -972,7 +982,7 @@
+ 		signal?.throwIfAborted();
+ 		const stored = await this.backend.loadStored(id, signal);
+ 		signal?.throwIfAborted();
+-		if (stored === void 0) throw new Error(`session "${id}" not found`);
++		if (stored === void 0) throw new SessionPersistenceNotFoundError(id);
+ 		this.assertStoredId(id, stored.meta);
+ 		this.assertVersion(stored.meta);
+ 		const events = snapshotStoredEvents(stored.events, id);
+@@ -985,7 +995,7 @@
+ 	/** Read, repair in memory, validate, and freeze one cold source once. */
+ 	async prepareCore(id) {
+ 		const stored = await this.backend.loadStored(id);
+-		if (stored === void 0) throw new Error(`session "${id}" not found`);
++		if (stored === void 0) throw new SessionPersistenceNotFoundError(id);
+ 		try {
+ 			const { meta, events, revision, tornMarker } = stored;
+ 			this.assertStoredId(id, meta);
+@@ -1393,4 +1403,4 @@
+ 	}
+ };
+ //#endregion
+-export { DEFAULT_PREPARED_SESSION_CACHE_SIZE, DEFAULT_WRITE_BATCH_MAX_DELAY_MS, MAX_WRITE_BATCH_DELAY_MS, PersistenceCoordinator, SessionFormatUnsupportedError, SessionPersistence, SessionPersistence as default, SessionPersistenceCorruptionError, SessionPersistenceRevision, sessionFormatVersionRefusal };
++export { DEFAULT_PREPARED_SESSION_CACHE_SIZE, DEFAULT_WRITE_BATCH_MAX_DELAY_MS, MAX_WRITE_BATCH_DELAY_MS, PersistenceCoordinator, SessionFormatUnsupportedError, SessionPersistence, SessionPersistence as default, SessionPersistenceCorruptionError, SessionPersistenceNotFoundError, SessionPersistenceRevision, sessionFormatVersionRefusal };
+--- a/lib/types/coordinator.d.ts
++++ b/lib/types/coordinator.d.ts
+@@ -40,6 +40,12 @@
+      */
+     constructor(message: string, location?: SessionLocation | undefined);
+ }
++/** The requested Session identity has no durable log visible to this caller. */
++export declare class SessionPersistenceNotFoundError extends Error {
++    readonly sessionId: SessionId;
++    /** @param sessionId - absent durable Session identity. */
++    constructor(sessionId: SessionId);
++}
+ /**
+  * Direction-aware refusal text for a stored session whose format version this
+  * build does not read. Shared by the coordinator's load-time check and by
+--- a/lib/types/index.d.ts
++++ b/lib/types/index.d.ts
+@@ -33,7 +33,7 @@
+     /** The artifact's full text content, decoded from the backend's physical encoding. */
+     readonly content: string;
+ }
+-export { DEFAULT_PREPARED_SESSION_CACHE_SIZE, DEFAULT_WRITE_BATCH_MAX_DELAY_MS, MAX_WRITE_BATCH_DELAY_MS, PersistenceCoordinator, SessionFormatUnsupportedError, SessionPersistenceCorruptionError, sessionFormatVersionRefusal, } from './coordinator.ts';
++export { DEFAULT_PREPARED_SESSION_CACHE_SIZE, DEFAULT_WRITE_BATCH_MAX_DELAY_MS, MAX_WRITE_BATCH_DELAY_MS, PersistenceCoordinator, SessionFormatUnsupportedError, SessionPersistenceCorruptionError, SessionPersistenceNotFoundError, sessionFormatVersionRefusal, } from './coordinator.ts';
+ export type { PersistenceBackend, PersistenceCoordinatorOptions, StoredPrefix, StoredSuffix, } from './coordinator.ts';
+ declare module '@deepseek-ai/cordis' {
+     interface Context {

@@ -1,0 +1,364 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-launch-environment/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-launch-environment/README.i18n.yaml	2026-09-11 14:27:15.122962996 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/README.i18n.yaml	2026-09-12 14:56:19.261196537 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/util/launch-environment/README.md
+-README.md: 43d3e27b1901ac7fea655a08ae183084bbbab1ff
+-README.zh.md: 7d2fc0506f9ab238bb592cbb2613549b1672ed1d
++README.md: 80ec4d59c38ee296e836f8cff52e3a89b0700ff5
++README.zh.md: 8fb8df559c1469b25543c15fe03ee7cf67492304
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-launch-environment/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-launch-environment/README.md	2026-09-11 14:27:15.083962442 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/README.md	2026-09-12 14:56:19.260779086 +0800
+@@ -1,114 +1,36 @@
+----
+-description: "An immutable snapshot of this run's environment that remembers which layer supplied each value, for packages that must resolve user-facing values without trusting a flattened process.env."
+-kind: "package-library"
+----
+-
+-# @deepseek-ai/dsh-launch-environment
++# dsh-launch-environment
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-Use `@deepseek-ai/dsh-launch-environment` to resolve launch-time environment values without trusting the flattened `process.env`. It freezes inherited process values, the invocation directory's `.env`, and the Harness home's `.env`, then returns the winning value and its source in a fixed trust order. Callers can exclude layers for sensitive lookups; an omitted layer stays unreachable regardless of later ordering changes. The snapshot is immutable, but every layer is still copied into `process.env`, so it does not isolate subprocesses. Import it as a library; it cannot be mounted from `cordis.yml`.
++This run's environment as one immutable snapshot that remembers **which layer supplied each value**. Consumers resolve user-facing values against it instead of `process.env`, because the layers are not equally trusted and a flattened view cannot tell them apart.
+ 
+-## Table of Contents
++| Layer | Source id | What it is |
++|---|---|---|
++| Inherited process environment | `process` | What the launching shell, CI job, or container passed in — this run's explicit intent |
++| `<invocation cwd>/.env` | `project-env` | The project the harness was launched in, which the product trusts to configure its own agent |
++| `$DSH_HOME/.env` | `user-env` | The user's own machine-level defaults |
+ 
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
++Values do also reach `process.env` — a user's `--config` tree and third-party libraries read it — but that flattened view is not the authority for anything the harness resolves.
+ 
+------
++## Resolving
+ 
+-<a id="use-this-package"></a>
+-## Use this package
++`get(name)` searches every layer, most trusted first. `getFrom(name, sources)` searches only the named layers without changing that trust order.
+ 
+-Resolve user-facing values through the snapshot instead of `process.env` whenever the layers are not equally trusted — for example a credential override a caller must never take from a project directory.
++**Omitting a layer is a refusal, not a demotion** — a caller that must never accept a layer leaves it out of the list, so no future reordering can let it back in. The provider adapters name all three, because the product trusts the project it runs in; the mechanism exists for the decisions where that is not true.
+ 
+-### Resolving a value
++Names match the way the platform matches them: exactly on POSIX, case-insensitively on Windows. A case-sensitive lookup there would rank the wrong layer — a shell's `deepseek_api_key` and a project `.env`'s `DEEPSEEK_API_KEY` are one variable to the OS, and treating them as two would let the project win.
+ 
+ ```ts
++import type { Context } from '@deepseek-ai/cordis'
+ import { launchEnvironmentOf } from '@deepseek-ai/dsh-launch-environment'
+ 
+-declare const ctx: import('@deepseek-ai/cordis').Context
++declare const ctx: Context
+ const endpoint = launchEnvironmentOf(ctx).get('DEEPSEEK_BASE_URL')?.value
+ ```
+ 
+-`get(name)` searches every layer, most trusted first. `getFrom(name, sources)` searches only the named layers without changing that trust order — a caller that must never accept a layer leaves it out of the list, so no future reordering can let it back in.
+-
+-`launchedThroughSsh(snapshot)` returns true only for a non-empty `SSH_CONNECTION` or `SSH_TTY` in the inherited process layer. Web browser handoff, the adaptive directory picker, and Open In share this predicate; project and user `.env` values never establish an SSH session.
+-
+-### How layers rank
+-
+-| Layer | What it is |
+-|---|---|
+-| Inherited process environment | What the launching shell, CI job, or container passed in — this run's explicit intent |
+-| `<invocation cwd>/.env` | The project the harness was launched in, which the product trusts to configure its own agent |
+-| `$DSH_HOME/.env` | The user's own machine-level defaults |
+-
+-Names match the way the platform matches them: exactly on POSIX, case-insensitively on Windows. A case-sensitive lookup on Windows would rank the wrong layer — a shell's `deepseek_api_key` and a project `.env`'s `DEEPSEEK_API_KEY` are one variable to the OS.
+-
+-### When no launcher booted the tree
+-
+-`launchEnvironmentOf(ctx)` returns the launcher's snapshot when the product CLI booted the tree, and otherwise the inherited environment as the only layer. The fallback does not weaken the rules: an SDK host or a bare `cordis.yml` discovered no files, so everything it has is the environment it was launched with.
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
+-
+-<details>
+-<summary>Implementation internals — click to expand</summary>
+-
+-The snapshot is built on one separation: the launcher owns which files exist, and the snapshot owns how values rank.
+-
+-### Source map
+-
+-| File | Role |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | `createLaunchEnvironmentSnapshot`, `launchEnvironmentOf`, and the `ctx.launchEnvironment` slot |
+-| — | No runtime invariant companion is published; the snapshot is frozen before any fiber starts and this package owns no event stream or mutable runtime data; its lookup and rejection rules are enforced by unit tests. |
+-
+-### How the snapshot stays frozen
+-
+-`createLaunchEnvironmentSnapshot` copies every layer's values at construction, so a later mutation of the source object cannot change the snapshot. Lookups walk a canonical trust order regardless of construction order; on Windows, names are folded to uppercase before storage so case variants cannot split precedence.
+-
+-### What omission means
+-
+-`getFrom` filters by the canonical order, never by the caller's list order. Omitting a layer is a refusal: the value is unreachable through that call, which is the mechanism a caller uses when a layer must never influence a specific decision.
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-Read these pages when you need the launcher that builds the snapshot or the consumers that resolve through it.
+-
+-- [Boot package](../../boot/app-boot/README.md) — the launcher that fills `ctx.launchEnvironment` before any config entry mounts.
+-- [Credentials store](../../credentials/credentials-local/README.md) — resolves stored credentials against the snapshot's layers.
+-- [DeepSeek provider](../../llm/llm-deepseek/README.md) — reads provider configuration through the launch environment.
+-
+------
++`launchEnvironmentOf(ctx)` returns the launcher's snapshot when the product CLI booted the tree, and otherwise the inherited environment as the only layer. That fallback does not weaken the rules: an SDK host or a bare `cordis.yml` discovered no files, so everything it has really is the environment it was launched with.
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits define when the snapshot is not a security boundary. They are current package constraints, not a task backlog.
+-
+-- **The snapshot is not a subprocess boundary** — every layer is also materialized into `process.env`, so ordinary project variables reach child processes under [`dsh-subprocess`](../../subprocess/subprocess/README.md)'s scrub; the product launcher's [`.env` contract](../../boot/app-boot/README.md) rejects bootstrap variables before materialization.
+-- **No per-workspace layer** — the project layer is the invoking directory, fixed at launch; a workspace selected later in the Web UI contributes nothing, deliberately, because following it would let a model's own workspace change the harness environment mid-session.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-None.
+-
+-</details>
++- **The snapshot is not a subprocess boundary** — every layer is also materialized into `process.env`, so ordinary project variables reach child processes under [`dsh-subprocess`](../../subprocess/subprocess/README.md)'s scrub. The product launcher's [`.env` contract](../../boot/app-boot/README.md#profiles) rejects bootstrap variables before materialization.
++- **No per-workspace layer** — the project layer is the *invoking* directory, fixed at launch. A workspace selected later in the Web UI contributes nothing, deliberately: following it would let a model's own workspace change the harness environment mid-session.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-launch-environment/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-launch-environment/README.zh.md	2026-09-11 14:27:15.096962627 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/README.zh.md	2026-09-12 14:56:19.260779086 +0800
+@@ -1,114 +1,36 @@
+----
+-description: "本次运行环境的不可变快照，记住每个值来自哪一层；供必须以不信任压平 process.env 的方式解析面向用户值的包使用。"
+-kind: "package-library"
+----
+-
+-# @deepseek-ai/dsh-launch-environment
++# dsh-launch-environment
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-使用 `@deepseek-ai/dsh-launch-environment` 解析启动时的环境值，无需信任压平的 `process.env`。它会冻结继承的进程值、调用目录的 `.env` 和 Harness 主目录的 `.env`，再按固定可信顺序返回胜出的值及其来源。调用方可以在敏感查找中排除某些层；无论之后顺序如何变化，被省略的层都不可达。快照不可变，但每一层仍会被复制到 `process.env`，因此它不隔离子进程。请把它作为库导入；不能从 `cordis.yml` 挂载它。
++把本次运行的环境冻结为一份不可变快照，并记住**每个值来自哪一层**。消费方用它而不是 `process.env` 解析面向用户的值，因为各层的可信程度并不相同，而压平后的视图无法区分它们。
+ 
+-## 目录
++| 层 | 来源 id | 它是什么 |
++|---|---|---|
++| 继承的进程环境 | `process` | 启动 shell、CI 任务或容器传入的东西——本次运行的明确意图 |
++| `<invocation cwd>/.env` | `project-env` | harness 被启动于其中的项目；产品信任它配置自己的 agent（智能体） |
++| `$DSH_HOME/.env` | `user-env` | 用户自己的机器级默认值 |
+ 
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
++这些值同样会进入 `process.env`——用户自己的 `--config` 树和第三方库要读它——但那份压平的视图不是 harness 解析任何值的依据。
+ 
+------
++## 解析
+ 
+-<a id="use-this-package"></a>
+-## 使用本包
++`get(name)` 按可信度从高到低搜索所有层。`getFrom(name, sources)` 只搜索指定的层，不改变这一可信顺序。
+ 
+-当各层并非同等可信时，通过快照而非 `process.env` 解析面向用户的值——例如调用方绝不能从项目目录取得的凭据覆盖值。
++**省略某一层是拒绝，不是降级**——绝不能接受某一层的调用方直接不把它列进去，后续任何重新排序都无法让它回来。提供方适配器三层全列，因为产品信任它所运行的项目；该机制是为那些「并非如此」的决策准备的。
+ 
+-### 解析一个值
++变量名按平台自身的规则匹配：POSIX 上精确匹配，Windows 上不区分大小写。在 Windows 上做大小写敏感的查找会选错层——shell 里的 `deepseek_api_key` 与项目 `.env` 里的 `DEEPSEEK_API_KEY` 对操作系统而言是同一个变量，把它们当成两个就会让项目胜出。
+ 
+ ```ts
++import type { Context } from '@deepseek-ai/cordis'
+ import { launchEnvironmentOf } from '@deepseek-ai/dsh-launch-environment'
+ 
+-declare const ctx: import('@deepseek-ai/cordis').Context
++declare const ctx: Context
+ const endpoint = launchEnvironmentOf(ctx).get('DEEPSEEK_BASE_URL')?.value
+ ```
+ 
+-`get(name)` 按可信度从高到低搜索所有层。`getFrom(name, sources)` 只搜索指定的层，不改变这一可信顺序——绝不能接受某一层的调用方不把它列进去，因此后续任何重新排序都无法让它回来。
+-
+-`launchedThroughSsh(snapshot)` 仅在继承的进程层中存在非空 `SSH_CONNECTION` 或 `SSH_TTY` 时返回 true。Web 浏览器唤起、自适应目录选择器与 Open In 共用此判断；项目与用户 `.env` 中的值不作为 SSH 会话的依据。
+-
+-### 各层的优先级
+-
+-| 层 | 它是什么 |
+-|---|---|
+-| 继承的进程环境 | 启动 shell、CI 任务或容器传入的内容——本次运行的明确意图 |
+-| `<invocation cwd>/.env` | harness 被启动于其中的项目；产品信任它配置自己的 agent（智能体） |
+-| `$DSH_HOME/.env` | 用户自己的机器级默认值 |
+-
+-变量名按平台自身的规则匹配：POSIX 上精确匹配，Windows 上不区分大小写。在 Windows 上做大小写敏感的查找会选错层——shell 里的 `deepseek_api_key` 与项目 `.env` 里的 `DEEPSEEK_API_KEY` 对操作系统而言是同一个变量。
+-
+-### 没有启动器引导这棵树时
+-
+-当产品 CLI 引导了这棵树时，`launchEnvironmentOf(ctx)` 返回启动器的快照；否则返回只含继承环境的那一层。该回退并不削弱规则：SDK 宿主或裸 `cordis.yml` 从未发现过任何文件，因此它拥有的一切就是它被启动时的环境。
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## 理解实现
+-
+-<details>
+-<summary>实现细节——点击展开</summary>
+-
+-快照建立在一个分离之上：启动器决定存在哪些文件，快照决定值如何排序。
+-
+-### 源码地图
+-
+-| 文件 | 职责 |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | `createLaunchEnvironmentSnapshot`、`launchEnvironmentOf` 与 `ctx.launchEnvironment` 槽位 |
+-| — | 不发布运行时不变式伴生入口；快照在任何 fiber 启动前即已冻结。 |
+-
+-### 快照如何保持冻结
+-
+-`createLaunchEnvironmentSnapshot` 在构造时复制每一层的值，因此之后对源对象的修改无法改变快照。无论构造顺序如何，查找都按规范信任顺序进行；在 Windows 上，名字在存储前折叠为大写，因此大小写变体无法拆分优先级。
+-
+-### 省略意味着什么
+-
+-`getFrom` 按规范顺序过滤，绝不按调用方列表的顺序。省略一层就是拒绝：该值在该调用中不可达，这正是调用方在某个决策绝不能被某层影响时使用的机制。
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-当你需要构建快照的启动器或通过快照解析的消费方时，阅读以下页面。
+-
+-- [boot 包](../../boot/app-boot/README.zh.md)——在任何配置项挂载之前填充 `ctx.launchEnvironment` 的启动器。
+-- [凭据存储](../../credentials/credentials-local/README.zh.md)——针对快照各层解析已存储的凭据。
+-- [DeepSeek 提供方](../../llm/llm-deepseek/README.zh.md)——通过启动环境读取提供方配置。
+-
+------
+-
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制说明快照何时不是安全边界。它们是当前包约束，不是任务积压。
+-
+-- **快照不是子进程边界**——每一层同样会被物化进 `process.env`，因此项目里的普通变量会按 [`dsh-subprocess`](../../subprocess/subprocess/README.zh.md) 的清洗规则抵达子进程；产品启动器的 [`.env` 约定](../../boot/app-boot/README.zh.md) 会在物化之前拒绝 bootstrap 变量。
+-- **没有按工作区划分的层**——项目层是调用目录，在启动时固定；之后在 Web UI 中选择的工作区不贡献任何内容，这是刻意的，因为跟随它等于让模型自己的工作区在会话中途改变 harness 环境。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
++当产品 CLI（命令行界面）启动了这棵树时，`launchEnvironmentOf(ctx)` 返回启动器的快照；否则返回只含继承环境的那一层。该回退并不削弱规则：SDK 宿主或裸 `cordis.yml` 从未发现过任何文件，因此它拥有的一切确实就是它被启动时的环境。
+ 
+-无。
++## 已知限制与暂缓事项
+ 
+-</details>
++- **快照不是子进程边界**：每一层同样会被物化进 `process.env`，因此项目里的普通变量会按 [`dsh-subprocess`](../../subprocess/subprocess/README.zh.md) 的清洗规则抵达子进程。产品启动器的 [`.env` 约定](../../boot/app-boot/README.zh.md#profiles) 会在物化之前拒绝 bootstrap 变量。
++- **没有按工作区划分的层**：项目层是*调用*目录，在启动时固定。之后在 Web UI 中选择的工作区不贡献任何内容，这是刻意的：跟随它等于让模型自己的工作区在会话中途改变 harness 的环境。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-launch-environment/lib/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/lib/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-launch-environment/lib/index.js	2026-09-11 14:27:15.070962257 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/lib/index.js	2026-09-12 14:56:19.259209964 +0800
+@@ -66,17 +66,5 @@
+ 		values: process.env
+ 	}]);
+ }
+-/**
+-* Detect SSH from non-empty SSH_CONNECTION or SSH_TTY inherited at launch.
+-* Project and user `.env` values never establish an SSH session.
+-* @param environment - the launcher's environment snapshot.
+-* @returns whether the inherited process layer carries either SSH marker.
+-*/
+-function launchedThroughSsh(environment) {
+-	return ["SSH_CONNECTION", "SSH_TTY"].some((name) => {
+-		const value = environment.getFrom(name, ["process"])?.value;
+-		return value !== void 0 && value !== "";
+-	});
+-}
+ //#endregion
+-export { DSH_LAUNCH_ENVIRONMENT_KEY, createLaunchEnvironmentSnapshot, launchEnvironmentOf, launchedThroughSsh };
++export { DSH_LAUNCH_ENVIRONMENT_KEY, createLaunchEnvironmentSnapshot, launchEnvironmentOf };
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/lib: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-launch-environment/lib/types/index.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/lib/types/index.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-launch-environment/lib/types/index.d.ts	2026-09-11 14:27:15.118962939 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/lib/types/index.d.ts	2026-09-12 14:56:19.260926159 +0800
+@@ -65,13 +65,6 @@
+  * @returns the snapshot to resolve user-facing values against.
+  */
+ export declare function launchEnvironmentOf(ctx: Context): LaunchEnvironmentSnapshot;
+-/**
+- * Detect SSH from non-empty SSH_CONNECTION or SSH_TTY inherited at launch.
+- * Project and user `.env` values never establish an SSH session.
+- * @param environment - the launcher's environment snapshot.
+- * @returns whether the inherited process layer carries either SSH marker.
+- */
+-export declare function launchedThroughSsh(environment: LaunchEnvironmentSnapshot): boolean;
+ declare module '@deepseek-ai/cordis' {
+     interface Context {
+         /** Launcher-owned snapshot of this run's environment; absent in compositions the product CLI did not boot. */
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/lib/types: invariant.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-launch-environment/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-launch-environment/package.json	2026-09-11 14:27:15.076962342 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-launch-environment/package.json	2026-09-12 14:56:19.260779086 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-launch-environment",
+   "description": "Immutable DeepSeek Harness launch environment that records which layer supplied each value",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -18,18 +18,25 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./src/*": "./src/*",
+     "./package.json": "./package.json"
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/types/**/*.d.ts"
+   ],
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/cordis": "^4.0.1",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   }
+ }
+\ No newline at end of file

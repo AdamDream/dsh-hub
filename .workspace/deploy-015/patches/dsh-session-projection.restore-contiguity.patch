@@ -1,0 +1,37 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -242,7 +242,13 @@
+ 			if (!usable && baseSeq > 0) throw new Error(`session projection ${JSON.stringify(def.key)} cannot restore from seq ${baseSeq}: its checkpoint row is missing, version-mismatched, or beyond the supplied log end; re-read from seq 0`);
+ 			let state = usable ? def.stateSchema.parse(row.val) : def.init();
+ 			const from = usable ? row.seq : baseSeq - 1;
+-			for (const event of events) if (event.seq > from) state = def.apply(state, event);
++			const startIndex = from - baseSeq + 1;
++			for (let index = startIndex; index < events.length; index++) {
++				const event = events[index];
++				const expectedSeq = baseSeq + index;
++				if (event === void 0 || event.seq !== expectedSeq) throw new Error(`session projection ${JSON.stringify(def.key)} cannot restore across missing seq ${String(expectedSeq)}`);
++				state = def.apply(state, event);
++			}
+ 			if (def.wire !== void 0) values[def.key] = def.wire.viewSchema.parse(def.wire.view(state));
+ 			refreshed[def.key] = {
+ 				ver: def.stateVersion,
+--- a/lib/types/index.js
++++ b/lib/types/index.js
+@@ -254,9 +254,14 @@
+             }
+             let state = usable ? def.stateSchema.parse(row.val) : def.init();
+             const from = usable ? row.seq : baseSeq - 1;
+-            for (const event of events) {
+-                if (event.seq > from)
+-                    state = def.apply(state, event);
++            const startIndex = from - baseSeq + 1;
++            for (let index = startIndex; index < events.length; index++) {
++                const event = events[index];
++                const expectedSeq = baseSeq + index;
++                if (event === undefined || event.seq !== expectedSeq) {
++                    throw new Error(`session projection ${JSON.stringify(def.key)} cannot restore across missing seq ${String(expectedSeq)}`);
++                }
++                state = def.apply(state, event);
+             }
+             if (def.wire !== undefined)
+                 values[def.key] = def.wire.viewSchema.parse(def.wire.view(state));

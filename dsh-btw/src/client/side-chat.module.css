@@ -221,8 +221,11 @@
 .userMessage p, .assistantMessage p { margin: 0; white-space: pre-wrap; }
 .messageMeta { margin-bottom: 5px; color: var(--dsw-alias-label-quaternary); font-family: var(--ds-font-family-code); font-size: 10px; line-height: 14px; }
 
-/* Running banner (TurnStatus gradient approximation; sticky so the panel top
-   keeps the current action in view while the transcript auto-scrolls). */
+/* Running banner (TurnStatus-style shimmer, re-themed to the side-chat lime;
+   sticky so the panel top keeps the current action in view while the
+   transcript auto-scrolls). 2026-09-14 btw-ui: border/text gradient switched
+   from the official TurnStatus blue theme tokens to the btw green
+   (#b7e85b family) so the banner matches the panel's green identity. */
 .runningBanner {
   position: sticky;
   top: 0;
@@ -232,7 +235,7 @@
   align-self: flex-start;
   align-items: center;
   padding: 3px 8px;
-  border: 1px solid color-mix(in srgb, var(--dsw-static-deepseek-500) 24%, var(--dsw-alias-border-l1));
+  border: 1px solid color-mix(in srgb, #b7e85b 24%, var(--dsw-alias-border-l1));
   border-radius: 999px;
   background: color-mix(in srgb, var(--dsw-alias-bg-base) 90%, transparent);
 }
@@ -242,7 +245,7 @@
   height: 20px;
   white-space: nowrap;
   font: var(--dsw-font-s-strong-14);
-  background: linear-gradient(90deg, var(--dsw-static-deepseek-500) 0%, var(--dsw-static-deepseek-500) 40%, var(--dsw-static-deepseek-200) 50%, var(--dsw-static-deepseek-500) 60%, var(--dsw-static-deepseek-500) 100%);
+  background: linear-gradient(90deg, #b7e85b 0%, #b7e85b 40%, #d9f39a 50%, #b7e85b 60%, #b7e85b 100%);
   background-size: 250% 100%;
   background-position: 100% 0;
   background-clip: text;
@@ -475,11 +478,87 @@
 
 /* Transcript image refs (R1-10 thumbnails + lightbox). */
 .messageImages { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
-.messageImageButton { display: block; padding: 0; border: 1px solid var(--dsw-alias-border-l2); border-radius: 9px; background: transparent; cursor: zoom-in; }
+.messageImageButton { position: relative; display: block; padding: 0; border: 1px solid var(--dsw-alias-border-l2); border-radius: 9px; background: transparent; cursor: zoom-in; }
 .messageImageButton:hover { border-color: color-mix(in srgb, #b7e85b 55%, var(--dsw-alias-border-l1)); }
 .messageImage { display: block; width: 84px; height: 84px; object-fit: cover; border-radius: 8px; }
 .messageImagePlaceholder { display: block; width: 84px; height: 84px; border-radius: 8px; background: var(--dsw-alias-fill-tsp-secondary); }
-.lightboxImage { display: block; max-width: min(560px, 82vw); max-height: 74vh; object-fit: contain; border-radius: 10px; }
+/* 2026-09-14 btw-ui: per-image sequence badge — top-left corner of each
+   thumbnail, white pill with black digits; non-interactive so clicks pass
+   through to the zoom button underneath. */
+.messageImageBadge {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 1;
+  pointer-events: none;
+  background: #fff;
+  color: #000;
+  font-family: var(--ds-font-family-code);
+  font-size: 10px;
+  line-height: 14px;
+  padding: 0 4px;
+  border-radius: 6px;
+}
+/* 2026-09-14 btw-ui: self-drawn lightbox aligned with the official
+   ImageLightbox interaction (mask + Escape + close + large image). The
+   official component is not exported by dsh-client-ui-attachment, and the
+   primitives Modal's 380px dialog cap read as "no real enlarge", so the
+   preview is a body-portal overlay with a true large image. */
+.lightboxRoot {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+.lightboxMask {
+  position: absolute;
+  inset: 0;
+  background: var(--dsw-alias-bg-mask-1);
+  backdrop-filter: var(--dsw-mask-blur);
+}
+.lightboxDialog {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: min(1600px, 94vw);
+  max-height: calc(100vh - 80px);
+}
+.lightboxClose {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  place-items: center;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--dsw-alias-bg-layer-2) 88%, transparent);
+  color: var(--dsw-alias-label-secondary);
+  cursor: pointer;
+}
+.lightboxClose:hover { background: var(--dsw-alias-interactive-bg-hover); color: var(--dsw-alias-label-primary); }
+.lightboxImage {
+  display: block;
+  max-width: min(1600px, 94vw);
+  max-height: calc(100vh - 80px);
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: var(--dsw-shadow-lv3);
+}
+.lightboxPlaceholder {
+  display: block;
+  width: min(560px, 82vw);
+  height: 320px;
+  border-radius: 10px;
+  background: var(--dsw-alias-fill-tsp-secondary);
+}
 
 @media (max-width: 720px) {
   .placementRoot[data-placement-mode='bottom-sheet'] .mobileScrim { display: block; }

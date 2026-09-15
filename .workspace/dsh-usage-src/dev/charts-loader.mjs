@@ -1,6 +1,7 @@
-// 2026-09-12 heatmap redesign — dev helper: load the actual heatmapGrid code
-// from lib/charts.js (source of truth) into a runnable module, so preview
-// dumps exercise the real implementation rather than a re-implementation.
+// 2026-09-12 heatmap redesign / 2026-09-14 tooltip — dev helper: load the
+// actual geometry code from lib/charts.js (source of truth) into a runnable
+// module, so preview dumps exercise the real implementation rather than a
+// re-implementation.
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -47,12 +48,11 @@ export function extractFills(src) {
 
 export function loadChartsModule(src) {
 	const fillsSrc = extractFills(src);
-	const parseDaySrc = extractFn(src, "parseDay");
-	const formatDaySrc = extractFn(src, "formatDay");
-	const heatmapGridSrc = extractFn(src, "heatmapGrid");
+	const fns = ["parseDay", "formatDay", "heatmapGrid", "scaleBars", "barRects", "scaleArea", "areaPath", "formatTokens"];
+	const fnSrcs = fns.map((name) => extractFn(src, name));
 	const body =
-		fillsSrc + "\n" + parseDaySrc + "\n" + formatDaySrc + "\n" + heatmapGridSrc +
-		"\nreturn { FILLS, parseDay, formatDay, heatmapGrid };";
+		fillsSrc + "\n" + fnSrcs.join("\n") +
+		"\nreturn { FILLS, parseDay, formatDay, heatmapGrid, scaleBars, barRects, scaleArea, areaPath, formatTokens };";
 	return new Function(body)();
 }
 

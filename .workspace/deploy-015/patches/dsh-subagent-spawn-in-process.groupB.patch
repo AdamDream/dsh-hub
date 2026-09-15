@@ -1,0 +1,11 @@
+diff --git a/lib/index.js b/lib/index.js
+--- a/lib/index.js	2026-09-15 15:52:52.989086436 +0800
++++ b/lib/index.js	2026-09-15 15:52:52.990665669 +0800
+@@ -21,6 +21,7 @@
+ var SpawnInProcessProvider = class {
+ 	name;
+ 	capabilities = {
++		agentOptions: true,
+ 		outputSchema: true,
+ 		depthLimit: true,
+ 		toolFilter: true,

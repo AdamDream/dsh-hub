@@ -1,0 +1,1432 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/README.i18n.yaml	2026-09-11 14:27:15.198964077 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/README.i18n.yaml	2026-09-12 14:56:17.998997269 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/client/ui-layout/README.md
+-README.md: 4fe19fb9ec0a549dc76ca311d0564cbe86c9f5f9
+-README.zh.md: 7a61e7808ffb3d81214388a2792a901ced8d9564
++README.md: 7c9d64b9ca7a5fada492c37200a283904466c36d
++README.zh.md: a2604d865977c495d2a3d2362b25f05e34142c97
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/README.md	2026-09-11 14:27:15.111962840 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/README.md	2026-09-12 14:56:17.998231060 +0800
+@@ -1,68 +1,13 @@
+----
+-description: "Shell layout for the Web GUI: the three-column AppFrame whose right column is a track for an edge-anchored panel, the panel-geometry service, and theme presentation; for users and maintainers of the window chrome."
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-client-ui-layout
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-This package provides the Web GUI's three-column AppFrame, edge-column widths, and `ctx.layout` presentation control. The right column concedes space before the center; its occupant renders fullscreen while the frame retains the wide-screen track underneath. The theme presenter owns color scheme, alias tokens, content font size, and document metadata. Layout state resets on reload.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## Use this package
+-
+-The root slot composes the sidebar, main content, and right column. The sidebar spans 264–420px, defaults to 280px, and retains a 56px rail when collapsed; below 1024px it collapses automatically, and opening the right panel collapses a manually expanded sidebar. The right panel first opens at 45% of the viewport, then retains the user's pixel preference, capped at 70%. To protect 400px for the center, the frame first reduces the right panel to 300px, then reports insufficient room so its occupant closes it, and only then compresses the center further. Dragging has no transition delay; the right handle is absent while closed or fullscreen.
+-
+-Global panels occupy the root-scoped `main` keyed slot; `conversation` is the reserved key for the Conversation. `ctx.layout.selectPanel(id)` selects a registered panel, and `null` selects the Conversation without changing the current Session. No global panel is registered by the shipped composition.
+-
+-### Theme presentation
+-
+-The presenter consumes resolved theme snapshots and projects them onto the document: `html { color-scheme }` for native UA chrome, `body[data-ds-dark-theme]` from the active color scheme, the theme's alias tokens and `--dsh-content-font-size` as inline variables on body, and one owned `<meta name="theme-color">` whose content follows the computed body background. Disposing the presenter removes its metadata node with its other global writes.
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
+-
+-<details>
+-<summary>Implementation internals — click to expand</summary>
+-
+-`selectPanel(id)` checks the live `main` registry before changing selection; an absent key throws and leaves the current panel intact. `beginNavigation()` returns an abort signal for an asynchronous UI navigation. A later call, a valid panel selection (including repeated selection), or layout disposal aborts that signal without cancelling underlying Session creation. Consumers check the signal before committing navigation or moving drafts.
++Shell plugin: three-column AppFrame (drag handles and concession chain) plus the `ctx.layout` panel-geometry service; it registers into the runtime-owned `root` slot and declares `sidebar`, `conversation`, `details`, and `conversation.empty`. The sidebar resize boundary is an invisible hit strip, while the details boundary retains its floating pill; only details shrinks during concession and then auto-closes. A closed sidebar retains a 56px control rail while details closes to zero width. The package also seats the theme presenter: it consumes resolved `ctx.theme` snapshots and projects them onto the document (`html { color-scheme }` for native UA chrome, `body[data-ds-dark-theme]` from the active color scheme, the theme's alias tokens as inline variables on body, and one owned `<meta name="theme-color">` whose content follows the computed body background). Measuring after palette and token application keeps the rendered background as the single color authority; disposing the presenter removes its metadata node with its other global writes.
+ 
+-One registration declares four child slots and binds `ctx.layout` methods `selectPanel`, `toggleSidebar`, `openRightbar(track, fullscreen)`, and `closeRightbar`. One root store separates `panelInfo` selection from `layoutInfo` measurements, width preferences, and presentation reports. `usePanelInfo` subscribes to the stable selection object; AppFrame subscribes to the stable layout object. The `rightbar` owner supplies actual `width`, `viewportWidth`, and normal-presentation eligibility `canShow`; insufficient room causes a deterministic close, never automatic reopening on widening. Fullscreen hides the width handle without releasing a track the occupant retains. AppFrame keeps the column containers mounted. The right column's root controller renders `rightbar.session` through `SessionProvider` only while the Conversation is selected; its unmount report releases the track. The independent title component uses the selected Session title only while the Conversation is visible, with the build-configured product title or localized `common.brand.localBuild` as its fallback; locale revisions update that fallback. The theme presenter is a second effect: pure DOM writes from resolved snapshots — initial state through the getter once, then event-driven only, with no React path. It applies palette, font-size, and token variables before measuring the rendered background as the single color authority. Fullscreen presentation suppresses grid and handle transitions; its occupant reports the new columns only after covering the frame. Fullscreen exit keeps transitions suppressed while the frame installs its destination geometry: close removes the right track, and restore retains it. Subsequent normal geometry actions restore ordinary transitions.
++AppFrame always mounts the conversation and details columns; a connected Session renders through `SessionProvider`. The transient layout store starts the sidebar at its default width and details closed, and it never reads or writes `localStorage`. Hero and other unselected states also derive a zero rendered details width without changing that stored preference. AppFrame retains the last non-blank Session id across those states: the first Session remains closed, an explicit details action opens the contract default width, returning to the same Session restores its unchanged width, and selecting a different Session closes details before paint. The conversation owner share is empty, while the sidebar owner share contains only `collapsed` and `width`; registrants obtain business data from standard hooks and actions from their own inject faces.
+ 
+-</details>
++The `/client` exports are the plugin body (`apply`/`inject`), `LayoutController`, and the four owner-share interfaces. AppFrame, the panel store, and the concession solver remain package-internal.
+ 
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-Read these pages when the layout surface is not enough. They move from the frame to the columns it renders and the theme it presents.
+-
+-- [ui-sidebar](../ui-sidebar/README.md) — occupies the `sidebar` column and its seats.
+-- [ui-conversation](../ui-conversation/README.md) — occupies the `main` key `conversation`.
+-- [ui-sidebar-right](../ui-sidebar-right/README.md) — occupies the `rightbar` column with one docking surface per session.
+-- [ui-theme](../ui-theme/README.md) — the theme seam whose resolved snapshots the presenter consumes.
+-- [Web client architecture](../../../.agents/notes/implemented/architecture/2026-07-19-gui-web-client-architecture.md) — how browser plugin rows load and register slots.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+ None, as the layout shell manages browser viewing state; nothing here reaches a model request.
+@@ -73,24 +18,6 @@
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits define the current layout behavior. They are current package constraints, not a general window-manager comparison or a task backlog.
+-
+-- **Panel geometry is transient** — reload restores the sidebar default and the right panel hidden; each dragged width is one frame-wide preference, not a per-Session fact.
+-- **Extremely narrow windows** — after the right panel closes, the center may still fall below 400px; the left 56px rail remains.
+-- **Track and panel travel on one shared curve** — the frame's track transition and the occupant's slide read the same duration and easing variables; an occupant that used its own would detach the panel's edge from the conversation's while squeezing.
++- **Panel geometry is transient** — reload restores the sidebar default and details closed; switching between distinct Session ids also closes details and forgets its dragged width, while unselected surfaces render details at zero width without modifying geometry.
++- **Concession-chain auto-close derives a zero width without touching the preferred width** — the panel restores itself when the window widens; consumers must not read the stored details width as the rendered truth.
+ - **No scroll anchoring during squeeze reflow** — layout changes may move the reader's viewport.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-None.
+-
+-</details>
+-
+-**Runtime invariant:** No companion is published. The shell viewing-state store behind ctx.layout emits no cordis events; clamp and track sequencing is asserted directly by this package's columns and service specs.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/README.zh.md	2026-09-11 14:27:15.120962968 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/README.zh.md	2026-09-12 14:56:17.998231060 +0800
+@@ -1,68 +1,13 @@
+----
+-description: "Web GUI 的外壳布局：三栏 AppFrame——其右栏是贴边面板的轨道——面板几何服务与主题呈现；供窗口外观的用户与维护者阅读。"
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-client-ui-layout
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-本包提供 Web GUI 的三栏 AppFrame、左右栏宽度与 `ctx.layout` 呈现控制。右栏先让步以保护中栏空间，全屏由占用方呈现，框架保留宽屏底层轨道。主题呈现器负责配色、别名 token、正文字号与 document 元数据；布局状态在刷新后重置。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## 使用本包
+-
+-本插件在 root slot 组合侧栏、中央内容与右栏。左栏为264～420px，默认280px，收起后保留56px；窗口低于1024px时自动收起，打开右栏也会收起手动展开的左栏。右栏首次打开使用窗口宽度的45%，之后保留用户像素偏好，上限为70%；中栏不足400px时先把右栏压到300px，仍不足则通知占用方收起，最后才继续压缩中栏。拖拽跟手且无过渡延迟，关闭或全屏时不显示右栏拖拽区。
+-
+-全局面板占据 root 作用域的 `main` keyed slot；`conversation` 是为会话界面保留的 key。`ctx.layout.selectPanel(id)` 选中已注册面板，`null` 则选中会话界面，但不改变当前会话。默认组合不注册任何全局面板。
+-
+-### 主题呈现
+-
+-呈现器消费解析后的主题快照，并投影到 document：`html { color-scheme }` 驱动原生 UA 控件，依据当前配色方案设置 `body[data-ds-dark-theme]`，把主题的别名 token 与 `--dsh-content-font-size` 设为 body 上的内联变量，并持有一个 `<meta name="theme-color">`，其内容随计算后的 body 背景色更新。释放呈现器时，它会连同其他全局写入一起移除自己的元数据节点。
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## 理解实现
+-
+-<details>
+-<summary>实现细节——点击展开</summary>
+-
+-`selectPanel(id)` 在改变选中态前检查实时 `main` 注册表；缺失的 key 会抛错并保留当前面板。`beginNavigation()` 为异步 UI 导航返回 abort signal。后续调用、有效面板选择（包括重复选择）或布局释放会中止该 signal，但不取消底层会话创建。消费者在提交导航或搬移草稿前检查 signal。
++外壳插件：三栏 AppFrame（拖动手柄与让步链）加 `ctx.layout` 面板几何服务；它注册到运行时拥有的 `root` slot，并声明 `sidebar`、`conversation`、`details` 和 `conversation.empty`。侧边栏的缩放边界是不可见命中条带，详情栏边界则保留其浮动胶囊；让步期间只有详情栏会收缩并随后自动关闭。关闭的侧边栏仍保留 56px 控制栏，详情栏则关闭到零宽度。该包还提供主题呈现器：它消费解析后的 `ctx.theme` 快照，并将其投影到 document（用 `html { color-scheme }` 驱动原生 UA 控件，依据当前配色方案设置 `body[data-ds-dark-theme]`，并将主题的别名 token 设为 body 上的内联变量，同时拥有一个 `<meta name="theme-color">`，其内容随计算后的 body 背景色更新）。在应用调色板和 token 后进行测量，可确保渲染后的背景成为唯一的颜色依据；呈现器在 dispose（资源释放）时会移除其自有的元数据节点，并一并清除其写入的其他全局状态。
+ 
+-一次注册声明四个子slot并绑定 `ctx.layout` 的 `selectPanel`、`toggleSidebar`、`openRightbar(track, fullscreen)` 与 `closeRightbar`。同一个 root 存储把 `panelInfo` 选中态与 `layoutInfo` 测量、宽度偏好、呈现报告分开。`usePanelInfo` 订阅引用稳定的选中态对象，AppFrame 订阅引用稳定的布局对象。`rightbar` 的owner参数为实际 `width`、`viewportWidth` 与普通呈现的 `canShow`；占用方在空间不足时执行确定性的收起，变宽不自行重新展开。全屏隐藏宽度手柄，但不自行释放占用方要求保留的轨道。AppFrame 保持各列容器挂载。右栏的 root 控制器仅在选中会话界面时，经 `SessionProvider` 渲染 `rightbar.session`；内容卸载时的报告释放列宽。独立的标题组件仅在会话界面可见时使用所选会话标题，以构建配置的产品标题或本地化 `common.brand.localBuild` 为回退值；语言变化会更新该回退值。主题呈现器是第二个 effect：从解析后的快照做纯 DOM 写入——初始状态经 getter 读取一次，此后仅事件驱动，不经过 React。它先应用调色板、字号与 token 变量，再把渲染出的背景测量为唯一的颜色依据。 全屏呈现禁用网格和手柄过渡；占用方完全覆盖框架后才报告新的列宽。 退出全屏时，框架先保持无过渡并安装目标布局：关闭移除右轨道，恢复保留右轨道。后续普通几何操作恢复正常过渡。
++AppFrame 始终挂载会话栏和详情栏；已连接 Session 通过 `SessionProvider` 渲染。布局 store 是瞬时状态，侧边栏以默认宽度启动，详情栏则保持关闭，且该 store 从不读写 `localStorage`。hero 和其他未选中状态也会将详情栏的渲染宽度派生为零，但不会改变存储的宽度偏好。AppFrame 会跨越这些状态保留最后一个非 blank 会话 id：首个会话保持关闭；显式打开详情栏的操作会使用约定默认宽度；返回同一会话时恢复其未改变的宽度；选择不同会话时，详情栏会在绘制前关闭。会话 owner share 为空，侧边栏 owner share 只包含 `collapsed` 和 `width`；注册方通过标准钩子获取业务数据，并从各自的 inject 接口获取操作。
+ 
+-</details>
++`/client` 导出表层包含插件主体（`apply`／`inject`）、`LayoutController` 和四个 owner-share 接口。AppFrame、面板 store 与让步求解器仍属于包内部。
+ 
+------
+-
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-当布局面不够用时阅读以下页面。它们从框架进入它所渲染的栏与它所呈现的主题。
+-
+-- [ui-sidebar](../ui-sidebar/README.zh.md)——占据 `sidebar` 栏及其座位。
+-- [ui-conversation](../ui-conversation/README.zh.md)——占据 `main` 中的 `conversation` key。
+-- [ui-sidebar-right](../ui-sidebar-right/README.zh.md)——以每会话一个停靠面占据 `rightbar` 栏。
+-- [ui-theme](../ui-theme/README.zh.md)——呈现器消费其解析快照的主题 seam。
+-- [Web 客户端架构](../../../.agents/notes/implemented/architecture/2026-07-19-gui-web-client-architecture.zh.md)——浏览器插件行如何加载并注册槽位。
+-
+------
+-
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+ 无。布局外壳管理浏览器查看状态；这里没有任何内容进入模型请求。
+@@ -71,26 +16,8 @@
+ 
+ 无；该包既不组装也不发送提供方请求。
+ 
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制界定了当前布局行为。它们是当前包约束，不是通用窗口管理器对比或任务积压。
+-
+-- **面板几何是瞬时状态**——重新加载会恢复侧栏默认值并隐藏右侧面板；每个拖出的宽度都是一份框架级偏好，不是按 Session 的事实。
+-- **极窄窗口**——右栏关闭后，中栏仍可能小于400px；左侧56px控制栏保留。
+-- **轨道与面板沿同一条曲线运动**——框架的轨道过渡和占位方的滑入读取同一组时长与缓动变量；占位方若自用一套，挤压时面板边缘就会与对话边缘脱开。
+-- **挤压重排期间无滚动锚定**——布局变化可能移动读者的视口。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
+-
+-无。
+-
+-</details>
++## 已知限制与暂缓事项
+ 
+-**运行时不变式：** 不发布伴生入口。`ctx.layout` 后的 viewing-state store 不发出 Cordis 事件；clamp 与轨道的时序由本包的 columns 与 service 规格直接断言。
++- **面板几何信息是瞬时状态**：重新加载会恢复侧边栏默认值，并使详情栏保持关闭；在不同会话 id 之间切换同样会关闭详情栏，并忘记拖动后的宽度，而未选中表面会以零宽度渲染详情栏，但不会修改几何信息。
++- **让步链自动关闭通过推导零宽度实现，不会改动宽度偏好**：窗口变宽时面板会自行恢复；消费方禁止把 store 中的详情宽度当作实际渲染状态。
++- **挤压重排期间不提供滚动锚定**：布局变化可能移动读者的 viewport。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/client.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/client.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/client.js	2026-09-11 14:27:15.074962314 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/client.js	2026-09-12 14:56:17.997048369 +0800
+@@ -6,15 +6,11 @@
+ 		Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+ 		let react_jsx_runtime = require("react/jsx-runtime");
+ 		let react = require("react");
+-		let _deepseek_ai_dsh_client_store = require("@deepseek-ai/dsh-client-store");
++		let _deepseek_ai_dsh_client_runtime_client = require("@deepseek-ai/dsh-client-runtime/client");
+ 		/** Viewport width below which the sidebar auto-collapses to the rail (deepsuite
+ 		* LG breakpoint); a manual toggle below it re-expands over the squeezed center
+ 		* (stores.ts narrowExpanded). */
+ 		const SIDEBAR_AUTO_COLLAPSE = 1024;
+-		/** Maximum normal right panel width as a fraction of the frame. */
+-		const RIGHTBAR_MAX_RATIO = .7;
+-		/** First-open right panel preference as a fraction of the frame. */
+-		const RIGHTBAR_DEFAULT_RATIO = .45;
+ 		/**
+ 		* Clamp a panel width into its contract range.
+ 		* @param px - requested width.
+@@ -26,49 +22,38 @@
+ 			return Math.min(max, Math.max(min, Math.round(px)));
+ 		}
+ 		/**
+-		* Solve the three column widths for one viewport frame.
++		* Solve the three column widths for one viewport frame. Pure: no hysteresis —
++		* the output is a function of (viewport, preferences) only, so recovery on
++		* re-widening is automatic. Preferences re-clamp here because they cross the
++		* store boundary and callers may still supply stale ranges.
+ 		* @param viewport - available frame width in px.
+ 		* @param sidebar - sidebar width preference in px (0 = closed).
+-		* @param rightbar - requested right panel width in px (0 = no track).
+-		* @returns actual widths after shrinking or removing the right track; only
+-		*   without that track may the center fall below its minimum, down to zero.
++		* @param details - details width preference in px (0 = closed).
++		* @returns resolved widths; details 0 means visually closed (never unmounted), while a closed sidebar keeps its compact rail.
+ 		*/
+-		function computeColumns(viewport, sidebar, rightbar) {
++		function computeColumns(viewport, sidebar, details) {
+ 			const s = sidebar === 0 ? 56 : clampWidth(sidebar, 264, 420);
+-			const available = viewport - s - 400;
+-			const r = rightbar === 0 || available < 300 ? 0 : Math.min(available, clampWidth(rightbar, 300, viewport * RIGHTBAR_MAX_RATIO));
++			const d0 = details === 0 ? 0 : clampWidth(details, 300, 520);
++			if (s + d0 + 640 <= viewport) return {
++				sidebar: s,
++				center: viewport - s - d0,
++				details: d0
++			};
++			const d1 = d0 === 0 ? 0 : Math.max(300, viewport - s - 640);
++			if (s + d1 + 640 <= viewport) return {
++				sidebar: s,
++				center: 640,
++				details: d1
++			};
+ 			return {
+ 				sidebar: s,
+-				center: Math.max(0, viewport - s - r),
+-				rightbar: r
++				center: Math.max(0, viewport - s),
++				details: 0
+ 			};
+ 		}
+ 		//#endregion
+-		//#region lib/types/client/DocumentTitle.js
+-		/** Browser title selection follows the active main panel without subscribing the frame. */
+-		/**
+-		* Project the selected durable session title into the browser title and
+-		* restore the build-selected product title when unmounted.
+-		* @param props - Selected session title projection.
+-		* @returns No rendered content.
+-		*/
+-		function DocumentTitle({ useSessions, usePanelInfo, productTitle }) {
+-			const showSessionTitle = usePanelInfo((info) => info.activePanelId === null);
+-			const title = useSessions((state) => {
+-				const current = state.current;
+-				return !showSessionTitle || current === void 0 ? void 0 : state.byId[current]?.title;
+-			});
+-			(0, react.useEffect)(() => {
+-				document.title = title === void 0 ? productTitle : `${title} — ${productTitle}`;
+-				return () => {
+-					document.title = productTitle;
+-				};
+-			}, [productTitle, title]);
+-			return null;
+-		}
+-		//#endregion
+ 		//#region \0dsh-css:/home/runner/work/deepseek-harness/deepseek-harness/packages/client/ui-layout/src/client/AppFrame.module.css.mjs
+-		const css = ".pI_x6G_frame{background:var(--dsw-alias-bg-base);height:100%;transition:grid-template-columns var(--ds-transition-duration-slow) var(--ds-ease-in-out);grid-template-rows:100%;display:grid;position:relative;overflow:hidden}.pI_x6G_frame[data-dragging]{transition:none}@media (prefers-reduced-motion:reduce){.pI_x6G_frame{transition:none}}.pI_x6G_sidebarCol{background:var(--dsw-specific-sidebar-fill);border-right:.5px solid var(--dsw-alias-border-l3);min-width:0;overflow:hidden}.pI_x6G_centerCol{flex-direction:column;min-width:0;display:flex;overflow:hidden}.pI_x6G_handle{cursor:col-resize;z-index:11;touch-action:none;width:8px;transition:left var(--ds-transition-duration-slow) var(--ds-ease-in-out);margin-left:-4px;position:absolute;top:0;bottom:0}.pI_x6G_frame[data-dragging] .pI_x6G_handle,.pI_x6G_frame[data-rightbar-fullscreen],.pI_x6G_frame[data-rightbar-fullscreen] .pI_x6G_handle,.pI_x6G_frame[data-rightbar-instant],.pI_x6G_frame[data-rightbar-instant] .pI_x6G_handle{transition:none}@media (prefers-reduced-motion:reduce){.pI_x6G_handle{transition:none}}.pI_x6G_rightbarCol{min-width:0;position:relative;overflow:visible}.pI_x6G_overlayLayer{z-index:20;pointer-events:none;position:absolute;inset:0}.pI_x6G_overlayLayer>*{pointer-events:auto}";
++		const css = ".pI_x6G_frame{background:var(--dsw-alias-bg-base);height:100%;transition:grid-template-columns var(--ds-transition-duration-slow) var(--ds-ease-in-out);grid-template-rows:100%;display:grid;position:relative;overflow:hidden}.pI_x6G_frame[data-dragging]{transition:none}@media (prefers-reduced-motion:reduce){.pI_x6G_frame{transition:none}}.pI_x6G_sidebarCol{background:var(--dsw-specific-sidebar-fill);border-right:1px solid var(--dsw-alias-border-l1);min-width:0;overflow:hidden}.pI_x6G_centerCol{flex-direction:column;min-width:0;display:flex;overflow:hidden}.pI_x6G_detailsCol{border-left:1px solid var(--dsw-alias-border-l2);min-width:0;overflow:hidden}.pI_x6G_frame[data-details-collapsed] .pI_x6G_detailsCol{border-left:none}.pI_x6G_handle{cursor:col-resize;z-index:2;touch-action:none;width:8px;transition:left var(--ds-transition-duration-slow) var(--ds-ease-in-out);margin-left:-4px;position:absolute;top:0;bottom:0}.pI_x6G_frame[data-dragging] .pI_x6G_handle{transition:none}@media (prefers-reduced-motion:reduce){.pI_x6G_handle{transition:none}}.pI_x6G_handle[data-side=details]:after{content:\"\";box-sizing:border-box;background:var(--dsw-alias-button-floating-fill);border:1px solid var(--dsw-alias-border-l2-darkmode-thin);opacity:0;width:12px;height:32px;transition:opacity var(--ds-transition-duration-slow) var(--ds-ease-in-out), background var(--ds-transition-duration-slow) var(--ds-ease-in-out);border-radius:10px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}.pI_x6G_detailsCol:hover~.pI_x6G_handle[data-side=details]:after,.pI_x6G_handle[data-side=details]:hover:after,.pI_x6G_handle[data-side=details][data-dragging=true]:after{opacity:1}.pI_x6G_handle[data-side=details]:hover:after,.pI_x6G_handle[data-side=details][data-dragging=true]:after{background:var(--dsw-alias-button-floating-hover);border-color:var(--dsw-alias-border-l3)}.pI_x6G_overlayLayer{z-index:20;pointer-events:none;position:absolute;inset:0}.pI_x6G_overlayLayer>*{pointer-events:auto}";
+ 		const tagId = "@deepseek-ai/dsh-client-ui-layout/AppFrame.module.css";
+ 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
+ 			const tag = document.createElement("style");
+@@ -79,10 +64,10 @@
+ 		}
+ 		var AppFrame_module_css_default = {
+ 			"centerCol": "pI_x6G_centerCol",
++			"detailsCol": "pI_x6G_detailsCol",
+ 			"frame": "pI_x6G_frame",
+ 			"handle": "pI_x6G_handle",
+ 			"overlayLayer": "pI_x6G_overlayLayer",
+-			"rightbarCol": "pI_x6G_rightbarCol",
+ 			"sidebarCol": "pI_x6G_sidebarCol"
+ 		};
+ 		//#endregion
+@@ -90,18 +75,14 @@
+ 		/**
+ 		* Three-column shell frame, registered into the built-in 'root' slot (the web
+ 		* shell renders only 'root'). Owns the grid tracks (sidebar | center |
+-		* rightbar), the drag handles (pointer capture + rAF throttle), the column
+-		* solve (columns.ts), and the child-slot render decisions: the sidebar slot
+-		* receives live parameters from that solve. The root-scoped main slot selects
+-		* the Conversation or a global panel. Each column occupant owns its Session
+-		* binding and reports the geometry it needs.
+-		*
+-		* The right column is a track, not a box: its occupant draws its panel anchored
+-		* to the frame's right edge at the resolved normal width, and the
+-		* track only decides whether the centre makes room for it. The occupant reports
+-		* shown/track/fullscreen through `ctx.layout`; fullscreen keeps the reported
+-		* track but hides the outer resize handle. Everything arrives through the framework
+-		* shares — zero cordis or framework imports, zero self-made hooks.
++		* details), the drag handles (pointer capture + rAF throttle), the concession
++		* chain (columns.ts), and the child-slot render decisions: the sidebar slot
++		* renders HERE with live parameters from the concession solve, and the
++		* session-aware occupants render in fixed column positions; strict entries
++		* gate themselves on current-session availability while session-maybe
++		* entries retain identity. Pure component: everything arrives
++		* through the three framework shares — zero cordis or framework imports,
++		* zero self-made hooks.
+ 		*/
+ 		/** Center column grid item (session-body building block). */
+ 		function CenterColumn(props) {
+@@ -110,19 +91,10 @@
+ 				children: props.children
+ 			});
+ 		}
+-		/** Subscribe to the main key without subscribing the column frame to each panel id. */
+-		function MainPanel({ usePanelInfo, renderSlot }) {
+-			return renderSlot("main", {}, { entryKey: usePanelInfo((info) => info.activePanelId) ?? "conversation" });
+-		}
+-		/**
+-		* Right column grid item. Zero-width unless the occupant asked for a track; the
+-		* occupant's panel is positioned against the column's right edge, which never
+-		* moves, so it can hang over the centre when there is no track.
+-		*/
+-		function RightbarColumn(props) {
++		/** Details column grid item; width 0 keeps the subtree mounted (never unmount on close). */
++		function DetailsColumn(props) {
+ 			return (0, react_jsx_runtime.jsx)("div", {
+-				className: AppFrame_module_css_default.rightbarCol,
+-				"data-rightbar-col": true,
++				className: AppFrame_module_css_default.detailsCol,
+ 				children: props.children
+ 			});
+ 		}
+@@ -135,7 +107,6 @@
+ 			const origin = (0, react.useRef)(0);
+ 			const latest = (0, react.useRef)(0);
+ 			const frame = (0, react.useRef)(null);
+-			const capture = (0, react.useRef)(null);
+ 			const callbacks = (0, react.useRef)({
+ 				onStart: props.onStart,
+ 				onDrag: props.onDrag,
+@@ -146,34 +117,16 @@
+ 				onDrag: props.onDrag,
+ 				onEnd: props.onEnd
+ 			};
+-			const endDrag = (0, react.useCallback)(() => {
+-				const active = capture.current;
+-				if (active === null) return;
+-				capture.current = null;
+-				if (frame.current !== null) {
+-					cancelAnimationFrame(frame.current);
+-					frame.current = null;
+-				}
+-				if (active.element.hasPointerCapture(active.id)) active.element.releasePointerCapture(active.id);
+-				setDragging(false);
+-				callbacks.current.onEnd();
+-			}, []);
+-			(0, react.useEffect)(() => endDrag, [endDrag]);
+ 			const onPointerDown = (0, react.useCallback)((e) => {
+-				if (e.button !== 0 || capture.current !== null) return;
+ 				e.preventDefault();
+ 				e.currentTarget.setPointerCapture(e.pointerId);
+-				capture.current = {
+-					element: e.currentTarget,
+-					id: e.pointerId
+-				};
+ 				origin.current = e.clientX;
+ 				latest.current = e.clientX;
+ 				callbacks.current.onStart();
+ 				setDragging(true);
+ 			}, []);
+ 			const onPointerMove = (0, react.useCallback)((e) => {
+-				if (capture.current?.id !== e.pointerId) return;
++				if (!e.currentTarget.hasPointerCapture(e.pointerId)) return;
+ 				latest.current = e.clientX;
+ 				frame.current ??= requestAnimationFrame(() => {
+ 					frame.current = null;
+@@ -181,13 +134,16 @@
+ 				});
+ 			}, []);
+ 			const onPointerUp = (0, react.useCallback)((e) => {
+-				if (capture.current?.id !== e.pointerId) return;
+-				callbacks.current.onDrag(e.clientX - origin.current);
+-				endDrag();
+-			}, [endDrag]);
+-			const onPointerCancel = (0, react.useCallback)((e) => {
+-				if (capture.current?.id === e.pointerId) endDrag();
+-			}, [endDrag]);
++				if (!e.currentTarget.hasPointerCapture(e.pointerId)) return;
++				e.currentTarget.releasePointerCapture(e.pointerId);
++				if (frame.current !== null) {
++					cancelAnimationFrame(frame.current);
++					frame.current = null;
++				}
++				callbacks.current.onDrag(latest.current - origin.current);
++				setDragging(false);
++				callbacks.current.onEnd();
++			}, []);
+ 			return (0, react_jsx_runtime.jsx)("div", {
+ 				className: AppFrame_module_css_default.handle,
+ 				style: { left: props.left },
+@@ -195,53 +151,52 @@
+ 				"data-dragging": dragging || void 0,
+ 				onPointerDown,
+ 				onPointerMove,
+-				onPointerUp,
+-				onPointerCancel,
+-				onLostPointerCapture: onPointerCancel
++				onPointerUp
+ 			});
+ 		}
+ 		/** The three-column frame (see module doc). */
+-		function AppFrame({ useStore, useSessions, usePanelInfo, actions, renderSlot, t }) {
+-			const layoutInfo = useStore((state) => state.layoutInfo);
++		function AppFrame({ useStore, useSessions, actions, renderSlot }) {
++			const panels = useStore((s) => s);
++			const detailsSession = useSessions((s) => {
++				const current = s.current;
++				return current !== void 0 && s.byId[current]?.blank === false ? current : void 0;
++			});
+ 			const frameRef = (0, react.useRef)(null);
+-			const viewport = layoutInfo.viewportWidth;
++			const [viewport, setViewport] = (0, react.useState)(() => window.innerWidth);
++			const lastSession = (0, react.useRef)(detailsSession);
+ 			(0, react.useLayoutEffect)(() => {
++				if (detailsSession === void 0) return;
++				if (lastSession.current !== void 0 && lastSession.current !== detailsSession) actions.closeDetails();
++				lastSession.current = detailsSession;
++			}, [actions, detailsSession]);
++			(0, react.useEffect)(() => {
+ 				const el = frameRef.current;
+ 				/* v8 ignore next -- the ref is always attached by effect time: the frame div renders unconditionally. */
+ 				if (el === null) return;
+ 				let raf = null;
+-				let disposed = false;
+-				const measure = () => {
+-					const width = el.getBoundingClientRect().width;
+-					if (width > 0) actions.setViewportWidth(width);
+-				};
+-				measure();
+ 				const observer = new ResizeObserver(() => {
+-					if (disposed) return;
+ 					raf ??= requestAnimationFrame(() => {
+ 						raf = null;
+-						measure();
++						const width = el.getBoundingClientRect().width;
++						if (width > 0) setViewport(width);
+ 					});
+ 				});
+ 				observer.observe(el);
+ 				return () => {
+-					disposed = true;
+ 					observer.disconnect();
+ 					if (raf !== null) cancelAnimationFrame(raf);
+ 				};
+-			}, [actions]);
++			}, []);
+ 			const narrow = viewport < SIDEBAR_AUTO_COLLAPSE;
+-			const sidebarCollapsed = narrow ? !layoutInfo.narrowExpanded : layoutInfo.sidebar === 0;
+-			const sidebarPreference = sidebarCollapsed ? 0 : layoutInfo.sidebar === 0 ? 280 : layoutInfo.sidebar;
+-			const rightbarPreference = layoutInfo.rightbar ?? viewport * .45;
+-			const normal = computeColumns(viewport, !layoutInfo.rightbarShown && narrow ? 0 : sidebarPreference, rightbarPreference);
+-			const cols = computeColumns(viewport, sidebarPreference, layoutInfo.rightbarTrack ? rightbarPreference : 0);
++			(0, react.useEffect)(() => {
++				actions.setNarrow(narrow);
++			}, [actions, narrow]);
++			const sidebarCollapsed = narrow ? !panels.narrowExpanded : panels.sidebar === 0;
++			const cols = computeColumns(viewport, sidebarCollapsed ? 0 : panels.sidebar === 0 ? 280 : panels.sidebar, detailsSession === void 0 ? 0 : panels.details);
+ 			const colsRef = (0, react.useRef)(cols);
+ 			colsRef.current = cols;
+-			const rightbarWidth = (0, react.useRef)(normal.rightbar);
+-			rightbarWidth.current = normal.rightbar;
+ 			const sidebarBase = (0, react.useRef)(0);
+-			const rightbarBase = (0, react.useRef)(0);
++			const detailsBase = (0, react.useRef)(0);
+ 			const [dragging, setDragging] = (0, react.useState)(false);
+ 			const onDragEnd = (0, react.useCallback)(() => {
+ 				setDragging(false);
+@@ -250,58 +205,36 @@
+ 				sidebarBase.current = colsRef.current.sidebar;
+ 				setDragging(true);
+ 			}, []);
++			const onDetailsStart = (0, react.useCallback)(() => {
++				detailsBase.current = colsRef.current.details;
++				setDragging(true);
++			}, []);
+ 			const onSidebarDrag = (0, react.useCallback)((dx) => {
+ 				actions.setSidebar(sidebarBase.current + dx);
+ 			}, [actions]);
+-			const onRightbarStart = (0, react.useCallback)(() => {
+-				rightbarBase.current = rightbarWidth.current;
+-				setDragging(true);
+-			}, []);
+-			const onRightbarDrag = (0, react.useCallback)((dx) => {
+-				actions.setRightbar(rightbarBase.current - dx);
++			const onDetailsDrag = (0, react.useCallback)((dx) => {
++				actions.setDetails(detailsBase.current - dx);
+ 			}, [actions]);
+-			const productTitle = "DeepSeek Harness";
+-			const sidebar = (0, react.useMemo)(() => renderSlot("sidebar", {
+-				collapsed: sidebarCollapsed,
+-				width: cols.sidebar
+-			}), [
+-				renderSlot,
+-				sidebarCollapsed,
+-				cols.sidebar
+-			]);
+-			const main = (0, react.useMemo)(() => (0, react_jsx_runtime.jsx)(MainPanel, {
+-				usePanelInfo,
+-				renderSlot
+-			}), [usePanelInfo, renderSlot]);
+-			const overlays = (0, react.useMemo)(() => renderSlot("shell.overlay", {}), [renderSlot]);
+ 			return (0, react_jsx_runtime.jsxs)("div", {
+ 				ref: frameRef,
+ 				className: AppFrame_module_css_default.frame,
+-				style: { gridTemplateColumns: `${cols.sidebar}px minmax(0, 1fr) ${cols.rightbar}px` },
++				style: { gridTemplateColumns: `${cols.sidebar}px minmax(0, 1fr) ${cols.details}px` },
+ 				"data-sidebar-collapsed": sidebarCollapsed || void 0,
+-				"data-rightbar-collapsed": cols.rightbar === 0 || void 0,
+-				"data-rightbar-fullscreen": layoutInfo.rightbarFullscreen || void 0,
+-				"data-rightbar-instant": layoutInfo.rightbarInstant || void 0,
++				"data-details-collapsed": cols.details === 0 || void 0,
+ 				"data-dragging": dragging || void 0,
+ 				children: [
+-					(0, react_jsx_runtime.jsx)(DocumentTitle, {
+-						productTitle,
+-						useSessions,
+-						usePanelInfo
+-					}),
+ 					(0, react_jsx_runtime.jsx)("div", {
+ 						className: AppFrame_module_css_default.sidebarCol,
+-						children: sidebar
++						children: renderSlot("sidebar", {
++							collapsed: sidebarCollapsed,
++							width: cols.sidebar
++						})
+ 					}),
+-					(0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [(0, react_jsx_runtime.jsx)(CenterColumn, { children: main }), (0, react_jsx_runtime.jsx)(RightbarColumn, { children: renderSlot("rightbar", {
+-						width: normal.rightbar,
+-						viewportWidth: viewport,
+-						canShow: normal.rightbar > 0
+-					}) })] }),
++					(0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [(0, react_jsx_runtime.jsx)(CenterColumn, { children: renderSlot("conversation", {}) }), (0, react_jsx_runtime.jsx)(DetailsColumn, { children: renderSlot("details", {}) })] }),
+ 					(0, react_jsx_runtime.jsx)("div", {
+ 						className: AppFrame_module_css_default.overlayLayer,
+ 						"data-shell-overlay": true,
+-						children: overlays
++						children: renderSlot("shell.overlay", {})
+ 					}),
+ 					!sidebarCollapsed && (0, react_jsx_runtime.jsx)(DragHandle, {
+ 						side: "sidebar",
+@@ -310,11 +243,11 @@
+ 						onDrag: onSidebarDrag,
+ 						onEnd: onDragEnd
+ 					}),
+-					layoutInfo.rightbarShown && !layoutInfo.rightbarFullscreen && normal.rightbar > 0 && (0, react_jsx_runtime.jsx)(DragHandle, {
+-						side: "rightbar",
+-						left: viewport - normal.rightbar,
+-						onStart: onRightbarStart,
+-						onDrag: onRightbarDrag,
++					cols.details > 0 && (0, react_jsx_runtime.jsx)(DragHandle, {
++						side: "details",
++						left: viewport - cols.details,
++						onStart: onDetailsStart,
++						onDrag: onDetailsDrag,
+ 						onEnd: onDragEnd
+ 					})
+ 				]
+@@ -323,72 +256,53 @@
+ 		//#endregion
+ 		//#region lib/types/client/stores.js
+ 		/**
+-		* Root-owned frame measurement, panel preferences, and presentation reports.
+-		* The registration supplies a fresh store and binds its actions to ctx.layout.
++		* The root entry's transient layout store: panel geometry as plain widths in
++		* px (0 = closed). Module level exports the factory only — a module-level
++		* handle would pin the store's identity in the module
++		* cache (a de-facto singleton surviving plugin reloads). register() receives
++		* the factory (exclusive use: the framework instantiates per entry), AppFrame
++		* derives its PropsStore share from the return type, and the service face
++		* receives the bound actions through the registration's inject hook.
+ 		*/
+ 		/**
+-		* Create the layout panel store handle. For the sidebar the preference IS the
+-		* width, so closing it forgets its drag width — reopening restores the contract
+-		* default. The right panel initializes at 45% of the frame on first opening
+-		* and keeps that px preference across resizes and close. Drag writes clamp to
+-		* the current frame's range. Narrow sidebar toggles change only the expansion
+-		* override; opening the right panel clears that override.
++		* Create the layout panel store handle. The preference IS the width, so
++		* closing a panel forgets its drag width — reopening restores the contract
++		* default. Actions are the complete write set: drag writes clamp
++		* into the panel's contract range and never cross the open/closed line;
++		* open/close transitions write 0 / the default explicitly. Below the
++		* auto-collapse breakpoint (AppFrame feeds setNarrow) the sidebar toggle
++		* flips the narrowExpanded override instead of the preference.
+ 		* @returns the store handle (spec + type + identity + factory in one).
+ 		*/
+ 		function createLayoutStore() {
+-			return (0, _deepseek_ai_dsh_client_store.defineStore)({
++			return (0, _deepseek_ai_dsh_client_runtime_client.defineStore)({
+ 				init: () => ({
+-					panelInfo: { activePanelId: null },
+-					layoutInfo: {
+-						sidebar: 280,
+-						viewportWidth: window.innerWidth,
+-						narrowExpanded: false,
+-						rightbar: null,
+-						rightbarShown: false,
+-						rightbarTrack: false,
+-						rightbarFullscreen: false,
+-						rightbarInstant: false
+-					}
++					sidebar: 280,
++					details: 0,
++					narrow: false,
++					narrowExpanded: false
+ 				}),
+ 				actions: {
+-					selectPanel: (d, panelId) => {
+-						d.panelInfo.activePanelId = panelId;
+-					},
+-					retainMainPanels: (d, panelIds) => {
+-						if (d.panelInfo.activePanelId !== null && !panelIds.includes(d.panelInfo.activePanelId)) d.panelInfo.activePanelId = null;
+-					},
+ 					setSidebar: (d, px) => {
+-						d.layoutInfo.rightbarInstant = false;
+-						d.layoutInfo.sidebar = clampWidth(px, 264, 420);
++						d.sidebar = clampWidth(px, 264, 420);
+ 					},
+-					toggleSidebar: (d) => {
+-						d.layoutInfo.rightbarInstant = false;
+-						if (d.layoutInfo.viewportWidth < 1024) d.layoutInfo.narrowExpanded = !d.layoutInfo.narrowExpanded;
+-						else d.layoutInfo.sidebar = d.layoutInfo.sidebar === 0 ? 280 : 0;
++					setDetails: (d, px) => {
++						d.details = clampWidth(px, 300, 520);
+ 					},
+-					setViewportWidth: (d, width) => {
+-						if (d.layoutInfo.viewportWidth === width) return;
+-						d.layoutInfo.rightbarInstant = false;
+-						if (d.layoutInfo.viewportWidth < 1024 !== width < 1024) d.layoutInfo.narrowExpanded = false;
+-						d.layoutInfo.viewportWidth = width;
++					toggleSidebar: (d) => {
++						if (d.narrow) d.narrowExpanded = !d.narrowExpanded;
++						else d.sidebar = d.sidebar === 0 ? 280 : 0;
+ 					},
+-					setRightbar: (d, px) => {
+-						d.layoutInfo.rightbarInstant = false;
+-						d.layoutInfo.rightbar = clampWidth(px, 300, Math.max(300, d.layoutInfo.viewportWidth * RIGHTBAR_MAX_RATIO));
++					setNarrow: (d, narrow) => {
++						if (d.narrow === narrow) return;
++						d.narrow = narrow;
++						d.narrowExpanded = false;
+ 					},
+-					openRightbar: (d, track, fullscreen) => {
+-						if (!d.layoutInfo.rightbarShown || d.layoutInfo.rightbarTrack !== track || d.layoutInfo.rightbarFullscreen !== fullscreen) d.layoutInfo.rightbarInstant = d.layoutInfo.rightbarFullscreen && !fullscreen;
+-						if (!d.layoutInfo.rightbarShown && d.layoutInfo.viewportWidth < 1024) d.layoutInfo.narrowExpanded = false;
+-						d.layoutInfo.rightbar ??= Math.max(300, Math.round(d.layoutInfo.viewportWidth * RIGHTBAR_DEFAULT_RATIO));
+-						d.layoutInfo.rightbarShown = true;
+-						d.layoutInfo.rightbarTrack = track;
+-						d.layoutInfo.rightbarFullscreen = fullscreen;
++					openDetails: (d) => {
++						if (d.details === 0) d.details = 360;
+ 					},
+-					closeRightbar: (d) => {
+-						if (d.layoutInfo.rightbarShown) d.layoutInfo.rightbarInstant = d.layoutInfo.rightbarFullscreen;
+-						d.layoutInfo.rightbarShown = false;
+-						d.layoutInfo.rightbarTrack = false;
+-						d.layoutInfo.rightbarFullscreen = false;
++					closeDetails: (d) => {
++						d.details = 0;
+ 					}
+ 				}
+ 			});
+@@ -397,52 +311,38 @@
+ 		//#region lib/types/client/service.js
+ 		/** Cross-plugin panel-action face (ctx.layout). */
+ 		var LayoutController = class {
+-			panels;
+-			hasMainPanel;
+-			navigation = new AbortController();
++			#panels;
+ 			/**
+-			* @param panels - actions of the instance shared with the root entry.
+-			* @param hasMainPanel - checks the live main-slot registry for a panel id.
++			* Adopt the root entry's bound store actions. Called from the root
++			* registration's inject hook (a sanctioned assembly side effect), so the
++			* face is live from the entry's first render; on entry re-register the
++			* fresh actions overwrite the stale set.
++			* @param actions - bound actions of the entry's layout store instance.
+ 			*/
+-			constructor(panels, hasMainPanel) {
+-				this.panels = panels;
+-				this.hasMainPanel = hasMainPanel;
+-			}
+-			/** Select a global panel or return to the Conversation. */
+-			selectPanel(panelId) {
+-				if (panelId !== null && !this.hasMainPanel(panelId)) throw new Error(`layout.selectPanel: main panel "${panelId}" is not registered`);
+-				this.navigation.abort();
+-				this.panels.selectPanel(panelId);
+-			}
+-			/** @returns the new pending navigation's cancellation signal. */
+-			beginNavigation() {
+-				this.navigation.abort();
+-				this.navigation = new AbortController();
+-				return this.navigation.signal;
+-			}
+-			/** Invalidate pending navigations when the layout owner is unloaded. */
+-			dispose() {
+-				this.navigation.abort();
++			attachPanels(actions) {
++				this.#panels = actions;
+ 			}
+ 			/** Toggle the sidebar panel (closed ⟷ contract default width). */
+ 			toggleSidebar() {
+-				this.panels.toggleSidebar();
++				this.#require().toggleSidebar();
+ 			}
+-			/** Report the right panel's track and fullscreen presentation. */
+-			openRightbar(track, fullscreen) {
+-				this.panels.openRightbar(track, fullscreen);
++			/** Open the details panel (no-op when already open). */
++			openDetails() {
++				this.#require().openDetails();
+ 			}
+-			/** Report the right panel as hidden: no track, no handle. */
+-			closeRightbar() {
+-				this.panels.closeRightbar();
++			/** Close the details panel. */
++			closeDetails() {
++				this.#require().closeDetails();
++			}
++			#require() {
++				if (this.#panels === void 0) throw new Error("layout: panel actions not wired (root entry not mounted)");
++				return this.#panels;
+ 			}
+ 		};
+ 		//#endregion
+ 		//#region lib/types/client/theme-presenter.js
+ 		/** Body attribute selecting the dark base palette in the token stylesheets. */
+ 		const DARK_ATTRIBUTE = "data-ds-dark-theme";
+-		/** Body variable carrying the user's content font size in px. */
+-		const CONTENT_FONT_SIZE_VARIABLE = "--dsh-content-font-size";
+ 		/** Applies theme snapshots to the document; one instance per plugin fiber. */
+ 		var ThemePresenter = class {
+ 			/** Token names this presenter wrote in the last apply (its retraction set). */
+@@ -457,10 +357,10 @@
+ 			/**
+ 			* Project a snapshot onto the document: set root `color-scheme` and the body
+ 			* palette attribute from `active.colorScheme` (never the id — `system` is
+-			* resolved upstream), publish the content font-size axis, then replace the
+-			* previously applied token variables with `active.tokens`. Browser
+-			* theme-color metadata follows the computed body background after those
+-			* writes, so the rendered palette remains the color authority.
++			* resolved upstream), then replace the previously applied token variables
++			* with `active.tokens`. Browser theme-color metadata follows the computed
++			* body background after those writes, so the rendered palette remains the
++			* color authority.
+ 			* @param snapshot - resolved theme snapshot from ctx.theme.
+ 			*/
+ 			apply(snapshot) {
+@@ -469,7 +369,6 @@
+ 				const body = document.body;
+ 				if (scheme === "dark") body.setAttribute(DARK_ATTRIBUTE, "");
+ 				else body.removeAttribute(DARK_ATTRIBUTE);
+-				body.style.setProperty(CONTENT_FONT_SIZE_VARIABLE, `${snapshot.fontSize}px`);
+ 				for (const name of this.appliedTokens) body.style.removeProperty(name);
+ 				this.appliedTokens = [];
+ 				for (const [name, value] of Object.entries(snapshot.active.tokens)) {
+@@ -479,12 +378,11 @@
+ 				this.themeColorMeta.content = getComputedStyle(body).backgroundColor;
+ 				if (!this.themeColorMeta.isConnected) document.head.append(this.themeColorMeta);
+ 			}
+-			/** Retract root color-scheme, the palette attribute, token variables, the font-size axis, and the owned metadata node. */
++			/** Retract root color-scheme, the palette attribute, token variables, and the owned metadata node. */
+ 			dispose() {
+ 				document.documentElement.style.removeProperty("color-scheme");
+ 				const body = document.body;
+ 				body.removeAttribute(DARK_ATTRIBUTE);
+-				body.style.removeProperty(CONTENT_FONT_SIZE_VARIABLE);
+ 				for (const name of this.appliedTokens) body.style.removeProperty(name);
+ 				this.appliedTokens = [];
+ 				this.themeColorMeta.remove();
+@@ -493,64 +391,45 @@
+ 		//#endregion
+ 		//#region lib/types/client/index.js
+ 		/** Required services (cordis fiber inject — the loader passes all module exports as an object plugin). */
+-		const inject = [
+-			"slots",
+-			"theme",
+-			"locale"
+-		];
++		const inject = ["slots", "theme"];
+ 		/**
+ 		* Client plugin body: provide ctx.layout, then one register() call — AppFrame
+ 		* into 'root' with the four child-slot declarations, the layout store seat,
+-		* and the shared root instance supplying commands and the panel-info source.
++		* and the inject hook that hands the store's bound actions to the service.
+ 		* @param ctx - client root context.
+ 		*/
+ 		function apply(ctx) {
++			const layout = new LayoutController();
+ 			ctx.effect(() => {
+-				const handle = createLayoutStore();
+-				const instance = handle.create();
+-				const store = {
+-					...handle,
+-					create: () => instance
+-				};
+-				const layout = new LayoutController(instance.actions, (id) => ctx.slots.entries("main").some((entry) => entry.options.key === id));
+-				const retainMainPanels = () => {
+-					instance.actions.retainMainPanels(ctx.slots.entries("main").flatMap((entry) => entry.options.key === void 0 ? [] : [entry.options.key]));
+-				};
+-				const disposePanelInfo = ctx.slots.provideRoot({ hooks: { panelInfo: {
+-					getSnapshot: () => instance.getSnapshot().panelInfo,
+-					subscribe: (listener) => instance.subscribe(listener)
+-				} } });
+ 				const disposeService = ctx.reflect.provide("layout", layout);
+ 				const disposeRegistration = ctx.slots.register({
+ 					name: "root",
+-					locale: "common",
+ 					children: {
+ 						"sidebar": {
+ 							kind: "single",
+ 							scope: "root"
+ 						},
+-						"main": {
+-							kind: "keyed",
+-							scope: "root"
++						"conversation": {
++							kind: "single",
++							scope: "session-maybe"
+ 						},
+-						"rightbar": {
++						"details": {
+ 							kind: "single",
+-							scope: "root"
++							scope: "session"
+ 						},
+ 						"shell.overlay": {
+ 							kind: "list",
+ 							scope: "root"
+ 						}
+ 					},
+-					store
++					store: createLayoutStore,
++					inject: (actions) => {
++						layout.attachPanels(actions);
++						return {};
++					}
+ 				}, AppFrame);
+-				const disposePanels = ctx.slots.subscribe("main", retainMainPanels);
+-				retainMainPanels();
+ 				return () => {
+-					layout.dispose();
+-					disposePanels();
+ 					disposeRegistration();
+-					disposePanelInfo();
+ 					disposeService();
+ 				};
+ 			}, "ui-layout: service + root registration");
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/AppFrame.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/AppFrame.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/AppFrame.d.ts	2026-09-11 14:27:15.135963181 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/AppFrame.d.ts	2026-09-12 14:56:17.998364488 +0800
+@@ -1,7 +1,7 @@
+-import type { PropsLocale, PropsRenderSlots, PropsRuntime, PropsStore } from '@deepseek-ai/dsh-client-ui-slots';
++import type { PropsRenderSlots, PropsRuntime, PropsStore } from '@deepseek-ai/dsh-client-ui-slots';
+ import type { createLayoutStore } from './stores.ts';
+ /** Full composed props: runtime share + child-slot render share + store share. */
+-export type AppFrameProps = PropsRuntime<'root'> & PropsRenderSlots<'sidebar' | 'main' | 'rightbar' | 'shell.overlay'> & PropsStore<ReturnType<typeof createLayoutStore>> & PropsLocale<'common'>;
++export type AppFrameProps = PropsRuntime<'root'> & PropsRenderSlots<'sidebar' | 'conversation' | 'details' | 'shell.overlay'> & PropsStore<ReturnType<typeof createLayoutStore>>;
+ /** The three-column frame (see module doc). */
+-export declare function AppFrame({ useStore, useSessions, usePanelInfo, actions, renderSlot, t, }: AppFrameProps): import("react").JSX.Element;
++export declare function AppFrame({ useStore, useSessions, actions, renderSlot, }: AppFrameProps): import("react").JSX.Element;
+ //# sourceMappingURL=AppFrame.d.ts.map
+\ No newline at end of file
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client: DocumentTitle.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/columns.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/columns.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/columns.d.ts	2026-09-11 14:27:15.151963409 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/columns.d.ts	2026-09-12 14:56:17.998536744 +0800
+@@ -1,16 +1,25 @@
+ /**
+- * Normal column geometry: the right column shrinks, then loses its track,
+- * before the center drops below its minimum. The sidebar never concedes here;
+- * AppFrame supplies its effective preference after responsive collapse.
++ * Pure concession-chain column solver for the three-column AppFrame.
++ * Chain order is fixed by contract: keep center >= CENTER_MIN by shrinking
++ * details, then auto-closing it (derived zero width — preferred width
++ * preferences are never rewritten, so widening the window restores them).
++ * The sidebar never concedes: its rendered width is always the drag
++ * preference (or the collapsed rail), and center absorbs any remaining
++ * deficit as the last resort. Inputs are the layout store's plain width
++ * preferences (0 = closed); a closed sidebar resolves to the fixed
++ * SIDEBAR_COLLAPSED control rail while closed details resolve to zero width.
++ * The SIDEBAR_AUTO_COLLAPSE breakpoint is consumed by AppFrame, which decides
++ * the effective sidebar preference before solving; the solver itself stays
++ * breakpoint-free.
+  */
+-/** Resolved widths for one frame. */
++/** Resolved widths for one frame; center may drop below CENTER_MIN only at the final fallback. */
+ export interface Columns {
+     sidebar: number;
+     center: number;
+-    rightbar: number;
++    details: number;
+ }
+-/** Center width protected while the normal right column is open. */
+-export declare const CENTER_MIN = 400;
++/** Center column floor; only the final fallback may go below it. */
++export declare const CENTER_MIN = 640;
+ /** Sidebar drag clamp floor. */
+ export declare const SIDEBAR_MIN = 264;
+ /** Sidebar drag clamp ceiling. */
+@@ -23,12 +32,12 @@
+  * LG breakpoint); a manual toggle below it re-expands over the squeezed center
+  * (stores.ts narrowExpanded). */
+ export declare const SIDEBAR_AUTO_COLLAPSE = 1024;
+-/** Right column drag clamp floor. */
+-export declare const RIGHTBAR_MIN = 300;
+-/** Maximum normal right panel width as a fraction of the frame. */
+-export declare const RIGHTBAR_MAX_RATIO = 0.7;
+-/** First-open right panel preference as a fraction of the frame. */
+-export declare const RIGHTBAR_DEFAULT_RATIO = 0.45;
++/** Details drag clamp floor. */
++export declare const DETAILS_MIN = 300;
++/** Details drag clamp ceiling. */
++export declare const DETAILS_MAX = 520;
++/** Details width before any user drag. */
++export declare const DETAILS_DEFAULT = 360;
+ /**
+  * Clamp a panel width into its contract range.
+  * @param px - requested width.
+@@ -38,12 +47,14 @@
+  */
+ export declare function clampWidth(px: number, min: number, max: number): number;
+ /**
+- * Solve the three column widths for one viewport frame.
++ * Solve the three column widths for one viewport frame. Pure: no hysteresis —
++ * the output is a function of (viewport, preferences) only, so recovery on
++ * re-widening is automatic. Preferences re-clamp here because they cross the
++ * store boundary and callers may still supply stale ranges.
+  * @param viewport - available frame width in px.
+  * @param sidebar - sidebar width preference in px (0 = closed).
+- * @param rightbar - requested right panel width in px (0 = no track).
+- * @returns actual widths after shrinking or removing the right track; only
+- *   without that track may the center fall below its minimum, down to zero.
++ * @param details - details width preference in px (0 = closed).
++ * @returns resolved widths; details 0 means visually closed (never unmounted), while a closed sidebar keeps its compact rail.
+  */
+-export declare function computeColumns(viewport: number, sidebar: number, rightbar: number): Columns;
++export declare function computeColumns(viewport: number, sidebar: number, details: number): Columns;
+ //# sourceMappingURL=columns.d.ts.map
+\ No newline at end of file
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/index.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/index.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/index.d.ts	2026-09-11 14:27:15.172963707 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/index.d.ts	2026-09-12 14:56:17.998624881 +0800
+@@ -3,17 +3,13 @@
+  * the runtime's built-in 'root' slot and, in the same breath, declares the
+  * four child slots (declaration = exclusive render authority), seats the
+  * layout store (panel geometry), and wires the panel-action service face.
+- * ctx.layout selects the main panel and controls column geometry; Session
+- * selection belongs to the Session Controller. A second effect seats the theme
++ * ctx.layout is the cross-plugin panel-action contract; navigation state lives
++ * with the runtime sessions service. A second effect seats the theme
+  * presenter, which projects ctx.theme snapshots onto document.body.
+  */
+-import type { Context as ClientContext } from '@deepseek-ai/cordis';
+-import type { SnapshotSelectorHook } from '@deepseek-ai/dsh-client-ui-slots';
+-import type { PanelInfo } from './service.ts';
++import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client';
+ export { LayoutController } from './service.ts';
+-export type { ILayout, MainPanelId, PanelInfo } from './service.ts';
+-/** Selector hook over root-scoped panel selection. */
+-export type UsePanelInfo = SnapshotSelectorHook<PanelInfo>;
++export type { ILayout } from './service.ts';
+ declare module '@deepseek-ai/cordis' {
+     interface Context {
+         /** The outward face only; the concrete service stays inside this plugin. */
+@@ -21,10 +17,6 @@
+     }
+ }
+ declare module '@deepseek-ai/dsh-client-ui-slots' {
+-    interface GlobalStandardProps {
+-        /** Subscribe to the selected main panel independently of parent renders. */
+-        usePanelInfo: UsePanelInfo;
+-    }
+     interface SlotMap {
+         /**
+          * The whole left column. OCCUPIED by ui-sidebar's SidebarRoot, which
+@@ -42,30 +34,35 @@
+             owner: SidebarOwnerProps;
+         };
+         /**
+-         * Central panel selected by sidebar entry id. The reserved `conversation`
+-         * key hosts the Conversation; other keys receive no Session binding.
++         * The whole center column, across both the no-session hero and a live
++         * conversation. OCCUPIED by ui-conversation's ConversationRoot, which
++         * declares the session body, composer, and input seats inside it —
++         * registering here replaces the entire conversation surface (and removes
++         * every seat it declares) rather than adding to it.
++         *
++         * Current-session-optional: the occupant owns both states without
++         * changing its React identity, so it keeps its own state across a session
++         * switch. It receives no owner props; session facts arrive through the
++         * framework hooks of the `session-maybe` scope.
+          */
+-        'main': {
+-            kind: 'keyed';
+-            scope: 'root';
++        'conversation': {
++            kind: 'single';
++            scope: 'session-maybe';
++            owner: ConvOwnerProps;
+         };
+         /**
+-         * The right column: a track the centre makes room for, or nothing. OCCUPIED
+-         * by the right Sidebar, which uses the resolved column width in normal
+-         * mode and covers the viewport in fullscreen, retaining the wide-screen
+-         * column reservation underneath.
++         * The right details column, shown when the layout opens it. OCCUPIED by
++         * ui-conversation's DetailsPanel, which declares the tool-details seat
++         * inside it — registering here replaces the column and takes that seat
++         * with it. Absent an occupant the column renders nothing.
+          *
+-         * Whether the panel is shown, and whether it takes a track, is the
+-         * occupant's own recorded business — it reports the composition of its
+-         * expanded and presentation state through `ctx.layout`, and the frame sizes
+-         * the track and places the resize handle from that. The expand control is
+-         * not this column's: it is a button in the conversation header. The root
+-         * occupant decides when to render its Session-bound content.
++         * No owner props: the framework injects the session id and hooks for the
++         * `session` scope, and `ctx.layout` owns whether the column is open.
+          */
+-        'rightbar': {
++        'details': {
+             kind: 'single';
+-            scope: 'root';
+-            owner: RightbarOwnerProps;
++            scope: 'session';
++            owner: DetailsOwnerProps;
+         };
+         /**
+          * Frame-wide floating layer, above every column and outside their scroll
+@@ -90,24 +87,18 @@
+     /** Rendered column width in px (SIDEBAR_COLLAPSED when collapsed). */
+     width: number;
+ }
+-/** Right column owner share: resolved normal geometry and opening eligibility. */
+-export interface RightbarOwnerProps {
+-    /** Resolved normal panel width in px, not the saved preference; zero if it cannot fit. */
+-    width: number;
+-    /** Current frame width in px. */
+-    viewportWidth: number;
+-    /**
+-     * Whether a normal right panel can retain 300px beside a 400px center.
+-     * Before a narrow opening, includes the space from collapsing the left sidebar.
+-     */
+-    canShow: boolean;
++/** Conversation owner share: business state and actions belong to the registrant. */
++export interface ConvOwnerProps {
++}
++/** Details owner share: empty — sessionId arrives as a framework-standard prop. */
++export interface DetailsOwnerProps {
+ }
+ /** Required services (cordis fiber inject — the loader passes all module exports as an object plugin). */
+ export declare const inject: string[];
+ /**
+  * Client plugin body: provide ctx.layout, then one register() call — AppFrame
+  * into 'root' with the four child-slot declarations, the layout store seat,
+- * and the shared root instance supplying commands and the panel-info source.
++ * and the inject hook that hands the store's bound actions to the service.
+  * @param ctx - client root context.
+  */
+ export declare function apply(ctx: ClientContext): void;
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/service.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/service.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/service.d.ts	2026-09-11 14:27:15.185963892 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/service.d.ts	2026-09-12 14:56:17.998755343 +0800
+@@ -1,72 +1,47 @@
+ /**
+  * LayoutController: the cross-plugin panel-action face behind ctx.layout.
+- * Panel geometry and main-panel selection live in the root layout store;
++ * Panel geometry itself lives in the root entry's layout store (stores.ts);
+  * the current-session selection lives with the runtime sessions service, and
+  * the per-session active view dissolved into ui-conversation's session store
+  * (its only consumer). What remains here is the contract other plugins'
+- * apply worlds reach for panel transitions (main-panel selection and sidebar toggle,
+- * right-panel show/hide from ui-sidebar-right) — writes stay inside the
+- * store's declared action set, shared with the root registration.
++ * apply worlds reach for panel transitions (sidebar toggle from ui-sidebar,
++ * details open/close from ui-conversation) — writes stay inside the store's
++ * declared action set, delivered as the registration's bound actions.
+  */
+ import type { BoundActions } from '@deepseek-ai/dsh-client-ui-slots';
+-import type { Branded } from '@deepseek-ai/dsh-brand';
+ import type { createLayoutStore } from './stores.ts';
+-/** Identity shared by a sidebar panel entry and its main-slot occupant. */
+-export type MainPanelId = Branded<'MainPanelId'>;
+-/** Root-scoped navigation state exposed to panel-aware components. */
+-export interface PanelInfo {
+-    /** Selected global panel; null displays the current Conversation. */
+-    readonly activePanelId: MainPanelId | null;
+-}
+ /** The layout store's bound action set (framework-baked, draft params peeled). */
+ export type PanelActions = BoundActions<ReturnType<typeof createLayoutStore>>;
+-/** Panel navigation and geometry actions exposed through ctx.layout. */
++/**
++ * The outward layout face (`ctx.layout`): the panel transitions other
++ * plugins may trigger — and exactly what a test fake must supply. The
++ * attachPanels wiring hook stays on the concrete class (root-entry assembly
++ * only).
++ */
+ export interface ILayout {
+-    /**
+-     * Select a global central panel without changing the current Session.
+-     * @param panelId - registered main key, or null to show the Conversation.
+-     * @throws if the selected main key is not registered; preserves the current selection.
+-     */
+-    selectPanel(panelId: MainPanelId | null): void;
+-    /**
+-     * Start an asynchronous navigation, superseding any earlier pending navigation.
+-     * @returns a signal aborted by the next navigation or layout disposal; check it before committing UI state.
+-     */
+-    beginNavigation(): AbortSignal;
+     /** Toggle the sidebar panel (closed ⟷ contract default width). */
+     toggleSidebar(): void;
+-    /**
+-     * Report the right panel's presentation without changing its expanded state.
+-     * @param track - whether the normal panel width reserves a grid track,
+-     *   including beneath a fullscreen overlay.
+-     * @param fullscreen - whether the panel covers the frame and hides its outer
+-     *   resize handle; independent of the underlying grid track.
+-     */
+-    openRightbar(track: boolean, fullscreen: boolean): void;
+-    /** Report the right panel as hidden: no track, no handle. */
+-    closeRightbar(): void;
++    /** Open the details panel (no-op when already open). */
++    openDetails(): void;
++    /** Close the details panel. */
++    closeDetails(): void;
+ }
+ /** Cross-plugin panel-action face (ctx.layout). */
+ export declare class LayoutController implements ILayout {
+-    private readonly panels;
+-    private readonly hasMainPanel;
+-    private navigation;
++    #private;
+     /**
+-     * @param panels - actions of the instance shared with the root entry.
+-     * @param hasMainPanel - checks the live main-slot registry for a panel id.
++     * Adopt the root entry's bound store actions. Called from the root
++     * registration's inject hook (a sanctioned assembly side effect), so the
++     * face is live from the entry's first render; on entry re-register the
++     * fresh actions overwrite the stale set.
++     * @param actions - bound actions of the entry's layout store instance.
+      */
+-    constructor(panels: PanelActions, hasMainPanel: (id: MainPanelId) => boolean);
+-    /** Select a global panel or return to the Conversation. */
+-    selectPanel(panelId: MainPanelId | null): void;
+-    /** @returns the new pending navigation's cancellation signal. */
+-    beginNavigation(): AbortSignal;
+-    /** Invalidate pending navigations when the layout owner is unloaded. */
+-    dispose(): void;
++    attachPanels(actions: PanelActions): void;
+     /** Toggle the sidebar panel (closed ⟷ contract default width). */
+     toggleSidebar(): void;
+-    /** Report the right panel's track and fullscreen presentation. */
+-    openRightbar(track: boolean, fullscreen: boolean): void;
+-    /** Report the right panel as hidden: no track, no handle. */
+-    closeRightbar(): void;
++    /** Open the details panel (no-op when already open). */
++    openDetails(): void;
++    /** Close the details panel. */
++    closeDetails(): void;
+ }
+ //# sourceMappingURL=service.d.ts.map
+\ No newline at end of file
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/stores.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/stores.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/stores.d.ts	2026-09-11 14:27:15.192963991 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/stores.d.ts	2026-09-12 14:56:17.998914002 +0800
+@@ -1,70 +1,46 @@
+ /**
+- * Root-owned frame measurement, panel preferences, and presentation reports.
+- * The registration supplies a fresh store and binds its actions to ctx.layout.
++ * The root entry's transient layout store: panel geometry as plain widths in
++ * px (0 = closed). Module level exports the factory only — a module-level
++ * handle would pin the store's identity in the module
++ * cache (a de-facto singleton surviving plugin reloads). register() receives
++ * the factory (exclusive use: the framework instantiates per entry), AppFrame
++ * derives its PropsStore share from the return type, and the service face
++ * receives the bound actions through the registration's inject hook.
+  */
+-import { type EngineStoreHandle } from '@deepseek-ai/dsh-client-store';
+-import type { MainPanelId } from './service.ts';
++import { type EngineStoreHandle } from '@deepseek-ai/dsh-client-runtime/client';
+ /**
+- * Transient layout preferences. Responsive concessions never rewrite widths;
+- * the right panel's expanded state belongs to its occupant.
++ * Layout store state: panel width preferences in px (0 = closed), plus the
++ * narrow-viewport pair — `narrow` mirrors AppFrame's breakpoint reading
++ * (viewport < SIDEBAR_AUTO_COLLAPSE) so toggleSidebar can pick semantics, and
++ * `narrowExpanded` is the manual override that re-expands the auto-collapsed
++ * sidebar over the squeezed center without rewriting the width preference.
+  */
+ type LayoutState = {
+-    panelInfo: {
+-        /** Null selects the Conversation; global panels keep the current Session intact. */
+-        activePanelId: MainPanelId | null;
+-    };
+-    layoutInfo: LayoutInfo;
+-};
+-type LayoutInfo = {
+     sidebar: number;
+-    /** Last positive frame measurement; window width bootstraps the first render. */
+-    viewportWidth: number;
++    details: number;
++    narrow: boolean;
+     narrowExpanded: boolean;
+-    /**
+-     * Saved right panel width in px, or null before its first opening. Resizing
+-     * the frame and closing the panel preserve this preference.
+-     */
+-    rightbar: number | null;
+-    /**
+-     * Whether the right panel is drawn at all, in either presentation.
+-     *
+-     * Derived chrome, not a source of truth: whether the right surface is
+-     * expanded is a recorded fact owned by that surface, reported here so the
+-     * frame can place the panel's resize handle. The occupant reports it; nothing
+-     * else writes it.
+-     */
+-    rightbarShown: boolean;
+-    /**
+-     * Whether the normal panel width reserves a grid track, including beneath
+-     * fullscreen. Reported by the occupant; always false while hidden.
+-     */
+-    rightbarTrack: boolean;
+-    /** Reported fullscreen presentation; hides the outer resize handle. */
+-    rightbarFullscreen: boolean;
+-    /** Suppress transitions for a fullscreen exit until another geometry action. */
+-    rightbarInstant: boolean;
+ };
+ /**
+  * Annotation twin of the actions literal below (the export needs a declared
+  * return type); drift fails assignability at the defineStore call.
+  */
+ type LayoutActions = {
+-    selectPanel: (draft: LayoutState, panelId: MainPanelId | null) => void;
+-    retainMainPanels: (draft: LayoutState, panelIds: readonly string[]) => void;
+     setSidebar: (draft: LayoutState, px: number) => void;
++    setDetails: (draft: LayoutState, px: number) => void;
+     toggleSidebar: (draft: LayoutState) => void;
+-    setViewportWidth: (draft: LayoutState, width: number) => void;
+-    setRightbar: (draft: LayoutState, px: number) => void;
+-    openRightbar: (draft: LayoutState, track: boolean, fullscreen: boolean) => void;
+-    closeRightbar: (draft: LayoutState) => void;
++    setNarrow: (draft: LayoutState, narrow: boolean) => void;
++    openDetails: (draft: LayoutState) => void;
++    closeDetails: (draft: LayoutState) => void;
+ };
+ /**
+- * Create the layout panel store handle. For the sidebar the preference IS the
+- * width, so closing it forgets its drag width — reopening restores the contract
+- * default. The right panel initializes at 45% of the frame on first opening
+- * and keeps that px preference across resizes and close. Drag writes clamp to
+- * the current frame's range. Narrow sidebar toggles change only the expansion
+- * override; opening the right panel clears that override.
++ * Create the layout panel store handle. The preference IS the width, so
++ * closing a panel forgets its drag width — reopening restores the contract
++ * default. Actions are the complete write set: drag writes clamp
++ * into the panel's contract range and never cross the open/closed line;
++ * open/close transitions write 0 / the default explicitly. Below the
++ * auto-collapse breakpoint (AppFrame feeds setNarrow) the sidebar toggle
++ * flips the narrowExpanded override instead of the preference.
+  * @returns the store handle (spec + type + identity + factory in one).
+  */
+ export declare function createLayoutStore(): EngineStoreHandle<LayoutState, LayoutActions>;
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/theme-presenter.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/theme-presenter.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/theme-presenter.d.ts	2026-09-11 14:27:15.197964063 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/theme-presenter.d.ts	2026-09-12 14:56:17.998997269 +0800
+@@ -2,17 +2,14 @@
+  * Global theme DOM applier: projects the resolved ThemeSnapshot onto the
+  * document — `html { color-scheme }` for native UA chrome (scrollbars, form
+  * controls), `body[data-ds-dark-theme]` for the token palette, the active
+- * theme's alias-token overrides as inline CSS variables on body, the content
+- * font-size axis (`--dsh-content-font-size`), and one presenter-owned
+- * `meta[name="theme-color"]` for surrounding browser UI. Pure DOM writes, no
+- * React involvement; the presenter only ever retracts what it wrote itself,
+- * so foreign attributes, metadata, and inline styles survive.
++ * theme's alias-token overrides as inline CSS variables on body, and one
++ * presenter-owned `meta[name="theme-color"]` for surrounding browser UI. Pure
++ * DOM writes, no React involvement; the presenter only ever retracts what it
++ * wrote itself, so foreign attributes, metadata, and inline styles survive.
+  */
+ import type { ThemeSnapshot } from '@deepseek-ai/dsh-client-ui-theme/client';
+ /** Body attribute selecting the dark base palette in the token stylesheets. */
+ export declare const DARK_ATTRIBUTE = "data-ds-dark-theme";
+-/** Body variable carrying the user's content font size in px. */
+-export declare const CONTENT_FONT_SIZE_VARIABLE = "--dsh-content-font-size";
+ /** Applies theme snapshots to the document; one instance per plugin fiber. */
+ export declare class ThemePresenter {
+     /** Token names this presenter wrote in the last apply (its retraction set). */
+@@ -24,14 +21,14 @@
+     /**
+      * Project a snapshot onto the document: set root `color-scheme` and the body
+      * palette attribute from `active.colorScheme` (never the id — `system` is
+-     * resolved upstream), publish the content font-size axis, then replace the
+-     * previously applied token variables with `active.tokens`. Browser
+-     * theme-color metadata follows the computed body background after those
+-     * writes, so the rendered palette remains the color authority.
++     * resolved upstream), then replace the previously applied token variables
++     * with `active.tokens`. Browser theme-color metadata follows the computed
++     * body background after those writes, so the rendered palette remains the
++     * color authority.
+      * @param snapshot - resolved theme snapshot from ctx.theme.
+      */
+     apply(snapshot: ThemeSnapshot): void;
+-    /** Retract root color-scheme, the palette attribute, token variables, the font-size axis, and the owned metadata node. */
++    /** Retract root color-scheme, the palette attribute, token variables, and the owned metadata node. */
+     dispose(): void;
+ }
+ //# sourceMappingURL=theme-presenter.d.ts.map
+\ No newline at end of file
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types: invariant.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-layout/package.json	2026-09-11 14:27:15.103962726 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/package.json	2026-09-12 14:56:17.998231060 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-client-ui-layout",
+   "description": "Shell plugin: three-column AppFrame with drag handles, ctx.layout viewing-state service (navigation + panels)",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -18,6 +18,10 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./client": {
+       "types": "./lib/types/client/index.d.ts",
+       "default": "./lib/client.js"
+@@ -28,9 +32,7 @@
+   "dsh": {
+     "client": {
+       "inject": [
+-        "@deepseek-ai/dsh-client-locale",
+-        "@deepseek-ai/dsh-client-ui-renderer",
+-        "@deepseek-ai/dsh-client-ui-session",
++        "@deepseek-ai/dsh-client-runtime",
+         "@deepseek-ai/dsh-client-ui-theme"
+       ],
+       "platform": "web"
+@@ -38,22 +40,24 @@
+   },
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-client-ui-theme": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-runtime": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   },
+   "devDependencies": {
+     "@types/react": "~18.3.1",
+     "react": "^18.2.0",
+-    "@deepseek-ai/dsh-brand": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-locale": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-store": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-renderer": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-session": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-slots": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-theme": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-client-ui-slots": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-locale": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-runtime": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-ui-theme": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2"
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/client.js",
+     "lib/types/**/*.d.ts"
+   ],

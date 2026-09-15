@@ -1,0 +1,710 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/README.i18n.yaml	2026-09-11 14:27:15.141963266 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/README.i18n.yaml	2026-09-12 14:56:16.105855523 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/session/session-telemetry/README.md
+-README.md: ba503adf55409ada47dc89b68ee37029ab0381d6
+-README.zh.md: 75b19f9c0280374d20605649381dcd2a6b5502e7
++README.md: e4ebee1324bc1228d6d97d891159685b05f94e4f
++README.zh.md: 718f07db3fb8d8f8a21236dcb917a33ed3e0cad8
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/README.md	2026-09-11 14:27:15.087962499 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/README.md	2026-09-12 14:56:16.104778404 +0800
+@@ -1,129 +1,49 @@
+----
+-description: "Session-telemetry capture seam for deployments and backend authors choosing a reporting backend, mounting redaction rules, or implementing the backend contract."
+-kind: "package-library"
+----
+-
+ # @deepseek-ai/dsh-session-telemetry
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-Session telemetry lets deployments send ordered copies of session activity for reporting while preserving the canonical session log. Deployments choose one reporting backend and can redact each outbound copy before delivery; without redaction rules, captured data leaves the process unchanged. The handoff is non-blocking, so reporting does not delay session processing. Delivery is best effort, and queued records may be lost if the process crashes.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## Use this package
+-
+-As a deployment, choose a backend, mount it, and add redaction rules when records must not leave the process as captured. As a backend author, implement the three-member contract and compose the coordinator with a capture mode.
+-
+-### Choosing and mounting a backend
+-
+-Load exactly one backend plugin; it registers `ctx.sessionTelemetry` with the capture coordinator and its delivery pipeline. A duplicate load throws. The required [`sharing` member](#the-sharing-disclosure) reports the deployment mode, not per-session admission or delivery. A consumer may report "not configured" only when no telemetry service is mounted. The `/feedback` command confirms recording without reading this policy.
+-
+-### The backend contract
+-
+-A backend implements three members: `emit(record)` must be a non-blocking enqueue because it runs synchronously on the session-event path; optional `flush()` is a fire-and-forget hint after a turn ends, which most backends omit in favor of their SDK's own batching schedule; `shutdown()` drains queued records and resolves when the SDK stops, and disposal awaits it. A backend that implements `flush()` must order concurrent flushes with the final `shutdown()` drain.
+-
+-### What gets captured
+-
+-Capture runs in one of two modes. `live` capture follows session events as they are appended, replays already-live sessions at mount time, and records lifecycle markers; `on-demand` capture reads the canonical session log only when the backend requests a prefix through `captureSession(session, throughSeq?)`. Coordinator options select whether stored history is included. Every canonical session event maps to one ledger record in order. An `assistant/message` or `assistant/attempt` record carries its complete embedded compact stream, including failed and retried output. Each ledger record also carries `session.id`, `session.format_version`, the numeric event identity, optional header facts, and a pre-mapped severity (`error` for `tool/result.isError`, `turn/end` error reasons, and `agent-error`; `info` otherwise).
+-
+-### The sharing disclosure
+-
+-<a id="the-sharing-disclosure"></a>
++The telemetry Service Definition declares the `SessionTelemetrySink` contract, and its capture coordinator passes session records to any reporting SDK backend that implements it. Capture can follow live session events or replay a canonical session-log prefix on demand. This package stops after it calls `emit()`: batching, retry, queueing, and loss policy belong to the backend's SDK and are neither specified nor wrapped. Rationale and rejected alternatives: [the revival Agent Note](../../../.agents/notes/implemented/feature/2026-07-23-session-telemetry-otel-revival.md), [feedback-gated delivery](../../../.agents/notes/implemented/feature/2026-08-05-feedback-gated-session-telemetry.md), and [buffer-free feedback replay](../../../.agents/notes/implemented/simplification/2026-08-06-buffer-free-feedback-telemetry.md).
+ 
+-Every backend discloses its deployment mode through `sharing`: `full`, `feedback-only`, or `disabled`. A backend may additionally restrict eligible Sessions. This property is not a delivery receipt; handoff is a non-blocking enqueue, and batching, retry, and loss policy belong to the backend SDK.
++## The backend contract
+ 
+-### Redacting records
++`SessionTelemetrySink` has three members: `emit(record)` MUST enqueue without blocking because it runs synchronously during `session/event` or explicit canonical-log replay; optional `flush()` is a fire-and-forget hint after a turn ends, and most backends omit it and use their SDK's normal batching schedule; `shutdown()` drains queued records and resolves when the SDK stops, and disposal awaits it. An implementation that provides `flush()` must order concurrent flushes with the final `shutdown()` drain. `SessionTelemetryBackend` registers this API under the `sessionTelemetry` context key; each context accepts one implementation, and a duplicate load throws. A backend constructs `SessionTelemetryCoordinator` with `live` or `on-demand` capture and calls `captureSession(session, throughSeq?)` at its chosen trigger.
+ 
+-<a id="the-redact-waterfall"></a>
++The service also carries the required [`SessionTelemetrySharingStatus`](#the-sharing-disclosure) `sharing` member: the deployment-selected sharing policy every backend must disclose to human-facing acknowledgement surfaces (the `/feedback` command's confirmation). A consumer renders "not configured" only when no telemetry service is mounted. The seam owns the vocabulary (`full` | `feedback-only` | `disabled`) so any backend can disclose a policy without depending on the OTel package.
+ 
+-Every outbound record passes the `sessionTelemetry/record` waterfall after the coordinator copies its canonical event. This package ships no rules: with no listener mounted, records reach the backend exactly as captured, so exported data is as clean as the rules a deployment mounts. Listeners stack by transforming `next()`'s return value; a throwing listener withholds that one record fail-closed. Redaction applies to the outbound copy only — the canonical session log is never rewritten.
++## The sharing disclosure
+ 
+------
++The acknowledgement of a recorded feedback entry reports whether and how the session is shared, read from the mounted backend's `sharing`. A backend sets the property from its deployment configuration: `full` (every event is handed over as it happens), `feedback-only` (nothing is handed over until a `feedback/record` event releases the unreleased prefix through it), or `disabled` (nothing is handed over at all). Consumers map the status onto user-facing copy; the disclosure never claims delivery — handoff is the non-blocking enqueue, and batching, retry, and loss policy stay the backend SDK's.
+ 
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
++## Capture points
+ 
+-<details>
+-<summary>Implementation internals — click to expand</summary>
++In `live` mode the coordinator registers, all through the composing fiber's effects: `session/created` (adopt: record the header, read the log back through the projection from the construction boundary — constructor seeds from fork/resume never re-emit on the firehose and never re-export), `session/event` (project, deep-copy, redact, then hand off; zero I/O), `session/flush` (forward the optional `flush()` hint and return void — the loop's awaited parallel must never wait on telemetry), `session/disposed` (capture the session's `shutdown` operational record at its termination edge, then retire it), `agent/error` (the one live-bus relay; the session event vocabulary intentionally has no operational-error record), a dispose effect (capture shutdown for each still-live session, then await the backend's `shutdown()`; failures warn instead of throwing), and an adoption sweep of `ctx.sessions.list()` (a hot reload does not replay `session/created`). In `on-demand` mode it registers only the dispose effect: `captureSession()` reads the canonical log through an optional inclusive sequence boundary, while flush hints and operational events remain local.
+ 
+-This section explains the capture design; the observable behavior is fully covered in [Use this package](#use-this-package).
++## The redact waterfall
+ 
+-### Design concept
++Every record passes the `sessionTelemetry/record` waterfall immediately after projection — the Service Definition's scrubbing extension point. This package ships NO rules of its own: the innermost `next()` passes the record through unchanged, so with no listener mounted records reach the backend exactly as captured, and exported data is precisely as clean as the rules a deployment mounts. Listeners stack by transforming `next()`'s return value; returning without `next()` replaces everything beneath, and a throwing listener withholds that one record fail-closed inside the coordinator's containment. Live capture runs the waterfall at append time; on-demand capture runs it while replaying the canonical log, using the rules mounted at that time. Redaction applies to the outbound copy only; the canonical session log is never rewritten.
+ 
+-The seam is built on one boundary: the harness's aspect ends at `emit()`. Complete event capture, redaction, and the handoff cursor live here; batching, retry, queueing, and loss policy are the reporting SDK's, deliberately not modelled or wrapped. The design and rejected alternatives are pinned in the [revival Agent Note](../../../.agents/notes/implemented/feature/2026-07-23-session-telemetry-otel-revival.md).
++## The handoff cursor
+ 
+-### Source map
++A module-scope `WeakMap<Session, seq>` marks the highest seq HANDED OFF (not delivered) per session. Live capture advances it at append time; on-demand capture advances it only while `captureSession()` hands a requested prefix to the backend. An uncaptured prefix remains solely in the canonical log, so a coordinator reload adds no telemetry-owned recovery state. On replay the coordinator re-hands only events past the cursor (events at or below it still rebuild the chunk-projection state); a missing cursor safely degrades to a re-hand from the session's construction boundary (`Session.firstLiveSeq` — seq 0 for a session born in this process), absorbed by receiver-side dedupe on `(session.id, event.seq)`. Constructor seeds never re-export: a resumed session's history shipped from the previous process under the same id, and a fork's inherited prefix lives in the parent's stream (receivers stitch on `session.parent_id` + `session.seed_length`). The accepted cost, consistent with at-most-once delivery: a resume does not backfill records a previous process failed to deliver — a deployment with a backfill requirement needs the deferred outbox, not replay. This is a deliberate, narrow exception to the registrations-are-effects discipline: entries die with their sessions, the value is a monotonic watermark, and losing it is never an error.
+ 
+-| File | Role |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | Service Definition: `SessionTelemetryBackend`/`SessionTelemetrySink` contract, record vocabulary, `session-telemetry/record` waterfall declaration |
+-| [`src/coordinator.ts`](src/coordinator.ts) | Capture: live listeners, lifecycle-local on-demand replay, redaction, handoff cursor, containment |
++## The fixed chunk projection
+ 
+-### Capture flow
++Only the first `assistant/chunk` of each `(turn, step)` ships; the rest are dropped at capture and never advance the cursor. That one chunk is the stream-started signal: `step/start` + first-chunk presence + `assistant/message` presence + the `turn/end` reason distinguish "the request never started" from "the stream died midway" without chunk volume, and time-to-first-token stays computable. Chunk elision makes `seq` gaps routine on the wire — a gap is never a loss signal. Every other event type, including ones merged by plugins this package never heard of, passes through whole.
+ 
+-Live capture registers Session events, flush hints, shutdown markers, and agent/error observers through the composing fiber’s effects. On-demand capture registers only the disposal effect and reads the requested canonical-log prefix under its history policy. Synchronous handlers contain failures so they cannot affect the agent loop or other listeners.
++## The logical record
+ 
+-### The handoff cursor
++`SessionTelemetryRecord`: `channel` (`ledger` | `ops`), `time` (epoch ms), `severity` (pre-mapped: ERROR for `tool/result.isError`, `turn/end` error reasons, and `agent-error`; INFO for other captured records, while `sessionTelemetry/record` policies may assign WARN), identity-only `attributes` (`session.id`, `event.type`, `event.seq`, plus `session.cwd`/`session.parent_id`/`session.seed_length` when the header has them), and the complete deep-copied `event.data` as `body` — post-redaction. Operational records carry `sessionTelemetry.op` (`agent-error` | `shutdown`) and `session.id`, and deliberately NO `event.seq`/`event.type` — signals to alert on, not entries to sum; `agent-error` normalizes its arbitrary thrown value into a stable `{ name, message }` body. Delivery downstream of the handoff is the backend SDK's; duplicates remain possible (cursor-less re-adoption, SDK retries), so receivers dedupe on `(session.id, event.seq)`.
+ 
+-A module-scope `WeakMap<Session, seq>` records the highest sequence handed off, not delivered. Re-adopting the same object resumes after that cursor. Capture normally starts at `firstLiveSeq`; explicit `includeHistory: true` starts an unhanded object at seq 0, including restored or fork history. The backend owns capture authorization. Stored history does not itself authorize capture; the OTel backend waits for new explicit feedback. Receivers deduplicate repeated records by `(session.id, session.format_version, event.seq)`.
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-Read these pages when the seam contract is not enough. They move from the shipped backend to the subsystem reference and the decision evidence.
+-
+-- [OpenTelemetry telemetry backend](../session-telemetry-otel/README.md) — the shipped backend deployments load, with mode and exporter configuration.
+-- [Session telemetry subsystem](../../../docs/subsystems/session-telemetry.md) — the capability split and type declarations.
+-- [Session telemetry revival decision](../../../.agents/notes/implemented/feature/2026-07-23-session-telemetry-otel-revival.md) — rationale, trade-offs, and rejected alternatives.
+-- [Session package map](../README.md) — adjacent persistence, projection, title, and telemetry packages.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+-None, as the seam observes the session stream and hands redacted copies outward; it registers nothing model-facing.
++None, as this package only observes the session stream and hands redacted copies to a reporting backend; it never contributes to a model request.
+ 
+ #### KV Cache effect
+ 
+-None; the package neither assembles nor sends a provider request.
++None; this package neither assembles nor sends a provider request.
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits define the delivery and data-protection guarantees a deployment gets. They are current package constraints.
+-
+-- **Best-effort delivery** — the cursor marks handed-off, not delivered; a session torn down inside a reload window cannot be re-adopted, and whatever sits in a backend queue at crash time is lost. A durable outbox (spool, per-sink cursors, at-least-once) is deferred until a deployment states a crash-loss requirement.
++- **Best-effort delivery** — the cursor marks handed-off, not delivered; a session torn down inside a reload window cannot be re-adopted; whatever sits in a backend queue at crash time is lost. A durable outbox (spool, per-sink cursors, at-least-once) is deferred until a deployment states a crash-loss requirement — see [the revival Agent Note](../../../.agents/notes/implemented/feature/2026-07-23-session-telemetry-otel-revival.md).
+ - **No built-in redaction rules** — with no `sessionTelemetry/record` listener mounted, records leave the process exactly as captured, including any credentials embedded in file contents or command output; a deployment exporting to a shared collector owns its rule set.
+-- **On-demand redaction uses current state** — uncaptured events exist only in the canonical session log; a later `captureSession()` deep-copies and redacts their current values with the policy mounted at that time, and there is no capture-time telemetry snapshot or durable pre-capture spool.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-None.
+-
+-</details>
+-
+-**Runtime invariant:** No companion is published. The package's whole output is the backend handoff — a synchronous `emit()` call outside every authoritative event stream — and its capture side never appends session events, so no event/data relation exists for an independent companion to observe.
++- **On-demand redaction uses current state** — uncaptured events exist only in the canonical session log. A later `captureSession()` deep-copies and redacts their current values with the policy mounted at that time; there is no capture-time telemetry snapshot or durable pre-capture spool.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/README.zh.md	2026-09-11 14:27:15.100962683 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/README.zh.md	2026-09-12 14:56:16.104778404 +0800
+@@ -1,129 +1,53 @@
+----
+-description: "面向部署方与后端作者的会话遥测捕获 seam 说明，用于选择上报后端、挂载脱敏规则或实现后端约定。"
+-kind: "package-library"
+----
+-
+ # @deepseek-ai/dsh-session-telemetry
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-会话遥测让部署方发送会话活动的有序副本用于上报，同时保留权威会话日志。部署方选择一个上报后端，并可在投递前脱敏每个外发副本；如果没有脱敏规则，捕获的数据将原样离开进程。交接以非阻塞方式完成，因此上报不会延迟会话处理。投递采用尽力而为方式；如果进程崩溃，队列中的记录可能丢失。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## 使用本包
+-
+-作为部署方，选择一个后端并挂载它，当记录不能以捕获原样离开进程时添加脱敏规则。作为后端作者，实现三成员约定，并以一种捕获模式组装协调器。
+-
+-### 选择并挂载后端
++遥测（telemetry）Service Definition 声明 `SessionTelemetrySink` 后端约定，捕获协调器把会话记录传给实现该约定的任意上报 SDK 后端。捕获侧可跟随实时会话事件，也可按需回放权威会话日志前缀。本包调用 `emit()` 后就停止处理：批处理、重试、排队与丢失策略都属于后端自身的 SDK，本包既不规定也不包装。设计依据与被否决的替代方案见[复活 Agent Note](../../../.agents/notes/implemented/feature/2026-07-23-session-telemetry-otel-revival.zh.md)、[反馈门控投递](../../../.agents/notes/implemented/feature/2026-08-05-feedback-gated-session-telemetry.zh.md)与[无缓冲反馈回放](../../../.agents/notes/implemented/simplification/2026-08-06-buffer-free-feedback-telemetry.zh.md)。
+ 
+-只加载一个后端插件；它把捕获协调器与投递流水线注册为 `ctx.sessionTelemetry`。重复加载会抛出异常。必需的 [`sharing` 成员](#the-sharing-disclosure) 报告部署模式，不代表会话准入或投递。只有在未挂载任何遥测服务时，消费方才可报告「未配置」。`/feedback` 命令确认记录，不读取此策略。
++## 后端约定
+ 
+-### 后端约定
++`SessionTelemetrySink` 有三个成员：`emit(record)` 必须入队且不能阻塞，因为它会在 `session/event` 或显式权威日志回放期间同步执行；可选的 `flush()` 是轮次结束后的提示，调用方不等待结果，多数后端省略它并使用 SDK 的常规批处理计划；`shutdown()` 排空已入队记录，并在 SDK 停止后结束，dispose（资源释放）会等待它。提供 `flush()` 的实现必须安排并发 flush 与 `shutdown()` 最终排空的先后顺序。`SessionTelemetryBackend` 将此 API 注册在 `sessionTelemetry` 上下文键下：每个上下文只允许一个实现，重复加载会抛出异常。后端以 `live` 或 `on-demand` 捕获构造 `SessionTelemetryCoordinator`，并在自己选择的触发器中调用 `captureSession(session, throughSeq?)`。
+ 
+-后端实现三个成员：`emit(record)` 必须是非阻塞入队，因为它会在会话事件路径上同步执行；可选的 `flush()` 是轮次结束后的即发即忘提示，多数后端为了遵循 SDK 自身的批处理计划而省略它；`shutdown()` 排空已入队记录，并在 SDK 停止后结束，dispose（资源释放）会等待它。实现 `flush()` 的后端必须安排并发 flush 与最终 `shutdown()` 排空的先后顺序。
+-
+-### 捕获内容
+-
+-捕获以两种模式之一运行。`live` 捕获在追加时跟随会话事件、在挂载时回放已存活会话并记录生命周期标记；`on-demand` 捕获只在后端通过 `captureSession(session, throughSeq?)` 请求前缀时读取权威会话日志。协调器选项决定是否包含存储历史。每条权威会话事件都按顺序映射为一条 ledger 记录。`assistant/message` 或 `assistant/attempt` 记录会携带完整的嵌入式紧凑 stream，包括失败和重试输出。每条 ledger 记录还携带 `session.id`、`session.format_version`、数值事件身份、可选 header 事实与预先映射的严重级别（`tool/result.isError`、`turn/end` 的错误原因与 `agent-error` 映射为 `error`；其余为 `info`）。
+-
+-### 共享披露
++该服务还携带必需的 [`SessionTelemetrySharingStatus`](#the-sharing-disclosure) `sharing` 成员：每个后端都必须向面向用户的确认 surface（`/feedback` 命令的确认文本）披露的部署级共享策略。消费方只有在未挂载任何遥测服务时才渲染「未配置」。seam 拥有该词汇（`full` | `feedback-only` | `disabled`），因此任何后端都可以披露策略，而无需依赖 OTel 包。
+ 
+ <a id="the-sharing-disclosure"></a>
+ 
+-每个后端通过 `sharing` 披露部署模式：`full`、`feedback-only` 或 `disabled`。后端还可限制符合条件的 Session。该属性不是投递回执；交接是非阻塞入队，批处理、重试与丢失策略属于后端 SDK。
+-
+-### 脱敏记录
+-
+-<a id="the-redact-waterfall"></a>
+-
+-协调器复制权威事件后，每条外发记录都会立即经过 `sessionTelemetry/record` waterfall（瀑布式事件）。本包不带任何规则：未挂载监听器时，记录以捕获时的原样到达后端，因此导出数据能干净到什么程度，恰恰取决于部署方挂载了什么规则。监听器通过变换 `next()` 的返回值来堆叠；抛出异常的监听器以 fail-closed 方式拦下这一条记录。脱敏只作用于外发副本——权威会话日志永不改写。
++## 共享披露
+ 
+------
++一条已记录的反馈条目的确认文本会报告该会话是否以及如何被共享，读取自已挂载后端的 `sharing`。后端根据其部署配置设置该属性：`full`（每个事件在发生时立即交接）、`feedback-only`（在 `feedback/record` 事件释放其之前的未释放前缀之前，不交接任何内容）或 `disabled`（完全不交接任何内容）。消费方把状态映射为面向用户的文案；披露从不声称投递——交接是非阻塞入队，批处理、重试与丢失策略仍归后端 SDK。
+ 
+-<a id="understand-the-implementation"></a>
+-## 理解实现
++## 捕获点
+ 
+-<details>
+-<summary>实现细节——点击展开</summary>
++在 `live` 模式中，协调器的全部注册都经由组合方 fiber 的 effect 完成：`session/created`（收养：记录 header，并经投影从构造边界起回读日志；来自 fork 或恢复的构造函数种子绝不会在 firehose 上再次发出，也绝不会再次导出）、`session/event`（投影、深拷贝、脱敏，再交接；零 I/O）、`session/flush`（转发可选的 `flush()` 提示并返回 void；循环所等待的并行任务绝不能等待遥测）、`session/disposed`（在会话自身的终止边缘捕获该会话的 `shutdown` 运维记录，然后将其退役）、`agent/error`（唯一的实时总线转发；会话事件词汇有意不包含运维错误记录）、一个 dispose effect（捕获每个仍存活会话的 shutdown，再等待后端的 `shutdown()`；失败只发出警告而不抛出），以及对 `ctx.sessions.list()` 的收养扫描（热重载不会重放 `session/created`）。在 `on-demand` 模式中，协调器只注册 dispose effect：`captureSession()` 读取权威日志，直至可选的序列号边界（含边界）；flush 提示与运维事件留在本地。
+ 
+-本节解释捕获设计；可观察行为已在[使用本包](#use-this-package)中完整说明。
+-
+-### 设计理念
+-
+-seam 建立在一个边界之上：harness 的职责止于 `emit()`。完整事件捕获、脱敏与 handoff 游标都在这里；批处理、重试、排队与丢失策略属于上报 SDK，本包有意不建模也不包装。设计与被否决的替代方案见[复活 Agent Note](../../../.agents/notes/implemented/feature/2026-07-23-session-telemetry-otel-revival.zh.md)。
+-
+-### 源码地图
+-
+-| 文件 | 职责 |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | Service Definition：`SessionTelemetryBackend`/`SessionTelemetrySink` 约定、记录词汇、`session-telemetry/record` waterfall 声明 |
+-| [`src/coordinator.ts`](src/coordinator.ts) | 捕获：live 监听器、生命周期本地 on-demand 回放、脱敏、handoff 游标、异常隔离 |
+-
+-### 捕获流程
+-
+-实时捕获通过组合 fiber 的 effect 注册 Session 事件、刷新提示、关闭标记与 agent/error 观察器。按需捕获只注册释放 effect，并按历史策略读取请求的权威日志前缀。同步处理器隔离失败，避免影响 agent loop 或其他监听器。
++<a id="the-redact-waterfall"></a>
+ 
+-### handoff 游标
++## 脱敏 waterfall（瀑布式事件）
+ 
+-模块作用域的 `WeakMap<Session, seq>` 记录已交接而非已投递的最高序号。重新收养同一对象时从该游标之后继续。捕获通常从 `firstLiveSeq` 开始；显式 `includeHistory: true` 从未交接对象的 seq 0 开始，包含恢复或分叉历史。后端负责捕获授权。存储的历史本身不授权捕获；OTel 后端等待新的显式反馈。接收方按 `(session.id, session.format_version, event.seq)` 对重复记录去重。
++每条记录在投影后立即经过 `sessionTelemetry/record` waterfall，这是 Service Definition 的脱敏扩展点。本包自身不带任何规则：最内层的 `next()` 原样透传记录，因此未挂载监听器时，记录以捕获时的原样到达后端；导出数据能干净到什么程度，恰恰取决于部署方挂载了什么规则。监听器通过变换 `next()` 的返回值来堆叠；不调用 `next()` 就返回，即替换其下方的全部逻辑；抛出异常的监听器会在协调器的隔离范围内以 fail-closed 方式拦下这一条记录。实时捕获在追加时运行 waterfall；按需捕获则在回放权威日志时使用当时挂载的规则运行 waterfall。脱敏只作用于外发副本；权威会话日志永不改写。
+ 
+-</details>
++## handoff 游标
+ 
+------
++一个模块作用域的 `WeakMap<Session, seq>` 记录每个会话已交接（而非已投递）的最高 seq。实时捕获在追加时推进游标；按需捕获只有在 `captureSession()` 将请求的前缀交给后端时才推进游标。未捕获的前缀只留在权威日志中，因此协调器重载不会增加遥测自有的恢复状态。回放时，协调器只重新交接游标之后的事件（游标及其之前的事件仍用于重建分片投影状态）；游标缺失时安全退化为从会话构造边界起的重新交接（`Session.firstLiveSeq`，对在本进程中诞生的会话即 seq 0），由接收端基于 `(session.id, event.seq)` 的去重吸收。构造函数种子绝不会再次导出：恢复会话的历史已由上一个进程以同一 id 发出，fork 继承的前缀则位于父会话的流中（接收端基于 `session.parent_id` + `session.seed_length` 拼接）。由此接受的代价与至多一次（at-most-once）投递一致：恢复不会回填上一个进程未能投递的记录；有回填要求的部署需要的是已推迟的 outbox，而不是回放。这是对「注册即 effect」纪律的一次有意且范围极窄的例外：条目随其会话消亡，值是单调水位线，丢失它绝不是错误。
+ 
+-<a id="further-exploration"></a>
+-## 进一步探索
++## 固定分片投影
+ 
+-当 seam 约定不够用时阅读以下页面。它们从随附后端逐步进入子系统参考与决策证据。
++每个 `(turn, step)` 只发出第一条 `assistant/chunk`；其余分片在捕获时丢弃，且绝不推进游标。这一条分片就是「流已开始」的信号：`step/start`、首分片是否存在、`assistant/message` 是否存在，加上 `turn/end` 的原因，无需分片流量即可区分「请求从未开始」与「流中途夭折」，首个 token 延迟（time-to-first-token）也仍然可以计算。分片省略使导出流中的 `seq` 缺口成为常态：缺口绝不是丢失信号。其余所有事件类型都会完整透传，包括本包从未听说过的插件所合并的事件类型。
+ 
+-- [OpenTelemetry 遥测后端](../session-telemetry-otel/README.zh.md)——部署方加载的随附后端，含模式与导出器配置。
+-- [会话遥测子系统](../../../docs/subsystems/session-telemetry.zh.md)——能力拆分与类型声明。
+-- [会话遥测复活决策](../../../.agents/notes/implemented/feature/2026-07-23-session-telemetry-otel-revival.zh.md)——理由、权衡与被否决的替代方案。
+-- [会话包映射](../README.zh.md)——相邻的持久化、投影、标题与遥测包。
++## 逻辑记录
+ 
+------
++`SessionTelemetryRecord` 包含：`channel`（`ledger` | `ops`）、`time`（epoch 毫秒）、`severity`（预先映射好的严重级别：`tool/result.isError`、`turn/end` 的错误原因与 `agent-error` 映射为 ERROR，其他已捕获记录映射为 INFO，而 `sessionTelemetry/record` 策略可以指定 WARN）、只含身份信息的 `attributes`（`session.id`、`event.type`、`event.seq`，header 中存在时再加 `session.cwd`/`session.parent_id`/`session.seed_length`），以及作为 `body` 的完整深拷贝 `event.data`，且以脱敏后的内容为准。运维记录携带 `sessionTelemetry.op`（`agent-error` | `shutdown`）和 `session.id`，并刻意不带 `event.seq`/`event.type`：它们是用来告警的信号，不是用来累加的条目；`agent-error` 会把任意抛出值规范化为稳定的 `{ name, message }` 记录主体。交接之后的投递由后端 SDK 负责；重复仍然可能出现（无游标的重新收养、SDK 重试），因此接收端基于 `(session.id, event.seq)` 去重。
+ 
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+-无，因为该 seam 观察会话流并把脱敏后的副本交给外部；它不注册任何面向模型的内容。
++无。本包只观察会话流，并把脱敏后的副本交给上报后端；它绝不向模型请求贡献任何内容。
+ 
+ #### KV Cache 影响
+ 
+ 无；本包既不组装也不发送提供方请求。
+ 
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制定义部署方能得到的投递与数据保护保证。它们是当前包约束。
+-
+-- **尽力而为的投递**——游标标记的是已交接而非已投递；在重载窗口内被拆除的会话无法重新收养，崩溃时留在后端队列中的内容会丢失。持久化 outbox（spool、每 sink 游标、at-least-once）推迟到有部署方提出明确的崩溃丢失要求时再实现。
+-- **不内置脱敏规则**——未挂载 `sessionTelemetry/record` 监听器时，记录以捕获时的原样离开进程，包括文件内容或命令输出中内嵌的任何凭据；向共享 collector 导出的部署方自行负责其规则集。
+-- **按需脱敏使用当前状态**——未捕获的事件只存在于权威会话日志中；后续的 `captureSession()` 会使用当时挂载的策略，深拷贝并脱敏其当前值，且不存在捕获时的遥测快照或持久化的捕获前 spool。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
+-
+-无。
+-
+-</details>
++## 已知限制与暂缓事项
+ 
+-**运行时不变式：** 不发布伴生入口。全部输出都是权威事件流之外的同步 backend handoff，capture 端不追加 Session 事件，因此没有独立事件或数据关系。
++- **尽力而为的投递**：游标标记的是已交接而非已投递；在重载窗口内被拆除的会话无法重新收养；崩溃时留在后端队列中的内容会丢失。持久化 outbox（spool、每 sink 游标、at-least-once）推迟到有部署方提出明确的崩溃丢失要求时再实现；见[复活 Agent Note](../../../.agents/notes/implemented/feature/2026-07-23-session-telemetry-otel-revival.zh.md)。
++- **不内置脱敏规则**：未挂载 `sessionTelemetry/record` 监听器时，记录以捕获时的原样离开进程，包括文件内容或命令输出中内嵌的任何凭据；向共享 collector 导出的部署方自行负责其规则集。
++- **按需脱敏使用当前状态**：未捕获的事件只存在于权威会话日志中。后续的 `captureSession()` 会使用当时挂载的策略，深拷贝并脱敏其当前值；不存在捕获时的遥测快照或持久化的捕获前 spool。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/lib/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/lib/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/lib/index.js	2026-09-11 14:27:15.069962243 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/lib/index.js	2026-09-12 14:56:16.099871898 +0800
+@@ -1,11 +1,10 @@
+ import { Service } from "@deepseek-ai/cordis";
+-import { SessionLogOffset, SessionSeq } from "@deepseek-ai/dsh-session";
+ //#region lib/types/coordinator.js
+ /**
+ * Capture coordinator for the telemetry capability. Live capture subscribes to
+ * the session firehose plus the one live-bus relay (`agent/error`). Both
+-* capture paths build one logical record per canonical Session event and run
+-* each through the
++* capture paths apply the fixed chunk projection, build logical records, and
++* run each through the
+ * `session-telemetry/record` waterfall (deployment-mounted redaction rules;
+ * pass-through when none), then hands the result to the backend. Live capture
+ * follows the session firehose; on-demand capture replays the canonical log
+@@ -31,10 +30,10 @@
+ /**
+ * Install the telemetry capture side onto a context for one backend.
+ *
+-* Live capture registers its own `session/created` / `session/event` /
+-* `session/disposed` listener set plus the `agent/error` relay, all through
+-* `ctx.effect()`/`ctx.on()` on the composing fiber, and sweeps already-live
+-* sessions (a hot reload does not replay `session/created`). A `session/disposed` captures the session's `shutdown`
++* Live capture registers the persistence-coordinator listener set plus the
++* `agent/error` relay, all through `ctx.effect()`/`ctx.on()` on the composing
++* fiber, and sweeps already-live sessions (a hot reload does not replay
++* `session/created`). A `session/disposed` captures the session's `shutdown`
+ * operational record at its own termination edge and retires it from the
+ * adopted set. On-demand capture registers none of those continuous listeners;
+ * {@link captureSession} reads the canonical log explicitly and never creates
+@@ -46,23 +45,23 @@
+ var SessionTelemetryCoordinator = class {
+ 	ctx;
+ 	backend;
+-	options;
+ 	/**
+ 	* Sessions adopted by THIS fiber and still live, for double-adoption
+ 	* protection and the teardown sweep of unmarked sessions;
+ 	* `session/disposed` marks and retires entries.
+ 	*/
+ 	adopted = /* @__PURE__ */ new Set();
++	/** Per session, the `turn:step` keys whose first chunk already shipped; rebuilt from the log on re-adoption. */
++	chunkSeen = /* @__PURE__ */ new WeakMap();
+ 	/**
+ 	* @param ctx - the composing backend's context; listeners bind to its fiber.
+ 	* @param backend - the backend receiving records; owned elsewhere, never disposed here beyond `shutdown()` forwarding.
+-	* @param options - capture mode and history policy.
++	* @param capture - follow live events, or wait for explicit canonical-log capture.
+ 	*/
+-	constructor(ctx, backend, options = {}) {
++	constructor(ctx, backend, capture = "live") {
+ 		this.ctx = ctx;
+ 		this.backend = backend;
+-		this.options = options;
+-		if ((options.capture ?? "live") === "live") {
++		if (capture === "live") {
+ 			ctx.on("session/created", (session) => {
+ 				this.adopt(session);
+ 			});
+@@ -101,7 +100,7 @@
+ 		}, "telemetry capture");
+ 	}
+ 	/**
+-	* Copy, redact, and hand over the canonical session-log suffix after the handoff
++	* Project and hand over the canonical session-log suffix after the handoff
+ 	* cursor, optionally stopping at an inclusive sequence boundary. Redaction
+ 	* runs during this call, so an on-demand caller retains no copied records
+ 	* before requesting capture and uses the policy mounted at that time.
+@@ -111,19 +110,28 @@
+ 	* @param throughSeq - optional last sequence included in this capture.
+ 	*/
+ 	captureSession(session, throughSeq) {
+-		const cursor = handoffCursor.get(session) ?? (this.options.includeHistory === true || session.firstLiveSeq === 0 ? -1 : SessionSeq(session.firstLiveSeq - 1));
+-		for (const event of session.snapshotEvents(SessionLogOffset(cursor + 1))) {
++		const cursor = handoffCursor.get(session) ?? session.firstLiveSeq - 1;
++		for (const event of session.events) {
+ 			if (throughSeq !== void 0 && event.seq > throughSeq) break;
+ 			this.contain(() => {
+-				this.captureEvent(session, event);
++				if (event.seq <= cursor) this.track(session, event);
++				else this.captureEvent(session, event);
+ 			});
+ 		}
+ 	}
+ 	/**
+-	* Adopt a session and replay after its handoff cursor, then follow live events.
+-	* New objects include inherited and restored history only with includeHistory;
+-	* otherwise replay starts at the constructor boundary. Re-adopting the same
+-	* object resumes after its cursor.
++	* Adopt a session: replay its log THROUGH the projection from the handoff
++	* cursor, then rely on the firehose for everything after. When no cursor
++	* survived, replay starts at the session's construction boundary
++	* (`firstLiveSeq`), not seq 0: constructor seeds never publish on the
++	* firehose, and their content already left the process under another
++	* identity — the same id in a previous process (resume) or the parent's
++	* stream (fork, stitched by receivers via `session.seed_length`). Events
++	* at or below the start still feed the projection state (first-chunk
++	* tracking) without being re-handed, so a resumed fiber drops mid-step
++	* chunk continuations exactly like the fiber that saw the step begin. The
++	* cost, accepted with the capture contract's at-most-once stance: a resume no longer
++	* backfills records a previous process failed to deliver.
+ 	* @param session - the live session to adopt; a second adoption is a no-op.
+ 	*/
+ 	adopt(session) {
+@@ -131,8 +139,18 @@
+ 		this.adopted.add(session);
+ 		this.captureSession(session);
+ 	}
+-	/** Copy, redact, and hand one canonical event to the backend. */
++	/** Feed the chunk projection without handing off — the ≤cursor half of re-adoption. */
++	track(session, event) {
++		if (event.type === "assistant/chunk") this.seen(session).add(`${event.data.turn}:${event.data.step}`);
++	}
++	/** Project, redact, and hand one event to the backend. */
+ 	captureEvent(session, event) {
++		if (event.type === "assistant/chunk") {
++			const key = `${event.data.turn}:${event.data.step}`;
++			const seen = this.seen(session);
++			if (seen.has(key)) return;
++			seen.add(key);
++		}
+ 		this.deliver(session, {
+ 			record: this.redact({
+ 				channel: "ledger",
+@@ -182,6 +200,12 @@
+ 			body: detail
+ 		}) });
+ 	}
++	/** Lazily create the per-session first-chunk tracking set. */
++	seen(session) {
++		let set = this.chunkSeen.get(session);
++		if (!set) this.chunkSeen.set(session, set = /* @__PURE__ */ new Set());
++		return set;
++	}
+ 	/**
+ 	* Run one capture-side step with its exception contained: cordis `emit`
+ 	* is stop-on-throw, so a throwing listener would starve every subscriber
+@@ -231,14 +255,13 @@
+ function identityOf(session, event) {
+ 	const attributes = {
+ 		"session.id": String(session.id),
+-		"session.format_version": session.header.version,
+ 		"event.type": event.type,
+ 		"event.seq": event.seq
+ 	};
+-	const { cwd, parentSession, isSeeded } = session.header;
++	const { cwd, parentSession, seedLength } = session.header;
+ 	if (cwd !== void 0) attributes["session.cwd"] = cwd;
+ 	if (parentSession !== void 0) attributes["session.parent_id"] = String(parentSession);
+-	if (isSeeded) attributes["session.seed_length"] = session.inheritedEventCount;
++	if (seedLength !== void 0) attributes["session.seed_length"] = seedLength;
+ 	return attributes;
+ }
+ //#endregion
+@@ -246,8 +269,8 @@
+ /**
+ * SessionTelemetryBackend Service Definition for the DeepSeek Harness.
+ *
+-* This package owns the CAPTURE side of session-event reporting — the complete
+-* one-record-per-event ledger mirror, what records carry, when
++* This package owns the CAPTURE side of session-event reporting — which records
++* exist (the chunk projection), what they carry (the logical record), when
+ * they are captured (adoption, the per-append firehose, lifecycle
+ * forwarding), live versus on-demand canonical-log capture, and the HMR
+ * cursor. Everything downstream of
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/lib: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/lib/types/coordinator.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/lib/types/coordinator.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/lib/types/coordinator.d.ts	2026-09-11 14:27:15.120962968 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/lib/types/coordinator.d.ts	2026-09-12 14:56:16.104778404 +0800
+@@ -1,8 +1,8 @@
+ /**
+  * Capture coordinator for the telemetry capability. Live capture subscribes to
+  * the session firehose plus the one live-bus relay (`agent/error`). Both
+- * capture paths build one logical record per canonical Session event and run
+- * each through the
++ * capture paths apply the fixed chunk projection, build logical records, and
++ * run each through the
+  * `session-telemetry/record` waterfall (deployment-mounted redaction rules;
+  * pass-through when none), then hands the result to the backend. Live capture
+  * follows the session firehose; on-demand capture replays the canonical log
+@@ -14,24 +14,17 @@
+  * @module @deepseek-ai/dsh-session-telemetry/coordinator
+  */
+ import type { Context } from '@deepseek-ai/cordis';
+-import { type Session, type SessionSeq as SessionSeqType } from '@deepseek-ai/dsh-session';
++import type { Session } from '@deepseek-ai/dsh-session';
+ import type { SessionTelemetrySink } from './index.ts';
+ /** Whether capture follows live events or reads the canonical log only when requested. */
+ export type SessionTelemetryCapture = 'live' | 'on-demand';
+-/** Backend-selected capture mode and history policy. */
+-export interface SessionTelemetryCaptureOptions {
+-    /** Follow live events, or wait for explicit capture; defaults to live. */
+-    capture?: SessionTelemetryCapture;
+-    /** Include stored history before this lifecycle; defaults to false. */
+-    includeHistory?: boolean;
+-}
+ /**
+  * Install the telemetry capture side onto a context for one backend.
+  *
+- * Live capture registers its own `session/created` / `session/event` /
+- * `session/disposed` listener set plus the `agent/error` relay, all through
+- * `ctx.effect()`/`ctx.on()` on the composing fiber, and sweeps already-live
+- * sessions (a hot reload does not replay `session/created`). A `session/disposed` captures the session's `shutdown`
++ * Live capture registers the persistence-coordinator listener set plus the
++ * `agent/error` relay, all through `ctx.effect()`/`ctx.on()` on the composing
++ * fiber, and sweeps already-live sessions (a hot reload does not replay
++ * `session/created`). A `session/disposed` captures the session's `shutdown`
+  * operational record at its own termination edge and retires it from the
+  * adopted set. On-demand capture registers none of those continuous listeners;
+  * {@link captureSession} reads the canonical log explicitly and never creates
+@@ -43,21 +36,22 @@
+ export declare class SessionTelemetryCoordinator {
+     private readonly ctx;
+     private readonly backend;
+-    private readonly options;
+     /**
+      * Sessions adopted by THIS fiber and still live, for double-adoption
+      * protection and the teardown sweep of unmarked sessions;
+      * `session/disposed` marks and retires entries.
+      */
+     private readonly adopted;
++    /** Per session, the `turn:step` keys whose first chunk already shipped; rebuilt from the log on re-adoption. */
++    private readonly chunkSeen;
+     /**
+      * @param ctx - the composing backend's context; listeners bind to its fiber.
+      * @param backend - the backend receiving records; owned elsewhere, never disposed here beyond `shutdown()` forwarding.
+-     * @param options - capture mode and history policy.
++     * @param capture - follow live events, or wait for explicit canonical-log capture.
+      */
+-    constructor(ctx: Context, backend: SessionTelemetrySink, options?: SessionTelemetryCaptureOptions);
++    constructor(ctx: Context, backend: SessionTelemetrySink, capture?: SessionTelemetryCapture);
+     /**
+-     * Copy, redact, and hand over the canonical session-log suffix after the handoff
++     * Project and hand over the canonical session-log suffix after the handoff
+      * cursor, optionally stopping at an inclusive sequence boundary. Redaction
+      * runs during this call, so an on-demand caller retains no copied records
+      * before requesting capture and uses the policy mounted at that time.
+@@ -66,16 +60,26 @@
+      * @param session - session whose current canonical-log prefix may be handed over.
+      * @param throughSeq - optional last sequence included in this capture.
+      */
+-    captureSession(session: Session, throughSeq?: SessionSeqType): void;
++    captureSession(session: Session, throughSeq?: number): void;
+     /**
+-     * Adopt a session and replay after its handoff cursor, then follow live events.
+-     * New objects include inherited and restored history only with includeHistory;
+-     * otherwise replay starts at the constructor boundary. Re-adopting the same
+-     * object resumes after its cursor.
++     * Adopt a session: replay its log THROUGH the projection from the handoff
++     * cursor, then rely on the firehose for everything after. When no cursor
++     * survived, replay starts at the session's construction boundary
++     * (`firstLiveSeq`), not seq 0: constructor seeds never publish on the
++     * firehose, and their content already left the process under another
++     * identity — the same id in a previous process (resume) or the parent's
++     * stream (fork, stitched by receivers via `session.seed_length`). Events
++     * at or below the start still feed the projection state (first-chunk
++     * tracking) without being re-handed, so a resumed fiber drops mid-step
++     * chunk continuations exactly like the fiber that saw the step begin. The
++     * cost, accepted with the capture contract's at-most-once stance: a resume no longer
++     * backfills records a previous process failed to deliver.
+      * @param session - the live session to adopt; a second adoption is a no-op.
+      */
+     private adopt;
+-    /** Copy, redact, and hand one canonical event to the backend. */
++    /** Feed the chunk projection without handing off — the ≤cursor half of re-adoption. */
++    private track;
++    /** Project, redact, and hand one event to the backend. */
+     private captureEvent;
+     /**
+      * Run the `session-telemetry/record` waterfall at capture time. The innermost `next`
+@@ -92,6 +96,8 @@
+     private hintFlush;
+     /** Relay one `agent/error` bus emission as an `agent-error` operational record. */
+     private relayAgentError;
++    /** Lazily create the per-session first-chunk tracking set. */
++    private seen;
+     /**
+      * Run one capture-side step with its exception contained: cordis `emit`
+      * is stop-on-throw, so a throwing listener would starve every subscriber
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/lib/types/index.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/lib/types/index.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/lib/types/index.d.ts	2026-09-11 14:27:15.139963238 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/lib/types/index.d.ts	2026-09-12 14:56:16.105810702 +0800
+@@ -1,8 +1,8 @@
+ /**
+  * SessionTelemetryBackend Service Definition for the DeepSeek Harness.
+  *
+- * This package owns the CAPTURE side of session-event reporting — the complete
+- * one-record-per-event ledger mirror, what records carry, when
++ * This package owns the CAPTURE side of session-event reporting — which records
++ * exist (the chunk projection), what they carry (the logical record), when
+  * they are captured (adoption, the per-append firehose, lifecycle
+  * forwarding), live versus on-demand canonical-log capture, and the HMR
+  * cursor. Everything downstream of
+@@ -65,9 +65,8 @@
+     severity: SessionTelemetrySeverity;
+     /**
+      * Identity attributes, deliberately minimal: ledger records carry
+-     * `session.id`, `session.format_version`, `event.type`, `event.seq`, plus optional
+-     * `session.cwd` / `session.parent_id`; a seeded Session also carries
+-     * `session.seed_length` from its exact inherited event count;
++     * `session.id`, `event.type`, `event.seq`, plus `session.cwd` /
++     * `session.parent_id` / `session.seed_length` when the header has them;
+      * ops records carry `telemetry.op`, `session.id`, and (for `agent-error`)
+      * `agent.id`, `turn`, `step`, `error.name`. Anything recoverable from the
+      * body is intentionally NOT duplicated here.
+@@ -125,7 +124,11 @@
+     shutdown(): Promise<void>;
+ }
+ /**
+- * Deployment-selected session-sharing mode, not confirmation of SDK delivery.
++ * Deployment-selected session-sharing policy disclosed by a mounted
++ * {@link SessionTelemetryBackend} backend to human-facing acknowledgement surfaces (the
++ * `/feedback` command's confirmation text). The seam owns the vocabulary so
++ * any backend can disclose a policy without depending on the OTel package;
++ * the values mirror the OTel backend's serialized `SessionTelemetryMode` choices.
+  */
+ export type SessionTelemetrySharingStatus = 'full' | 'feedback-only' | 'disabled';
+ /**
+@@ -137,7 +140,11 @@
+ export declare abstract class SessionTelemetryBackend extends Service implements SessionTelemetrySink {
+     constructor(ctx: Context);
+     /**
+-     * Deployment-selected sharing mode, independent of SDK delivery.
++     * Deployment-selected session-sharing policy, disclosed for acknowledgement
++     * surfaces that report whether recorded feedback leaves the process. Every
++     * backend must disclose its policy; a consumer renders "not configured" only
++     * when no telemetry service is mounted. The seam owns this vocabulary so the
++     * disclosure is backend-independent.
+      */
+     abstract readonly sharing: SessionTelemetrySharingStatus;
+     /**
+@@ -153,5 +160,5 @@
+      */
+     abstract shutdown(): Promise<void>;
+ }
+-export { SessionTelemetryCoordinator, type SessionTelemetryCapture, type SessionTelemetryCaptureOptions } from './coordinator.ts';
++export { SessionTelemetryCoordinator, type SessionTelemetryCapture } from './coordinator.ts';
+ //# sourceMappingURL=index.d.ts.map
+\ No newline at end of file
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/lib/types: invariant.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-telemetry/package.json	2026-09-11 14:27:15.075962328 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-telemetry/package.json	2026-09-12 14:56:16.099955567 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-session-telemetry",
+   "description": "SessionTelemetryBackend seam for the DeepSeek Harness: session-event capture, projection, redaction, and handoff to a reporting backend",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -18,22 +18,29 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./src/*": "./src/*",
+     "./package.json": "./package.json"
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/types/**/*.d.ts"
+   ],
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/dsh-agent": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-agent": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/dsh-agent": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-agent": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   }
+ }
+\ No newline at end of file

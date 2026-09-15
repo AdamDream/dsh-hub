@@ -13,7 +13,7 @@ window.__ModuleLoader__.load({
 		// 先例), session rows drill down via ctx.sessions.select.
 		//#endregion
 		//#region styles (data-plugin style + --dsw-* tokens, official idiom)
-		const css = ".du_root{box-sizing:border-box;display:flex;flex-direction:column;gap:10px;padding:14px;font-size:13px;line-height:20px}.du_head{align-items:center;gap:8px;flex-wrap:wrap;display:flex}.du_title{color:var(--dsw-alias-label-primary);font-size:15px;font-weight:600}.du_sub{color:var(--dsw-alias-label-caption);font-size:11px}.du_toolbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.du_select{color:var(--dsw-alias-label-secondary);background:var(--dsw-alias-interactive-bg-hover);border:1px solid var(--dsw-alias-border-l2);border-radius:8px;padding:2px 6px;font:inherit;font-size:12px}.du_btn{color:var(--dsw-alias-label-primary);cursor:pointer;background:var(--dsw-alias-button-ghost-active-fill);border:1px solid var(--dsw-alias-border-inverted);border-radius:8px;padding:2px 10px;font:inherit;font-size:12px}.du_btn:hover{background:var(--dsw-alias-interactive-bg-hover)}.du_btn:disabled{opacity:.4;cursor:default}.du_error{color:var(--dsw-alias-state-error-primary);border:1px solid var(--dsw-alias-border-l2);border-radius:8px;padding:6px 10px;font-size:12px;line-height:18px}.du_errorDetail{color:var(--dsw-alias-label-caption);font-family:var(--ds-font-family-code,monospace);font-size:11px;word-break:break-all}.du_hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px}.du_stat{border:1px solid var(--dsw-alias-border-l2);border-radius:10px;padding:6px 10px;min-width:0}.du_statLabel{color:var(--dsw-alias-label-caption);font-size:11px}.du_statValue{color:var(--dsw-alias-label-primary);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}.du_note{color:var(--dsw-alias-label-caption);font-size:11px;line-height:16px}.du_panel{border:1px solid var(--dsw-alias-border-l2);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}.du_panelTitle{color:var(--dsw-alias-label-secondary);font-size:12px;font-weight:500}.du_svg{width:100%;max-width:560px;height:auto}.du_tabs{display:flex;gap:4px;flex-wrap:wrap}.du_tab{color:var(--dsw-alias-label-secondary);cursor:pointer;background:none;border:1px solid var(--dsw-alias-border-l2);border-radius:999px;padding:2px 10px;font:inherit;font-size:12px}.du_tabActive{color:var(--dsw-alias-label-primary);background:var(--dsw-alias-button-ghost-active-fill);border-color:var(--dsw-alias-border-inverted)}.du_tableWrap{max-height:260px;overflow:auto;border:1px solid var(--dsw-alias-border-l2);border-radius:8px}.du_table{border-collapse:collapse;width:100%;font-size:12px}.du_table th{color:var(--dsw-alias-label-caption);background:var(--dsw-alias-interactive-bg-hover);padding:4px 8px;text-align:left;font-weight:500;position:sticky;top:0}.du_table td{padding:4px 8px;border-top:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);font-variant-numeric:tabular-nums;white-space:nowrap}.du_table tr.du_clickable{cursor:pointer}.du_table tr.du_clickable:hover td{background:var(--dsw-alias-interactive-bg-hover)}.du_legend{display:flex;gap:4px;align-items:center;color:var(--dsw-alias-label-secondary);font-size:12px;flex-wrap:wrap}.du_swatch{width:10px;height:10px;border-radius:2px;display:inline-block}.du_heatNote{color:var(--dsw-alias-label-secondary);font-size:12px;line-height:16px}body{--du-heat-0:#f3f4f6;--du-heat-0-stroke:#9ca3af;--du-heat-0-stroke-width:1px;--du-heat-1:#dbeafe;--du-heat-2:#93c5fd;--du-heat-3:#60a5fa;--du-heat-4:#3b82f6;--du-heat-5:#2563eb;--du-heat-6:#1e3a8a;--du-heat-peak-stroke:#ffffff;--du-heat-month-fill:var(--dsw-alias-label-caption)}body[data-ds-dark-theme]{--du-heat-0:#2f3540;--du-heat-0-stroke:#8b93a1;--du-heat-0-stroke-width:1.5px;--du-heat-1:#1e3a8a;--du-heat-2:#2563eb;--du-heat-3:#3b82f6;--du-heat-4:#60a5fa;--du-heat-5:#93c5fd;--du-heat-6:#bfdbfe;--du-heat-peak-stroke:#0f1115;--du-heat-month-fill:var(--dsw-alias-label-secondary)}";
+		const css = ".du_root{box-sizing:border-box;display:flex;flex-direction:column;gap:10px;padding:14px;font-size:13px;line-height:20px}.du_head{align-items:center;gap:8px;flex-wrap:wrap;display:flex}.du_title{color:var(--dsw-alias-label-primary);font-size:15px;font-weight:600}.du_sub{color:var(--dsw-alias-label-caption);font-size:11px}.du_toolbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.du_select{color:var(--dsw-alias-label-secondary);background:var(--dsw-alias-interactive-bg-hover);border:1px solid var(--dsw-alias-border-l2);border-radius:8px;padding:2px 6px;font:inherit;font-size:12px}.du_btn{color:var(--dsw-alias-label-primary);cursor:pointer;background:var(--dsw-alias-button-ghost-active-fill);border:1px solid var(--dsw-alias-border-inverted);border-radius:8px;padding:2px 10px;font:inherit;font-size:12px}.du_btn:hover{background:var(--dsw-alias-interactive-bg-hover)}.du_btn:disabled{opacity:.4;cursor:default}.du_error{color:var(--dsw-alias-state-error-primary);border:1px solid var(--dsw-alias-border-l2);border-radius:8px;padding:6px 10px;font-size:12px;line-height:18px}.du_errorDetail{color:var(--dsw-alias-label-caption);font-family:var(--ds-font-family-code,monospace);font-size:11px;word-break:break-all}.du_hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px}.du_stat{border:1px solid var(--dsw-alias-border-l2);border-radius:10px;padding:6px 10px;min-width:0}.du_statLabel{color:var(--dsw-alias-label-caption);font-size:11px}.du_statValue{color:var(--dsw-alias-label-primary);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}.du_note{color:var(--dsw-alias-label-caption);font-size:11px;line-height:16px}.du_panel{border:1px solid var(--dsw-alias-border-l2);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}.du_panelTitle{color:var(--dsw-alias-label-secondary);font-size:12px;font-weight:500}.du_svg{width:100%;max-width:560px;height:auto}.du_tabs{display:flex;gap:4px;flex-wrap:wrap}.du_tab{color:var(--dsw-alias-label-secondary);cursor:pointer;background:none;border:1px solid var(--dsw-alias-border-l2);border-radius:999px;padding:2px 10px;font:inherit;font-size:12px}.du_tabActive{color:var(--dsw-alias-label-primary);background:var(--dsw-alias-button-ghost-active-fill);border-color:var(--dsw-alias-border-inverted)}.du_tableWrap{max-height:260px;overflow:auto;border:1px solid var(--dsw-alias-border-l2);border-radius:8px}.du_table{border-collapse:collapse;width:100%;font-size:12px}.du_table th{color:var(--dsw-alias-label-caption);background:var(--dsw-alias-interactive-bg-hover);padding:4px 8px;text-align:left;font-weight:500;position:sticky;top:0}.du_table td{padding:4px 8px;border-top:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);font-variant-numeric:tabular-nums;white-space:nowrap}.du_table tr.du_clickable{cursor:pointer}.du_table tr.du_clickable:hover td{background:var(--dsw-alias-interactive-bg-hover)}.du_legend{display:flex;gap:4px;align-items:center;color:var(--dsw-alias-label-secondary);font-size:12px;flex-wrap:wrap}.du_swatch{width:10px;height:10px;border-radius:2px;display:inline-block}.du_heatNote{color:var(--dsw-alias-label-secondary);font-size:12px;line-height:16px}.du_tip{position:fixed;z-index:1000;pointer-events:none;background:#ffffff;border:1px solid #d8dce2;border-radius:8px;padding:4px 7px;font-size:11px;line-height:13px;box-shadow:0 4px 16px rgba(0,0,0,.18);white-space:nowrap}.du_tipDay{color:var(--dsw-alias-label-secondary);font-size:10px;line-height:12px;font-variant-numeric:tabular-nums}.du_tipValue{color:var(--dsw-alias-label-primary);font-weight:600;font-variant-numeric:tabular-nums;line-height:14px;font-size:12px}.du_tipUnit{color:var(--dsw-alias-label-caption);font-weight:400;font-size:10px;line-height:14px}.du_tipMuted{color:var(--dsw-alias-label-caption);font-weight:400}.du_tip::before{content:'';position:absolute;top:-5px;left:var(--du-tip-ax,14px);width:8px;height:8px;background:#ffffff;border-left:1px solid #d8dce2;border-top:1px solid #d8dce2;transform:rotate(45deg)}.du_tip.du_tipL::before{top:var(--du-tip-ay,14px);left:-5px;border-left:1px solid #d8dce2;border-top:1px solid #d8dce2;transform:rotate(-45deg)}.du_tip.du_tipR::before{top:var(--du-tip-ay,14px);left:auto;right:-5px;border-right:1px solid #d8dce2;border-top:1px solid #d8dce2;transform:rotate(45deg)}.du_tip.du_tipD::before{top:auto;bottom:-5px;left:var(--du-tip-ax,14px);border-right:1px solid #d8dce2;border-bottom:1px solid #d8dce2;transform:rotate(45deg)}body[data-ds-dark-theme] .du_tip{background:#2b303b;border-color:#8b93a1;box-shadow:0 6px 20px rgba(0,0,0,.55)}body[data-ds-dark-theme] .du_tip::before{background:#2b303b;border-left-color:#8b93a1;border-top-color:#8b93a1}body[data-ds-dark-theme] .du_tip.du_tipR::before{border-right-color:#8b93a1;border-top-color:#8b93a1}body[data-ds-dark-theme] .du_tip.du_tipD::before{border-right-color:#8b93a1;border-bottom-color:#8b93a1}body[data-ds-dark-theme] .du_tip.du_tipL::before{border-left-color:#8b93a1;border-top-color:#8b93a1}body{--du-heat-0:#f3f4f6;--du-heat-0-stroke:#9ca3af;--du-heat-0-stroke-width:1px;--du-heat-1:#dbeafe;--du-heat-2:#93c5fd;--du-heat-3:#60a5fa;--du-heat-4:#3b82f6;--du-heat-5:#2563eb;--du-heat-6:#1e3a8a;--du-heat-peak-stroke:#ffffff;--du-heat-month-fill:var(--dsw-alias-label-caption)}body[data-ds-dark-theme]{--du-heat-0:#2f3540;--du-heat-0-stroke:#8b93a1;--du-heat-0-stroke-width:1.5px;--du-heat-1:#1e3a8a;--du-heat-2:#2563eb;--du-heat-3:#3b82f6;--du-heat-4:#60a5fa;--du-heat-5:#93c5fd;--du-heat-6:#bfdbfe;--du-heat-peak-stroke:#0f1115;--du-heat-month-fill:var(--dsw-alias-label-secondary)}";
 		const tagId = "@local/dsh-usage/dsh-usage-card.css";
 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
 			const tag = document.createElement("style");
@@ -63,6 +63,7 @@ window.__ModuleLoader__.load({
 				width: Math.max(0.5, v.width - pad * 2),
 				height: Math.max(0, Math.min(v.height, h - v.y)),
 				value: v.value,
+				day: v.day,
 			}));
 		}
 		function heatmapGrid(days, cell, opts) {
@@ -144,7 +145,7 @@ window.__ModuleLoader__.load({
 			const baseline = h;
 			const rects = series.map((s, i) => {
 				const height = (s.value / max) * (h - 4);
-				return { x: i * slot, y: baseline - height, width: slot, height, value: s.value };
+				return { x: i * slot, y: baseline - height, width: slot, height, value: s.value, day: s.day };
 			});
 			const tickEvery = Math.max(1, Math.ceil(series.length / 8));
 			const ticks = series
@@ -156,7 +157,7 @@ window.__ModuleLoader__.load({
 			if (!Array.isArray(series) || series.length === 0) return { points: [], ticks: [] };
 			const max = Math.max(1, ...series.map((s) => s.value));
 			const slot = series.length > 1 ? w / (series.length - 1) : w;
-			const points = series.map((s, i) => ({ x: i * slot, y: h - (s.value / max) * (h - 4) - 2 }));
+			const points = series.map((s, i) => ({ x: i * slot, y: h - (s.value / max) * (h - 4) - 2, day: s.day, value: s.value }));
 			const tickEvery = Math.max(1, Math.ceil(series.length / 8));
 			const ticks = series
 				.map((s, i) => ({ label: s.day.slice(5), x: i * slot }))
@@ -169,6 +170,98 @@ window.__ModuleLoader__.load({
 			if (Math.abs(n) >= 1e9) return (n / 1e9).toFixed(2) + "b";
 			if (Math.abs(n) >= 1e6) return (n / 1e6).toFixed(2) + "m";
 			if (Math.abs(n) >= 1e3) return (n / 1e3).toFixed(1) + "k";
+			return String(Math.round(n));
+		}
+		// 2026-09-14 tooltip: self-drawn hover tooltip for area/bar/heatmap.
+		// Hit-testing runs in viewBox coordinates (the svg onMouseMove handler
+		// converts screen coords via getBoundingClientRect × viewBox scale);
+		// the tooltip layer is position:fixed following the mouse with
+		// viewport-flip so it never overflows the window.
+		function hitAreaPoints(points, mx, my, maxDist) {
+			// nearest data point (vertex distance + polyline segment distance).
+			let best = -1;
+			let bestDist = maxDist;
+			for (let i = 0; i < points.length; i++) {
+				const dx = points[i].x - mx;
+				const dy = points[i].y - my;
+				const d = Math.sqrt(dx * dx + dy * dy);
+				if (d <= bestDist) { bestDist = d; best = i; }
+				if (i + 1 < points.length) {
+					const ax = points[i].x, ay = points[i].y;
+					const bx = points[i + 1].x, by = points[i + 1].y;
+					const abx = bx - ax, aby = by - ay;
+					const len2 = abx * abx + aby * aby;
+					let t = len2 > 0 ? ((mx - ax) * abx + (my - ay) * aby) / len2 : 0;
+					t = Math.max(0, Math.min(1, t));
+					const px = ax + abx * t;
+					const py = ay + aby * t;
+					const ddx = mx - px, ddy = my - py;
+					const d2 = Math.sqrt(ddx * ddx + ddy * ddy);
+					if (d2 <= bestDist) { bestDist = d2; best = t < 0.5 ? i : i + 1; }
+				}
+			}
+			return best;
+		}
+		function hitBarRects(rects, mx, my) {
+			// strict rect containment first; for narrow bars fall back to the
+			// horizontally nearest rect while the pointer stays within the
+			// bar's vertical span (± small tolerance).
+			for (let i = 0; i < rects.length; i++) {
+				const r = rects[i];
+				if (mx >= r.x && mx <= r.x + r.width && my >= r.y && my <= r.y + r.height) return i;
+			}
+			let best = -1;
+			let bestD = Infinity;
+			for (let i = 0; i < rects.length; i++) {
+				const r = rects[i];
+				const cx = r.x + r.width / 2;
+				const d = Math.abs(mx - cx);
+				const tolX = Math.max(8, r.width / 2 + 2);
+				if (d <= tolX && my >= r.y - 8 && my <= r.y + r.height + 8 && d < bestD) {
+					bestD = d;
+					best = i;
+				}
+			}
+			return best;
+		}
+		function hitGridCells(cells, mx, my, offsetY) {
+			// cells are laid out inside <g transform=translate(0,monthRow)>,
+			// so the pointer's y is offset by monthRow before containment.
+			for (let i = 0; i < cells.length; i++) {
+				const c = cells[i];
+				if (mx >= c.x && mx < c.x + c.size && my >= offsetY + c.y && my < offsetY + c.y + c.size) return i;
+			}
+			return -1;
+		}
+		function tipAtEvent(e, estW, estH) {
+			// 2026-09-14 tooltip iteration 2: tooltip is vertically centered on
+			// the pointer and sits +14px to its right; the returned `dir` makes
+			// the arrow point back at the data point in all four quadrants:
+			//   L — default (pointer left of tooltip)
+			//   R — right-edge flip (pointer right of tooltip)
+			//   D — bottom overflow (tooltip above pointer)
+			//   U — top overflow (tooltip below pointer)
+			const vw = window.innerWidth - 8;
+			const vh = window.innerHeight - 8;
+			const fx = e.clientX + 14 + estW > vw;
+			const left = Math.max(8, fx ? e.clientX - estW - 14 : e.clientX + 14);
+			let top = e.clientY - estH / 2;
+			let dir;
+			if (top + estH > vh) { top = vh - estH; dir = "d"; }
+			else if (top < 8) { top = 8; dir = "u"; }
+			else dir = fx ? "r" : "l";
+			return { left, top, dir, fx, fy: dir === "d" };
+		}
+		function tipTokens(value) {
+			// 2026-09-14 tooltip iteration 2: tooltip-only compact formatter —
+			// one decimal, uppercase unit (253.45m → "253.5M"). The global
+			// formatTokens keeps its existing two-decimal lowercase form for
+			// tables/hero/heatmap note (out of this feature's scope).
+			const n = Number(value == null ? 0 : value);
+			if (!Number.isFinite(n)) return "0";
+			if (Math.abs(n) >= 1e9) return (n / 1e9).toFixed(1) + "B";
+			if (Math.abs(n) >= 1e6) return (n / 1e6).toFixed(1) + "M";
+			if (Math.abs(n) >= 1e3) return (n / 1e3).toFixed(0) + "K";
 			return String(Math.round(n));
 		}
 		//#endregion
@@ -210,11 +303,21 @@ window.__ModuleLoader__.load({
 			const series = (props.rows || []).map((r) => ({ day: r.day, value: bucketValue(r, props.bucket) }));
 			const w = 560;
 			const h = 150;
+			// 2026-09-14 tooltip: self-drawn hover tooltip — hit-testing runs
+			// in viewBox coordinates on the svg's onMouseMove; the tooltip
+			// layer is a fixed-position .du_tip div following the mouse
+			// (viewport-flipped so it never overflows the window).
+			const [tip, setTip] = react.useState(null);
 			if (series.length === 0) return react.createElement("div", { className: "du_note" }, "暂无趋势数据");
 			const children = [];
+			let hitFn = null;
 			if (props.mode === "bar") {
 				const scaled = scaleBars(series, w, h);
 				const rects = barRects(scaled.rects, w, h);
+				hitFn = (mx, my) => {
+					const i = hitBarRects(rects, mx, my);
+					return i >= 0 ? { day: rects[i].day, valueText: tipTokens(rects[i].value) } : null;
+				};
 				children.push(react.createElement("g", { fill: "var(--dsw-state-business-primary)" },
 					rects.map((r) => react.createElement("rect", { key: r.x + "-" + r.y, x: r.x, y: r.y, width: r.width, height: r.height, rx: 1 }))));
 				children.push(react.createElement("g", { fill: "var(--dsw-alias-label-caption)", fontSize: 9, textAnchor: "middle" },
@@ -222,18 +325,50 @@ window.__ModuleLoader__.load({
 			} else {
 				const scaled = scaleArea(series, w, h);
 				const geom = areaPath(scaled.points, w, h);
+				hitFn = (mx, my) => {
+					const i = hitAreaPoints(scaled.points, mx, my, 12);
+					return i >= 0 ? { day: scaled.points[i].day, valueText: tipTokens(scaled.points[i].value) } : null;
+				};
 				children.push(react.createElement("path", { d: geom.area, fill: "var(--dsw-state-business-secondary)", opacity: 0.35 }));
 				children.push(react.createElement("path", { d: geom.line, fill: "none", stroke: "var(--dsw-state-business-primary)", strokeWidth: 2 }));
 				children.push(react.createElement("g", { fill: "var(--dsw-alias-label-caption)", fontSize: 9, textAnchor: "middle" },
 					scaled.ticks.map((t) => react.createElement("text", { key: "t" + t.x, x: t.x, y: h - 2 }, t.label))));
 			}
-			return react.createElement("svg", { viewBox: "0 0 " + w + " " + h, className: "du_svg", role: "img", "aria-label": "usage trend" }, children);
+			const onMove = (e) => {
+				const svg = e.currentTarget;
+				const rect = svg.getBoundingClientRect();
+				if (!rect.width || !rect.height) return;
+				const vx = (e.clientX - rect.left) * (w / rect.width);
+				const vy = (e.clientY - rect.top) * (h / rect.height);
+				const hit = hitFn(vx, vy);
+				if (!hit) { setTip(null); return; }
+				const pos = tipAtEvent(e, 110, 40);
+				// arrow pivot tracks the pointer (clamped inside the card)
+				const ax = Math.max(10, Math.min(110 - 18, e.clientX - pos.left));
+				const ay = Math.max(10, Math.min(40 - 18, e.clientY - pos.top));
+				setTip({ left: pos.left, top: pos.top, dir: pos.dir, ax: ax, ay: ay, day: hit.day.slice(5), valueText: hit.valueText, muted: false });
+			};
+			const tipEl = tip
+				? react.createElement("div", { className: "du_tip du_tip" + tip.dir.toUpperCase(), style: { left: tip.left + "px", top: tip.top + "px", "--du-tip-ax": tip.ax + "px", "--du-tip-ay": tip.ay + "px" } },
+						react.createElement("div", { className: "du_tipDay" }, tip.day),
+						react.createElement("div", { className: "du_tipValue" },
+							tip.muted ? tip.valueText : react.createElement("span", null, tip.valueText, react.createElement("span", { className: "du_tipUnit" }, " tokens"))))
+				: null;
+			return react.createElement("div", { style: { position: "relative" } },
+				react.createElement("svg", { viewBox: "0 0 " + w + " " + h, className: "du_svg", role: "img", "aria-label": "usage trend", onMouseMove: onMove, onMouseLeave: () => setTip(null) }, children),
+				tipEl);
 		}
 		function HeatmapChart(props) {
 			const cell = 11;
 			const grid = heatmapGrid(props.days || [], cell);
 			const monthRow = 16;
 			const gridH = monthRow + 7 * (cell + 3) - 3;
+			// 2026-09-14 tooltip: self-drawn hover tooltip on top of the
+			// per-cell <title> (kept as an a11y/fallback affordance). Cells
+			// already carry {day, value, level} from heatmapGrid, so the
+			// hit-test reads the day/token value directly; level 0 shows
+			// 无数据.
+			const [tip, setTip] = react.useState(null);
 			if (grid.cells.length === 0) return react.createElement("div", { className: "du_note" }, "暂无热力图数据");
 			// 2026-09-12 heatmap redesign v3: per-cell SVG <title> tooltip (data
 			// vs 无数据), month labels CENTERED over their covered column span
@@ -255,10 +390,34 @@ window.__ModuleLoader__.load({
 				react.createElement("span", null, "多"));
 			const legendNote = react.createElement("div", { className: "du_heatNote" },
 				"单位 tokens/日 · 灰格 = 无数据 · 峰值 " + formatTokens(grid.peak) + " tokens/日（" + grid.peakDay + "）");
+			const onMove = (e) => {
+				const svg = e.currentTarget;
+				const rect = svg.getBoundingClientRect();
+				if (!rect.width || !rect.height) return;
+				const vw = Math.max(grid.width, 200);
+				const vx = (e.clientX - rect.left) * (vw / rect.width);
+				const vy = (e.clientY - rect.top) * (gridH / rect.height);
+				const i = hitGridCells(grid.cells, vx, vy, monthRow);
+				if (i < 0) { setTip(null); return; }
+				const c = grid.cells[i];
+				const noData = c.level === 0;
+				const pos = tipAtEvent(e, 110, 40);
+				const ax = Math.max(10, Math.min(110 - 18, e.clientX - pos.left));
+				const ay = Math.max(10, Math.min(40 - 18, e.clientY - pos.top));
+				setTip({ left: pos.left, top: pos.top, dir: pos.dir, ax: ax, ay: ay, day: c.day.slice(5), valueText: noData ? "无数据" : tipTokens(c.value), muted: noData });
+			};
+			const tipEl = tip
+				? react.createElement("div", { className: "du_tip du_tip" + tip.dir.toUpperCase(), style: { left: tip.left + "px", top: tip.top + "px", "--du-tip-ax": tip.ax + "px", "--du-tip-ay": tip.ay + "px" } },
+						react.createElement("div", { className: "du_tipDay" }, tip.day),
+						react.createElement("div", { className: "du_tipValue" + (tip.muted ? " du_tipMuted" : "") },
+							tip.muted ? tip.valueText : react.createElement("span", null, tip.valueText, react.createElement("span", { className: "du_tipUnit" }, " tokens"))))
+				: null;
 			return react.createElement(react.Fragment, null,
-				react.createElement("svg", { viewBox: "0 0 " + Math.max(grid.width, 200) + " " + gridH, className: "du_svg", role: "img", "aria-label": "usage heatmap" },
-					monthLabels,
-					react.createElement("g", { transform: "translate(0," + monthRow + ")" }, rects)),
+				react.createElement("div", { style: { position: "relative" } },
+					react.createElement("svg", { viewBox: "0 0 " + Math.max(grid.width, 200) + " " + gridH, className: "du_svg", role: "img", "aria-label": "usage heatmap", onMouseMove: onMove, onMouseLeave: () => setTip(null) },
+						monthLabels,
+						react.createElement("g", { transform: "translate(0," + monthRow + ")" }, rects)),
+					tipEl),
 				legend,
 				legendNote);
 		}

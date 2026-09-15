@@ -29,12 +29,15 @@ export function areaPath(points, w, h, opts = {}) {
 
 /**
  * Bar-chart rects for one value series.
- * @param {Array<{x: number, y: number, width: number, height: number, value: number}>} values
+ * @param {Array<{x: number, y: number, width: number, height: number, value: number, day?: string}>} values
  *   — the caller scales values into coordinates.
  * @param {number} w - viewBox width.
  * @param {number} h - viewBox height.
  * @param {{pad?: number}} [opts]
- * @returns {Array<{x: number, y: number, width: number, height: number, value: number}>}
+ * @returns {Array<{x: number, y: number, width: number, height: number, value: number, day?: string}>}
+ *   2026-09-14 tooltip: `day` is passed through when the input carries it, so
+ *   the render layer can hit-test each rect and show 日期 + token 值 without
+ *   re-indexing the source series.
  */
 export function barRects(values, w, h, opts = {}) {
 	const pad = Number.isFinite(opts.pad) ? opts.pad : 1;
@@ -45,6 +48,7 @@ export function barRects(values, w, h, opts = {}) {
 		width: Math.max(0.5, v.width - pad * 2),
 		height: Math.max(0, Math.min(v.height, h - v.y)),
 		value: v.value,
+		day: v.day,
 	}));
 }
 
@@ -173,7 +177,9 @@ function formatDay(date) {
 }
 
 /**
- * Scale a numeric series into `{x, y, width, height, value}` bar rects.
+ * Scale a numeric series into `{x, y, width, height, value, day}` bar rects.
+ * 2026-09-14 tooltip: rects carry `day` through (self-drawn hover tooltip in
+ * the render layer hits rects by coordinate and shows the date + value).
  * @param {Array<{day: string, value: number}>} series
  * @param {number} w - chart width.
  * @param {number} h - chart height.
@@ -192,6 +198,7 @@ export function scaleBars(series, w, h) {
 			width: slot,
 			height,
 			value: s.value,
+			day: s.day,
 		};
 	});
 	const tickEvery = Math.max(1, Math.ceil(series.length / 8));
@@ -203,10 +210,13 @@ export function scaleBars(series, w, h) {
 
 /**
  * Scale a numeric series into area-chart points.
+ * 2026-09-14 tooltip: points carry `day`/`value` through so the render layer
+ * can hit-test near the polyline (vertex + segment distance) and show the
+ * date + token value without re-indexing the source series.
  * @param {Array<{day: string, value: number}>} series
  * @param {number} w - chart width.
  * @param {number} h - chart height.
- * @returns {{points: Array<{x: number, y: number}>, ticks: Array<{label: string, x: number}>}}
+ * @returns {{points: Array<{x: number, y: number, day?: string, value?: number}>, ticks: Array<{label: string, x: number}>}}
  */
 export function scaleArea(series, w, h) {
 	if (!Array.isArray(series) || series.length === 0) return { points: [], ticks: [] };
@@ -215,6 +225,8 @@ export function scaleArea(series, w, h) {
 	const points = series.map((s, i) => ({
 		x: i * slot,
 		y: h - (s.value / max) * (h - 4) - 2,
+		day: s.day,
+		value: s.value,
 	}));
 	const tickEvery = Math.max(1, Math.ceil(series.length / 8));
 	const ticks = series

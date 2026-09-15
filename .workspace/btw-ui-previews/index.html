@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>btw UI 批渲染预览 — 横幅绿系 + 序号徽标 + 放大 lightbox（2026-09-14）</title>
+<style>
+  /* ===== DSW 主题 token 近似（仅预览用；真实面板由 dsh-client-ui-theme 注入） ===== */
+  :root {
+    --dsw-alias-border-l1: #2a3038;
+    --dsw-alias-border-l2: #22262d;
+    --dsw-alias-bg-base: #171b21;
+    --dsw-alias-bg-layer-2: #1e242c;
+    --dsw-alias-bg-mask-1: rgb(5 7 9 / 62%);
+    --dsw-mask-blur: blur(2px);
+    --dsw-alias-label-primary: #eef1f4;
+    --dsw-alias-label-secondary: #aab2bd;
+    --dsw-alias-label-tertiary: #7d8794;
+    --dsw-alias-label-quaternary: #565f6b;
+    --dsw-alias-fill-tsp-secondary: #232932;
+    --dsw-alias-interactive-bg-hover: #262d37;
+    --dsw-shadow-lv3: 0 24px 70px rgb(0 0 0 / 45%);
+    --dsw-font-s-strong-14: 600 14px/20px system-ui, sans-serif;
+    --ds-font-family-code: ui-monospace, "SF Mono", Menlo, monospace;
+    --banner-lime: #b7e85b;
+    --banner-lime-light: #d9f39a;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #0c0f13;
+    color: var(--dsw-alias-label-primary);
+    font-family: system-ui, sans-serif;
+    padding: 32px;
+  }
+  .stage { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap; }
+  .caption { color: #8b95a1; font-size: 12px; line-height: 18px; max-width: 460px; }
+  .caption h2 { color: #e8ecf0; font-size: 15px; margin: 0 0 8px; }
+  .caption code { background: #1c2129; padding: 1px 5px; border-radius: 5px; font-size: 11px; color: #b7e85b; }
+  .caption .pill { display: inline-block; background: #fff; color: #000; border-radius: 6px; padding: 0 4px; font-family: var(--ds-font-family-code); font-size: 10px; line-height: 14px; }
+
+  /* ===== 复刻自 side-chat.module.css（2026-09-14 btw-ui） ===== */
+  .drawer {
+    position: relative;
+    width: 400px;
+    height: 640px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--dsw-alias-border-l1);
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--dsw-alias-bg-base) 96%, #0b0d0e 4%);
+    box-shadow: -18px 12px 70px rgb(18 25 21 / 30%), -1px 0 0 rgb(183 232 91 / 8%);
+    overflow: hidden;
+  }
+  .drawerHeader {
+    display: flex; align-items: center; justify-content: space-between;
+    min-height: 56px; padding: 10px 14px; border-bottom: 1px solid var(--dsw-alias-border-l2);
+  }
+  .drawerHeader strong { font-size: 14px; }
+  .readOnlyBadge {
+    padding: 2px 6px; border-radius: 999px; background: #b7e85b; color: #161a13;
+    font-family: var(--ds-font-family-code); font-size: 9px; font-weight: 700;
+    letter-spacing: .08em; line-height: 14px; margin-left: 6px;
+  }
+  .parentStatus {
+    display: flex; align-items: center; gap: 7px; min-height: 34px;
+    padding: 6px 16px; border-bottom: 1px solid var(--dsw-alias-border-l2);
+    color: var(--dsw-alias-label-secondary); font-size: 11px;
+  }
+  .statusDotRunning { width: 6px; height: 6px; border-radius: 50%; background: #b7e85b; box-shadow: 0 0 0 3px rgb(183 232 91 / 13%); }
+  .transcript {
+    flex: 1; overflow-y: auto; padding: 18px 16px 24px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .runningBanner {
+    position: sticky; top: 0; z-index: 2; align-self: flex-start;
+    display: inline-flex; align-items: center; padding: 3px 8px;
+    border: 1px solid color-mix(in srgb, #b7e85b 24%, var(--dsw-alias-border-l1));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--dsw-alias-bg-base) 90%, transparent);
+  }
+  .runningBannerText {
+    display: inline-flex; align-items: center; height: 20px; white-space: nowrap;
+    font: var(--dsw-font-s-strong-14);
+    background: linear-gradient(90deg, #b7e85b 0%, #b7e85b 40%, #d9f39a 50%, #b7e85b 60%, #b7e85b 100%);
+    background-size: 250% 100%; background-position: 100% 0;
+    background-clip: text; -webkit-background-clip: text;
+    color: transparent; -webkit-text-fill-color: transparent;
+    animation: btw-banner-shimmer 1.8s linear infinite;
+  }
+  @keyframes btw-banner-shimmer { to { background-position: 0 0; } }
+  .assistantMessage { align-self: flex-start; max-width: 92%; padding-left: 12px; border-left: 2px solid color-mix(in srgb, #b7e85b 72%, transparent); font-size: 13px; line-height: 21px; }
+  .userMessage { align-self: flex-end; max-width: 92%; padding: 11px 13px; border-radius: 12px 12px 3px 12px; background: color-mix(in srgb, var(--dsw-alias-fill-tsp-secondary) 80%, #b7e85b 5%); font-size: 13px; line-height: 21px; }
+  .messageMeta { margin-bottom: 5px; color: var(--dsw-alias-label-quaternary); font-family: var(--ds-font-family-code); font-size: 10px; line-height: 14px; }
+  .messageImages { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
+  .messageImageButton { position: relative; display: block; padding: 0; border: 1px solid var(--dsw-alias-border-l2); border-radius: 9px; background: transparent; cursor: zoom-in; }
+  .messageImageButton:hover { border-color: color-mix(in srgb, #b7e85b 55%, var(--dsw-alias-border-l1)); }
+  .messageImage { display: block; width: 84px; height: 84px; object-fit: cover; border-radius: 8px; }
+  .messageImageBadge {
+    position: absolute; top: 4px; left: 4px; z-index: 1; pointer-events: none;
+    background: #fff; color: #000; font-family: var(--ds-font-family-code);
+    font-size: 10px; line-height: 14px; padding: 0 4px; border-radius: 6px;
+  }
+  .composer { display: flex; align-items: center; gap: 8px; min-height: 52px; padding: 8px 10px; border: 1px solid var(--dsw-alias-border-l1); border-radius: 12px; background: #1a1f26; margin: 0 14px 12px; font-size: 12px; color: var(--dsw-alias-label-tertiary); }
+  .sendButton { width: 30px; height: 30px; border: 0; border-radius: 999px; background: #b7e85b; color: #151912; display: grid; place-items: center; font-weight: 700; margin-left: auto; }
+
+  /* ===== lightbox overlay（复刻 side-chat.module.css 2026-09-14 btw-ui） ===== */
+  .lightboxRoot {
+    position: fixed; inset: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: center; padding: 40px;
+  }
+  .lightboxMask { position: absolute; inset: 0; background: var(--dsw-alias-bg-mask-1); backdrop-filter: var(--dsw-mask-blur); }
+  .lightboxDialog { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; max-width: min(1600px, 94vw); max-height: calc(100vh - 80px); }
+  .lightboxClose {
+    position: absolute; top: -40px; right: 0; display: grid; width: 32px; height: 32px;
+    place-items: center; border: 1px solid var(--dsw-alias-border-l2); border-radius: 999px;
+    background: color-mix(in srgb, var(--dsw-alias-bg-layer-2) 88%, transparent);
+    color: var(--dsw-alias-label-secondary); cursor: pointer; font-size: 14px;
+  }
+  .lightboxClose:hover { background: var(--dsw-alias-interactive-bg-hover); color: var(--dsw-alias-label-primary); }
+  .lightboxImage { display: block; max-width: min(1600px, 94vw); max-height: calc(100vh - 80px); object-fit: contain; border-radius: 10px; box-shadow: var(--dsw-shadow-lv3); }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="drawer" data-dsh-btw-drawer>
+      <div class="drawerHeader">
+        <div><strong>btw 侧聊</strong><span class="readOnlyBadge">只读</span></div>
+        <span style="color:#565f6b; font-size:16px;">×</span>
+      </div>
+      <div class="parentStatus"><span class="statusDotRunning"></span> 主任务运行中 <span style="margin-left:auto; color:#565f6b;">继承内容仅作参考</span></div>
+      <div class="transcript">
+        <!-- ① 运行横幅：绿色系（#b7e85b 边框 + 绿渐变 shimmer 文字） -->
+        <div class="runningBanner" role="status" aria-live="polite">
+          <span class="runningBannerText">输出中… · 当前动作: read</span>
+        </div>
+        <div class="userMessage">
+          <div class="messageMeta">你</div>
+          <p style="margin:0;">这张图里有什么文字？</p>
+          <!-- ② 缩略图 + 左上角序号徽标（白底黑字） -->
+          <div class="messageImages">
+            <button type="button" class="messageImageButton" title="a.png">
+              <span class="messageImageBadge" aria-hidden="true">1</span>
+              <img class="messageImage" alt="a.png" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%234a7bd4'/%3E%3Cstop offset='1' stop-color='%231d3a70'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='84' height='84' fill='url(%23g)'/%3E%3Ccircle cx='58' cy='30' r='10' fill='%23e8b04b'/%3E%3Cpath d='M0 64 L30 44 L52 60 L70 48 L84 62 L84 84 L0 84 Z' fill='%23306433'/%3E%3Ctext x='10' y='26' font-family='monospace' font-size='14' fill='%23fff'%3EShot A%3C/text%3E%3C/svg%3E">
+            </button>
+            <button type="button" class="messageImageButton" title="b.png">
+              <span class="messageImageBadge" aria-hidden="true">2</span>
+              <img class="messageImage" alt="b.png" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23845ec2'/%3E%3Cstop offset='1' stop-color='%23381e63'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='84' height='84' fill='url(%23g)'/%3E%3Crect x='18' y='20' width='46' height='34' rx='4' fill='%23f0c75e'/%3E%3Crect x='24' y='28' width='12' height='4' fill='%235a3d00'/%3E%3Ctext x='10' y='70' font-family='monospace' font-size='14' fill='%23fff'%3EShot B%3C/text%3E%3C/svg%3E">
+            </button>
+          </div>
+        </div>
+        <div class="assistantMessage">
+          <div class="messageMeta">侧边助手</div>
+          <p style="margin:0;">图 1 是蓝色渐变界面截图（“Shot A”），图 2 是紫色卡片示意图（“Shot B”）。两张图的缩略图左上角均显示序号徽标。</p>
+        </div>
+      </div>
+      <div class="composer"><span>输入一个临时问题…</span><span class="sendButton">→</span></div>
+    </div>
+
+    <!-- ③ 打开的 lightbox：遮罩 + 大图 + 关闭钮（点击遮罩/Esc/关闭钮均可关闭） -->
+    <div class="lightboxRoot" role="presentation">
+      <div class="lightboxMask" aria-hidden="true"></div>
+      <div class="lightboxDialog" role="dialog" aria-modal="true" aria-label="a.png">
+        <button type="button" class="lightboxClose" aria-label="关闭预览" title="关闭预览">✕</button>
+        <img class="lightboxImage" alt="a.png" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='420'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%234a7bd4'/%3E%3Cstop offset='1' stop-color='%231d3a70'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='640' height='420' fill='url(%23g)'/%3E%3Ccircle cx='430' cy='150' r='72' fill='%23e8b04b'/%3E%3Cpath d='M0 320 L220 210 L380 300 L520 240 L640 310 L640 420 L0 420 Z' fill='%23306433'/%3E%3Ctext x='40' y='90' font-family='monospace' font-size='34' fill='%23fff'%3EShot A - original%3C/text%3E%3Ctext x='40' y='130' font-family='monospace' font-size='18' fill='%23cfe0ff'%3Emax-width 1600px / max-height 100vh-80px%3C/text%3E%3C/svg%3E">
+      </div>
+    </div>
+  </div>
+
+  <div class="caption">
+    <h2>btw UI 批渲染预览（2026-09-14 btw-ui）</h2>
+    <p><b>① 运行横幅</b>：边框 <code>color-mix(#b7e85b 24%, border)</code>、文字渐变 <code>#b7e85b → #d9f39a</code> shimmer（原为 DeepSeek 蓝 token）——与面板绿色身份一致；sticky/shimmer/文案未动。</p>
+    <p><b>② 序号徽标</b>：每张缩略图左上角 <code>position:absolute; top/left 4px</code>，白底黑字（<span class="pill">1</span> / <span class="pill">2</span>），多图消息显示、单图不显示。</p>
+    <p><b>③ lightbox</b>：自绘 overlay（body portal）——遮罩点击关闭、Esc 关闭（stopPropagation，不触发抽屉最小化）、右上关闭钮、大图 <code>max-width:min(1600px,94vw); max-height:calc(100vh - 80px)</code>，关闭后焦点还原到缩略图。</p>
+  </div>
+</body>
+</html>

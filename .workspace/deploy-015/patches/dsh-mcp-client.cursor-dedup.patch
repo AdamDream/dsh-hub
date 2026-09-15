@@ -1,0 +1,21 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -149,6 +149,7 @@
+ */
+ async function syncTools(client, ctx, opts, previous) {
+ 	const definitions = /* @__PURE__ */ new Map();
++	const seenCursors = /* @__PURE__ */ new Set();
+ 	let cursor;
+ 	do {
+ 		const response = await listToolsUncached(client, cursor);
+@@ -158,6 +159,10 @@
+ 			definitions.set(publicName, createDefinition(client, ctx, publicName, tool.name, tool.description ?? "", tool.inputSchema, supportedOutputSchema(tool.outputSchema), tool.execution?.taskSupport === "required", opts));
+ 		}
+ 		cursor = response.nextCursor;
++		if (cursor) {
++			if (seenCursors.has(cursor)) throw new Error(`mcp-client(${opts.serverName}): server repeated a tools/list continuation cursor — invalid tool list`);
++			seenCursors.add(cursor);
++		}
+ 	} while (cursor);
+ 	for (const dispose of previous.values()) dispose();
+ 	const disposers = /* @__PURE__ */ new Map();

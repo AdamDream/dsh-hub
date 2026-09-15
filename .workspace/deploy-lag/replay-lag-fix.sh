@@ -2,12 +2,15 @@
 # ============================================================================
 # replay-lag-fix.sh — subagent 多开卡顿修复 重放脚本（U-1..U-8 全量固化 + P0 btw 子代理打开修复）
 # ============================================================================
-# 规格：lag-fix-audit.md §4（交付单元 U-9）；btw-open-p0-diagnosis.md ④（路线 a，P0 单元）
+# 规格：lag-fix-audit.md §4（交付单元 U-9）；btw-open-p0-diagnosis.md ④（路线 a，P0 单元）；
+#       deploy/patches/APPLY.md（btw sessions/prompt-image-transform 官方补丁 runbook）
 # 目标：live 全局树 4 包（dsh-agent-loop / dsh-client-ui-subagent /
 #       dsh-web-search-deepseek / dsh-host-apiproxy）+ 官方 dsh-subagent（P0 materialize 补丁）
 #       + ~/.dsh/settings.yaml
 # 覆盖：U-1..U-3 恢复 3 个丢失补丁（tgz 解包 cp + sha256 校验）
 #       U-4/U-5/U-5b 加固 apiproxy（patch 应用，dry-run 预检；U-5b=应答帧永不丢弃守卫）
+#       btw 官方补丁 sessions/prompt-image-transform（patch -p1 于包目录，在 u4/u5/u5b 之后应用；
+#         锚点 session/prompt-image-transform ≥1 + node --check；备份/回滚经整目录快照覆盖）
 #       P0 dsh-subagent materializeContinuableChild 公开方法（patch 应用，dry-run 预检；备份/回滚覆盖）
 #       U-6..U-8 settings 改写（python3 pyyaml 结构化改写 + 解析断言）
 # 模式：
@@ -20,6 +23,7 @@
 #   PATCH_TGZ       补丁 tgz（默认 $HOME/dsh-upgrade-backup/patched-official-files.tgz）
 #   SETTINGS_FILE   settings.yaml 路径（默认 $HOME/.dsh/settings.yaml）
 #   LAG_BACKUP_DIR  备份根目录（默认本脚本所在目录）
+#   BTW_PATCH       btw sessions/prompt-image-transform 补丁路径（默认 deploy/patches/...）
 # 依赖：bash / tar / sha256sum / cmp / grep / cp / mv / patch / diff /
 #       node（--check）/ python3 + pyyaml。本环境 pnpm 不可用，勿依赖。
 # ============================================================================
@@ -60,6 +64,8 @@ SUBAGENT_JS="$ROOT/dsh-subagent/lib/index.js"
 SUBAGENT_TYPES="$ROOT/dsh-subagent/lib/types/index.d.ts"
 # P0 官方补丁（btw 子代理打开修复，路线 a）存放于 deploy-p0；可用 P0_PATCH 覆盖
 P0_PATCH="${P0_PATCH:-$SCRIPT_DIR/../deploy-p0/dsh-subagent.materialize.patch}"
+# btw 官方补丁（sessions/prompt-image-transform waterfall）存放于 deploy/patches；可用 BTW_PATCH 覆盖
+BTW_PATCH="${BTW_PATCH:-$SCRIPT_DIR/../deploy/patches/dsh-host-apiproxy.sessions-prompt-transform.patch}"
 
 FAILED=0
 
@@ -82,6 +88,7 @@ precheck() {
   [ -f "$KNOWN" ] || { warn "known-sha256.txt 不存在：$KNOWN"; missing=1; }
   [ -d "$ROOT/dsh-agent-loop/lib" ] || { warn "全局树不存在：$ROOT（可用 DSH_ROOT 覆盖）"; missing=1; }
   [ -f "$P0_PATCH" ] || { warn "P0 补丁不存在：$P0_PATCH（可用 P0_PATCH 覆盖）"; missing=1; }
+  [ -f "$BTW_PATCH" ] || { warn "btw 补丁不存在：$BTW_PATCH（可用 BTW_PATCH 覆盖）"; missing=1; }
   [ -f "$SETTINGS" ] || { warn "settings.yaml 不存在：$SETTINGS（可用 SETTINGS_FILE 覆盖）"; missing=1; }
   if ! python3 -c 'import yaml' 2>/dev/null; then
     warn "python3 缺少 pyyaml（settings 改写需要）"; missing=1
@@ -118,6 +125,7 @@ u3_applied() { grep -q "x-opencode-session" "$WEB_SEARCH" 2>/dev/null; }
 u4_applied() { grep -q "if (!subscribed.has(session.id)) return;" "$APIPROXY" 2>/dev/null; }
 u5_applied() { grep -q "MAX_QUEUED_FRAMES" "$APIPROXY" 2>/dev/null; }
 u5b_applied() { grep -q "isAnswerableFrame" "$APIPROXY" 2>/dev/null; }
+btw_applied() { grep -q "session/prompt-image-transform" "$APIPROXY" 2>/dev/null; }
 p0_applied() {
   grep -q "materializeContinuableChild" "$SUBAGENT_JS" 2>/dev/null \
     && grep -q "materializeContinuableChild" "$SUBAGENT_TYPES" 2>/dev/null
@@ -234,6 +242,30 @@ patch_subagent() {
 }
 
 # ---------------------------------------------------------------------------
+# btw 官方补丁：sessions/prompt-image-transform waterfall（patch -p1 于包目录；u4/u5/u5b 之后应用）
+# 备份/回滚：经 backup_all / --rollback 的 dsh-host-apiproxy 整目录快照覆盖
+# ---------------------------------------------------------------------------
+patch_btw() {
+  if btw_applied; then
+    skip "btw sessions/prompt-image-transform 已应用（锚点命中）"
+    return 0
+  fi
+  if [ "$DRY" -eq 1 ]; then
+    dry "btw 将 patch -p1 应用 $BTW_PATCH（于 $ROOT/dsh-host-apiproxy，先 dry-run 预检）"
+    return 0
+  fi
+  if ! (cd "$ROOT/dsh-host-apiproxy" && patch --batch -p1 --dry-run < "$BTW_PATCH" >/dev/null 2>&1); then
+    fail "btw patch dry-run 未命中（live apiproxy 可能已漂移，需重新锚定 .workspace/deploy/patches），中止"
+    return 1
+  fi
+  if ! (cd "$ROOT/dsh-host-apiproxy" && patch --batch -p1 < "$BTW_PATCH" >/dev/null 2>&1); then
+    fail "btw patch 应用失败"
+    return 1
+  fi
+  return 0
+}
+
+# ---------------------------------------------------------------------------
 # U-6..U-8：settings 结构化改写（python3 pyyaml）+ 写回后解析断言
 # ---------------------------------------------------------------------------
 apply_settings() {
@@ -303,6 +335,11 @@ verify_u45() {
   grep -q "isAnswerableFrame" "$APIPROXY" || { fail "U-5b 锚点应答帧守卫缺失"; return 1; }
   pass "U-4/U-5/U-5b apiproxy 加固（node --check + 订阅过滤 + MAX_QUEUED_FRAMES×2 + 应答帧守卫）"
 }
+verify_btw() {
+  node --check "$APIPROXY" >/dev/null 2>&1 || { fail "btw apiproxy node --check 失败"; return 1; }
+  [ "$(grep -c 'session/prompt-image-transform' "$APIPROXY")" -ge 1 ] || { fail "btw 锚点 session/prompt-image-transform <1"; return 1; }
+  pass "btw sessions/prompt-image-transform 补丁（node --check + 锚点 ≥1）"
+}
 verify_p0() {
   node --check "$SUBAGENT_JS" >/dev/null 2>&1 || { fail "P0 dsh-subagent node --check 失败"; return 1; }
   [ "$(grep -c materializeContinuableChild "$SUBAGENT_JS")" -eq 3 ] || { fail "P0 锚点 materializeContinuableChild（lib/index.js）≠3"; return 1; }
@@ -354,6 +391,7 @@ u3_applied || needs_apply=1
 u4_applied || needs_apply=1
 u5_applied || needs_apply=1
 u5b_applied || needs_apply=1
+btw_applied || needs_apply=1
 p0_applied || needs_apply=1
 settings_check || needs_apply=1
 
@@ -388,6 +426,12 @@ if [ "$DRY" -eq 0 ]; then
   verify_u45 || exit 1
 fi
 
+# --- btw 官方补丁：sessions/prompt-image-transform（在 u4/u5/u5b 之后应用）---
+patch_btw || exit 1
+if [ "$DRY" -eq 0 ]; then
+  verify_btw || exit 1
+fi
+
 # --- P0：dsh-subagent materializeContinuableChild（btw 子代理打开修复）---
 patch_subagent || exit 1
 if [ "$DRY" -eq 0 ]; then
@@ -408,6 +452,7 @@ fi
 if [ "$FAILED" -eq 0 ]; then
   say "===== 全部单元 PASS ====="
   say "提示：宿主侧改动（agent-loop / host-apiproxy / dsh-subagent / settings）需重启 DSH 生效；"
+  say "      btw sessions/prompt-image-transform 补丁已并入本重放（在 u4/u5/u5b 之后应用，见 .workspace/deploy/patches/APPLY.md）。"
   say "      ui-subagent（客户端补丁按请求读盘）刷新浏览器即生效。"
   say "      Runbook：npx @deepseek-ai/dsh web 后派一个 subagent 调研，"
   say "      期望子代理会话 0 条 assistant/chunk、1 条 assistant/message；主会话打字机照常；"

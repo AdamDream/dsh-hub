@@ -1,0 +1,98 @@
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-goal/lib/index.js	2026-09-11 14:27:15.075962328 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-goal/lib/index.js	2026-09-12 14:56:16.933900714 +0800
+@@ -8,21 +8,24 @@
+ function reject(message, code = "GOAL_TOOL_AUTHORITY_REQUIRED") {
+ 	throw new HarnessError(message, code);
+ }
+-/** Resolve the immutable event cut and open-turn boundary without copying the turn suffix. */
+-function openTurnEvents(ctx, agent) {
+-	const events = agent.session.snapshotEvents();
+-	const boundary = ctx.sessionProjections.stateOf(agent.session, "turnBoundary");
+-	if (boundary === void 0 || boundary.openTurnStartSeq === null) reject("goal tools require an open model turn", "GOAL_TOOL_DRIVER_REQUIRED");
+-	return {
+-		events,
+-		openTurnStartSeq: boundary.openTurnStartSeq
+-	};
++/** Locate the open turn enclosing a model tool call. */
++function openTurn(agent) {
++	const events = agent.session.events;
++	for (let index = events.length - 1; index >= 0; index -= 1) {
++		const boundary = events[index];
++		if (boundary?.type === "turn/end") reject("goal tools require an open model turn", "GOAL_TOOL_DRIVER_REQUIRED");
++		if (boundary?.type === "turn/start") return {
++			start: boundary,
++			events: events.slice(index + 1)
++		};
++	}
++	return reject("goal tools require an open model turn", "GOAL_TOOL_DRIVER_REQUIRED");
+ }
+ /**
+ * Resolve and authenticate the calling agent and its driver boundary.
+ * @param ctx - Context carrying the live agent registry.
+ * @param exec - Tool execution metadata supplied by the registry.
+-* @returns The authenticated agent, immutable event cut, and open-turn boundary.
++* @returns The authenticated agent and its current turn window.
+ */
+ function goalToolExecution(ctx, exec) {
+ 	const agent = exec.agent;
+@@ -30,17 +33,9 @@
+ 	if (ctx.agents.get(agent.id) !== agent || agent.status !== "running" || ctx.agents.currentInitiator() !== agent) return reject("goal tools require the exact live calling agent inside its active driver", "GOAL_TOOL_DRIVER_REQUIRED");
+ 	return {
+ 		agent,
+-		...openTurnEvents(ctx, agent)
++		...openTurn(agent)
+ 	};
+ }
+-/** Whether the captured open turn contains an event accepted by `predicate`. */
+-function someOpenTurnEvent(execution, predicate) {
+-	for (let seq = execution.openTurnStartSeq + 1; seq < execution.events.length; seq += 1) {
+-		const event = execution.events[seq];
+-		if (event !== void 0 && predicate(event)) return true;
+-	}
+-	return false;
+-}
+ /**
+ * Whether host-attested human input appears in the current root-agent turn.
+ * An omitted `Agent.followup()` / `steer()` source resolves to `user`, so non-human
+@@ -48,11 +43,11 @@
+ */
+ function hasDirectHumanInput(ctx, execution) {
+ 	if (!ctx.agents.roots().includes(execution.agent)) return false;
+-	return someOpenTurnEvent(execution, (event) => event.type === "user/message" && event.data.source.kind === "user");
++	return execution.events.some((event) => event.type === "user/message" && event.data.source.kind === "user");
+ }
+ /** Whether this turn is the current goal's exact admitted round. */
+ function isMatchingGoalRound(execution, goal) {
+-	return someOpenTurnEvent(execution, (event) => event.type === "user/message" && event.data.source.kind === "goal" && event.data.source.goalId === goal.id && event.data.source.revision === goal.revision && event.data.source.round === goal.roundsStarted);
++	return execution.events.some((event) => event.type === "user/message" && event.data.source.kind === "goal" && event.data.source.goalId === goal.id && event.data.source.revision === goal.revision && event.data.source.round === goal.roundsStarted);
+ }
+ /**
+ * Require authority originating in a human message accepted by a runtime root.
+@@ -108,8 +103,7 @@
+ 	"agents",
+ 	"goals",
+ 	"tools",
+-	"systemPrompt",
+-	"sessionProjections"
++	"systemPrompt"
+ ];
+ /** Schemastery config for the goal-tool policy. */
+ const Config = z.object({ blockedAfterConsecutiveRounds: z.number().step(1).min(1).default(3) });
+@@ -258,7 +252,7 @@
+ 	const resolved = resolveConfig(config);
+ 	ctx.systemPrompt.section({
+ 		name: "tool:goal",
+-		order: ctx.systemPrompt.getSectionOrder("TOOL_GOAL"),
++		order: 114,
+ 		text: guidance(resolved.blockedAfterConsecutiveRounds)
+ 	});
+ 	ctx.tools.register(defineTool({
+@@ -348,8 +342,6 @@
+ 			if (args.action === "pause" || args.action === "resume") {
+ 				requireDirectHuman(ctx, execution);
+ 				if (hasText(args.objective) || hasRoundCap(args.max_goal_rounds) || hasText(args.blocked_reason)) throw new HarnessError("objective and max_goal_rounds are valid only with action edit; blocked_reason is valid only with action blocked", "GOAL_TOOL_INVALID_UPDATE");
+-				const current = ctx.goals.get(execution.agent);
+-				if (args.action === "resume" && current?.id === ref.id && current.revision === ref.revision && current.phase === "paused") throw new HarnessError("the model cannot resume a paused goal; the user must resume it", "GOAL_TOOL_RESUME_PAUSED");
+ 				const goal = args.action === "pause" ? ctx.goals.pause(execution.agent, ref) : ctx.goals.resume(execution.agent, ref);
+ 				return Promise.resolve(goalValue(goal));
+ 			}

@@ -1,0 +1,601 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/README.i18n.yaml	2026-09-11 14:27:15.162963565 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/README.i18n.yaml	2026-09-12 14:56:17.082787390 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/interaction/user-questions/README.md
+-README.md: 32093da6a319dbf473b28d29ddd60402785b5fce
+-README.zh.md: f8d1f1b8971d63c2569e59cdc0512e5c950dd2c6
++README.md: 53459c39c75d5d3907b002239c83db5f82e024f5
++README.zh.md: 3a1f016aef6efa0a2167523fd4e1a938fa53eb71
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/README.md	2026-09-11 14:27:15.127963067 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/README.md	2026-09-12 14:56:17.082593992 +0800
+@@ -1,32 +1,15 @@
+----
+-description: "Waterfall-based question and answer service for tools, permission plugins, local answerers, and Agent-scoped Web interactions."
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-user-questions
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-User-interaction Service Definition. It owns `ctx.userQuestions`, the service a model-facing tool or permission plugin uses when it needs to pause work and ask the human for a decision. Use it when a consumer must suspend an operation until the user answers.
+-
+-## Table of Contents
++User-interaction Service Definition. It owns `ctx.userQuestions`, the service a model-facing tool or permission plugin uses when it needs to pause work and ask the human for a decision.
+ 
+-- [Service: `UserQuestionService` (ctx key: `userQuestions`)](#service-userquestionservice-ctx-key-userquestions)
+-- [Role](#role)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
+-
+-<a id="service-userquestionservice-ctx-key-userquestions"></a>
+ ## Service: `UserQuestionService` (ctx key: `userQuestions`)
+ 
+ ### Public API
+ 
+-- `ctx.userQuestions.ask(request): Promise<AskUserQuestionAnswer>` Dispatch the answerer waterfall and wait for the first accepted answer.
++- `ctx.userQuestions.registerProvider(provider): () => void` Register the UI-side provider. Only one provider may be active in a context; disposal unregisters it.
++- `ctx.userQuestions.ask(request): Promise<AskUserQuestionAnswer>` Ask the active provider and wait for the answer.
+ 
+ ### Key Types
+ 
+@@ -34,25 +17,24 @@
+ - `AskUserQuestionOption` — `{ label, description? }`.
+ - `AskUserQuestionIntent` — `{ kind: 'plan-review', approve }`; the tagged presentation intent below.
+ - `AskUserQuestionAnswer` — `{ answers: [{ id, selected, custom? }] }`.
+-- `UserQuestionError` — `HarnessError` subclass with codes such as `EMPTY_QUESTIONS`, `BAD_INTENT`, `NO_PROVIDER`, `ASK_ABORTED`, `CALLER_NOT_LIVE`, and `DELEGATED_CALLER`.
++- `UserQuestionProvider` — UI implementation with `ask(request)`.
++- `UserQuestionError` — `HarnessError` subclass with codes such as `EMPTY_QUESTIONS`, `BAD_INTENT`, `NO_PROVIDER`, `DUPLICATE_PROVIDER`, `ASK_ABORTED`, `CALLER_NOT_LIVE`, and `DELEGATED_CALLER`.
+ 
+ For a single-select question, `custom` overrides the selected choice and `selected` is empty. For a multi-select question, `custom` may supplement the labels in `selected`. A UI may preserve a skipped item as `{ id, selected: [] }`, keeping the existing answer shape while retaining other answers in the batch.
+ 
+-When a request carries an agent, `ask()` authenticates its exact identity through the live `AgentRegistry` and admits only a runtime root. Durable lineage is not authority: a session with historical delegation depth may ask after it is resumed as a new runtime root, while a live child owned by another agent is rejected even if its durable depth is zero. The Web answerer receives only Agent-scoped requests; an agentless programmatic request remains available to unscoped local waterfall listeners and fails with `NO_PROVIDER` when none accepts it.
++When a request carries an agent, `ask()` authenticates its exact identity through the live `AgentRegistry` and admits only a runtime root. Durable lineage is not authority: a session with historical delegation depth may ask after it is resumed as a new runtime root, while a live child owned by another agent is rejected even if its durable depth is zero. Agentless programmatic requests retain the existing provider path.
+ 
+ ### Presentation intent
+ 
+ `intent` declares that a question IS a known kind of decision, so a UI that recognises the tag may present it as such — `plan-review` says `detail` is a plan under review, and `dsh-plan-mode` sets it on the `exit_plan_mode` question. An intent changes presentation only: a UI honouring it answers with the same option labels a generic UI would send, and a UI that does not know the tag renders the generic option list, so callers read the same answer fields either way. `approve` names the label that approves rather than relying on option order. `ask()` rejects with `BAD_INTENT` the two assertions no type can carry: an `approve` naming none of that question's own options, and an intent on a question with no `detail` — the thing it declares itself a review of.
+ 
+-<a id="role"></a>
+ ## Role
+ 
+-This is the Service Definition package. Consumers such as `@deepseek-ai/dsh-tool-ask-user` depend on this service; the Web client contributes an Agent-scoped answerer through Remote Events. The loop stays unchanged: a tool call awaits the waterfall result, and that result resumes the normal agent loop.
++This is the Service Definition package. Consumers such as `@deepseek-ai/dsh-tool-ask-user` depend on this service; the Web host runtime supplies the shipped Service Provider. The loop stays unchanged: a tool call awaits a promise, and the tool result resumes the normal agent loop.
+ 
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+-Indirectly, through `dsh-tool-ask-user`, which retains a successful answer as compact JSON or one of these failures: `Error: ask_user_question was aborted before the user answered`, `Error: ask_user_question requires at least one question`, `Error: human interaction requires the exact live calling agent when an agent is supplied`, `Error: human interaction is unavailable while the calling agent is owned by another live agent; include the unresolved question or decision in the child agent's final result`, `Error: no user-questions answerer accepted the request`, or `Error: <message>`. Waiting for the human adds no tokens.
++Indirectly, through `dsh-tool-ask-user`, which retains a successful provider answer as compact JSON or one of these failures: `Error: ask_user_question was aborted before the user answered`, `Error: ask_user_question requires at least one question`, `Error: human interaction requires the exact live calling agent when an agent is supplied`, `Error: human interaction is unavailable while the calling agent is owned by another live agent; include the unresolved question or decision in the child agent's final result`, `Error: no user-questions provider is registered`, or `Error: <message>`. Waiting for the human adds no tokens.
+ 
+ #### KV Cache effect
+ 
+@@ -60,20 +42,5 @@
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-- **Agent-scoped Web answering** — Remote Events route the shipped Web answerer only when the request carries a live Agent scope; agentless callers need an unscoped local waterfall listener.
++- **One provider per context** — there is no routing or fan-out to multiple UIs; a second registration throws `DUPLICATE_PROVIDER`, and with none registered `ask()` throws `NO_PROVIDER` rather than degrading.
+ - **The vocabulary is the question-form shape only** — selectable options plus optional custom text; richer interaction shapes (file pickers, diff-preview confirmations) have no seam vocabulary yet.
+-
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-None.
+-
+-</details>
+-
+-**Runtime invariant:** No companion is published. The single provider slot is validated at registration and asks return directly to their caller; the seam publishes no independent request/answer audit stream.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/README.zh.md	2026-09-11 14:27:15.133963152 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/README.zh.md	2026-09-12 14:56:17.082593992 +0800
+@@ -1,32 +1,15 @@
+----
+-description: "基于 waterfall 的问答服务，用于工具、权限插件、本地 answerer 与 Agent-scoped Web 交互。"
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-user-questions
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-用户交互 Service Definition。它定义 `ctx.userQuestions`，供面向模型的工具或权限插件在需要暂停工作并询问人类决定时使用。当消费方必须暂停操作并等待用户回答时，请使用它。
+-
+-## 目录
++用户交互 Service Definition。它定义 `ctx.userQuestions`，供面向模型的工具或权限插件在需要暂停工作并询问人类决定时使用。
+ 
+-- [服务：`UserQuestionService`（ctx 键：`userQuestions`）](#service-userquestionservice-ctx-key-userquestions)
+-- [职责](#role)
+-- [模型体验](#model-experience)
+-- [已知限制与暂缓事项](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
+-
+-<a id="service-userquestionservice-ctx-key-userquestions"></a>
+ ## 服务：`UserQuestionService`（ctx 键：`userQuestions`）
+ 
+ ### 公开 API
+ 
+-- `ctx.userQuestions.ask(request): Promise<AskUserQuestionAnswer>` 派发回答者 waterfall，并等待第一个接受请求的回答。
++- `ctx.userQuestions.registerProvider(provider): () => void` 注册 UI 侧提供方。同一上下文中只能有一个活跃提供方；dispose（资源释放）会将其注销。
++- `ctx.userQuestions.ask(request): Promise<AskUserQuestionAnswer>` 向活跃提供方提问并等待回答。
+ 
+ ### 关键类型
+ 
+@@ -34,25 +17,24 @@
+ - `AskUserQuestionOption`：`{ label, description? }`。
+ - `AskUserQuestionIntent`：`{ kind: 'plan-review', approve }`；即下文的带标签呈现意图。
+ - `AskUserQuestionAnswer`：`{ answers: [{ id, selected, custom? }] }`。
+-- `UserQuestionError`：`HarnessError` 的子类，包含 `EMPTY_QUESTIONS`、`BAD_INTENT`、`NO_PROVIDER`、`ASK_ABORTED`、`CALLER_NOT_LIVE` 和 `DELEGATED_CALLER` 等代码。
++- `UserQuestionProvider`：包含 `ask(request)` 的 UI 实现。
++- `UserQuestionError`：`HarnessError` 的子类，包含 `EMPTY_QUESTIONS`、`BAD_INTENT`、`NO_PROVIDER`、`DUPLICATE_PROVIDER`、`ASK_ABORTED`、`CALLER_NOT_LIVE` 和 `DELEGATED_CALLER` 等代码。
+ 
+ 对于单选题，`custom` 会覆盖选中的选项，且 `selected` 为空。对于多选题，`custom` 可以补充 `selected` 中的标签。UI 可以把跳过的条目保留为 `{ id, selected: [] }`，既维持现有回答形态，也保留该批次中的其他回答。
+ 
+-请求包含 agent 时，`ask()` 会通过当前 `AgentRegistry` 验证该 agent 与注册表中的存活实例是同一对象，并且只允许运行时根调用。持久谱系不构成权限依据：带有历史委托深度的会话恢复为新的运行时根后可以提问；归属于另一个 agent 的存活子级即使持久化记录的委托深度为零也会被拒绝。Web 回答者只接收带 Agent scope 的请求；不含 agent 的程序化请求仍会交给本地未限定 scope 的 waterfall listener，若无人接受则以 `NO_PROVIDER` 失败。
++请求包含 agent 时，`ask()` 会通过当前 `AgentRegistry` 验证该 agent 与注册表中的存活实例是同一对象，并且只允许运行时根调用。持久谱系不构成权限依据：带有历史委托深度的会话恢复为新的运行时根后可以提问；归属于另一个 agent 的存活子级即使持久化记录的委托深度为零也会被拒绝。不含 agent 的程序化请求继续沿用现有提供方路径。
+ 
+ ### 呈现意图
+ 
+ `intent` 声明某个问题本身就是一种已知决策，因此认识该标签的 UI 可以照此呈现——`plan-review` 表示 `detail` 是一份待审阅的计划，`dsh-plan-mode` 会在 `exit_plan_mode` 的问题上设置它。意图只改变呈现：遵循它的 UI 回答的仍是通用 UI 会发送的那些选项标签，不认识该标签的 UI 渲染通用选项列表，因此调用方两种情况下读到的回答字段相同。`approve` 指名表示批准的标签，而不依赖选项顺序。有两项断言无法通过类型表达，`ask()` 会以 `BAD_INTENT` 拒绝它们：`approve` 未命中该问题自身的任一选项，以及意图落在没有 `detail` 的问题上——而 `detail` 正是它自称在审阅的东西。
+ 
+-<a id="role"></a>
+ ## 职责
+ 
+-这是 Service Definition 包。`@deepseek-ai/dsh-tool-ask-user` 等 Consumer 依赖此服务；Web Client 通过 Remote Events 贡献带 Agent scope 的回答者。循环保持不变：工具调用等待 waterfall 结果，该结果随后恢复正常的 agent loop（智能体循环）。
++这是 Service Definition 包。`@deepseek-ai/dsh-tool-ask-user` 等 Consumer 依赖此服务；Web 宿主运行时提供随产品交付的 Service Provider。循环保持不变：工具调用等待 Promise，工具结果随后恢复正常的 agent loop（智能体循环）。
+ 
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+-间接地，通过 `dsh-tool-ask-user`：它会将成功回答保留为紧凑 JSON，或返回以下失败之一：`Error: ask_user_question was aborted before the user answered`、`Error: ask_user_question requires at least one question`、`Error: human interaction requires the exact live calling agent when an agent is supplied`、`Error: human interaction is unavailable while the calling agent is owned by another live agent; include the unresolved question or decision in the child agent's final result`、`Error: no user-questions answerer accepted the request` 或 `Error: <message>`。等待人类回答不会增加 token。
++间接地，通过 `dsh-tool-ask-user`：它会将成功的提供方回答保留为紧凑 JSON，或返回以下失败之一：`Error: ask_user_question was aborted before the user answered`、`Error: ask_user_question requires at least one question`、`Error: human interaction requires the exact live calling agent when an agent is supplied`、`Error: human interaction is unavailable while the calling agent is owned by another live agent; include the unresolved question or decision in the child agent's final result`、`Error: no user-questions provider is registered` 或 `Error: <message>`。等待人类回答不会增加 token。
+ 
+ #### KV Cache 影响
+ 
+@@ -60,20 +42,5 @@
+ 
+ ## 已知限制与暂缓事项
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-- **带 Agent scope 的 Web 回答**：Remote Events 仅在请求带有存活 Agent scope 时路由随产品交付的 Web 回答者；agentless 调用方需要本地未限定 scope 的 waterfall listener。
++- **每个上下文只能有一个提供方**：不支持路由或扇出到多个 UI；第二次注册会抛出 `DUPLICATE_PROVIDER`，未注册任何提供方时，`ask()` 会抛出 `NO_PROVIDER`，而不会降级。
+ - **词汇仅包含问题表单形态**：可供选择的选项加可选的自定义文本；更丰富的交互形态（文件选择器、diff 预览确认）尚无 seam 词汇。
+-
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者工作上下文——点击展开</summary>
+-
+-无。
+-
+-</details>
+-
+-**运行时不变式：** 不发布伴生入口。单个 provider slot 在注册时校验，ask 结果直接返回调用方；该 seam 不发布独立 request/answer 审计流。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/lib/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/lib/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/lib/index.js	2026-09-11 14:27:15.069962243 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/lib/index.js	2026-09-12 14:56:17.081921805 +0800
+@@ -1,12 +1,11 @@
+ import { Service } from "@deepseek-ai/cordis";
+ import { HarnessError } from "@deepseek-ai/dsh-llm";
+-import { scopeTarget } from "@deepseek-ai/dsh-scope";
+ //#region lib/types/index.js
+ /**
+ * Service Definition for the user-questions capability seam (`ctx.userQuestions`): a UI-backed service for
+ * pausing an agent tool call until the human answers a question. The model-
+-* facing tool lives in `@deepseek-ai/dsh-tool-ask-user`; UI packages compose
+-* answerers on the Agent-scoped Cordis waterfall.
++* facing tool lives in `@deepseek-ai/dsh-tool-ask-user`; UI packages provide
++* the single active provider.
+ *
+ * @module @deepseek-ai/dsh-user-questions
+ */
+@@ -17,24 +16,30 @@
+ 		this.name = "UserQuestionError";
+ 	}
+ };
+-function abortedQuestion(cause) {
+-	return new UserQuestionError("ask_user_question was aborted before the user answered", "ASK_ABORTED", cause === void 0 ? void 0 : { cause });
+-}
+-function isRecord(value) {
+-	return typeof value === "object" && value !== null && !Array.isArray(value);
+-}
+-function restoreUserQuestionError(reason) {
+-	if (reason instanceof UserQuestionError) return reason;
+-	if (isRecord(reason) && reason.name === "UserQuestionError" && typeof reason.message === "string" && typeof reason.code === "string") return new UserQuestionError(reason.message, reason.code, { cause: reason });
+-	return reason;
+-}
+-/** `ctx.userQuestions`: validation plus the scoped answerer waterfall. */
++/** `ctx.userQuestions`: one active UI provider plus an `ask()` API. */
+ var UserQuestionService = class extends Service {
++	provider;
+ 	constructor(ctx) {
+ 		super(ctx, "userQuestions");
+ 	}
+ 	/**
+-	* Ask the scoped answerer waterfall and wait for the user's answer.
++	* Register the UI provider. Only one provider may be active in a context.
++	*
++	* @param provider UI-side implementation that collects answers.
++	* @returns Disposer that unregisters this provider.
++	*/
++	registerProvider(provider) {
++		const dispose = this.ctx.effect(function* () {
++			if (this.provider !== void 0) throw new UserQuestionError("a user-questions provider is already registered", "DUPLICATE_PROVIDER");
++			this.provider = provider;
++			yield () => {
++				this.provider = void 0;
++			};
++		}.bind(this), "userInteraction.registerProvider()");
++		return () => void dispose();
++	}
++	/**
++	* Ask the active UI provider and wait for the user's answer.
+ 	*
+ 	* When a caller supplies an agent, human interaction is valid only for the
+ 	* exact live runtime root. Runtime ownership, not durable session lineage,
+@@ -44,13 +49,12 @@
+ 	*
+ 	* @param request Questions, owner agent, and abort signal.
+ 	* @returns The answer chosen or typed by the human.
+-	* @throws {UserQuestionError} code `ASK_ABORTED` when the supplied signal
+-	*   is already or becomes aborted, `CALLER_NOT_LIVE` when a supplied agent
+-	*   is not the registry's exact live instance, or `DELEGATED_CALLER` when
+-	*   that live agent is owned by another agent.
++	* @throws {UserQuestionError} code `CALLER_NOT_LIVE` when a supplied
++	*   agent is not the registry's exact live instance, or `DELEGATED_CALLER`
++	*   when that live agent is owned by another agent.
+ 	*/
+ 	async ask(request) {
+-		if (request.signal?.aborted) throw abortedQuestion();
++		if (request.signal?.aborted) throw new UserQuestionError("ask_user_question was aborted before the user answered", "ASK_ABORTED");
+ 		if (request.questions.length === 0) throw new UserQuestionError("ask_user_question requires at least one question", "EMPTY_QUESTIONS");
+ 		const agent = request.agent;
+ 		if (agent !== void 0) {
+@@ -64,18 +68,8 @@
+ 			if (!(question.options ?? []).some((option) => option.label === intent.approve)) throw new UserQuestionError(`question ${question.id} declares intent ${intent.kind} whose approve label ${JSON.stringify(intent.approve)} names none of its options`, "BAD_INTENT");
+ 			if (question.detail === void 0) throw new UserQuestionError(`question ${question.id} declares intent ${intent.kind} without the detail it reviews`, "BAD_INTENT");
+ 		}
+-		const noAnswerer = () => Promise.reject(new UserQuestionError("no user-questions answerer accepted the request", "NO_PROVIDER"));
+-		try {
+-			return await (agent === void 0 ? this.ctx.waterfall("user-questions/request", request, noAnswerer) : this.ctx.waterfall(scopeTarget(agent, agent), "user-questions/request", {
+-				...request,
+-				agent
+-			}, noAnswerer));
+-		} catch (error) {
+-			const restored = restoreUserQuestionError(error);
+-			if (restored instanceof UserQuestionError) throw restored;
+-			if (request.signal?.aborted) throw abortedQuestion(error);
+-			throw restored;
+-		}
++		if (this.provider === void 0) throw new UserQuestionError("no user-questions provider is registered", "NO_PROVIDER");
++		return this.provider.ask(request);
+ 	}
+ };
+ //#endregion
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/lib: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/lib/types/index.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/lib/types/index.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/lib/types/index.d.ts	2026-09-11 14:27:15.146963337 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/lib/types/index.d.ts	2026-09-12 14:56:17.082703101 +0800
+@@ -1,32 +1,51 @@
+ /**
+  * Service Definition for the user-questions capability seam (`ctx.userQuestions`): a UI-backed service for
+  * pausing an agent tool call until the human answers a question. The model-
+- * facing tool lives in `@deepseek-ai/dsh-tool-ask-user`; UI packages compose
+- * answerers on the Agent-scoped Cordis waterfall.
++ * facing tool lives in `@deepseek-ai/dsh-tool-ask-user`; UI packages provide
++ * the single active provider.
+  *
+  * @module @deepseek-ai/dsh-user-questions
+  */
+ import { Context, Service } from '@deepseek-ai/cordis';
++import type { Agent } from '@deepseek-ai/dsh-agent';
+ import { HarnessError } from '@deepseek-ai/dsh-llm';
+ declare module '@deepseek-ai/cordis' {
+     interface Context {
+         userQuestions: UserQuestionService;
+     }
+ }
+-import type { AskUserQuestionAnswer, AskUserQuestionRequestEvent } from './types.ts';
++import type { AskUserQuestionAnswer, AskUserQuestionItem } from './types.ts';
+ export type { AskUserQuestionAnswer, AskUserQuestionAnswerItem, AskUserQuestionIntent, AskUserQuestionItem, AskUserQuestionOption, } from './types.ts';
+ /** Request for a human answer. */
+-export interface AskUserQuestionRequest extends AskUserQuestionRequestEvent {
++export interface AskUserQuestionRequest {
++    /** Questions to display. */
++    questions: AskUserQuestionItem[];
++    /** Exact live calling agent, when the request came from an agent tool call. */
++    agent?: Agent;
++    /** Abort signal for the owning tool/step. */
++    signal?: AbortSignal;
++}
++/** UI-side provider for user questions. */
++export interface UserQuestionProvider {
++    ask(request: AskUserQuestionRequest): Promise<AskUserQuestionAnswer>;
+ }
+ /** Stable error taxonomy for user-questions failures. */
+ export declare class UserQuestionError extends HarnessError {
+     constructor(message: string, code: string, options?: ErrorOptions);
+ }
+-/** `ctx.userQuestions`: validation plus the scoped answerer waterfall. */
++/** `ctx.userQuestions`: one active UI provider plus an `ask()` API. */
+ export declare class UserQuestionService extends Service {
++    private provider;
+     constructor(ctx: Context);
+     /**
+-     * Ask the scoped answerer waterfall and wait for the user's answer.
++     * Register the UI provider. Only one provider may be active in a context.
++     *
++     * @param provider UI-side implementation that collects answers.
++     * @returns Disposer that unregisters this provider.
++     */
++    registerProvider(provider: UserQuestionProvider): () => void;
++    /**
++     * Ask the active UI provider and wait for the user's answer.
+      *
+      * When a caller supplies an agent, human interaction is valid only for the
+      * exact live runtime root. Runtime ownership, not durable session lineage,
+@@ -36,10 +55,9 @@
+      *
+      * @param request Questions, owner agent, and abort signal.
+      * @returns The answer chosen or typed by the human.
+-     * @throws {UserQuestionError} code `ASK_ABORTED` when the supplied signal
+-     *   is already or becomes aborted, `CALLER_NOT_LIVE` when a supplied agent
+-     *   is not the registry's exact live instance, or `DELEGATED_CALLER` when
+-     *   that live agent is owned by another agent.
++     * @throws {UserQuestionError} code `CALLER_NOT_LIVE` when a supplied
++     *   agent is not the registry's exact live instance, or `DELEGATED_CALLER`
++     *   when that live agent is owned by another agent.
+      */
+     ask(request: AskUserQuestionRequest): Promise<AskUserQuestionAnswer>;
+ }
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/lib/types/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/lib/types/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/lib/types/index.js	2026-09-11 14:27:15.095962613 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/lib/types/index.js	2026-09-12 14:56:17.082277796 +0800
+@@ -1,14 +1,13 @@
+ /**
+  * Service Definition for the user-questions capability seam (`ctx.userQuestions`): a UI-backed service for
+  * pausing an agent tool call until the human answers a question. The model-
+- * facing tool lives in `@deepseek-ai/dsh-tool-ask-user`; UI packages compose
+- * answerers on the Agent-scoped Cordis waterfall.
++ * facing tool lives in `@deepseek-ai/dsh-tool-ask-user`; UI packages provide
++ * the single active provider.
+  *
+  * @module @deepseek-ai/dsh-user-questions
+  */
+ import { Service } from '@deepseek-ai/cordis';
+ import { HarnessError } from '@deepseek-ai/dsh-llm';
+-import { scopeTarget } from '@deepseek-ai/dsh-scope';
+ /** Stable error taxonomy for user-questions failures. */
+ export class UserQuestionError extends HarnessError {
+     constructor(message, code, options) {
+@@ -16,30 +15,32 @@
+         this.name = 'UserQuestionError';
+     }
+ }
+-function abortedQuestion(cause) {
+-    return new UserQuestionError('ask_user_question was aborted before the user answered', 'ASK_ABORTED', cause === undefined ? undefined : { cause });
+-}
+-function isRecord(value) {
+-    return typeof value === 'object' && value !== null && !Array.isArray(value);
+-}
+-function restoreUserQuestionError(reason) {
+-    if (reason instanceof UserQuestionError)
+-        return reason;
+-    if (isRecord(reason)
+-        && reason.name === 'UserQuestionError'
+-        && typeof reason.message === 'string'
+-        && typeof reason.code === 'string') {
+-        return new UserQuestionError(reason.message, reason.code, { cause: reason });
+-    }
+-    return reason;
+-}
+-/** `ctx.userQuestions`: validation plus the scoped answerer waterfall. */
++/** `ctx.userQuestions`: one active UI provider plus an `ask()` API. */
+ export class UserQuestionService extends Service {
++    provider;
+     constructor(ctx) {
+         super(ctx, 'userQuestions');
+     }
+     /**
+-     * Ask the scoped answerer waterfall and wait for the user's answer.
++     * Register the UI provider. Only one provider may be active in a context.
++     *
++     * @param provider UI-side implementation that collects answers.
++     * @returns Disposer that unregisters this provider.
++     */
++    registerProvider(provider) {
++        const dispose = this.ctx.effect(function* () {
++            if (this.provider !== undefined) {
++                throw new UserQuestionError('a user-questions provider is already registered', 'DUPLICATE_PROVIDER');
++            }
++            this.provider = provider;
++            yield () => {
++                this.provider = undefined;
++            };
++        }.bind(this), 'userInteraction.registerProvider()');
++        return () => void dispose();
++    }
++    /**
++     * Ask the active UI provider and wait for the user's answer.
+      *
+      * When a caller supplies an agent, human interaction is valid only for the
+      * exact live runtime root. Runtime ownership, not durable session lineage,
+@@ -49,14 +50,13 @@
+      *
+      * @param request Questions, owner agent, and abort signal.
+      * @returns The answer chosen or typed by the human.
+-     * @throws {UserQuestionError} code `ASK_ABORTED` when the supplied signal
+-     *   is already or becomes aborted, `CALLER_NOT_LIVE` when a supplied agent
+-     *   is not the registry's exact live instance, or `DELEGATED_CALLER` when
+-     *   that live agent is owned by another agent.
++     * @throws {UserQuestionError} code `CALLER_NOT_LIVE` when a supplied
++     *   agent is not the registry's exact live instance, or `DELEGATED_CALLER`
++     *   when that live agent is owned by another agent.
+      */
+     async ask(request) {
+         if (request.signal?.aborted) {
+-            throw abortedQuestion();
++            throw new UserQuestionError('ask_user_question was aborted before the user answered', 'ASK_ABORTED');
+         }
+         if (request.questions.length === 0) {
+             throw new UserQuestionError('ask_user_question requires at least one question', 'EMPTY_QUESTIONS');
+@@ -91,21 +91,10 @@
+                 throw new UserQuestionError(`question ${question.id} declares intent ${intent.kind} without the detail it reviews`, 'BAD_INTENT');
+             }
+         }
+-        const noAnswerer = () => Promise.reject(new UserQuestionError('no user-questions answerer accepted the request', 'NO_PROVIDER'));
+-        try {
+-            return await (agent === undefined
+-                ? this.ctx.waterfall('user-questions/request', request, noAnswerer)
+-                : this.ctx.waterfall(scopeTarget(agent, agent), 'user-questions/request', { ...request, agent }, noAnswerer));
+-        }
+-        catch (error) {
+-            const restored = restoreUserQuestionError(error);
+-            if (restored instanceof UserQuestionError)
+-                throw restored;
+-            if (request.signal?.aborted) {
+-                throw abortedQuestion(error);
+-            }
+-            throw restored;
++        if (this.provider === undefined) {
++            throw new UserQuestionError('no user-questions provider is registered', 'NO_PROVIDER');
+         }
++        return this.provider.ask(request);
+     }
+ }
+ export default UserQuestionService;
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/lib/types: invariant.d.ts
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/lib/types: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/lib/types/types.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/lib/types/types.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/lib/types/types.d.ts	2026-09-11 14:27:15.159963522 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/lib/types/types.d.ts	2026-09-12 14:56:17.082787390 +0800
+@@ -1,6 +1,9 @@
+-/** Client-safe question, answer, and event types. @module @deepseek-ai/dsh-user-questions/types */
+-import type { Scoped } from '@deepseek-ai/dsh-scope';
+-import type { Agent } from '@deepseek-ai/dsh-agent/types';
++/**
++ * Wire-safe question and answer types, free of cordis/service imports so browser
++ * type chains (apiproxy api → client) can consume them without loading this
++ * package's Context augmentation.
++ * @module @deepseek-ai/dsh-user-questions/types
++ */
+ /** One selectable answer offered to the user. */
+ export interface AskUserQuestionOption {
+     /** User-facing label. */
+@@ -56,25 +59,4 @@
+     /** Structured answers keyed by question id. */
+     answers: AskUserQuestionAnswerItem[];
+ }
+-/** Client-safe payload declared for the user-question answerer waterfall. */
+-export interface AskUserQuestionRequestEvent {
+-    /** Questions to display. */
+-    questions: AskUserQuestionItem[];
+-    /** Agent identity projected to the corresponding Client Context in transit. */
+-    agent?: Agent;
+-    /** Cancellation lifetime of the pending request. */
+-    signal?: AbortSignal;
+-}
+-declare module '@deepseek-ai/cordis' {
+-    interface Events {
+-        /**
+-         * Ask composed answerers for structured user input. Return an answer to
+-         * claim the request or call `next()` to delegate. Scope-filtered dispatch
+-         * (`@deepseek-ai/dsh-scope`): agent-scoped listeners receive only that agent.
+-         * @param request - pending user-question request.
+-         * @mode waterfall
+-         */
+-        'user-questions/request'(this: Scoped<Agent>, request: AskUserQuestionRequestEvent, next: () => Promise<AskUserQuestionAnswer>): Promise<AskUserQuestionAnswer>;
+-    }
+-}
+ //# sourceMappingURL=types.d.ts.map
+\ No newline at end of file
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/lib/types/types.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/lib/types/types.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/lib/types/types.js	2026-09-11 14:27:15.118962939 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/lib/types/types.js	2026-09-12 14:56:17.082593992 +0800
+@@ -1,3 +1,8 @@
+-/** Client-safe question, answer, and event types. @module @deepseek-ai/dsh-user-questions/types */
++/**
++ * Wire-safe question and answer types, free of cordis/service imports so browser
++ * type chains (apiproxy api → client) can consume them without loading this
++ * package's Context augmentation.
++ * @module @deepseek-ai/dsh-user-questions/types
++ */
+ export {};
+ //# sourceMappingURL=types.js.map
+\ No newline at end of file
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-user-questions/package.json	2026-09-11 14:27:15.122962996 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-user-questions/package.json	2026-09-12 14:56:17.082593992 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-user-questions",
+   "description": "Abstract user-questions seam (ctx.userQuestions) for asking the human during agent runs",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -18,6 +18,10 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./types": {
+       "types": "./lib/types/types.d.ts",
+       "default": "./lib/types/types.js"
+@@ -27,20 +31,21 @@
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/types/**/*.js",
+     "lib/types/**/*.d.ts"
+   ],
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/dsh-agent": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-llm": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-scope": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-agent": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-llm": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/dsh-agent": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-llm": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-scope": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-agent": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1",
++    "@deepseek-ai/dsh-llm": "^0.1.1-rc.2"
+   }
+ }
+\ No newline at end of file

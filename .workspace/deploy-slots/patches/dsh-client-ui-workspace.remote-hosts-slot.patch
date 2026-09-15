@@ -1,0 +1,38 @@
+--- a/lib/client.js	2026-09-15 14:48:40.262208303 +0800
++++ b/lib/client.js	2026-09-15 14:49:08.886383494 +0800
+@@ -2010,6 +2010,7 @@
+ 							})
+ 						})
+ 					}),
++					wide && renderSlot("sidebar.workspaces.remoteHosts", {}),
+ 					(0, react_jsx_runtime.jsx)("div", {
+ 						className: WorkspaceBrowser_module_css_default.listArea,
+ 						children: wide && (normalizedQuery !== "" ? (0, react_jsx_runtime.jsx)(SearchResults, {
+@@ -2436,6 +2437,9 @@
+ 				children: { "sidebar.workspaces.directoryFlow": {
+ 					kind: "single",
+ 					scope: "root"
++				}, "sidebar.workspaces.remoteHosts": {
++					kind: "list",
++					scope: "root"
+ 				} },
+ 				store: createWorkspaceViewStore(),
+ 				inject: browserInjected,
+--- a/lib/types/client/contract/slots.d.ts	2026-09-15 14:48:40.263953439 +0800
++++ b/lib/types/client/contract/slots.d.ts	2026-09-15 14:49:19.869704088 +0800
+@@ -57,6 +57,15 @@
+             scope: 'root';
+             owner: DirectoryFlowOwnerProps;
+         };
++        /**
++         * Sidebar remote-hosts sidecar folder tree (declared by the WorkspaceBrowser
++         * entry; list-kind, so any plugin may add its own folder section without
++         * touching the single-kind directory-flow holes).
++         */
++        'sidebar.workspaces.remoteHosts': {
++            kind: 'list';
++            scope: 'root';
++        };
+     }
+ }
+ /** The two directory-flow holes; a flow package's client half registers its one component into both. */

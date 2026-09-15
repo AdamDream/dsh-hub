@@ -1,0 +1,56 @@
+{
+  "name": "@local/dsh-ssh-gui",
+  "version": "0.2.0",
+  "description": "Distributed control GUI for DeepSeek Harness — unified node abstraction (node = {id, name, transport, target}) over ssh:// remote hosts, serial:// local USB serial (reusing the dsh-workerspace serial backend) and serial-tcp:// TCP serial servers (ser2net/socat); connection management, node status, command execution (exec.run), file ops (file.get/put) and directory browsing with keyRef credential binding, riding the dsh-workspace-enhancement registry (/dsw) plus a private /ssh-gui loopback channel. Terminal console is left external — no embedded interactive terminal.",
+  "license": "MIT",
+  "author": "CNS2026495165",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "ssh",
+    "serial",
+    "serial-tcp",
+    "ser2net",
+    "socat",
+    "distributed-control",
+    "remote",
+    "sftp",
+    "web-ui"
+  ],
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-connection"
+      ]
+    }
+  },
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-credentials": ">=0.1.1-rc.2 <0.2.0",
+    "@deepseek-ai/dsh-settings": ">=0.1.1-rc.2 <0.2.0",
+    "@deepseek-ai/schemastery": "^3.18.1",
+    "dsh-workspace-enhancement": "0.1.2"
+  }
+}

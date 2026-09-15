@@ -1,0 +1,15 @@
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-loader/lib/index.js	2026-09-11 14:27:15.075962328 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-loader/lib/index.js	2026-09-12 14:56:15.475680438 +0800
+@@ -17,9 +17,9 @@
+ * fails loud — aggregated into this plugin's activation throw for existing
+ * entries, contained to a logged error per package in steady state.
+ *
+-* Scanning is incremental per entry name. Every cordis `internal/plugin`
+-* emission marks the fiber's entry name dirty, and a microtask flush
+-* reconciles each dirty name against the live
++* Scanning is incremental per entry name, mirroring the client-modules node
++* half: every cordis `internal/plugin` emission marks the fiber's entry name
++* dirty and a microtask flush reconciles each dirty name against the live
+ * loader entries; the activation pass seeds the same dirty set with all
+ * current entries. Package verdicts and imported manifests are cached per
+ * package name and never expire — plugin-set changes take effect on restart.

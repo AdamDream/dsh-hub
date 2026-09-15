@@ -1,0 +1,144 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -285,6 +285,30 @@
+ 		default: return null;
+ 	}
+ }
++/** Whether a payload field is a JSON object rather than an array or scalar. */
++function isPayloadRecord(value) {
++	return typeof value === "object" && value !== null && !Array.isArray(value);
++}
++/**
++* Reject contradictory tool failure metadata.
++* This does not validate complete event payloads or embedded provider streams.
++* @param event - event whose locally related payload fields are inspected.
++* @param subject - event location to include in validation errors.
++* @throws when tool failure metadata contradicts its message.
++*/
++function validateSessionEventData(event, subject) {
++	const data = event.data;
++	if (event.type === "tool/result") {
++		if (!isPayloadRecord(data)) throw new Error(`${subject} data must be an object`);
++		if (data["error"] === void 0) return;
++		const message = data["message"];
++		const content = isPayloadRecord(message) ? message["content"] : void 0;
++		const block = Array.isArray(content) ? content[0] : void 0;
++		if (!isPayloadRecord(block) || block["isError"] !== true) {
++			throw new Error(`${subject} error requires message content[0].isError === true`);
++		}
++	}
++}
+ /** Create an empty surface fold state. */
+ function createFoldState() {
+ 	return {
+@@ -1155,6 +1179,7 @@
+ * @returns the same event object with a validated, deeply frozen message.
+ */
+ function adoptSessionEvent(event) {
++	validateSessionEventData(event, `session event at seq ${event.seq}`);
+ 	assertMessageEventShape(event, `session event at seq ${event.seq}`);
+ 	switch (event.type) {
+ 		case "user/message":
+@@ -1207,6 +1232,7 @@
+ 	const seq = event["seq"];
+ 	const time = event["time"];
+ 	if (typeof type !== "string" || typeof seq !== "number" || !Number.isSafeInteger(seq) || seq < 0 || typeof time !== "number" || !Number.isSafeInteger(time) || event["data"] === void 0 || event["ignorable"] !== void 0 && event["ignorable"] !== true) throw new Error(`seed event at index ${index} has an invalid event envelope`);
++	validateSessionEventData(event, `seed ${type} at index ${index}`);
+ 	switch (type) {
+ 		case "request/header":
+ 		case "user/message":
+@@ -1461,6 +1487,7 @@
+ 			data: dataSnapshot,
+ 			...surfaceMetadataSnapshot
+ 		});
++		validateSessionEventData(event, `session event "${type}" at seq ${event.seq}`);
+ 		this.surfaceManager.validateNext(event);
+ 		if (entry !== void 0) entry.appending = true;
+ 		try {
+--- a/lib/types/surface.js
++++ b/lib/types/surface.js
+@@ -101,6 +101,32 @@
+             return null;
+     }
+ }
++/** Whether a payload field is a JSON object rather than an array or scalar. */
++function isRecord(value) {
++    return typeof value === 'object' && value !== null && !Array.isArray(value);
++}
++/**
++ * Reject contradictory tool failure metadata.
++ * This does not validate complete event payloads or embedded provider streams.
++ * @param event - event whose locally related payload fields are inspected.
++ * @param subject - event location to include in validation errors.
++ * @throws when tool failure metadata contradicts its message.
++ */
++export function validateSessionEventData(event, subject) {
++    const data = event.data;
++    if (event.type === 'tool/result') {
++        if (!isRecord(data))
++            throw new Error(`${subject} data must be an object`);
++        if (data['error'] === undefined)
++            return;
++        const message = data['message'];
++        const content = isRecord(message) ? message['content'] : undefined;
++        const block = Array.isArray(content) ? content[0] : undefined;
++        if (!isRecord(block) || block['isError'] !== true) {
++            throw new Error(`${subject} error requires message content[0].isError === true`);
++        }
++    }
++}
+ /** Create an empty surface fold state. */
+ function createFoldState() {
+     return { nodes: [], replaceGeneration: 0 };
+--- a/lib/types/index.js
++++ b/lib/types/index.js
+@@ -11,7 +11,7 @@
+ import { scopeOf, scopeTarget } from '@deepseek-ai/dsh-scope';
+ import { SESSION_FORMAT_VERSION, SessionId } from "./types.js";
+ import { snapshotJsonValue } from "./json.js";
+-import { deriveEventMessage, SurfaceManager } from "./surface.js";
++import { deriveEventMessage, SurfaceManager, validateSessionEventData } from "./surface.js";
+ import { foldRequestHeader } from "./request-header.js";
+ export * from "./types.js";
+ export { SessionPreparation } from "./preparation.js";
+@@ -93,6 +93,7 @@
+  * @returns the same event object with a validated, deeply frozen message.
+  */
+ export function adoptSessionEvent(event) {
++    validateSessionEventData(event, `session event at seq ${event.seq}`);
+     assertMessageEventShape(event, `session event at seq ${event.seq}`);
+     switch (event.type) {
+         case 'user/message':
+@@ -162,6 +163,7 @@
+         || (event['ignorable'] !== undefined && event['ignorable'] !== true)) {
+         throw new Error(`seed event at index ${index} has an invalid event envelope`);
+     }
++    validateSessionEventData(event, `seed ${type} at index ${index}`);
+     switch (type) {
+         case 'request/header':
+         case 'user/message':
+@@ -507,6 +509,7 @@
+             data: dataSnapshot,
+             ...surfaceMetadataSnapshot,
+         });
++        validateSessionEventData(event, `session event "${type}" at seq ${event.seq}`);
+         this.surfaceManager.validateNext(event);
+         if (entry !== undefined)
+             entry.appending = true;
+--- a/lib/types/surface.d.ts
++++ b/lib/types/surface.d.ts
+@@ -61,6 +61,14 @@
+  * @returns the derived message, or null when the event produces none.
+  */
+ export declare function deriveEventMessage(event: SessionEvent): Message | null;
++/**
++ * Reject contradictory tool failure metadata.
++ * This does not validate complete event payloads or embedded provider streams.
++ * @param event - event whose locally related payload fields are inspected.
++ * @param subject - event location to include in validation errors.
++ * @throws when tool failure metadata contradicts its message.
++ */
++export declare function validateSessionEventData(event: Pick<SessionEvent, 'type' | 'data'>, subject: string): void;
+ /** One replacement operation observed while folding a session surface. */
+ export interface SurfaceFoldReplacement {
+     /** Seq of the event that replaced the prior surface range. */

@@ -1,0 +1,31 @@
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-compaction-tool-result-pruner/lib/index.js	2026-09-11 14:27:15.070962257 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-compaction-tool-result-pruner/lib/index.js	2026-09-12 14:56:17.715009363 +0800
+@@ -1,7 +1,6 @@
+ import { Service } from "@deepseek-ai/cordis";
+ import z from "@deepseek-ai/schemastery";
+-import { freezeMessage } from "@deepseek-ai/dsh-llm";
+-import { deepFreeze } from "@deepseek-ai/dsh-util-values";
++import { deepFreeze, freezeMessage } from "@deepseek-ai/dsh-llm";
+ //#region lib/types/config.js
+ /** Configuration resolution for deterministic tool-result pruning. */
+ /** Fixed marker substituted for every removed middle span. */
+@@ -137,7 +136,7 @@
+ 	pruneSession(session) {
+ 		const candidates = [];
+ 		for (const seq of [...session.surface.nodes]) {
+-			const event = session.eventAt(seq);
++			const event = session.events[seq];
+ 			/* v8 ignore next -- surface seqs are validated contiguous log references. */
+ 			if (event?.type === "tool/result") candidates.push({
+ 				seq,
+@@ -173,8 +172,8 @@
+ 			}, {
+ 				surfaceOp: {
+ 					op: "replace",
+-					startSeq: seq,
+-					endSeq: seq
++					start: seq,
++					end: seq
+ 				},
+ 				sourceEventSeqs: [seq]
+ 			});

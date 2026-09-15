@@ -1,0 +1,454 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-persona/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-persona/README.i18n.yaml	2026-09-11 14:27:15.122962996 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/README.i18n.yaml	2026-09-12 14:56:17.491536161 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/preset/persona/README.md
+-README.md: 11f9fdc1d3968fdb9ba0792936a050aca04d4e8b
+-README.zh.md: bbf702dc752f84b120a9540fed7e793f5bb692ce
++README.md: 978d01ddbd52095bc2486d27d08fde2d4a8fa79b
++README.zh.md: a6e682711c0d6bba742cd1bb192fb9f38bf32cd0
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-persona/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-persona/README.md	2026-09-11 14:27:15.082962428 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/README.md	2026-09-12 14:56:17.490978379 +0800
+@@ -1,128 +1,41 @@
+----
+-description: "The composable persona row presets mount to give one agent its own system-prompt persona, for users and maintainers configuring or debugging it."
+-kind: "package-reference"
+----
+-
+-# @deepseek-ai/dsh-persona
++# dsh-persona
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-`dsh-persona` gives one agent its own persona: a preset mounts this composable row to register persona prefix and suffix sections, shadowing the deployment-wide defaults for that session. It can also make the prefix the session's complete system prompt, suppressing every other section, and can turn off dynamic runtime-context snapshots for the session. Mount it inside a preset composition — mounting it globally collides with the prompt registry's own persona registration and fails loud. Without this row, a preset could change an agent's tools but never its identity.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
++The agent persona as a composable row. It can either shadow the deployment persona or own the complete system prompt.
+ 
+------
++[`dsh-system-prompt`](../../core/system-prompt/README.md) owns the deployment persona as its own config and registers that section unconditionally, so a process has exactly one. An [agent preset](../agent-presets/README.md) cannot mount the prompt registry itself — without a row of its own, a preset could change an agent's tools but never its identity. This package is that row.
+ 
+-<a id="use-this-package"></a>
+-## Use this package
++## Scope-only
+ 
+-Mount this row inside a preset composition to give that preset's sessions their own persona. The row needs an agent scope: mounted outside one it collides with the prompt registry's own `deployment:persona-prefix` registration and fails loud — the deployment persona already has an owner, and the whole point of this row is to shadow it for one agent.
++Mounting this row outside an agent scope collides with the registry's own `deployment:persona` registration and fails loud. That is not a limitation to work around: the deployment persona already has an owner, and the whole point of this row is to shadow it for one agent. Mount it inside a preset composition, where the preset mount supplies the agent scope.
+ 
+-### Configuration
+-
+-```yaml
+-- name: '@deepseek-ai/dsh-persona'
+-  config:
+-    prefix: You are a terse systems engineer who answers in short commands.
+-```
++## Config
+ 
+ | Field | Default | Meaning |
+ |---|---|---|
+-| `prefix` | required | Persona prose rendered as the `deployment:persona-prefix` section |
+-| `suffix` | `''` | Template for `deployment:persona-suffix`; omitted or empty text shadows the global suffix away |
+-| `complete` | `false` | Use only the rendered prefix as the system prompt; ignore the suffix |
++| `text` | required | Persona prose rendered as the `deployment:persona` section |
++| `complete` | `false` | Restore this persona after assembly as the only system-prompt section |
+ | `includeRuntimeContext` | `true` | Include dynamic runtime-context snapshots for this agent scope; false suppresses every context contribution without disabling its owning services |
+ 
+-The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-persona) is the exhaustive source for every accepted field and its JSDoc.
+-
+-### Persona behavior
+-
+-The persona `prefix` and `suffix` are templates: complete `{{…}}` groups resolve strictly against registered prompt variables when the prompt renders, not when it assembles. Each empty template still shadows its deployment-wide section, then disappears at render. Omitted `suffix` defaults to empty; it does not inherit the global suffix. With `complete: true`, assembly still resolves contexts, tools, variables, and cooperative listeners, but the prompt registry restores this exact prefix as the sole section; no identity, suffix, tool guidance, or listener can append prompt text. With `includeRuntimeContext: false`, context providers are not evaluated for this scope and contexts added by assembly listeners are discarded.
+-
+-### When to use it
+-
+-Use this row when a preset must change an agent's identity and not only its tools. The deployment-wide persona itself is configured on the `dsh-system-prompt` row, not here; this row exists only to shadow or replace it for one agent.
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
+-
+-<details>
+-<summary>Implementation internals — click to expand</summary>
+-
+-### How the row registers
+-
+-The row registers scoped persona prefix and suffix sections using the registry's shared names and named orders. Each shadows its deployment default instead of appearing beside it; the registry owns ordering, interpolation, and complete-prompt enforcement. `includeRuntimeContext: false` calls `ctx.systemPrompt.suppressRuntimeContext()`.
+-
+-### Why the row is scope-only
+-
+-`dsh-system-prompt` owns the global persona as its own config and registers `deployment:persona-prefix` unconditionally, so a process has exactly one. This row collides with that registration outside an agent scope, by design: the row exists because a preset cannot mount the prompt registry itself.
++`text` is a template, like any prompt section: complete `{{…}}` groups resolve strictly against registered prompt variables when the prompt renders, not when it assembles. Empty text still occupies the slot, so it shadows the deployment persona away entirely and then disappears at render. With `complete: true`, assembly still resolves contexts, tools, variables, and cooperative listeners, then the prompt registry restores this exact persona as the sole section; no identity, tool guidance, or listener can append prompt text. With `includeRuntimeContext: false`, context providers are not evaluated for this scope and contexts added by assembly listeners are discarded.
+ 
+-### Source map
+-
+-| File | Role |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | Plugin entry: `Config` schema, persona section registration, runtime-context suppression |
+-| — | No runtime invariant companion is published; this row owns no event stream or mutable runtime data — it registers prompt sections and the prompt registry owns identity, complete-prompt enforcement, shadowing, and disposal. |
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-Read these pages when the package-level contract is not enough; they move from the preset composition to the prompt registry this row feeds.
+-
+-- [agent-presets package](../agent-presets/README.md) — the preset composition this row mounts into.
+-- [System prompt subsystem](../../../docs/subsystems/system-prompt.md) — sections, assembly, and the persona slot this row shadows.
+-- [Generated configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-persona) — every accepted config field and its source declaration.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+ ### The persona section
+ 
+ #### What the model sees
+ 
+-The `deployment:persona-prefix` section at order `0` carries this row's `prefix`; `deployment:persona-suffix` at order `10200` carries its `suffix`, after first-party guidance. Both replace their deployment defaults and resolve prompt variables. In complete mode, the model sees only the rendered prefix section as its system prompt. Runtime context remains enabled by default; when disabled, a fresh agent receives no runtime-context snapshot from sandbox policy, approval policy, delegation, or another system-prompt context provider.
++The `deployment:persona` section at order 0, immediately after the harness identity opener, carrying exactly this row's configured `text` with prompt variables resolved. For an agent whose preset mounts this row, it replaces whatever persona the deployment configured. In complete mode, the model sees only this rendered section as its system prompt. Runtime context remains enabled by default. When disabled, a fresh agent receives no runtime-context snapshot from sandbox policy, approval policy, delegation, or another system-prompt context provider.
+ 
+ #### Token effect
+ 
+-Fixed for a given preset: the persona prefix and suffix tokens on every request that agent makes, and none for any other agent. Empty text contributes nothing. Complete mode removes every other system-prompt token for that agent.
++Fixed for a given preset: the persona's own tokens on every request that agent makes, and none for any other agent. Empty text contributes nothing. Complete mode removes every other system-prompt token for that agent.
+ 
+ #### KV Cache effect
+ 
+-Prefix-stable while the rendered template variables and text are unchanged. Suffix changes leave preceding instructions unchanged when the model, prefix, and tools match. Prefix changes affect the early prefix; provider cache sharing is not guaranteed.
++Prefix-stable for the life of an agent — the row mounts once, before the agent is published and therefore before its first request, and its text never changes while the agent runs. Two agents on different presets establish different prefixes from this section onward; neither can invalidate the other's reuse.
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits define when the row is a poor fit. They are current package constraints, not a task backlog.
+-
+ - **No global mount** — the prompt registry owns the unscoped persona slot, so this row is usable only from a scoped composition. A deployment-wide persona change belongs in the `system-prompt` row's own config.
+-- **Runtime-context suppression is all-or-nothing** — `includeRuntimeContext: false` turns off every context contribution for the scope, including sandbox policy, approval policy, and delegation; there is no per-provider filter.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-None.
+-
+-</details>
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-persona/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-persona/README.zh.md	2026-09-11 14:27:15.095962613 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/README.zh.md	2026-09-12 14:56:17.490978379 +0800
+@@ -1,128 +1,41 @@
+----
+-description: "preset 挂载的可组装人设行，让单个 agent 拥有自己的系统提示词人设，供配置或排查它的用户与维护者阅读。"
+-kind: "package-reference"
+----
+-
+-# @deepseek-ai/dsh-persona
++# dsh-persona
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-`dsh-persona` 让单个 agent（智能体）拥有自己的人设：preset 挂载这一可组装的行来注册人设前缀与后缀段落，为该会话遮蔽部署级默认值。它还可以把前缀变成该会话的完整系统提示词、抑制所有其他段落，并可为该会话关闭动态 runtime-context 快照。请把它挂在 preset 组装内部——全局挂载会与提示词注册表自身的人设注册相撞并明确报错。没有这一行，preset 能改变 agent 的工具，却永远改不了它的身份。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
++把 agent（智能体）人设做成一个可组装的行：它既可以遮蔽部署级人设，也可以拥有完整系统提示词。
+ 
+------
++[`dsh-system-prompt`](../../core/system-prompt/README.zh.md) 以自身配置持有部署级人设，并且无条件注册该段落，因此一个进程只有一份。[agent preset](../agent-presets/README.zh.md) 无法自行挂载提示词注册表——若没有属于自己的行，preset 能改变 agent 的工具，却永远改不了它的身份。本包就是那一行。
+ 
+-<a id="use-this-package"></a>
+-## 使用本包
++## 仅限 scope 内使用
+ 
+-在 preset 组装内部挂载本行，让该 preset 的会话拥有自己的人设。本行需要 agent scope：在 scope 之外挂载会与提示词注册表自身的 `deployment:persona-prefix` 注册相撞并明确报错——部署级人设已经有归属，而本行存在的意义正是为某一个 agent 遮蔽它。
++在 agent scope 之外挂载本行，会与注册表自身的 `deployment:persona` 注册相撞并明确报错。这不是需要绕开的限制：部署级人设已经有归属，而本行存在的意义正是为某一个 agent 遮蔽它。请把它挂在 preset 组装内部，由 preset 的挂载过程提供 agent scope。
+ 
+-### 配置
+-
+-```yaml
+-- name: '@deepseek-ai/dsh-persona'
+-  config:
+-    prefix: You are a terse systems engineer who answers in short commands.
+-```
++## 配置
+ 
+ | 字段 | 默认值 | 含义 |
+ |---|---|---|
+-| `prefix` | 必填 | 作为 `deployment:persona-prefix` 段落渲染的人设文本 |
+-| `suffix` | `''` | `deployment:persona-suffix` 模板；省略或空文本会遮蔽掉全局后缀 |
+-| `complete` | `false` | 仅将渲染后的前缀用作系统提示词；忽略后缀 |
++| `text` | 必填 | 作为 `deployment:persona` 段落渲染的人设文本 |
++| `complete` | `false` | 组装后将此人设恢复为唯一的系统提示词段落 |
+ | `includeRuntimeContext` | `true` | 是否为此 agent 作用域包含动态 runtime-context 快照；false 会抑制所有上下文贡献，但不禁用拥有它们的服务 |
+ 
+-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-persona)是每个受支持字段及其 JSDoc 的穷尽式真源。
+-
+-### 人设行为
+-
+-人设 `prefix` 与 `suffix` 都是模板：完整的 `{{…}}` 组在提示词**渲染**时（而非组装时）严格解析为已注册的提示词变量。每个空模板仍会遮蔽对应的部署级段落，然后在渲染时消失。省略 `suffix` 时默认为空，不继承全局后缀。启用 `complete: true` 时，组装仍会解析上下文、工具、变量与协作式监听器，但提示词注册表会把这确切前缀恢复为唯一段落；身份、后缀、工具引导或监听器都无法追加提示词文本。启用 `includeRuntimeContext: false` 时，此作用域的上下文提供方不会被求值，组装监听器添加的上下文也会被丢弃。
+-
+-### 何时使用
+-
+-当 preset 必须改变 agent 的身份、而不只是工具时，使用本行。部署级人设本身配置在 `dsh-system-prompt` 行上，不在这里；本行只用于为某一个 agent 遮蔽或替换它。
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## 理解实现
+-
+-<details>
+-<summary>实现细节——点击展开</summary>
+-
+-### 本行如何注册
+-
+-本行使用注册表共享的名称与具名顺序来注册带作用域的人设前缀与后缀段落。两者分别遮蔽对应的部署默认值，而不是出现在其旁边；排序、插值与完整提示词执行归注册表所有。`includeRuntimeContext: false` 会调用 `ctx.systemPrompt.suppressRuntimeContext()`。
+-
+-### 本行为何仅限 scope 内使用
+-
+-`dsh-system-prompt` 以自身配置持有全局人设并无条件注册 `deployment:persona-prefix`，因此一个进程只有一份。本行在 agent scope 之外与该项注册相撞，这是刻意的：本行的存在是因为 preset 无法自行挂载提示词注册表。
++`text` 与任何提示词段落一样是模板：完整的 `{{…}}` 组在提示词**渲染**时（而非组装时）严格解析为已注册的提示词变量。空文本同样占据该槽位，因此会把部署级人设整个遮蔽掉，然后在渲染时消失。启用 `complete: true` 时，组装仍会解析上下文、工具、变量和协作式监听器，之后提示词注册表将这份确切人设恢复为唯一段落；身份、工具引导或监听器都无法追加提示词文本。启用 `includeRuntimeContext: false` 时，此作用域的上下文提供方不会被求值，组装监听器添加的上下文也会被丢弃。
+ 
+-### 源码地图
+-
+-| 文件 | 职责 |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | 插件入口：`Config` schema、人设段落注册、runtime-context 抑制 |
+-| — | 不发布运行时不变式伴生入口；身份、完整提示词执行与资源释放归提示词注册表。 |
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-当包级约定不够用时阅读以下页面；它们从 preset 组装逐步进入本行所供给的提示词注册表。
+-
+-- [agent-presets 包](../agent-presets/README.zh.md)——本行挂载进的 preset 组装。
+-- [系统提示词子系统](../../../docs/subsystems/system-prompt.zh.md)——段落、组装，以及本行所遮蔽的人设槽位。
+-- [生成的配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-persona)——每个受支持配置字段及其源声明。
+-
+------
+-
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+ ### 人设段落
+ 
+-#### 模型看到什么
+-
+-位于 order `0` 的 `deployment:persona-prefix` 段落携带本行的 `prefix`；位于 order `10200` 的 `deployment:persona-suffix` 在第一方指导之后携带其 `suffix`。两者分别替换对应的部署默认值，并解析提示词变量。在完整模式下，模型只会看到渲染后的前缀段落作为系统提示词。Runtime context 默认保持启用；禁用后，新建 agent 不会收到来自沙箱策略、批准策略、委派或其他 system-prompt 上下文提供方的 runtime-context 快照。
+-
+-#### Token 影响
+-
+-对给定 preset 而言是固定的：该 agent 的每次请求都携带人设前缀与后缀的 token，其他 agent 一个都不带。空文本不贡献任何 token。完整模式会移除该 agent 的其他所有系统提示词 token。
+-
+-#### KV Cache 影响
+-
+-渲染后的模板变量与文本不变时，前缀保持稳定。模型、前缀与工具一致时，后缀变化不改变前置指令。前缀变化会影响靠前的前缀；不保证提供方共享缓存。
+-
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
++#### What the model sees
+ 
++位于 order 0 的 `deployment:persona` 段落，紧随 harness 身份开场白之后，携带本行配置的 `text`，其中的提示词变量已解析。对于其 preset 挂载了本行的 agent，它会替换部署所配置的任何人设。在完整模式下，模型只会看到这个渲染后的段落作为系统提示词。Runtime context 默认保持启用。禁用后，新建 agent 不会收到来自沙箱策略、批准策略、委派或其他 system-prompt 上下文提供方的 runtime-context 快照。
+ 
+-这些限制说明本行何时不合适。它们是当前包约束，不是任务积压。
++#### Token effect
+ 
+-- **不支持全局挂载**——提示词注册表拥有未加 scope 的人设槽位，因此本行只能从带 scope 的组装中使用。要改变部署级人设，应在 `system-prompt` 行自身的配置中修改。
+-- **runtime-context 抑制是全有或全无**——`includeRuntimeContext: false` 会关闭该作用域的所有上下文贡献，包括沙箱策略、批准策略与委派；没有按提供方过滤的选项。
++对给定 preset 而言是固定的：该 agent 的每次请求都携带人设自身的 token，其他 agent 一个都不带。空文本不贡献任何 token。完整模式会移除该 agent 的其他所有系统提示词 token。
+ 
+-<a id="dev-note"></a>
+-### 开发备注
++#### KV Cache effect
+ 
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
++在一个 agent 的整个生命周期内保持前缀稳定——本行只挂载一次，发生在 agent 发布之前、因而也在它的首个请求之前，且在 agent 运行期间文本不再改变。两个使用不同 preset 的 agent 从该段落起建立各自不同的前缀，谁都无法让对方失去缓存复用。
+ 
+-无。
++## 已知限制与暂缓事项
+ 
+-</details>
++- **不支持全局挂载** —— 提示词注册表拥有未加 scope 的人设槽位，因此本行只能从带 scope 的组装中使用。要改变部署级人设，应在 `system-prompt` 行自身的配置中修改。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-persona/lib/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/lib/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-persona/lib/index.js	2026-09-11 14:27:15.069962243 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/lib/index.js	2026-09-12 14:56:17.489983953 +0800
+@@ -1,5 +1,5 @@
+ import z from "@deepseek-ai/schemastery";
+-import { PERSONA_PREFIX_SECTION, PERSONA_SUFFIX_SECTION } from "@deepseek-ai/dsh-system-prompt";
++import { PERSONA_ORDER, PERSONA_SECTION } from "@deepseek-ai/dsh-system-prompt";
+ //#region lib/types/index.js
+ /**
+ * A per-agent persona as a composable row.
+@@ -21,30 +21,24 @@
+ const inject = ["systemPrompt"];
+ /** Runtime schema for the persona row. */
+ const Config = z.object({
+-	prefix: z.string().required(),
+-	suffix: z.string().default(""),
++	text: z.string().required(),
+ 	complete: z.boolean().default(false),
+ 	includeRuntimeContext: z.boolean().default(true)
+ });
+ /**
+-* Register the persona prefix and suffix sections for the mounting context's scope.
++* Register the persona section for the mounting context's scope.
+ * @param ctx - an agent scope context; an unscoped context collides with the
+ * prompt registry's own persona registration and rejects.
+-* @param config - the prefix, suffix, and complete-prompt policy.
++* @param config - the persona text and complete-prompt policy.
+ */
+ function apply(ctx, config) {
+ 	ctx.effect(() => ctx.systemPrompt.section({
+-		name: PERSONA_PREFIX_SECTION,
+-		order: ctx.systemPrompt.getSectionOrder("DEPLOYMENT_PERSONA_PREFIX"),
+-		text: config.prefix,
++		name: PERSONA_SECTION,
++		order: PERSONA_ORDER,
++		text: config.text,
+ 		...config.complete ? { complete: true } : {}
+ 	}), "persona.section()");
+-	ctx.effect(() => ctx.systemPrompt.section({
+-		name: PERSONA_SUFFIX_SECTION,
+-		order: ctx.systemPrompt.getSectionOrder("DEPLOYMENT_PERSONA_SUFFIX"),
+-		text: config.suffix ?? ""
+-	}), "persona.suffix()");
+ 	if (!(config.includeRuntimeContext ?? true)) ctx.systemPrompt.suppressRuntimeContext();
+ }
+ //#endregion
+-export { Config, PERSONA_PREFIX_SECTION, PERSONA_SUFFIX_SECTION, apply, inject, name };
++export { Config, PERSONA_ORDER, PERSONA_SECTION, apply, inject, name };
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/lib: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-persona/lib/types/index.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/lib/types/index.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-persona/lib/types/index.d.ts	2026-09-11 14:27:15.118962939 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/lib/types/index.d.ts	2026-09-12 14:56:17.491311740 +0800
+@@ -14,8 +14,8 @@
+  */
+ import type { Context } from '@deepseek-ai/cordis';
+ import z from '@deepseek-ai/schemastery';
+-import { PERSONA_PREFIX_SECTION, PERSONA_SUFFIX_SECTION } from '@deepseek-ai/dsh-system-prompt';
+-export { PERSONA_PREFIX_SECTION, PERSONA_SUFFIX_SECTION };
++import { PERSONA_ORDER, PERSONA_SECTION } from '@deepseek-ai/dsh-system-prompt';
++export { PERSONA_ORDER, PERSONA_SECTION };
+ /** Cordis plugin name. */
+ export declare const name = "persona";
+ /** The prompt registry this row contributes to. */
+@@ -23,17 +23,12 @@
+ /** Plugin config: the persona text this composition contributes. */
+ export interface Config {
+     /**
+-     * Persona prose rendered as the `deployment:persona-prefix` section. A template:
++     * Persona prose rendered as the `deployment:persona` section. A template:
+      * complete `{{…}}` groups interpolate strictly against registered prompt
+      * variables. Empty text drops the section at render, matching the registry.
+      */
+-    prefix: string;
+-    /**
+-     * Persona suffix template rendered after first-party guidance. Omitted or empty
+-     * text shadows the deployment suffix away; interpolation is strict.
+-     */
+-    suffix?: string;
+-    /** Make the prefix the complete system prompt, suppressing the suffix and every other section. */
++    text: string;
++    /** Make this persona the complete system prompt, suppressing every other section. */
+     complete?: boolean;
+     /** Suppress dynamic runtime-context snapshots for this persona's agent scope. */
+     includeRuntimeContext?: boolean;
+@@ -41,10 +36,10 @@
+ /** Runtime schema for the persona row. */
+ export declare const Config: z<Config>;
+ /**
+- * Register the persona prefix and suffix sections for the mounting context's scope.
++ * Register the persona section for the mounting context's scope.
+  * @param ctx - an agent scope context; an unscoped context collides with the
+  * prompt registry's own persona registration and rejects.
+- * @param config - the prefix, suffix, and complete-prompt policy.
++ * @param config - the persona text and complete-prompt policy.
+  */
+ export declare function apply(ctx: Context, config: Config): void;
+ //# sourceMappingURL=index.d.ts.map
+\ No newline at end of file
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/lib/types: invariant.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-persona/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-persona/package.json	2026-09-11 14:27:15.076962342 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-persona/package.json	2026-09-12 14:56:17.490978379 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-persona",
+   "description": "Composition-authored deployment persona section for the DeepSeek Harness",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -18,24 +18,31 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./src/*": "./src/*",
+     "./package.json": "./package.json"
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/types/**/*.d.ts"
+   ],
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/dsh-system-prompt": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-system-prompt": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2"
+   },
+   "dependencies": {
+-    "@deepseek-ai/schemastery": "^3.18.2"
++    "@deepseek-ai/schemastery": "^3.18.1"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/dsh-scope": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-system-prompt": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-scope": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-system-prompt": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2"
+   }
+ }
+\ No newline at end of file

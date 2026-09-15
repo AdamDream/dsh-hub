@@ -1,0 +1,637 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/README.i18n.yaml	2026-09-11 14:27:15.141963266 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/README.i18n.yaml	2026-09-12 14:56:18.036284779 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/subprocess/subprocess/README.md
+-README.md: 5b6ee4d3c1ab8a7b7071e40e845ad28a5213aa8b
+-README.zh.md: 6e0b4f2ca37e952d74701e6061c99fa941d81892
++README.md: 5e80bc7205c2f06b3528bbcfcb775941d2fa4545
++README.zh.md: 4744b4aeea07e18a8d149865050f7487f8816061
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/README.md	2026-09-11 14:27:15.090962541 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/README.md	2026-09-12 14:56:18.035851692 +0800
+@@ -1,132 +1,25 @@
+----
+-description: "The subprocess service (ctx.subprocess) for composition authors and capability consumers starting, observing, and terminating managed child processes and terminal sessions."
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-subprocess
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-`ctx.subprocess` resolves executables, starts explicitly specified child processes or real terminal sessions, streams or collects bounded output, and terminates the full managed process range. Configure one subprocess implementation for each composition, choosing local or remote execution according to where commands must run. Each request sets argv, working directory, stdio, environment overrides, termination grace, and cancellation, with no shell interpretation or hidden execution defaults. Child environments remove ambient credentials and `DSH_*` values before applying explicit overrides; callers own deadlines, teardown policy, and model-facing rendering, while collected output remains readable after exit.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## Use this package
+-
+-Mount a subprocess provider in any composition that must run child processes, and call `ctx.subprocess` from the capability that owns the command. The common path is explicit: resolve the executable, spawn with a fully specified request, read the output you asked for, and terminate the managed range when the work is done.
+-
+-### Mounting the service
+-
+-One provider registers `ctx.subprocess` per composition; load it beside the consumers that spawn through it — the bash executors, the LSP host, the PTY shell backend, or an out-of-process subagent backend. Loading a second provider fails loudly (one service per context, cordis standard).
+-
+-```yaml
+-- name: '@deepseek-ai/dsh-subprocess-local'
+-- name: '@deepseek-ai/dsh-bash-local'
+-```
+-
+-### Starting a managed process
+-
+-The request is fully explicit: the program and arguments, the working directory, one stdio disposition per stream, a termination grace, an optional abort signal, and optional environment overrides. Target and managed-range identities remain provider-private. `done` resolves with the direct command's exit facts (`exitCode` and `signal`) and rejects for spawn or provider failures; collected output stays readable after exit.
+-
+-```text
+-const executable = await ctx.subprocess.resolveExecutable('bash')
+-const handle = ctx.subprocess.spawn({
+-  argv: [executable, '-c', 'echo hello'],
+-  cwd: '/workspace',
+-  stdio: { stdin: 'ignore', stdout: { maxBytes: 64 * 1024 }, stderr: 'inherit' },
+-  graceMs: 5000,
+-})
+-const { exitCode, signal } = await handle.done
+-const output = handle.collected.stdout?.readFrom(0)
+-```
+-
+-### Choosing how output is delivered
+-
+-- `'pipe'` hands you the raw stream for your own protocol framing — JSON-RPC for the LSP host, ndjson for the ACP backend.
+-- `'inherit'` lets the child write to the parent's own stream, for pass-through diagnostics.
+-- A collect object buffers a bounded in-memory tail; add a `spill` cap and the complete stream is also recoverable from a spill file.
+-
+-Reads are offset-based and non-consuming: a background reader and a final batch read can share one stream without stealing each other's bytes.
+-
+-### Managing process lifetime
+-
+-Termination and waiting use one provider-managed range. `terminate()` starts the provider's documented procedure, is idempotent, and becomes a no-op after that range is empty; the request's abort signal starts the same procedure. `waitForExit()` observes the same range and resolves only after the provider proves it quiescent, so direct command completion does not hide a surviving descendant. It rejects when the selected owner can no longer prove quiescence. Providers document their native owners and weaker fallbacks; callers own deadlines, teardown ladders, and cause classification.
+-
+-### Running a terminal session
+-
+-For interactive programs, `spawnTerminal` allocates a real PTY: write text, read UTF-8 output, inspect and signal the current foreground process group, and await one `terminate()` that settles every session member the provider can still observe. Readiness, scrollback, and prompt policy stay with the PTY consumer.
+-
+-### Environment every child starts from
+-
+-Children never inherit the harness's ambient secrets: credential-shaped names and ambient `DSH_*` facts are scrubbed, and the caller's explicit `env` merges after that scrub. A deliberately forwarded credential or a current `DSH_*` deployment fact still reaches the child; an explicit `undefined` tombstone removes an ordinary ambient entry.
+-
+-### What can go wrong
+-
+-An executable that cannot be resolved fails loud with a stable error. A spawn that never starts rejects `done`; there is no buffered output for a process that never ran. `waitForExit()` also rejects when the provider cannot prove its selected range is empty, and a provider fallback may not own descendants that escape its process group or observed session. When a transport owns its own spawn (the SDK client, MCP), route around the service and import `scrubbedParentEnv` directly so environment policy stays single-sourced.
++The subprocess seam (`ctx.subprocess`) is the process half of one execution world. The abstract `SubprocessRuntime` exposes executable lookup, ordinary managed `spawn`, and one terminal-process primitive; its vocabulary covers raw/collected stdio, process and terminal handles, exit facts, tree/session cleanup, and the managed `DSH_*` environment namespace. The local implementation lives in [`dsh-subprocess-local`](../subprocess-local/README.md).
+ 
+------
++## Contract
+ 
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
++- `spawn(spec)` returns immediately with a live handle; `done` resolves at process close with exit facts (`SubprocessOutcome` carries no output and no cause classification) and rejects only for spawn-level failures.
++- Spawn working directories and executable paths belong to the provider's execution world. `resolveExecutable(command, env?, signal?)` verifies absolute commands or resolves bare names against that world's scrubbed PATH plus explicit overrides.
++- The spec is fully explicit — argv, cwd, per-stream stdio dispositions, grace — because deployment-varying defaults belong to the caller's config, not to a hidden subprocess-service default (the `dsh-shell` request/spec split is the owning template). `argv` is never shell-interpreted; a consumer that wants a shell passes `['bash', '-c', command]` itself.
++- Stdio is Node-shaped per stream: `'pipe'` hands the caller the raw stream for its own protocol framing (LSP JSON-RPC, ACP ndjson), `'inherit'` passes the parent descriptor through for diagnostics, and collect mode (`{ maxBytes, spill? }`) buffers a bounded tail with an optional full-stream spill file. Collect readers take whole-stream byte offsets and never consume, so independent readers cannot steal one another's deltas; a read whose offset slid out of the in-memory tail is `lossy` and points at the spill file when one exists. Collected output stays readable after settlement.
++- Termination is tree-scoped on every platform (POSIX detached groups with direct-child fallback; Windows `taskkill /T`): `terminate()` — the only termination verb — escalates SIGTERM→grace→SIGKILL (idempotent, driven by the spec's abort signal too, a no-op once the tree is gone), and `waitForExit(signal?)` observes whole-tree liveness so a consumer-owned teardown ladder holds each tier on real quiescence — the manager reacts but never classifies why (callers own deadlines, teardown ladders, and cause classification).
++- `spawnTerminal(spec)` is the only non-pipe primitive. Its handle owns a real PTY, UTF-8 text I/O, foreground-process-group inspection/signalling, and one awaited `terminate()` operation that reaches quiescence for every session member the provider can still observe and settles in-flight handle calls; providers document substrate-specific observability limits. The spec signal cancels allocation only; the published handle owns its lifetime. The output stream ends after queued output when the top-level process exits, and a live transport failure rejects `done`. These operations remain one substrate primitive because ordinary pipes cannot allocate a controlling terminal or clean terminal-session members; readiness, scrollback, and owner policy remain in the PTY consumer.
++- `scrubbedParentEnv()` / `SENSITIVE_ENV_PATTERN` are the one shared scrub definition: ambient credential-shaped and `DSH_*` names are dropped, and explicit `env` merges after the scrub. The local ordinary and terminal spawns both apply it; SDK-managed transports that own their spawn may import it directly.
++- Disposal of the service terminates all still-running managed processes and awaits their exit.
+ 
+-<details>
+-<summary>Implementation internals — click to expand</summary>
++See the [subprocess subsystem page](../../../docs/subsystems/subprocess.md) and the [seam Agent Note](../../../.agents/notes/implemented/architecture/2026-07-26-subprocess-seam.md).
+ 
+-This section explains the design decisions behind the seam and points at the code that realizes them; the observable behavior is covered in [Use this package](#use-this-package).
+-
+-### Design concept
+-
+-The seam is built on one separation: the service owns process coordinates and lifetime; consumers own what a process means and every default that shapes one. That is why the spawn request is fully explicit — no hidden subprocess-service default — and why `SubprocessOutcome` carries exit facts only: callers own deadlines, teardown ladders, and cause classification. The `dsh-shell` request/spec split is the owning template.
+-
+-### Source map
+-
+-| File | Role |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | Plugin entry: abstract `SubprocessRuntime`, `ctx.subprocess` registration, the shared `scrubbedParentEnv` scrub |
+-| [`src/types.ts`](src/types.ts) | Vocabulary: spawn spec, stdio modes, handles, readers, outcomes, `DSH_*` namespace |
+-| — | No runtime invariant companion is published; this stateless Service Definition owns spawn-spec/handle types, while Service Providers own observations. |
+-
+-### Data model and flow
+-
+-A spawn returns a live handle immediately without exposing target identity. `done` independently reports the direct command outcome or failure, while `waitForExit()` reports managed-range quiescence. The request's abort signal drives the same termination procedure as `terminate()`. Collected readers are cursor-free: offsets are whole-stream byte coordinates the caller owns, so independent readers cannot consume one another's output, and a read whose offset slid out of the in-memory tail is `lossy` and points at the spill file when one exists. `spawnTerminal` is one deep primitive because ordinary pipes cannot allocate a controlling terminal or clean terminal-session members.
+-
+-### Lifecycle and invariants
+-
+-One implementation registers per context; loading a second throws (cordis standard). Disposal of the service terminates every still-running managed process and awaits its exit, so process lifetime survives consumer reloads. `argv` is never shell-interpreted; a consumer that wants a shell passes `['bash', '-c', command]` itself. Terminal allocation cancellation (the spec signal) is separate from the published handle's lifetime.
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-Read these pages when the package-level contract is not enough. They move from the exhaustive type reference to the providers and the decision evidence behind the seam.
+-
+-- [Subprocess subsystem](../../../docs/subsystems/subprocess.md) — spawn specs, output readers, outcomes, and the `DSH_*` environment in full.
+-- [dsh-subprocess-local](../subprocess-local/README.md) — the local host provider that implements this contract.
+-- [dsh-subprocess-e2b](../../e2b/subprocess-e2b/README.md) — the remote E2B provider for the same seam.
+-- [dsh-bash-local](../../shell/bash-local/README.md) — the largest consumer: bash commands over this service.
+-- [Subprocess seam Agent Note](../../../.agents/notes/archived/architecture/2026-07-26-subprocess-seam.md) — why the process half became its own seam and what moved with it.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+-Indirectly, through consumer seams such as the bash executor family, which own all model-facing rendering of process output and lifecycle.
++Indirectly, through Consumers (today the bash executor family behind `dsh-tool-bash`), which own all model-facing rendering of process output and lifecycle.
+ 
+ #### KV Cache effect
+ 
+@@ -134,23 +27,5 @@
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits define when the seam is a poor fit or leaves work to its consumers. They are current package constraints, not a comparison or a backlog.
+-
+-- **SDK-managed spawns remain outside** — a transport that owns its internal spawn (the SDK client, MCP) cannot route that call through this service; it can still import `scrubbedParentEnv` so environment policy stays single-sourced.
+-- **Teardown ladders are consumer-owned** — the seam ships signalling verbs and the managed-range wait, not a canned quiesce sequence; each out-of-process consumer encodes its child's cooperation shape itself (the ACP backend's stdin-EOF-first ladder is the in-repo template).
+-- **Observability is provider-specific** — native providers may own escaped descendants through systemd scopes or Windows Jobs, while fallback providers expose weaker process-group, tree, or session visibility. The seam adds no continuous process-table monitor.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-This Dev Note is working context for maintainers: open design questions and directions that are not decided. It is explicitly non-authoritative — shipped behavior, limits, and accepted rationale live in the sections above, the package code, and the linked Agent Notes.
+-
+-Future: non-shell runners. The seam was split so a direct-argv executor or worker supervisor could consume it without reaching into bash internals; none is shipped yet, and the terminal primitive keeps readiness policy in its consumer.
+-
+-</details>
++- **SDK-managed spawns remain outside** — an SDK transport that owns its internal spawn cannot route that call through this service; it can still import `scrubbedParentEnv` so environment policy stays single-sourced.
++- **Teardown ladders are consumer-owned** — the seam ships signalling verbs and the tree-liveness wait, not a canned quiesce sequence; each out-of-process consumer encodes its child's cooperation shape itself (the ACP backend's stdin-EOF-first ladder is the in-repo template).
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/README.zh.md	2026-09-11 14:27:15.100962683 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/README.zh.md	2026-09-12 14:56:18.035851692 +0800
+@@ -1,156 +1,31 @@
+----
+-description: "面向组合作者与能力消费方的子进程服务（`ctx.subprocess`）说明：启动、观察并终止受管子进程与终端会话。"
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-subprocess
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-`ctx.subprocess` 可解析可执行文件、启动显式指定的子进程或真实终端会话、流式读取或有界收集输出，并终止完整的受管进程范围。每个组合配置一个 subprocess 实现，并根据命令运行位置选择本地或远程执行。每次请求都指定 argv、工作目录、stdio、环境覆盖、终止宽限期与取消信号，不会添加 shell 解释或隐藏的执行默认值。子进程环境会先移除环境中的凭据与 `DSH_*` 值，再应用显式覆盖；时限、拆卸策略与面向模型的渲染由调用方负责，收集的输出在进程退出后仍可读取。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## 使用本包
+-
+-在需要运行子进程的组合中挂载一个 subprocess 提供方，并从拥有该命令的能力包调用 `ctx.subprocess`。常用路径是显式的：解析可执行文件、用完全明确的请求 spawn、读取你要的输出，并在工作完成时终止受管范围。
+-
+-### 挂载服务
+-
+-每个组合由唯一一个提供方注册 `ctx.subprocess`；把它与经由它 spawn 的消费方放在一起加载——bash 执行器、LSP 主机、PTY shell 后端或进程外 subagent 后端。加载第二个提供方会快速失败（每个上下文只有一个服务，这是 cordis 的标准行为）。
+-
+-```yaml
+-- name: '@deepseek-ai/dsh-subprocess-local'
+-- name: '@deepseek-ai/dsh-bash-local'
+-```
+-
+-### 启动受管进程
+-
+-请求完全明确：程序与参数、工作目录、每条流一种 stdio 处置方式、终止宽限期、可选的中止信号与可选的环境覆盖。目标与受管范围标识保留在提供方内部。`done` 以直接命令的退出事实（`exitCode` 与 `signal`）resolve，并在 spawn 或提供方失败时 reject；收集输出在退出后仍可读取。
+-
+-```text
+-const executable = await ctx.subprocess.resolveExecutable('bash')
+-const handle = ctx.subprocess.spawn({
+-  argv: [executable, '-c', 'echo hello'],
+-  cwd: '/workspace',
+-  stdio: { stdin: 'ignore', stdout: { maxBytes: 64 * 1024 }, stderr: 'inherit' },
+-  graceMs: 5000,
+-})
+-const { exitCode, signal } = await handle.done
+-const output = handle.collected.stdout?.readFrom(0)
+-```
+-
+-### 选择输出投递方式
+-
+-- `'pipe'` 把原始流交给你做自己的协议分帧——LSP 主机用 JSON-RPC，ACP 后端用 ndjson。
+-- `'inherit'` 让子进程直接写父进程自己的流，用于直通诊断输出。
+-- collect 对象缓冲一段有界的进程内尾部；加上 `spill` 上限后，完整流还可以从 spill 文件中恢复。
+-
+-读取基于偏移量且从不消费：后台读取与最终批量读取可以共享同一条流，而不会抢走彼此的字节。
+-
+-### 管理进程生命周期
+-
+-终止与等待使用同一个由提供方管理的范围。`terminate()` 会启动提供方记录的流程，具有幂等性，并在该范围为空后成为空操作；请求的中止信号会启动同一流程。`waitForExit()` 观察同一范围，只在提供方证明它完全停稳后 resolve，因此直接命令结束不会掩盖仍存活的后代。所选 owner 无法再证明完全停稳时，它会 reject。提供方记录其 native owner 与较弱 fallback；时限、拆卸阶梯与原因分类归调用方所有。
+-
+-### 运行终端会话
+-
+-对于交互式程序，`spawnTerminal` 分配真实 PTY：写入文本、读取 UTF-8 输出、检查当前前台进程组并向其发送信号，以及等待一次 `terminate()`，让提供方仍可观察到的每个会话成员完全停稳。就绪状态、scrollback 与提示符策略仍归 PTY 消费方所有。
+-
+-### 每个子进程起步时的环境
+-
+-子进程永远不会隐式继承 harness 的环境秘密：形似凭据的名称与环境中的 `DSH_*` 事实都会被清除，调用方显式的 `env` 在该清除之后合并。有意转发的凭据或当前的 `DSH_*` 部署事实仍会到达子进程；显式的 `undefined` 墓碑值则移除一个普通的环境项。
+-
+-### 可能出错的地方
+-
+-无法解析的可执行文件会以稳定的错误快速失败。从未启动成功的 spawn 会让 `done` reject；从未运行过的进程没有任何缓冲输出。提供方无法证明所选范围为空时，`waitForExit()` 也会 reject；提供方 fallback 可能无法拥有逃离其进程组或已观察 session 的后代。当传输拥有自己的 spawn（SDK 客户端、MCP）时，请绕开本服务并直接导入 `scrubbedParentEnv`，让环境策略保持单一来源。
++子进程 seam（`ctx.subprocess`）是一个执行世界的进程部分。抽象的 `SubprocessRuntime` 公开可执行文件查找、普通受管 `spawn` 和一项终端进程原语；其词汇涵盖原始／收集式 stdio、进程与终端句柄、退出事实、进程树／会话清理，以及受管的 `DSH_*` 环境命名空间。本地实现位于 [`dsh-subprocess-local`](../subprocess-local/README.zh.md)。
+ 
+------
++## 约定
+ 
+-<a id="understand-the-implementation"></a>
+-## 理解实现
++- `spawn(spec)` 立即返回一个活动句柄；`done` 在进程关闭时以退出事实 resolve（`SubprocessOutcome` 不携带输出，也不携带原因分类），仅在 spawn 层面失败时 reject。
++- spawn 工作目录和可执行文件路径属于提供方的执行世界。`resolveExecutable(command, env?, signal?)` 验证绝对命令，或根据该执行世界清理后的 PATH 加显式覆盖来解析裸名称。
++- spec 完全显式（argv、cwd、按流划分的 stdio 处置方式（disposition）、宽限期），因为随部署变化的默认值属于调用方的配置，而不属于某个隐藏的子进程服务默认值（`dsh-shell` 的 request/spec 拆分是这条规则的所属模板）。`argv` 绝不经过 shell 解释；需要 shell 的消费方自行传入 `['bash', '-c', command]`。
++- stdio 按流采用 Node 风格：`'pipe'` 把原始流交给调用方做自己的协议分帧（LSP 的 JSON-RPC、ACP（Agent Client Protocol）的 ndjson），`'inherit'` 直通父进程描述符以承载诊断输出，收集模式（collect）`{ maxBytes, spill? }` 则缓冲一段有界尾部，外加可选的完整流 spill 文件。收集模式的读取器接受全流字节偏移量且从不消费，因此独立的读取器不会抢走彼此的增量；偏移量滑出内存尾部窗口的读取标记为 `lossy`，并在 spill 文件存在时指向它。收集到的输出在结算后仍可读取。
++- 终止在每个平台上都以进程树为范围（POSIX 用 detached 进程组并以直接子进程回退；Windows 用 `taskkill /T`）：`terminate()`（唯一的终止动词）执行 SIGTERM→宽限期→SIGKILL 升级（幂等，也由 spec 的 abort 信号驱动，进程树消亡后为空操作）；`waitForExit(signal?)` 观察整棵进程树的存活状态，使消费方自有的拆卸阶梯能在真正完全停稳后才进入下一层。管理器只响应中止，但绝不判定原因（deadline、拆卸阶梯与原因分类归调用方所有）。
++- `spawnTerminal(spec)` 是唯一的非管道原语。其句柄负责真实 PTY、UTF-8 文本 I/O、前台进程组检查／信号发送，以及一项须等待的 `terminate()` 操作；该操作会使提供方仍可观察到的每个会话成员完全停稳，并结算在途句柄调用；提供方会记录执行基底特有的可观察性限制。spec 信号只取消分配；句柄一经发布，便负责自身生命周期。顶层进程退出时，输出流在已排队输出之后结束；仍处于活动状态的传输若发生故障，会使 `done` 拒绝。这些操作保留为一项执行基底原语，因为普通管道无法分配控制终端或清理终端会话成员；就绪状态、scrollback 和所有者策略仍归 PTY 消费方所有。
++- `scrubbedParentEnv()` / `SENSITIVE_ENV_PATTERN` 是唯一一份共享的环境清理定义：环境中形似凭据的名称与 `DSH_*` 名称都会被丢弃，显式 `env` 在清除之后合并。本地的普通 spawn 与终端 spawn 都应用该定义；拥有自身 spawn 的 SDK 管理传输可直接导入它。
++- 服务自身的 dispose（资源释放）会终止所有仍在运行的受管进程并等待其退出。
+ 
+-<details>
+-<summary>实现细节——点击展开</summary>
++参见[子进程子系统页面](../../../docs/subsystems/subprocess.zh.md)与[seam Agent Note](../../../.agents/notes/implemented/architecture/2026-07-26-subprocess-seam.zh.md)。
+ 
+-本节解释 seam 背后的设计决策，并指出实现它们的代码位置；可观察行为已在[使用本包](#use-this-package)中说明。
+-
+-### 设计理念
+-
+-本 seam 建立在一个分离之上：服务负责进程坐标与生命周期；消费方负责定义进程的含义，以及决定塑造该进程的每一项默认值。正因如此，spawn 请求完全明确——没有任何隐藏的子进程服务默认值——`SubprocessOutcome` 也只携带退出事实：时限、拆卸阶梯与原因分类归调用方所有。`dsh-shell` 的 request/spec 拆分是这条规则的所属模板。
+-
+-### 源码地图
+-
+-| 文件 | 职责 |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | 插件入口：抽象 `SubprocessRuntime`、`ctx.subprocess` 注册、共享的 `scrubbedParentEnv` 清除 |
+-| [`src/types.ts`](src/types.ts) | 词汇：spawn spec、stdio 模式、句柄、读取器、结果、`DSH_*` 命名空间 |
+-| — | 不发布运行时不变式伴生入口；观察由提供方负责。 |
+-
+-### 数据模型与流程
+-
+-spawn 会立即返回活动句柄，而不公开目标身份。`done` 独立报告直接命令的结果或失败，`waitForExit()` 则报告受管范围是否完全停稳。请求的中止信号驱动与 `terminate()` 相同的终止流程。收集模式的读取器无游标：偏移量是调用方拥有的全流字节坐标，因此独立读取器不会消费彼此的输出，偏移量滑出内存尾部的读取标记为 `lossy`，并在 spill 文件存在时指向它。`spawnTerminal` 是一项底层原语，因为普通管道无法分配控制终端或清理终端会话成员。
+-
+-### 生命周期与不变式
+-
+-每个上下文只注册一个实现；加载第二个会抛错（cordis 标准行为）。服务自身的 dispose（资源释放）会终止所有仍在运行的受管进程并等待其退出，因此进程生命周期在消费方重载后依然延续。`argv` 绝不经过 shell 解释；需要 shell 的消费方自行传入 `['bash', '-c', command]`。终端分配的取消（spec 信号）与已发布句柄的生命周期相互独立。
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-当包级约定不够用时阅读以下页面。它们从穷尽式类型参考逐步进入各提供方，以及 seam 背后的决策证据。
+-
+-- [子进程子系统](../../../docs/subsystems/subprocess.zh.md)——spawn spec、输出读取器、结果与完整的 `DSH_*` 环境。
+-- [dsh-subprocess-local](../subprocess-local/README.zh.md)——实现本约定的本地宿主提供方。
+-- [dsh-subprocess-e2b](../../e2b/subprocess-e2b/README.zh.md)——同一 seam 的远程 E2B 提供方。
+-- [dsh-bash-local](../../shell/bash-local/README.zh.md)——最大的消费方：经由本服务运行 bash 命令。
+-- [subprocess seam Agent Note](../../../.agents/notes/archived/architecture/2026-07-26-subprocess-seam.md)——进程部分为何成为独立的 seam，以及随之迁移的内容。
+-
+------
+-
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+-通过消费方 seam（例如 bash 执行器家族）间接影响，它们负责进程输出与生命周期的全部面向模型渲染。
++通过 Consumer 间接影响（目前是 `dsh-tool-bash` 背后的 bash 执行器家族）；进程输出和生命周期的全部面向模型渲染均由 Consumer 负责。
+ 
+ #### KV Cache 影响
+ 
+ 不会直接导致 KV Cache 失效；请求前缀变更由上述消费方负责。
+ 
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制说明该 seam 何时不合适，或何时把工作留给消费方。它们是当前包约束，不是对比或任务积压。
+-
+-- **由 SDK 管理的 spawn 仍在服务之外**——拥有内部 spawn 的传输（SDK 客户端、MCP）无法把该调用路由到本服务；它仍可导入 `scrubbedParentEnv`，使环境策略保持单一来源。
+-- **拆卸阶梯归消费方所有**——该 seam 只提供信号动词与受管范围等待，不提供现成的完全停稳序列；每个进程外消费方自行编码其子进程的配合方式（ACP 后端以 stdin EOF 打头的阶梯是仓库内模板）。
+-- **可观察性取决于提供方**——native 提供方可以通过 systemd scope 或 Windows Job 拥有逃逸后代，fallback 提供方则只暴露较弱的进程组、进程树或 session 可见性。该 seam 不新增持续的进程表监视器。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
+-
+-本开发备注是维护者的工作上下文：开放设计问题与尚未决定的探索方向。它明确不具权威性——已交付的行为、限制与既定理由以上文、包代码和相关 Agent Note 为准。
+-
+-未来：非 shell 运行器。该 seam 拆分的目的就是让直接 argv 执行器或 worker supervisor 无需深入 bash 内部即可消费它；目前尚无任何实现交付，终端原语也把就绪策略留在其消费方。
++## 已知限制与暂缓事项
+ 
+-</details>
++- **由 SDK 管理的 spawn 仍在服务之外**：拥有内部 spawn 的 SDK 传输无法把该调用路由到本服务；它仍可导入 `scrubbedParentEnv`，使环境策略保持单一来源。
++- **拆卸阶梯归消费方所有**：该 seam 只提供信号动词与进程树存活等待，不提供现成的停稳序列；每个进程外消费方自行编码其子进程的配合方式（ACP 后端以 stdin EOF 打头的阶梯是仓库内模板）。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/lib/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/lib/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/lib/index.js	2026-09-11 14:27:15.069962243 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/lib/index.js	2026-09-12 14:56:18.035053324 +0800
+@@ -1,10 +1,9 @@
+ import { Service } from "@deepseek-ai/cordis";
+-import { proxyEnvironmentForChild } from "@deepseek-ai/dsh-http-proxy";
+ //#region lib/types/types.js
+ /**
+ * Vocabulary for the subprocess Service Definition: fully-specified spawn requests with
+ * Node-shaped per-stream stdio modes, bounded collected output with spill
+-* recovery, raw piped streams, and managed-range termination. Command
++* recovery, raw piped streams, and tree-scoped termination. Command
+ * defaulting, shell semantics, protocol framing, and presentation belong to
+ * consumers such as the bash executor seam.
+ * @module dsh-subprocess/types
+@@ -15,7 +14,7 @@
+ //#region lib/types/index.js
+ /**
+ * Service Definition for the subprocess capability seam (`ctx.subprocess`): execution-world executable lookup,
+-* fully specified provider-managed process ranges with raw or
++* fully specified managed process trees with raw or
+ * collected stdio, and one terminal-process primitive. Command defaulting,
+ * shell semantics, deadlines, protocol framing, terminal readiness, and
+ * presentation belong to consumers. The local implementation lives in
+@@ -42,16 +41,11 @@
+ * deliberate lowercase `dsh_*` names on POSIX are implausible. Exported as a plain function so spawners
+ * that cannot route through the service (node-pty backends, SDK-managed
+ * transports) share the one scrub definition.
+-*
+-* When a proxy is active the result also carries the resolved proxy names and the flag a child Node
+-* needs to honor them, so a child inherits the same routing as its parent.
+ * @returns a fresh environment object safe to hand to a child spawn.
+ */
+ function scrubbedParentEnv() {
+ 	const env = {};
+ 	for (const [key, value] of Object.entries(process.env)) if (value !== void 0 && !SENSITIVE_ENV_PATTERN.test(key) && !key.toUpperCase().startsWith("DSH_")) env[key] = value;
+-	for (const [name, value] of Object.entries(proxyEnvironmentForChild())) if (value === void 0) Reflect.deleteProperty(env, name);
+-	else env[name] = value;
+ 	return env;
+ }
+ /**
+@@ -63,18 +57,17 @@
+ * Implementations must honor these semantics:
+ * - Executable paths belong to one execution world shared with the mounted
+ *   filesystem provider.
+-* - {@link spawn} returns a live handle synchronously. Target identity remains
+-*   provider-private; `done` resolves with the spawned command's exit facts and
+-*   may reject for spawn or provider failures.
++* - {@link spawn} returns immediately with a live handle; `done` resolves at
++*   process close with exit facts and rejects only for spawn-level failures.
+ * - Collect-mode readers are offset-based and non-consuming, so independent
+ *   readers never consume one another's output; lossy reads report truncation
+ *   and the spill file holding the complete stream when one exists. Piped
+ *   streams are handed to the caller raw and never buffered here.
+-* - {@link SubprocessHandle.terminate} (and the spec's abort signal) starts the
+-*   provider's documented procedure against its managed range.
+-*   {@link SubprocessHandle.waitForExit} observes that same range so a
+-*   consumer-owned teardown ladder can hold each tier on real quiescence; each
+-*   provider documents its signalling and observability limits.
++* - {@link SubprocessHandle.terminate} (and the spec's abort signal) escalates
++*   SIGTERM→grace→SIGKILL — the only termination verb — tree-scoped on every
++*   platform. {@link SubprocessHandle.waitForExit} observes whole-tree
++*   liveness, so a consumer-owned teardown ladder can hold each tier on real
++*   quiescence.
+ * - Disposal of the service terminates all still-running managed processes
+ *   and awaits their exit.
+ * - {@link spawnTerminal} owns terminal allocation, text transport,
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/lib: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/lib/types/index.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/lib/types/index.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/lib/types/index.d.ts	2026-09-11 14:27:15.122962996 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/lib/types/index.d.ts	2026-09-12 14:56:18.036022845 +0800
+@@ -1,6 +1,6 @@
+ /**
+  * Service Definition for the subprocess capability seam (`ctx.subprocess`): execution-world executable lookup,
+- * fully specified provider-managed process ranges with raw or
++ * fully specified managed process trees with raw or
+  * collected stdio, and one terminal-process primitive. Command defaulting,
+  * shell semantics, deadlines, protocol framing, terminal readiness, and
+  * presentation belong to consumers. The local implementation lives in
+@@ -32,9 +32,6 @@
+  * deliberate lowercase `dsh_*` names on POSIX are implausible. Exported as a plain function so spawners
+  * that cannot route through the service (node-pty backends, SDK-managed
+  * transports) share the one scrub definition.
+- *
+- * When a proxy is active the result also carries the resolved proxy names and the flag a child Node
+- * needs to honor them, so a child inherits the same routing as its parent.
+  * @returns a fresh environment object safe to hand to a child spawn.
+  */
+ export declare function scrubbedParentEnv(): Record<string, string>;
+@@ -52,18 +49,17 @@
+  * Implementations must honor these semantics:
+  * - Executable paths belong to one execution world shared with the mounted
+  *   filesystem provider.
+- * - {@link spawn} returns a live handle synchronously. Target identity remains
+- *   provider-private; `done` resolves with the spawned command's exit facts and
+- *   may reject for spawn or provider failures.
++ * - {@link spawn} returns immediately with a live handle; `done` resolves at
++ *   process close with exit facts and rejects only for spawn-level failures.
+  * - Collect-mode readers are offset-based and non-consuming, so independent
+  *   readers never consume one another's output; lossy reads report truncation
+  *   and the spill file holding the complete stream when one exists. Piped
+  *   streams are handed to the caller raw and never buffered here.
+- * - {@link SubprocessHandle.terminate} (and the spec's abort signal) starts the
+- *   provider's documented procedure against its managed range.
+- *   {@link SubprocessHandle.waitForExit} observes that same range so a
+- *   consumer-owned teardown ladder can hold each tier on real quiescence; each
+- *   provider documents its signalling and observability limits.
++ * - {@link SubprocessHandle.terminate} (and the spec's abort signal) escalates
++ *   SIGTERM→grace→SIGKILL — the only termination verb — tree-scoped on every
++ *   platform. {@link SubprocessHandle.waitForExit} observes whole-tree
++ *   liveness, so a consumer-owned teardown ladder can hold each tier on real
++ *   quiescence.
+  * - Disposal of the service terminates all still-running managed processes
+  *   and awaits their exit.
+  * - {@link spawnTerminal} owns terminal allocation, text transport,
+@@ -91,13 +87,12 @@
+      * applies no defaults.
+      * @param spec - argv, directory, stdio dispositions, grace, cancellation, and environment.
+      * @returns the live process handle (streams/readers, signalling, outcome promise).
+-     * @throws synchronously when pre-aborted or when argv, cwd, environment, or grace is invalid before handle creation.
+      */
+     abstract spawn(spec: SubprocessSpawnSpec): SubprocessHandle;
+     /**
+      * Allocate a real terminal and start one owned process session. This is the
+      * only non-pipe process primitive: implementations own terminal byte I/O,
+-     * foreground groups, signals, and whole-session quiescence.
++     * foreground groups, signals, and complete session-tree cleanup.
+      * @param spec - fully specified argv, cwd, environment, dimensions, grace, and allocation cancellation.
+      * @returns the live terminal handle after allocation succeeds.
+      */
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/lib/types: invariant.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/lib/types/types.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/lib/types/types.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/lib/types/types.d.ts	2026-09-11 14:27:15.139963238 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/lib/types/types.d.ts	2026-09-12 14:56:18.036284779 +0800
+@@ -1,7 +1,7 @@
+ /**
+  * Vocabulary for the subprocess Service Definition: fully-specified spawn requests with
+  * Node-shaped per-stream stdio modes, bounded collected output with spill
+- * recovery, raw piped streams, and managed-range termination. Command
++ * recovery, raw piped streams, and tree-scoped termination. Command
+  * defaulting, shell semantics, protocol framing, and presentation belong to
+  * consumers such as the bash executor seam.
+  * @module dsh-subprocess/types
+@@ -73,15 +73,14 @@
+     stdio: SubprocessStdio;
+     /**
+      * Positive finite grace period in milliseconds, no greater than
+-     * `MAX_TIMER_DELAY_MS`, available to the provider's termination procedure
+-     * and used for draining still-open collected pipes after the process exits
+-     * (an inherited descriptor held by a survivor cannot hold the outcome open
+-     * indefinitely). Providers document whether range termination is staged or
+-     * immediate.
++     * `MAX_TIMER_DELAY_MS`, for the {@link SubprocessHandle.terminate} escalation
++     * and for draining still-open collected pipes after the process exits (an
++     * inherited descriptor held by a surviving descendant cannot hold the
++     * outcome open indefinitely).
+      */
+     graceMs: number;
+     /**
+-     * Abort signal — starts the terminate escalation on the managed range when
++     * Abort signal — starts the terminate escalation on the process tree when
+      * it fires. The caller owns deadlines and cause classification; this seam
+      * only reacts to the abort.
+      */
+@@ -144,14 +143,17 @@
+     readonly stderr?: SubprocessOutputReader;
+ }
+ /**
+- * A live subprocess and its provider-managed process range. Collected output
++ * A live child process rooted in its own process tree. Collected output
+  * remains readable after exit; piped streams belong to the caller.
+  *
+- * Termination and {@link SubprocessHandle.waitForExit} use the same managed
+- * range. Each provider documents the range it can observe and its signalling
+- * and observation limits.
++ * Termination is tree-scoped everywhere: POSIX signals the detached process
++ * group (falling back to the direct child when the group is gone), Windows
++ * terminates the tree via `taskkill /T`, so helper processes cannot outlive
++ * the handle unnoticed.
+  */
+ export interface SubprocessHandle {
++    /** Process id (tree root); -1 when the spawn itself failed. */
++    readonly pid: number;
+     /** The child's stdin, present iff spawned with `stdin: 'pipe'`. */
+     readonly stdin: Writable | undefined;
+     /** The child's raw stdout, present iff spawned with `stdout: 'pipe'`. */
+@@ -160,20 +162,20 @@
+     readonly stderr: Readable | undefined;
+     /** Offset-based readers for collect-mode streams (also readable after exit). */
+     readonly collected: SubprocessCollectedOutputs;
+-    /** Resolves with spawned-command exit facts; rejects for spawn or provider failures. */
++    /** Resolves at process close with exit facts; rejects only for spawn-level failures. */
+     readonly done: Promise<SubprocessOutcome>;
+     /**
+-     * Begin the provider's documented termination procedure on the managed range
+-     * — the seam's only termination verb. Idempotent, a no-op once that range is
+-     * gone, and also triggered by the spec's abort signal.
++     * Begin the SIGTERM → `graceMs` → SIGKILL escalation on the process tree
++     * (Windows force-terminates immediately) — the seam's only termination
++     * verb. Idempotent, a no-op once the tree is gone (the pid may be reused),
++     * and also triggered by the spec's abort signal.
+      */
+     terminate(): void;
+     /**
+-     * Wait until the same managed range is empty — not just until the spawned
+-     * command reports its outcome, so surviving work remains observable.
++     * Wait until the process tree has exited — the tree, not just the direct
++     * child, so a still-running helper is observable before teardown returns.
+      * @param signal - optional bound for the wait.
+-     * @returns `true` when the managed range is empty, `false` when the signal aborted first.
+-     * @throws when the selected provider can no longer observe its managed range.
++     * @returns `true` when the tree exited, `false` when the signal aborted first.
+      */
+     waitForExit(signal?: AbortSignal): Promise<boolean>;
+ }
+@@ -209,7 +211,7 @@
+ }
+ /**
+  * One live terminal process and its owned OS session. Terminal allocation,
+- * foreground-group inspection/signalling, and whole-session quiescence are one
++ * foreground-group inspection/signalling, and session-tree cleanup are one
+  * deep subprocess primitive because none can be reconstructed from ordinary
+  * piped stdio without substrate-specific process control.
+  */
+@@ -218,7 +220,7 @@
+     readonly pid: number;
+     /** UTF-8 terminal output bytes in delivery order; ends after queued output when the terminal exits. */
+     readonly output: Readable;
+-    /** Resolves when the top-level process exits; rejects for a terminal startup, provider, or live transport failure. */
++    /** Resolves when the top-level process exits; rejects only for a live transport failure. */
+     readonly done: Promise<SubprocessOutcome>;
+     /**
+      * Write text to the terminal input.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-subprocess/package.json	2026-09-11 14:27:15.076962342 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-subprocess/package.json	2026-09-12 14:56:18.035851692 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-subprocess",
+   "description": "Subprocess seam (ctx.subprocess) for the DeepSeek Harness — managed process groups, bounded spill-backed output, and escalated kills behind one abstract service",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -18,21 +18,25 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./src/*": "./src/*",
+     "./package.json": "./package.json"
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/types/**/*.d.ts"
+   ],
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.2",
+-    "@deepseek-ai/dsh-http-proxy": "^0.1.5-rc.2"
++    "@deepseek-ai/cordis": "^4.0.1",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.2",
+-    "@deepseek-ai/dsh-http-proxy": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-launch-environment": "^0.1.5-rc.2"
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   }
+ }
+\ No newline at end of file

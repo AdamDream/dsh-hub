@@ -1,0 +1,46 @@
+# ppt-master skill —— Python 依赖清单（staging 副本）
+# =========================================================
+# 本文件与 skills/ppt-master/requirements.txt 内容一致（后者为 skill 内部权威清单，
+# install-skill.sh 默认安装 skill 内部清单；本文件用于文档核对与 pip 直装）。
+# 来源：pn1024/dsh-ppt-master v6.1.0（MIT，hugohe3/PPT-master 上游），2026-09-14 克隆核验。
+#
+# 核心导出（SVG→PPTX 渲染，scripts/svg_to_pptx.py 硬依赖）：
+python-pptx>=0.6.21
+PyYAML>=6.0
+
+# 图表 workbook 导出（scripts/svg_to_pptx.py 硬依赖）：
+XlsxWriter>=3.0.0
+
+# 合并形状物化 / OpenType 文本排版轮廓（ImportError 处有降级，可选）：
+skia-pathops>=0.9.2
+uharfbuzz>=0.50.0
+
+# 录制计时与旁白（notes_to_audio.py，可选）：
+edge-tts>=7.2.8
+
+# PDF→Markdown（source_to_md/pdf_to_md.py，可选）：
+PyMuPDF>=1.23.0
+
+# 文档→Markdown（source_to_md/doc_to_md.py，可选）：
+mammoth>=1.6.0
+markdownify>=0.11.6
+ebooklib>=0.18
+nbconvert>=7.0.0
+
+# Excel→Markdown（source_to_md/excel_to_md.py，可选）：
+openpyxl>=3.1.0
+
+# 图片处理（fix_image_aspect.py / gemini_watermark_remover.py，可选）：
+Pillow>=9.0.0
+numpy>=1.20.0
+
+# 网页→Markdown（source_to_md/web_to_md.py，可选）：
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+curl_cffi>=0.7.0
+
+# AI 生图（image_gen.py，IMAGE_BACKEND=gemini；需 .env 配 key，可选）：
+google-genai>=1.0.0
+
+# SVG 编辑器（svg_editor/server.py，可选，需浏览器/端口）：
+flask>=3.0.0

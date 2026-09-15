@@ -1,0 +1,995 @@
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tools/lib/types/invariant.js	2026-09-11 14:27:15.161963551 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tools/lib/types/invariant.js	2026-09-12 14:56:19.184565605 +0800
+@@ -15,13 +15,13 @@
+         fail('tools/result execution must carry non-empty name and callId');
+     }
+ }
+-/** Install monotonic pipeline, final-snapshot, and PTC dispatch enclosure checks. */
++/** Install monotonic pipeline, final-snapshot, and code-dispatch enclosure checks. */
+ const install = Object.assign((ctx, fail) => {
+     const stages = new WeakMap();
+     const openTurns = new WeakMap();
+     const dispatchRoots = new WeakMap();
+     const validateDispatch = (session, event) => {
+-        if (event.type !== 'tool/ptc-dispatch-start' && event.type !== 'tool/ptc-dispatch')
++        if (event.type !== 'tool/code-dispatch-start' && event.type !== 'tool/code-dispatch')
+             return;
+         const root = String(event.data.rootCallId);
+         const parent = String(event.data.parentCallId);
+@@ -39,7 +39,7 @@
+         }
+     };
+     const commitDispatch = (session, event) => {
+-        if (event.type !== 'tool/ptc-dispatch-start' && event.type !== 'tool/ptc-dispatch')
++        if (event.type !== 'tool/code-dispatch-start' && event.type !== 'tool/code-dispatch')
+             return;
+         const roots = dispatchRoots.get(session);
+         roots.set(String(event.data.subCallId), String(event.data.rootCallId));
+@@ -47,14 +47,14 @@
+     const seed = (session) => {
+         let openTurn = null;
+         dispatchRoots.set(session, new Map());
+-        for (const event of session.snapshotEvents()) {
++        for (const event of session.events) {
+             validateDispatch(session, event);
+             commitDispatch(session, event);
+             if (event.type === 'turn/start')
+                 openTurn = event.data.turn;
+             else if (event.type === 'turn/end')
+                 openTurn = null;
+-            else if ((event.type === 'tool/ptc-dispatch-start' || event.type === 'tool/ptc-dispatch')
++            else if ((event.type === 'tool/code-dispatch-start' || event.type === 'tool/code-dispatch')
+                 && openTurn === null) {
+                 fail(`${event.type} appended outside any open turn`);
+             }
+@@ -78,7 +78,7 @@
+         if (eventName === 'session/event') {
+             const [session, event] = args;
+             validateDispatch(session, event);
+-            if ((event.type === 'tool/ptc-dispatch-start' || event.type === 'tool/ptc-dispatch')
++            if ((event.type === 'tool/code-dispatch-start' || event.type === 'tool/code-dispatch')
+                 && openTurnFor(session) === null) {
+                 fail(`${event.type} appended outside any open turn`);
+             }
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tools/lib/types/index.js	2026-09-11 14:27:15.144963309 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tools/lib/types/index.js	2026-09-12 14:56:19.184565605 +0800
+@@ -6,10 +6,10 @@
+ import { Service } from '@deepseek-ai/cordis';
+ import z from '@deepseek-ai/schemastery';
+ import { AnonymousEntries, NamedEntries, ScopedLayers, scopeOf, scopeTarget } from '@deepseek-ai/dsh-scope';
+-import { HarnessError } from '@deepseek-ai/dsh-llm';
+-import { assertNever, deepFreeze, snapshotJsonValue } from '@deepseek-ai/dsh-util-values';
++import { assertNever, deepFreeze, HarnessError } from '@deepseek-ai/dsh-llm';
++import { snapshotJsonValue } from '@deepseek-ai/dsh-session';
+ import { assertSupportedJsonSchema, validateJsonSchemaValue } from "./json-schema.js";
+-import { createRunCodeTool, RUN_CODE_NAME } from "./ptc.js";
++import { createRunCodeTool, RUN_CODE_NAME, SDK_SECTION_ORDER } from "./code-mode.js";
+ import { renderToolsSdk } from "./ts-types.js";
+ import { renderToolsSdkPy } from "./py-types.js";
+ /**
+@@ -18,7 +18,7 @@
+  * section under a non-native mode; a runtime whose language is not a key
+  * fails the assembly loudly (same idiom as `toolOrder` violations). Adding a
+  * new backend language is three parallel edits — a {@link CodeSdkLanguage}
+- * member, an entry here, and a `RUN_CODE_FLAVORS` entry in `ptc.ts` for
++ * member, an entry here, and a `RUN_CODE_FLAVORS` entry in `code-mode.ts` for
+  * its `run_code` schema strings — plus the renderer function this table points
+  * at. The `satisfies` clause pins this table's key set to that union, which
+  * the flavor table is checked against too, so any of the three left out is a
+@@ -29,18 +29,24 @@
+  * {@link Config.mode} JSDoc.
+  */
+ /**
+- * The model-facing statement of the `ptc` collapse. Names the consequence
++ * Prompt order of the `code` collapse statement: after the persona and before
++ * the 100-199 per-tool guidance band, so the model reads which tools it may
++ * call before it reads what each one is for.
++ */
++const COLLAPSE_SECTION_ORDER = 99;
++/**
++ * The model-facing statement of the `code` collapse. Names the consequence
+  * (the call fails) and the route (inside the program), because a rule the
+  * model can only discover by being denied is one it corrects too late.
+  */
+-const PTC_ONLY_INSTRUCTION = `\`${RUN_CODE_NAME}\` is the only tool you can call directly — a tool call naming any other tool fails. Reach every tool the SDK declares below from inside the program.`;
++const CODE_ONLY_INSTRUCTION = `\`${RUN_CODE_NAME}\` is the only tool you can call directly — a tool call naming any other tool fails. Reach every tool the SDK declares below from inside the program.`;
+ const SDK_RENDERERS = {
+     typescript: renderToolsSdk,
+     python: renderToolsSdkPy,
+ };
+ export { defineTool, valueSchemaSpecToJsonSchema, parameterSchemaSpecToJsonSchema, validateArgs, ToolArgsError, } from "./schema.js";
+ export { assertSupportedJsonSchema, assertObjectJsonSchema, validateJsonSchemaValue, JsonSchemaError, } from "./json-schema.js";
+-export { CodeRunFailedError, RUN_CODE_NAME } from "./ptc.js";
++export { CodeRunFailedError, RUN_CODE_NAME } from "./code-mode.js";
+ export { jsonSchemaToTs, renderToolsSdk } from "./ts-types.js";
+ export { jsonSchemaToPy, renderToolsSdkPy } from "./py-types.js";
+ export { defineContentToolFixture } from "./testing.js";
+@@ -218,7 +224,7 @@
+ export class ToolRuntime extends Service {
+     static inject = ['systemPrompt'];
+     static Config = z.object({
+-        mode: z.union(['native', 'ptc', 'both']).default('native'),
++        mode: z.union(['native', 'code', 'both']).default('native'),
+         maxParallelSubCalls: z.natural().min(1).default(10),
+     });
+     /** Internal staged view consumed by `dsh-agent-loop`'s parallel scheduler. */
+@@ -243,10 +249,10 @@
+     /**
+      * Reserved presentation transport, kept outside the filterable registration
+      * layers. Built on first need rather than at construction: which agents run
+-     * a PTC mode is no longer known when the service is constructed, and the
++     * a code mode is no longer known when the service is constructed, and the
+      * transport is stateless beyond its closures over `this`.
+      */
+-    ptcTransport;
++    codeTransport;
+     constructor(ctx, config = {}) {
+         super(ctx, 'tools');
+         // The schema already defaulted an omitted mode; the ?? narrows the
+@@ -260,35 +266,36 @@
+         }
+     }
+     /**
+-     * The prompt statement of the `ptc` executor collapse, registered wherever
+-     * {@link sdkSection} is and rendering empty outside an effective `ptc`.
++     * The prompt statement of the `code` executor collapse, registered wherever
++     * {@link sdkSection} is and rendering empty outside an effective `code`.
+      *
+      * Every tool contributes its own guidance section naming its tool, none of
+-     * them qualify how that tool is reached, and they all render before the SDK.
+-     * Without this the model reads a catalog of tools it is told to use and no
+-     * statement that only `run_code` may be called, so it emits a native call,
+-     * receives `UNKNOWN_TOOL` for a tool the prompt just declared, and concludes
+-     * the deployment is inconsistent. Its order places the rule before that
+-     * guidance rather than after it.
++     * them qualify how that tool is reached, and they all render before the SDK
++     * (orders 100-199 against {@link SDK_SECTION_ORDER}). Without this the model
++     * reads a catalog of tools it is told to use and no statement that only
++     * `run_code` may be called, so it emits a native call, receives
++     * `UNKNOWN_TOOL` for a tool the prompt just declared, and concludes the
++     * deployment is inconsistent. {@link COLLAPSE_SECTION_ORDER} places the rule
++     * before that guidance rather than after it.
+      *
+      * `both` renders empty: native calls do execute there, so the rule is false.
+      * @returns the section registration.
+      */
+     collapseSection() {
+         return {
+-            name: 'tools:ptc-only',
+-            order: this.ctx.systemPrompt.getSectionOrder('PTC_ONLY'),
++            name: 'tools:code-only',
++            order: COLLAPSE_SECTION_ORDER,
+             // The SAME predicate the executor denies by, so the prompt cannot state
+             // a rule the registry does not enforce (see `collapses`).
+-            text: context => this.modeFor(context.scope) === 'ptc' ? PTC_ONLY_INSTRUCTION : '',
++            text: context => this.modeFor(context.scope) === 'code' ? CODE_ONLY_INSTRUCTION : '',
+         };
+     }
+     /**
+-     * The generated-SDK prompt section, registered globally by a PTC mode
++     * The generated-SDK prompt section, registered globally by a code-mode
+      * deployment and per scope by {@link presentAs}.
+      *
+      * The body regenerates from the CALLING scope, and renders empty for an
+-     * agent presenting natively — an agent that opted out under a PTC mode
++     * agent presenting natively — an agent that opted out under a code-mode
+      * deployment still sees the global registration, and an empty section is
+      * dropped from the rendered prompt.
+      * @returns the section registration.
+@@ -296,7 +303,7 @@
+     sdkSection() {
+         return {
+             name: 'tools:sdk',
+-            order: this.ctx.systemPrompt.getSectionOrder('TOOLS_SDK'),
++            order: SDK_SECTION_ORDER,
+             // Regenerate from the calling scope's visible tools in stable order.
+             text: (context) => {
+                 const mode = this.modeFor(context.scope);
+@@ -342,7 +349,7 @@
+      * @returns the shared transport definition.
+      */
+     requireCodeTransport() {
+-        this.ptcTransport ??= createRunCodeTool(this, {
++        this.codeTransport ??= createRunCodeTool(this, {
+             requireRuntime: () => this.requireCodeRuntime(this.defaultMode),
+             // The language-aware description/parameters getters read the runtime
+             // without demanding one, so a native-default process can still project
+@@ -351,7 +358,7 @@
+             maxParallel: this.maxParallelSubCalls,
+             shapeDispatchLog: dispatch => this.shapeDispatchLog(dispatch),
+         });
+-        return this.ptcTransport;
++        return this.codeTransport;
+     }
+     /**
+      * Present the calling scope's tools in `mode` instead of the deployment
+@@ -359,7 +366,7 @@
+      * declaration covers every agent joined under it.
+      *
+      * Scoped only, and one declaration per scope: this is how an agent preset
+-     * composes PTC mode agents beside native ones in the same process, and a
++     * composes Code Mode agents beside native ones in the same process, and a
+      * process-global override would be the `mode` config field instead.
+      * @param mode - the presentation the covered agents' models see.
+      * @returns the exact disposer that restores the deployment default.
+@@ -378,7 +385,7 @@
+                 return () => { layer.mode = undefined; };
+             }, { label: 'tools.presentAs()' });
+             // The SDK and collapse sections are per scope for the same reason the
+-            // mode is. Under a deployment that already defaults to PTC mode this
++            // mode is. Under a deployment that already defaults to a code mode this
+             // shadows the global registration with an identical body, which costs
+             // nothing and keeps one rule instead of a case analysis.
+             if (mode !== 'native') {
+@@ -386,7 +393,7 @@
+                 yield ctx.systemPrompt.section(this.sdkSection());
+             }
+         }.bind(this), 'tools.presentAs()');
+-        // oxlint-disable-next-line typescript/no-misused-promises -- synchronous composite teardown
++        // oxlint-disable-next-line typescript/no-misused-promises -- synchronous composite teardown; direct return preserves disposer identity
+         return dispose;
+     }
+     /**
+@@ -407,7 +414,7 @@
+         // language with no SDK renderer.
+         this.requireCodeRuntime(mode);
+         const schemas = [...view.visible.values()].map(definition => this.schemaOf(definition, false));
+-        if (mode === 'ptc') {
++        if (mode === 'code') {
+             return {
+                 schemas: schemas.filter(schema => schema.name === RUN_CODE_NAME),
+                 knownNames: [RUN_CODE_NAME],
+@@ -420,14 +427,16 @@
+      * Read at use time (assembly / run_code execution), NOT via static
+      * `inject`: an inject entry would hold `ctx.tools` — and every tool plugin
+      * behind it — hostage to a code runtime existing even under `mode:
+-     * 'native'`.
++     * 'native'` (the loop's optional-backend idiom, same as
++     * `sessionPersistence`).
+      *
+      * Assembly and `run_code` execution read separately, so the language is not
+      * bound to a request. Harmless while one published backend exists — both
+      * reads return the same flavor — but a reload that swapped in a second
+      * language between them would hand a program written against one SDK to the
+      * other. Binding it is deferred until a second backend ships (the first
+-     * point it is testable).
++     * point it is testable); rationale in the
++     * [language-dispatch note](../../../../.agents/notes/implemented/feature/2026-07-31-code-mode-language-dispatch.md).
+      */
+     requireCodeRuntime(mode) {
+         const runtime = this.ctx.get('codeRuntime');
+@@ -464,7 +473,7 @@
+         // so a name free to take under the deployment default would become a
+         // collision the moment a preset mounted.
+         if (name === RUN_CODE_NAME) {
+-            throw new Error(`tool name "${RUN_CODE_NAME}" is reserved for the PTC mode presentation transport and cannot be registered or shadowed`);
++            throw new Error(`tool name "${RUN_CODE_NAME}" is reserved for the Code Mode presentation transport and cannot be registered or shadowed`);
+         }
+         return this.layers.effect(this.ctx, layer => layer.tools.insert(name, definition), { label: 'tools.register()' });
+     }
+@@ -490,7 +499,7 @@
+             ...deny !== undefined ? { deny: new Set(deny) } : {},
+         };
+         if ([...allow ?? [], ...deny ?? []].includes(RUN_CODE_NAME)) {
+-            throw new Error(`tools.restrict() cannot name reserved PTC mode presentation transport "${RUN_CODE_NAME}"; restrict end-capability tools instead`);
++            throw new Error(`tools.restrict() cannot name reserved Code Mode presentation transport "${RUN_CODE_NAME}"; restrict end-capability tools instead`);
+         }
+         const known = this.view(scope).restrictableNames;
+         const unknown = [...allow ?? [], ...deny ?? []].filter(name => !known.has(name));
+@@ -536,9 +545,9 @@
+      * A restriction filters what a scope inherits — the global layer and every
+      * ancestor layer on its chain — and never what its OWN layer registers.
+      * That exemption is what a per-child capability filter has to keep intact:
+-     * the delegation runtime registers a child's structured-output tool into the
+-     * child's own layer, and a filter naming the capabilities the child may use
+-     * must not strip the machinery it answers through.
++     * the delegation runtime registers a child's reporting and structured-output
++     * tools into the child's own layer, and a filter naming the capabilities the
++     * child may use must not strip the machinery it answers through.
+      *
+      * Reading the exempt set as "the global layer" instead of "not mine" held
+      * only while every model-facing tool sat in the host composition. Once
+@@ -608,7 +617,7 @@
+     /**
+      * Resolve the definition that MAY EXECUTE for a call, applying the mode
+      * collapse at the operation boundary that owns it. The registry view
+-     * (`get`) is presentation-agnostic; here a MODEL-DIRECT call under `ptc`
++     * (`get`) is presentation-agnostic; here a MODEL-DIRECT call under `code`
+      * may only name the reserved `run_code` transport, while a nested
+      * sub-dispatch (a `parent` token set — the `run_code` SDK calling a tool
+      * it bound) may call any visible tool. Denial surfaces as `UNKNOWN_TOOL`
+@@ -635,7 +644,7 @@
+     schemas(scope) {
+         return [...this.view(scope).visible.values()].map(definition => this.schemaOf(definition, true));
+     }
+-    /** Project visible callable tools onto the generated PTC mode SDK contract. */
++    /** Project visible callable tools onto the generated Code Mode SDK contract. */
+     sdkSchemas(scope) {
+         return [...this.view(scope).visible.values()]
+             .filter(definition => definition.name !== RUN_CODE_NAME)
+@@ -684,8 +693,8 @@
+         }
+     }
+     /**
+-     * Run the `tools/ptc-dispatch-log` waterfall over one settled sub-dispatch
+-     * and return the content the bridge should log on `tool/ptc-dispatch`.
++     * Run the `tools/code-dispatch-log` waterfall over one settled sub-dispatch
++     * and return the content the bridge should log on `tool/code-dispatch`.
+      * Contained: when a listener throws, the method logs the original settled
+      * content; that failure must not fail the dispatch or omit the settle event. Private:
+      * the ONE consumer is the `run_code` bridge this registry constructs, which
+@@ -694,21 +703,21 @@
+      */
+     async shapeDispatchLog(dispatch) {
+         try {
+-            return await this.ctx.waterfall(scopeTarget(this, dispatch.agent), 'tools/ptc-dispatch-log', dispatch, () => Promise.resolve(dispatch.content));
++            return await this.ctx.waterfall(scopeTarget(this, dispatch.agent), 'tools/code-dispatch-log', dispatch, () => Promise.resolve(dispatch.content));
+         }
+         catch (error) {
+-            this.ctx.logger.warn(`tools: ptc-dispatch-log listener failed for ${dispatch.name}: ${errorMessage(error)}; logging the original settled content`);
++            this.ctx.logger.warn(`tools: code-dispatch-log listener failed for ${dispatch.name}: ${errorMessage(error)}; logging the original settled content`);
+             return dispatch.content;
+         }
+     }
+     /**
+-     * Whether the `ptc` mode collapse denies a model-direct call: only the
++     * Whether the `code` mode collapse denies a model-direct call: only the
+      * reserved `run_code` transport may be named. Nested sub-dispatches (a
+      * `parent` token set) bypass the collapse. One home for the
+      * security-relevant predicate, shared by {@link resolveExecution} and
+      * {@link createExecution} so the two can never drift apart.
+      *
+-     * Resolved through {@link modeFor}, NOT `defaultMode`: an agent given `ptc`
++     * Resolved through {@link modeFor}, NOT `defaultMode`: an agent given `code`
+      * by an agent preset under a native deployment is the composition
+      * `dsh-agent-tool-presentation` exists for, and reading the deployment default would
+      * leave exactly that agent uncollapsed — announcing one surface while
+@@ -718,7 +727,7 @@
+      * @param nested - whether the call is a transport sub-dispatch, not a model-direct call.
+      */
+     collapses(name, scope, nested) {
+-        return !nested && this.modeFor(scope) === 'ptc' && name !== RUN_CODE_NAME;
++        return !nested && this.modeFor(scope) === 'code' && name !== RUN_CODE_NAME;
+     }
+     /**
+      * Execute through pre-policy, guards, around-dispatch, post-policy,
+@@ -764,7 +773,7 @@
+         const parent = exec.parent;
+         const signal = exec.signal;
+         // Distinguish a mode-collapsed call (visible in the scope, denied only by
+-        // the `ptc` collapse) from a genuinely unknown tool. A collapsed call is
++        // the `code` collapse) from a genuinely unknown tool. A collapsed call is
+         // deterministically denied, so it terminates BEFORE the extensible policy
+         // pipeline: pre-execute listeners, approval `ask`, and guards must never
+         // observe — or worse, approve — a call that can only fail. An unknown tool
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tools/lib/types/ts-types.js	2026-09-11 14:27:15.202964134 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tools/lib/types/ts-types.js	2026-09-12 14:56:19.209028146 +0800
+@@ -1,5 +1,5 @@
+ /**
+- * PTC mode codegen: the pure projection from registered tool schemas to the TypeScript SDK
++ * Code Mode codegen: the pure projection from registered tool schemas to the TypeScript SDK
+  * text the model programs against (the `tools:sdk` prompt section). Sibling of
+  * `json-schema.ts` — `schemas()` (native function calling) and this module (the generated
+  * `declare const tools` API) are two projections of the same store.
+@@ -218,43 +218,17 @@
+         return 'unknown';
+     }
+ }
+-/** The fixed model-facing usage contract rendered above the declarations (see the PTC mode Agent Note's "What the model sees"). */
++/** The fixed model-facing usage contract rendered above the declarations (see the Code Mode Agent Note's "What the model sees"). */
+ const SDK_INSTRUCTIONS = `## Writing code for run_code
+ 
+-\`run_code\` takes two required arguments: \`code\` — the body of an async TypeScript function (erasable syntax only — no \`enum\` or namespaces; type annotations are advisory, the code runs type-stripped) — and \`description\`, a short summary of what the program does. The declarations below are SDK bindings for this program. A declaration does not make its name a directly callable tool; only names supplied as separate tool schemas may be called directly.`;
+-const SDK_PROGRAM_INSTRUCTIONS = `Inside the program:
++\`run_code\` takes two required arguments: \`code\` — the body of an async TypeScript function (erasable syntax only — no \`enum\` or namespaces; type annotations are advisory, the code runs type-stripped) — and \`description\`, a short summary of what the program does. Inside the program:
+ 
+ - Call tools as \`await tools.name(args)\` — quoted access for exotic names: \`tools["my-tool"](args)\`. Every call resolves to the tool's typed canonical JSON value. Tool arguments must be lossless JSON.
+ - A FAILED tool call rejects with \`ToolCallError\`, whose \`toolName\` identifies the failed tool and whose \`message\` is human-readable — \`try/catch\` it to handle and continue.
+ - Independent read-only calls MAY overlap under \`Promise.all\` (safe calls run concurrently; mutating calls run alone, in submission order). Sequence dependent work with \`await\`.
+ - Emit results with \`return\` and/or \`console.log(...)\`. Only what you print or return is program output. A successful tool result containing an image is attached after the run so you can inspect it on the next step; every other intermediate result stays out of the conversation, so extract just what you need.
+ 
+-Program-only SDK bindings:`;
+-/** Whether one string schema accepts the literal used by the bash example. */
+-function acceptsExampleString(schema, value) {
+-    return schema?.type === 'string'
+-        && (schema.const === undefined || schema.const === value)
+-        && (schema.enum === undefined || schema.enum.includes(value));
+-}
+-/** Render the bash example only when its literal arguments satisfy the current parameter schema. */
+-function renderBashExample(schemas) {
+-    const bash = schemas.find(schema => schema.name === 'bash');
+-    if (bash === undefined)
+-        return '';
+-    const parameters = bash.parameters;
+-    if (parameters.type !== 'object')
+-        return '';
+-    const required = parameters.required ?? [];
+-    if (required.some(name => name !== 'command' && name !== 'description'))
+-        return '';
+-    if (!acceptsExampleString(parameters.properties?.command, 'pwd'))
+-        return '';
+-    const needsDescription = required.includes('description');
+-    if (needsDescription && !acceptsExampleString(parameters.properties?.description, 'Show current directory'))
+-        return '';
+-    const description = needsDescription ? ", description: 'Show current directory'" : '';
+-    return ` When no separate \`bash\` schema is supplied, invoke a declared \`bash\` binding inside \`run_code\`:\n\n\`run_code({ code: "return await tools.bash({ command: 'pwd'${description} })", description: "Show current directory" })\``;
+-}
++The available tools:`;
+ /**
+  * Render the full `tools:sdk` prompt section: the fixed usage instructions
+  * plus one `declare const tools` interface covering every given tool.
+@@ -286,6 +260,6 @@
+         ['declare const tools: {', '  [K in ToolName]: (args: ToolArgsMap[K]) => Promise<ToolOutputMap[K]>;', '}'].join('\n'),
+     ].join('\n\n');
+     const jsonValue = 'type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue }';
+-    return `${SDK_INSTRUCTIONS}${renderBashExample(sorted)}\n\n${SDK_PROGRAM_INSTRUCTIONS}\n\n\`\`\`ts\n${jsonValue}\n\n${declaration}\n\`\`\``;
++    return `${SDK_INSTRUCTIONS}\n\n\`\`\`ts\n${jsonValue}\n\n${declaration}\n\`\`\``;
+ }
+ //# sourceMappingURL=ts-types.js.map
+\ No newline at end of file
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tools/lib/types/json-schema.js	2026-09-11 14:27:15.168963650 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tools/lib/types/json-schema.js	2026-09-12 14:56:19.185234668 +0800
+@@ -1,5 +1,5 @@
+ /**
+- * Enforced JSON Schema subset shared by tool outputs, generated PTC mode
++ * Enforced JSON Schema subset shared by tool outputs, generated Code Mode
+  * types, subagents, and workflows. The subset accepts any JSON root, an
+  * annotation-only schema for unconstrained JSON, one scalar `type`, object
+  * `properties`/`required`/boolean `additionalProperties`, array `items`,
+@@ -10,8 +10,8 @@
+  * {@link assertObjectJsonSchema} before accepting input.
+  * @module dsh-tools/json-schema
+  */
+-import { HarnessError } from '@deepseek-ai/dsh-llm';
+-import { assertNever, isJsonValue } from '@deepseek-ai/dsh-util-values';
++import { assertNever, HarnessError } from '@deepseek-ai/dsh-llm';
++import { isJsonValue } from '@deepseek-ai/dsh-session';
+ /**
+  * Thrown when a raw schema falls outside the enforced subset. `violations`
+  * lists every offending path instead of stopping at the first author error.
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tools/lib/types/py-types.js	2026-09-11 14:27:15.189963949 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tools/lib/types/py-types.js	2026-09-12 14:56:19.196202304 +0800
+@@ -1,11 +1,11 @@
+ /**
+- * PTC mode codegen — Python flavor. The pure projection from registered tool schemas to the
++ * Code Mode codegen — Python flavor. The pure projection from registered tool schemas to the
+  * Python SDK text the model programs against under `runtime.language === 'python'`. Sibling of
+  * {@link ./ts-types.ts | ts-types.ts}; the two files are two projections of the same registry
+  * store, keyed by the loaded {@link @deepseek-ai/dsh-code-runtime#CodeRuntime.language | code
+  * runtime's language}.
+  *
+- * Under `mode: 'ptc'` the native tool schemas are omitted from the request, so this generated
++ * Under `mode: 'code'` the native tool schemas are omitted from the request, so this generated
+  * SDK is the model's ONLY source for each tool's argument names, required fields, types,
+  * descriptions, and canonical output shapes; under `mode: 'both'` the native schemas ship
+  * alongside it and it is one of two. Object-shaped arguments and outputs therefore render as one
+@@ -27,7 +27,7 @@
+  * Python identifiers are not ASCII: `路径` is as legal a field name as `path`,
+  * and rejecting it would degrade the whole enclosing object, dropping every
+  * field's name, requiredness, and type — information whose only source under
+- * `mode: 'ptc'` is this generated text.
++ * `mode: 'code'` is this generated text.
+  *
+  * NFKC stability is a second and separate condition, because CPython
+  * normalizes identifiers at compile time while JSON keys are compared as
+@@ -140,7 +140,7 @@
+  * (`SyntaxError: source code string cannot contain null bytes`), whether it
+  * sits in a docstring or in a comment, so one such byte anywhere in a schema
+  * description would make the whole generated SDK unparseable — under
+- * `mode: 'ptc'`, the model's only declaration of the tools. The rest are
++ * `mode: 'code'`, the model's only declaration of the tools. The rest are
+  * legal but invisible; escaping them with the same rule keeps the emitted text
+  * readable and the treatment uniform.
+  *
+@@ -211,7 +211,7 @@
+  * Backslashes are doubled first, every quote is escaped, and a trailing
+  * backslash cannot survive: a description ending in `"` or an odd backslash
+  * would otherwise merge with (or escape) the closing triple quote and make
+- * the generated block — PTC mode's only SDK — syntactically invalid Python.
++ * the generated block — Code Mode's only SDK — syntactically invalid Python.
+  */
+ function docLines(description, indent) {
+     const collapsed = describe({ description });
+@@ -538,7 +538,7 @@
+                     }
+                 }
+                 // TypedDict syntax cannot express openness, so an open object states it
+-                // in-band: the annotation is advisory either way, and `mode: 'ptc'`
++                // in-band: the annotation is advisory either way, and `mode: 'code'`
+                 // omits the native schemas, making this line the model's only signal
+                 // that extra keys are accepted.
+                 if (node.additionalProperties !== false) {
+@@ -745,7 +745,7 @@
+             // of that method's body. Emitted before the `async def` it would instead
+             // become the `Tools` class docstring (for the first tool) or a dead
+             // expression (for every later one), leaving every method undocumented —
+-            // and under `mode: 'ptc'` this SDK is the model's only description of
++            // and under `mode: 'code'` this SDK is the model's only description of
+             // what a tool does. A docstring is a complete body, so the `...` stub is
+             // only for the description-less case.
+             const doc = docLines(schema.description, 2);
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tools/lib/invariant.js	2026-09-11 14:27:15.150963394 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tools/lib/invariant.js	2026-09-12 14:56:19.184565605 +0800
+@@ -11,13 +11,13 @@
+ 	if (!Object.isFrozen(result) || !Object.isFrozen(result.content)) fail("tools/result outcome and content must be frozen before publication");
+ 	if (exec.name.length === 0 || String(exec.callId).length === 0) fail("tools/result execution must carry non-empty name and callId");
+ }
+-/** Install monotonic pipeline, final-snapshot, and PTC dispatch enclosure checks. */
++/** Install monotonic pipeline, final-snapshot, and code-dispatch enclosure checks. */
+ const install = Object.assign((ctx, fail) => {
+ 	const stages = /* @__PURE__ */ new WeakMap();
+ 	const openTurns = /* @__PURE__ */ new WeakMap();
+ 	const dispatchRoots = /* @__PURE__ */ new WeakMap();
+ 	const validateDispatch = (session, event) => {
+-		if (event.type !== "tool/ptc-dispatch-start" && event.type !== "tool/ptc-dispatch") return;
++		if (event.type !== "tool/code-dispatch-start" && event.type !== "tool/code-dispatch") return;
+ 		const root = String(event.data.rootCallId);
+ 		const parent = String(event.data.parentCallId);
+ 		const child = String(event.data.subCallId);
+@@ -31,18 +31,18 @@
+ 		if (parent !== root && roots?.get(parent) !== root) fail(`${event.type} parentCallId ${parent} does not belong to rootCallId ${root}`);
+ 	};
+ 	const commitDispatch = (session, event) => {
+-		if (event.type !== "tool/ptc-dispatch-start" && event.type !== "tool/ptc-dispatch") return;
++		if (event.type !== "tool/code-dispatch-start" && event.type !== "tool/code-dispatch") return;
+ 		dispatchRoots.get(session).set(String(event.data.subCallId), String(event.data.rootCallId));
+ 	};
+ 	const seed = (session) => {
+ 		let openTurn = null;
+ 		dispatchRoots.set(session, /* @__PURE__ */ new Map());
+-		for (const event of session.snapshotEvents()) {
++		for (const event of session.events) {
+ 			validateDispatch(session, event);
+ 			commitDispatch(session, event);
+ 			if (event.type === "turn/start") openTurn = event.data.turn;
+ 			else if (event.type === "turn/end") openTurn = null;
+-			else if ((event.type === "tool/ptc-dispatch-start" || event.type === "tool/ptc-dispatch") && openTurn === null) fail(`${event.type} appended outside any open turn`);
++			else if ((event.type === "tool/code-dispatch-start" || event.type === "tool/code-dispatch") && openTurn === null) fail(`${event.type} appended outside any open turn`);
+ 		}
+ 		openTurns.set(session, openTurn);
+ 		return openTurn;
+@@ -62,7 +62,7 @@
+ 		if (eventName === "session/event") {
+ 			const [session, event] = args;
+ 			validateDispatch(session, event);
+-			if ((event.type === "tool/ptc-dispatch-start" || event.type === "tool/ptc-dispatch") && openTurnFor(session) === null) fail(`${event.type} appended outside any open turn`);
++			if ((event.type === "tool/code-dispatch-start" || event.type === "tool/code-dispatch") && openTurnFor(session) === null) fail(`${event.type} appended outside any open turn`);
+ 			return;
+ 		}
+ 		if (eventName === "tools/pre-execute") {
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tools/lib/index.js	2026-09-11 14:27:15.118962939 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tools/lib/index.js	2026-09-12 14:56:19.171839465 +0800
+@@ -1,12 +1,11 @@
+ import { Service } from "@deepseek-ai/cordis";
+ import z from "@deepseek-ai/schemastery";
+ import { AnonymousEntries, NamedEntries, ScopedLayers, scopeOf, scopeTarget } from "@deepseek-ai/dsh-scope";
+-import { HarnessError, createUserMessage } from "@deepseek-ai/dsh-llm";
+-import { assertNever, deepFreeze, isJsonValue, snapshotJsonValue } from "@deepseek-ai/dsh-util-values";
+-import { brandString } from "@deepseek-ai/dsh-brand";
++import { CallId, HarnessError, assertNever, createUserMessage, deepFreeze } from "@deepseek-ai/dsh-llm";
++import { isJsonValue, snapshotJsonValue } from "@deepseek-ai/dsh-session";
+ //#region lib/types/json-schema.js
+ /**
+-* Enforced JSON Schema subset shared by tool outputs, generated PTC mode
++* Enforced JSON Schema subset shared by tool outputs, generated Code Mode
+ * types, subagents, and workflows. The subset accepts any JSON root, an
+ * annotation-only schema for unconstrained JSON, one scalar `type`, object
+ * `properties`/`required`/boolean `additionalProperties`, array `items`,
+@@ -882,15 +881,15 @@
+ 	return tool;
+ }
+ //#endregion
+-//#region lib/types/ptc.js
++//#region lib/types/code-mode.js
+ /**
+-* PTC mode `run_code` transport. Programs call the registry's agent-visible
++* Code Mode `run_code` transport. Programs call the registry's agent-visible
+ * tools through nested executions scheduled under the native concurrency
+ * contract; each sub-dispatch is logged for reconstruction, while only the
+ * outer curated result enters model history.
+-* @module @deepseek-ai/dsh-tools/src/ptc
++* @module @deepseek-ai/dsh-tools/src/code-mode
+ */
+-/** The model-facing name of the PTC mode tool. */
++/** The model-facing name of the Code Mode tool. */
+ const RUN_CODE_NAME = "run_code";
+ /**
+ * The TypeScript flavor: the fallback for a schema read with no runtime
+@@ -1208,7 +1207,7 @@
+ 				if (runOver()) throw new Error(`run_code run is over (${String(runController.signal.reason)}); ${name} not dispatched`);
+ 				const normalized = jsonNormalizeArgs(rawArgs);
+ 				const n = ++dispatches;
+-				const subCallId = brandString(`${String(exec.callId)}:ptc:${n}`);
++				const subCallId = CallId(`${String(exec.callId)}:code:${n}`);
+ 				const input = {
+ 					callId: subCallId,
+ 					rootCallId: exec.rootCallId,
+@@ -1240,7 +1239,7 @@
+ 								isError: result.isError,
+ 								content: result.content
+ 							});
+-							agent.session.append("tool/ptc-dispatch", {
++							agent.session.append("tool/code-dispatch", {
+ 								rootCallId: exec.rootCallId,
+ 								parentCallId: exec.callId,
+ 								subCallId,
+@@ -1262,7 +1261,7 @@
+ 							reject(/* @__PURE__ */ new Error(`run_code run is over (${String(runController.signal.reason)}); ${name} tool call abandoned`));
+ 						},
+ 						async start() {
+-							exec.agent?.session.append("tool/ptc-dispatch-start", {
++							exec.agent?.session.append("tool/code-dispatch-start", {
+ 								rootCallId: exec.rootCallId,
+ 								parentCallId: exec.callId,
+ 								subCallId,
+@@ -1296,7 +1295,7 @@
+ 								content: result.content,
+ 								source: {
+ 									kind: "plugin",
+-									plugin: "tools-ptc"
++									plugin: "tools-code-mode"
+ 								}
+ 							}));
+ 							for (const context of result.additionalContexts ?? []) exec.deferContext(context);
+@@ -1382,7 +1381,7 @@
+ //#endregion
+ //#region lib/types/ts-types.js
+ /**
+-* PTC mode codegen: the pure projection from registered tool schemas to the TypeScript SDK
++* Code Mode codegen: the pure projection from registered tool schemas to the TypeScript SDK
+ * text the model programs against (the `tools:sdk` prompt section). Sibling of
+ * `json-schema.ts` — `schemas()` (native function calling) and this module (the generated
+ * `declare const tools` API) are two projections of the same store.
+@@ -1589,35 +1588,17 @@
+ 		return "unknown";
+ 	}
+ }
+-/** The fixed model-facing usage contract rendered above the declarations (see the PTC mode Agent Note's "What the model sees"). */
++/** The fixed model-facing usage contract rendered above the declarations (see the Code Mode Agent Note's "What the model sees"). */
+ const SDK_INSTRUCTIONS$1 = `## Writing code for run_code
+ 
+-\`run_code\` takes two required arguments: \`code\` — the body of an async TypeScript function (erasable syntax only — no \`enum\` or namespaces; type annotations are advisory, the code runs type-stripped) — and \`description\`, a short summary of what the program does. The declarations below are SDK bindings for this program. A declaration does not make its name a directly callable tool; only names supplied as separate tool schemas may be called directly.`;
+-const SDK_PROGRAM_INSTRUCTIONS = `Inside the program:
++\`run_code\` takes two required arguments: \`code\` — the body of an async TypeScript function (erasable syntax only — no \`enum\` or namespaces; type annotations are advisory, the code runs type-stripped) — and \`description\`, a short summary of what the program does. Inside the program:
+ 
+ - Call tools as \`await tools.name(args)\` — quoted access for exotic names: \`tools["my-tool"](args)\`. Every call resolves to the tool's typed canonical JSON value. Tool arguments must be lossless JSON.
+ - A FAILED tool call rejects with \`ToolCallError\`, whose \`toolName\` identifies the failed tool and whose \`message\` is human-readable — \`try/catch\` it to handle and continue.
+ - Independent read-only calls MAY overlap under \`Promise.all\` (safe calls run concurrently; mutating calls run alone, in submission order). Sequence dependent work with \`await\`.
+ - Emit results with \`return\` and/or \`console.log(...)\`. Only what you print or return is program output. A successful tool result containing an image is attached after the run so you can inspect it on the next step; every other intermediate result stays out of the conversation, so extract just what you need.
+ 
+-Program-only SDK bindings:`;
+-/** Whether one string schema accepts the literal used by the bash example. */
+-function acceptsExampleString(schema, value) {
+-	return schema?.type === "string" && (schema.const === void 0 || schema.const === value) && (schema.enum === void 0 || schema.enum.includes(value));
+-}
+-/** Render the bash example only when its literal arguments satisfy the current parameter schema. */
+-function renderBashExample(schemas) {
+-	const bash = schemas.find((schema) => schema.name === "bash");
+-	if (bash === void 0) return "";
+-	const parameters = bash.parameters;
+-	if (parameters.type !== "object") return "";
+-	const required = parameters.required ?? [];
+-	if (required.some((name) => name !== "command" && name !== "description")) return "";
+-	if (!acceptsExampleString(parameters.properties?.command, "pwd")) return "";
+-	const needsDescription = required.includes("description");
+-	if (needsDescription && !acceptsExampleString(parameters.properties?.description, "Show current directory")) return "";
+-	return ` When no separate \`bash\` schema is supplied, invoke a declared \`bash\` binding inside \`run_code\`:\n\n\`run_code({ code: "return await tools.bash({ command: 'pwd'${needsDescription ? ", description: 'Show current directory'" : ""} })", description: "Show current directory" })\``;
+-}
++The available tools:`;
+ /**
+ * Render the full `tools:sdk` prompt section: the fixed usage instructions
+ * plus one `declare const tools` interface covering every given tool.
+@@ -1639,7 +1620,7 @@
+ 		argsMembers.push(`${pad$1(1)}${renderKey(schema.name)}: ${jsonSchemaToTs(schema.parameters, 1)};`);
+ 		outputMembers.push(`${pad$1(1)}${renderKey(schema.name)}: ${jsonSchemaToTs(schema.output, 1)};`);
+ 	}
+-	const declaration = [
++	return `${SDK_INSTRUCTIONS$1}\n\n\`\`\`ts\ntype JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue }\n\n${[
+ 		`interface ToolArgsMap {${argsMembers.length > 0 ? `\n${argsMembers.join("\n")}\n` : ""}}`,
+ 		`interface ToolOutputMap {${outputMembers.length > 0 ? `\n${outputMembers.join("\n")}\n` : ""}}`,
+ 		"type ToolName = keyof ToolOutputMap",
+@@ -1654,19 +1635,18 @@
+ 			"  [K in ToolName]: (args: ToolArgsMap[K]) => Promise<ToolOutputMap[K]>;",
+ 			"}"
+ 		].join("\n")
+-	].join("\n\n");
+-	return `${SDK_INSTRUCTIONS$1}${renderBashExample(sorted)}\n\n${SDK_PROGRAM_INSTRUCTIONS}\n\n\`\`\`ts\ntype JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue }\n\n${declaration}\n\`\`\``;
++	].join("\n\n")}\n\`\`\``;
+ }
+ //#endregion
+ //#region lib/types/py-types.js
+ /**
+-* PTC mode codegen — Python flavor. The pure projection from registered tool schemas to the
++* Code Mode codegen — Python flavor. The pure projection from registered tool schemas to the
+ * Python SDK text the model programs against under `runtime.language === 'python'`. Sibling of
+ * {@link ./ts-types.ts | ts-types.ts}; the two files are two projections of the same registry
+ * store, keyed by the loaded {@link @deepseek-ai/dsh-code-runtime#CodeRuntime.language | code
+ * runtime's language}.
+ *
+-* Under `mode: 'ptc'` the native tool schemas are omitted from the request, so this generated
++* Under `mode: 'code'` the native tool schemas are omitted from the request, so this generated
+ * SDK is the model's ONLY source for each tool's argument names, required fields, types,
+ * descriptions, and canonical output shapes; under `mode: 'both'` the native schemas ship
+ * alongside it and it is one of two. Object-shaped arguments and outputs therefore render as one
+@@ -1687,7 +1667,7 @@
+ * Python identifiers are not ASCII: `路径` is as legal a field name as `path`,
+ * and rejecting it would degrade the whole enclosing object, dropping every
+ * field's name, requiredness, and type — information whose only source under
+-* `mode: 'ptc'` is this generated text.
++* `mode: 'code'` is this generated text.
+ *
+ * NFKC stability is a second and separate condition, because CPython
+ * normalizes identifiers at compile time while JSON keys are compared as
+@@ -1834,7 +1814,7 @@
+ * (`SyntaxError: source code string cannot contain null bytes`), whether it
+ * sits in a docstring or in a comment, so one such byte anywhere in a schema
+ * description would make the whole generated SDK unparseable — under
+-* `mode: 'ptc'`, the model's only declaration of the tools. The rest are
++* `mode: 'code'`, the model's only declaration of the tools. The rest are
+ * legal but invisible; escaping them with the same rule keeps the emitted text
+ * readable and the treatment uniform.
+ *
+@@ -1900,7 +1880,7 @@
+ * Backslashes are doubled first, every quote is escaped, and a trailing
+ * backslash cannot survive: a description ending in `"` or an odd backslash
+ * would otherwise merge with (or escape) the closing triple quote and make
+-* the generated block — PTC mode's only SDK — syntactically invalid Python.
++* the generated block — Code Mode's only SDK — syntactically invalid Python.
+ */
+ function docLines(description, indent) {
+ 	const collapsed = describe({ description });
+@@ -2403,7 +2383,7 @@
+ * section under a non-native mode; a runtime whose language is not a key
+ * fails the assembly loudly (same idiom as `toolOrder` violations). Adding a
+ * new backend language is three parallel edits — a {@link CodeSdkLanguage}
+-* member, an entry here, and a `RUN_CODE_FLAVORS` entry in `ptc.ts` for
++* member, an entry here, and a `RUN_CODE_FLAVORS` entry in `code-mode.ts` for
+ * its `run_code` schema strings — plus the renderer function this table points
+ * at. The `satisfies` clause pins this table's key set to that union, which
+ * the flavor table is checked against too, so any of the three left out is a
+@@ -2414,11 +2394,17 @@
+ * {@link Config.mode} JSDoc.
+ */
+ /**
+-* The model-facing statement of the `ptc` collapse. Names the consequence
++* Prompt order of the `code` collapse statement: after the persona and before
++* the 100-199 per-tool guidance band, so the model reads which tools it may
++* call before it reads what each one is for.
++*/
++const COLLAPSE_SECTION_ORDER = 99;
++/**
++* The model-facing statement of the `code` collapse. Names the consequence
+ * (the call fails) and the route (inside the program), because a rule the
+ * model can only discover by being denied is one it corrects too late.
+ */
+-const PTC_ONLY_INSTRUCTION = `\`${RUN_CODE_NAME}\` is the only tool you can call directly — a tool call naming any other tool fails. Reach every tool the SDK declares below from inside the program.`;
++const CODE_ONLY_INSTRUCTION = `\`${RUN_CODE_NAME}\` is the only tool you can call directly — a tool call naming any other tool fails. Reach every tool the SDK declares below from inside the program.`;
+ const SDK_RENDERERS = {
+ 	typescript: renderToolsSdk,
+ 	python: renderToolsSdkPy
+@@ -2569,7 +2555,7 @@
+ 	static Config = z.object({
+ 		mode: z.union([
+ 			"native",
+-			"ptc",
++			"code",
+ 			"both"
+ 		]).default("native"),
+ 		maxParallelSubCalls: z.natural().min(1).default(10)
+@@ -2598,10 +2584,10 @@
+ 	/**
+ 	* Reserved presentation transport, kept outside the filterable registration
+ 	* layers. Built on first need rather than at construction: which agents run
+-	* a PTC mode is no longer known when the service is constructed, and the
++	* a code mode is no longer known when the service is constructed, and the
+ 	* transport is stateless beyond its closures over `this`.
+ 	*/
+-	ptcTransport;
++	codeTransport;
+ 	constructor(ctx, config = {}) {
+ 		super(ctx, "tools");
+ 		this.defaultMode = config.mode ?? "native";
+@@ -2613,33 +2599,34 @@
+ 		}
+ 	}
+ 	/**
+-	* The prompt statement of the `ptc` executor collapse, registered wherever
+-	* {@link sdkSection} is and rendering empty outside an effective `ptc`.
++	* The prompt statement of the `code` executor collapse, registered wherever
++	* {@link sdkSection} is and rendering empty outside an effective `code`.
+ 	*
+ 	* Every tool contributes its own guidance section naming its tool, none of
+-	* them qualify how that tool is reached, and they all render before the SDK.
+-	* Without this the model reads a catalog of tools it is told to use and no
+-	* statement that only `run_code` may be called, so it emits a native call,
+-	* receives `UNKNOWN_TOOL` for a tool the prompt just declared, and concludes
+-	* the deployment is inconsistent. Its order places the rule before that
+-	* guidance rather than after it.
++	* them qualify how that tool is reached, and they all render before the SDK
++	* (orders 100-199 against {@link SDK_SECTION_ORDER}). Without this the model
++	* reads a catalog of tools it is told to use and no statement that only
++	* `run_code` may be called, so it emits a native call, receives
++	* `UNKNOWN_TOOL` for a tool the prompt just declared, and concludes the
++	* deployment is inconsistent. {@link COLLAPSE_SECTION_ORDER} places the rule
++	* before that guidance rather than after it.
+ 	*
+ 	* `both` renders empty: native calls do execute there, so the rule is false.
+ 	* @returns the section registration.
+ 	*/
+ 	collapseSection() {
+ 		return {
+-			name: "tools:ptc-only",
+-			order: this.ctx.systemPrompt.getSectionOrder("PTC_ONLY"),
+-			text: (context) => this.modeFor(context.scope) === "ptc" ? PTC_ONLY_INSTRUCTION : ""
++			name: "tools:code-only",
++			order: COLLAPSE_SECTION_ORDER,
++			text: (context) => this.modeFor(context.scope) === "code" ? CODE_ONLY_INSTRUCTION : ""
+ 		};
+ 	}
+ 	/**
+-	* The generated-SDK prompt section, registered globally by a PTC mode
++	* The generated-SDK prompt section, registered globally by a code-mode
+ 	* deployment and per scope by {@link presentAs}.
+ 	*
+ 	* The body regenerates from the CALLING scope, and renders empty for an
+-	* agent presenting natively — an agent that opted out under a PTC mode
++	* agent presenting natively — an agent that opted out under a code-mode
+ 	* deployment still sees the global registration, and an empty section is
+ 	* dropped from the rendered prompt.
+ 	* @returns the section registration.
+@@ -2647,7 +2634,7 @@
+ 	sdkSection() {
+ 		return {
+ 			name: "tools:sdk",
+-			order: this.ctx.systemPrompt.getSectionOrder("TOOLS_SDK"),
++			order: 150,
+ 			text: (context) => {
+ 				const mode = this.modeFor(context.scope);
+ 				if (mode === "native") return "";
+@@ -2683,13 +2670,13 @@
+ 	* @returns the shared transport definition.
+ 	*/
+ 	requireCodeTransport() {
+-		this.ptcTransport ??= createRunCodeTool(this, {
++		this.codeTransport ??= createRunCodeTool(this, {
+ 			requireRuntime: () => this.requireCodeRuntime(this.defaultMode),
+ 			peekRuntime: () => this.ctx.get("codeRuntime"),
+ 			maxParallel: this.maxParallelSubCalls,
+ 			shapeDispatchLog: (dispatch) => this.shapeDispatchLog(dispatch)
+ 		});
+-		return this.ptcTransport;
++		return this.codeTransport;
+ 	}
+ 	/**
+ 	* Present the calling scope's tools in `mode` instead of the deployment
+@@ -2697,7 +2684,7 @@
+ 	* declaration covers every agent joined under it.
+ 	*
+ 	* Scoped only, and one declaration per scope: this is how an agent preset
+-	* composes PTC mode agents beside native ones in the same process, and a
++	* composes Code Mode agents beside native ones in the same process, and a
+ 	* process-global override would be the `mode` config field instead.
+ 	* @param mode - the presentation the covered agents' models see.
+ 	* @returns the exact disposer that restores the deployment default.
+@@ -2732,7 +2719,7 @@
+ 		};
+ 		this.requireCodeRuntime(mode);
+ 		const schemas = [...view.visible.values()].map((definition) => this.schemaOf(definition, false));
+-		if (mode === "ptc") return {
++		if (mode === "code") return {
+ 			schemas: schemas.filter((schema) => schema.name === RUN_CODE_NAME),
+ 			knownNames: [RUN_CODE_NAME]
+ 		};
+@@ -2746,14 +2733,16 @@
+ 	* Read at use time (assembly / run_code execution), NOT via static
+ 	* `inject`: an inject entry would hold `ctx.tools` — and every tool plugin
+ 	* behind it — hostage to a code runtime existing even under `mode:
+-	* 'native'`.
++	* 'native'` (the loop's optional-backend idiom, same as
++	* `sessionPersistence`).
+ 	*
+ 	* Assembly and `run_code` execution read separately, so the language is not
+ 	* bound to a request. Harmless while one published backend exists — both
+ 	* reads return the same flavor — but a reload that swapped in a second
+ 	* language between them would hand a program written against one SDK to the
+ 	* other. Binding it is deferred until a second backend ships (the first
+-	* point it is testable).
++	* point it is testable); rationale in the
++	* [language-dispatch note](../../../../.agents/notes/implemented/feature/2026-07-31-code-mode-language-dispatch.md).
+ 	*/
+ 	requireCodeRuntime(mode) {
+ 		const runtime = this.ctx.get("codeRuntime");
+@@ -2777,7 +2766,7 @@
+ 		assertSupportedJsonSchema(output.schema);
+ 		const timeoutMs = definition.timeoutMs;
+ 		if (timeoutMs !== void 0 && (!Number.isFinite(timeoutMs) || timeoutMs <= 0)) throw new TypeError(`tool "${name}" timeoutMs must be a positive finite number`);
+-		if (name === "run_code") throw new Error(`tool name "${RUN_CODE_NAME}" is reserved for the PTC mode presentation transport and cannot be registered or shadowed`);
++		if (name === "run_code") throw new Error(`tool name "${RUN_CODE_NAME}" is reserved for the Code Mode presentation transport and cannot be registered or shadowed`);
+ 		return this.layers.effect(this.ctx, (layer) => layer.tools.insert(name, definition), { label: "tools.register()" });
+ 	}
+ 	/**
+@@ -2797,7 +2786,7 @@
+ 			...allow !== void 0 ? { allow: new Set(allow) } : {},
+ 			...deny !== void 0 ? { deny: new Set(deny) } : {}
+ 		};
+-		if ([...allow ?? [], ...deny ?? []].includes("run_code")) throw new Error(`tools.restrict() cannot name reserved PTC mode presentation transport "${RUN_CODE_NAME}"; restrict end-capability tools instead`);
++		if ([...allow ?? [], ...deny ?? []].includes("run_code")) throw new Error(`tools.restrict() cannot name reserved Code Mode presentation transport "${RUN_CODE_NAME}"; restrict end-capability tools instead`);
+ 		const known = this.view(scope).restrictableNames;
+ 		const unknown = [...allow ?? [], ...deny ?? []].filter((name) => !known.has(name));
+ 		if (unknown.length > 0) throw new Error(`tools.restrict() names unknown global tool${unknown.length > 1 ? "s" : ""} ${unknown.map((n) => `"${n}"`).join(", ")}; known global tools: ${[...known].sort().join(", ") || "(none)"}`);
+@@ -2839,9 +2828,9 @@
+ 	* A restriction filters what a scope inherits — the global layer and every
+ 	* ancestor layer on its chain — and never what its OWN layer registers.
+ 	* That exemption is what a per-child capability filter has to keep intact:
+-	* the delegation runtime registers a child's structured-output tool into the
+-	* child's own layer, and a filter naming the capabilities the child may use
+-	* must not strip the machinery it answers through.
++	* the delegation runtime registers a child's reporting and structured-output
++	* tools into the child's own layer, and a filter naming the capabilities the
++	* child may use must not strip the machinery it answers through.
+ 	*
+ 	* Reading the exempt set as "the global layer" instead of "not mine" held
+ 	* only while every model-facing tool sat in the host composition. Once
+@@ -2893,7 +2882,7 @@
+ 	/**
+ 	* Resolve the definition that MAY EXECUTE for a call, applying the mode
+ 	* collapse at the operation boundary that owns it. The registry view
+-	* (`get`) is presentation-agnostic; here a MODEL-DIRECT call under `ptc`
++	* (`get`) is presentation-agnostic; here a MODEL-DIRECT call under `code`
+ 	* may only name the reserved `run_code` transport, while a nested
+ 	* sub-dispatch (a `parent` token set — the `run_code` SDK calling a tool
+ 	* it bound) may call any visible tool. Denial surfaces as `UNKNOWN_TOOL`
+@@ -2918,7 +2907,7 @@
+ 	schemas(scope) {
+ 		return [...this.view(scope).visible.values()].map((definition) => this.schemaOf(definition, true));
+ 	}
+-	/** Project visible callable tools onto the generated PTC mode SDK contract. */
++	/** Project visible callable tools onto the generated Code Mode SDK contract. */
+ 	sdkSchemas(scope) {
+ 		return [...this.view(scope).visible.values()].filter((definition) => definition.name !== RUN_CODE_NAME).map((definition) => {
+ 			const output = snapshotJsonValue(definition.output.schema);
+@@ -2958,8 +2947,8 @@
+ 		}
+ 	}
+ 	/**
+-	* Run the `tools/ptc-dispatch-log` waterfall over one settled sub-dispatch
+-	* and return the content the bridge should log on `tool/ptc-dispatch`.
++	* Run the `tools/code-dispatch-log` waterfall over one settled sub-dispatch
++	* and return the content the bridge should log on `tool/code-dispatch`.
+ 	* Contained: when a listener throws, the method logs the original settled
+ 	* content; that failure must not fail the dispatch or omit the settle event. Private:
+ 	* the ONE consumer is the `run_code` bridge this registry constructs, which
+@@ -2968,20 +2957,20 @@
+ 	*/
+ 	async shapeDispatchLog(dispatch) {
+ 		try {
+-			return await this.ctx.waterfall(scopeTarget(this, dispatch.agent), "tools/ptc-dispatch-log", dispatch, () => Promise.resolve(dispatch.content));
++			return await this.ctx.waterfall(scopeTarget(this, dispatch.agent), "tools/code-dispatch-log", dispatch, () => Promise.resolve(dispatch.content));
+ 		} catch (error) {
+-			this.ctx.logger.warn(`tools: ptc-dispatch-log listener failed for ${dispatch.name}: ${errorMessage(error)}; logging the original settled content`);
++			this.ctx.logger.warn(`tools: code-dispatch-log listener failed for ${dispatch.name}: ${errorMessage(error)}; logging the original settled content`);
+ 			return dispatch.content;
+ 		}
+ 	}
+ 	/**
+-	* Whether the `ptc` mode collapse denies a model-direct call: only the
++	* Whether the `code` mode collapse denies a model-direct call: only the
+ 	* reserved `run_code` transport may be named. Nested sub-dispatches (a
+ 	* `parent` token set) bypass the collapse. One home for the
+ 	* security-relevant predicate, shared by {@link resolveExecution} and
+ 	* {@link createExecution} so the two can never drift apart.
+ 	*
+-	* Resolved through {@link modeFor}, NOT `defaultMode`: an agent given `ptc`
++	* Resolved through {@link modeFor}, NOT `defaultMode`: an agent given `code`
+ 	* by an agent preset under a native deployment is the composition
+ 	* `dsh-agent-tool-presentation` exists for, and reading the deployment default would
+ 	* leave exactly that agent uncollapsed — announcing one surface while
+@@ -2991,7 +2980,7 @@
+ 	* @param nested - whether the call is a transport sub-dispatch, not a model-direct call.
+ 	*/
+ 	collapses(name, scope, nested) {
+-		return !nested && this.modeFor(scope) === "ptc" && name !== "run_code";
++		return !nested && this.modeFor(scope) === "code" && name !== "run_code";
+ 	}
+ 	/**
+ 	* Execute through pre-policy, guards, around-dispatch, post-policy,

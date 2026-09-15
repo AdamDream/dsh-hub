@@ -1,0 +1,252 @@
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-todo/lib/types/invariant.js	2026-09-11 14:27:15.146963337 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-todo/lib/types/invariant.js	2026-09-12 14:56:18.196485389 +0800
+@@ -33,55 +33,23 @@
+         }
+     }
+ }
+-/** Advance the trace after one event has committed. */
+-function advanceTrace(trace, event) {
+-    if (event.type === 'turn/start')
+-        trace.open = true;
+-    if (event.type === 'turn/end')
+-        trace.open = false;
+-}
+-/** Validate one package-owned event against the preceding committed trace. */
+-function validateEvent(event, trace, fail) {
+-    if (event.type !== 'todo/write')
+-        return;
+-    validateTodos(event.data.todos, fail);
+-    if (!trace.open)
+-        fail('todo/write appended outside any open turn');
+-}
+-/** Validate one existing log in a single pass and return its tail trace. */
+-function seedTrace(session, fail) {
+-    const trace = { open: false };
+-    for (const event of session.snapshotEvents()) {
+-        validateEvent(event, trace, fail);
+-        advanceTrace(trace, event);
+-    }
+-    return trace;
++/* jscpd:ignore-start -- package companions share replay and dispatch plumbing */
++/** Validate the package-owned event fields and ignore unrelated events. */
++function validateEvent(event, fail) {
++    if (event.type === 'todo/write')
++        validateTodos(event.data.todos, fail);
+ }
+ /** Install validation for loaded and newly appended whole-list todo snapshots. */
+ const install = Object.assign((ctx, fail) => {
+-    const traces = new WeakMap();
+-    const seed = (session) => {
+-        traces.set(session, seedTrace(session, fail));
+-    };
+-    const traceFor = (session) => {
+-        let trace = traces.get(session);
+-        if (trace === undefined) {
+-            trace = seedTrace(session, fail);
+-            traces.set(session, trace);
+-        }
+-        return trace;
+-    };
+-    for (const session of ctx.sessions.list())
+-        seed(session);
+-    ctx.on('session/created', (session) => { seed(session); }, { global: true });
++    for (const session of ctx.sessions.list()) {
++        for (const event of session.events)
++            validateEvent(event, fail);
++    }
+     ctx.on('internal/dispatch', (_mode, eventName, args) => {
+         if (eventName !== 'session/event')
+             return;
+-        const [session, event] = args;
+-        validateEvent(event, traceFor(session), fail);
+-    }, { global: true });
+-    ctx.on('session/event', (session, event) => {
+-        advanceTrace(traceFor(session), event);
++        const event = args[1];
++        validateEvent(event, fail);
+     }, { global: true });
+ }, { inject: ['sessions'] });
+ /* jscpd:ignore-end */
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-todo/lib/types/index.js	2026-09-11 14:27:15.121962982 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-todo/lib/types/index.js	2026-09-12 14:56:18.196341571 +0800
+@@ -8,7 +8,7 @@
+ import { z as zod } from 'zod';
+ import { defineTool } from '@deepseek-ai/dsh-tools';
+ export const name = 'tool-todo';
+-export const inject = ['tools', 'sessionProjections'];
++export const inject = ['tools'];
+ /** The valid {@link TodoItem} statuses, as a runtime set for input narrowing. */
+ const STATUSES = ['pending', 'in_progress', 'completed'];
+ /** Schemastery configuration for the todo tool consumer. */
+@@ -83,30 +83,33 @@
+     zod.null(),
+ ]);
+ /**
+- * Register the `todo_write` tool on `ctx.tools` and the `todos` unit on
+- * `ctx.sessionProjections`.
+- * @param ctx - registrant context carrying the tool and session-projection registries.
++ * Register the `todo_write` tool on `ctx.tools` and, when the session-projection seam is composed,
++ * the `todos` unit.
++ * @param ctx - registrant context carrying the tool registry.
+  * @param config - deployment's explicit todo policy.
+  */
+ export function apply(ctx, config) {
+     const allowParallel = config.allowParallelInProgress;
+-    // Standing-plan fold: latest whole todo/write list, cleared by the next
+-    // turn/start (turn/end keeps the finished checklist visible); null before the
+-    // first write or after a later turn begins; every other event returns the
+-    // same state reference.
+-    ctx.sessionProjections.register({
+-        key: 'todos',
+-        stateSchema: todosProjectionSchema,
+-        init: () => null,
+-        apply: (state, event) => {
+-            if (event.type === 'todo/write')
+-                return event.data.todos;
+-            if (event.type === 'turn/start')
+-                return null;
+-            return state;
+-        },
+-        wire: { viewSchema: todosProjectionSchema, view: state => state },
+-        stateVersion: 2,
++    // The unit child activates only when a projection registry is composed
++    // (headless assemblies without the seam stay unaffected). Standing-plan fold:
++    // latest whole todo/write list, cleared by the next turn/start (turn/end keeps
++    // the finished checklist visible); null before the first write or after a
++    // later turn begins; every other event returns the same state reference.
++    ctx.inject(['sessionProjections'], (projectionCtx) => {
++        projectionCtx.sessionProjections.register({
++            key: 'todos',
++            stateSchema: todosProjectionSchema,
++            init: () => null,
++            apply: (state, event) => {
++                if (event.type === 'todo/write')
++                    return event.data.todos;
++                if (event.type === 'turn/start')
++                    return null;
++                return state;
++            },
++            wire: { viewSchema: todosProjectionSchema, view: state => state },
++            stateVersion: 2,
++        });
+     });
+     ctx.tools.register(defineTool({
+         name: 'todo_write',
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-todo/lib/invariant.js	2026-09-11 14:27:15.133963152 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-todo/lib/invariant.js	2026-09-12 14:56:18.196485389 +0800
+@@ -31,51 +31,17 @@
+ 		if (typeof status !== "string" || !TODO_STATUSES.has(status)) fail(`todo/write carries unknown status ${JSON.stringify(status)}`);
+ 	}
+ }
+-/** Advance the trace after one event has committed. */
+-function advanceTrace(trace, event) {
+-	if (event.type === "turn/start") trace.open = true;
+-	if (event.type === "turn/end") trace.open = false;
+-}
+-/** Validate one package-owned event against the preceding committed trace. */
+-function validateEvent(event, trace, fail) {
+-	if (event.type !== "todo/write") return;
+-	validateTodos(event.data.todos, fail);
+-	if (!trace.open) fail("todo/write appended outside any open turn");
+-}
+-/** Validate one existing log in a single pass and return its tail trace. */
+-function seedTrace(session, fail) {
+-	const trace = { open: false };
+-	for (const event of session.snapshotEvents()) {
+-		validateEvent(event, trace, fail);
+-		advanceTrace(trace, event);
+-	}
+-	return trace;
++/** Validate the package-owned event fields and ignore unrelated events. */
++function validateEvent(event, fail) {
++	if (event.type === "todo/write") validateTodos(event.data.todos, fail);
+ }
+ /** Install validation for loaded and newly appended whole-list todo snapshots. */
+ const install = Object.assign((ctx, fail) => {
+-	const traces = /* @__PURE__ */ new WeakMap();
+-	const seed = (session) => {
+-		traces.set(session, seedTrace(session, fail));
+-	};
+-	const traceFor = (session) => {
+-		let trace = traces.get(session);
+-		if (trace === void 0) {
+-			trace = seedTrace(session, fail);
+-			traces.set(session, trace);
+-		}
+-		return trace;
+-	};
+-	for (const session of ctx.sessions.list()) seed(session);
+-	ctx.on("session/created", (session) => {
+-		seed(session);
+-	}, { global: true });
++	for (const session of ctx.sessions.list()) for (const event of session.events) validateEvent(event, fail);
+ 	ctx.on("internal/dispatch", (_mode, eventName, args) => {
+ 		if (eventName !== "session/event") return;
+-		const [session, event] = args;
+-		validateEvent(event, traceFor(session), fail);
+-	}, { global: true });
+-	ctx.on("session/event", (session, event) => {
+-		advanceTrace(traceFor(session), event);
++		const event = args[1];
++		validateEvent(event, fail);
+ 	}, { global: true });
+ }, { inject: ["sessions"] });
+ /**
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-tool-todo/lib/index.js	2026-09-11 14:27:15.095962613 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-tool-todo/lib/index.js	2026-09-12 14:56:18.196341571 +0800
+@@ -9,7 +9,7 @@
+ * @module @deepseek-ai/dsh-tool-todo
+ */
+ const name = "tool-todo";
+-const inject = ["tools", "sessionProjections"];
++const inject = ["tools"];
+ /** The valid {@link TodoItem} statuses, as a runtime set for input narrowing. */
+ const STATUSES = [
+ 	"pending",
+@@ -70,27 +70,29 @@
+ 	])
+ })), z$1.null()]);
+ /**
+-* Register the `todo_write` tool on `ctx.tools` and the `todos` unit on
+-* `ctx.sessionProjections`.
+-* @param ctx - registrant context carrying the tool and session-projection registries.
++* Register the `todo_write` tool on `ctx.tools` and, when the session-projection seam is composed,
++* the `todos` unit.
++* @param ctx - registrant context carrying the tool registry.
+ * @param config - deployment's explicit todo policy.
+ */
+ function apply(ctx, config) {
+ 	const allowParallel = config.allowParallelInProgress;
+-	ctx.sessionProjections.register({
+-		key: "todos",
+-		stateSchema: todosProjectionSchema,
+-		init: () => null,
+-		apply: (state, event) => {
+-			if (event.type === "todo/write") return event.data.todos;
+-			if (event.type === "turn/start") return null;
+-			return state;
+-		},
+-		wire: {
+-			viewSchema: todosProjectionSchema,
+-			view: (state) => state
+-		},
+-		stateVersion: 2
++	ctx.inject(["sessionProjections"], (projectionCtx) => {
++		projectionCtx.sessionProjections.register({
++			key: "todos",
++			stateSchema: todosProjectionSchema,
++			init: () => null,
++			apply: (state, event) => {
++				if (event.type === "todo/write") return event.data.todos;
++				if (event.type === "turn/start") return null;
++				return state;
++			},
++			wire: {
++				viewSchema: todosProjectionSchema,
++				view: (state) => state
++			},
++			stateVersion: 2
++		});
+ 	});
+ 	ctx.tools.register(defineTool({
+ 		name: "todo_write",

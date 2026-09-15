@@ -1,0 +1,574 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/README.i18n.yaml	2026-09-11 14:27:15.195964034 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/README.i18n.yaml	2026-09-12 14:56:18.766708343 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/typert/registry/README.md
+-README.md: c1ab98ae8ebe720a29eb4fb339f39e00ce593120
+-README.zh.md: 7bf90ff8fd02c4fb17c4f57d1af251a7a4bd3116
++README.md: fa227b1c8faf1abd5a6492d4b8fe7d0c51ceeef1
++README.zh.md: 62c5a2141de9ccdd564654658a464d721b77f97d
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/README.md	2026-09-11 14:27:15.169963664 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/README.md	2026-09-12 14:56:18.765147992 +0800
+@@ -1,131 +1,33 @@
+----
+-description: "The runtime Typert registry: stores generated package reflection, live Zod schemas, and Remote invocation descriptors, and resolves them for consumers."
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-typert-registry
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-`dsh-typert-registry` makes generated Typert artifacts queryable at runtime: each package's reflection — services, events, and objects — its live Zod schemas, and Remote invocation descriptors live under stable keys that consumers can query or resolve on demand. Registrations are atomic and fiber-scoped: a contribution lands whole or not at all and is withdrawn automatically when the registering component unloads. The same service hosts the lookup and scoped-Context provider registries that Remote calls resolve through. It performs no TypeScript analysis and generates no schemas; the generator and the loader handle those.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## Use this package
+-
+-Mount the registry in any Host or Client composition that stores or consumes generated Typert artifacts; it provides `ctx.typert`. There is no configuration.
+-
+-### Minimal setup
+-
+-Load the registry plugin; the Client face is installed the same way by the Client runtime's own metadata, and both faces run the same implementation:
+-
+-```yaml
+-- name: '@deepseek-ai/dsh-typert-registry'
+-```
+-
+-### Querying schemas and reflection
+-
+-Consumers read schemas with `get(key)`, `resolve(key)`, or `list(filter?)` and package reflection with `getPackage(name, face?)` or `listPackages(filter?)`. `resolve()` distinguishes a malformed key, an absent package, and a registered package that contributes no schema under that name, each with its own error. `toJSONSchema(key)` projects a live Zod schema to JSON Schema without caching.
+-
+-### Registering a contribution
+-
+-Generated artifacts register through the [loader](../loader/README.md) in Loader compositions; any other owner calls `ctx.typert.register(contribution)` directly and receives the exact disposer that withdraws it. Duplicate package-face identities, schema keys, invocation ids, or endpoints reject the whole batch before anything is committed.
+-
+-### Lookup and Context providers
+-
+-Remote calls resolve Host objects and scoped Contexts through `ctx.typert.lookups` and `ctx.typert.contexts`. `registerHost()` installs the Host wire declaration and its wire-to-Context resolver, while `configureHost()` replaces only that resolver. `registerClient()` installs the bidirectional Client adapter for the same merge-declared kind. Host-to-Client event sources carry their domain identity explicitly instead of projecting it back from a Context.
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
+-
+-<details>
+-<summary>Implementation internals — click to expand</summary>
++Runtime registry for generated Typert artifacts. A contribution carries one package face's business reflection and optional live Zod schemas; `ctx.typert` registers both atomically and withdraws them with the calling Cordis fiber. TypeScript analysis and code generation live in [`dsh-typert-generator`](../generator/README.md).
+ 
+-This section explains how the registry stores and owns contributions; the consumer API is covered in [Use this package](#use-this-package).
++Package reflection is keyed by `<package>#<face>`. Schemas are keyed by `<package>#<name>` and retain the producer's Zod instance. JSON Schema is computed on demand at the consumer edge.
+ 
+-### Design concept
++## Public API
+ 
+-The registry is built on one principle: a contribution is one atomic, fiber-owned commit. `register()` validates the package-face identity, schemas, and invocation descriptors first, then commits everything under a single Cordis effect whose disposer withdraws exactly that contribution. Duplicate identities fail at the owning operation boundary before any state changes.
++- `TypertRegistry` is the default plugin and provides `ctx.typert`.
++- `ctx.typert.lookups.register()` registers the wire declaration and default resolver owned by the business package; `configure()` registers a resolver owned by Host composition that may run asynchronously. Their lifetimes are independent: configuration may precede the provider, and unloading the configuration restores the default policy.
++- `ctx.typert.contexts.registerHost()` and `configureHost()` apply the same ownership split to scoped Context identity; `registerClient()` supplies the corresponding Client Context binder.
++- `register(contribution)` rejects malformed identities and duplicate package-face or schema keys before committing anything, then returns the exact Cordis effect disposer.
++- `get(key)`, `resolve(key)`, and `list(filter?)` query live schemas. `resolve()` distinguishes a malformed key, an absent package, and a package that contributes no schema under that name.
++- `getPackage(packageName, face?)` and `listPackages(filter?)` query generated service, event, and object reflection; the default face is `host`.
++- `toJSONSchema(key, params?)` projects a live schema with `z.toJSONSchema()` without caching the result.
++- `typertKey()` and `typertPackageKey()` compose the two stable identity forms.
+ 
+-### Sub-registries
++The `@deepseek-ai/dsh-typert-registry/types` subpath contains the pure contribution and record contracts. [`dsh-typert-loader`](../loader/README.md) discovers and registers generated host artifacts in Loader compositions; direct `ctx.typert.register()` supports other composition owners.
+ 
+-- `ctx.typert.local` — current-environment invocation definitions, including `hasSeen()` history for source-mode fallback.
+-- `ctx.typert.remotes` — consumer-selected contributions mounted in the calling fiber.
+-- `ctx.typert.lookups` — lookup providers plus composition-owned resolver overrides per key.
+-- `ctx.typert.contexts` — Host Context providers and Client Context binders per scoped key.
+-
+-Each sub-registry publishes `TypertRegistryChange` events to subscribed listeners; a throwing listener is logged and does not stop later listeners.
+-
+-### Identity and validation
+-
+-Keys are stable: `<package>#<face>` for reflection, `<package>#<name>` for schemas, and `<namespace>/<method>` for endpoints. Validation rejects names containing `#`, wire names outside the RPC segment grammar, duplicate keys, and lookup definitions whose wire declaration changes during the registry lifetime; strict codecs must carry a parseable schema.
+-
+-### Source map
+-
+-| File | Role |
+-|---|---|
+-| [`src/service.ts`](src/service.ts) | `TypertRegistry` service, stores, validation, effect wiring |
+-| [`src/types.ts`](src/types.ts) | Contribution, record, and filter types |
+-| [`src/client/index.ts`](src/client/index.ts) | Client face installing the same registry |
+-| — | No runtime invariant companion is published; schema and package-reflection records mutate together inside register/dispose, with no independent event or second data source to cross-check; duplicate identities fail at the owning operation boundary. |
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-Read these pages when the package-level contract is not enough; they move from the registry to what feeds it and what consumes it.
+-
+-- [Typert loader](../loader/README.md) — automatic registration of generated host artifacts.
+-- [Typert generator](../generator/README.md) — what produces the contributions the registry stores.
+-- [Typert protocol](../protocol/README.md) — the descriptors, codecs, and provider contracts the registry serves.
+-- [Typert subsystem reference](../../../docs/subsystems/typert.md) — the literal `ctx.typert` contract.
+-- [API Gateway reference](../../../docs/api-gateway.md) — the main consumer of invocation descriptors and providers.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+-None, as this runtime type registry's consumers (cordis_inspect, wire faces, gates) own any model-visible projection of registry contents.
++None, as the registry contributes no prompt, tool, or session event; consumers such as `cordis_inspect` own any model-visible projection.
+ 
+ #### KV Cache effect
+ 
+-No direct effect; a consumer that places reflection or schemas in a request owns the resulting prefix change.
++No direct effect. A consumer that places reflection in a request owns the resulting prefix change.
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits define what the registry stores and rejects; they are current package constraints, not a task backlog.
+-
+-- **No graph merging** — the registry stores generated reflection per face but does not merge host and client graphs or resolve TypeScript references; those are analyzer and emitter concerns.
+-- **Schema keys omit the face** — host and client run in separate contexts, so registering same-named schemas from both faces into one context is rejected as a duplicate.
+-- **JSON Schema projection is uncached** — `toJSONSchema()` returns a fresh document per call; consumers that project repeatedly own caching.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-None.
+-
+-</details>
++- The registry stores generated reflection but does not merge host and client graphs or resolve TypeScript references. Those are analyzer and emitter concerns.
++- Schema keys omit the face because host and client run in separate contexts. Registering same-named schemas from both faces into one context is rejected as a duplicate.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/README.zh.md	2026-09-11 14:27:15.171963693 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/README.zh.md	2026-09-12 14:56:18.765147992 +0800
+@@ -1,131 +1,33 @@
+----
+-description: "运行时 Typert 注册表：保存生成的包反射、实时 Zod schema 与 Remote 调用描述符，并按需为消费方解析。"
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-typert-registry
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-`dsh-typert-registry` 让生成的 Typert 产物在运行时可按需查询：每个包的反射——服务、事件与对象——其实时 Zod schema 与 Remote 调用描述符都保存在稳定键下，消费方可以按需查询或解析。注册是原子且按 fiber 作用域的：贡献要么整体落地要么完全不落地，并在注册组件卸载时自动撤销。同一服务还托管 Remote 调用所经由的 lookup 与作用域 Context 提供方注册表。它不执行 TypeScript 分析，也不生成 schema；这些由生成器与 loader 负责。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## 使用本包
+-
+-在存储或消费生成 Typert 产物的任何 Host 或 Client 组合中挂载本注册表；它提供 `ctx.typert`。没有配置。
+-
+-### 最小设置
+-
+-加载注册表插件；Client face 由 Client 运行时自身的元数据以同样方式安装，两个 face 运行同一实现：
+-
+-```yaml
+-- name: '@deepseek-ai/dsh-typert-registry'
+-```
+-
+-### 查询 schema 与反射
+-
+-消费方用 `get(key)`、`resolve(key)` 或 `list(filter?)` 读取 schema，用 `getPackage(name, face?)` 或 `listPackages(filter?)` 读取包反射。`resolve()` 能区分格式错误的键、未注册的包，以及已注册但未以该名称提供 schema 的包，各自给出不同的错误。`toJSONSchema(key)` 把实时 Zod schema 投影为 JSON Schema，且不缓存结果。
+-
+-### 注册贡献
+-
+-生成产物在 Loader 组合中通过 [loader](../loader/README.zh.md) 注册；其他所有者直接调用 `ctx.typert.register(contribution)`，并获得撤销它的同一资源释放函数。重复的包与 face 组合键、schema 键、调用 id 或端点会在提交任何内容之前拒绝整个批次。
+-
+-### Lookup 与 Context 提供方
+-
+-Remote 调用通过 `ctx.typert.lookups` 与 `ctx.typert.contexts` 解析 Host 对象与作用域 Context。`registerHost()` 安装 Host wire 声明及其 wire 到 Context 的 resolver，`configureHost()` 只替换该 resolver。`registerClient()` 为同一个 merge-declared kind 安装双向 Client adapter。Host 到 Client 的事件源显式携带领域 identity，而不从 Context 反向投影。
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## 理解实现
+-
+-<details>
+-<summary>实现细节——点击展开</summary>
++生成的 Typert 产物所用的运行时注册表。每个注册项包含某个包在一个 face 上的业务反射信息，以及可选的运行时 Zod schema；`ctx.typert` 会以原子方式同时注册两者，并在发起调用的 Cordis fiber 释放时一并移除它们。TypeScript 分析和代码生成由 [`dsh-typert-generator`](../generator/README.zh.md) 负责。
+ 
+-本节解释注册表如何存储与拥有贡献；消费方 API 已在[使用本包](#use-this-package)中说明。
++包反射信息以 `<package>#<face>` 为键。schema 以 `<package>#<name>` 为键，并保留生成方的 Zod 实例。系统按需在消费方边界计算 JSON Schema。
+ 
+-### 设计理念
++## 公开 API
+ 
+-注册表建立在一个原则之上：贡献是一次原子、由 fiber 拥有的提交。`register()` 先校验包与 face 组合键、schema 与调用描述符，再在单个 Cordis effect 下提交全部内容，该 effect 的资源释放函数精确撤销这一贡献。重复标识在拥有该操作的所有权边界失败，此时任何状态都未改变。
++- `TypertRegistry` 是默认插件，并提供 `ctx.typert`。
++- `ctx.typert.lookups.register()` 注册由业务包拥有的协议声明和默认解析器；`configure()` 注册由宿主组合拥有且可异步执行的解析器。两者的生命周期相互独立：配置可以先于提供方注册，卸载配置会恢复默认策略。
++- `ctx.typert.contexts.registerHost()` 和 `configureHost()` 对具作用域的上下文身份采用同样的所有权划分；`registerClient()` 提供对应的客户端上下文绑定器。
++- `register(contribution)` 会在提交任何内容之前拒绝格式错误的标识，以及重复的包与 face 组合键或 schema 键，随后返回 Cordis effect 提供的同一资源释放函数。
++- `get(key)`、`resolve(key)` 和 `list(filter?)` 查询当前有效的 schema。`resolve()` 能区分格式错误的键、未注册的包，以及已注册但未以该名称提供 schema 的包。
++- `getPackage(packageName, face?)` 和 `listPackages(filter?)` 查询生成的服务、事件和对象反射信息；默认 face 为 `host`。
++- `toJSONSchema(key, params?)` 使用 `z.toJSONSchema()` 投影当前有效的 schema，且不缓存结果。
++- `typertKey()` 和 `typertPackageKey()` 构造两种稳定的标识形式。
+ 
+-### 子注册表
++`@deepseek-ai/dsh-typert-registry/types` 子路径包含注册项和记录的纯类型约定。[`dsh-typert-loader`](../loader/README.zh.md) 会在 Loader 组合中发现并注册生成的宿主侧产物；其他组合所有者可以直接调用 `ctx.typert.register()`。
+ 
+-- `ctx.typert.local`——当前环境的调用定义，含供源码模式回退使用的 `hasSeen()` 历史。
+-- `ctx.typert.remotes`——在调用方 fiber 中挂载的、由消费方选中的贡献。
+-- `ctx.typert.lookups`——lookup 提供方，以及按键配置的组合方解析器覆盖。
+-- `ctx.typert.contexts`——按作用域键配置的 Host Context 提供方与 Client Context 绑定器。
+-
+-每个子注册表都会向已订阅的监听器发布 `TypertRegistryChange` 事件；抛异常的监听器会被记录日志，且不会阻止后续监听器。
+-
+-### 标识与校验
+-
+-键是稳定的：反射用 `<package>#<face>`，schema 用 `<package>#<name>`，端点用 `<namespace>/<method>`。校验会拒绝含 `#` 的名称、超出 RPC 端点段文法的 wire 名称、重复键，以及在其注册表生命周期内改变 wire 声明的 lookup 定义；严格编解码器必须携带可解析的 schema。
+-
+-### 源码地图
+-
+-| 文件 | 职责 |
+-|---|---|
+-| [`src/service.ts`](src/service.ts) | `TypertRegistry` 服务、存储、校验、effect 接线 |
+-| [`src/types.ts`](src/types.ts) | 贡献、记录与过滤器类型 |
+-| [`src/client/index.ts`](src/client/index.ts) | 安装同一注册表的 Client face |
+-| — | 不发布运行时不变式伴生入口；schema 与 package-reflection record 在 register/dispose 内一起变更，没有独立 event 或第二数据源可供交叉核对；重复 identity 在所属操作处失败。 |
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-当包级约定不够用时阅读以下页面；它们从注册表逐步进入供给它与消费它的内容。
+-
+-- [Typert loader](../loader/README.zh.md)——生成宿主产物的自动注册。
+-- [Typert 生成器](../generator/README.zh.md)——产生注册表所存贡献的包。
+-- [Typert 协议](../protocol/README.zh.md)——注册表所服务的描述符、编解码器与提供方约定。
+-- [Typert 子系统参考](../../../docs/subsystems/typert.zh.md)——字面的 `ctx.typert` 约定。
+-- [API Gateway 参考](../../../docs/api-gateway.zh.md)——调用描述符与提供方的主要消费方。
+-
+------
+-
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+-无，因为该运行时类型注册表的消费方（cordis_inspect、wire faces、门禁）拥有注册表内容的任何模型可见投影。
++无。注册表不会提供提示词、工具或会话事件；所有模型可见投影均由 `cordis_inspect` 等消费方负责。
+ 
+ #### KV Cache 影响
+ 
+-无直接影响；把反射或 schema 放入请求的消费方负责由此产生的前缀变化。
+-
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制说明注册表存储与拒绝什么；它们是当前包约束，不是任务积压。
+-
+-- **不合并图**——注册表按 face 存储生成的反射，但不合并宿主侧与客户端侧的图，也不解析 TypeScript 引用；这些是分析器与生成器的事。
+-- **schema 键不含 face**——宿主侧与客户端侧在不同上下文中运行，因此在同一上下文中注册来自两个 face 的同名 schema 会被作为重复项拒绝。
+-- **JSON Schema 投影不缓存**——`toJSONSchema()` 每次调用都返回全新文档；需要重复投影的消费方自行负责缓存。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
++无直接影响。将反射信息放入请求的消费方负责由此产生的前缀变化。
+ 
+-无。
++## 已知限制与暂缓事项
+ 
+-</details>
++- 注册表存储生成的反射信息，但不会合并宿主侧与客户端侧的图，也不会解析 TypeScript 引用；这些由分析器和产物输出器负责。
++- schema 键不包含 face，因为宿主侧和客户端侧在不同的上下文中运行。若在同一上下文中注册来自两个 face 的同名 schema，系统会将其作为重复项拒绝。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/lib/client.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/lib/client.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/lib/client.js	2026-09-11 14:27:15.087962499 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/lib/client.js	2026-09-12 14:56:18.761147473 +0800
+@@ -1056,22 +1056,22 @@
+ 			}
+ 			view(ctx) {
+ 				return {
+-					registerHost: (key, adapter) => this.registerHost(ctx, key, adapter),
++					registerHost: (key, provider) => this.registerHost(ctx, key, provider),
+ 					configureHost: (key, resolver) => this.configureHost(ctx, key, resolver),
+-					registerClient: (key, adapter) => this.registerClient(ctx, key, adapter),
++					registerClient: (key, binder) => this.registerClient(ctx, key, binder),
+ 					getHost: (key) => this.getHost(key),
+ 					getClient: (key) => this.clients.get(key)?.provider,
+ 					subscribe: (listener) => this.changes.subscribe(ctx, listener)
+ 				};
+ 			}
+ 			getHost(key) {
+-				const adapter = this.hosts.get(key)?.provider;
+-				if (adapter === void 0) return void 0;
++				const provider = this.hosts.get(key)?.provider;
++				if (provider === void 0) return void 0;
+ 				const resolver = this.hostResolvers.get(key)?.provider;
+-				if (resolver === void 0) return adapter;
++				if (resolver === void 0) return provider;
+ 				return {
+-					wire: adapter.wire,
+-					wireTypeSymbol: adapter.wireTypeSymbol,
++					wire: provider.wire,
++					wireTypeSymbol: provider.wireTypeSymbol,
+ 					resolve: (id) => resolver.resolve(id)
+ 				};
+ 			}
+@@ -1100,15 +1100,15 @@
+ 					};
+ 				}, `typert.contexts.configureHost(${JSON.stringify(key)})`);
+ 			}
+-			registerHost(ctx, key, adapter) {
++			registerHost(ctx, key, provider) {
+ 				validateSegment("Context key", key);
+-				validateWireName("Context wire field", adapter.wire);
+-				validateNonempty("Context wire type symbol", adapter.wireTypeSymbol);
+-				return this.registerProvider(ctx, this.hosts, "host-context", key, adapter);
++				validateWireName("Context wire field", provider.wire);
++				validateNonempty("Context wire type symbol", provider.wireTypeSymbol);
++				return this.registerProvider(ctx, this.hosts, "host-context", key, provider);
+ 			}
+-			registerClient(ctx, key, adapter) {
++			registerClient(ctx, key, binder) {
+ 				validateSegment("Context key", key);
+-				return this.registerProvider(ctx, this.clients, "client-context", key, adapter);
++				return this.registerProvider(ctx, this.clients, "client-context", key, binder);
+ 			}
+ 			registerProvider(ctx, table, kind, key, provider) {
+ 				if (table.has(key)) throw new Error(`typert: ${kind} provider "${key}" is already registered`);
+@@ -1176,7 +1176,7 @@
+ 			get lookups() {
+ 				return this.lookupStore.view(this.ctx);
+ 			}
+-			/** Host and Client Context adapters. */
++			/** Host Context providers and Client Context binders. */
+ 			get contexts() {
+ 				return this.contextStore.view(this.ctx);
+ 			}
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/lib/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/lib/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/lib/index.js	2026-09-11 14:27:15.112962854 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/lib/index.js	2026-09-12 14:56:18.762214515 +0800
+@@ -264,22 +264,22 @@
+ 	}
+ 	view(ctx) {
+ 		return {
+-			registerHost: (key, adapter) => this.registerHost(ctx, key, adapter),
++			registerHost: (key, provider) => this.registerHost(ctx, key, provider),
+ 			configureHost: (key, resolver) => this.configureHost(ctx, key, resolver),
+-			registerClient: (key, adapter) => this.registerClient(ctx, key, adapter),
++			registerClient: (key, binder) => this.registerClient(ctx, key, binder),
+ 			getHost: (key) => this.getHost(key),
+ 			getClient: (key) => this.clients.get(key)?.provider,
+ 			subscribe: (listener) => this.changes.subscribe(ctx, listener)
+ 		};
+ 	}
+ 	getHost(key) {
+-		const adapter = this.hosts.get(key)?.provider;
+-		if (adapter === void 0) return void 0;
++		const provider = this.hosts.get(key)?.provider;
++		if (provider === void 0) return void 0;
+ 		const resolver = this.hostResolvers.get(key)?.provider;
+-		if (resolver === void 0) return adapter;
++		if (resolver === void 0) return provider;
+ 		return {
+-			wire: adapter.wire,
+-			wireTypeSymbol: adapter.wireTypeSymbol,
++			wire: provider.wire,
++			wireTypeSymbol: provider.wireTypeSymbol,
+ 			resolve: (id) => resolver.resolve(id)
+ 		};
+ 	}
+@@ -308,15 +308,15 @@
+ 			};
+ 		}, `typert.contexts.configureHost(${JSON.stringify(key)})`);
+ 	}
+-	registerHost(ctx, key, adapter) {
++	registerHost(ctx, key, provider) {
+ 		validateSegment("Context key", key);
+-		validateWireName("Context wire field", adapter.wire);
+-		validateNonempty("Context wire type symbol", adapter.wireTypeSymbol);
+-		return this.registerProvider(ctx, this.hosts, "host-context", key, adapter);
++		validateWireName("Context wire field", provider.wire);
++		validateNonempty("Context wire type symbol", provider.wireTypeSymbol);
++		return this.registerProvider(ctx, this.hosts, "host-context", key, provider);
+ 	}
+-	registerClient(ctx, key, adapter) {
++	registerClient(ctx, key, binder) {
+ 		validateSegment("Context key", key);
+-		return this.registerProvider(ctx, this.clients, "client-context", key, adapter);
++		return this.registerProvider(ctx, this.clients, "client-context", key, binder);
+ 	}
+ 	registerProvider(ctx, table, kind, key, provider) {
+ 		if (table.has(key)) throw new Error(`typert: ${kind} provider "${key}" is already registered`);
+@@ -384,7 +384,7 @@
+ 	get lookups() {
+ 		return this.lookupStore.view(this.ctx);
+ 	}
+-	/** Host and Client Context adapters. */
++	/** Host Context providers and Client Context binders. */
+ 	get contexts() {
+ 		return this.contextStore.view(this.ctx);
+ 	}
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/lib: invariant.js
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/lib/types: invariant.d.ts
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/lib/types: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/lib/types/service.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/lib/types/service.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/lib/types/service.d.ts	2026-09-11 14:27:15.189963949 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/lib/types/service.d.ts	2026-09-12 14:56:18.766671730 +0800
+@@ -47,7 +47,7 @@
+     get remotes(): TypertRemoteRegistry;
+     /** Host object lookup providers. */
+     get lookups(): TypertLookupRegistry;
+-    /** Host and Client Context adapters. */
++    /** Host Context providers and Client Context binders. */
+     get contexts(): TypertContextRegistry;
+     /**
+      * Register one generated contribution atomically for the calling fiber.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/lib/types/service.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/lib/types/service.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/lib/types/service.js	2026-09-11 14:27:15.160963537 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/lib/types/service.js	2026-09-12 14:56:18.765147992 +0800
+@@ -267,24 +267,24 @@
+     }
+     view(ctx) {
+         return {
+-            registerHost: (key, adapter) => this.registerHost(ctx, key, adapter),
++            registerHost: (key, provider) => this.registerHost(ctx, key, provider),
+             configureHost: (key, resolver) => this.configureHost(ctx, key, resolver),
+-            registerClient: (key, adapter) => this.registerClient(ctx, key, adapter),
++            registerClient: (key, binder) => this.registerClient(ctx, key, binder),
+             getHost: key => this.getHost(key),
+             getClient: key => this.clients.get(key)?.provider,
+             subscribe: listener => this.changes.subscribe(ctx, listener),
+         };
+     }
+     getHost(key) {
+-        const adapter = this.hosts.get(key)?.provider;
+-        if (adapter === undefined)
++        const provider = this.hosts.get(key)?.provider;
++        if (provider === undefined)
+             return undefined;
+         const resolver = this.hostResolvers.get(key)?.provider;
+         if (resolver === undefined)
+-            return adapter;
++            return provider;
+         return {
+-            wire: adapter.wire,
+-            wireTypeSymbol: adapter.wireTypeSymbol,
++            wire: provider.wire,
++            wireTypeSymbol: provider.wireTypeSymbol,
+             resolve: id => resolver.resolve(id),
+         };
+     }
+@@ -309,15 +309,15 @@
+             };
+         }, `typert.contexts.configureHost(${JSON.stringify(key)})`);
+     }
+-    registerHost(ctx, key, adapter) {
++    registerHost(ctx, key, provider) {
+         validateSegment('Context key', key);
+-        validateWireName('Context wire field', adapter.wire);
+-        validateNonempty('Context wire type symbol', adapter.wireTypeSymbol);
+-        return this.registerProvider(ctx, this.hosts, 'host-context', key, adapter);
++        validateWireName('Context wire field', provider.wire);
++        validateNonempty('Context wire type symbol', provider.wireTypeSymbol);
++        return this.registerProvider(ctx, this.hosts, 'host-context', key, provider);
+     }
+-    registerClient(ctx, key, adapter) {
++    registerClient(ctx, key, binder) {
+         validateSegment('Context key', key);
+-        return this.registerProvider(ctx, this.clients, 'client-context', key, adapter);
++        return this.registerProvider(ctx, this.clients, 'client-context', key, binder);
+     }
+     registerProvider(ctx, table, kind, key, provider) {
+         if (table.has(key))
+@@ -378,7 +378,7 @@
+     get lookups() {
+         return this.lookupStore.view(this.ctx);
+     }
+-    /** Host and Client Context adapters. */
++    /** Host Context providers and Client Context binders. */
+     get contexts() {
+         return this.contextStore.view(this.ctx);
+     }
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-registry/package.json	2026-09-11 14:27:15.168963650 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-registry/package.json	2026-09-12 14:56:18.765147992 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-typert-registry",
+   "description": "Runtime registry for generated package reflection and Zod schemas",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -18,6 +18,10 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./client": {
+       "types": "./lib/types/client/index.d.ts",
+       "default": "./lib/client.js"
+@@ -38,20 +42,23 @@
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/client.js",
+     "lib/types/**/*.js",
+     "lib/types/**/*.d.ts"
+   ],
+   "license": "MIT",
+   "dependencies": {
+-    "zod": "^4.4.3"
++    "zod": "^4.4.3",
++    "@deepseek-ai/dsh-typert-protocol": "^0.1.1-rc.2"
+   },
+   "peerDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/dsh-typert-protocol": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   },
+   "scripts": {
+     "bundle": "tsdown",

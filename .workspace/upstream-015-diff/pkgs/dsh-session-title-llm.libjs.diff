@@ -1,0 +1,11 @@
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-session-title-llm/lib/index.js	2026-09-11 14:27:15.068962229 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-title-llm/lib/index.js	2026-09-12 14:56:15.733721039 +0800
+@@ -1,7 +1,6 @@
+ import z from "@deepseek-ai/schemastery";
+-import { BlockAssembler, createUserMessage } from "@deepseek-ai/dsh-llm";
++import { BlockAssembler, createUserMessage, deepFreeze } from "@deepseek-ai/dsh-llm";
+ import { MAX_TIMER_DELAY_MS, deadline } from "@deepseek-ai/dsh-timeout";
+-import { deepFreeze } from "@deepseek-ai/dsh-util-values";
+ import { SessionTitleProviderId, normalizeSessionTitle } from "@deepseek-ai/dsh-session-title";
+ //#region lib/types/index.js
+ /**

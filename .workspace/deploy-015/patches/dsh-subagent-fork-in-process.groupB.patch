@@ -1,0 +1,11 @@
+diff --git a/lib/index.js b/lib/index.js
+--- a/lib/index.js	2026-09-15 15:52:52.964895662 +0800
++++ b/lib/index.js	2026-09-15 15:52:52.966866380 +0800
+@@ -34,6 +34,7 @@
+ var ForkInProcessProvider = class {
+ 	name;
+ 	capabilities = {
++		agentOptions: true,
+ 		outputSchema: true,
+ 		depthLimit: true,
+ 		toolFilter: true,

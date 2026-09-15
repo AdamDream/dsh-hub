@@ -168,8 +168,8 @@ const VISION_DEFAULTS = Object.freeze({
 	apiKeyEnv: "OPENCODE_GO_API_KEY",
 	maxTokens: 2e3
 });
-/** Default analysis question sent with every pasted image (audit U-I). */
-const VISION_DEFAULT_QUESTION = "请用中文简洁描述这张图片的内容、主体颜色与图中文字。";
+/** Default analysis question sent with every pasted image (audit U-I; 2026-09-14 全落点改版：完整转录 + 审美/设计合理性分析). */
+const VISION_DEFAULT_QUESTION = "请用中文尽可能完整转录这张图片的全部可见内容（文字逐字、布局、颜色、元素位置），并附审美与设计合理性分析（配色、层级、对齐、可读性、改进建议）。";
 function errorText$1(error) {
 	return error instanceof Error ? error.message : String(error);
 }

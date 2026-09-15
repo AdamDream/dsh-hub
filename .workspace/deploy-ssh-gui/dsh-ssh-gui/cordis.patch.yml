@@ -1,0 +1,10 @@
+# dsh-ssh-gui —— profile 装配片段（与 deploy.sh --apply 追加内容一致）。
+# 「分布式控制」薄插件：统一节点（ssh:// 主机 + serial:// 本地串口 + serial-tcp://
+# TCP 串口服务器）的连接管理/状态/命令/文件/目录浏览 GUI。
+# insert-only：不 disable/覆盖任何底座行（audit-d §3.3 的 seam 冲突教训）。
+# 依赖底座行 ssh-web-channel（dsh-workspace-enhancement/web 提供 ctx.sshRegistry）、
+# dsh-base 的 dsh-credentials-local（ctx.credentials）与 @local/dsh-workerspace
+# （serial:// 后端模块，懒加载；未装时 serial 传输优雅降级）；服务懒取、行序无关。
+- insert:
+    - id: ssh-gui
+      name: '@local/dsh-ssh-gui'

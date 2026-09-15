@@ -1,0 +1,11 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -186,7 +186,7 @@
+ 		const signal = req.signal;
+ 		if (signal?.aborted) return "cancelled";
+ 		if (this.effectivePolicy(session) === "never") return "rejected";
+-		const answer = Promise.resolve().then(() => this.ctx.waterfall(scopeTarget(this, req.agent), "approval/request", req, () => Promise.resolve("unavailable"))).then((outcome) => OUTCOMES.includes(outcome) ? outcome : "unavailable", () => "unavailable");
++		const answer = Promise.resolve().then(() => this.ctx.waterfall(scopeTarget(req.agent, req.agent), "approval/request", req, () => Promise.resolve("unavailable"))).then((outcome) => OUTCOMES.includes(outcome) ? outcome : "unavailable", () => "unavailable");
+ 		if (signal === void 0) return answer;
+ 		return await new Promise((resolve) => {
+ 			const onAbort = () => {

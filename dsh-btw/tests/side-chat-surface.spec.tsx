@@ -378,6 +378,122 @@ describe('SideChatSurface controls', () => {
     expect(document.querySelector('[role="dialog"]')?.getAttribute('aria-label')).toBe('shot.png')
   })
 
+  it('numbers multi-image thumbnails with top-left badges', async () => {
+    currentSnapshot = {
+      ...openSnapshot,
+      messages: [{
+        id: 'm1', role: 'user' as const, text: '',
+        images: [
+          { attachmentId: 'att-1', mediaType: 'image/png' as const, name: 'a.png' },
+          { attachmentId: 'att-2', mediaType: 'image/png' as const, name: 'b.png' },
+        ],
+      }],
+    }
+    controller = {
+      ...controller,
+      readImage: vi.fn(async (id: string) => ({
+        ok: true as const, mediaType: 'image/png', data: `Zm9vLWJhc2U-${id}`,
+      })),
+    } as unknown as SideChatController
+    renderSurface()
+
+    await vi.waitFor(() => {
+      expect(mount.querySelectorAll('[class*="messageImageButton"]')).toHaveLength(2)
+    })
+    const buttons = [...mount.querySelectorAll<HTMLButtonElement>('[class*="messageImageButton"]')]
+    // 2026-09-14 btw-ui: white-black digit badge, first child of the button.
+    const badges = [...mount.querySelectorAll('[class*="messageImageBadge"]')]
+    expect(badges.map(badge => badge.textContent)).toEqual(['1', '2'])
+    expect(badges[0]?.getAttribute('aria-hidden')).toBe('true')
+    for (let i = 0; i < buttons.length; i += 1) {
+      expect(buttons[i]?.firstElementChild?.className.includes('messageImageBadge')).toBe(true)
+    }
+  })
+
+  it('leaves single-image thumbnails unnumbered', async () => {
+    currentSnapshot = {
+      ...openSnapshot,
+      messages: [{
+        id: 'm2', role: 'user' as const, text: '',
+        images: [{ attachmentId: 'att-3', mediaType: 'image/png' as const, name: 'c.png' }],
+      }],
+    }
+    controller = {
+      ...controller,
+      readImage: vi.fn(async () => ({ ok: true as const, mediaType: 'image/png', data: 'Yw==' })),
+    } as unknown as SideChatController
+    renderSurface()
+
+    await vi.waitFor(() => {
+      expect(mount.querySelectorAll('[class*="messageImageButton"]')).toHaveLength(1)
+    })
+    expect(mount.querySelector('[class*="messageImageBadge"]')).toBeNull()
+  })
+
+  it('opens the self-drawn lightbox from a thumbnail and closes via button, Escape, and mask', async () => {
+    currentSnapshot = {
+      ...openSnapshot,
+      messages: [{
+        id: 'm1', role: 'user' as const, text: '',
+        images: [{ attachmentId: 'att-1', mediaType: 'image/png' as const, name: 'shot.png' }],
+      }],
+    }
+    controller = {
+      ...controller,
+      readImage: vi.fn(async () => ({ ok: true as const, mediaType: 'image/png', data: 'aGVsbG8=' })),
+    } as unknown as SideChatController
+    renderSurface()
+
+    await vi.waitFor(() => {
+      expect(mount.querySelector('img[src="data:image/png;base64,aGVsbG8="]')).not.toBeNull()
+    })
+    const thumbnail = mount
+      .querySelector<HTMLImageElement>('img[src="data:image/png;base64,aGVsbG8="]')
+      ?.closest('button') as HTMLButtonElement
+
+    // The drawer (not rendered here) minimizes on window-level Escape; the
+    // lightbox must stop propagation so Escape closes only the preview.
+    const onWindowEscape = vi.fn()
+    window.addEventListener('keydown', onWindowEscape)
+    try {
+      act(() => { thumbnail.click() })
+      const dialog = document.querySelector('[role="dialog"][aria-label="shot.png"]')
+      expect(dialog).not.toBeNull()
+      // The preview shows the full image with the large lightbox class.
+      const preview = dialog?.querySelector('img[src="data:image/png;base64,aGVsbG8="]')
+      expect(preview).not.toBeNull()
+      expect(preview?.className.includes('lightboxImage')).toBe(true)
+      expect(document.querySelector('[class*="lightboxClose"]')).not.toBeNull()
+
+      // Close button closes and restores focus to the opener thumbnail.
+      act(() => {
+        document.querySelector('[class*="lightboxClose"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      })
+      expect(document.querySelector('[role="dialog"][aria-label="shot.png"]')).toBeNull()
+      expect(document.activeElement).toBe(thumbnail)
+
+      // Reopen; Escape closes the preview and does NOT reach the window
+      // listener (drawer stays put), then focus returns to the thumbnail.
+      act(() => { thumbnail.click() })
+      expect(document.querySelector('[role="dialog"][aria-label="shot.png"]')).not.toBeNull()
+      onWindowEscape.mockClear()
+      act(() => { document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' })) })
+      expect(document.querySelector('[role="dialog"][aria-label="shot.png"]')).toBeNull()
+      expect(onWindowEscape).not.toHaveBeenCalled()
+      expect(document.activeElement).toBe(thumbnail)
+
+      // Reopen; mask click closes.
+      act(() => { thumbnail.click() })
+      expect(document.querySelector('[role="dialog"][aria-label="shot.png"]')).not.toBeNull()
+      act(() => {
+        document.querySelector('[class*="lightboxMask"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      })
+      expect(document.querySelector('[role="dialog"][aria-label="shot.png"]')).toBeNull()
+    } finally {
+      window.removeEventListener('keydown', onWindowEscape)
+    }
+  })
+
   it('shows the running banner with the in-flight tool as the current action', () => {
     currentSnapshot = {
       ...openSnapshot,

@@ -1,0 +1,25 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -147,10 +147,10 @@
+ async function analyzeImageBytes(options, apiKey, mediaType, base64, question, signal) {
+   const isVideo = mediaType.startsWith("video/");
+   const prompt = question !== void 0 && question.trim().length > 0
+-    ? `Analyze the attached ${isVideo ? "video" : "image"} and answer the following question. ${question.trim()}`
++    ? `Analyze the attached ${isVideo ? "video" : "image"} and answer the following question. ${question.trim()} In any case, transcribe the entire visible content of the attached ${isVideo ? "video" : "image"} as completely as possible — all text verbatim, layout, colors, element positions, objects, and captions — and, if it is a UI, screenshot, or interface, also provide a concise aesthetic and design-rationale analysis covering color scheme, visual hierarchy, alignment, readability, and concrete improvement suggestions.`
+     : isVideo
+-      ? "Describe the attached video in detail, including how its content changes over time."
+-      : "Describe the attached image in detail.";
++      ? "Transcribe the entire visible content of the attached video as completely as possible — all text verbatim, layout, colors, element positions, objects, and how the content changes over time — and, if it shows a UI, screenshot, or interface, also provide a concise aesthetic and design-rationale analysis covering color scheme, visual hierarchy, alignment, readability, and concrete improvement suggestions."
++      : "Transcribe the entire visible content of the attached image as completely as possible — all text verbatim, layout, colors, element positions, objects, and captions — and, if it is a UI, screenshot, or interface, also provide a concise aesthetic and design-rationale analysis covering color scheme, visual hierarchy, alignment, readability, and concrete improvement suggestions.";
+   const headers = {
+     "authorization": `Bearer ${apiKey}`,
+     ...options.xApiKey === false ? {} : { "x-api-key": apiKey },
+@@ -235,7 +235,7 @@
+   const options = () => resolveOptions(current());
+   ctx.tools.register(defineTool({
+     name: "analyze_image",
+-    description: "Analyze a PNG/JPEG/WebP/GIF image file or an MP4/M4V/WebM/MOV/MKV/AVI video file with a multimodal model and return a text description or answer. Returns text only, so it works with ANY model — including text-only models that cannot receive images directly. Use this whenever you need to understand what is in an image or video.",
++    description: "Analyze a PNG/JPEG/WebP/GIF image file or an MP4/M4V/WebM/MOV/MKV/AVI video file with a multimodal model and return a text description or answer. Returns text only, so it works with ANY model — including text-only models that cannot receive images directly. Use this whenever you need to understand what is in an image or video. The returned description prefers a complete transcription of the visible content (text, layout, colors, element positions) plus an aesthetic/design-rationale assessment when applicable.",
+     parameters: {
+       file_path: {
+         type: "string",

@@ -1,0 +1,35 @@
+remote: error: GH013: Repository rule violations found for refs/heads/main.        
+remote: 
+remote: - GITHUB PUSH PROTECTION        
+remote:   —————————————————————————————————————————        
+remote:     Resolve the following violations before pushing again        
+remote: 
+remote:     - Push cannot contain secrets        
+remote: 
+remote:             
+remote:      (?) Learn how to resolve a blocked push        
+remote:      https://docs.github.com/code-security/secret-scanning/working-with-secret-scanning-and-push-protection/working-with-push-protection-from-the-command-line#resolving-a-blocked-push        
+remote:             
+remote:             
+remote:       —— Google OAuth Client ID ————————————————————————————        
+remote:        locations:        
+remote:          - commit: a521d2d4a896b3ba2f5aa763ff052f1ebed494e6        
+remote:            path: cc-switch-src/src-tauri/src/services/subscription.rs:1042        
+remote:             
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.        
+remote:        https://github.com/AdamDream/dsh-hub/security/secret-scanning/unblock-secret/3JIgSLXlhYQoA8KwKkiSIONttCT        
+remote:             
+remote:             
+remote:       —— Google OAuth Client Secret ————————————————————————        
+remote:        locations:        
+remote:          - commit: a521d2d4a896b3ba2f5aa763ff052f1ebed494e6        
+remote:            path: cc-switch-src/src-tauri/src/services/subscription.rs:1043        
+remote:             
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.        
+remote:        https://github.com/AdamDream/dsh-hub/security/secret-scanning/unblock-secret/3JIgSL332wcgqytiSv86YdWBjfk        
+remote:             
+remote: 
+remote: 
+To github.com:AdamDream/dsh-hub.git
+ ! [remote rejected] main -> main (push declined due to repository rule violations)
+error: 无法推送一些引用到 'github.com:AdamDream/dsh-hub.git'

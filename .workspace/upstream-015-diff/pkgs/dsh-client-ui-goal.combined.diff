@@ -1,0 +1,921 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/README.i18n.yaml	2026-09-11 14:27:15.196964048 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/README.i18n.yaml	2026-09-12 14:56:14.574068425 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/client/ui-goal/README.md
+-README.md: 1fbc1c7df944f1106fedcff79f6b9df35bda480d
+-README.zh.md: 01f8902377c98dc39d64b3bfe26108b68cb29fe0
++README.md: c79d6f5a68f1b4b40f4b57f5745feeed63a25fcd
++README.zh.md: c2d000dd8141a989c67f2e8dc6786ed2b5067a6b
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/README.md	2026-09-11 14:27:15.111962840 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/README.md	2026-09-12 14:56:14.565851778 +0800
+@@ -1,69 +1,16 @@
+----
+-description: "Goal surface for the Web GUI: the composer-context strip that shows the current goal and edits, pauses, resumes, or clears it; for users and maintainers of the goal experience."
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-client-ui-goal
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-The Web GUI goal surface shows both the durable goal state and its current process-local activation, and lets users edit, pause, resume, or clear the goal; rejected changes appear inline. It displays durable `/goal` runs as `Command input` bubbles so commands from users or the model remain visible after reload. Goal creation remains outside this package. Shipped Web presets other than `minimal` make `/goal` available to agents.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## Use this package
+-
+-Mount this plugin alongside `ui-conversation` and the goal domain package; the strip then appears as the second card in the composer-context stack (after Todo, before Queue) whenever the session has a goal. An armed active goal offers pause; an active-but-disarmed or paused goal offers resume; edit rewrites the objective; clear removes the goal and suppresses the strip until the projection catches up.
+-
+-### The command-input bubble
+-
+-Each durable `/goal` run projects as a right-aligned user-style bubble labeled `Command input` (or `指令输入`), rendered before the generic command result row; the leading `/goal` token renders as a command reference chip in the code face through ui-primitives `projectUserText`, and the objective stays plain body text. It carries no timestamp, copy, or branch actions, and reloading reconstructs it from the run.
+-
+-### Failures
+-
+-A rejected mutation surfaces the Remote error inline on the strip; loading, absent, completed, and successfully cleared goals render nothing.
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
+-
+-<details>
+-<summary>Implementation internals — click to expand</summary>
++Goal surface plugin, browser half: the `GoalBar` strip is the second standalone card in the `conversation.input.dock` composer-context stack (order 10, after Todo and before Queue). The live goal arrives through `useProjection('goal')` — the host-computed whole value seeded by the history tail page and updated by `session/projection` frames — so the plugin owns no domain store, refresh chain, or event listener. The slot inject face carries only the four mutation verbs (edit / pause / resume / clear through `ctx.remote.goals` — an active goal offers the pause action, a paused one resume); each reads the CAS ref from the session's current projected value at call time and surfaces the rejected Remote error inline. The strip single-flights mutations synchronously because React's pending render cannot fence same-frame clicks; after a successful clear it immediately suppresses that exact goal id while the authoritative null projection catches up. Goal creation stays on the `/goal` host command; loading, absent, completed, and successfully cleared goals render nothing.
+ 
+-The durable goal arrives through `useProjection('goal')` (seeded by the history tail page and updated by `session/projection` frames). The inject face carries a registrant-private activation hook source plus the four mutation verbs. That source starts only while the framework hook observes it, reads `ctx.remote.goals.get`, subscribes to `goal/activation-changed`, and refreshes on running-state or connection resets. Live-event epochs invalidate in-flight reads, so a stale HTTP result cannot overwrite a newer activation edge; running refreshes retain the last known activation until the read resolves. The strip owns no domain store or cross-plugin cache. Each mutation reads the CAS ref from the session's current projected value at call time, and the RPC's compare-and-set is the staleness guard. The strip single-flights mutations synchronously because a pending render cannot fence same-frame clicks. The command-input projection is a separate Conversation Definition that builds a `command-input` Chat Node before the generic command result Node; it never creates `user/message` or a model turn.
++The plugin separately projects each durable `/goal` `command/run` through its own Conversation Definition. It builds a `command-input` Chat Node before the generic command result Node and registers that Node's keyed renderer as a right-aligned 14px/22px monospace user-style bubble with the localized group name `Command input` / `命令输入` and no timestamp, copy, or branch actions. The visible non-command Node activates fresh Chat; reload reconstructs it from the run, while a history window containing only `command/done` keeps only the generic result row. This projection never creates `user/message` or a model turn.
+ 
+-</details>
++The `/client` exports are the plugin body (`apply`/`inject`), the `GoalBar`/`GoalDock` components, and the injected verb face types.
+ 
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-Read these pages when the goal surface is not enough. They move from the browser strip to the goal domain and the slots it fills.
+-
+-- [dsh-goal](../../goal/goal/README.md) — the goal domain, projection, and `/goal` command this surface reads and mutates.
+-- [ui-conversation](../ui-conversation/README.md) — declares the `conversation.input.dock` slot and owns the composer.
+-- [Client package map](../README.md) — adjacent browser UI packages.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+-Indirectly, through the `goals/edit`, `goals/pause`, `goals/resume`, and `goals/clear` mutations the strip routes; the host GoalService owns the model-visible goal context message those mutations queue.
++Indirectly, through the `goals/edit`, `goals/pause`, `goals/resume`, and `goals/clear` Remote methods the strip invokes: each accepted mutation commits in a durable `agent/inbox/spliced` insertion, which the goal projection folds immediately, and queues a `goal/change` context message. The model sees that context only if a later pre-step admits it; discarding the queued message does not roll back the projected state. The strip itself adds no prompt content.
+ 
+ #### KV Cache effect
+ 
+@@ -71,21 +18,4 @@
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits define the current goal surface. They are current package constraints, not a goal-domain comparison or a task backlog.
+-
+-- **Preset-independent host state** — switching an active session to `minimal` leaves its host-owned goal intact. `/goal` and goal tools disappear, while this strip can still edit, pause, resume, or clear the goal.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-None.
+-
+-</details>
+-
+-**Runtime invariant:** No companion is published. A single GoalBar dock registration whose disposal is proven by the HMR-safety spec — durable state arrives on the goal projection, process-local activation arrives through the entry's private hook source, and that source subscribes only while the framework hook observes it.
++- **Durable phase only** — the projection omits process-local activation, so the strip cannot distinguish an active-but-disarmed goal from an armed one; resume re-arms through the RPC side. There is no host-live activation channel.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/README.zh.md	2026-09-11 14:27:15.120962968 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/README.zh.md	2026-09-12 14:56:14.571533673 +0800
+@@ -1,91 +1,21 @@
+----
+-description: "Web GUI 的 goal 表面：显示当前目标并支持编辑、暂停、恢复或清除的 composer 上下文条带；供 goal 体验的用户与维护者阅读。"
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-client-ui-goal
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-Web GUI 的 goal 表面同时显示持久 goal 状态及当前的进程本地激活状态，供用户编辑、暂停、恢复或清除 goal；被拒绝的变更会内联显示。它把持久的 `/goal` 运行显示为 `Command input` 气泡，让用户或模型发出的命令在重新加载后仍然可见。goal 创建仍不归本包。除 `minimal` 外，随附的 Web preset 都会向 agent 提供 `/goal`。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## 使用本包
+-
+-与 `ui-conversation` 及 goal 领域包一起挂载本插件；只要会话存在目标，条带就会作为 composer 上下文堆栈的第二张卡片出现（位于 Todo 之后、Queue 之前）。已 armed 的 active goal 提供暂停动作；active-but-disarmed 或 paused 的 goal 提供恢复；编辑重写目标文本；清除移除目标，并在投影追上之前抑制条带。
+-
+-### 指令输入气泡
+-
+-每条持久的 `/goal` 运行都投影为一个右对齐的用户样式气泡，标签为 `Command input`（或 `指令输入`），渲染在通用命令结果行之前；开头的 `/goal` token 经 ui-primitives 的 `projectUserText` 以等宽代码字体渲染为指令引用 chip，目标文本保持正文字体。它不含时间戳、复制或分支操作，重新加载时会依据运行记录重建。
+-
+-### 失败
+-
+-被拒绝的变更会把 Remote 错误内联呈现到条带上；加载中、无目标、已完成与成功清除的目标一律不渲染。
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## 理解实现
+-
+-<details>
+-<summary>实现细节——点击展开</summary>
++Goal 界面插件（浏览器端部分）：`GoalBar` 条带是 `conversation.input.dock` composer 上下文堆栈中的第二张独立卡片（order 10，位于 Todo 之后、Queue 之前）。活值经 `useProjection('goal')` 到达——host 计算的全量值由历史尾页播种、由 `session/projection` 帧更新——因此本插件不持有领域 store、不设刷新链、不挂事件监听。slot 注入面只携带四个变更动词（edit / pause / resume / clear，经 `ctx.remote.goals` 调用——active 的 goal 提供暂停动作，paused 的提供恢复）；每个动词在调用时从会话当前投影值读取 CAS ref，并将 Remote 调用的拒绝错误内联呈现。由于 React 的 pending 渲染无法拦住同一帧内的点击，横条会同步为变更建立 single-flight 防护；清除成功后，会立即抑制该 goal id 对应的目标显示，直到权威的 null 投影追上。goal 的创建仍归 `/goal` host 命令；加载中、无 goal、已完成和已成功清除的 goal 一律不渲染。
+ 
+-持久 goal 经 `useProjection('goal')` 到达（由历史尾页播种、`session/projection` 帧更新）。注入面携带 registrant-private 的 activation hook source 与四个变更动词。该 source 仅在框架 hook 观察期间订阅，读取 `ctx.remote.goals.get`、订阅 `goal/activation-changed`，并在 running 状态或连接 reset 时刷新。live event epoch 会让在途读取失效，因此较旧的 HTTP 响应不能覆盖更新的 activation 边界；running 刷新会保留最后一次已知 activation，直到读取完成。条带不持有领域 store 或跨插件缓存。每个变更在调用时从会话当前投影值读取 CAS ref，比较并交换（RPC 的 CAS）就是陈旧性护栏。由于 React 的 pending 渲染无法拦住同一帧内的点击，条带会同步为变更建立 single-flight 防护。指令输入投影是独立的 Conversation Definition，在通用命令结果 Node 之前构建 `command-input` Chat Node；它绝不创建 `user/message` 或模型轮次。
++该插件还会通过自有 Conversation Definition 投影每条持久 `/goal` `command/run`。它在通用命令结果 Node 之前构建一个 `command-input` Chat Node，并为该 Node 注册 keyed renderer；renderer 将其呈现为右对齐、使用 14px/22px 等宽字体的用户样式气泡，使用本地化分组名称 `Command input`／`命令输入`，且不含时间戳、复制或分支操作。可见的非命令 Node 会激活新 Chat；重新加载时会根据 run 重建该 Node，而仅包含 `command/done` 的历史窗口只保留通用结果行。该投影绝不会创建 `user/message` 或模型轮次。
+ 
+-</details>
++`/client` 的导出接口包括插件本体（`apply`/`inject`）、`GoalBar`/`GoalDock` 组件与注入动词面类型。
+ 
+------
+-
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-当 goal 表面不够用时阅读以下页面。它们从浏览器条带进入 goal 领域与它所填充的槽位。
+-
+-- [dsh-goal](../../goal/goal/README.zh.md)——本表面读取并变更的 goal 领域、投影与 `/goal` 命令。
+-- [ui-conversation](../ui-conversation/README.zh.md)——声明 `conversation.input.dock` 槽位并拥有 composer。
+-- [客户端包映射](../README.zh.md)——相邻的浏览器 UI 包。
+-
+------
+-
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+-间接影响：条带路由 `goals/edit`、`goals/pause`、`goals/resume` 与 `goals/clear` 变更；宿主 GoalService 拥有这些变更排队的模型可见 goal 上下文消息。
++间接影响：条带通过调用 `goals/edit`、`goals/pause`、`goals/resume` 和 `goals/clear` Remote 方法提交变更；每次被接受的变更都会在持久 `agent/inbox/spliced` 插入项中提交，goal 投影会立即折叠该插入项，同时将一条 `goal/change` 上下文消息排队。只有后续 pre-step 准入该上下文时，模型才会看到它；丢弃已排队的消息不会回滚投影状态。条带自身不添加任何提示词内容。
+ 
+ #### KV Cache 影响
+ 
+ 除非已排队的 goal 上下文获准，否则没有影响。获准的上下文会像其他消息一样扩展历史尾部；准入前被丢弃的插入项不会影响缓存。
+ 
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制界定了当前 goal 表面。它们是当前包约束，不是 goal 领域对比或任务积压。
+-
+-- **Host 状态与 preset 无关**——把活跃会话切换到 `minimal` 后，Host 拥有的 goal 仍会保留。`/goal` 与 goal 工具会消失，但该条带仍可编辑、暂停、恢复或清除 goal。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
+-
+-无。
+-
+-</details>
++## 已知限制与暂缓事项
+ 
+-**运行时不变式：** 不发布伴生入口。插件只注册一个 GoalBar dock，HMR 测试覆盖释放；持久状态来自 goal projection，进程本地 activation 来自入口私有 hook source，且该 source 只在框架 hook 观察期间订阅。
++- **只反映持久 phase**——投影省略进程本地 activation，因此条带无法区分 active-but-disarmed 与 armed 状态；resume 通过 RPC 重新置为 armed 状态。不存在 host 实时 activation 通道。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/client.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/client.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/client.js	2026-09-11 14:27:15.074962314 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/client.js	2026-09-12 14:56:14.564532498 +0800
+@@ -7,124 +7,8 @@
+ 		let react_jsx_runtime = require("react/jsx-runtime");
+ 		let react = require("react");
+ 		let _deepseek_ai_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
+-		//#region lib/types/client/activation-source.js
+-		/** Goal activation observable that orders Remote reads and live activation events. */
+-		/** Compare two empty-or-populated activation snapshots by value. */
+-		function sameSnapshot(left, right) {
+-			return left.id === right.id && left.revision === right.revision && left.activation === right.activation;
+-		}
+-		/** Return the current active CAS ref, or undefined when the goal is not active. */
+-		function activeRef(projection) {
+-			return projection?.goal.phase === "active" ? projection.goal : void 0;
+-		}
+-		/**
+-		* Create one registrant-private activation source. The source subscribes only
+-		* while a framework hook observes it, so unmount releases the Remote event,
+-		* projection, running-snapshot, and reset listeners.
+-		* @param deps - projection, session, Remote read, and live-event inputs.
+-		* @returns stable snapshot source consumed by `useGoalActivation`.
+-		*/
+-		function createGoalActivationSource(deps) {
+-			let snapshot = {};
+-			let subscriptions = 0;
+-			let disposers = [];
+-			let running = deps.session.getSnapshot().running;
+-			let eventEpoch = 0;
+-			let projectionEpoch = 0;
+-			let readEpoch = 0;
+-			const listeners = /* @__PURE__ */ new Set();
+-			const publish = (next) => {
+-				if (sameSnapshot(snapshot, next)) return;
+-				snapshot = next;
+-				for (const listener of listeners) listener();
+-			};
+-			const startRead = (ref) => {
+-				if (ref === void 0) return;
+-				const read = ++readEpoch;
+-				const startedAtEvent = eventEpoch;
+-				const startedAtProjection = projectionEpoch;
+-				deps.getGoal().then((result) => {
+-					if (read !== readEpoch || startedAtEvent !== eventEpoch || startedAtProjection !== projectionEpoch) return;
+-					if (!result.ok) return;
+-					const goal = result.value;
+-					/* v8 ignore next 4 -- projection drive is the authoritative clear edge; an active projection with no live goal is transient. */
+-					if (goal === void 0) {
+-						if (activeRef(deps.projection.getSnapshot()) === void 0) publish({});
+-						return;
+-					}
+-					publish({
+-						id: goal.id,
+-						revision: goal.revision,
+-						activation: goal.activation
+-					});
+-				});
+-			};
+-			const refreshProjection = () => {
+-				projectionEpoch++;
+-				const ref = activeRef(deps.projection.getSnapshot());
+-				if (ref === void 0) {
+-					/* v8 ignore next -- clearing an already-empty activation snapshot is idempotent. */
+-					if (snapshot.id !== void 0) publish({});
+-					return;
+-				}
+-				if (snapshot.id !== ref.id || snapshot.revision !== ref.revision) publish({
+-					id: ref.id,
+-					revision: ref.revision
+-				});
+-				startRead(ref);
+-			};
+-			const onActivation = (goal) => {
+-				eventEpoch++;
+-				readEpoch++;
+-				publish(goal === void 0 ? {} : {
+-					id: goal.id,
+-					revision: goal.revision,
+-					activation: goal.activation
+-				});
+-			};
+-			const onRunning = () => {
+-				const next = deps.session.getSnapshot().running;
+-				if (next === running) return;
+-				running = next;
+-				startRead(activeRef(deps.projection.getSnapshot()));
+-			};
+-			const onReset = () => {
+-				eventEpoch++;
+-				projectionEpoch++;
+-				startRead(activeRef(deps.projection.getSnapshot()));
+-			};
+-			const start = () => {
+-				disposers = [
+-					deps.projection.subscribe(refreshProjection),
+-					deps.session.subscribe(onRunning),
+-					deps.subscribeActivation(onActivation),
+-					deps.subscribeReset(onReset)
+-				];
+-				running = deps.session.getSnapshot().running;
+-				refreshProjection();
+-			};
+-			const stop = () => {
+-				for (const dispose of disposers) dispose();
+-				disposers = [];
+-				readEpoch++;
+-			};
+-			return {
+-				getSnapshot: () => snapshot,
+-				subscribe(listener) {
+-					listeners.add(listener);
+-					if (subscriptions === 0) start();
+-					subscriptions++;
+-					return () => {
+-						listeners.delete(listener);
+-						subscriptions--;
+-						if (subscriptions === 0) stop();
+-					};
+-				}
+-			};
+-		}
+-		//#endregion
+ 		//#region \0dsh-css:/home/runner/work/deepseek-harness/deepseek-harness/packages/client/ui-goal/src/client/GoalBar.module.css.mjs
+-		const css$1 = ".nLMEza_dock{box-sizing:border-box;width:calc(100% - var(--dsh-composer-side-clearance) - var(--dsh-composer-side-clearance) - var(--dsh-composer-dock-inset) - var(--dsh-composer-dock-inset) - var(--dsh-composer-dock-inset) - var(--dsh-composer-dock-inset));margin:0 auto}.nLMEza_bar{box-sizing:border-box;width:100%;max-width:calc(var(--dsh-composer-card-max-width) - 4 * var(--dsh-composer-dock-inset));border:.5px solid var(--dsw-alias-border-l1);background:var(--dsw-specific-tip);border-radius:12px;align-items:center;gap:10px;height:36px;margin:0 auto;padding:4px 5px 4px 12px;display:flex}.nLMEza_goalGlyph{color:var(--dsw-alias-label-tertiary);flex:none;display:inline-flex}.nLMEza_label{color:var(--dsw-alias-label-primary);flex:none;font-size:13px;font-weight:500;line-height:24px}.nLMEza_objective{min-width:0;color:var(--dsw-alias-label-primary-dimmed);text-overflow:ellipsis;white-space:nowrap;flex:1;font-size:13px;line-height:20px;overflow:hidden}.nLMEza_error{min-width:0;color:var(--dsw-alias-state-error-primary);text-overflow:ellipsis;white-space:nowrap;flex:1;font-size:12px;line-height:20px;overflow:hidden}.nLMEza_objectiveInput{border:.5px solid var(--dsw-alias-border-l4);background:var(--dsw-alias-bg-base);min-width:0;height:26px;color:var(--dsw-alias-label-primary);border-radius:6px;outline:none;flex:1;padding:0 8px;font-size:13px;line-height:20px}.nLMEza_objectiveInput:focus{border-color:var(--dsw-alias-state-business-primary)}.nLMEza_objectiveInput::placeholder{color:var(--dsw-alias-label-caption)}.nLMEza_actions{flex:none;align-items:center;gap:10px;display:flex}.nLMEza_iconBtn{corner-shape:round;width:28px;height:28px;color:var(--dsw-alias-label-tertiary);cursor:pointer;background:0 0;border:none;border-radius:999px;justify-content:center;align-items:center;padding:0;display:inline-flex}.nLMEza_iconBtn:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-secondary)}.nLMEza_iconBtn:disabled{opacity:.4;cursor:default}";
++		const css$1 = ".nLMEza_dock{box-sizing:border-box;width:calc(100% - var(--dsh-composer-side-clearance) - var(--dsh-composer-side-clearance) - var(--dsh-composer-dock-inset) - var(--dsh-composer-dock-inset) - var(--dsh-composer-dock-inset) - var(--dsh-composer-dock-inset));margin:0 auto}.nLMEza_bar{box-sizing:border-box;width:100%;max-width:calc(var(--dsh-composer-card-max-width) - 4 * var(--dsh-composer-dock-inset));border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-specific-tip);border-radius:12px;align-items:center;gap:10px;height:36px;margin:0 auto;padding:4px 5px 4px 12px;display:flex}.nLMEza_goalGlyph{color:var(--dsw-alias-label-tertiary);flex:none;display:inline-flex}.nLMEza_label{color:var(--dsw-alias-label-primary);flex:none;font-size:13px;font-weight:500;line-height:24px}.nLMEza_objective{min-width:0;color:var(--dsw-alias-label-primary-dimmed);text-overflow:ellipsis;white-space:nowrap;flex:1;font-size:13px;line-height:20px;overflow:hidden}.nLMEza_error{min-width:0;color:var(--dsw-alias-state-error-primary);text-overflow:ellipsis;white-space:nowrap;flex:1;font-size:12px;line-height:20px;overflow:hidden}.nLMEza_objectiveInput{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);min-width:0;height:26px;color:var(--dsw-alias-label-primary);border-radius:6px;outline:none;flex:1;padding:0 8px;font-size:13px;line-height:20px}.nLMEza_objectiveInput:focus{border-color:var(--dsw-alias-state-business-primary)}.nLMEza_objectiveInput::placeholder{color:var(--dsw-alias-label-caption)}.nLMEza_actions{flex:none;align-items:center;gap:10px;display:flex}.nLMEza_iconBtn{width:28px;height:28px;color:var(--dsw-alias-label-tertiary);cursor:pointer;background:0 0;border:none;border-radius:999px;justify-content:center;align-items:center;padding:0;display:inline-flex}.nLMEza_iconBtn:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-secondary)}.nLMEza_iconBtn:disabled{opacity:.4;cursor:default}";
+ 		const tagId$1 = "@deepseek-ai/dsh-client-ui-goal/GoalBar.module.css";
+ 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId$1) + "]") === null) {
+ 			const tag = document.createElement("style");
+@@ -149,11 +33,11 @@
+ 		/**
+ 		* GoalBar: the goal indicator docked above the message composer (input dock
+ 		* strip). A present goal shows a goal glyph, a phase label, the truncated
+-		* objective, and icon actions — resume when active-disarmed or paused, edit
+-		* (inline form in the same strip), and clear. Goal creation lives on the
+-		* `/goal` command, not here: loading (undefined), no goal (null), and complete
+-		* goals render nothing. Durable state arrives as the projected whole snapshot;
+-		* process-local activation arrives through the injected activation hook.
++		* objective, and icon actions — resume when paused, edit (inline form in the
++		* same strip), and clear. Goal creation lives on the `/goal` command, not
++		* here: loading (undefined), no goal (null), and complete goals render
++		* nothing. Live state arrives as the projected whole snapshot; the verbs are
++		* the injected face.
+ 		*/
+ 		/** Strip label keys per visible phase; complete goals render nothing. */
+ 		const PHASE_LABELS = {
+@@ -161,12 +45,7 @@
+ 			paused: "phase.paused",
+ 			blocked: "phase.blocked"
+ 		};
+-		/** Strip label for an active goal using its process-local activation. */
+-		function activeLabel(activation, t) {
+-			if (activation === "disarmed") return t("phase.active.disarmed");
+-			return t(PHASE_LABELS.active);
+-		}
+-		function GoalBar({ goal, activation, onEdit, onPause, onResume, onClear, t }) {
++		function GoalBar({ goal, onEdit, onPause, onResume, onClear, t }) {
+ 			const [editing, setEditing] = (0, react.useState)(false);
+ 			const [draft, setDraft] = (0, react.useState)("");
+ 			const [pending, setPending] = (0, react.useState)(false);
+@@ -264,8 +143,6 @@
+ 				})
+ 			});
+ 			const title = goal.phase === "blocked" ? goal.blockedReason?.message : void 0;
+-			const label = goal.phase === "active" ? activeLabel(activation, t) : t(PHASE_LABELS[goal.phase]);
+-			const showResume = goal.phase === "paused" || goal.phase === "active" && activation === "disarmed";
+ 			return (0, react_jsx_runtime.jsx)("div", {
+ 				className: GoalBar_module_css_default.dock,
+ 				"data-goal-bar": true,
+@@ -279,7 +156,7 @@
+ 						}),
+ 						(0, react_jsx_runtime.jsx)("span", {
+ 							className: GoalBar_module_css_default.label,
+-							children: label
++							children: t(PHASE_LABELS[goal.phase])
+ 						}),
+ 						(0, react_jsx_runtime.jsx)("span", {
+ 							className: GoalBar_module_css_default.objective,
+@@ -293,7 +170,7 @@
+ 						(0, react_jsx_runtime.jsxs)("div", {
+ 							className: GoalBar_module_css_default.actions,
+ 							children: [
+-								goal.phase === "active" && activation === "armed" && (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Tooltip, {
++								goal.phase === "active" && (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Tooltip, {
+ 									label: t("action.pause"),
+ 									side: "bottom",
+ 									delayMs: 500,
+@@ -308,7 +185,7 @@
+ 										children: (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconPauseOutline16, { size: 14 })
+ 									})
+ 								}),
+-								showResume && (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Tooltip, {
++								goal.phase === "paused" && (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Tooltip, {
+ 									label: t("action.resume"),
+ 									side: "bottom",
+ 									delayMs: 500,
+@@ -360,16 +237,11 @@
+ 				})
+ 			});
+ 		}
+-		/** Dock adapter: overlays process-local activation on the durable goal projection. */
+-		function GoalDock({ useProjection, useGoalActivation, onEdit, onPause, onResume, onClear, t }) {
++		/** Dock adapter: reads the host-computed 'goal' projection (whole value; absent or null renders nothing). */
++		function GoalDock({ useProjection, onEdit, onPause, onResume, onClear, t }) {
+ 			const projection = useProjection("goal");
+-			const goal = projection === void 0 || projection === null ? projection : projection.goal;
+-			const goalId = goal?.id;
+-			const revision = goal?.revision;
+-			const activation = useGoalActivation((next) => next.id === goalId && next.revision === revision ? next.activation : void 0);
+ 			return (0, react_jsx_runtime.jsx)(GoalBar, {
+-				goal,
+-				...activation === void 0 ? {} : { activation },
++				goal: projection === void 0 ? void 0 : projection === null ? null : projection.goal,
+ 				onEdit,
+ 				onPause,
+ 				onResume,
+@@ -378,9 +250,42 @@
+ 			});
+ 		}
+ 		//#endregion
++		//#region \0dsh-css:/home/runner/work/deepseek-harness/deepseek-harness/packages/client/ui-goal/src/client/GoalCommandInputView.module.css.mjs
++		const css = ".oRe1gG_row{flex-direction:column;align-items:flex-end;gap:6px;display:flex}.oRe1gG_stack{flex-direction:column;align-items:flex-end;min-width:0;max-width:min(525px,82%);display:flex}.oRe1gG_bubble{overflow-wrap:anywhere;background:var(--dsw-specific-bubble);max-width:100%;color:var(--dsw-alias-label-primary);font:var(--dsw-font-markdown-code);white-space:pre-wrap;border-radius:22px;padding:10px 16px}";
++		const tagId = "@deepseek-ai/dsh-client-ui-goal/GoalCommandInputView.module.css";
++		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
++			const tag = document.createElement("style");
++			tag.dataset.plugin = "@deepseek-ai/dsh-client-ui-goal";
++			tag.dataset.pluginCss = tagId;
++			tag.textContent = css;
++			document.head.appendChild(tag);
++		}
++		var GoalCommandInputView_module_css_default = {
++			"bubble": "oRe1gG_bubble",
++			"row": "oRe1gG_row",
++			"stack": "oRe1gG_stack"
++		};
++		//#endregion
++		//#region lib/types/client/GoalCommandInputView.js
++		/** Right-aligned `/goal` input bubble without ordinary message actions. */
++		const GoalCommandInputView = (0, react.memo)(function GoalCommandInputView({ node, t }) {
++			const data = node.data;
++			return (0, react_jsx_runtime.jsx)("div", {
++				className: GoalCommandInputView_module_css_default.row,
++				"data-command-input": "",
++				role: "group",
++				"aria-label": t("commandInput.aria"),
++				children: (0, react_jsx_runtime.jsx)("div", {
++					className: GoalCommandInputView_module_css_default.stack,
++					children: (0, react_jsx_runtime.jsx)("div", {
++						className: GoalCommandInputView_module_css_default.bubble,
++						children: (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.MessageText, { text: data.text })
++					})
++				})
++			});
++		});
++		//#endregion
+ 		//#region lib/types/client/goal-command-input.js
+-		/** The command name whose runs this projection owns. */
+-		const GOAL_COMMAND = "goal";
+ 		/**
+ 		* Derive the visible command line from its structured durable run.
+ 		* @param event - `/goal` command run.
+@@ -426,59 +331,15 @@
+ 			}
+ 		};
+ 		//#endregion
+-		//#region \0dsh-css:/home/runner/work/deepseek-harness/deepseek-harness/packages/client/ui-goal/src/client/GoalCommandInputView.module.css.mjs
+-		const css = ".oRe1gG_row{flex-direction:column;align-items:flex-end;gap:6px;display:flex}.oRe1gG_stack{min-width:0;max-width:min(calc(var(--dsh-chat-content-width,748px) * .702), 82%);flex-direction:column;align-items:flex-end;display:flex}.oRe1gG_bubble{overflow-wrap:anywhere;background:var(--dsw-specific-bubble);max-width:100%;color:var(--dsw-alias-label-primary);font-size:var(--dsh-content-font-size,14px);line-height:calc(22px + var(--dsh-content-font-delta,0px));white-space:pre-wrap;border-radius:22px;padding:10px 16px}";
+-		const tagId = "@deepseek-ai/dsh-client-ui-goal/GoalCommandInputView.module.css";
+-		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
+-			const tag = document.createElement("style");
+-			tag.dataset.plugin = "@deepseek-ai/dsh-client-ui-goal";
+-			tag.dataset.pluginCss = tagId;
+-			tag.textContent = css;
+-			document.head.appendChild(tag);
+-		}
+-		var GoalCommandInputView_module_css_default = {
+-			"bubble": "oRe1gG_bubble",
+-			"row": "oRe1gG_row",
+-			"stack": "oRe1gG_stack"
+-		};
+-		//#endregion
+-		//#region lib/types/client/GoalCommandInputView.js
+-		/**
+-		* Right-aligned `/goal` input bubble without ordinary message actions. The
+-		* echoed line decorates its leading `/goal` token as a command chip — the run
+-		* this Node projects is the fact that that token was a command — and keeps
+-		* the objective, `/goal` mentions included, as plain text.
+-		*/
+-		const GoalCommandInputView = (0, react.memo)(function GoalCommandInputView({ node, t }) {
+-			const data = node.data;
+-			const split = data.text.search(/\s/u);
+-			const head = split === -1 ? data.text : data.text.slice(0, split);
+-			const rest = split === -1 ? "" : data.text.slice(split);
+-			return (0, react_jsx_runtime.jsx)("div", {
+-				className: GoalCommandInputView_module_css_default.row,
+-				"data-command-input": "",
+-				role: "group",
+-				"aria-label": t("commandInput.aria"),
+-				children: (0, react_jsx_runtime.jsx)("div", {
+-					className: GoalCommandInputView_module_css_default.stack,
+-					children: (0, react_jsx_runtime.jsxs)("div", {
+-						className: GoalCommandInputView_module_css_default.bubble,
+-						children: [(0, _deepseek_ai_dsh_client_ui_primitives.projectUserText)(head, [], [GOAL_COMMAND], "command"), rest !== "" && (0, _deepseek_ai_dsh_client_ui_primitives.projectUserText)(rest, [])]
+-					})
+-				})
+-			});
+-		});
+-		//#endregion
+ 		//#region lib/types/client/locales.js
+ 		/** `goal` namespace dictionaries. */
+ 		/** Simplified Chinese dictionary (the key-set source of truth). */
+ 		const zh = {
+ 			"phase.active": "进行中的目标",
+-			"phase.active.disarmed": "未运行的目标",
+ 			"phase.paused": "已暂停的目标",
+ 			"phase.blocked": "受阻的目标",
+ 			"objective.aria": "目标内容",
+-			"commandInput.aria": "指令输入",
++			"commandInput.aria": "命令输入",
+ 			"action.save": "保存目标",
+ 			"action.cancel": "取消编辑",
+ 			"action.pause": "暂停目标",
+@@ -489,7 +350,6 @@
+ 		/** English dictionary, checked complete against the zh key set. */
+ 		const en = {
+ 			"phase.active": "Ongoing Goal",
+-			"phase.active.disarmed": "Inactive Goal",
+ 			"phase.paused": "Paused Goal",
+ 			"phase.blocked": "Blocked Goal",
+ 			"objective.aria": "Goal objective",
+@@ -512,14 +372,14 @@
+ 			"remote",
+ 			"remote.goals",
+ 			"locale",
+-			"uiConversation"
++			"conversationEvents"
+ 		];
+ 		/**
+ 		* Client plugin body: the GoalBar dock entry with its mutation verbs.
+ 		* @param ctx - client root context.
+ 		*/
+ 		function apply(ctx) {
+-			ctx.uiConversation.events.register(goalCommandInputDefinition);
++			ctx.conversationEvents.register(goalCommandInputDefinition);
+ 			ctx.effect(() => ctx.locale.register(NS, {
+ 				zh,
+ 				en
+@@ -543,7 +403,8 @@
+ 				ok: false,
+ 				error: {
+ 					code: "no-current-goal",
+-					message: "no current goal to mutate"
++					message: "no current goal to mutate",
++					details: {}
+ 				}
+ 			};
+ 			ctx.slots.inject("conversation.input.dock", () => ctx.slots.register({
+@@ -551,41 +412,28 @@
+ 				id: "goal",
+ 				order: 10,
+ 				locale: NS,
+-				inject: (sessionId) => {
+-					const binding = sessions.binding(sessionId);
+-					if (binding === void 0) throw new Error(`ui-goal: session "${sessionId}" is unavailable`);
+-					return {
+-						hooks: { goalActivation: createGoalActivationSource({
+-							projection: binding.session.projections.faceOf("goal"),
+-							session: binding.session,
+-							getGoal: () => ctx.remote.goals.get(sessionId),
+-							subscribeActivation: (listener) => ctx.remote.$on("goal/activation-changed", (event) => {
+-								if (event.sessionId === sessionId) listener(event.goal);
+-							}),
+-							subscribeReset: (listener) => ctx.on("connection/reset", listener)
+-						}) },
+-						onEdit: async (objective) => {
+-							const ref = refOf(sessionId);
+-							if (ref === void 0) return noCurrentGoal;
+-							return await ctx.remote.goals.edit(sessionId, ref, { objective });
+-						},
+-						onPause: async () => {
+-							const ref = refOf(sessionId);
+-							if (ref === void 0) return noCurrentGoal;
+-							return await ctx.remote.goals.pause(sessionId, ref);
+-						},
+-						onResume: async () => {
+-							const ref = refOf(sessionId);
+-							if (ref === void 0) return noCurrentGoal;
+-							return await ctx.remote.goals.resume(sessionId, ref);
+-						},
+-						onClear: async () => {
+-							const ref = refOf(sessionId);
+-							if (ref === void 0) return noCurrentGoal;
+-							return await ctx.remote.goals.clear(sessionId, ref);
+-						}
+-					};
+-				}
++				inject: (sessionId) => ({
++					onEdit: async (objective) => {
++						const ref = refOf(sessionId);
++						if (ref === void 0) return noCurrentGoal;
++						return await ctx.remote.goals.edit(sessionId, ref, { objective });
++					},
++					onPause: async () => {
++						const ref = refOf(sessionId);
++						if (ref === void 0) return noCurrentGoal;
++						return await ctx.remote.goals.pause(sessionId, ref);
++					},
++					onResume: async () => {
++						const ref = refOf(sessionId);
++						if (ref === void 0) return noCurrentGoal;
++						return await ctx.remote.goals.resume(sessionId, ref);
++					},
++					onClear: async () => {
++						const ref = refOf(sessionId);
++						if (ref === void 0) return noCurrentGoal;
++						return await ctx.remote.goals.clear(sessionId, ref);
++					}
++				})
+ 			}, GoalDock));
+ 		}
+ 		//#endregion
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/GoalBar.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/GoalBar.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/GoalBar.d.ts	2026-09-11 14:27:15.164963593 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/GoalBar.d.ts	2026-09-12 14:56:14.573608287 +0800
+@@ -1,24 +1,22 @@
+ /**
+  * GoalBar: the goal indicator docked above the message composer (input dock
+  * strip). A present goal shows a goal glyph, a phase label, the truncated
+- * objective, and icon actions — resume when active-disarmed or paused, edit
+- * (inline form in the same strip), and clear. Goal creation lives on the
+- * `/goal` command, not here: loading (undefined), no goal (null), and complete
+- * goals render nothing. Durable state arrives as the projected whole snapshot;
+- * process-local activation arrives through the injected activation hook.
++ * objective, and icon actions — resume when paused, edit (inline form in the
++ * same strip), and clear. Goal creation lives on the `/goal` command, not
++ * here: loading (undefined), no goal (null), and complete goals render
++ * nothing. Live state arrives as the projected whole snapshot; the verbs are
++ * the injected face.
+  */
+-import type { GoalActivation, GoalSnapshot } from '@deepseek-ai/dsh-goal/client';
+-import type { InjectFace, PropsLocale } from '@deepseek-ai/dsh-client-ui-slots';
+-import type { GoalBarActions, GoalBarInjected } from './slots.ts';
++import type { GoalSnapshot } from '@deepseek-ai/dsh-goal/client';
++import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots';
++import type { GoalBarActions } from './slots.ts';
+ export interface GoalBarProps extends GoalBarActions {
+     /** Current goal snapshot; undefined = capability absent or loading, null = no goal set. */
+     goal: GoalSnapshot | null | undefined;
+-    /** Process-local continuation activation; absent while the live read is pending. */
+-    activation?: GoalActivation;
+ }
+-export declare function GoalBar({ goal, activation, onEdit, onPause, onResume, onClear, t }: GoalBarProps & PropsLocale<'goal'>): import("react").JSX.Element | null;
+-/** Full props of the dock entry: InputZone owner share + injected verbs/activation hook + the locale seat. */
+-export type GoalDockProps = import('@deepseek-ai/dsh-client-ui-slots').PropsRuntime<'conversation.input.dock'> & InjectFace<GoalBarInjected> & PropsLocale<'goal'>;
+-/** Dock adapter: overlays process-local activation on the durable goal projection. */
+-export declare function GoalDock({ useProjection, useGoalActivation, onEdit, onPause, onResume, onClear, t, }: GoalDockProps): import("react").JSX.Element;
++export declare function GoalBar({ goal, onEdit, onPause, onResume, onClear, t }: GoalBarProps & PropsLocale<'goal'>): import("react").JSX.Element | null;
++/** Full props of the dock entry: InputZone owner share + session standard kit + injected verbs + the locale seat. */
++export type GoalDockProps = import('@deepseek-ai/dsh-client-ui-slots').PropsRuntime<'conversation.input.dock'> & GoalBarActions & PropsLocale<'goal'>;
++/** Dock adapter: reads the host-computed 'goal' projection (whole value; absent or null renders nothing). */
++export declare function GoalDock({ useProjection, onEdit, onPause, onResume, onClear, t }: GoalDockProps): import("react").JSX.Element;
+ //# sourceMappingURL=GoalBar.d.ts.map
+\ No newline at end of file
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/GoalCommandInputView.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/GoalCommandInputView.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/GoalCommandInputView.d.ts	2026-09-11 14:27:15.172963707 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/GoalCommandInputView.d.ts	2026-09-12 14:56:14.573689793 +0800
+@@ -1,11 +1,6 @@
+ import type { PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots';
+ type GoalCommandInputViewProps = PropsRuntime<'conversation.chat.node', 'command-input'> & PropsLocale<'goal'>;
+-/**
+- * Right-aligned `/goal` input bubble without ordinary message actions. The
+- * echoed line decorates its leading `/goal` token as a command chip — the run
+- * this Node projects is the fact that that token was a command — and keeps
+- * the objective, `/goal` mentions included, as plain text.
+- */
++/** Right-aligned `/goal` input bubble without ordinary message actions. */
+ export declare const GoalCommandInputView: import("react").MemoExoticComponent<({ node, t, }: GoalCommandInputViewProps) => import("react").JSX.Element>;
+ export {};
+ //# sourceMappingURL=GoalCommandInputView.d.ts.map
+\ No newline at end of file
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client: activation-source.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/goal-command-input.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/goal-command-input.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/goal-command-input.d.ts	2026-09-11 14:27:15.151963409 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/goal-command-input.d.ts	2026-09-12 14:56:14.572533841 +0800
+@@ -1,15 +1,13 @@
+ import type { SessionEvent } from '@deepseek-ai/dsh-session/types';
+ import type { CommandId } from '@deepseek-ai/dsh-commands/brand';
+-import type { ConversationNodeDefinition } from '@deepseek-ai/dsh-client-ui-conversation/client';
+-/** The command name whose runs this projection owns. */
+-export declare const GOAL_COMMAND = "goal";
++import type { ConversationNodeDefinition } from '@deepseek-ai/dsh-client-runtime/client';
+ /** Goal-owned human command input projected independently of model messages. */
+ export interface GoalCommandInputData {
+     readonly commandId: CommandId;
+     readonly text: string;
+     readonly time: number;
+ }
+-declare module '@deepseek-ai/dsh-client-ui-chat/client' {
++declare module '@deepseek-ai/dsh-client-ui-conversation/client' {
+     interface ChatNodeDataMap {
+         /** Human-entered `/goal` command input. */
+         'command-input': GoalCommandInputData;
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/index.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/index.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/index.d.ts	2026-09-11 14:27:15.181963835 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/index.d.ts	2026-09-12 14:56:14.573756279 +0800
+@@ -1,15 +1,17 @@
+ /**
+  * Goal surface plugin, browser half: the GoalBar entry in the
+- * conversation.input.dock strip. The durable goal arrives through
+- * `useProjection('goal')`. A registrant-private activation hook source owns
+- * the live Remote read and event subscription; the inject face carries that
+- * hook plus the four mutation verbs through the generated Goal Remote API.
+- * This plugin does not create goals; deployments may expose /goal separately.
++ * conversation.input.dock strip. Projection-mode surface — the live goal
++ * arrives through `useProjection('goal')` (seeded by the history tail page,
++ * updated by session/projection frames), so this plugin owns no store, no
++ * refresh chain, and no event listener. The inject face carries only the
++ * four mutation verbs through the generated Goal Remote API;
++ * their CAS ref reads the session's current projected value at call time.
++ * Goal creation stays on the /goal host command.
+  */
+-import type { Context as ClientContext } from '@deepseek-ai/cordis';
++import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client';
+ import { type GoalKey } from './locales.ts';
+ export { GoalBar, GoalDock } from './GoalBar.tsx';
+-export type { GoalActionResult, GoalBarActions, } from './slots.ts';
++export type { GoalActionResult, GoalBarActions } from './slots.ts';
+ export type { GoalKey } from './locales.ts';
+ declare module '@deepseek-ai/dsh-client-ui-slots' {
+     interface LocaleNamespaceMap {
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/locales.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/locales.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/locales.d.ts	2026-09-11 14:27:15.190963963 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/locales.d.ts	2026-09-12 14:56:14.573881354 +0800
+@@ -2,7 +2,6 @@
+ /** Simplified Chinese dictionary (the key-set source of truth). */
+ export declare const zh: {
+     'phase.active': string;
+-    'phase.active.disarmed': string;
+     'phase.paused': string;
+     'phase.blocked': string;
+     'objective.aria': string;
+@@ -19,7 +18,6 @@
+ /** English dictionary, checked complete against the zh key set. */
+ export declare const en: {
+     'phase.active': string;
+-    'phase.active.disarmed': string;
+     'phase.paused': string;
+     'phase.blocked': string;
+     'objective.aria': string;
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/slots.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/slots.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/slots.d.ts	2026-09-11 14:27:15.196964048 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types/client/slots.d.ts	2026-09-12 14:56:14.573988973 +0800
+@@ -1,46 +1,18 @@
+ /**
+  * GoalBar's injected face. The target 'conversation.input.dock' slot is
+  * declared (children table) and typed by ui-conversation; this package only
+- * contributes the entry, so no SlotMap merge lives here. The durable goal
+- * value arrives through `useProjection('goal')` (the framework standard kit);
+- * the injected face carries mutation verbs and a registrant-private
+- * activation hook source.
++ * contributes the entry, so no SlotMap merge lives here. The live goal value
++ * is NOT part of this face — it arrives through `useProjection('goal')`
++ * (the framework standard kit); inject carries only the mutation verbs
++ * (callbacks from inject, live state from useProjection).
+  */
+-import type { RemoteResult } from '@deepseek-ai/dsh-api-remotes/client';
+-import type { HostObservable } from '@deepseek-ai/dsh-client-ui-slots';
+-import type { GoalActivation, GoalId } from '@deepseek-ai/dsh-goal/client';
+-/**
+- * The one failure the strip reports without a wire call: the session projects
+- * no goal, so no CAS ref exists to address a mutation to.
+- */
+-export interface GoalLocalFailure {
+-    readonly ok: false;
+-    readonly error: {
+-        readonly code: 'no-current-goal';
+-        readonly message: string;
+-    };
+-}
++import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol';
+ /**
+  * Settled outcome of one goal mutation, rendered inline by the strip. The
+  * strip renders the failure only — the mutated goal arrives through the
+  * projection — so the success value stays unread here.
+  */
+-export type GoalActionResult = RemoteResult<unknown> | GoalLocalFailure;
+-/** Process-local activation matched to one exact goal revision. */
+-export interface GoalActivationSnapshot {
+-    /** Exact current goal id, absent before create or after clear. */
+-    readonly id?: GoalId;
+-    /** Exact current revision for the activation edge. */
+-    readonly revision?: number;
+-    /** Process-local continuation state; absent while no matching edge is known. */
+-    readonly activation?: GoalActivation;
+-}
+-/** Registrant-private observable source bound by the slot renderer. */
+-export interface GoalActivationInjected {
+-    readonly hooks: {
+-        readonly goalActivation: HostObservable<GoalActivationSnapshot>;
+-    };
+-}
++export type GoalActionResult = RemoteResult<unknown>;
+ /** Injected business face of the GoalBar dock entry: the mutation verbs (function properties: the strip destructures them freely). */
+ export interface GoalBarActions {
+     /**
+@@ -55,6 +27,4 @@
+     /** Clear the current goal (tombstone). */
+     onClear: () => Promise<GoalActionResult>;
+ }
+-/** Injected business face of the GoalBar dock entry. */
+-export type GoalBarInjected = GoalBarActions & GoalActivationInjected;
+ //# sourceMappingURL=slots.d.ts.map
+\ No newline at end of file
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/lib/types: invariant.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-goal/package.json	2026-09-11 14:27:15.103962726 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-goal/package.json	2026-09-12 14:56:14.565851778 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-client-ui-goal",
+   "description": "Session goal surface: GoalBar docked above the composer, read from the goal session projection",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -18,6 +18,10 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./client": {
+       "types": "./lib/types/client/index.d.ts",
+       "default": "./lib/client.js"
+@@ -28,44 +32,49 @@
+   "dsh": {
+     "client": {
+       "inject": [
++        "@deepseek-ai/dsh-client-runtime",
+         "@deepseek-ai/dsh-api-remotes",
+-        "@deepseek-ai/dsh-api-session-controller",
+         "@deepseek-ai/dsh-client-locale",
+-        "@deepseek-ai/dsh-client-ui-chat",
+-        "@deepseek-ai/dsh-client-ui-conversation",
+-        "@deepseek-ai/dsh-client-ui-renderer",
+-        "@deepseek-ai/dsh-client-ui-session"
++        "@deepseek-ai/dsh-client-ui-conversation"
+       ],
+       "platform": "web"
+     }
+   },
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-client-locale": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-api-remotes": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-runtime": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-ui-conversation": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-commands": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-goal": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-typert-protocol": "^0.1.1-rc.2"
+   },
+   "devDependencies": {
+     "@testing-library/react": "^16.1.0",
+     "@types/react": "~18.3.1",
+     "react": "^18.2.0",
+     "react-dom": "^18.2.0",
+-    "@deepseek-ai/dsh-api-remotes": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-api-session-controller": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-test-runtime": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-chat": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-conversation": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-locale": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-primitives": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-slots": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-renderer": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-session": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-commands": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-goal": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2",
+-    "@deepseek-ai/dsh-session": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-typert-protocol": "^0.1.5-rc.2"
++    "@deepseek-ai/dsh-client-locale": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-api-remotes": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-runtime": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-ui-primitives": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-ui-slots": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-goal": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-test-runtime": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1",
++    "@deepseek-ai/dsh-client-ui-conversation": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-typert-protocol": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-commands": "^0.1.1-rc.2"
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/client.js",
+     "lib/types/**/*.d.ts"
+   ],

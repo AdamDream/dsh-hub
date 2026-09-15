@@ -1,0 +1,1448 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/README.i18n.yaml	2026-09-11 14:27:15.186963906 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/README.i18n.yaml	2026-09-12 14:56:16.193431756 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/attachment/attachment-local/README.md
+-README.md: d4b8037c5e5cdcd9cd39302422d74ef854fb0890
+-README.zh.md: 37d03f5edda1311f51968fe66f928cb19886514c
++README.md: 3ed4ab3251b0a609807c76930226bec63f0164cd
++README.zh.md: 85abd10389acc46c2d89dd85628f5d201b089710
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/README.md	2026-09-11 14:27:15.095962613 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/README.md	2026-09-12 14:56:16.187235473 +0800
+@@ -1,153 +1,26 @@
+----
+-description: "Local storage for your attached images below DSH_HOME, for users and maintainers choosing or debugging where image attachments are kept."
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-attachment-local
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-Store images and generic file attachments durably below `DSH_HOME` on the machine running DSH. Images are validated, normalized for model requests, and cached per route; generic files are preserved byte-for-byte without admission limits. Identical bytes are stored once even when uploads use different display names, reads verify file length and content, and admitted images remain readable if limits later tighten. The shipped `dsh` composition uses this package without configuration. Objects remain local to one machine and are never deleted automatically.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## Use this package
+-
+-In the default composition, images and generic files attached to prompts or commands are stored on this machine automatically. If you compose your own setup, mounting this plugin provides durable attachments.
+-
+-### Minimal configuration
+-
+-Mount the plugin with no required configuration. The defaults below define what you can attach; the generated configuration catalog is the exhaustive source for every field.
+-
+-```yaml
+-- name: '@deepseek-ai/dsh-attachment-local'
+-```
+-
+-| Field | Default | Meaning |
+-|---|---|---|
+-| `dshHome` | resolved | Explicit harness home; omitted follows `$DSH_HOME`, then `~/.dsh` |
+-| `maxImageBytes` | `20 MiB` | Maximum encoded source bytes accepted for one image |
+-| `maxImagesPerMessage` | `20` | Maximum image count accepted in one submitted message |
+-| `maxMessageImageBytes` | `200 MiB` | Maximum aggregate encoded source bytes in one submitted message |
+-| `maxImagePixels` | `64,000,000` | Maximum source width multiplied by height |
+-| `maxImageDimension` | `8192` | Maximum source width or height |
+-| `normalizedImageMaxPixels` | `2048 × 2048` | Total-pixel budget of the stored normalized image |
+-| `normalizedImageMaxDimension` | `8192` | Maximum long edge after applying the total-pixel budget |
+-| `normalizedImageMaxBytes` | `4 MiB` | Encoded-byte target; the smallest quality-ladder output is kept when none fits |
+-| `imageCompressionConcurrency` | `2` | FIFO limit for concurrent normalization and request transforms |
+-
+-The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-attachment-local) is the exhaustive source for every accepted field and its JSDoc.
+-
+-### Where your images are stored and how long they last
+-
+-Attached images are kept below `<DSH_HOME>/attachments/v1` on this machine. Stored images are never deleted automatically, identical images are stored only once, and a later tightening of the limits never makes already-saved images unreadable. If your images must be readable from another machine, this package is not the right fit.
+-
+-### What happens when you attach an image
+-
+-Attach an image and its source limits, media, dimensions, and pixels are checked before it is normalized and saved. EXIF orientation is applied, metadata and color profiles are removed, transparency is preserved, and the raster is reduced under a total-pixel budget plus a long-edge cap. Alpha images use WebP and opaque images use JPEG on the shared 85/75/60 quality ladder; the smallest output is retained when every candidate exceeds the byte target. An accepted image reappears in history and later turns, including after restart; the selected model route receives a cached request version and, when its filesystem maps the host object, a read-only execution-world path.
+-
+-### What can go wrong
+-
+-An image can be refused when you attach it: unsupported format, over the byte, pixel, or per-side dimension limits, or bytes that do not match their declared type. On a later read, an image that was deleted or corrupted on disk fails with a clear error. Each failure carries a stable code so the client and protocol adapters can explain it in their own words.
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
+-
+-<details>
+-<summary>Implementation internals — click to expand</summary>
+-
+-This section explains the durability and verification design behind the storage, and the write and read paths that realize it; observable behavior is fully covered in [Use this package](#use-this-package).
++The private local implementation of [`@deepseek-ai/dsh-attachment`](../attachment). Objects land at `<DSH_HOME>/attachments/v1/objects/<sha256-prefix>/<sha256>` and are addressed by an opaque `sha256:` id. Each process proves a home durable once by syncing every ancestor entry to the filesystem root. Writes use a private staging directory, owner-only files, a synced temporary file, an atomic exclusive hard-link publish, and directory syncs on the publication path (POSIX; Windows relies on filesystem metadata journaling) so the reported reference survives a crash.
+ 
+-### Design decisions
++Admission accepts at most 20 images and 200MiB of encoded source bytes per message. Each source may use up to 20MiB, 64,000,000 pixels, and 8192px per side. It then prepares a provider-independent normalized attachment. EXIF orientation is applied, metadata and color profiles are removed, pixels become 8-bit sRGB/sRGBA, and the long edge is reduced proportionally to `normalizedImageMaxDimension` (2048px by default). The normalized attachment has its own `normalizedImageMaxBytes` safety cap (4MiB by default). Transparent pixels are retained; Sharp/libvips may omit an alpha plane whose samples are all opaque. A nearest-neighbour bounded sample classifies color complexity without averaging high-frequency pixels. Confirmed low-color images try PNG, using a palette only when the input has no alpha channel, then WebP at qualities 85, 80, and 75. Other alpha images try WebP at those qualities; other opaque images try JPEG. Each candidate runs only after the preceding candidate exceeds the cap. Dimensions shrink only after every candidate at one size exceeds the cap. A clean, single-frame 8-bit sRGB/sRGBA PNG, JPEG, or WebP already within both normalization limits passes through byte-identically; 16-bit PNG, GIF, animated input, metadata, orientation, and incompatible color spaces force conversion. The source and converted attachment are each fully decoded once. `saveImages` prepares and verifies every normalized attachment once before publishing the batch, so validation failure leaves no partial references and commit does not repeat full image encoding.
+ 
+-- **Durability by fsync chain, not existence.** A synced file alone does not survive a crash when its directory entry never reached storage, so the write path syncs every ancestor entry to a process-proven boundary before a reference can reach a session checkpoint.
+-- **Normalize once, project per route.** Admission persists one provider-independent normalized attachment; request projection derives deterministic variants without rewriting durable history.
+-- **Lazy alpha-routed encoding.** Alpha images use WebP and opaque images use JPEG; quality candidates run in 85/75/60 order, and the smallest output is retained when none meets the encoded-byte target.
+-- **Limits are write-time policy.** Byte, total-pixel, and per-side dimension limits bind admission only, so tightening them later never makes admitted history unreadable.
++Request versions live below `<DSH_HOME>/attachments/v1/request-images/`. `readImageRequest` scales the stored normalized attachment under a total-pixel budget without enlargement, then enforces a separate encoded-byte cap. The request encoder uses the same color branches, with PNG (palette only without alpha) before WebP 85 and 80 for low-color images, WebP 85 then 80 for other alpha images, and JPEG 85 then 80 for other opaque images. It executes candidates lazily and reduces dimensions only after both quality attempts exceed the request cap. Its cache identity includes the attachment id, transform version, pixel and byte budgets, and fixed encoder settings. Cached bytes are fully decoded and checked as 8-bit sRGB/sRGBA before use. Concurrent calls for one identity share one transform and cache write; cancelling one waiter does not cancel the shared work. Callers compose ordered batches from singular reads, while the service's FIFO limiter applies `imageCompressionConcurrency` to simultaneous normalization and request transforms. The setting ranges from 1 through 8 and defaults to 2; file publication remains ordered after preparation.
+ 
+-### Write and read paths
++`DSH_HOME` resolves through the shared path policy: explicit config, `$DSH_HOME`, then `~/.dsh`. Session logs contain only the reference and verified metadata, never this host path. `readImage` forwards optional cancellation into the filesystem read, observes it around verification, and preserves it instead of wrapping it as `ATTACHMENT_READ_FAILED`.
+ 
+-Objects land at `<DSH_HOME>/attachments/v1/objects/<sha256-prefix>/<sha256>`; equal bytes deduplicate to one object and one `sha256:` id. Before the first write, the process syncs every ancestor directory of the home down to the filesystem root once, so a directory another process created but has not yet synced is never mistaken for a safe boundary. Writes then stage bytes in `v1/tmp`, sync the temporary file, publish with an atomic exclusive hard link, and sync the publication directories — on Windows, filesystem metadata journaling owns entry durability. Once the save resolves, the reported reference is durable.
+-
+-Admission accepts up to 20 images and 200 MiB of source bytes per message; one source may use up to 20 MiB, 64 million pixels, and 8192 pixels per side. It applies orientation, removes metadata and color profiles, and normalizes under a 2048×2048 total-pixel budget, an 8192-pixel long edge, and a 4 MiB encoded-byte target. Extreme aspect ratios therefore retain their short-edge resolution. Clean single-frame 8-bit sRGB/sRGBA PNG, JPEG, or WebP input already within those limits passes through byte-identically; GIF, animation, metadata, orientation, 16-bit PNG, and incompatible color spaces force conversion.
+-
+-Request versions live below `<DSH_HOME>/attachments/v1/request-images/`. `readImageRequest` scales without enlargement to a route pixel budget, then applies a separate encoded-byte target through the same alpha routing and quality ladder. Its cache identity includes the attachment id, transform version, budgets, and fixed encoder settings; cached bytes are header-probed for format, 8-bit sRGB/sRGBA, dimensions, and alpha facts, and a mismatch regenerates the entry. Concurrent callers share one transform and cache write, while cancellation stops shared work only when no waiter remains. `imageHostPath` derives the normalized object's host path, and the mounted filesystem may map that path into its execution world without writing it to durable history.
+-
+-Generic-file bytes have one canonical object at `<DSH_HOME>/attachments/v1/file-objects/<digest-prefix>/<digest>`. Each reference path at `<DSH_HOME>/attachments/v1/files/<digest-prefix>/<digest>/<name>` is a read-only hard link, so different names for equal bytes do not duplicate disk content. `readFileStream` reads the reference path in bounded chunks and verifies the complete digest and recorded byte count before a consumer can finish successfully. A missing, changed, or truncated object fails its consumer instead of producing a complete export with different bytes.
+-
+-### Source map
+-
+-| File | Role |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | Plugin entry: `LocalAttachmentStore`, `Config` schema, defaults |
+-| [`src/store.ts`](src/store.ts) | Content-addressed write and verified read: staging, hard-link publish, fsync chain, digest verification |
+-| [`src/file-store.ts`](src/file-store.ts) | Verbatim streamed file writes, verified streamed reads, and safe stored filenames |
+-| [`src/normalization.ts`](src/normalization.ts) + [`src/encoding.ts`](src/encoding.ts) | Provider-independent normalization and bounded format/quality candidates |
+-| [`src/request-image.ts`](src/request-image.ts) | Route-specific request transforms, cache identity, and singleflight |
+-| [`src/image.ts`](src/image.ts) | Full raster decode and metadata verification |
+-| — | No runtime invariant companion is published; immutable writes and verified reads are enforced directly at the backend boundary. |
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-For the full service contract and payload types, read the subsystem reference; for the capability this storage backs, read the seam package.
+-
+-- [Attachment subsystem reference](../../../docs/subsystems/attachment.md) — service contract, payload types, and the `ctx.attachments` cordis surface.
+-- [Attachment seam package](../attachment/README.md) — the image attachment capability this storage backs.
+-- [Generated configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-attachment-local) — every accepted config field and its source declaration.
+-- [Home paths resolution](../../util/home-paths/README.md) — how `DSH_HOME` resolves from explicit config, environment, and the user home.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+-Indirectly, through request descriptors. A mapped execution filesystem lets the model see each image's identity, dimensions, media type, read-only process path, writable-copy extension, and normalization warning alongside the request bytes. Generic files project as text handles naming their identity and read-only process path; when no mapping exists, the handle states that the execution environment cannot read the file.
++Indirectly, through durable replay of historical user images and structured model image output after restart and fork.
+ 
+ #### KV Cache effect
+ 
+-Normalization and request projection are deterministic. An unchanged attachment and route policy reuse identical cached request bytes on later turns; execution-world path mapping can change descriptor text without changing those bytes or their `variantId`.
++Normalization and request projection are deterministic. An unchanged attachment and route policy reuse identical cached request bytes on later turns.
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits describe what this storage can and cannot do; they are current package constraints.
+-
+-- **Images are kept forever** — stored images are never deleted automatically, and nothing collects unreferenced objects.
+-- **Local to this machine** — images live on the machine that runs the harness; other hosts cannot read them.
+-- **Animated GIF becomes static** — normalization retains only the first frame; animation is outside the version-one image contract.
+-- **Encoder output is versioned** — the installed Sharp/libvips build pins normalization and request bytes; an encoder or transform-version upgrade re-addresses future variants while existing objects remain valid.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-This Dev Note is working context for maintainers: undecided directions and open questions. It is explicitly non-authoritative — shipped behavior and limits live in the sections above and the package code.
+-
+-#### Future: retention and remote storage
+-
+-Retention and garbage collection are deferred because resumed and forked sessions may share immutable objects, and a backend serving remote runtimes or shared storage would need its own durability proof. Both directions are undecided; the local storage currently retains every object under `DSH_HOME`.
+-
+-</details>
++- Objects are retained indefinitely; reference-aware garbage collection is deferred.
++- The local backend assumes the host and provider adapter share this filesystem service.
++- Animated GIF sources keep only their first frame; animation is outside the version-one image contract.
++- The normalization and request encoders are pinned by the installed sharp/libvips build; an encoder or transform-version upgrade re-addresses future normalized attachments or request variants while existing objects stay valid.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/README.zh.md	2026-09-11 14:27:15.104962740 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/README.zh.md	2026-09-12 14:56:16.190791093 +0800
+@@ -1,153 +1,26 @@
+----
+-description: "DSH_HOME 下附加图片的本地存储，供用户与维护者选择或排查图片附件的存放位置。"
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-attachment-local
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-在运行 DSH 的机器上，把图片与通用文件附件持久存储到 `DSH_HOME` 下。图片经过校验、针对模型请求完成规范化并按路由缓存；通用文件不设准入限制，按字节原样保存。即使上传时使用不同显示名称，相同字节也只存储一次；读取会校验文件长度与内容，之后收紧限制也不会让已接纳的图片不可读。随附的 `dsh` 组合无需配置即可使用本包。对象仅限本机，并且永远不会自动删除。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## 使用本包
+-
+-在默认组合中，把图片或通用文件附加到提示词或命令，它们会自动保存到本机。自行组合时，挂载这个插件即可获得持久附件。
+-
+-### 最小配置
+-
+-挂载插件，无需任何必填配置。下表默认值定义你可以附加什么；生成的配置目录是每个字段的穷尽式真源。
+-
+-```yaml
+-- name: '@deepseek-ai/dsh-attachment-local'
+-```
+-
+-| 字段 | 默认值 | 含义 |
+-|---|---|---|
+-| `dshHome` | 自动解析 | 显式 harness home；省略时依次跟随 `$DSH_HOME` 与 `~/.dsh` |
+-| `maxImageBytes` | `20 MiB` | 单张图片接受的最大编码源字节数 |
+-| `maxImagesPerMessage` | `20` | 单条提交消息接受的最大图片数量 |
+-| `maxMessageImageBytes` | `200 MiB` | 单条提交消息接受的最大编码源图字节总数 |
+-| `maxImagePixels` | `64,000,000` | 源图接受的最大宽度乘以高度 |
+-| `maxImageDimension` | `8192` | 源图接受的最大宽度或高度 |
+-| `normalizedImageMaxPixels` | `2048 × 2048` | 已存规范化图片的总像素预算 |
+-| `normalizedImageMaxDimension` | `8192` | 应用总像素预算后的最大长边 |
+-| `normalizedImageMaxBytes` | `4 MiB` | 编码字节目标；没有候选满足时保留质量阶梯中的最小输出 |
+-| `imageCompressionConcurrency` | `2` | 并发规范化与请求变换的 FIFO 上限 |
+-
+-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-attachment-local)是每个受支持字段及其 JSDoc 的穷尽式真源。
+-
+-### 图片存储在哪里、会保留多久
+-
+-附加的图片保存在本机的 `<DSH_HOME>/attachments/v1` 下。已存储的图片永远不会被自动删除，相同图片只会存储一份，之后收紧限制也绝不会让已保存的图片不可读。如果你的图片需要能从另一台机器读取，本包并不合适。
+-
+-### 附加图片时会发生什么
+-
+-附加图片后，会先检查源图限制、媒体类型、尺寸与像素，再完成规范化并保存。系统应用 EXIF 方向、移除元数据与色彩配置、保留透明度，并按总像素预算与长边上限缩小光栅。带 alpha 的图片使用 WebP，不透明图片使用 JPEG，共享 85/75/60 质量阶梯；全部候选都超过字节目标时保留最小输出。被接受的图片会重新出现在历史和后续轮次中，重启后也不例外；所选模型路由会收到缓存的请求版本，并在其文件系统可映射宿主对象时收到只读执行世界路径。
+-
+-### 可能出什么问题
+-
+-附加图片时可能被拒绝：格式不受支持、超出字节、像素或单边尺寸限制，或者字节与声明类型不符。之后读取时，磁盘上被删除或损坏的图片会以明确错误失败。每个失败都带有稳定错误码，客户端与协议适配器可以用自己的措辞解释。
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## 理解实现
+-
+-<details>
+-<summary>实现细节——点击展开</summary>
+-
+-本节解释存储背后的持久性与校验设计，以及实现它的写入与读取路径；可观察行为已在[使用本包](#use-this-package)中完整说明。
++这是 [`@deepseek-ai/dsh-attachment`](../attachment) 的私有本地实现。对象存放在 `<DSH_HOME>/attachments/v1/objects/<sha256-prefix>/<sha256>`，并通过不透明的 `sha256:` 标识符寻址。每个进程都会把每级祖先目录项同步到文件系统根目录，以此一次性证明 home 已持久化。写入使用私有暂存目录、仅所有者可访问的文件、经过同步的临时文件、原子且排他的硬链接发布，并对发布路径执行目录同步（适用于 POSIX；Windows 依赖文件系统元数据日志），确保已报告的引用能够在崩溃后继续存在。
+ 
+-### 设计决策
++每条消息最多准入 20 张图片，源图编码字节总量不超过 200MiB。每张源图不得超过 20MiB、64,000,000 像素和单边 8192px。随后生成提供方无关的规范化附件：应用 EXIF 方向，删除元数据和色彩配置文件，转换为 8-bit sRGB/sRGBA，并保持宽高比把长边限制到 `normalizedImageMaxDimension`（默认 2048px）。规范化附件有独立的 `normalizedImageMaxBytes` 安全上限（默认 4MiB）。透明像素会保留；当所有 alpha 样本均为不透明时，Sharp/libvips 可能省略没有实际作用的 alpha 平面。系统用 nearest-neighbour 对有界样本分类，不会通过像素平均把高频图片误判为低色数。确认的低色数图片先尝试 PNG，只有不带 alpha 通道时才使用 palette，随后依次尝试质量 85、80、75 的 WebP；其他透明图片依次尝试这些质量的 WebP；其他非透明图片依次尝试这些质量的 JPEG。只有前一个候选超限时才会执行下一个候选；同一尺寸的候选全部超限后才缩小尺寸。已经处于两个规范化上限内的干净、单帧、8-bit sRGB/sRGBA PNG、JPEG 或 WebP 按字节原样直通；16-bit PNG、GIF、动图、元数据、方向和不兼容色彩空间都会触发转换。源图和转换后的附件各完整解码一次。`saveImages` 在发布任何批次成员前为每张图片各准备并验证一次规范化附件，因此校验失败不会留下部分引用，提交阶段也不会重复执行完整图片编码。
+ 
+-- **持久性靠 fsync 链，而非存在性。** 当目录项从未到达存储时，仅同步文件无法在崩溃后存活，因此写入路径会在引用可能到达会话检查点前，把每个祖先条目同步到进程已验证的边界。
+-- **一次规范化，按路由投影。** 准入持久保存一份提供方无关的规范化附件；请求投影派生确定性变体而不改写持久历史。
+-- **惰性 alpha 路由编码。** 带 alpha 的图片使用 WebP，不透明图片使用 JPEG；质量候选按 85/75/60 顺序运行，没有候选满足编码字节目标时保留最小输出。
+-- **限制是写入时策略。** 字节、总像素与单边尺寸限制只约束准入，因此之后收紧它们绝不会让已接纳的历史不可读。
++请求版本保存在 `<DSH_HOME>/attachments/v1/request-images/`。`readImageRequest` 在不放大小图的前提下，把存储的规范化附件缩放到总像素预算内，再执行独立的编码字节上限。请求编码器使用同一分类分支：低色数图片先尝试 PNG，只有不带 alpha 通道时才使用 palette，再尝试质量 85 和 80 的 WebP；其他透明图片依次尝试质量 85 和 80 的 WebP；其他非透明图片依次尝试质量 85 和 80 的 JPEG。候选按需执行，两个质量档均超限后才缩小尺寸。缓存身份包含附件 ID、变换策略版本、像素和字节预算及固定编码参数。缓存字节在使用前会完整解码并校验为 8-bit sRGB/sRGBA。同一身份的并发调用共享一次变换和缓存写入；取消一个等待方不会取消共享任务。调用方组合单数读取得到有序批次，服务的 FIFO 限流器通过 `imageCompressionConcurrency` 限制同时执行的规范化和请求变换。该配置范围为 1 至 8，默认值为 2；文件发布仍在准备结束后按顺序执行。
+ 
+-### 写入与读取路径
++`DSH_HOME` 按共享路径策略解析：显式配置、`$DSH_HOME`，最后是 `~/.dsh`。会话日志只包含引用和经过校验的元数据，绝不包含这个宿主路径。`readImage` 会把可选取消信号传入文件系统读取、在校验前后观察该信号，并保留取消语义，而不会将其包装成 `ATTACHMENT_READ_FAILED`。
+ 
+-对象存放在 `<DSH_HOME>/attachments/v1/objects/<sha256-prefix>/<sha256>`；相同字节会去重为同一个对象和同一个 `sha256:` 标识符。首次写入前，进程会把 home 的每个祖先目录逐级同步到文件系统根目录，因此绝不会把另一个进程已创建但尚未同步的目录误认为安全边界。随后，写入过程把字节暂存到 `v1/tmp`、同步临时文件、以原子且排他的硬链接发布，并同步发布目录——在 Windows 上，文件系统元数据日志负责目录项持久性。保存成功后，已报告的引用即持久。
+-
+-准入允许每条消息最多 20 张图片与 200 MiB 源字节；单个源图最多 20 MiB、6400 万像素与单边 8192 像素。系统应用方向、移除元数据与色彩配置，并把规范化结果限制在 2048×2048 总像素预算、8192 像素长边和 4 MiB 编码字节目标内，因此极端宽高比会保留短边分辨率。已经满足限制的干净、单帧、8-bit sRGB/sRGBA PNG、JPEG 或 WebP 会逐字节直通；GIF、动画、元数据、方向、16-bit PNG 与不兼容色彩空间会触发转换。
+-
+-请求版本位于 `<DSH_HOME>/attachments/v1/request-images/`。`readImageRequest` 在不放大的前提下缩放到路由像素预算，再通过相同的 alpha 路由与质量阶梯应用独立编码字节目标。缓存身份包含附件 id、变换版本、预算与固定编码参数；缓存字节会先探测格式、8-bit sRGB/sRGBA、尺寸与 alpha 信息，不匹配时重新生成。并发调用方共享一次变换与缓存写入，且只在没有等待方时由取消停止共享工作。`imageHostPath` 派生规范化对象的宿主路径，挂载的文件系统可以把该路径映射进执行世界，而不会写入持久历史。
+-
+-通用文件字节的唯一规范对象位于 `<DSH_HOME>/attachments/v1/file-objects/<digest-prefix>/<digest>`。每条引用路径 `<DSH_HOME>/attachments/v1/files/<digest-prefix>/<digest>/<name>` 都是只读硬链接，所以名称不同但字节相同的文件不会重复占用磁盘。`readFileStream` 以有界分块读取引用路径，并在消费方成功结束前校验完整摘要与记录的字节数。对象缺失、被改写或截断时，消费方会失败，不会得到字节已经变化的完整导出。
+-
+-### 源码地图
+-
+-| 文件 | 职责 |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | 插件入口：`LocalAttachmentStore`、`Config` schema、默认值 |
+-| [`src/store.ts`](src/store.ts) | 内容寻址写入与校验读取：暂存、硬链接发布、fsync 链、摘要校验 |
+-| [`src/file-store.ts`](src/file-store.ts) | 原样文件的流式写入、校验式流式读取与安全存储文件名 |
+-| [`src/normalization.ts`](src/normalization.ts) + [`src/encoding.ts`](src/encoding.ts) | 提供方无关的规范化与有界格式／质量候选 |
+-| [`src/request-image.ts`](src/request-image.ts) | 路由专用请求变换、缓存身份与 singleflight |
+-| [`src/image.ts`](src/image.ts) | 完整光栅解码与元数据校验 |
+-| — | 不发布运行时不变式伴生入口；不可变写入与校验读取在后端边界直接强制。 |
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-完整的服务约定与载荷类型请看子系统参考；这份存储所支撑的能力请看 seam 包。
+-
+-- [附件子系统参考](../../../docs/subsystems/attachment.zh.md)——服务约定、载荷类型与 `ctx.attachments` 的 cordis 接口面。
+-- [附件 seam 包](../attachment/README.zh.md)——本存储支撑的图片附件能力。
+-- [生成配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-attachment-local)——每个受支持配置字段及其源声明。
+-- [Home 路径解析](../../util/home-paths/README.zh.md)——`DSH_HOME` 如何从显式配置、环境变量与用户主目录解析。
+-
+------
+-
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+-本包通过请求描述符间接影响模型。执行文件系统可以映射宿主对象时，模型会随请求字节看到每张图片的身份、尺寸、媒体类型、只读进程路径、可写副本扩展名与规范化警告。通用文件会投影为指出文件身份与只读进程路径的文本句柄；无法映射时，句柄会说明当前执行环境不能读取该文件。
+-
+-#### KV Cache 影响
+-
+-规范化和请求投影都是确定性的。附件和路由策略不变时，之后各轮会复用相同的缓存请求字节；执行世界路径映射可以改变描述符文本，而不会改变这些字节或其 `variantId`。
+-
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制描述了这份存储能做什么、不能做什么；它们是当前包约束。
+-
+-- **图片会永久保留**——已存储的图片永远不会被自动删除，也没有任何机制回收未被引用的对象。
+-- **仅限本机**——图片存放在运行 harness 的机器上；其他主机无法读取。
+-- **动态 GIF 变为静态**——规范化只保留第一帧；动画不属于版本一图片约定。
+-- **编码器输出带版本**——已安装的 Sharp/libvips 构建钉定规范化与请求字节；编码器或变换版本升级会让未来变体产生新地址，已有对象继续有效。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
++该包通过重启和 fork 后对历史用户图片与结构化模型图片输出的持久回放间接影响模型。
+ 
+-本开发备注是维护者的工作上下文：尚未决定的探索方向与开放问题。它明确不具权威性——已交付的行为与限制以上文和包代码为准。
++#### KV 缓存影响
+ 
+-#### 未来：保留与远程存储
++规范化和请求投影都是确定性的。附件和路由策略不变时，之后各轮会复用相同的缓存请求字节。
+ 
+-保留与垃圾回收被推迟，因为恢复和 fork 后的会话可能共享不可变对象；服务于远程运行时或共享存储的后端则需要自己的持久性证明。两个方向都尚未决定；本地存储当前在 `DSH_HOME` 下保留所有对象。
++## 已知限制与待完成工作
+ 
+-</details>
++- 对象会无限期保留；基于引用的垃圾回收尚未实现。
++- 本地后端假定宿主与提供方适配器共享同一个文件系统服务。
++- 动态 GIF 源图只保留首帧；动画在版本一图片契约之外。
++- 规范化和请求版本编码器由安装的 sharp/libvips 构建钉定；编码器或变换策略版本升级会让未来的规范化附件或请求变体产生新地址，已有对象保持有效。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/index.js	2026-09-11 14:27:15.081962414 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/index.js	2026-09-12 14:56:16.186790502 +0800
+@@ -1,21 +1,13 @@
+ import { dirname, join, parse, resolve } from "node:path";
+ import z from "@deepseek-ai/schemastery";
+-import { AttachmentError, AttachmentId, AttachmentStore, ImageVariantId, requestImageDimensions } from "@deepseek-ai/dsh-attachment";
++import { AttachmentError, AttachmentId, AttachmentStore, ImageVariantId } from "@deepseek-ai/dsh-attachment";
+ import { resolveDshHome } from "@deepseek-ai/dsh-home-paths";
+ import { createHash, randomUUID } from "node:crypto";
+-import { constants, createReadStream } from "node:fs";
++import { constants } from "node:fs";
+ import { chmod, link, mkdir, open, readFile, rename, rm, unlink, writeFile } from "node:fs/promises";
+ import sharp from "sharp";
+ //#region lib/types/compression-limiter.js
+ /** Instance-owned concurrency bound for native image transformations. */
+-/**
+-* Preserve Error rejections and normalize non-Error native binding values.
+-* @param reason - rejection reason returned by a compression task.
+-* @returns an Error suitable for promise rejection.
+-*/
+-function compressionFailure(reason) {
+-	return reason instanceof Error ? reason : new Error("Image compression task rejected with a non-Error value.", { cause: reason });
+-}
+ /** FIFO limiter for asynchronous compression work. */
+ var CompressionLimiter = class {
+ 	concurrency;
+@@ -45,7 +37,7 @@
+ 					resolve(value);
+ 				}, (error) => {
+ 					release();
+-					reject(compressionFailure(error));
++					reject(error instanceof Error ? error : new Error("Image compression task rejected with a non-Error value.", { cause: error }));
+ 				});
+ 			};
+ 			if (this.active < this.concurrency) start();
+@@ -55,40 +47,11 @@
+ };
+ //#endregion
+ //#region lib/types/encoding.js
+-/** Shared quality ladder and lazy candidate execution for normalization and request-image encoders. */
+-/** Shared ladder for both encoders: spaced so each step buys a real size reduction. */
+-const IMAGE_ENCODING_QUALITIES = [
+-	85,
+-	75,
+-	60
+-];
+-async function encode(pipeline, mediaType, quality) {
+-	const { data, info } = await (mediaType === "image/webp" ? pipeline.webp({
+-		quality,
+-		effort: 0
+-	}) : pipeline.jpeg({ quality })).toBuffer({ resolveWithObject: true });
+-	return {
+-		data: new Uint8Array(data),
+-		mediaType,
+-		width: info.width,
+-		height: info.height
+-	};
+-}
+-/**
+-* Build the lazy quality ladder for one prepared pipeline: WebP keeps a source
+-* alpha channel, everything else is JPEG.
+-* @param prepared - sized sRGB pipeline; cloned per candidate.
+-* @param hasAlpha - decoded source alpha fact selecting the codec.
+-* @returns encoders ordered from highest to lowest ladder quality.
+-*/
+-function encodingLadder(prepared, hasAlpha) {
+-	const mediaType = hasAlpha ? "image/webp" : "image/jpeg";
+-	return IMAGE_ENCODING_QUALITIES.map((quality) => (() => encode(prepared.clone(), mediaType, quality)));
+-}
++/** Shared lazy candidate execution for normalization and request-image encoders. */
+ /**
+ * Execute encoding candidates in preference order and stop after the first fitting output.
+ * @param attempts - lazy encoders ordered from preferred to fallback representation.
+-* @param maxBytes - positive encoded-byte target.
++* @param maxBytes - positive encoded-byte cap.
+ * @returns the first fitting candidate, otherwise the smallest completed fallback.
+ */
+ async function encodeFirstWithinLimit(attempts, maxBytes) {
+@@ -106,7 +69,7 @@
+ /**
+ * Whether a lazy encoding result exhausted every candidate at one size.
+ * @param result - first fitting candidate or exhausted result.
+-* @returns whether every candidate exceeded the byte target.
++* @returns whether every candidate exceeded the byte cap.
+ */
+ function isExhaustedEncoding(result) {
+ 	return "smallest" in result;
+@@ -195,6 +158,27 @@
+ //#endregion
+ //#region lib/types/normalization.js
+ /** Deterministic provider-independent image normalization. */
++const NORMALIZATION_QUALITIES = [
++	85,
++	80,
++	75
++];
++const LOW_COLOUR_SAMPLE_EDGE = 128;
++const LOW_COLOUR_LIMIT = 256;
++const MIN_SCALE_STEP = .9;
++/** Encode one prepared pipeline and report exact output facts. */
++async function encode(pipeline, mediaType, quality, palette = true) {
++	const { data, info } = await (mediaType === "image/png" ? pipeline.png({
++		compressionLevel: 9,
++		palette
++	}) : mediaType === "image/webp" ? pipeline.webp({ quality }) : pipeline.jpeg({ quality })).toBuffer({ resolveWithObject: true });
++	return {
++		data: new Uint8Array(data),
++		mediaType,
++		width: info.width,
++		height: info.height
++	};
++}
+ /**
+ * Whether bytes already satisfy the normalization requirements.
+ * @param detected - fully decoded source facts.
+@@ -203,7 +187,32 @@
+ * @returns whether the source can pass through byte-identically.
+ */
+ function canPassThroughNormalization(detected, bytes, policy) {
+-	return detected.mediaType !== "image/gif" && !detected.animated && !detected.carriesMetadata && detected.depth === "uchar" && detected.space === "srgb" && bytes <= policy.maxBytes && detected.width * detected.height <= policy.maxPixels && Math.max(detected.width, detected.height) <= policy.maxDimension;
++	return detected.mediaType !== "image/gif" && !detected.animated && !detected.carriesMetadata && detected.depth === "uchar" && detected.space === "srgb" && bytes <= policy.maxBytes && Math.max(detected.width, detected.height) <= policy.maxDimension;
++}
++/**
++* Classify a bounded pixel sample without assuming that a PNG source is a screenshot.
++* @param pipeline - oriented sRGB source pipeline before output resizing.
++* @returns whether the nearest-neighbour sample stays within the low-color threshold.
++*/
++async function hasLowColourCount(pipeline) {
++	const { data, info } = await pipeline.clone().resize({
++		width: LOW_COLOUR_SAMPLE_EDGE,
++		height: LOW_COLOUR_SAMPLE_EDGE,
++		fit: "inside",
++		withoutEnlargement: true,
++		kernel: sharp.kernel.nearest,
++		fastShrinkOnLoad: false
++	}).raw().toBuffer({ resolveWithObject: true });
++	const colours = /* @__PURE__ */ new Set();
++	for (let offset = 0; offset < data.length; offset += info.channels) {
++		const red = data.readUInt8(offset);
++		const green = data.readUInt8(offset + 1);
++		const blue = data.readUInt8(offset + 2);
++		const alpha = info.channels === 4 ? data.readUInt8(offset + 3) : 255;
++		colours.add(red >> 3 << 15 | green >> 3 << 10 | blue >> 3 << 5 | alpha >> 3);
++		if (colours.size > LOW_COLOUR_LIMIT) return false;
++	}
++	return true;
+ }
+ /** Assert that a normalized output is an 8-bit sRGB/sRGBA single-frame image with matching facts. */
+ async function verifyNormalizedImage(image, expectedAlpha) {
+@@ -223,23 +232,27 @@
+ 		withoutEnlargement: true
+ 	});
+ }
+-/** Dimensions under the total-pixel budget, then the long-edge cap, without changing aspect ratio. */
+-function initialDimensions(detected, policy) {
+-	const budgeted = requestImageDimensions(detected.width, detected.height, policy.maxPixels);
+-	const longEdge = Math.max(budgeted.width, budgeted.height);
+-	if (longEdge <= policy.maxDimension) return budgeted;
+-	const scale = policy.maxDimension / longEdge;
++/** Dimensions after the long edge is capped without changing aspect ratio. */
++function initialDimensions(detected, maxDimension) {
++	const scale = Math.min(1, maxDimension / Math.max(detected.width, detected.height));
+ 	return {
+-		width: Math.max(1, Math.floor(budgeted.width * scale)),
+-		height: Math.max(1, Math.floor(budgeted.height * scale))
++		width: Math.max(1, Math.round(detected.width * scale)),
++		height: Math.max(1, Math.round(detected.height * scale))
+ 	};
+ }
++/** Lazy encoding order for one size, separated by sampled colour complexity and alpha. */
++function encodingAttemptsAtSize(data, width, height, hasAlpha, lowColour) {
++	const prepared = preparedPipeline(data, width, height);
++	const webp = NORMALIZATION_QUALITIES.map((quality) => (() => encode(prepared.clone(), "image/webp", quality)));
++	if (lowColour) return [() => encode(prepared.clone(), "image/png", void 0, !hasAlpha), ...webp];
++	if (hasAlpha) return webp;
++	return NORMALIZATION_QUALITIES.map((quality) => (() => encode(prepared.clone(), "image/jpeg", quality)));
++}
+ /**
+ * Produce the persisted provider-independent normalized version of one fully decoded source.
+ * The source is passed through only when it is already clean, single-frame, 8-bit sRGB/sRGBA,
+-* and inside every normalization limit. Re-encoding never removes transparency. When every
+-* ladder quality exceeds the byte target, the smallest ladder output is kept; provider byte
+-* caps stay enforced at the route that transmits the bytes.
++* and inside both normalization limits. Re-encoding never removes transparency. After the fixed
++* quality floor is reached, dimensions continue shrinking until the independent byte cap holds.
+ * @param data - complete admitted source bytes.
+ * @param detected - fully decoded source facts.
+ * @param policy - resolved independent normalization limits.
+@@ -253,13 +266,27 @@
+ 		height: detected.height
+ 	};
+ 	try {
+-		const { width, height } = initialDimensions(detected, policy);
+-		const encoded = await encodeFirstWithinLimit(encodingLadder(preparedPipeline(data, width, height), detected.hasAlpha), policy.maxBytes);
+-		return await verifyNormalizedImage(isExhaustedEncoding(encoded) ? encoded.smallest : encoded, detected.mediaType === "image/gif" ? void 0 : detected.hasAlpha);
++		let { width, height } = initialDimensions(detected, policy.maxDimension);
++		const lowColour = await hasLowColourCount(sharp(data, {
++			failOn: "error",
++			limitInputPixels: false
++		}).rotate().toColourspace("srgb"));
++		for (;;) {
++			const encoded = await encodeFirstWithinLimit(encodingAttemptsAtSize(data, width, height, detected.hasAlpha, lowColour), policy.maxBytes);
++			if (!isExhaustedEncoding(encoded)) return await verifyNormalizedImage(encoded, detected.mediaType === "image/gif" ? void 0 : detected.hasAlpha);
++			if (width === 1 && height === 1) break;
++			const sizeScale = Math.sqrt(policy.maxBytes / encoded.smallest.data.byteLength) * .95;
++			const scale = Math.min(MIN_SCALE_STEP, sizeScale);
++			const nextWidth = Math.max(1, Math.floor(width * scale));
++			const nextHeight = Math.max(1, Math.floor(height * scale));
++			width = nextWidth;
++			height = nextHeight;
++		}
+ 	} catch (error) {
+ 		if (error instanceof AttachmentError) throw error;
+ 		throw new AttachmentError(`The ${detected.mediaType === "image/png" && detected.depth !== "uchar" ? `${detected.depth === "ushort" ? "16-bit" : detected.depth} PNG` : `${detected.depth} ${detected.mediaType.slice(6).toUpperCase()}`} could not be converted to the normalized 8-bit sRGB form.`, "ATTACHMENT_WRITE_FAILED", { cause: error });
+ 	}
++	throw new AttachmentError("Image cannot be encoded within the configured normalized-image byte cap.", "IMAGE_TOO_LARGE");
+ }
+ //#endregion
+ //#region lib/types/store.js
+@@ -274,21 +301,14 @@
+ 	const clean = value.slice(Math.max(value.lastIndexOf("/"), value.lastIndexOf("\\")) + 1).replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 255);
+ 	return clean === "" ? void 0 : clean;
+ }
++function objectPath(root, sha256) {
++	return join(root, "objects", sha256.slice(0, 2), sha256);
++}
+ function ensureReference(ref) {
+ 	const match = ID_PATTERN.exec(String(ref.attachmentId));
+ 	if (match?.[1] === void 0) throw new AttachmentError("Attachment reference is invalid.", "INVALID_ATTACHMENT_REF");
+ 	return match[1];
+ }
+-/**
+-* Derive the absolute immutable-object path for one normalized attachment.
+-* @param root - absolute `DSH_HOME/attachments/v1` root.
+-* @param ref - durable normalized attachment reference.
+-* @returns provider-local path without reading the object.
+-*/
+-function normalizedImagePath(root, ref) {
+-	const sha256 = ensureReference(ref);
+-	return join(root, "objects", sha256.slice(0, 2), sha256);
+-}
+ async function inspectMetadata(data, declaredMediaType, limits) {
+ 	if (data.byteLength === 0) throw new AttachmentError("Image is empty.", "INVALID_IMAGE");
+ 	const detected = await detectImage(data, {
+@@ -409,160 +429,47 @@
+ 	const normalized = prepared.data;
+ 	const sha256 = ensureReference(prepared.ref);
+ 	if (digest$1(normalized) !== sha256 || normalized.byteLength !== prepared.ref.bytes) throw new AttachmentError("Prepared attachment bytes do not match their reference.", "ATTACHMENT_CORRUPT");
+-	await publishImmutableObject(root, normalizedImagePath(root, prepared.ref), normalized, sha256);
+-	return prepared.ref;
+-}
+-/**
+-* Publish one immutable content-addressed object below a versioned attachment
+-* root: staged write, fsync, hard-link into place, digest-verified EEXIST
+-* deduplication, read-only mode, and durable directory entries from the
+-* target's parent up to (excluding) `root`.
+-* @param root - absolute `DSH_HOME/attachments/v1` root.
+-* @param target - absolute final object path below `root`.
+-* @param data - exact object bytes whose digest is `sha256`.
+-* @param sha256 - hex digest the stored bytes must match on deduplication.
+-*/
+-async function publishImmutableObject(root, target, data, sha256) {
+-	const staged = await stageImmutableObject(root, (function* () {
+-		yield data;
+-	})());
+-	if (staged.sha256 !== sha256) {
+-		await removeTemporary(staged.path);
+-		throw new AttachmentError("Attachment bytes do not match their publication digest.", "ATTACHMENT_CORRUPT");
+-	}
+-	await publishStagedObject(root, target, staged);
+-}
+-/**
+-* Stream one immutable object from bounded chunks into a staging file, then
+-* publish it at a digest-derived target without collecting the complete object in memory.
+-* @param root - absolute `DSH_HOME/attachments/v1` root.
+-* @param data - exact object bytes in order.
+-* @param targetFor - derive the final absolute target from the completed digest and byte count.
+-* @param signal - optional cancellation for source reads and storage writes.
+-* @returns digest and exact byte count of the published object.
+-*/
+-async function publishImmutableObjectStream(root, data, targetFor, signal) {
+-	const staged = await stageImmutableObject(root, data, signal);
+-	let target;
+-	try {
+-		target = targetFor(staged.sha256, staged.bytes);
+-	} catch (error) {
+-		/* v8 ignore start -- The local target callback constructs a validated reference from this function's digest. */
+-		await removeTemporary(staged.path);
+-		throw error;
+-	}
+-	await publishStagedObject(root, target, staged);
+-	return {
+-		sha256: staged.sha256,
+-		bytes: staged.bytes
+-	};
+-}
+-/**
+-* Publish another durable hard-link name for an existing immutable object.
+-* @param root - absolute versioned attachment root.
+-* @param source - existing content-addressed object below `root`.
+-* @param target - new alias below `root`.
+-* @param sha256 - expected object digest for an existing-target race.
+-*/
+-async function publishImmutableAlias(root, source, target, sha256) {
+-	const parent = dirname(target);
+-	try {
+-		await ensureDurableDirectory(parent, await ensureDurableHome(dirname(dirname(resolve(root)))));
+-		try {
+-			await link(source, target);
+-		} catch (error) {
+-			/* v8 ignore next -- Private same-filesystem directories make EEXIST the only recoverable link race. */
+-			if (!(error instanceof Error && "code" in error && error.code === "EEXIST")) throw error;
+-			if (await digestFile(target) !== sha256) throw new AttachmentError("Stored attachment failed integrity verification.", "ATTACHMENT_CORRUPT");
+-		}
+-		await chmod(target, 256);
+-		const stop = resolve(root);
+-		for (let level = parent; level !== stop; level = dirname(level)) {
+-			await syncDirectory(level);
+-			/* v8 ignore next -- filesystem-root guard: targets sit below root, so the walk reaches `stop` first. */
+-			if (dirname(level) === level) break;
+-		}
+-	} catch (error) {
+-		if (error instanceof AttachmentError) throw error;
+-		throw new AttachmentError("Unable to persist attachment.", "ATTACHMENT_WRITE_FAILED", { cause: error });
+-	}
+-}
+-async function stageImmutableObject(root, data, signal) {
++	const bucket = join(root, "objects", sha256.slice(0, 2));
+ 	const staging = join(root, "tmp");
+ 	const boundary = await ensureDurableHome(dirname(dirname(resolve(root))));
++	await ensureDurableDirectory(bucket, boundary);
+ 	await ensureDurableDirectory(staging, boundary);
+ 	const temporary = join(staging, randomUUID());
++	const target = objectPath(root, sha256);
+ 	let handle;
+ 	try {
+ 		handle = await open(temporary, constants.O_CREAT | constants.O_EXCL | constants.O_WRONLY, 384);
+-		const hash = createHash("sha256");
+-		let bytes = 0;
+-		for await (const chunk of data) {
+-			signal?.throwIfAborted();
+-			await handle.writeFile(chunk);
+-			hash.update(chunk);
+-			bytes += chunk.byteLength;
+-		}
+-		signal?.throwIfAborted();
++		await handle.writeFile(normalized);
+ 		await handle.sync();
+-		signal?.throwIfAborted();
+ 		await handle.close();
+ 		handle = void 0;
+-		return {
+-			path: temporary,
+-			boundary,
+-			sha256: hash.digest("hex"),
+-			bytes
+-		};
+-	} catch (error) {
+-		/* v8 ignore next -- A descriptor remains open only when write, sync, or close fails. */
+-		if (handle !== void 0) await handle.close().catch(
+-			/* v8 ignore next -- Close failure is superseded by the storage operation that entered cleanup. */
+-			() => {}
+-		);
+-		await removeTemporary(temporary);
+-		if (error instanceof AttachmentError || signal?.aborted === true) throw error;
+-		throw new AttachmentError("Unable to persist attachment.", "ATTACHMENT_WRITE_FAILED", { cause: error });
+-	}
+-}
+-async function publishStagedObject(root, target, staged) {
+-	const parent = dirname(target);
+-	try {
+-		await ensureDurableDirectory(parent, staged.boundary);
+ 		try {
+-			await link(staged.path, target);
++			await link(temporary, target);
+ 		} catch (error) {
+ 			/* v8 ignore next -- Private same-filesystem directories make EEXIST the only recoverable link race. */
+ 			if (!(error instanceof Error && "code" in error && error.code === "EEXIST")) throw error;
+-			if (await digestFile(target) !== staged.sha256) throw new AttachmentError("Stored attachment failed integrity verification.", "ATTACHMENT_CORRUPT");
+-		}
+-		await unlink(staged.path);
+-		await chmod(target, 256);
+-		const stop = resolve(root);
+-		for (let level = parent; level !== stop; level = dirname(level)) {
+-			await syncDirectory(level);
+-			/* v8 ignore next -- filesystem-root guard: targets sit below root, so the walk reaches `stop` first. */
+-			if (dirname(level) === level) break;
++			if (digest$1(new Uint8Array(await readFile(target))) !== sha256) throw new AttachmentError("Stored attachment failed integrity verification.", "ATTACHMENT_CORRUPT");
+ 		}
++		await syncDirectory(bucket);
++		await syncDirectory(join(root, "objects"));
++		await unlink(temporary);
+ 	} catch (error) {
+-		await removeTemporary(staged.path);
++		/* v8 ignore next -- A descriptor can remain open only when the underlying write/sync/close operation fails. */
++		if (handle !== void 0) await handle.close().catch(
++			/* v8 ignore next -- Close failure is superseded by the storage operation that entered cleanup. */
++			() => {}
++		);
++		await unlink(temporary).catch(
++			/* v8 ignore next -- The callback requires a second independent staging-unlink failure. */
++			(cleanupError) => {
++				/* v8 ignore next -- Cleanup is best-effort only for a staging file already removed by a failed operation. */
++				if (!(cleanupError instanceof Error && "code" in cleanupError && cleanupError.code === "ENOENT")) throw cleanupError;
++			}
++		);
+ 		if (error instanceof AttachmentError) throw error;
+-		throw new AttachmentError("Unable to persist attachment.", "ATTACHMENT_WRITE_FAILED", { cause: error });
++		throw new AttachmentError("Unable to persist image attachment.", "ATTACHMENT_WRITE_FAILED", { cause: error });
+ 	}
+-}
+-async function digestFile(path) {
+-	const hash = createHash("sha256");
+-	for await (const chunk of createReadStream(path)) hash.update(chunk);
+-	return hash.digest("hex");
+-}
+-async function removeTemporary(path) {
+-	await unlink(path).catch(
+-		/* v8 ignore next -- Cleanup can observe a staging name already removed after successful linking. */
+-		(cleanupError) => {
+-			/* v8 ignore next -- Any cleanup failure except an absent staging name must remain visible. */
+-			if (!(cleanupError instanceof Error && "code" in cleanupError && cleanupError.code === "ENOENT")) throw cleanupError;
+-		}
+-	);
++	return prepared.ref;
+ }
+ /**
+ * Decode and normalize one image once, then publish the prepared object.
+@@ -588,7 +495,7 @@
+ 	const sha256 = ensureReference(ref);
+ 	let data;
+ 	try {
+-		data = new Uint8Array(await readFile(normalizedImagePath(root, ref), { signal }));
++		data = new Uint8Array(await readFile(objectPath(root, sha256), { signal }));
+ 	} catch (error) {
+ 		signal?.throwIfAborted();
+ 		if (error instanceof Error && "code" in error && error.code === "ENOENT") throw new AttachmentError("Attachment object is missing.", "ATTACHMENT_NOT_FOUND");
+@@ -605,144 +512,51 @@
+ 	};
+ }
+ //#endregion
+-//#region lib/types/file-store.js
+-/** Verbatim content-addressed local file storage. @module @deepseek-ai/dsh-attachment-local/file-store */
+-const FILE_ID_PATTERN = /^sha256:([a-f0-9]{64})$/;
+-const WINDOWS_DEVICE_NAME = /^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])$/iu;
+-function isWindowsDeviceName(name) {
+-	const dot = name.indexOf(".");
+-	const stem = (dot < 0 ? name : name.slice(0, dot)).replace(/[. ]+$/u, "");
+-	return WINDOWS_DEVICE_NAME.test(stem);
+-}
+-function utf8Prefix(value, maxBytes) {
+-	let bytes = 0;
+-	let prefix = "";
+-	for (const character of Buffer.from(value).toString("utf8")) {
+-		const characterBytes = Buffer.byteLength(character);
+-		if (bytes + characterBytes > maxBytes) break;
+-		prefix += character;
+-		bytes += characterBytes;
+-	}
+-	return prefix;
+-}
+-/**
+-* Sanitize one caller display name into a safe stored leaf name. Both
+-* separator styles are stripped by hand: a POSIX host treats `\` as an
+-* ordinary character, so path.basename would keep a Windows client's full
+-* local path and leak it into the reference and the session log. Characters
+-* Windows refuses in file names become `_` so one reference stays valid on
+-* every supported host.
+-* @param value - caller-declared display name, possibly a full client path.
+-* @returns a non-empty leaf name safe to store on every supported filesystem.
+-*/
+-function fileLeafName(value) {
+-	if (value === void 0) return "file";
+-	let clean = value.slice(Math.max(value.lastIndexOf("/"), value.lastIndexOf("\\")) + 1).replace(/[\u0000-\u001f\u007f]/g, "").replace(/[<>:"|?*]/g, "_").trim().replace(/[. ]+$/u, "");
+-	if (isWindowsDeviceName(clean)) clean = `_${clean}`;
+-	clean = utf8Prefix(clean, 255).replace(/[. ]+$/u, "");
+-	return clean === "" || clean === "." || clean === ".." ? "file" : clean;
+-}
+-function ensureFileReference(ref) {
+-	const match = FILE_ID_PATTERN.exec(String(ref.attachmentId));
+-	if (match?.[1] === void 0 || ref.name !== fileLeafName(ref.name)) throw new AttachmentError("File attachment reference is invalid.", "INVALID_ATTACHMENT_REF");
+-	return match[1];
+-}
+-/**
+-* Derive the absolute immutable-object path for one stored file. The digest
+-* names a directory so the sanitized display name stays the stored leaf name,
+-* giving models and users a path that ends in the real filename.
+-* @param root - absolute `DSH_HOME/attachments/v1` root.
+-* @param ref - durable file reference from the session log or an upload receipt.
+-* @returns provider-local path without reading the object.
+-* @throws an AttachmentError when the reference digest or name is invalid.
+-*/
+-function storedFilePath(root, ref) {
+-	const sha256 = ensureFileReference(ref);
+-	return join(root, "files", sha256.slice(0, 2), sha256, ref.name);
+-}
+-/** Canonical object path shared by every display name for one digest. */
+-function storedFileObjectPath(root, sha256) {
+-	return join(root, "file-objects", sha256.slice(0, 2), sha256);
+-}
+-/**
+-* Commit one file byte-for-byte below a versioned attachment root.
+-* @param root - absolute `DSH_HOME/attachments/v1` root.
+-* @param input - exact bytes and optional display name.
+-* @returns the durable content-addressed file reference.
+-*/
+-async function saveFileVerbatim(root, input) {
+-	const sha256 = createHash("sha256").update(input.data).digest("hex");
+-	const ref = {
+-		attachmentId: AttachmentId(`sha256:${sha256}`),
+-		name: fileLeafName(input.name),
+-		bytes: input.data.byteLength
+-	};
+-	const objectPath = storedFileObjectPath(root, sha256);
+-	await publishImmutableObject(root, objectPath, input.data, sha256);
+-	await publishImmutableAlias(root, objectPath, storedFilePath(root, ref), sha256);
+-	return ref;
+-}
+-/**
+-* Commit one file byte-for-byte from bounded chunks below a versioned attachment root.
+-* @param root - absolute `DSH_HOME/attachments/v1` root.
+-* @param input - ordered exact bytes, optional cancellation, and display name.
+-* @returns the durable content-addressed file reference.
+-*/
+-async function saveFileStreamVerbatim(root, input) {
+-	const name = fileLeafName(input.name);
+-	const stored = await publishImmutableObjectStream(root, input.data, (sha256) => storedFileObjectPath(root, sha256), input.signal);
+-	const ref = {
+-		attachmentId: AttachmentId(`sha256:${stored.sha256}`),
+-		name,
+-		bytes: stored.bytes
+-	};
+-	input.signal?.throwIfAborted();
+-	await publishImmutableAlias(root, storedFileObjectPath(root, stored.sha256), storedFilePath(root, ref), stored.sha256);
+-	input.signal?.throwIfAborted();
+-	return ref;
+-}
+-/**
+-* Read one stored file in bounded chunks and verify its byte count and digest.
+-* @param root - absolute `DSH_HOME/attachments/v1` root.
+-* @param ref - durable file reference from the session log.
+-* @param signal - optional cancellation for filesystem reads.
+-* @returns exact stored bytes in order; integrity failures reject after the final chunk.
+-*/
+-async function* readFileStreamVerbatim(root, ref, signal) {
+-	signal?.throwIfAborted();
+-	const sha256 = ensureFileReference(ref);
+-	const stream = createReadStream(storedFilePath(root, ref), {
+-		highWaterMark: 65536,
+-		...signal === void 0 ? {} : { signal }
+-	});
+-	const hash = createHash("sha256");
+-	let bytes = 0;
+-	try {
+-		for await (const chunk of stream) {
+-			signal?.throwIfAborted();
+-			const data = chunk;
+-			hash.update(data);
+-			bytes += data.byteLength;
+-			yield data;
+-		}
+-	} catch (error) {
+-		signal?.throwIfAborted();
+-		if (error instanceof Error && "code" in error && error.code === "ENOENT") throw new AttachmentError("File attachment object is missing.", "ATTACHMENT_NOT_FOUND");
+-		throw new AttachmentError("Unable to read file attachment.", "ATTACHMENT_READ_FAILED", { cause: error });
+-	} finally {
+-		stream.destroy();
+-	}
+-	signal?.throwIfAborted();
+-	if (bytes !== ref.bytes || hash.digest("hex") !== sha256) throw new AttachmentError("Stored file attachment failed integrity verification.", "ATTACHMENT_CORRUPT");
+-}
+-//#endregion
+ //#region lib/types/request-image.js
+ /** Deterministic cached image versions for model requests. */
+ /** Transform version included in every cache and upload-index identity. */
+-const REQUEST_IMAGE_TRANSFORM_VERSION = "request-image-v5";
++const REQUEST_IMAGE_TRANSFORM_VERSION = "request-image-v4";
++/** DeepSeek request versions normally fit at these two preferred qualities. */
++const REQUEST_IMAGE_QUALITIES = [85, 80];
+ function digest(value) {
+ 	return createHash("sha256").update(value).digest("hex");
+ }
++/**
++* Compute aspect-preserving integer dimensions within a hard total-pixel budget.
++* @param width - positive source width.
++* @param height - positive source height.
++* @param maxPixels - positive width-times-height cap.
++* @returns inward-rounded dimensions; small images are not enlarged.
++*/
++function requestImageDimensions(width, height, maxPixels) {
++	const scale = Math.min(1, Math.sqrt(maxPixels / (width * height)));
++	if (scale === 1) return {
++		width,
++		height
++	};
++	if (width >= height) {
++		let projectedWidth = Math.max(1, Math.floor(width * scale));
++		let projectedHeight = Math.max(1, Math.round(projectedWidth * height / width));
++		while (projectedWidth * projectedHeight > maxPixels && projectedWidth > 1) {
++			projectedWidth -= 1;
++			projectedHeight = Math.max(1, Math.round(projectedWidth * height / width));
++		}
++		return {
++			width: projectedWidth,
++			height: projectedHeight
++		};
++	}
++	let projectedHeight = Math.max(1, Math.floor(height * scale));
++	let projectedWidth = Math.max(1, Math.round(projectedHeight * width / height));
++	while (projectedWidth * projectedHeight > maxPixels && projectedHeight > 1) {
++		projectedHeight -= 1;
++		projectedWidth = Math.max(1, Math.round(projectedHeight * width / height));
++	}
++	return {
++		width: projectedWidth,
++		height: projectedHeight
++	};
++}
+ function checkedInteger(value, name) {
+ 	if (!Number.isSafeInteger(value) || value <= 0) throw new AttachmentError(`${name} must be a positive integer.`, "INVALID_ATTACHMENT_REF");
+ 	return value;
+@@ -758,10 +572,17 @@
+ 		routePixelBudget: policy.maxPixels,
+ 		encodedByteBudget: policy.maxBytes,
+ 		encoding: {
+-			webpQualities: IMAGE_ENCODING_QUALITIES,
+-			webpEffort: 0,
+-			jpegQualities: IMAGE_ENCODING_QUALITIES,
+-			order: ["alpha:webp", "opaque:jpeg"],
++			png: {
++				compressionLevel: 9,
++				palette: "opaque-only"
++			},
++			webpQualities: REQUEST_IMAGE_QUALITIES,
++			jpegQualities: REQUEST_IMAGE_QUALITIES,
++			order: [
++				"low-colour:png-webp",
++				"alpha:webp",
++				"opaque:jpeg"
++			],
+ 			colourspace: "srgb"
+ 		}
+ 	});
+@@ -789,16 +610,45 @@
+ 		limitInputPixels: false
+ 	}).toColourspace("srgb");
+ }
++async function encoded(image, mediaType, quality, palette = true) {
++	const { data, info } = await (mediaType === "image/png" ? image.png({
++		compressionLevel: 9,
++		palette
++	}) : mediaType === "image/webp" ? image.webp({ quality }) : image.jpeg({ quality })).toBuffer({ resolveWithObject: true });
++	return {
++		data: new Uint8Array(data),
++		mediaType,
++		width: info.width,
++		height: info.height
++	};
++}
++function encodingAttempts(attachment, width, height, hasAlpha, lowColour) {
++	const prepared = pipeline(attachment, width, height);
++	const webp = REQUEST_IMAGE_QUALITIES.map((quality) => (() => encoded(prepared.clone(), "image/webp", quality)));
++	if (lowColour) return [() => encoded(prepared.clone(), "image/png", void 0, !hasAlpha), ...webp];
++	if (hasAlpha) return webp;
++	return REQUEST_IMAGE_QUALITIES.map((quality) => (() => encoded(prepared.clone(), "image/jpeg", quality)));
++}
+ async function createRequestImage(attachment, policy, hasAlpha) {
+-	const dimensions = requestImageDimensions(attachment.ref.width, attachment.ref.height, policy.maxPixels);
++	let dimensions = requestImageDimensions(attachment.ref.width, attachment.ref.height, policy.maxPixels);
+ 	if (dimensions.width === attachment.ref.width && dimensions.height === attachment.ref.height && attachment.data.byteLength <= policy.maxBytes) return {
+ 		data: attachment.data,
+ 		mediaType: attachment.ref.mediaType,
+ 		width: attachment.ref.width,
+ 		height: attachment.ref.height
+ 	};
+-	const encodedVersion = await encodeFirstWithinLimit(encodingLadder(pipeline(attachment, dimensions.width, dimensions.height), hasAlpha), policy.maxBytes);
+-	return isExhaustedEncoding(encodedVersion) ? encodedVersion.smallest : encodedVersion;
++	const lowColour = await hasLowColourCount(sourcePipeline(attachment));
++	for (;;) {
++		const encodedVersion = await encodeFirstWithinLimit(encodingAttempts(attachment, dimensions.width, dimensions.height, hasAlpha, lowColour), policy.maxBytes);
++		if (!isExhaustedEncoding(encodedVersion)) return encodedVersion;
++		if (dimensions.width === 1 && dimensions.height === 1) break;
++		const scale = Math.min(.9, Math.sqrt(policy.maxBytes / encodedVersion.smallest.data.byteLength) * .95);
++		dimensions = {
++			width: Math.max(1, Math.floor(dimensions.width * scale)),
++			height: Math.max(1, Math.floor(dimensions.height * scale))
++		};
++	}
++	throw new AttachmentError("Image cannot be encoded within the model-request byte budget.", "IMAGE_TOO_LARGE");
+ }
+ function cachePath(root, hash) {
+ 	return join(root, "request-images", hash.slice(0, 2), hash);
+@@ -808,7 +658,7 @@
+ 		const data = new Uint8Array(await readFile(path, { signal }));
+ 		const detected = await probeImage(data);
+ 		const maximum = requestImageDimensions(attachment.ref.width, attachment.ref.height, policy.maxPixels);
+-		if (detected.depth !== "uchar" || detected.space !== "srgb" || detected.width > maximum.width || detected.height > maximum.height || !encodedAlphaIsCompatible(expectedAlpha, detected)) return void 0;
++		if (data.byteLength > policy.maxBytes || detected.depth !== "uchar" || detected.space !== "srgb" || detected.width > maximum.width || detected.height > maximum.height || !encodedAlphaIsCompatible(expectedAlpha, detected)) return void 0;
+ 		return {
+ 			data,
+ 			mediaType: detected.mediaType,
+@@ -895,16 +745,12 @@
+ /** Default per-side pixel cap for one submitted image. */
+ const DEFAULT_MAX_IMAGE_DIMENSION = 8192;
+ /**
+-* Default total-pixel budget of the stored normalized image. A larger source
+-* is admitted and downscaled proportionally, so admission bounds what rides
+-* every later model request without refusing ordinary large sources; extreme
+-* aspect ratios keep their short-edge resolution instead of collapsing under
+-* a long-edge rule.
++* Default long-edge target of the stored normalized image. A larger source
++* is admitted and downscaled to this edge, so admission bounds what rides
++* every later model request without refusing ordinary large sources.
+ */
+-const DEFAULT_NORMALIZED_IMAGE_MAX_PIXELS = 2048 * 2048;
+-/** Default long-edge cap of the stored normalized image, applied after the total-pixel budget. */
+-const DEFAULT_NORMALIZED_IMAGE_MAX_DIMENSION = 8192;
+-/** Default encoded-byte target for one stored normalized image. */
++const DEFAULT_NORMALIZED_IMAGE_MAX_DIMENSION = 2048;
++/** Default independent safety cap for one stored normalized image. */
+ const DEFAULT_NORMALIZED_IMAGE_MAX_BYTES = 4 * 1024 * 1024;
+ /** Conservative default number of simultaneous native image transformations per store. */
+ const DEFAULT_IMAGE_COMPRESSION_CONCURRENCY = 2;
+@@ -949,7 +795,7 @@
+ 			}, (error) => {
+ 				signal.removeEventListener("abort", abort);
+ 				release(false);
+-				reject(compressionFailure(error));
++				reject(error);
+ 			});
+ 		});
+ 	}
+@@ -967,7 +813,6 @@
+ 		maxMessageImageBytes: z.number().step(1).min(1).default(DEFAULT_MAX_MESSAGE_IMAGE_BYTES),
+ 		maxImagePixels: z.number().step(1).min(1).default(DEFAULT_MAX_IMAGE_PIXELS),
+ 		maxImageDimension: z.number().step(1).min(1).default(DEFAULT_MAX_IMAGE_DIMENSION),
+-		normalizedImageMaxPixels: z.number().step(1).min(1).default(DEFAULT_NORMALIZED_IMAGE_MAX_PIXELS),
+ 		normalizedImageMaxDimension: z.number().step(1).min(1).default(DEFAULT_NORMALIZED_IMAGE_MAX_DIMENSION),
+ 		normalizedImageMaxBytes: z.number().step(1).min(1).default(DEFAULT_NORMALIZED_IMAGE_MAX_BYTES),
+ 		imageCompressionConcurrency: z.number().step(1).min(1).max(8).default(2)
+@@ -998,8 +843,7 @@
+ 			])
+ 		});
+ 		this.normalizationPolicy = Object.freeze({
+-			maxPixels: config.normalizedImageMaxPixels ?? 4194304,
+-			maxDimension: config.normalizedImageMaxDimension ?? 8192,
++			maxDimension: config.normalizedImageMaxDimension ?? 2048,
+ 			maxBytes: config.normalizedImageMaxBytes ?? 4194304
+ 		});
+ 		const compressionConcurrency = config.imageCompressionConcurrency ?? 2;
+@@ -1024,21 +868,6 @@
+ 	async readImage(ref, signal) {
+ 		return readImageFile(this.root, ref, signal);
+ 	}
+-	imageHostPath(ref) {
+-		return normalizedImagePath(this.root, ref);
+-	}
+-	async saveFile(input) {
+-		return saveFileVerbatim(this.root, input);
+-	}
+-	async saveFileStream(input) {
+-		return saveFileStreamVerbatim(this.root, input);
+-	}
+-	readFileStream(ref, signal) {
+-		return readFileStreamVerbatim(this.root, ref, signal);
+-	}
+-	fileHostPath(ref) {
+-		return storedFilePath(this.root, ref);
+-	}
+ 	async readImageRequest(ref, policy, signal) {
+ 		return this.requestVersion(ref, policy, void 0, signal);
+ 	}
+@@ -1052,9 +881,7 @@
+ 			operation = void 0;
+ 		}
+ 		if (operation === void 0) {
+-			const shared = new SharedRequest((sharedSignal) => this.compression.run(async () => {
+-				return await readRequestImageFile(this.root, stored ?? await this.readImage(ref, sharedSignal), policy, sharedSignal);
+-			}));
++			const shared = new SharedRequest((sharedSignal) => this.compression.run(async () => readRequestImageFile(this.root, stored ?? await this.readImage(ref, sharedSignal), policy, sharedSignal)));
+ 			operation = shared;
+ 			this.requestInflight.set(key, shared);
+ 			shared.promise.finally(() => {
+@@ -1065,4 +892,4 @@
+ 	}
+ };
+ //#endregion
+-export { DEFAULT_IMAGE_COMPRESSION_CONCURRENCY, DEFAULT_MAX_IMAGES_PER_MESSAGE, DEFAULT_MAX_IMAGE_BYTES, DEFAULT_MAX_IMAGE_DIMENSION, DEFAULT_MAX_IMAGE_PIXELS, DEFAULT_MAX_MESSAGE_IMAGE_BYTES, DEFAULT_NORMALIZED_IMAGE_MAX_BYTES, DEFAULT_NORMALIZED_IMAGE_MAX_DIMENSION, DEFAULT_NORMALIZED_IMAGE_MAX_PIXELS, LocalAttachmentStore, LocalAttachmentStore as default, MAX_IMAGE_COMPRESSION_CONCURRENCY, canPassThroughNormalization, commitPreparedImageFile, normalizeImage, prepareImageFile, readImageFile, readRequestImageFile, requestImageVariantId, saveImageFile, validateImageFile };
++export { DEFAULT_IMAGE_COMPRESSION_CONCURRENCY, DEFAULT_MAX_IMAGES_PER_MESSAGE, DEFAULT_MAX_IMAGE_BYTES, DEFAULT_MAX_IMAGE_DIMENSION, DEFAULT_MAX_IMAGE_PIXELS, DEFAULT_MAX_MESSAGE_IMAGE_BYTES, DEFAULT_NORMALIZED_IMAGE_MAX_BYTES, DEFAULT_NORMALIZED_IMAGE_MAX_DIMENSION, LocalAttachmentStore, LocalAttachmentStore as default, MAX_IMAGE_COMPRESSION_CONCURRENCY, canPassThroughNormalization, commitPreparedImageFile, normalizeImage, prepareImageFile, readImageFile, readRequestImageFile, requestImageDimensions, requestImageVariantId, saveImageFile, validateImageFile };
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/compression-limiter.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/compression-limiter.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/compression-limiter.d.ts	2026-09-11 14:27:15.124963025 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/compression-limiter.d.ts	2026-09-12 14:56:16.191791240 +0800
+@@ -1,10 +1,4 @@
+ /** Instance-owned concurrency bound for native image transformations. */
+-/**
+- * Preserve Error rejections and normalize non-Error native binding values.
+- * @param reason - rejection reason returned by a compression task.
+- * @returns an Error suitable for promise rejection.
+- */
+-export declare function compressionFailure(reason: unknown): Error;
+ /** FIFO limiter for asynchronous compression work. */
+ export declare class CompressionLimiter {
+     readonly concurrency: number;
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/encoding.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/encoding.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/encoding.d.ts	2026-09-11 14:27:15.139963238 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/encoding.d.ts	2026-09-12 14:56:16.192757606 +0800
+@@ -1,24 +1,4 @@
+-/** Shared quality ladder and lazy candidate execution for normalization and request-image encoders. */
+-import type { Sharp } from 'sharp';
+-/** Shared ladder for both encoders: spaced so each step buys a real size reduction. */
+-export declare const IMAGE_ENCODING_QUALITIES: readonly [85, 75, 60];
+-/** Fixed lossy-WebP effort; deeper search costs 3-4x encode time for about 5% size. */
+-export declare const WEBP_ENCODING_EFFORT = 0;
+-/** One ladder output carrying its complete bytes and exact facts. */
+-export interface EncodedImage {
+-    data: Uint8Array;
+-    mediaType: 'image/jpeg' | 'image/webp';
+-    width: number;
+-    height: number;
+-}
+-/**
+- * Build the lazy quality ladder for one prepared pipeline: WebP keeps a source
+- * alpha channel, everything else is JPEG.
+- * @param prepared - sized sRGB pipeline; cloned per candidate.
+- * @param hasAlpha - decoded source alpha fact selecting the codec.
+- * @returns encoders ordered from highest to lowest ladder quality.
+- */
+-export declare function encodingLadder(prepared: Sharp, hasAlpha: boolean): Array<() => Promise<EncodedImage>>;
++/** Shared lazy candidate execution for normalization and request-image encoders. */
+ /** One encoded candidate carrying its complete bytes. */
+ export interface EncodedCandidate {
+     data: Uint8Array;
+@@ -30,14 +10,14 @@
+ /**
+  * Execute encoding candidates in preference order and stop after the first fitting output.
+  * @param attempts - lazy encoders ordered from preferred to fallback representation.
+- * @param maxBytes - positive encoded-byte target.
++ * @param maxBytes - positive encoded-byte cap.
+  * @returns the first fitting candidate, otherwise the smallest completed fallback.
+  */
+ export declare function encodeFirstWithinLimit<T extends EncodedCandidate>(attempts: readonly (() => Promise<T>)[], maxBytes: number): Promise<T | ExhaustedEncoding<T>>;
+ /**
+  * Whether a lazy encoding result exhausted every candidate at one size.
+  * @param result - first fitting candidate or exhausted result.
+- * @returns whether every candidate exceeded the byte target.
++ * @returns whether every candidate exceeded the byte cap.
+  */
+ export declare function isExhaustedEncoding<T extends EncodedCandidate>(result: T | ExhaustedEncoding<T>): result is ExhaustedEncoding<T>;
+ //# sourceMappingURL=encoding.d.ts.map
+\ No newline at end of file
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/types: file-store.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/index.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/index.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/index.d.ts	2026-09-11 14:27:15.167963636 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/index.d.ts	2026-09-12 14:56:16.193079055 +0800
+@@ -2,13 +2,13 @@
+ import { Context } from '@deepseek-ai/cordis';
+ import z from '@deepseek-ai/schemastery';
+ import { AttachmentStore } from '@deepseek-ai/dsh-attachment';
+-import type { FileAttachmentRef, ImageAttachmentLimits, ImageAttachmentRef, ImageRequestPolicy, RequestImageAttachment, SaveFileAttachment, SaveFileStreamAttachment, SaveImageAttachment, StoredImageAttachment } from '@deepseek-ai/dsh-attachment';
++import type { ImageAttachmentLimits, ImageAttachmentRef, ImageRequestPolicy, RequestImageAttachment, SaveImageAttachment, StoredImageAttachment } from '@deepseek-ai/dsh-attachment';
+ import type { NormalizationPolicy } from './normalization.ts';
+ export { canPassThroughNormalization, normalizeImage } from './normalization.ts';
+ export type { NormalizedImage, NormalizationPolicy } from './normalization.ts';
+ export { commitPreparedImageFile, prepareImageFile, readImageFile, saveImageFile, validateImageFile } from './store.ts';
+ export type { PreparedImageFile } from './store.ts';
+-export { readRequestImageFile, requestImageVariantId } from './request-image.ts';
++export { readRequestImageFile, requestImageDimensions, requestImageVariantId } from './request-image.ts';
+ /** Default maximum encoded bytes for one submitted image; oversized sources are refused, not shrunk. */
+ export declare const DEFAULT_MAX_IMAGE_BYTES: number;
+ /** Default maximum images in one prompt. */
+@@ -20,16 +20,12 @@
+ /** Default per-side pixel cap for one submitted image. */
+ export declare const DEFAULT_MAX_IMAGE_DIMENSION = 8192;
+ /**
+- * Default total-pixel budget of the stored normalized image. A larger source
+- * is admitted and downscaled proportionally, so admission bounds what rides
+- * every later model request without refusing ordinary large sources; extreme
+- * aspect ratios keep their short-edge resolution instead of collapsing under
+- * a long-edge rule.
++ * Default long-edge target of the stored normalized image. A larger source
++ * is admitted and downscaled to this edge, so admission bounds what rides
++ * every later model request without refusing ordinary large sources.
+  */
+-export declare const DEFAULT_NORMALIZED_IMAGE_MAX_PIXELS: number;
+-/** Default long-edge cap of the stored normalized image, applied after the total-pixel budget. */
+-export declare const DEFAULT_NORMALIZED_IMAGE_MAX_DIMENSION = 8192;
+-/** Default encoded-byte target for one stored normalized image. */
++export declare const DEFAULT_NORMALIZED_IMAGE_MAX_DIMENSION = 2048;
++/** Default independent safety cap for one stored normalized image. */
+ export declare const DEFAULT_NORMALIZED_IMAGE_MAX_BYTES: number;
+ /** Conservative default number of simultaneous native image transformations per store. */
+ export declare const DEFAULT_IMAGE_COMPRESSION_CONCURRENCY = 2;
+@@ -49,14 +45,9 @@
+     maxImagePixels?: number;
+     /** Maximum intrinsic width and maximum intrinsic height accepted for one submitted image. Default: 8192px. */
+     maxImageDimension?: number;
+-    /** Total-pixel budget of the stored provider-independent normalized image. */
+-    normalizedImageMaxPixels?: number;
+-    /** Long-edge pixel cap of the stored provider-independent normalized image, applied after the total-pixel budget. */
++    /** Long-edge pixel cap of the stored provider-independent normalized image. */
+     normalizedImageMaxDimension?: number;
+-    /**
+-     * Encoded-byte target of the stored provider-independent normalized image;
+-     * the smallest quality-ladder output is kept when no quality fits.
+-     */
++    /** Encoded-byte safety cap of the stored provider-independent normalized image. */
+     normalizedImageMaxBytes?: number;
+     /** Maximum simultaneous normalization or request-image transformations in this service instance. */
+     imageCompressionConcurrency?: number;
+@@ -78,11 +69,6 @@
+     saveImages(inputs: readonly SaveImageAttachment[]): Promise<readonly ImageAttachmentRef[]>;
+     saveImage(input: SaveImageAttachment): Promise<ImageAttachmentRef>;
+     readImage(ref: ImageAttachmentRef, signal?: AbortSignal): Promise<StoredImageAttachment>;
+-    imageHostPath(ref: ImageAttachmentRef): string;
+-    saveFile(input: SaveFileAttachment): Promise<FileAttachmentRef>;
+-    saveFileStream(input: SaveFileStreamAttachment): Promise<FileAttachmentRef>;
+-    readFileStream(ref: FileAttachmentRef, signal?: AbortSignal): AsyncIterable<Uint8Array>;
+-    fileHostPath(ref: FileAttachmentRef): string;
+     readImageRequest(ref: ImageAttachmentRef, policy: ImageRequestPolicy, signal?: AbortSignal): Promise<RequestImageAttachment>;
+     private requestVersion;
+ }
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/types: invariant.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/normalization.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/normalization.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/normalization.d.ts	2026-09-11 14:27:15.172963707 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/normalization.d.ts	2026-09-12 14:56:16.193277285 +0800
+@@ -1,13 +1,12 @@
+ /** Deterministic provider-independent image normalization. */
++import { type Sharp } from 'sharp';
+ import type { ImageMediaType } from '@deepseek-ai/dsh-attachment';
+ import type { DetectedImage } from './image.ts';
+ /** Deployment-resolved policy for the persisted normalized attachment. */
+ export interface NormalizationPolicy {
+-    /** Total-pixel budget; larger sources are downscaled proportionally. */
+-    maxPixels: number;
+-    /** Long-edge cap in pixels applied after the total-pixel budget, bounding extreme aspect ratios. */
++    /** Long-edge cap in pixels; larger sources are downscaled proportionally. */
+     maxDimension: number;
+-    /** Encoded-byte target for the quality ladder; the smallest ladder output is kept when no quality fits. */
++    /** Independent safety cap for encoded normalized image bytes. */
+     maxBytes: number;
+ }
+ /** Normalized bytes beside the facts recorded by a durable reference. */
+@@ -26,11 +25,16 @@
+  */
+ export declare function canPassThroughNormalization(detected: DetectedImage, bytes: number, policy: NormalizationPolicy): boolean;
+ /**
++ * Classify a bounded pixel sample without assuming that a PNG source is a screenshot.
++ * @param pipeline - oriented sRGB source pipeline before output resizing.
++ * @returns whether the nearest-neighbour sample stays within the low-color threshold.
++ */
++export declare function hasLowColourCount(pipeline: Sharp): Promise<boolean>;
++/**
+  * Produce the persisted provider-independent normalized version of one fully decoded source.
+  * The source is passed through only when it is already clean, single-frame, 8-bit sRGB/sRGBA,
+- * and inside every normalization limit. Re-encoding never removes transparency. When every
+- * ladder quality exceeds the byte target, the smallest ladder output is kept; provider byte
+- * caps stay enforced at the route that transmits the bytes.
++ * and inside both normalization limits. Re-encoding never removes transparency. After the fixed
++ * quality floor is reached, dimensions continue shrinking until the independent byte cap holds.
+  * @param data - complete admitted source bytes.
+  * @param detected - fully decoded source facts.
+  * @param policy - resolved independent normalization limits.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/request-image.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/request-image.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/request-image.d.ts	2026-09-11 14:27:15.179963807 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/request-image.d.ts	2026-09-12 14:56:16.193341985 +0800
+@@ -2,7 +2,20 @@
+ import { ImageVariantId } from '@deepseek-ai/dsh-attachment';
+ import type { ImageAttachmentRef, ImageRequestPolicy, RequestImageAttachment, StoredImageAttachment } from '@deepseek-ai/dsh-attachment';
+ /** Transform version included in every cache and upload-index identity. */
+-export declare const REQUEST_IMAGE_TRANSFORM_VERSION = "request-image-v5";
++export declare const REQUEST_IMAGE_TRANSFORM_VERSION = "request-image-v4";
++/** DeepSeek request versions normally fit at these two preferred qualities. */
++export declare const REQUEST_IMAGE_QUALITIES: readonly [85, 80];
++/**
++ * Compute aspect-preserving integer dimensions within a hard total-pixel budget.
++ * @param width - positive source width.
++ * @param height - positive source height.
++ * @param maxPixels - positive width-times-height cap.
++ * @returns inward-rounded dimensions; small images are not enlarged.
++ */
++export declare function requestImageDimensions(width: number, height: number, maxPixels: number): {
++    width: number;
++    height: number;
++};
+ /**
+  * Complete deterministic identity for one attachment and route-owned request policy.
+  * @param attachment - provider-independent durable normalized attachment reference.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/store.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/store.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/store.d.ts	2026-09-11 14:27:15.184963878 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/lib/types/store.d.ts	2026-09-12 14:56:16.193431756 +0800
+@@ -2,13 +2,6 @@
+ import type { ImageAttachmentLimits, ImageAttachmentRef, SaveImageAttachment, StoredImageAttachment } from '@deepseek-ai/dsh-attachment';
+ import type { NormalizationPolicy } from './normalization.ts';
+ /**
+- * Derive the absolute immutable-object path for one normalized attachment.
+- * @param root - absolute `DSH_HOME/attachments/v1` root.
+- * @param ref - durable normalized attachment reference.
+- * @returns provider-local path without reading the object.
+- */
+-export declare function normalizedImagePath(root: string, ref: ImageAttachmentRef): string;
+-/**
+  * Run the full admission policy for one image without touching storage,
+  * including normalization: a batch whose members all validate cannot later
+  * be refused by the normalized image byte cap during publication.
+@@ -41,40 +34,6 @@
+  */
+ export declare function commitPreparedImageFile(root: string, prepared: PreparedImageFile): Promise<ImageAttachmentRef>;
+ /**
+- * Publish one immutable content-addressed object below a versioned attachment
+- * root: staged write, fsync, hard-link into place, digest-verified EEXIST
+- * deduplication, read-only mode, and durable directory entries from the
+- * target's parent up to (excluding) `root`.
+- * @param root - absolute `DSH_HOME/attachments/v1` root.
+- * @param target - absolute final object path below `root`.
+- * @param data - exact object bytes whose digest is `sha256`.
+- * @param sha256 - hex digest the stored bytes must match on deduplication.
+- */
+-export declare function publishImmutableObject(root: string, target: string, data: Uint8Array, sha256: string): Promise<void>;
+-/** Digest and byte count produced while streaming one immutable object to disk. */
+-export interface StreamedImmutableObject {
+-    readonly sha256: string;
+-    readonly bytes: number;
+-}
+-/**
+- * Stream one immutable object from bounded chunks into a staging file, then
+- * publish it at a digest-derived target without collecting the complete object in memory.
+- * @param root - absolute `DSH_HOME/attachments/v1` root.
+- * @param data - exact object bytes in order.
+- * @param targetFor - derive the final absolute target from the completed digest and byte count.
+- * @param signal - optional cancellation for source reads and storage writes.
+- * @returns digest and exact byte count of the published object.
+- */
+-export declare function publishImmutableObjectStream(root: string, data: AsyncIterable<Uint8Array>, targetFor: (sha256: string, bytes: number) => string, signal?: AbortSignal): Promise<StreamedImmutableObject>;
+-/**
+- * Publish another durable hard-link name for an existing immutable object.
+- * @param root - absolute versioned attachment root.
+- * @param source - existing content-addressed object below `root`.
+- * @param target - new alias below `root`.
+- * @param sha256 - expected object digest for an existing-target race.
+- */
+-export declare function publishImmutableAlias(root: string, source: string, target: string, sha256: string): Promise<void>;
+-/**
+  * Decode and normalize one image once, then publish the prepared object.
+  * @param root - absolute `DSH_HOME/attachments/v1` root.
+  * @param input - submitted encoded bytes and declared media type.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-attachment-local/package.json	2026-09-11 14:27:15.087962499 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-attachment-local/package.json	2026-09-12 14:56:16.187235473 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-attachment-local",
+   "description": "Private content-addressed DSH_HOME attachment storage",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -18,26 +18,33 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./src/*": "./src/*",
+     "./package.json": "./package.json"
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/types/**/*.d.ts"
+   ],
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/dsh-attachment": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-home-paths": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-attachment": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-home-paths": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   },
+   "dependencies": {
+     "sharp": "^0.35.3",
+-    "@deepseek-ai/schemastery": "^3.18.2"
++    "@deepseek-ai/schemastery": "^3.18.1"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/dsh-attachment": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2",
+-    "@deepseek-ai/dsh-home-paths": "^0.1.5-rc.2"
++    "@deepseek-ai/dsh-attachment": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-home-paths": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   }
+ }
+\ No newline at end of file

@@ -1,0 +1,309 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-jobs/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-jobs/README.i18n.yaml	2026-09-11 14:27:15.171963693 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/README.i18n.yaml	2026-09-12 14:56:14.610480380 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/client/ui-jobs/README.md
+-README.md: f2ed20916fc04e1c1be7be933698c78d2ba92e1f
+-README.zh.md: b3fe6b7c754dee455ce2530a670792afc6e49b46
++README.md: d9720329ee537fdc303b8191b714c315b7535f9c
++README.zh.md: 59a9531a1df471fcee688dc79d922038a37f5025
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-jobs/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-jobs/README.md	2026-09-11 14:27:15.107962783 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/README.md	2026-09-12 14:56:14.609985111 +0800
+@@ -1,66 +1,18 @@
+----
+-description: "Web background-job surface: the session-header action listing the jobs this session can see; for users and maintainers of the background-job experience."
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-client-ui-jobs
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-This package renders the background-job surface of the Web GUI: a session-header action that opens a popover listing the jobs this session can see. It reads host-computed registry state through the runtime's `jobsBySession` mirror and issues no RPC of its own. The trigger appears only when the session has at least one job, with a badge counting running and stopping jobs; settled rows stay visible and de-emphasized until the registry drops them. The model's own view of the same jobs belongs to `dsh-tool-jobs`; this package is a read-only projection for the human.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## Use this package
+-
+-Mount this plugin alongside the runtime; the job action then appears in the session header whenever the session has at least one job. A click opens the popover: live rows first by start time, then settled rows by finish time, each showing the producer kind, label, status, and an elapsed duration that ticks once per second while live and freezes at completion.
+-
+-### Dismissal and limits
+-
+-Escape closes the list and returns focus to the trigger, as does a pointer press outside it. The list shows what one session can see through the wire view, so a job owned by another session never appears here; a process restart empties the list while the transcript keeps the `run_in_background` cards that started those jobs.
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
+-
+-<details>
+-<summary>Implementation internals — click to expand</summary>
++Web background-job feature owner: contributes one entry to `conversation.session.header.actions` listing the `ctx.jobs` records this session can see. The data arrives entirely through the `jobsBySession` list mirror that [`dsh-client-runtime`](../runtime/README.md) folds from `session/jobs` frames, so this package issues no RPC and holds no state beyond popover visibility.
+ 
+-The package contributes one entry to `conversation.session.header.actions` (`JobListAction`), and the data arrives entirely through the `jobsBySession` list mirror that the Session Controller binding folds from `session/jobs` frames — no RPC, and no state beyond popover visibility. The badge counts `running` plus `stopping` and is omitted at zero. Rows order live first by `startedAt` ascending, then settled by `finishedAt` descending, with a same-millisecond tie broken on start order; a settled row missing `finishedAt` reads as zero rather than as a negative figure, and a duration past an hour stays in hours. Settled rows stay visible because a failed job's `detail` is the only place its failure is legible. The behavior is specified by the [Web background-job display note](../../../.agents/notes/implemented/feature/2026-08-08-web-background-job-display.md).
++The trigger renders only when the session has at least one job, so an ordinary conversation never grows a control for a capability it is not using. Its badge counts `running` plus `stopping` and is omitted at zero, leaving a session that holds only finished jobs a quiet entry point into its history rather than one advertising a count of nothing. The popover is a flat list: live rows first by `startedAt` ascending, then settled rows by `finishedAt` descending, with a same-millisecond tie broken on start order so the host's map iteration never decides it. A row shows the producer kind, the label, a status marker, the producer's `detail` in place of the generic status word once it has one, and an elapsed duration. That duration advances once per second while the row is live and freezes at `finishedAt`; the clock runs only while an open list holds something that moves. A settled row missing `finishedAt` reads as zero rather than as a negative figure, and a duration past an hour stays in hours rather than growing a day vocabulary no producer currently reaches.
+ 
+-</details>
++Settled rows stay visible and de-emphasized until the registry drops them at owner disposal. They are in the snapshot, a failed job's `detail` is the only place its failure is legible, and filtering them out here is work the output and cancellation phases would undo. A running one-shot background subagent therefore appears both here and in the [subagent catalog](../ui-subagent/README.md): the catalog navigates into the child's transcript, while this list is the only handle a future cancellation can attach to.
+ 
+------
++Escape closes the list and returns focus to the trigger, as does a pointer press outside it. The last job disappearing closes the list before the control unmounts, so focus never vanishes from a removed node. Styling uses tokens only; copy goes through the package's own `job` locale namespace. The behavior is specified by the [Web background-job display Agent Note](../../../.agents/notes/implemented/feature/2026-08-08-web-background-job-display.md).
+ 
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-Read these pages when the job surface is not enough. They move from the browser list to the registry and the model-facing tool.
+-
+-- [dsh-tool-jobs](../../jobs/tool-jobs/README.md) — the model-facing jobs tool over the same registry.
+-- [Session Controller](../../api/session-controller/README.md) — folds the `jobsBySession` mirror this package reads.
+-- [ui-subagent](../ui-subagent/README.md) — the subagent catalog, where a running one-shot background subagent also appears.
+-- [Web client architecture](../../../.agents/notes/implemented/architecture/2026-07-19-gui-web-client-architecture.md) — how browser plugin rows load and register slots.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+-None, as this package renders host-computed registry state for a human and touches no prompt, message, schema, stream, or tool result.
++None, as this package renders host-computed registry state for a human and touches no prompt, message, schema, stream, or tool result. The model's own view of the same jobs stays with [`dsh-tool-jobs`](../../jobs/tool-jobs/README.md).
+ 
+ #### KV Cache effect
+ 
+@@ -68,22 +20,5 @@
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits define the current job list. They are current package constraints, not a general job-management comparison or a task backlog.
+-
+-- **Rows are read-only** — a job's streamed output and a human-initiated cancellation are separate phases. Cancellation additionally owes a model-facing decision the seam does not answer: `kill()` marks terminal delivery reported, so an interrupt written against the current contract would leave the model believing its job is still running.
+-- **The list is not the registry's own set** — it shows what one session can see through the wire view, so a job owned by another session never appears here, and a process restart empties the list while the transcript keeps the `run_in_background` cards that started those jobs. An unowned job (one started without a live `Agent`) reaches every session's list, matching what `list(caller)` reports to every caller.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-None.
+-
+-</details>
+-
+-**Runtime invariant:** No companion is published. This package is a read-only projection of the `jobsBySession` mirror onto one header slot entry. It emits no cordis events, owns no cross-plugin mutable state, and its single slot registration proves disposal through the HMR-safety spec.
++- **Rows are read-only** — a job's streamed output and a human-initiated cancellation are separate phases. Cancellation additionally owes a model-facing decision the seam does not answer today: `kill()` marks terminal delivery reported, so an interrupt written against the current contract would leave the model believing its job is still running.
++- **The list is not the registry's own set** — it shows what one session can see through the wire view, so a job owned by another session never appears here, and a process restart empties the list while the transcript keeps the `run_in_background` cards that started those jobs. An unowned job (one started without a live `Agent`) is the opposite case: it reaches every session's list, matching what `list(caller)` reports to every caller.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-jobs/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-jobs/README.zh.md	2026-09-11 14:27:15.111962840 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/README.zh.md	2026-09-12 14:56:14.609985111 +0800
+@@ -1,89 +1,24 @@
+----
+-description: "Web 后台任务表面：列出本会话可见任务的会话头部动作；供后台任务体验的用户与维护者阅读。"
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-client-ui-jobs
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-本包渲染 Web GUI 的后台任务表面：一个会话头部动作，打开后以弹层列出本会话可见的任务。它经运行时提供的 `jobsBySession` 镜像读取宿主计算的注册表状态，自身不发任何 RPC。触发器只在会话至少有一个任务时出现，角标计数运行中与停止中的任务；终态行保持可见并弱化，直到注册表把它们丢弃。模型对同一批任务的视角属于 `dsh-tool-jobs`；本包是给人类看的只读投影。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## 使用本包
+-
+-与运行时一起挂载本插件；只要会话至少有一个任务，任务动作就会出现在会话头部。点击打开弹层：活跃行在前按开始时间升序，随后终态行按结束时间降序，每行显示生产者 kind、标签、状态，以及一个活跃时每秒跳动、完成后冻结的已耗时。
+-
+-### 关闭与边界
+-
+-Escape 关闭列表并把焦点交还触发器，在其外部按下指针同理。列表展示的是「一个会话通过线路视图能看到什么」，因此别的会话拥有的任务在这里永不出现；进程重启会清空列表，而文本记录里启动这些任务的 `run_in_background` 卡片仍在。
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## 理解实现
+-
+-<details>
+-<summary>实现细节——点击展开</summary>
++Web 后台任务特性的归属方：向 `conversation.session.header.actions` 贡献一个条目，列出当前会话可见的 `ctx.jobs` 记录。数据完全来自 [`dsh-client-runtime`](../runtime/README.zh.md) 从 `session/jobs` 帧折叠出的 `jobsBySession` 列表镜像，因此本包不发任何 RPC，除弹层开合外不持有任何状态。
+ 
+-本包向 `conversation.session.header.actions` 贡献一个条目（`JobListAction`），数据完全来自 Session Controller binding 从 `session/jobs` 帧折叠出的 `jobsBySession` 列表镜像——不发 RPC，除弹层开合外不持有任何状态。角标计数 `running` 加 `stopping`，为零时省略。行序为活跃行在前按 `startedAt` 升序、终态行按 `finishedAt` 降序，毫秒并列按启动顺序打破；缺少 `finishedAt` 的终态行读作零而不是负数，超过一小时的耗时停留在小时单位。终态行保持可见，因为失败任务的 `detail` 是其失败唯一可读之处。行为由 [Web 后台任务展示笔记](../../../.agents/notes/implemented/feature/2026-08-08-web-background-job-display.zh.md) 规定。
++只有当会话至少有一个任务时才渲染触发器，普通对话不会因为一项未被使用的能力而长出控件。角标计数为 `running` 加 `stopping`，为零时省略，这样只剩已完成任务的会话保留一个安静的历史入口，而不是宣告一个「零」。弹层是一个扁平列表：活跃行在前按 `startedAt` 升序，随后终态行按 `finishedAt` 降序；毫秒相同的并列按启动顺序打破，宿主的 map 迭代顺序永远不参与决定。一行显示生产者 kind、label、状态标记、生产者一旦给出 `detail` 就取代通用状态词的那段文字，以及已耗时。该耗时在活跃时每秒推进，并在 `finishedAt` 冻结；只有当打开的列表里确实有会动的东西时时钟才运行。缺少 `finishedAt` 的终态行读作零而不是负数，超过一小时的耗时停留在小时单位，不会长出任何生产者目前都到不了的「天」词汇。
+ 
+-</details>
++终态行保持可见并弱化，直到注册表在 owner 销毁时把它们丢掉。它们本就在快照里，失败任务的 `detail` 是其失败唯一可读之处，在这里过滤掉它们是输出与中断两期要推翻的工作。因此一个运行中的一次性后台 subagent 会同时出现在这里和 [subagent 目录](../ui-subagent/README.zh.md)里：目录负责进入子会话的 transcript，而这个列表是将来中断能力唯一可能附着的句柄。
+ 
+------
++Escape 关闭列表并把焦点交还触发器，在其外部按下指针同理。最后一个任务消失时先关闭列表再卸载控件，焦点因此不会从一个被移除的节点上凭空消失。样式只用 token；文案走本包自己的 `job` locale 命名空间。行为由 [Web 后台任务展示 Agent Note](../../../.agents/notes/implemented/feature/2026-08-08-web-background-job-display.zh.md) 规定。
+ 
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-当任务表面不够用时阅读以下页面。它们从浏览器列表进入注册表与面向模型的工具。
+-
+-- [dsh-tool-jobs](../../jobs/tool-jobs/README.zh.md)——同一注册表之上的面向模型任务工具。
+-- [Session Controller](../../api/session-controller/README.zh.md)——折叠出本包读取的 `jobsBySession` 镜像。
+-- [ui-subagent](../ui-subagent/README.zh.md)——subagent 目录，运行中的一次性后台 subagent 也会出现在那里。
+-- [Web 客户端架构](../../../.agents/notes/implemented/architecture/2026-07-19-gui-web-client-architecture.zh.md)——浏览器插件行如何加载并注册槽位。
+-
+------
+-
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+-无，因为本包为人类渲染宿主计算出的注册表状态，不触及 prompt、消息、schema、流或工具结果。
+-
+-#### KV Cache 影响
+-
+-无；本包从不组装或发送提供方请求。
+-
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制界定了当前任务列表。它们是当前包约束，不是通用任务管理对比或任务积压。
+-
+-- **行是只读的**——任务的流式输出与人类发起的中断是各自独立的阶段。中断还额外欠一个 seam 没有回答的、面向模型的决策：`kill()` 会把终态投递标为已上报，所以照当前契约写出来的中断会让模型一直以为它的任务还在跑。
+-- **列表不等于注册表自己的集合**——它展示的是一个会话通过线路视图能看到什么，因此别的会话拥有的任务在这里永不出现；进程重启会清空列表，而文本记录里启动这些任务的 `run_in_background` 卡片仍在。无主任务（没有活体 `Agent` 时启动的）反过来会进入每个会话的列表，与 `list(caller)` 对每个调用方的报告一致。
+-
+-<a id="dev-note"></a>
+-### 开发备注
++无，因为本包为人类渲染宿主计算出的注册表状态，不触及 prompt、消息、schema、流或工具结果。模型对同一批任务的视角仍属于 [`dsh-tool-jobs`](../../jobs/tool-jobs/README.zh.md)。
+ 
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
++#### KV Cache effect
+ 
+-无。
++无；本包从不组装或发送 provider 请求。
+ 
+-</details>
++## 已知限制与暂缓事项
+ 
+-**运行时不变式：** 不发布伴生入口。本包只把 `jobsBySession` mirror 只读投影到一个 header slot，不发出 Cordis 事件，也不持有跨插件可变状态。
++- **行是只读的** —— 任务的流式输出与人类发起的中断是各自独立的阶段。中断还额外欠一个 seam 目前没有回答的、面向模型的决策：`kill()` 会把终态投递标为已上报，所以照当前契约写出来的中断会让模型一直以为它的任务还在跑。
++- **列表不等于注册表自己的集合** —— 它展示的是「一个会话通过线路视图能看到什么」，所以别的会话拥有的任务在这里永远不出现；而进程重启会清空列表，transcript 里启动这些任务的 `run_in_background` 卡片却还在。无主任务（在没有活体 `Agent` 时启动的）是反过来的情形：它会进入每一个会话的列表，与 `list(caller)` 对每个调用方的报告一致。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-jobs/lib/client.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/lib/client.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-jobs/lib/client.js	2026-09-11 14:27:15.068962229 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/lib/client.js	2026-09-12 14:56:14.609626600 +0800
+@@ -8,7 +8,7 @@
+ 		let react = require("react");
+ 		let _deepseek_ai_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
+ 		//#region \0dsh-css:/home/runner/work/deepseek-harness/deepseek-harness/packages/client/ui-jobs/src/client/JobListAction.module.css.mjs
+-		const css = ".QsffPG_root{position:relative}.QsffPG_trigger{min-height:28px;color:var(--dsw-alias-label-tertiary);cursor:pointer;background:0 0;border:0;border-radius:6px;align-items:center;gap:3px;padding:3px 2px;font-size:12px;line-height:18px;display:inline-flex}.QsffPG_trigger:hover,.QsffPG_trigger:focus-visible{color:var(--dsw-alias-label-secondary)}.QsffPG_trigger svg{transition:transform .12s}.QsffPG_triggerOpen{transform:rotate(180deg)}.QsffPG_triggerDot{flex:none}.QsffPG_count{margin:0 5px}.QsffPG_menu{z-index:100;box-sizing:border-box;background:var(--dsw-specific-menu);--dsh-scrollbar-thumb:var(--dsw-alias-scrollbar-bg-l2);--dsh-scrollbar-thumb-hover:var(--dsw-alias-scrollbar-hover-l2);--dsw-elevation-stroke-color:var(--dsw-alias-border-l1);width:336px;max-width:min(400px,100vw - 32px);max-height:min(420px,100vh - 140px);box-shadow:var(--dsw-elevation-prominent);border:0;border-radius:20px;flex-direction:column;gap:1px;margin:0;padding:4px;list-style:none;display:flex;position:absolute;top:calc(100% + 5px);left:0;overflow:auto}.QsffPG_row{box-sizing:border-box;width:100%;min-height:32px;color:var(--dsw-alias-label-primary);border-radius:8px;align-items:center;gap:8px;padding:6px 8px;font-size:13px;line-height:18px;display:flex}.QsffPG_rowSettled{color:var(--dsw-alias-label-tertiary)}.QsffPG_rowDot{flex:none}.QsffPG_kind{background:var(--dsw-alias-fill-l2);color:var(--dsw-alias-label-secondary);border-radius:5px;flex:none;padding:0 6px;font-size:11px;line-height:18px}.QsffPG_label{min-width:0;font-family:var(--dsw-font-mono);white-space:nowrap;text-overflow:ellipsis;flex:1;overflow:hidden}.QsffPG_status,.QsffPG_duration{color:var(--dsw-alias-label-tertiary);flex:none;font-size:11px;line-height:18px}.QsffPG_status{white-space:nowrap;text-overflow:ellipsis;max-width:40%;overflow:hidden}.QsffPG_duration{font-variant-numeric:tabular-nums}";
++		const css = ".QsffPG_root{position:relative}.QsffPG_trigger{min-height:28px;color:var(--dsw-alias-label-tertiary);cursor:pointer;background:0 0;border:0;border-radius:6px;align-items:center;gap:3px;padding:3px 2px;font-size:12px;line-height:18px;display:inline-flex}.QsffPG_trigger:hover,.QsffPG_trigger:focus-visible{color:var(--dsw-alias-label-secondary)}.QsffPG_trigger svg{transition:transform .12s}.QsffPG_triggerOpen{transform:rotate(180deg)}.QsffPG_triggerDot{flex:none}.QsffPG_count{margin:0 5px}.QsffPG_menu{z-index:100;box-sizing:border-box;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-specific-menu);--dsh-scrollbar-thumb:var(--dsw-alias-scrollbar-bg-l2);--dsh-scrollbar-thumb-hover:var(--dsw-alias-scrollbar-hover-l2);width:336px;max-width:min(400px,100vw - 32px);max-height:min(420px,100vh - 140px);box-shadow:var(--dsw-shadow-lv3);border-radius:12px;flex-direction:column;gap:1px;margin:0;padding:4px;list-style:none;display:flex;position:absolute;top:calc(100% + 5px);left:0;overflow:auto}.QsffPG_row{box-sizing:border-box;width:100%;min-height:32px;color:var(--dsw-alias-label-primary);border-radius:8px;align-items:center;gap:8px;padding:6px 8px;font-size:13px;line-height:18px;display:flex}.QsffPG_rowSettled{color:var(--dsw-alias-label-tertiary)}.QsffPG_rowDot{flex:none}.QsffPG_kind{background:var(--dsw-alias-fill-l2);color:var(--dsw-alias-label-secondary);border-radius:5px;flex:none;padding:0 6px;font-size:11px;line-height:18px}.QsffPG_label{min-width:0;font-family:var(--dsw-font-mono);white-space:nowrap;text-overflow:ellipsis;flex:1;overflow:hidden}.QsffPG_status,.QsffPG_duration{color:var(--dsw-alias-label-tertiary);flex:none;font-size:11px;line-height:18px}.QsffPG_status{white-space:nowrap;text-overflow:ellipsis;max-width:40%;overflow:hidden}.QsffPG_duration{font-variant-numeric:tabular-nums}";
+ 		const tagId = "@deepseek-ai/dsh-client-ui-jobs/JobListAction.module.css";
+ 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
+ 			const tag = document.createElement("style");
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/lib: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-jobs/lib/types/client/index.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/lib/types/client/index.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-jobs/lib/types/client/index.d.ts	2026-09-11 14:27:15.129963096 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/lib/types/client/index.d.ts	2026-09-12 14:56:14.610129165 +0800
+@@ -4,7 +4,7 @@
+  * through the `jobsBySession` list mirror, so the plugin issues no RPC and
+  * holds no state of its own beyond popover visibility.
+  */
+-import type { Context as ClientContext } from '@deepseek-ai/cordis';
++import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client';
+ import { type JobKey } from './locales.ts';
+ declare module '@deepseek-ai/dsh-client-ui-slots' {
+     interface LocaleNamespaceMap {
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/lib/types: invariant.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-jobs/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-client-ui-jobs/package.json	2026-09-11 14:27:15.099962669 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-jobs/package.json	2026-09-12 14:56:14.609985111 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-client-ui-jobs",
+   "description": "Session-header background-job list: live registry state mirrored from session/jobs frames",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "type": "module",
+   "main": "lib/index.js",
+   "types": "lib/types/index.d.ts",
+@@ -10,6 +10,10 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./client": {
+       "types": "./lib/types/client/index.d.ts",
+       "default": "./lib/client.js"
+@@ -21,6 +25,7 @@
+     "client": {
+       "inject": [
+         "@deepseek-ai/dsh-client-locale",
++        "@deepseek-ai/dsh-client-runtime",
+         "@deepseek-ai/dsh-client-ui-conversation",
+         "@deepseek-ai/dsh-client-ui-primitives"
+       ],
+@@ -37,23 +42,27 @@
+     "access": "public"
+   },
+   "peerDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-client-runtime": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-ui-conversation": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-locale": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   },
+   "devDependencies": {
+     "@types/react": "~18.3.1",
+     "react": "^18.2.0",
+-    "@deepseek-ai/dsh-client-locale": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-test-runtime": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-conversation": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-primitives": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-slots": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2",
+-    "@deepseek-ai/dsh-api-session-controller": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-renderer": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-client-ui-session": "^0.1.5-rc.2"
++    "@deepseek-ai/dsh-client-locale": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-runtime": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-test-runtime": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-ui-conversation": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-ui-primitives": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-client-ui-slots": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/client.js",
+     "lib/types/**/*.d.ts"
+   ],

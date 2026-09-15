@@ -1,0 +1,472 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-skill-filesystem/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-skill-filesystem/README.i18n.yaml	2026-09-11 14:27:15.127963067 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/README.i18n.yaml	2026-09-12 14:56:17.339633147 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/skill/skill-filesystem/README.md
+-README.md: 808df61c0fa248ba02b4e2993e6cbe60ede35f7c
+-README.zh.md: 6e542dee5bb275488cea9dadba10decd6ecb6733
++README.md: 33fb550a9ca804c4f0f380232c2bfd94cc58a67e
++README.zh.md: c1d24f590c7fc525fbf15356f7a8bee9c4d1308b
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-skill-filesystem/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-skill-filesystem/README.md	2026-09-11 14:27:15.095962613 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/README.md	2026-09-12 14:56:17.339098272 +0800
+@@ -1,47 +1,34 @@
+----
+-description: "The local filesystem skill provider for users and maintainers authoring local skills or configuring how project, custom, and user skill roots are discovered and watched."
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-skill-filesystem
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-Agents can use local skills from the repository, a custom directory, or the user's agent configuration: author a skill as a directory bundle with a `SKILL.md` or a flat `<name>.md` file under any scanned root, and it appears in the session catalog. The provider discovers the project, custom, and user roots, parses each skill's YAML frontmatter, and watches the directories, so new, renamed, or deleted skills reach agents without a restart. Choose it when skills live on disk — the registry (`dsh-skill`) accepts any provider, and another provider can supply skills from elsewhere.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
++Local filesystem provider for the `ctx.skills` registry.
+ 
+-<a id="use-this-package"></a>
+-## Use this package
++This package implements one skill source. It scans local project, custom, and user skill roots, parses `SKILL.md` or flat Markdown skill files, and registers the provider on `ctx.skills`. The registry remains in `@deepseek-ai/dsh-skill`; the durable session catalogs and model-facing loader tool remain in `@deepseek-ai/dsh-tool-skill`.
+ 
+-Mount the plugin to make local skills available to agents. It scans the project, custom, and user skill roots below, parses each skill's frontmatter into a catalog entry, and loads the body on demand; it also watches the roots so new, renamed, or deleted skills reach the next catalog without a restart.
++## Plugin
+ 
+-### When to choose it
++Requires `ctx.skills` (`inject: ['skills']`).
+ 
+-Use this provider when skills live on disk — in the repository, a custom directory, or the user's agent configuration. Avoid it when skills come from a remote registry or embedded plugin data: the registry accepts any provider, and this package is one implementation.
++### Config
+ 
+-### Skill format
+-
+-A skill is either a directory bundle `<name>/SKILL.md` or a flat file `<name>.md` at the top level of a scanned root; nested `**/SKILL.md` files are deliberately not discovered. The file starts with YAML frontmatter: required `name` and `description`, plus optional `whenToUse`, `metadata`, `disable-model-invocation`, and `user-invocable`.
+-
+-`disable-model-invocation: true` keeps the skill out of model-facing catalogs and loaders; `user-invocable: false` keeps it out of human-facing commands, and omitted fields default to permitting their surface. The two keys accept YAML booleans plus the case-insensitive `true`/`false`, `yes`/`no`, `on`/`off`, and `1`/`0` forms; a rejected spelling or a non-boolean value drops the whole skill with a warning rather than silently permitting a surface.
+-
+-The catalog and the body have separate lifecycles: discovery parses frontmatter into the catalog entry, and every load re-reads the current file, so editing a skill body needs no versioning or cache invalidation.
++| Field | Default | Meaning |
++|---|---|---|
++| `providerName` | `filesystem` | Unique name used to register this provider on `ctx.skills`. |
++| `includeDefaultRoots` | `true` | Include project and user roots around `customSkillDirs`; set false for an isolated custom-root provider. |
++| `dshHome` | `$DSH_HOME` or `~/.dsh` | DeepSeek Harness config root resolved by [`@deepseek-ai/dsh-home-paths`](../../util/home-paths/README.md); scans `skills` under this directory. |
++| `agentsHome` | `$DSH_AGENTS_HOME` or `~/.agents` | Shared agent config root scanned for compatible skills. |
++| `customSkillDirs` | `[]` | Additional local skill roots scanned after project roots and before user roots. |
++| `watch` | `true` | Watch host-local roots and invalidate the local provider when catalog membership or frontmatter may have changed. |
++| `watchUsePolling` | `false` | Use Chokidar polling instead of native events for existing skill roots. |
++| `watchStabilityThresholdMs` | `200` | Stable-write window for Chokidar `add` and `change` events. |
++| `watchPollIntervalMs` | `100` | Chokidar polling/stability interval and missing-path probe interval. |
++| `watchMaxProjects` | `128` | Maximum distinct project roots retained in the watcher LRU. |
++| `watchFollowSymlinks` | `true` | Follow symbolic links while watching existing roots. |
+ 
+-### Roots and priority
++## Discovery
+ 
+-Default roots are scanned in this provider's rank order:
++Default roots are resolved in this provider's rank order:
+ 
+ | Rank | Source | Path |
+ |---|---|---|
+@@ -51,83 +38,26 @@
+ | 400 | `user-dsh` | `<dshHome>/skills` |
+ | 500 | `user-agents` | `<agentsHome>/skills` |
+ 
+-The project root is the nearest ancestor containing `.git`; without one, the current cwd is used. The user DSH root skips its `.system` child. `includeDefaultRoots: false` omits the project and user rows plus the `$DSH_BUNDLED_SKILL_DIR` default so an isolated provider sees only its own configured roots; `bundledSkillDir` adds a bundled root at rank 600.
+-
+-### Mount and configure
+-
+-Load the plugin alongside the skill registry; it requires `ctx.skills`.
+-
+-```yaml
+-- name: '@deepseek-ai/dsh-skill'
+-- name: '@deepseek-ai/dsh-skill-filesystem'
+-```
+-
+-| Field | Default | Meaning |
+-|---|---|---|
+-| `providerName` | `filesystem` | Unique provider name registered on `ctx.skills` |
+-| `includeDefaultRoots` | `true` | Include project and user roots around `customSkillDirs` |
+-| `dshHome` | `$DSH_HOME` or `~/.dsh` | Harness config root; its `skills` subdirectory is scanned |
+-| `agentsHome` | `$DSH_AGENTS_HOME` or `~/.agents` | Shared agent config root scanned for compatible skills |
+-| `customSkillDirs` | `[]` | Additional local skill roots, after project roots and before user roots |
+-| `watch` | `true` | Watch local roots and invalidate the provider when the catalog may have changed |
+-| `bundledSkillDir` | — | Bundled skill root scanned at rank 600 when configured |
+-
+-The remaining `watch*` fields tune Chokidar behavior — polling, stability window, interval, project cap, and symlink following. The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-skill-filesystem) is the exhaustive source for every field.
+-
+-### Change detection
+-
+-Existing roots are watched, so adding, renaming, or deleting a skill (or editing its frontmatter) triggers a catalog refresh for the next model step; edits below `references`, `scripts`, `assets`, and other bundle resources do not. The first-party `write` and `edit` tools invalidate the provider directly when their target could affect a watched skill, so the model observes its own filesystem mutation without waiting for the host watcher. External IDE, Git, and shell changes are picked up by the host watcher, and a root that does not exist yet is probed until it appears.
++The project root is the nearest ancestor containing `.git`; without one, the current cwd is used. The user DSH root skips its `.system` child so system-owned directories are not treated as normal user skills. `includeDefaultRoots: false` omits the project and user rows and the `$DSH_BUNDLED_SKILL_DIR` environment default while retaining explicitly configured custom and bundled roots, allowing several uniquely named isolated providers to see only their own roots. This provider supplies project and user skills; another provider may supply built-in system skills.
+ 
+-### Observable success and failures
++When `ctx.fs` is available, discovery lists roots through `ctx.fs.listDir`, reads skill files through `ctx.fs.readText`, and probes `.git` through the filesystem service. Full skill loads forward the lookup abort signal to filesystem metadata and content reads. Without a filesystem service, the provider falls back to abortable Node filesystem I/O so minimal local contexts can still load skills. Confirmed missing paths are valid empty state, malformed or non-text entries warn and skip, and unexpected discovery/read failures make the registry snapshot incomplete rather than replacing a last-good model catalog with a misleading deletion.
+ 
+-A valid skill under any scanned root appears in the session catalog sorted by name, and loading it returns the current file body. A file without valid frontmatter, an invalid name, or an invalid invocation value is skipped with a warning, so the model catalog receives no per-skill diagnostic and cannot distinguish an absent skill from an invalid one. Unexpected discovery or read failures leave the catalog observation incomplete rather than replacing the last-good view with a misleading deletion.
++## Catalog Change Detection
+ 
+------
++Existing skill roots are watched with Chokidar. Before opening a native watcher, the provider realpaths the existing root or ancestor and restores the next missing segment; when `watchFollowSymlinks` is false and the root itself is a symbolic link, it preserves that final link so Chokidar can enforce the configured boundary. Discovery and diagnostics retain the configured path, while Windows cannot otherwise mix an 8.3 alias with long-form libuv events. The provider observes direct bundle directory additions/removals, flat Markdown additions/removals, and direct `SKILL.md` additions/removals/changes; `change` exists to rediscover catalog frontmatter such as `name` and `description`. Changes below `references`, `scripts`, `assets`, or other bundle resources do not invalidate the catalog. Events delivered in the same microtask batch collapse to one provider invalidation.
+ 
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
++A root that does not exist is followed from the nearest existing ancestor one missing path segment at a time. The next segment is probed with `fs.watchFile`; once `.agents`, `skills`, or the configured root appears, observation advances until Chokidar can attach to the real root. Root deletion reverses this process, so deleting and recreating an entire skills directory remains observable. Project-scoped watchers are bounded by `watchMaxProjects`; revisiting an evicted project reattaches observation during discovery.
+ 
+-<details>
+-<summary>Implementation internals — click to expand</summary>
++The first-party filesystem `write` and `edit` tools also synchronously invalidate the provider through `fs/observed` when their target could affect a watched skill entry. This fast path makes the next model step observe its own filesystem mutation without waiting for the host watcher. External IDE, Git, shell, and process changes rely on Chokidar or the missing-path probe. Existing-root watchers remain persistent until effect teardown so Chokidar owns asynchronous native error events; startup/runtime watcher failures are logged and retried. Discovery still scans readable roots and returns their candidates for direct loading, but marks the observation incomplete so it is not cached or published as an authoritative model catalog. Effect teardown closes every watcher and contains late callbacks.
+ 
+-This section explains how discovery and watching are organized; the observable behavior is fully covered in [Use this package](#use-this-package).
++## Skill Format
+ 
+-### Design concept
++Skills can be single-level directory bundles (`<name>/SKILL.md`) or flat Markdown files (`<name>.md`). Nested `**/SKILL.md` discovery is deliberately excluded. Frontmatter is parsed as an open YAML object with the `yaml` package; this provider interprets required `name` and `description`, plus optional `whenToUse`, `metadata`, `disable-model-invocation`, and `user-invocable`. Names must be kebab-case.
+ 
+-The provider is built on two separations. First, catalog versus body: discovery parses frontmatter into summaries, while every load re-reads the file, so body edits need no hash, revision, or cache invalidation. Second, discovery versus watching: `list()` scans roots and resolves the project root through `ctx.fs` when a filesystem service is present (falling back to abortable Node I/O), while a separate watch manager owns Chokidar handles, missing-root probes, and invalidation.
++The two invocation fields accept YAML booleans and the case-insensitive forms `true`/`false`, `yes`/`no`, `on`/`off`, and `1`/`0`. `disable-model-invocation: true` excludes the skill from model-facing catalogs and loaders; `user-invocable: false` excludes it from human-facing commands. Each omitted field defaults to permitting its surface, and the provider always emits both positive internal policy values, including when both keys are absent. A rejected camel-case spelling or a non-boolean invocation value drops the entire skill from discovery with a warning instead of discarding only that field or falling back to a permissive default. Invocation policy fails closed because ignoring invalid data could expose a skill on a disabled surface; wrong-typed optional `whenToUse` and `metadata` values are omitted because neither currently grants invocation.
+ 
+-### Source map
++The catalog and body have separate lifecycles. Discovery parses frontmatter to produce the summary. Every `skill(name)` load rereads and reparses the current file, so body edits need no hash, revision, cache invalidation, or proactive model notification. A frontmatter rename between discovery and loading rejects the stale name and invalidates the provider; the next catalog observation publishes the new name.
+ 
+-| File | Role |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | Plugin entry, provider, root resolution, frontmatter parsing, watch manager |
+-| — | No runtime invariant companion is published; this package exposes no independent event sequence or mutable data relation beyond contracts enforced at its owning seam. |
+-
+-### Discovery flow
+-
+-Discovery resolves the root list for the lookup cwd, asks the watch manager to attach to each root, then scans each root's direct entries: directory bundles resolve `<name>/SKILL.md`, flat files resolve `<name>.md`. Each file is parsed for frontmatter — `name` must be kebab-case, `description` is required, and the invocation keys resolve through the strict boolean grammar — and candidates carry the root's source label and rank so the registry can merge them with other providers. Confirmed missing paths are valid empty state; malformed or non-text entries warn and skip.
+-
+-### Watching and invalidation
+-
+-Existing roots are watched by Chokidar at depth 1; a root that does not exist is followed from its nearest existing ancestor one missing segment at a time using `fs.watchFile`. Relevant events — direct bundle add/remove, flat `.md` add/remove, and direct `SKILL.md` add/remove/change — coalesce into one provider invalidation per microtask batch, while resource-subtree changes are ignored. The watch manager is bounded by `watchMaxProjects`, logs and retries failed startup, and closes every handle at teardown. First-party `write`/`edit` mutations invalidate synchronously through the `fs/observed` event.
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-Read these pages when the package-level contract is not enough. They move from the registry contract to the consumer that renders discovered skills and the home-path resolution used by the config defaults.
+-
+-- [Skill subsystem reference](../../../docs/subsystems/skills.md) — the registry contract and the local discovery priority table.
+-- [skill package](../skill/README.md) — the registry this provider registers on.
+-- [tool-skill package](../tool-skill/README.md) — how discovered skills reach the session catalog and the model.
+-- [home-paths package](../../util/home-paths/README.md) — how `dshHome` and `agentsHome` resolve.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+ Indirectly, through `dsh-tool-skill`, which renders this provider's invocable names and capped descriptions into the initial or replacement catalog and a selected current instruction body plus resource-base guidance into retained tool history while paths, provider ranks, and disabled skills remain hidden.
+@@ -138,23 +68,8 @@
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits define when the provider is a poor fit or needs special operational care. They are current package constraints, not a task backlog.
+-
+ - **Discovery is one level deep** — only `<root>/<name>/SKILL.md` and `<root>/<name>.md` are recognized; nested skill trees and package manifests are ignored.
+ - **Project scope is the nearest `.git` ancestor** — workspaces without that marker fall back to the supplied cwd, with no alternate project-root marker or monorepo subproject selection.
+ - **Malformed entries disappear with a warning** — the model catalog receives no per-skill diagnostic and cannot distinguish an absent skill from an invalid one; unexpected I/O failures preserve the last-good catalog instead.
+ - **Missing-root observation polls one path segment** — roots absent at startup use `fs.watchFile` at `watchPollIntervalMs` until Chokidar can attach, trading bounded detection latency for reliable creation detection across IDE, Git, and shell workflows.
+ - **No body revision protocol** — a loaded body is ordinary retained tool history; later file edits affect later calls but neither rewrite old results nor announce that the body changed.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-This Dev Note is working context for maintainers and is explicitly non-authoritative — shipped behavior and limits live in the sections above and in the code. A TODO in `src/index.ts` proposes extracting the Chokidar and missing-root observation into a Cordis file-watch service, keeping skill filtering and invalidation here; the missing-root polling tradeoff documented above is part of that open design.
+-
+-</details>
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-skill-filesystem/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-skill-filesystem/README.zh.md	2026-09-11 14:27:15.104962740 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/README.zh.md	2026-09-12 14:56:17.339098272 +0800
+@@ -1,47 +1,34 @@
+----
+-description: "本地文件系统 skill 提供方，供编写本地 skill、或配置项目、自定义与用户 skill 根目录如何被发现与监视的用户与维护者阅读。"
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-skill-filesystem
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-agent（智能体）可以使用来自仓库、自定义目录或用户 agent 配置的本地 skill（技能）：把 skill 编写为任一被扫描根目录下的目录 bundle（内含 `SKILL.md`）或平铺 `<name>.md` 文件，它就会出现在会话目录中。该提供方发现项目、自定义与用户根目录，解析每个 skill 的 YAML frontmatter，并监视这些目录，因此新增、改名或删除的 skill 无需重启即可到达 agent。当 skill 存放在磁盘上时选择它——注册表（`dsh-skill`）接受任意提供方，其他提供方可以从别处提供 skill。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
++`ctx.skills` 注册表的本地文件系统提供方。
+ 
+-<a id="use-this-package"></a>
+-## 使用本包
++该包实现一个 skill（技能）来源。它扫描本地项目、自定义和用户 skill 根目录，解析 `SKILL.md` 或平铺 Markdown skill 文件，并将提供方注册到 `ctx.skills`。注册表仍位于 `@deepseek-ai/dsh-skill`；持久化会话目录和面向模型的 loader 工具仍位于 `@deepseek-ai/dsh-tool-skill`。
+ 
+-挂载插件即可让本地 skill 对 agent 可用。它扫描下方的项目、自定义与用户 skill 根目录，把每个 skill 的 frontmatter 解析为目录条目，并按需加载正文；它还会监视这些根目录，使新增、改名或删除的 skill 无需重启即可进入下一次目录。
++## 插件
+ 
+-### 何时选择
++需要 `ctx.skills`（`inject: ['skills']`）。
+ 
+-当 skill 存放在磁盘上——仓库、自定义目录或用户的 agent 配置中——时，使用此提供方。当 skill 来自远程注册表或嵌入式插件数据时，请避免使用：注册表接受任意提供方，本包只是其中一种实现。
++### 配置
+ 
+-### skill 格式
+-
+-skill 可以是被扫描根目录顶层的目录 bundle `<name>/SKILL.md`，也可以是平铺文件 `<name>.md`；刻意不支持发现嵌套的 `**/SKILL.md`。文件以 YAML frontmatter 开头：必填 `name` 与 `description`，另有可选 `whenToUse`、`metadata`、`disable-model-invocation` 与 `user-invocable`。
+-
+-`disable-model-invocation: true` 会把 skill 从面向模型的目录和 loader 中排除；`user-invocable: false` 会把它从面向用户的命令中排除，省略的字段默认允许对应接口调用。这两个键接受 YAML 布尔值，以及不区分大小写的 `true`/`false`、`yes`/`no`、`on`/`off` 和 `1`/`0` 形式；被拒绝的拼写或非布尔值会让整个 skill 随警告一起被丢弃，而不会静默允许某个接口。
+-
+-目录与正文具有独立的生命周期：发现阶段把 frontmatter 解析进目录条目，每次加载都会重新读取当前文件，因此编辑 skill 正文无需版本化或缓存失效。
++| 字段 | 默认值 | 含义 |
++|---|---|---|
++| `providerName` | `filesystem` | 在 `ctx.skills` 上注册该提供方时使用的唯一名称。 |
++| `includeDefaultRoots` | `true` | 在 `customSkillDirs` 周围包含项目根和用户根；设为 false 时仅使用隔离的自定义根。 |
++| `dshHome` | `$DSH_HOME` 或 `~/.dsh` | 由 [`@deepseek-ai/dsh-home-paths`](../../util/home-paths/README.zh.md) 解析的 DeepSeek Harness 配置根目录；扫描该目录下的 `skills`。 |
++| `agentsHome` | `$DSH_AGENTS_HOME` 或 `~/.agents` | 为兼容 skill 扫描的共享 agent（智能体）配置根目录。 |
++| `customSkillDirs` | `[]` | 在项目根目录之后、用户根目录之前扫描的其他本地 skill 根目录。 |
++| `watch` | `true` | 监视宿主本地根，并在目录成员或 frontmatter 可能发生变化时使本地提供方失效。 |
++| `watchUsePolling` | `false` | 对现有 skill 根使用 Chokidar 轮询，而不是原生事件。 |
++| `watchStabilityThresholdMs` | `200` | Chokidar `add` 和 `change` 事件的稳定写入窗口。 |
++| `watchPollIntervalMs` | `100` | Chokidar 轮询／稳定性间隔和缺失路径探测间隔。 |
++| `watchMaxProjects` | `128` | watcher LRU 中保留的不同项目根数量上限。 |
++| `watchFollowSymlinks` | `true` | 监视现有根时跟随符号链接。 |
+ 
+-### 根目录与优先级
++## 发现
+ 
+-默认根按该提供方的 rank 顺序扫描：
++默认根按该提供方的 rank 顺序解析：
+ 
+ | Rank | 来源 | 路径 |
+ |---|---|---|
+@@ -51,110 +38,38 @@
+ | 400 | `user-dsh` | `<dshHome>/skills` |
+ | 500 | `user-agents` | `<agentsHome>/skills` |
+ 
+-项目根目录是包含 `.git` 的最近祖先目录；如果不存在，则使用当前 cwd。用户 DSH 根目录会跳过其 `.system` 子目录。`includeDefaultRoots: false` 会省略项目根、用户根以及 `$DSH_BUNDLED_SKILL_DIR` 默认值，使隔离提供方只看到自身配置的根；`bundledSkillDir` 会按 rank 600 添加一个内置根目录。
+-
+-### 挂载与配置
+-
+-与 skill 注册表一起加载该插件；它需要 `ctx.skills`。
+-
+-```yaml
+-- name: '@deepseek-ai/dsh-skill'
+-- name: '@deepseek-ai/dsh-skill-filesystem'
+-```
+-
+-| 字段 | 默认值 | 含义 |
+-|---|---|---|
+-| `providerName` | `filesystem` | 注册到 `ctx.skills` 的唯一提供方名称 |
+-| `includeDefaultRoots` | `true` | 在 `customSkillDirs` 周围包含项目根与用户根 |
+-| `dshHome` | `$DSH_HOME` 或 `~/.dsh` | Harness 配置根目录；扫描其 `skills` 子目录 |
+-| `agentsHome` | `$DSH_AGENTS_HOME` 或 `~/.agents` | 为兼容 skill 扫描的共享 agent 配置根目录 |
+-| `customSkillDirs` | `[]` | 其他本地 skill 根目录，位于项目根之后、用户根之前 |
+-| `watch` | `true` | 监视本地根，并在目录可能变化时使提供方失效 |
+-| `bundledSkillDir` | — | 配置后按 rank 600 扫描的内置 skill 根目录 |
+-
+-其余 `watch*` 字段用于调节 Chokidar 行为——轮询、稳定窗口、间隔、项目上限与符号链接跟随。生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-skill-filesystem)是每个字段的穷尽式真源。
+-
+-### 变更检测
+-
+-现有根目录会被监视，因此新增、改名或删除 skill（或编辑其 frontmatter）会在下一个模型步骤触发目录刷新；`references`、`scripts`、`assets` 等 bundle 资源下的编辑不会触发。当第一方 `write` 与 `edit` 工具的目标可能影响受监视的 skill 时，它们会直接使提供方失效，因此模型无需等待宿主 watcher 即可观察到自身的文件系统变更。外部 IDE、Git 与 shell 变更由宿主 watcher 捕获；尚不存在的根目录会被探测，直至其出现。
++项目根目录是包含 `.git` 的最近祖先目录；如果不存在，则使用当前 cwd。用户 DSH 根目录会跳过其 `.system` 子目录，因此归系统所有的目录不会被当作普通用户 skill。`includeDefaultRoots: false` 会省略项目根、用户根以及 `$DSH_BUNDLED_SKILL_DIR` 环境默认值，同时保留显式配置的自定义根与 bundled 根，因此可以挂载多个只看到自身根的唯一命名隔离提供方。该提供方提供项目和用户 skill；其他提供方可提供内置系统 skill。
+ 
+-### 可观察的成功与失败
++当 `ctx.fs` 可用时，发现通过 `ctx.fs.listDir` 列出根，通过 `ctx.fs.readText` 读取 skill 文件，并通过文件系统服务探测 `.git`。完整 skill 加载会将查找中止信号转发给文件系统元数据和内容读取。如果没有文件系统服务，提供方回退到可中止的 Node 文件系统 I/O，使最小本地上下文仍能加载 skill。已确认缺失的路径属于有效空状态；遇到格式错误或非文本条目时，提供方会发出警告并跳过；意外的发现或读取失败会使注册表快照不完整，系统不会因此用看似发生删除的结果替换上一份可用模型目录。
+ 
+-任一被扫描根目录下的有效 skill 都会按名称排序出现在会话目录中，加载它即可返回当前文件正文。缺少有效 frontmatter、名称无效或调用值无效的文件会随警告被跳过，因此模型目录不会收到逐 skill 诊断，也无法区分缺失的 skill 与无效的 skill。意外的发现或读取失败会让目录观测保持不完整，而不会用看似发生删除的结果替换最后一份可用视图。
++## 目录变更检测
+ 
+------
++现有 skill 根由 Chokidar 监视。打开原生 watcher 前，提供方会对现有根或祖先执行 realpath 解析，并拼回下一个缺失路径段；当 `watchFollowSymlinks` 为 false 且根本身是符号链接时，提供方不会展开最后这一级链接，使 Chokidar 能够强制执行配置边界。发现与诊断仍保留配置路径，从而避免 Windows 在 libuv 内部混用 8.3 别名与长格式事件路径。提供方会观察直属 bundle 目录的添加／移除、平铺 Markdown 文件的添加／移除，以及直接 `SKILL.md` 的添加／移除／变更；`change` 事件用于重新发现 `name`、`description` 等目录 frontmatter。`references`、`scripts`、`assets` 或其他 bundle 资源下的变更不会使目录失效。同一微任务批次内送达的事件会合并为一次提供方失效。
+ 
+-<a id="understand-the-implementation"></a>
+-## 理解实现
++不存在的根会从最近的现有祖先开始，每次沿一个缺失路径段跟踪。系统使用 `fs.watchFile` 探测下一段；当 `.agents`、`skills` 或已配置的根出现后，观察会逐级推进，直至 Chokidar 可以附加到真实根。根删除时，该过程反向执行，因此删除再重建整个 skills 目录仍可被观察到。按项目划分的 watcher 数量受 `watchMaxProjects` 限制；再次访问已被驱逐的项目时，发现阶段会重新附加观察。
+ 
+-<details>
+-<summary>实现细节——点击展开</summary>
++如果第一方文件系统 `write` 和 `edit` 工具的目标可能影响受监视的 skill 条目，它们还会通过 `fs/observed` 同步使提供方失效。这条快速路径让模型的下一个步骤无需等待宿主 watcher，即可观察到自身的文件系统变更。外部 IDE、Git、shell 和进程产生的变更依赖 Chokidar 或缺失路径探测。现有根的 watcher 会保持持久状态直至 effect 释放，使 Chokidar 能够接管异步原生错误事件；watcher 启动或运行时失败会被记录并触发重试。发现过程仍会扫描可读根目录，并返回其候选项供直接加载，但会将观测标记为不完整，因此不会缓存，也不会作为权威模型目录发布。effect 释放会关闭所有 watcher，并收束延迟回调。
+ 
+-本节解释发现与监视如何组织；可观察行为已在[使用本包](#use-this-package)中完整说明。
++## skill 格式
+ 
+-### 设计理念
++skill 可以是单层目录 bundle（`<name>/SKILL.md`），也可以是平铺 Markdown 文件（`<name>.md`）。刻意不支持发现嵌套的 `**/SKILL.md`。Frontmatter 使用 `yaml` 包解析为开放的 YAML 对象；该提供方解析必填的 `name` 和 `description`，以及可选的 `whenToUse`、`metadata`、`disable-model-invocation` 和 `user-invocable`。名称必须使用 kebab-case。
+ 
+-该提供方建立在两个分离之上。第一，目录与正文分离：发现阶段把 frontmatter 解析为摘要，而每次加载都重新读取文件，因此正文编辑无需 hash、修订号或缓存失效。第二，发现与监视分离：`list()` 在存在文件系统服务时通过 `ctx.fs` 扫描根目录并解析项目根（否则回退到可中止的 Node I/O），而独立的监视管理器负责 Chokidar 句柄、缺失根探测与失效。
++这两个调用字段接受 YAML 布尔值，以及不区分大小写的 `true`/`false`、`yes`/`no`、`on`/`off` 和 `1`/`0`。`disable-model-invocation: true` 会从面向模型的目录和 loader 中排除该 skill；`user-invocable: false` 会从面向用户的命令中排除该 skill。每个省略的字段都默认为允许对应接口调用；提供方始终输出两个正向内部策略值，即使两个键都不存在也不例外。若使用驼峰拼写或提供非布尔调用值，系统会记录警告并从发现结果中排除整个 skill，而不是只丢弃该字段或回退到宽松的默认值。调用策略校验遵循失败时默认拒绝原则，因为忽略无效数据可能会在已禁用的接口上暴露 skill；类型错误的可选 `whenToUse` 和 `metadata` 值则会被省略，因为这两个字段目前都不授予调用权限。
+ 
+-### 源码地图
++目录与正文具有独立的生命周期。发现阶段解析 frontmatter 以生成概述。每次 `skill(name)` 加载都会重新读取并解析当前文件，因此正文编辑不需要 hash、修订号、缓存失效或主动通知模型。若在发现与加载之间更改 frontmatter 中的名称，系统会拒绝陈旧名称并使提供方失效；下一次目录观察会发布新名称。
+ 
+-| 文件 | 职责 |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | 插件入口、提供方、根解析、frontmatter 解析、监视管理器 |
+-| — | 不发布运行时不变式伴生入口；本包没有独立事件序列或可变数据关系，相关约定在所属 seam 强制执行。 |
+-
+-### 发现流程
+-
+-发现过程先为查找 cwd 解析根列表，让监视管理器附加到每个根，再扫描每个根的直接条目：目录 bundle 解析为 `<name>/SKILL.md`，平铺文件解析为 `<name>.md`。每个文件都会解析 frontmatter——`name` 必须为 kebab-case，`description` 必填，调用键按严格布尔语法解析——候选项携带根目录的来源标签与 rank，供注册表与其他提供方合并。已确认缺失的路径属于有效空状态；格式错误或非文本条目会随警告跳过。
+-
+-### 监视与失效
+-
+-现有根目录由 Chokidar 以深度 1 监视；不存在的根会从最近的现有祖先开始，借助 `fs.watchFile` 每次沿一个缺失路径段跟踪。相关事件——直属 bundle 添加/移除、平铺 `.md` 添加/移除、直接 `SKILL.md` 添加/移除/变更——会在每个微任务批次合并为一次提供方失效，资源子树下的变更则被忽略。监视管理器受 `watchMaxProjects` 限制，会记录并重试失败的启动，并在释放时关闭所有句柄。第一方 `write`/`edit` 变更通过 `fs/observed` 事件同步失效。
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-当包级约定不够用时阅读以下页面。它们从注册表约定逐步进入渲染已发现 skill 的消费方，以及配置默认值使用的 home 路径解析。
+-
+-- [skill 子系统参考](../../../docs/subsystems/skills.zh.md)——注册表约定与本地发现优先级表。
+-- [skill 包](../skill/README.zh.md)——该提供方注册到的注册表。
+-- [tool-skill 包](../tool-skill/README.zh.md)——已发现 skill 如何到达会话目录与模型。
+-- [home-paths 包](../../util/home-paths/README.zh.md)——`dshHome` 与 `agentsHome` 如何解析。
+-
+------
+-
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+-通过 `dsh-tool-skill` 间接影响模型；它把该提供方的可调用名称和有长度上限的描述渲染到初始目录或替换目录中，并把所选的当前指令正文与资源基底指引渲染到已保留工具历史中；路径、提供方 rank 与已禁用 skill 仍被隐藏。
++通过 `dsh-tool-skill` 间接影响模型。它将该提供方的可调用名称和有长度上限的描述渲染到初始目录或替换目录中，并将所选的当前指令正文与资源基底指引渲染到保留的工具历史中；路径、提供方 rank 和已禁用 skill 仍被隐藏。
+ 
+ #### KV Cache 影响
+ 
+ watcher 触发的失效可促使上述消费方在现有请求历史中追加替换目录。仅涉及正文的编辑不会改变目录 digest。
+ 
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制说明该提供方何时不合适，或何时需要特别的运维注意。它们是当前包约束，不是任务积压。
+-
+-- **发现深度为一层**——只识别 `<root>/<name>/SKILL.md` 与 `<root>/<name>.md`；忽略嵌套 skill 树与包 manifest（元数据清单）。
+-- **项目范围为最近 `.git` 祖先**——没有该标记的工作区回退到提供的 cwd，不支持其他项目根标记或 monorepo 子项目选择。
+-- **格式错误的条目随警告消失**——模型目录不会收到逐 skill 诊断，无法区分缺失的 skill 与无效的 skill；意外的 I/O 失败则会保留最后一份可用目录。
+-- **缺失根观察每次轮询一个路径段**——启动时不存在的根会使用 `fs.watchFile` 按 `watchPollIntervalMs` 轮询，直至 Chokidar 可以附加；这以有界检测延迟换取跨 IDE、Git 与 shell 工作流的可靠创建检测。
+-- **无正文修订协议**——已加载正文是普通的已保留工具历史；后续文件编辑会影响后续调用，但既不会改写旧结果，也不会通知正文已变化。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
+-
+-本开发备注是维护者的工作上下文，明确不具权威性——已交付的行为与限制以上文和代码为准。`src/index.ts` 中的一条 TODO 提议把 Chokidar 与缺失根观察提取为 Cordis 文件监视服务，把 skill 过滤与失效保留在此处；上文记录的缺失根轮询取舍是该开放设计的一部分。
++## 已知限制与暂缓事项
+ 
+-</details>
++- **发现深度为一层**：只识别 `<root>/<name>/SKILL.md` 和 `<root>/<name>.md`；忽略嵌套 skill 树和包 manifest（元数据清单）。
++- **项目范围为最近 `.git` 祖先**：没有该标记的工作区回退到提供的 cwd，不支持其他项目根标记或 monorepo 子项目选择。
++- **格式错误的条目会随警告消失**：模型目录不会收到每个 skill 的诊断，无法区分缺失的 skill 与无效的 skill；意外 I/O 失败则会保留最后一份可用目录。
++- **缺失根观察每次轮询一个路径段**：启动时不存在的根会使用 `fs.watchFile` 按 `watchPollIntervalMs` 轮询，直至 Chokidar 可以附加；这以有界检测延迟换取跨 IDE、Git 和 shell 工作流的可靠创建检测。
++- **无正文修订协议**：已加载的正文是普通的已保留工具历史；后续文件编辑会影响后续调用，但既不会改写旧结果，也不会通知正文已发生变化。
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/lib: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-skill-filesystem/lib/types/index.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/lib/types/index.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-skill-filesystem/lib/types/index.d.ts	2026-09-11 14:27:15.124963025 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/lib/types/index.d.ts	2026-09-12 14:56:17.339533026 +0800
+@@ -15,7 +15,7 @@
+ export declare const inject: string[];
+ /** Local filesystem skill provider configuration. */
+ export interface Config {
+-    /** Unique provider name. Defaults to `filesystem`. */
++    /** Unique provider name. Defaults to `local`. */
+     providerName?: string;
+     /** Whether project and user roots are included around custom roots. */
+     includeDefaultRoots?: boolean;
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/lib/types: invariant.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-skill-filesystem/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-skill-filesystem/package.json	2026-09-11 14:27:15.090962541 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/package.json	2026-09-12 14:56:17.339098272 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-skill-filesystem",
+   "description": "Local filesystem skill provider for the DeepSeek Harness",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -18,29 +18,36 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./src/*": "./src/*",
+     "./package.json": "./package.json"
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/types/**/*.d.ts"
+   ],
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/dsh-fs": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-home-paths": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-skill": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-fs": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-home-paths": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-skill": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   },
+   "dependencies": {
+     "chokidar": "^5.0.0",
+     "yaml": "^2.4.2",
+-    "@deepseek-ai/schemastery": "^3.18.2"
++    "@deepseek-ai/schemastery": "^3.18.1"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/dsh-fs": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-home-paths": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-skill": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-fs": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-home-paths": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-skill": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   }
+ }
+\ No newline at end of file

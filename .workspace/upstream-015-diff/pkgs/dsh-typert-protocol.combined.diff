@@ -1,0 +1,1150 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/README.i18n.yaml	2026-09-11 14:27:15.177963778 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/README.i18n.yaml	2026-09-12 14:56:19.258116281 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/typert/protocol/README.md
+-README.md: 43147c2c2f1746ff0c806c0842b5dba65457775a
+-README.zh.md: 0633db1a9e95d9abda8131fec0f1cf659c484910
++README.md: 84f9f1b31cca35cffce5dc5fc84db1017adaad08
++README.zh.md: 97e4734a7292f0a305ff8ed00ff1d72d1a53b5e9
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/README.md	2026-09-11 14:27:15.144963309 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/README.md	2026-09-12 14:56:19.257834820 +0800
+@@ -1,149 +1,38 @@
+----
+-description: "The shared Typert Remote protocol: decorators, wire descriptors, codecs, and provider contracts used by business packages, generated artifacts, the Host Gateway, and the Client API."
+-kind: "package-library"
+----
+-
+ # @deepseek-ai/dsh-typert-protocol
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-With `dsh-typert-protocol`, business packages can expose Host methods to Remote clients: mark a method with `@Remote` (or `@RemoteScope` for scoped receivers), bind the service to a wire namespace, and associate Host objects and scoped Contexts with wire identities through the merge-extensible protocol maps. Generated artifacts, the Host Gateway, and the Client API consume the same invocation descriptors, codecs, and provider contracts, so one declaration set stays in sync across every face. The package registers no Cordis service and runs no TypeScript analysis; it declares types and decorator markers only.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## Use this package
+-
+-This package is for business-package and assembly maintainers who expose Host capabilities to Remote clients. It is a declarations library: mark methods, bind services, and let the generated pipeline and the Gateway do the rest.
+-
+-### Exposing a Host method
+-
+-A business package marks a public instance method with `@Remote` (or `@RemoteScope(key)` when the receiver comes from a scoped Context), and the owning service either extends `TypertRemoteService` or declares a `typertRemote` binding through `bindTypertRemote()`:
+-
+-```text
+-import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
+-
+-export class GoalService extends TypertRemoteService {
+-  @Remote
+-  async create(agentId: string, objective: string): Promise<GoalResult> {
+-    ...
+-  }
+-}
+-```
+-
+-Generation turns the method into a wire endpoint under the service's namespace; Clients call it as a typed method through `ctx.remote` (see the [API Gateway reference](../../../docs/api-gateway.md)). A method opts into cooperative cancellation by declaring `signal: AbortSignal` as its final parameter — the signal is injected, never a JSON parameter or lookup field.
+-
+-### Associating Host objects and Contexts with wire identities
+-
+-Complex Host objects cannot cross the wire directly. A business package declares the association through the merge-extensible `TypertLookupMap` and `TypertContextMap`. A Host Context adapter owns the stable wire declaration and resolves wire identities to live Contexts. A Client Context adapter maps in both directions because scoped calls originate from a Client Context and forwarded Host events resolve their explicit wire identity there. Host composition may override its synchronous or asynchronous resolver. A resolver that refuses on policy grounds throws `RemoteError` with its own code, which reaches the caller unchanged.
+-
+-### Reporting and reading a Remote failure
+-
+-One class carries every Remote failure: `RemoteError`, holding a stable `<domain>/<reason>` code and the details typed for that code. This package declares the universal carrier codes (`gateway/bad-request`, `gateway/cancelled`, `gateway/internal`) and owns `RemoteErrorDetailsMap`, the merge-extensible table every other package extends beside its own throwing code:
+-
+-```text
+-declare module '@deepseek-ai/dsh-typert-protocol' {
+-  interface RemoteErrorDetailsMap {
+-    'goal/not-found': { readonly goalId: string }
+-  }
+-}
+-throw new RemoteError('goal/not-found', `goal "${id}" does not exist`, { goalId: id })
+-```
+-
+-An owner throws at the failure point; no package writes an error-class family or an exit-mapping function. A caller discriminates by `code` — never by `instanceof` — and a `code` branch narrows `details` with no cast, because `RemoteFailure` is the code-discriminated union of `RemoteError` instances. Infrastructure that must recognize a failure carried across a module or realm copy of the class calls `remoteErrorOf(value)`, which reads a structural marker instead of the prototype chain.
+-
+-### Receiving forwarded Host events on the Client
+-
+-The Host assembly extends `TypertRemoteEventSelection` with the Cordis events it forwards to consumers, which narrows the `ctx.remote.$on` key set. `TypertForwardableEvent` accepts unscoped `void` notifications and scoped async waterfalls whose final `next()` callback returns the event's result type. `TypertClientEventListener` derives the Client listener from that same `Events` member while preserving signals, optional and readonly fields, arrays, callbacks, and result types. `TypertClientRemote` exposes only `$mount()` and `$on()`; event transport remains private to Gateway.
++Compiler-independent declarations shared by business packages, generated Typert artifacts, the Host Gateway, and Client API. This package owns the Remote Service base, decorators, explicit binding fallback, merge-extensible protocol maps, invocation descriptors, codecs, and provider contracts; it does not run TypeScript analysis or register a concrete Cordis service.
+ 
+------
++## Remote declarations
+ 
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
++- `@Remote` marks a public instance method for direct invocation on its registered Cordis Service.
++- `@RemoteScope(key)` marks a method whose receiver is selected from a merge-declared scoped Context kind.
++- `TypertRemoteService` binds the Cordis key passed to `super(ctx, serviceKey, options?)` to the same default wire namespace.
++- `bindTypertRemote(this, serviceKey, options?)` provides the same visible, frozen binding for a Service that cannot inherit from `TypertRemoteService`.
++- `remoteMethods(service)` returns a detached declaration-order snapshot used by the Gateway's SRC fallback.
+ 
+-<details>
+-<summary>Implementation internals — click to expand</summary>
++A Host method opts into cooperative cancellation by declaring `signal: AbortSignal` as its final parameter. `InvocationDescriptor.cancellation` records that reserved injection point; the signal never becomes a JSON parameter or lookup field. SRC recognizes the final parameter name, while strict generation also verifies the global `AbortSignal` type.
+ 
+-This section explains how the declarations stay compiler-independent and where each contract is enforced; the programming model is covered in [Use this package](#use-this-package).
++Decorator initializers retain markers in a module-private `WeakMap` keyed by the Service prototype. They do not add constructor symbols, prototype properties, parameter metadata, or runtime reflection fields. A `TypertRemoteService` exposes the same public readonly `typertRemote` binding that the explicit helper returns.
+ 
+-### Design concept
++## Typert protocol
+ 
+-The package keeps strict reflection in the compiler: decorator initializers retain minimal markers in a versioned descriptor on the Service prototype. The descriptor uses a stable string property name, so another installed copy of the protocol package can read the same markers. Full parameter, result, lookup, and schema reflection is the Typert build pipeline's job, delivered through `InvocationDescriptor`.
++Business packages extend `TypertLookupMap` and `TypertContextMap` to associate Host objects or scoped Contexts with their wire identities. Generated artifacts extend `TypertRemoteMap`, `TypertRemoteScopeMap`, and `TypertRemoteNamespaceMap` so Client imports expose only selected Remote methods. `InvocationDescriptor` is the shared runtime form consumed by the registry, Gateway, and Client Remote.
+ 
+-### Remote markers
++The Host assembly extends `TypertRemoteEventSelection` with the Host events it forwards to consumers, which narrows the `ctx.remote.$on` key face; `TypertForwardableEvent` states the shapes a one-way delivery can carry at all, excluding Scope-bound and answered events. `TypertClientRemote` carries both roles of that surface: consumers subscribe through `$on`, and the Client half owning the host frame sink hands frames over through `$dispatch`.
+ 
+-`@Remote` and `@RemoteScope` schedule an initializer that appends the method name, an optional export name, and the invocation mode to the prototype descriptor; `remoteMethods(service)` validates its version and returns a detached declaration-order snapshot that the Gateway's source-mode fallback reads. Markers require public, non-static instance methods with string names, and conflicting markers on one method are rejected.
++Lookup and Context packages own both sides of their contract: declaration merging supplies the static association, while runtime providers register identity resolution with `ctx.typert`. A lookup or Host Context provider supplies the stable declaration and default resolver, while Host composition may separately configure a synchronous or asynchronous resolver; policy rejections may use `TypertLookupFailure` to carry a failure value owned by the boundary adapter. Strict codecs carry generated schemas; `src-json` codecs identify the weaker source-launch path.
+ 
+-### Protocol maps and descriptors
+-
+-The merge-extensible protocol maps keep static associations in the type system, while runtime providers register resolution with `ctx.typert`; the map names and shapes live in [`src/types.ts`](src/types.ts). `InvocationDescriptor` is the shared runtime form consumed by the registry, the Gateway, and the Client Remote, covering direct and Context receivers, JSON and lookup parameters, scope projections, cancellation, and result codecs.
+-
+-### Wire identity grammar
+-
+-Every namespace, method, lookup, and Context segment must satisfy `isTypertRemoteSegment()`, so generated names cross the shared RPC carrier unchanged. Strict codecs carry generated schemas; `src-json` codecs identify the weaker source-launch path.
+-
+-### Source map
+-
+-| File | Role |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | Decorators, Gateway bindings, `remoteMethods`, segment validation |
+-| [`src/remote-error.ts`](src/remote-error.ts) | `RemoteError` and the structural `remoteErrorOf` recognizer |
+-| [`src/types.ts`](src/types.ts) | Protocol maps, `RemoteErrorDetailsMap`, `RemoteResult`, `InvocationDescriptor`, codecs, provider contracts, registry interfaces, `TypertClientRemote` |
+-| — | No runtime invariant companion is published; decorators retain private immutable declarations and bindings are frozen values with no independent event stream to cross-check. |
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-Read these pages when the package-level contract is not enough; they move from the declarations to the runtime and the call path.
+-
+-- [API Gateway reference](../../../docs/api-gateway.md) — how the declarations become running Host-to-Client calls.
+-- [Typert subsystem reference](../../../docs/subsystems/typert.md) — the literal public contracts recorded from protocol and Gateway types.
+-- [Typert registry](../registry/README.md) — where descriptors and providers are stored at runtime.
+-- [Typert generator](../generator/README.md) — what generates the consumer-side declarations and descriptors.
+-- [Remote-call Agent Note](../../../.agents/notes/implemented/architecture/2026-08-02-typert-remote-method-calls.md) — the architecture and transport decisions behind Remote calls.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+-None, as compiler-independent Remote protocol declarations register nothing model-facing.
++None, as this protocol package declares application reflection and registers nothing model-facing.
+ 
+ #### KV Cache effect
+ 
+-No direct effect; the declared contracts reach a request only when an assembly places them in one.
++No direct effect.
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits define what the declarations can represent; they are current package constraints, not a task backlog.
+-
+-- **Decorator markers are minimal** — markers contain only the method name and the direct or Context invocation mode; parameter, result, lookup, and schema reflection require the Typert build pipeline.
+-- **Remote signatures are restricted** — decorators accept only public, non-static instance methods with string names, and source-mode execution cannot represent overloaded, destructured, defaulted, or rest-parameter signatures.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-None.
+-
+-</details>
++- Decorator markers contain only the method name and direct or Context invocation mode. Parameter, result, lookup, and schema reflection require the Typert build pipeline.
++- Remote decorators accept only public, non-static instance methods with string names. SRC execution cannot represent overloaded, destructured, defaulted, or rest-parameter signatures.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/README.zh.md	2026-09-11 14:27:15.146963337 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/README.zh.md	2026-09-12 14:56:19.257834820 +0800
+@@ -1,149 +1,38 @@
+----
+-description: "共享的 Typert Remote 协议：业务包、生成产物、Host Gateway 与 Client API 使用的装饰器、wire 描述符、编解码器与提供方约定。"
+-kind: "package-library"
+----
+-
+ # @deepseek-ai/dsh-typert-protocol
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-借助 `dsh-typert-protocol`，业务包可以向 Remote 客户端暴露 Host 方法：用 `@Remote`（作用域接收者用 `@RemoteScope`）标记方法，把服务绑定到 wire 命名空间，并通过可合并扩展的协议映射把 Host 对象与作用域 Context 关联到 wire identity。生成产物、Host Gateway 与 Client API 消费同一套调用描述符、编解码器与提供方约定，因此一套声明在每个 face 上保持一致。本包不注册任何 Cordis 服务，也不运行 TypeScript 分析；它只声明类型与装饰器标记。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## 使用本包
+-
+-本包供向 Remote 客户端暴露 Host 能力的业务包与装配维护者使用。它是一个声明库：标记方法、绑定服务，其余交给生成的流水线与 Gateway。
+-
+-### 暴露 Host 方法
+-
+-业务包用 `@Remote`（当接收者来自作用域 Context 时用 `@RemoteScope(key)`）标记一个公开实例方法，所属服务要么继承 `TypertRemoteService`，要么通过 `bindTypertRemote()` 声明 `typertRemote` 绑定：
+-
+-```text
+-import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
+-
+-export class GoalService extends TypertRemoteService {
+-  @Remote
+-  async create(agentId: string, objective: string): Promise<GoalResult> {
+-    ...
+-  }
+-}
+-```
+-
+-生成会把方法变为服务命名空间下的 wire 端点；Client 通过 `ctx.remote` 以类型化方法调用它（见 [API Gateway 参考](../../../docs/api-gateway.zh.md)）。方法把 `signal: AbortSignal` 声明为最后一个参数即可选择协作式取消——该信号是注入的，绝不会成为 JSON 参数或查找字段。
+-
+-### 把 Host 对象与 Context 关联到 wire identity
+-
+-复杂的 Host 对象不能直接跨 wire 传输。业务包通过可合并扩展的 `TypertLookupMap` 与 `TypertContextMap` 声明关联。Host Context adapter 拥有稳定 wire 声明，并把 wire identity 解析为活跃 Context。Client Context adapter 需要双向映射，因为作用域调用从 Client Context 发起，而转发的 Host 事件要在 Client 侧解析其显式 wire identity。Host 组合可以覆盖其同步或异步 resolver。因策略而拒绝的 resolver 抛出带自有码的 `RemoteError`，该码原样到达调用方。
+-
+-### 报告与读取 Remote 失败
+-
+-所有 Remote 失败都由一个类承载：`RemoteError`，携带稳定的 `<domain>/<reason>` 码，以及按该码定型的 details。本包声明通用载体码（`gateway/bad-request`、`gateway/cancelled`、`gateway/internal`），并拥有 `RemoteErrorDetailsMap`——可合并扩展的码表，其他每个包都在自己的抛出点旁扩展它：
+-
+-```text
+-declare module '@deepseek-ai/dsh-typert-protocol' {
+-  interface RemoteErrorDetailsMap {
+-    'goal/not-found': { readonly goalId: string }
+-  }
+-}
+-throw new RemoteError('goal/not-found', `goal "${id}" does not exist`, { goalId: id })
+-```
+-
+-拥有方在失败点直接抛出；没有任何包再写错误类家族或出口映射函数。调用方按 `code` 判别——绝不用 `instanceof`——且 `code` 分支无需 cast 即收窄 `details`，因为 `RemoteFailure` 就是 `RemoteError` 实例按码判别的 union。需要识别跨模块或跨 realm 类副本传来的失败时，基础设施调用 `remoteErrorOf(value)`，它读结构标记而不是原型链。
+-
+-### 在 Client 侧接收转发的 Host 事件
+-
+-Host 装配以转发给消费端的 Cordis 事件扩展 `TypertRemoteEventSelection`，从而收窄 `ctx.remote.$on` 的键集。`TypertForwardableEvent` 接受无作用域且返回 `void` 的通知，以及最后一个 `next()` 回调返回事件结果类型的异步作用域 waterfall。`TypertClientEventListener` 从同一条 `Events` 成员派生 Client listener，并保留 signal、可选和只读字段、数组、回调与结果类型。`TypertClientRemote` 只公开 `$mount()` 与 `$on()`；事件传输仍由 Gateway 私有持有。
++该包提供不依赖编译器的声明，由业务包、生成的 Typert 产物、宿主网关和客户端 API 共享。它负责 Remote 服务基类、装饰器、显式绑定回退、可通过声明合并扩展的协议映射、调用描述符、编解码器和提供方约定；它不执行 TypeScript 分析，也不注册具体 Cordis 服务。
+ 
+------
++## Remote 声明
+ 
+-<a id="understand-the-implementation"></a>
+-## 理解实现
++- `@Remote` 将公开实例方法标记为可在其注册的 Cordis 服务上直接调用。
++- `@RemoteScope(key)` 标记接收者选自合并声明的作用域 Context 类型的方法。
++- `TypertRemoteService` 将传给 `super(ctx, serviceKey, options?)` 的 Cordis 键绑定到同一默认协议命名空间。
++- `bindTypertRemote(this, serviceKey, options?)` 为无法继承 `TypertRemoteService` 的服务提供同样可见且冻结的绑定。
++- `remoteMethods(service)` 返回按声明顺序排列、与内部状态分离的快照，供 Gateway 的 SRC 回退路径使用。
+ 
+-<details>
+-<summary>实现细节——点击展开</summary>
++宿主方法通过将 `signal: AbortSignal` 声明为最后一个参数来启用协作式取消。`InvocationDescriptor.cancellation` 记录这个保留的注入点；该信号绝不会成为 JSON 参数或查找字段。SRC 识别末位参数名，严格生成还会校验它是否具有全局 `AbortSignal` 类型。
+ 
+-本节解释声明如何保持与编译器无关，以及每个约定在哪里执行；编程模型已在[使用本包](#use-this-package)中说明。
++装饰器初始化器将标记保存在以服务原型为键的模块私有 `WeakMap` 中。它们不会在构造函数上添加符号，也不会添加原型属性、参数元数据或运行时反射字段。`TypertRemoteService` 会暴露与显式辅助函数相同的公开只读 `typertRemote` 绑定。
+ 
+-### 设计理念
++## Typert 协议
+ 
+-本包把严格反射留在编译器中：装饰器初始化器把最小标记保存在 Service 原型上的带版本描述符中。描述符使用稳定的字符串属性名，因此协议包的另一个已安装副本也能读取同一组标记。完整的参数、结果、查找与 schema 反射是 Typert 构建流水线的职责，通过 `InvocationDescriptor` 交付。
++业务包扩展 `TypertLookupMap` 和 `TypertContextMap`，以关联宿主对象或作用域 Context 与其协议身份。生成的产物扩展 `TypertRemoteMap`、`TypertRemoteScopeMap` 和 `TypertRemoteNamespaceMap`，使客户端导入后仅暴露选定的 Remote 方法。`InvocationDescriptor` 是供注册表、网关和客户端 Remote 使用的共享运行时形式。
+ 
+-### Remote 标记
++Host 装配以转发给消费端的 Host 事件扩展 `TypertRemoteEventSelection`，从而收窄 `ctx.remote.$on` 的键面；`TypertForwardableEvent` 陈述单向投递根本能承载哪些形状，把 Scope 化事件与有返回值的事件排除在外。`TypertClientRemote` 承载该面的两种角色：消费方经 `$on` 订阅，持有 Host 帧 sink 的 Client 半经 `$dispatch` 交出帧。
+ 
+-`@Remote` 与 `@RemoteScope` 调度一个初始化器，把方法名、可选导出名与调用模式追加到原型描述符；`remoteMethods(service)` 校验其版本，并返回与已存描述符分离、按声明顺序排列的快照，供 Gateway 的源码模式回退读取。标记要求公开、非静态、具名字符串的实例方法，同一方法上的冲突标记会被拒绝。
++查找包与 Context 包同时负责该约定的两侧：声明合并提供静态关联，运行时提供方则向 `ctx.typert` 注册身份解析。查找提供方或宿主 Context 提供方提供稳定声明与默认解析器，宿主组合可以另行配置同步或异步解析器；策略拒绝可用 `TypertLookupFailure` 携带由边界适配器拥有的失败值。严格编解码器携带生成的 schema；`src-json` 编解码器标识约束更弱的源码启动路径。
+ 
+-### 协议映射与描述符
+-
+-可合并扩展的协议映射在类型系统中保留静态关联，运行时提供方则向 `ctx.typert` 注册解析；映射的名称与形状见 [`src/types.ts`](src/types.ts)。`InvocationDescriptor` 是注册表、Gateway 与 Client Remote 共同消费的共享运行时形式，涵盖直接与 Context 接收者、JSON 与查找参数、作用域投影、取消与结果编解码器。
+-
+-### Wire 标识文法
+-
+-每个命名空间、方法、查找与 Context 段都必须满足 `isTypertRemoteSegment()`，生成的名字才能原样跨共享 RPC 载体传输。严格编解码器携带生成的 schema；`src-json` 编解码器标识约束更弱的源码启动路径。
+-
+-### 源码地图
+-
+-| 文件 | 职责 |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | 装饰器、Gateway 绑定、`remoteMethods`、段校验 |
+-| [`src/remote-error.ts`](src/remote-error.ts) | `RemoteError` 与结构式识别函数 `remoteErrorOf` |
+-| [`src/types.ts`](src/types.ts) | 协议映射、`RemoteErrorDetailsMap`、`RemoteResult`、`InvocationDescriptor`、编解码器、提供方约定、注册表接口、`TypertClientRemote` |
+-| — | 不发布运行时不变量伴生入口；decorator 只保留私有不可变声明，binding 也是冻结值，没有可供交叉核对的独立事件流。 |
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-当包级约定不够用时阅读以下页面；它们从声明逐步进入运行时与调用路径。
+-
+-- [API Gateway 参考](../../../docs/api-gateway.zh.md)——声明如何成为实际的 Host 到 Client 调用。
+-- [Typert 子系统参考](../../../docs/subsystems/typert.zh.md)——从协议与 Gateway 类型记录的字面公共约定。
+-- [Typert 注册表](../registry/README.zh.md)——描述符与提供方在运行时存放的位置。
+-- [Typert 生成器](../generator/README.zh.md)——生成消费方声明与描述符的包。
+-- [Remote 调用 Agent Note](../../../.agents/notes/implemented/architecture/2026-08-02-typert-remote-method-calls.zh.md)——Remote 调用背后的架构与传输决策。
+-
+------
+-
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+-无，因为与编译器无关的 Remote 协议声明不注册任何面向模型的内容。
++无，因为该协议包声明应用反射，不注册任何面向模型的内容。
+ 
+ #### KV Cache 影响
+ 
+-无直接影响；声明的约定只有在装配将其放入请求时才会触及请求。
+-
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制说明声明能表示什么；它们是当前包约束，不是任务积压。
+-
+-- **装饰器标记是最小化的**——标记只包含方法名与直接调用或 Context 调用模式；参数、结果、查找与 schema 反射需要 Typert 构建流水线。
+-- **Remote 签名受限**——装饰器只接受具有字符串名称的公开、非静态实例方法，源码模式执行无法表示重载、解构、默认参数或剩余参数签名。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
++无直接影响。
+ 
+-无。
++## 已知限制与暂缓事项
+ 
+-</details>
++- 装饰器标记仅包含方法名，以及直接调用或 Context 调用模式。参数、结果、查找和 schema 反射需要 Typert 构建流水线。
++- Remote 装饰器只接受具有字符串名称的公开、非静态实例方法。SRC 执行无法表示重载签名，以及包含解构参数、默认参数或剩余参数的方法签名。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/lib/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/lib/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/lib/index.js	2026-09-11 14:27:15.070962257 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/lib/index.js	2026-09-12 14:56:19.257387169 +0800
+@@ -1,47 +1,8 @@
+ import { Service } from "@deepseek-ai/cordis";
+-//#region lib/types/remote-error.js
+-/** The one Remote failure class shared by owners, the Gateway, and consumers. */
+-/**
+-* One Remote call failure: a real Error carrying its stable code and typed
+-* details. Owners throw it at the failure point; the Host Gateway encodes it
+-* onto the wire unchanged; the Client face rebuilds an instance for the
+-* `RemoteResult` error branch, so `throw result.error` keeps throw semantics.
+-* Discrimination is always by `code`, never by instanceof.
+-*/
+-var RemoteError = class extends Error {
+-	code;
+-	details;
+-	/** Structural marker: cross-realm/bundle identification never uses instanceof. */
+-	isDSHRemoteError = true;
+-	/**
+-	* @param code - stable failure code declared in {@link RemoteErrorDetailsMap}.
+-	* @param message - human diagnostic carried across the wire.
+-	* @param details - structured payload typed by the code.
+-	* @param options - standard Error options (`cause` survives in-process only).
+-	*/
+-	constructor(code, message, details, options) {
+-		super(message, options);
+-		this.code = code;
+-		this.details = details;
+-		this.name = "RemoteError";
+-	}
+-};
+-/**
+-* Structurally identify a RemoteError thrown across module or realm copies of
+-* this class. Mechanism-internal: the Gateway and test assertions use it;
+-* business code receives typed failures and never needs it.
+-* @param value - a caught value.
+-* @returns the failure when the marker matches, otherwise undefined.
+-*/
+-function remoteErrorOf(value) {
+-	if (typeof value === "object" && value !== null && value.isDSHRemoteError === true && typeof value.code === "string") return value;
+-}
+-//#endregion
+ //#region lib/types/index.js
+ /**
+-* Remote decorators and explicit Gateway bindings backed by versioned
+-* descriptors carried on decorated class prototypes. Strict reflection
+-* remains a Typert compiler responsibility.
++* Remote decorators and explicit Gateway bindings backed only by private
++* module state. Strict reflection remains a Typert compiler responsibility.
+ * @module @deepseek-ai/dsh-typert-protocol
+ */
+ const TYPERT_REMOTE_SEGMENT_PATTERN = /^[A-Za-z0-9_$.-]+$/;
+@@ -53,7 +14,24 @@
+ function isTypertRemoteSegment(value) {
+ 	return value !== "." && value !== ".." && TYPERT_REMOTE_SEGMENT_PATTERN.test(value);
+ }
+-const REMOTE_METHOD_DESCRIPTOR = "@deepseek-ai/dsh-typert-protocol/remote-methods";
++/**
++* A lookup policy rejection whose typed payload belongs to the active boundary adapter.
++* Gateway adapters preserve this payload instead of collapsing it into an infrastructure failure.
++*/
++var TypertLookupFailure = class extends Error {
++	/** Adapter-owned failure returned to the caller. */
++	failure;
++	/**
++	* Wrap one adapter failure without exposing the rejected identity.
++	* @param failure - typed failure owned by the active boundary adapter.
++	*/
++	constructor(failure) {
++		super("Typert lookup policy rejected the requested identity");
++		this.name = "TypertLookupFailure";
++		this.failure = failure;
++	}
++};
++const markers = /* @__PURE__ */ new WeakMap();
+ /**
+ * Bind one visible Service field to a Cordis key and Remote namespace.
+ * @param service - owning Service instance, normally `this`.
+@@ -86,99 +64,77 @@
+ 		this.typertRemote = bindTypertRemote(this, this.name, options);
+ 	}
+ };
+-function Remote(methodExportOrOptions, context) {
+-	if (typeof methodExportOrOptions === "string") {
+-		validateName("Remote export name", methodExportOrOptions);
+-		return remoteDecorator({ kind: "direct" }, void 0, methodExportOrOptions);
+-	}
+-	if (typeof methodExportOrOptions === "object") {
+-		if (remoteOptionMode(methodExportOrOptions) !== "stream" || Reflect.ownKeys(methodExportOrOptions).length !== 1) throw new TypeError("typert-protocol: Remote options must contain exactly mode: \"stream\"");
+-		return remoteDecorator({ kind: "direct" }, "stream");
++function Remote(methodOrExportName, context) {
++	if (typeof methodOrExportName === "string") {
++		validateName("Remote export name", methodOrExportName);
++		return function(_method, decoratorContext) {
++			addMarkerInitializer(decoratorContext, { kind: "direct" }, methodOrExportName);
++		};
+ 	}
+ 	if (context === void 0) throw new TypeError("typert-protocol: Remote decorator context is missing");
+ 	addMarkerInitializer(context, { kind: "direct" });
+ }
+-function remoteOptionMode(options) {
+-	return Reflect.get(options, "mode");
+-}
+-function remoteDecorator(invocation, mode, exportName) {
+-	return function(_method, context) {
+-		addMarkerInitializer(context, invocation, mode, exportName);
+-	};
+-}
+ /**
+ * Create a decorator for a method resolved from one Remote Scope.
+ * @param key - scope key declared through the Context map.
+ * @param exportName - optional Remote export name; defaults to the method name.
+-* @returns a standard method decorator that records a versioned prototype descriptor.
++* @returns a standard method decorator that records only private module state.
+ */
+ function RemoteScope(key, exportName) {
+ 	validateName("Scope key", key);
+ 	if (exportName !== void 0) validateName("Remote export name", exportName);
+-	return remoteDecorator({
+-		kind: "context",
+-		context: key
+-	}, void 0, exportName);
++	return function(_method, context) {
++		addMarkerInitializer(context, {
++			kind: "context",
++			context: key
++		}, exportName);
++	};
+ }
+ /**
+-* Read Remote markers attached to a live Service's class prototype.
+-* The returned snapshot cannot mutate the stored descriptor.
++* Read Remote markers attached to a live Service by decorator initializers.
++* The returned snapshot cannot mutate the private marker table.
+ * @param service - live Service instance.
+ * @returns markers in class declaration order.
+ */
+ function remoteMethods(service) {
+ 	const prototype = Object.getPrototypeOf(service);
+ 	if (prototype === null) return [];
+-	return (readRemoteMethodDescriptor(prototype)?.methods ?? []).map((marker) => ({ ...marker }));
+-}
+-function readRemoteMethodDescriptor(prototype) {
+-	const property = Object.getOwnPropertyDescriptor(prototype, REMOTE_METHOD_DESCRIPTOR);
+-	if (property === void 0) return void 0;
+-	const descriptor = property.value;
+-	if (descriptor === null || typeof descriptor !== "object") throw new TypeError("typert-protocol: Remote method descriptor must be an object");
+-	const version = Reflect.get(descriptor, "version");
+-	if (version !== 1) throw new TypeError(`typert-protocol: unsupported Remote method descriptor version ${String(version)}`);
+-	const methods = Reflect.get(descriptor, "methods");
+-	if (!Array.isArray(methods)) throw new TypeError("typert-protocol: Remote method descriptor methods must be an array");
+-	return descriptor;
++	return [...markers.get(prototype) ?? []].map(([method, marker]) => ({
++		method,
++		...marker
++	}));
+ }
+-function addMarkerInitializer(context, invocation, mode, exportName) {
++function addMarkerInitializer(context, invocation, exportName) {
+ 	if (context.private || context.static || typeof context.name !== "string") throw new TypeError("typert-protocol: Remote decorators require a public instance method with a string name");
+ 	const method = context.name;
+ 	context.addInitializer(function() {
+ 		const prototype = Object.getPrototypeOf(this);
+ 		if (prototype === null) throw new TypeError(`typert-protocol: cannot mark Remote method "${method}" on an object without a prototype`);
+-		mark(prototype, method, invocation, mode, exportName);
++		mark(prototype, method, invocation, exportName);
+ 	});
+ }
+-function mark(prototype, method, invocation, mode, exportName) {
+-	const descriptor = readRemoteMethodDescriptor(prototype);
+-	const marker = Object.freeze({
+-		method,
++function mark(prototype, method, invocation, exportName) {
++	let table = markers.get(prototype);
++	if (table === void 0) {
++		table = /* @__PURE__ */ new Map();
++		markers.set(prototype, table);
++	}
++	const marker = {
+ 		...exportName === void 0 || exportName === method ? {} : { exportName },
+-		...mode === void 0 ? {} : { mode },
+ 		invocation: Object.freeze(invocation)
+-	});
+-	const current = descriptor?.methods.find((candidate) => candidate.method === method);
++	};
++	const current = table.get(method);
+ 	if (current !== void 0) {
+-		if (current.exportName === marker.exportName && current.mode === marker.mode && sameInvocation(current.invocation, invocation)) return;
++		if (current.exportName === marker.exportName && sameInvocation(current.invocation, invocation)) return;
+ 		throw new Error(`typert-protocol: Remote method "${method}" has conflicting invocation markers`);
+ 	}
+-	Object.defineProperty(prototype, REMOTE_METHOD_DESCRIPTOR, {
+-		configurable: true,
+-		value: Object.freeze({
+-			version: 1,
+-			methods: Object.freeze([...descriptor?.methods ?? [], marker])
+-		})
+-	});
++	table.set(method, Object.freeze(marker));
+ }
+ function sameInvocation(left, right) {
+-	if (left.kind === "direct") return right.kind === "direct";
+-	if (right.kind === "direct") return false;
+-	return left.context === right.context;
++	return left.kind === right.kind && (left.kind === "direct" || right.kind === "context" && left.context === right.context);
+ }
+ function validateName(subject, value) {
+ 	if (!isTypertRemoteSegment(value)) throw new TypeError(`typert-protocol: ${subject} must contain only RPC endpoint segment characters`);
+ }
+ //#endregion
+-export { Remote, RemoteError, RemoteScope, TypertRemoteService, bindTypertRemote, isTypertRemoteSegment, remoteErrorOf, remoteMethods };
++export { Remote, RemoteScope, TypertLookupFailure, TypertRemoteService, bindTypertRemote, isTypertRemoteSegment, remoteMethods };
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/lib: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types/index.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types/index.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types/index.d.ts	2026-09-11 14:27:15.156963480 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types/index.d.ts	2026-09-12 14:56:19.257967605 +0800
+@@ -1,19 +1,30 @@
+ /**
+- * Remote decorators and explicit Gateway bindings backed by versioned
+- * descriptors carried on decorated class prototypes. Strict reflection
+- * remains a Typert compiler responsibility.
++ * Remote decorators and explicit Gateway bindings backed only by private
++ * module state. Strict reflection remains a Typert compiler responsibility.
+  * @module @deepseek-ai/dsh-typert-protocol
+  */
+ import { Service, type Context } from '@deepseek-ai/cordis';
+ import type { TypertContextMap } from './types.ts';
+-export { RemoteError, remoteErrorOf } from './remote-error.ts';
+ /**
+  * Test one generated Remote name against the Connection endpoint grammar.
+  * @param value - namespace, method, lookup, or Context segment.
+  * @returns whether the value can cross the shared RPC carrier unchanged.
+  */
+ export declare function isTypertRemoteSegment(value: string): boolean;
+-export type { InvocationDescriptor, InvocationParameterDescriptor, InvocationSourceLocation, RemoteErrorCode, RemoteErrorDetailsMap, RemoteFailure, RemoteResult, TypertClientEventListener, TypertClientRemote, TypertClientContextAdapter, TypertCodec, TypertContext, TypertContextMap, TypertContextRegistry, TypertContextWire, TypertDisposer, TypertForwardableEvent, TypertForwardableEventEntry, TypertHostContextAdapter, TypertHostContextResolver, TypertLocalRegistry, TypertLookup, TypertLookupDefinition, TypertLookupHost, TypertLookupMap, TypertLookupProvider, TypertLookupResolver, TypertLookupRegistry, TypertLookupWire, TypertRemoteScopeApi, TypertRemoteScopeMap, TypertRemoteScopeNamespace, TypertRemoteContribution, TypertRemoteEvent, TypertRemoteEventSelection, TypertRemoteMap, TypertRemoteNamespace, TypertRemoteNamespaceMap, TypertRemoteRegistry, TypertRegistryChange, TypertRegistryListener, TypertSchema, TypertRegistryContract, } from './types.ts';
++/**
++ * A lookup policy rejection whose typed payload belongs to the active boundary adapter.
++ * Gateway adapters preserve this payload instead of collapsing it into an infrastructure failure.
++ */
++export declare class TypertLookupFailure<Failure = unknown> extends Error {
++    /** Adapter-owned failure returned to the caller. */
++    readonly failure: Failure;
++    /**
++     * Wrap one adapter failure without exposing the rejected identity.
++     * @param failure - typed failure owned by the active boundary adapter.
++     */
++    constructor(failure: Failure);
++}
++export type { InvocationDescriptor, InvocationParameterDescriptor, InvocationSourceLocation, RemoteFailure, RemoteResult, TypertClientRemote, TypertClientContextBinder, TypertCodec, TypertContext, TypertContextMap, TypertContextRegistry, TypertContextWire, TypertDisposer, TypertForwardableEvent, TypertHostContextProvider, TypertHostContextResolver, TypertLocalRegistry, TypertLookup, TypertLookupDefinition, TypertLookupHost, TypertLookupMap, TypertLookupProvider, TypertLookupResolver, TypertLookupRegistry, TypertLookupWire, TypertRemoteScopeApi, TypertRemoteScopeMap, TypertRemoteScopeNamespace, TypertRemoteContribution, TypertRemoteEvent, TypertRemoteEventSelection, TypertRemoteMap, TypertRemoteNamespace, TypertRemoteNamespaceMap, TypertRemoteRegistry, TypertRegistryChange, TypertRegistryListener, TypertSchema, TypertRegistryContract, } from './types.ts';
+ /** Options for an explicit Service-to-Gateway binding. */
+ export interface TypertGatewayBindingOptions {
+     /** Wire namespace; defaults to the Cordis service key. */
+@@ -38,15 +49,8 @@
+     readonly method: string;
+     /** Endpoint method when it differs from the implementation member. */
+     readonly exportName?: string;
+-    /** Stream methods yield many independently validated result items. */
+-    readonly mode?: 'stream';
+     readonly invocation: RemoteInvocationMarker;
+ }
+-/** Options for a non-unary Remote method. */
+-export interface RemoteMethodOptions {
+-    /** Deliver each Iterable item over the shared logical-stream carrier. */
+-    readonly mode: 'stream';
+-}
+ type RemoteMethodDecorator = <This extends object, Args extends unknown[], Result>(method: (this: This, ...args: Args) => Result, context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Result>) => void;
+ /**
+  * Bind one visible Service field to a Cordis key and Remote namespace.
+@@ -75,21 +79,21 @@
+  */
+ export declare function Remote<This extends object, Args extends unknown[], Result>(_method: (this: This, ...args: Args) => Result, context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Result>): void;
+ /**
+- * Mark one public instance method under an exported name or as a logical stream.
+- * @param option - endpoint method name or stream delivery mode.
++ * Mark one public instance method under a distinct exported method name.
++ * @param exportName - Remote endpoint method, without a namespace or slash.
+  * @returns a standard method decorator.
+  */
+-export declare function Remote(option: string | RemoteMethodOptions): RemoteMethodDecorator;
++export declare function Remote(exportName: string): RemoteMethodDecorator;
+ /**
+  * Create a decorator for a method resolved from one Remote Scope.
+  * @param key - scope key declared through the Context map.
+  * @param exportName - optional Remote export name; defaults to the method name.
+- * @returns a standard method decorator that records a versioned prototype descriptor.
++ * @returns a standard method decorator that records only private module state.
+  */
+ export declare function RemoteScope(key: Extract<keyof TypertContextMap, string>, exportName?: string): RemoteMethodDecorator;
+ /**
+- * Read Remote markers attached to a live Service's class prototype.
+- * The returned snapshot cannot mutate the stored descriptor.
++ * Read Remote markers attached to a live Service by decorator initializers.
++ * The returned snapshot cannot mutate the private marker table.
+  * @param service - live Service instance.
+  * @returns markers in class declaration order.
+  */
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types/index.js	2026-09-11 14:27:15.101962698 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types/index.js	2026-09-12 14:56:19.257483290 +0800
+@@ -1,11 +1,9 @@
+ /**
+- * Remote decorators and explicit Gateway bindings backed by versioned
+- * descriptors carried on decorated class prototypes. Strict reflection
+- * remains a Typert compiler responsibility.
++ * Remote decorators and explicit Gateway bindings backed only by private
++ * module state. Strict reflection remains a Typert compiler responsibility.
+  * @module @deepseek-ai/dsh-typert-protocol
+  */
+ import { Service } from '@deepseek-ai/cordis';
+-export { RemoteError, remoteErrorOf } from "./remote-error.js";
+ const TYPERT_REMOTE_SEGMENT_PATTERN = /^[A-Za-z0-9_$.-]+$/;
+ /**
+  * Test one generated Remote name against the Connection endpoint grammar.
+@@ -15,7 +13,24 @@
+ export function isTypertRemoteSegment(value) {
+     return value !== '.' && value !== '..' && TYPERT_REMOTE_SEGMENT_PATTERN.test(value);
+ }
+-const REMOTE_METHOD_DESCRIPTOR = '@deepseek-ai/dsh-typert-protocol/remote-methods';
++/**
++ * A lookup policy rejection whose typed payload belongs to the active boundary adapter.
++ * Gateway adapters preserve this payload instead of collapsing it into an infrastructure failure.
++ */
++export class TypertLookupFailure extends Error {
++    /** Adapter-owned failure returned to the caller. */
++    failure;
++    /**
++     * Wrap one adapter failure without exposing the rejected identity.
++     * @param failure - typed failure owned by the active boundary adapter.
++     */
++    constructor(failure) {
++        super('Typert lookup policy rejected the requested identity');
++        this.name = 'TypertLookupFailure';
++        this.failure = failure;
++    }
++}
++const markers = new WeakMap();
+ /**
+  * Bind one visible Service field to a Cordis key and Remote namespace.
+  * @param service - owning Service instance, normally `this`.
+@@ -44,45 +59,34 @@
+         this.typertRemote = bindTypertRemote(this, this.name, options);
+     }
+ }
+-export function Remote(methodExportOrOptions, context) {
+-    if (typeof methodExportOrOptions === 'string') {
+-        validateName('Remote export name', methodExportOrOptions);
+-        return remoteDecorator({ kind: 'direct' }, undefined, methodExportOrOptions);
+-    }
+-    if (typeof methodExportOrOptions === 'object') {
+-        if (remoteOptionMode(methodExportOrOptions) !== 'stream'
+-            || Reflect.ownKeys(methodExportOrOptions).length !== 1) {
+-            throw new TypeError('typert-protocol: Remote options must contain exactly mode: "stream"');
+-        }
+-        return remoteDecorator({ kind: 'direct' }, 'stream');
++export function Remote(methodOrExportName, context) {
++    if (typeof methodOrExportName === 'string') {
++        validateName('Remote export name', methodOrExportName);
++        return function (_method, decoratorContext) {
++            addMarkerInitializer(decoratorContext, { kind: 'direct' }, methodOrExportName);
++        };
+     }
+     if (context === undefined)
+         throw new TypeError('typert-protocol: Remote decorator context is missing');
+     addMarkerInitializer(context, { kind: 'direct' });
+ }
+-function remoteOptionMode(options) {
+-    return Reflect.get(options, 'mode');
+-}
+-function remoteDecorator(invocation, mode, exportName) {
+-    return function (_method, context) {
+-        addMarkerInitializer(context, invocation, mode, exportName);
+-    };
+-}
+ /**
+  * Create a decorator for a method resolved from one Remote Scope.
+  * @param key - scope key declared through the Context map.
+  * @param exportName - optional Remote export name; defaults to the method name.
+- * @returns a standard method decorator that records a versioned prototype descriptor.
++ * @returns a standard method decorator that records only private module state.
+  */
+ export function RemoteScope(key, exportName) {
+     validateName('Scope key', key);
+     if (exportName !== undefined)
+         validateName('Remote export name', exportName);
+-    return remoteDecorator({ kind: 'context', context: key }, undefined, exportName);
++    return function (_method, context) {
++        addMarkerInitializer(context, { kind: 'context', context: key }, exportName);
++    };
+ }
+ /**
+- * Read Remote markers attached to a live Service's class prototype.
+- * The returned snapshot cannot mutate the stored descriptor.
++ * Read Remote markers attached to a live Service by decorator initializers.
++ * The returned snapshot cannot mutate the private marker table.
+  * @param service - live Service instance.
+  * @returns markers in class declaration order.
+  */
+@@ -90,27 +94,9 @@
+     const prototype = Object.getPrototypeOf(service);
+     if (prototype === null)
+         return [];
+-    return (readRemoteMethodDescriptor(prototype)?.methods ?? []).map(marker => ({ ...marker }));
+-}
+-function readRemoteMethodDescriptor(prototype) {
+-    const property = Object.getOwnPropertyDescriptor(prototype, REMOTE_METHOD_DESCRIPTOR);
+-    if (property === undefined)
+-        return undefined;
+-    const descriptor = property.value;
+-    if (descriptor === null || typeof descriptor !== 'object') {
+-        throw new TypeError('typert-protocol: Remote method descriptor must be an object');
+-    }
+-    const version = Reflect.get(descriptor, 'version');
+-    if (version !== 1) {
+-        throw new TypeError(`typert-protocol: unsupported Remote method descriptor version ${String(version)}`);
+-    }
+-    const methods = Reflect.get(descriptor, 'methods');
+-    if (!Array.isArray(methods)) {
+-        throw new TypeError('typert-protocol: Remote method descriptor methods must be an array');
+-    }
+-    return descriptor;
++    return [...(markers.get(prototype) ?? [])].map(([method, marker]) => ({ method, ...marker }));
+ }
+-function addMarkerInitializer(context, invocation, mode, exportName) {
++function addMarkerInitializer(context, invocation, exportName) {
+     if (context.private || context.static || typeof context.name !== 'string') {
+         throw new TypeError('typert-protocol: Remote decorators require a public instance method with a string name');
+     }
+@@ -120,39 +106,30 @@
+         if (prototype === null) {
+             throw new TypeError(`typert-protocol: cannot mark Remote method "${method}" on an object without a prototype`);
+         }
+-        mark(prototype, method, invocation, mode, exportName);
++        mark(prototype, method, invocation, exportName);
+     });
+ }
+-function mark(prototype, method, invocation, mode, exportName) {
+-    const descriptor = readRemoteMethodDescriptor(prototype);
+-    const marker = Object.freeze({
+-        method,
++function mark(prototype, method, invocation, exportName) {
++    let table = markers.get(prototype);
++    if (table === undefined) {
++        table = new Map();
++        markers.set(prototype, table);
++    }
++    const marker = {
+         ...(exportName === undefined || exportName === method ? {} : { exportName }),
+-        ...(mode === undefined ? {} : { mode }),
+         invocation: Object.freeze(invocation),
+-    });
+-    const current = descriptor?.methods.find(candidate => candidate.method === method);
++    };
++    const current = table.get(method);
+     if (current !== undefined) {
+-        if (current.exportName === marker.exportName
+-            && current.mode === marker.mode
+-            && sameInvocation(current.invocation, invocation))
++        if (current.exportName === marker.exportName && sameInvocation(current.invocation, invocation))
+             return;
+         throw new Error(`typert-protocol: Remote method "${method}" has conflicting invocation markers`);
+     }
+-    Object.defineProperty(prototype, REMOTE_METHOD_DESCRIPTOR, {
+-        configurable: true,
+-        value: Object.freeze({
+-            version: 1,
+-            methods: Object.freeze([...(descriptor?.methods ?? []), marker]),
+-        }),
+-    });
++    table.set(method, Object.freeze(marker));
+ }
+ function sameInvocation(left, right) {
+-    if (left.kind === 'direct')
+-        return right.kind === 'direct';
+-    if (right.kind === 'direct')
+-        return false;
+-    return left.context === right.context;
++    return left.kind === right.kind
++        && (left.kind === 'direct' || (right.kind === 'context' && left.context === right.context));
+ }
+ function validateName(subject, value) {
+     if (!isTypertRemoteSegment(value)) {
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types: invariant.d.ts
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types: invariant.js
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types: remote-error.d.ts
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types: remote-error.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types/types.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types/types.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types/types.d.ts	2026-09-11 14:27:15.174963736 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/lib/types/types.d.ts	2026-09-12 14:56:19.258116281 +0800
+@@ -32,34 +32,20 @@
+ export interface TypertRemoteMap {
+ }
+ /**
+- * Merge-extensible Remote failure vocabulary: this package declares the
+- * universal carrier codes once; the Gateway merges its infrastructure codes
+- * and every owner merges its domain codes next to the throwing code.
++ * One Remote call's failure as the carrier reported it. `code` stays open here:
++ * the closed RPC code union belongs to the carrier package, which already
++ * depends on this one, so naming it would invert that edge.
+  */
+-export interface RemoteErrorDetailsMap {
+-    /** Owner-side business validation refused the request; `issues` carries codec output when one produced it. */
+-    'gateway/bad-request': {
+-        readonly issues?: readonly object[];
+-    };
+-    /** The call was cancelled by the carrier signal or the backend. */
+-    'gateway/cancelled': {};
+-    /** Carrier, dispatch, or unclassified Host failure. */
+-    'gateway/internal': {};
++export interface RemoteFailure {
++    readonly code: string;
++    readonly message: string;
++    readonly details: object;
+ }
+-/** Every declared Remote failure code. */
+-export type RemoteErrorCode = keyof RemoteErrorDetailsMap;
+-/**
+- * One Remote call's failure: the code-discriminated union of RemoteError
+- * instances, so a `code` branch narrows `details` with no cast.
+- */
+-export type RemoteFailure = {
+-    [Code in RemoteErrorCode]: import('./remote-error.ts').RemoteError<Code>;
+-}[RemoteErrorCode];
+ /**
+  * What every generated Remote method resolves to. The Remote face itself folds
+  * carrier failures into the error branch, so no consumer wraps a call to
+  * recover one; only assembly faults (arity, an unmounted method, a missing
+- * Context adapter) still reject.
++ * Context binder) still reject.
+  * @template T - the Host method's business result.
+  */
+ export type RemoteResult<T> = {
+@@ -72,47 +58,20 @@
+ /** Merge-extensible scoped Remote method signatures generated for consumers. */
+ export interface TypertRemoteScopeMap {
+ }
+-type TypertEventParameters<Event extends keyof Events> = Events[Event] extends (...args: infer Args) => unknown ? Args : never;
+-type TypertEventResult<Event extends keyof Events> = Events[Event] extends (...args: never[]) => infer Result ? Result : never;
+-type TypertProjectedContextKey = Extract<keyof TypertLookupMap, keyof TypertContextMap>;
+-type TypertProjectedContextSubject = {
+-    [Key in TypertProjectedContextKey]: TypertLookupHost<TypertLookupMap[Key]>;
+-}[TypertProjectedContextKey];
+-type TypertAgentScopedRequest<Request> = Request extends object ? 'agent' extends keyof Request ? Exclude<Request['agent'], undefined> extends TypertProjectedContextSubject ? Request : never : never : never;
+-type TypertWaterfallEvent<Event extends keyof Events> = unknown extends ThisParameterType<Events[Event]> ? never : TypertEventParameters<Event> extends [infer Request, infer Next] ? Next extends () => TypertEventResult<Event> ? TypertEventResult<Event> extends Promise<unknown> ? TypertAgentScopedRequest<Request> extends never ? never : Event : never : never : never;
+-type TypertForwardingMode<Event extends keyof Events> = unknown extends ThisParameterType<Events[Event]> ? TypertEventResult<Event> extends void ? 'emit' : never : TypertWaterfallEvent<Event> extends never ? never : 'waterfall';
+ /**
+- * Cordis event names the Remote Event carrier can preserve without a second
+- * signature declaration: unscoped `void` notifications and scoped async
+- * waterfalls whose final parameter is their same-result `next()` callback.
++ * Cordis event names whose shape a one-way Remote delivery can carry: unbound
++ * from any Scope and returning `void`. Which ones are actually forwarded is the
++ * Host assembly's selection; this predicate only excludes shapes the carrier
++ * cannot represent.
+  */
+ export type TypertForwardableEvent = {
+-    [Event in keyof Events]: TypertForwardingMode<Event> extends never ? never : Event;
+-}[keyof Events];
+-/** Event and dispatch mode accepted by the Remote Event source. */
+-export type TypertForwardableEventEntry = {
+-    [Event in keyof Events]: TypertForwardingMode<Event> extends infer Mode ? Mode extends 'emit' | 'waterfall' ? {
+-        readonly event: Event;
+-        readonly mode: Mode;
+-    } : never : never;
++    [Event in keyof Events]: unknown extends ThisParameterType<Events[Event]> ? ReturnType<Events[Event]> extends void ? Event : never : never;
+ }[keyof Events];
+ /** Merge-extensible forwarding selection declared once by the Host assembly. */
+ export interface TypertRemoteEventSelection {
+ }
+-/** Legal `$on` keys selected from the carrier-compatible Cordis event declarations. */
+-export type TypertRemoteEvent = Extract<TypertForwardableEvent, keyof TypertRemoteEventSelection>;
+-type TypertClientAgent<Value> = Exclude<Value, undefined> extends TypertProjectedContextSubject ? Context | Extract<Value, undefined> : Value;
+-type TypertClientEventRequest<Request> = Request extends object ? {
+-    [Key in keyof Request]: Key extends 'agent' ? TypertClientAgent<Request[Key]> : Request[Key];
+-} : never;
+-type TypertScopedClientEventListener<Event extends TypertRemoteEvent> = Events[Event] extends (request: infer Request, next: infer Next) => infer Result ? (this: Context, request: TypertClientEventRequest<Request>, next: Next) => Result : never;
+-/**
+- * Listener derived from one selected Cordis event declaration. Scoped Host
+- * subjects become the resolved Client `Context`; one-way notifications retain
+- * their declaration unchanged.
+- * @template Event - selected Remote Event name.
+- */
+-export type TypertClientEventListener<Event extends TypertRemoteEvent> = unknown extends ThisParameterType<Events[Event]> ? Events[Event] : TypertScopedClientEventListener<Event>;
++/** Legal `$on` keys: selected events that exist in the current compilation face. */
++export type TypertRemoteEvent = Extract<keyof Events, keyof TypertRemoteEventSelection>;
+ /**
+  * Resolve one direct Remote namespace from the generated flat endpoint map.
+  * @template Namespace - wire namespace before the endpoint slash.
+@@ -189,8 +148,6 @@
+     readonly method: string;
+     /** Service member invoked when the exported method name is an alias. */
+     readonly implementation?: string;
+-    /** Absent for unary calls; stream calls validate and deliver every yielded item. */
+-    readonly mode?: 'stream';
+     /** Receiver selection mode. */
+     readonly invocation: {
+         readonly kind: 'direct';
+@@ -202,7 +159,7 @@
+     };
+     /** Optional consuming-Context projection for one direct lookup parameter. */
+     readonly scope?: {
+-        /** Context kind whose Client adapter supplies the identity. */
++        /** Context kind whose Client binder supplies the identity. */
+         readonly context: string;
+         /** Lookup parameter wire field replaced by the Context identity. */
+         readonly wire: string;
+@@ -214,7 +171,7 @@
+         /** Reserved final Host method parameter. */
+         readonly parameter: 'signal';
+     };
+-    /** Codec for the unary result or each yielded stream item. */
++    /** Codec for the resolved method result. */
+     readonly result: TypertCodec;
+     /** Source declaration used only for diagnostics. */
+     readonly sourceLocation?: InvocationSourceLocation;
+@@ -235,15 +192,26 @@
+      */
+     $mount(contribution: TypertRemoteContribution): Promise<TypertDisposer>;
+     /**
+-     * Subscribe to one forwarded Host event. Notifications run in registration
+-     * order and isolate failures; scoped waterfalls return, delegate through
+-     * `next()`, or reject the Host dispatch.
++     * Subscribe to one forwarded Host event; delivery is one-way, in registration
++     * order, and isolates a throwing listener from the rest.
+      * @template Event - forwarded event name selected by the Host assembly.
+      * @param event - forwarded Host event name, unchanged on the wire.
+-     * @param listener - receives the Client projection of the Cordis `Events` declaration.
++     * @param listener - receives the Host's argument list as declared by Cordis `Events`.
+      * @returns disposer owned by the calling fiber.
+      */
+-    $on<Event extends TypertRemoteEvent>(event: Event, listener: TypertClientEventListener<Event>): () => void;
++    $on<Event extends TypertRemoteEvent>(event: Event, listener: Events[Event]): () => void;
++    /**
++     * Hand one decoded forwarded frame to the subscription table. The carrier
++     * owning the Host frame sink calls this; a consumer subscribes with
++     * {@link TypertClientRemote.$on} and never calls it.
++     *
++     * `event` is a plain string because this is the wire boundary: the name is
++     * whatever the Host assembly's allowlist selected, and one nobody subscribed
++     * to is dropped silently.
++     * @param event - forwarded Host event name, exactly as the Host emitted it.
++     * @param args - the Host argument list, already JSON-decoded.
++     */
++    $dispatch(event: string, args: readonly unknown[]): void;
+ }
+ /**
+  * Resolve one validated wire identity, synchronously or asynchronously.
+@@ -281,35 +249,29 @@
+     /** Canonical wire type symbol used by strict generation. */
+     readonly wireTypeSymbol: string;
+ }
+-/** Host wire-to-Context resolver plus the declaration used by strict Remote methods. */
+-export interface TypertHostContextAdapter<Wire = unknown> {
++/** Host resolver for one scoped Remote kind. */
++export interface TypertHostContextProvider<Wire = unknown> {
+     /** Wire field carrying the Context identity. */
+     readonly wire: string;
+     /** Canonical wire type symbol used by strict generation. */
+     readonly wireTypeSymbol: string;
+     /**
+-     * Resolve a validated wire identity to a live Host Context.
++     * Resolve a wire identity to its live scoped Context.
+      * @param id - validated wire identity.
+-     * @returns the Context, or `undefined` when it is unavailable.
++     * @returns the scoped Context, or `undefined` when unavailable.
+      */
+     resolve(id: Wire): Context | undefined | Promise<Context | undefined>;
+ }
+-/** Composition-owned resolver replacing one Host Context adapter's default lookup policy. */
++/** Composition-owned resolver replacing one Host Context provider's default lookup policy. */
+ export type TypertHostContextResolver<Wire = unknown> = (id: Wire) => Context | undefined | Promise<Context | undefined>;
+-/** Client-side bidirectional Context adapter. */
+-export interface TypertClientContextAdapter<Wire = unknown> {
++/** Client resolver for the identity carried by the calling scoped Context. */
++export interface TypertClientContextBinder<Wire = unknown> {
+     /**
+-     * Read the identity represented by a live Client Context.
+-     * @param ctx - Client Context inspected by a scoped Remote caller.
+-     * @returns the wire identity, or `undefined` for another Context kind.
++     * Read the Remote identity represented by a calling Context.
++     * @param ctx - Context rebound by the Cordis service tracker.
++     * @returns the wire identity, or `undefined` when the Context has the wrong scope.
+      */
+     identity(ctx: Context): Wire | undefined;
+-    /**
+-     * Resolve a wire identity from the Client's currently materialized Contexts.
+-     * @param id - validated wire identity.
+-     * @returns the Client Context, or `undefined` when unavailable.
+-     */
+-    resolve(id: Wire): Context | undefined;
+ }
+ /** Notification emitted after a Typert runtime registry changes. */
+ export interface TypertRegistryChange {
+@@ -398,17 +360,17 @@
+      */
+     subscribe(listener: TypertRegistryListener): TypertDisposer;
+ }
+-/** Runtime registry for the Host and Client adapters of each Context kind. */
++/** Runtime registry for Host Context resolvers and Client Context binders. */
+ export interface TypertContextRegistry {
+     /**
+-     * Register a Host Context adapter.
++     * Register a Host Context resolver.
+      * @param key - merge-declared Context key.
+-     * @param adapter - owning package's Host resolver and wire declaration.
+-     * @returns disposer withdrawing the exact adapter.
++     * @param provider - owning package's Host resolver.
++     * @returns disposer withdrawing the exact provider.
+      */
+-    registerHost<K extends StringKeyOf<TypertContextMap>>(key: K, adapter: TypertHostContextAdapter<TypertContextWire<TypertContextMap[K]>>): TypertDisposer;
++    registerHost<K extends StringKeyOf<TypertContextMap>>(key: K, provider: TypertHostContextProvider<TypertContextWire<TypertContextMap[K]>>): TypertDisposer;
+     /**
+-     * Override one Host Context key's resolution policy for the calling fiber.
++     * Override one Host Context key's identity policy for the calling fiber.
+      * Configuration may precede provider registration and restores the provider's default resolver on disposal.
+      * @param key - merge-declared Context key.
+      * @param resolver - composition-owned resolver used by every Host Context lookup of this key.
+@@ -416,26 +378,26 @@
+      */
+     configureHost<K extends StringKeyOf<TypertContextMap>>(key: K, resolver: TypertHostContextResolver<TypertContextWire<TypertContextMap[K]>>): TypertDisposer;
+     /**
+-     * Register a Client Context adapter.
++     * Register a Client Context identity binder.
+      * @param key - merge-declared Context key.
+-     * @param adapter - owning package's bidirectional Client projection.
+-     * @returns disposer withdrawing the exact adapter.
++     * @param binder - Client scope identity resolver.
++     * @returns disposer withdrawing the exact binder.
+      */
+-    registerClient<K extends StringKeyOf<TypertContextMap>>(key: K, adapter: TypertClientContextAdapter<TypertContextWire<TypertContextMap[K]>>): TypertDisposer;
++    registerClient<K extends StringKeyOf<TypertContextMap>>(key: K, binder: TypertClientContextBinder<TypertContextWire<TypertContextMap[K]>>): TypertDisposer;
+     /**
+-     * Look up a Host Context adapter.
++     * Look up a Host Context resolver.
+      * @param key - descriptor Context key.
+-     * @returns the adapter, or `undefined` when absent.
++     * @returns the provider, or `undefined` when absent.
+      */
+-    getHost(key: string): TypertHostContextAdapter | undefined;
++    getHost(key: string): TypertHostContextProvider | undefined;
+     /**
+-     * Look up a Client Context adapter.
++     * Look up a Client Context binder.
+      * @param key - descriptor Context key.
+-     * @returns the adapter, or `undefined` when absent.
++     * @returns the binder, or `undefined` when absent.
+      */
+-    getClient(key: string): TypertClientContextAdapter | undefined;
++    getClient(key: string): TypertClientContextBinder | undefined;
+     /**
+-     * Observe later Context adapter changes.
++     * Observe later Context provider changes.
+      * @param listener - synchronous contained observer.
+      * @returns disposer for this subscription.
+      */
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-typert-protocol/package.json	2026-09-11 14:27:15.141963266 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-typert-protocol/package.json	2026-09-12 14:56:19.257834820 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-typert-protocol",
+   "description": "Compiler-independent Remote metadata and Typert provider protocols",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -18,6 +18,10 @@
+       "types": "./lib/types/index.d.ts",
+       "default": "./lib/index.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./types": {
+       "types": "./lib/types/types.d.ts",
+       "default": "./lib/types/types.js"
+@@ -27,14 +31,17 @@
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/types/**/*.js",
+     "lib/types/**/*.d.ts"
+   ],
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   }
+ }
+\ No newline at end of file

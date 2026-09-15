@@ -1,9 +1,10 @@
 import {
   useCallback, useEffect, useRef, useState, useSyncExternalStore, type ClipboardEvent, type KeyboardEvent,
 } from 'react'
+import { createPortal } from 'react-dom'
 import type { SessionFace, SessionId } from '@deepseek-ai/dsh-client-runtime/client'
 import {
-  Button, IconSendOutline16, IconStopFill16, MarkdownText, Modal,
+  Button, IconCloseOutline16, IconSendOutline16, IconStopFill16, MarkdownText, Modal,
 } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
 import type { BtwModel, BtwPendingQuestion, SideChatImageRef } from '../shared/remote.ts'
@@ -167,6 +168,56 @@ function QuestionCard({
   )
 }
 
+/**
+ * Self-drawn image preview (2026-09-14 btw-ui). The official ImageLightbox is
+ * not exported from dsh-client-ui-attachment and the primitives Modal dialog
+ * is width-capped (380px), which read as "clicking a thumbnail does not
+ * enlarge" — so the preview is a body-portal overlay following the official
+ * ImageLightbox interaction: full mask (click to close), Escape to close,
+ * close button, focus returns to the opener, large image.
+ */
+function ImageLightbox({
+  image,
+  dataUrl,
+  dialogLabel,
+  closeLabel,
+  onClose,
+}: {
+  image: SideChatImageRef
+  dataUrl: string | undefined
+  dialogLabel: string
+  closeLabel: string
+  onClose: () => void
+}) {
+  useEffect(() => {
+    const onKeyDown = (event: globalThis.KeyboardEvent): void => {
+      if (event.key !== 'Escape') return
+      // stopPropagation keeps the drawer-level Escape handler (window,
+      // SideChatDrawer minimizes on Escape) from closing the whole panel
+      // while the preview is open.
+      event.stopPropagation()
+      onClose()
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => { document.removeEventListener('keydown', onKeyDown) }
+  }, [onClose])
+
+  return createPortal(
+    <div className={css.lightboxRoot} role="presentation">
+      <div className={css.lightboxMask} aria-hidden="true" onClick={onClose} />
+      <div className={css.lightboxDialog} role="dialog" aria-modal="true" aria-label={dialogLabel}>
+        <button type="button" className={css.lightboxClose} aria-label={closeLabel} title={closeLabel} onClick={onClose}>
+          <IconCloseOutline16 />
+        </button>
+        {dataUrl === undefined
+          ? <span className={css.lightboxPlaceholder} aria-hidden="true" />
+          : <img src={dataUrl} alt={image.name ?? ''} className={css.lightboxImage} />}
+      </div>
+    </div>,
+    document.body,
+  )
+}
+
 export function SideChatSurface({
   controller,
   parentSessionId,
@@ -191,6 +242,18 @@ export function SideChatSurface({
   /** attachmentId → data URL of the fetched bytes (U-F/U-L rendering cache). */
   const [imageCache, setImageCache] = useState<ReadonlyMap<string, string>>(new Map())
   const [lightbox, setLightbox] = useState<SideChatImageRef | null>(null)
+  /** Thumbnail button that opened the preview; focus returns here on close
+      (2026-09-14 btw-ui, official ImageLightbox focus-restore pattern). */
+  const lightboxOpenerRef = useRef<HTMLElement | null>(null)
+  /** attachmentId → 'loading' while a fetch is in flight; 'failed' after a
+      failed attempt so the next effect run retries once the conversation is
+      ready (2026-09-14 btw-ui: fixes thumbnails stuck as non-interactive
+      placeholders when a read was issued before the conversation was open). */
+  const fetchStateRef = useRef<Map<string, 'loading' | 'failed'>>(new Map())
+  const disposedRef = useRef(false)
+  useEffect(() => {
+    return () => { disposedRef.current = true }
+  }, [])
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const confirmationFooterRef = useRef<HTMLDivElement>(null)
@@ -210,23 +273,36 @@ export function SideChatSurface({
     for (const message of messages) {
       for (const ref of message.images ?? []) {
         if (imageCache.has(ref.attachmentId)) continue
+        if (fetchStateRef.current.get(ref.attachmentId) === 'loading') continue
         pending.set(ref.attachmentId, ref)
       }
     }
     if (pending.size === 0) return
-    let cancelled = false
+    // 2026-09-14 btw-ui: no cleanup-cancel — previously every cache/message
+    // identity change cancelled in-flight reads (and reads issued before the
+    // conversation was open failed forever), leaving placeholders that were
+    // not clickable. Reads now settle into the cache; failures retry on the
+    // next effect run (e.g. once phase turns open or the next poll arrives).
     for (const ref of pending.values()) {
+      fetchStateRef.current.set(ref.attachmentId, 'loading')
       void controller.readImage(ref.attachmentId).then(result => {
-        if (cancelled || !result.ok) return
-        setImageCache(previous => {
-          const next = new Map(previous)
-          next.set(ref.attachmentId, `data:${result.mediaType};base64,${result.data}`)
-          return next
-        })
-      }).catch(() => {})
+        if (disposedRef.current) return
+        if (result.ok) {
+          fetchStateRef.current.delete(ref.attachmentId)
+          setImageCache(previous => {
+            const next = new Map(previous)
+            next.set(ref.attachmentId, `data:${result.mediaType};base64,${result.data}`)
+            return next
+          })
+        } else {
+          fetchStateRef.current.set(ref.attachmentId, 'failed')
+        }
+      }).catch(() => {
+        if (disposedRef.current) return
+        fetchStateRef.current.set(ref.attachmentId, 'failed')
+      })
     }
-    return () => { cancelled = true }
-  }, [controller, imageCache, messages])
+  }, [controller, imageCache, messages, state.phase, state.chatToken])
 
   useEffect(() => {
     if ((state.phase !== 'starting' && state.phase !== 'open') || confirmEndRef.current) return
@@ -301,6 +377,12 @@ export function SideChatSurface({
     restoreEndFocusRef.current = true
     setConfirmEnd(false)
   }
+  // 2026-09-14 btw-ui: closing the image preview also restores focus to the
+  // thumbnail that opened it (official ImageLightbox focus-restore pattern).
+  const closeLightbox = useCallback((): void => {
+    setLightbox(null)
+    lightboxOpenerRef.current?.focus()
+  }, [])
   const onComposerKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>): void => {
     if (event.key !== 'Enter' || event.shiftKey || event.nativeEvent.isComposing) return
     event.preventDefault()
@@ -422,7 +504,9 @@ export function SideChatSurface({
             <p>{t('drawer.emptyBody')}</p>
           </div>
         )}
-        {messages.map(message => (
+        {messages.map(message => {
+          const images = message.images ?? []
+          return (
           <article key={message.id} className={message.role === 'user' ? css.userMessage : css.assistantMessage}>
             <div className={css.messageMeta}>{message.role === 'user' ? t('drawer.you') : t('drawer.assistant')}</div>
             {message.role === 'assistant'
@@ -439,9 +523,9 @@ export function SideChatSurface({
                 </>
               )
               : <p>{message.text}</p>}
-            {message.images !== undefined && message.images.length > 0 && (
+            {images.length > 0 && (
               <div className={css.messageImages}>
-                {message.images.map(ref => {
+                {images.map((ref, index) => {
                   const dataUrl = imageCache.get(ref.attachmentId)
                   if (dataUrl === undefined) {
                     return <span key={ref.attachmentId} className={css.messageImagePlaceholder} aria-hidden="true" />
@@ -452,8 +536,19 @@ export function SideChatSurface({
                       type="button"
                       className={css.messageImageButton}
                       title={ref.name ?? t('drawer.attachmentOpen')}
-                      onClick={() => { setLightbox(ref) }}
+                      onClick={event => {
+                        // 2026-09-14 btw-ui: remember the opener so the
+                        // preview restores focus here when it closes.
+                        lightboxOpenerRef.current = event.currentTarget
+                        setLightbox(ref)
+                      }}
                     >
+                      {/* 2026-09-14 btw-ui: sequence badge (top-left, white
+                          pill, black digits); only for multi-image messages
+                          to avoid single-thumbnail noise. */}
+                      {images.length > 1 && (
+                        <span className={css.messageImageBadge} aria-hidden="true">{index + 1}</span>
+                      )}
                       <img src={dataUrl} alt={ref.name ?? ''} className={css.messageImage} />
                     </button>
                   )
@@ -461,7 +556,8 @@ export function SideChatSurface({
               </div>
             )}
           </article>
-        ))}
+          )
+        })}
         {reasoning !== '' && (
           <article className={css.assistantMessage}>
             <div className={css.messageMeta}>{t('drawer.thinking')}</div>
@@ -548,20 +644,19 @@ export function SideChatSurface({
         </footer>
       )}
 
-      <Modal
-        open={lightbox !== null}
-        onClose={() => { setLightbox(null) }}
-        title={lightbox?.name ?? t('drawer.attachmentOpen')}
-        closeLabel={t('drawer.endCancel')}
-      >
-        {lightbox !== null && imageCache.has(lightbox.attachmentId) && (
-          <img
-            src={imageCache.get(lightbox.attachmentId)}
-            alt={lightbox.name ?? ''}
-            className={css.lightboxImage}
-          />
-        )}
-      </Modal>
+      {/* 2026-09-14 btw-ui: self-drawn lightbox aligned with the official
+          ImageLightbox interaction (mask + Escape + close + large image);
+          replaces the width-capped primitives Modal whose 380px dialog read
+          as "clicking a thumbnail does not enlarge". */}
+      {lightbox !== null && (
+        <ImageLightbox
+          image={lightbox}
+          dataUrl={imageCache.get(lightbox.attachmentId)}
+          dialogLabel={lightbox.name ?? t('drawer.attachmentOpen')}
+          closeLabel={t('drawer.lightboxClose')}
+          onClose={closeLightbox}
+        />
+      )}
 
       <Modal
         open={confirmEnd}

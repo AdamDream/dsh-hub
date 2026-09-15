@@ -1,0 +1,261 @@
+--- a/lib/client.js
++++ b/lib/client.js
+@@ -5,12 +5,16 @@
+ 		var exports = module.exports;
+ 		Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+ 		//#region lib/types/client/connection.js
++		/** Connection generation readiness, cancellation, and continuous recovery. */
+ 		const CONNECTION_DEFAULTS = {
+ 			backoffBaseMs: 500,
+ 			backoffFactor: 2,
+ 			backoffMaxMs: 1e4,
+-			streamOpenTimeoutMs: 3e3
++			generationReadyWarnMs: 3e3,
++			generationReadyTimeoutMs: 15e3
+ 		};
++		const MANUAL_RECONNECT = /* @__PURE__ */ new Error("connection: manual reconnect requested");
++		const NETWORK_STATE_CHANGED = /* @__PURE__ */ new Error("connection: browser network state changed");
+ 		function sleep(ms, signal) {
+ 			return new Promise((resolve) => {
+ 				const t = setTimeout(done, ms);
+@@ -22,10 +26,22 @@
+ 				}
+ 			});
+ 		}
++		function waitForAbort(signal) {
++			if (signal.aborted) return Promise.resolve();
++			return new Promise((resolve) => {
++				signal.addEventListener("abort", () => {
++					resolve();
++				}, { once: true });
++			});
++		}
+ 		/**
+ 		* Opens both streams and keeps iterating (pull mode: nothing reads the socket and the tap
+ 		* never fires unless someone for-awaits), reconnecting with exponential backoff on loss.
+-		* State (generation/attempt) is instance-private, never in the store.
++		* Recovery is network-aware: while the browser reports offline the loop suspends retries,
++		* and a manual reconnect request (or a network-return event) cancels any pending backoff
++		* and starts a fresh attempt. A generation that does not become ready within
++		* `generationReadyTimeoutMs` (warned at `generationReadyWarnMs`) is aborted instead of
++		* waiting forever. State (generation/attempt) is instance-private, never in the store.
+ 		* The pump body feeds each frame to a sink (sink exceptions must
+ 		* not kill the pump — a broken business layer must not drag down the connection layer).
+ 		*/
+@@ -35,7 +51,10 @@
+ 			generation = 0;
+ 			attempt = 0;
+ 			current = null;
++			retryDelay = null;
+ 			running = false;
++			immediateRetry = false;
++			networkAvailable = true;
+ 			lastState = null;
+ 			config;
+ 			constructor(api, sinks = {}, config = {}) {
+@@ -57,12 +76,46 @@
+ 				this.running = false;
+ 				this.current?.abort();
+ 				this.current = null;
++				this.retryDelay?.abort();
++				this.retryDelay = null;
+ 			}
+-			backoffDelay(attempt) {
++			/** Reset the retry sequence and replace the current generation or retry delay immediately. */
++			reconnect() {
++				if (!this.running) return;
++				this.attempt = 0;
++				this.immediateRetry = true;
++				this.emitState("connecting");
++				if (!this.isRunning()) return;
++				this.current?.abort(MANUAL_RECONNECT);
++				this.retryDelay?.abort(MANUAL_RECONNECT);
++			}
++			/**
++			* Suspend automatic retries while offline and restart backoff when the network returns.
++			* @param available - whether the browser reports network access.
++			*/
++			setNetworkAvailable(available) {
++				if (this.networkAvailable === available) return;
++				this.networkAvailable = available;
++				this.attempt = 0;
++				this.immediateRetry = false;
++				if (!this.running) return;
++				this.emitState(available ? "connecting" : "disconnected");
++				if (!this.isRunning()) return;
++				this.current?.abort(NETWORK_STATE_CHANGED);
++				this.retryDelay?.abort(NETWORK_STATE_CHANGED);
++			}
++			backoffCap(attempt) {
+ 				const { backoffBaseMs, backoffFactor, backoffMaxMs } = this.config;
+-				const cap = Math.min(backoffMaxMs, backoffBaseMs * backoffFactor ** Math.max(0, attempt - 1));
++				return Math.min(backoffMaxMs, backoffBaseMs * backoffFactor ** Math.max(0, attempt - 1));
++			}
++			backoffDelay(attempt) {
++				const cap = this.backoffCap(attempt);
+ 				return cap / 2 + Math.random() * (cap / 2);
+ 			}
++			/** Re-read retry inputs after a potentially reentrant state sink. */
++			isRetryInterrupted(immediate) {
++				return this.immediateRetry || !this.networkAvailable && !immediate;
++			}
+ 			/** Read through a method: stop() flips the flag across awaits, so narrowing from the loop condition must not stick. */
+ 			isRunning() {
+ 				return this.running;
+@@ -72,10 +125,61 @@
+ 				return this.isRunning() && !controller.signal.aborted;
+ 			}
+ 			async loop() {
++				let retry = false;
+ 				while (this.running) {
++					if (!this.networkAvailable && !this.immediateRetry) {
++						const retryDelay = new AbortController();
++						this.retryDelay = retryDelay;
++						this.emitState("disconnected");
++						await waitForAbort(retryDelay.signal);
++						if (this.retryDelay === retryDelay) this.retryDelay = null;
++						if (!this.isRunning()) return;
++						retry = true;
++						continue;
++					}
++					let manualAttempt = false;
++					if (retry) {
++						const immediate = this.immediateRetry;
++						this.immediateRetry = false;
++						if (immediate) this.attempt = 0;
++						manualAttempt = immediate;
++						const attempt = ++this.attempt;
++						this.emitState("reconnecting");
++						if (!this.isRunning()) return;
++						if (this.isRetryInterrupted(immediate)) continue;
++						if (!immediate) {
++							const retryDelay = new AbortController();
++							this.retryDelay = retryDelay;
++							await sleep(this.backoffDelay(attempt), retryDelay.signal);
++							if (this.retryDelay === retryDelay) this.retryDelay = null;
++							if (!this.isRunning()) return;
++							if (retryDelay.signal.aborted) continue;
++						}
++						console.warn(`[connection] connection lost, retry #${String(attempt)}`);
++						this.callSink(() => {
++							this.sinks.onReconnectRequested?.();
++						});
++						if (!this.isRunning()) return;
++					}
+ 					const gen = ++this.generation;
+ 					const ac = new AbortController();
+ 					this.current = ac;
++					let sourceReady = false;
++					let resolveReady;
++					let rejectReady;
++					let rejectSourceLost;
++					const ready = new Promise((resolve, reject) => {
++						resolveReady = resolve;
++						rejectReady = reject;
++					});
++					const sourceLost = new Promise((_resolve, reject) => {
++						rejectSourceLost = reject;
++					});
++					const reportReady = (host) => {
++						if (sourceReady || gen !== this.generation || !this.isGenerationActive(ac)) return;
++						sourceReady = true;
++						resolveReady(host);
++					};
+ 					/* v8 ignore next -- initializer placeholder: the Promise executor
+ 					* below runs synchronously and replaces it before anyone can call it. */
+ 					let muxOpened = () => {};
+@@ -89,33 +193,42 @@
+ 					const failed = new Promise((resolve) => {
+ 						const settle = () => {
+ 							if (gen === this.generation && !ac.signal.aborted) ac.abort();
++							if (!sourceReady) {
++								const error = new Error("connection generation ended");
++								rejectReady(error);
++								rejectSourceLost(error);
++							}
+ 							resolve();
+ 						};
+ 						this.pumpStream(this.api.events.mux({}, ac.signal, muxOpened), this.sinks.onMuxEnvelope, settle);
+ 						this.pumpStream(this.api.events.host({}, ac.signal, hostOpened), this.sinks.onHostEnvelope, settle);
+ 					});
++					void (async () => {
++						try {
++							await streamsOpen;
++							const [description] = await Promise.all([this.api.host.describe({})]);
++							const descriptionResult = description.result;
++							if (!descriptionResult.ok) throw new Error(`host.describe failed: ${descriptionResult.error.code}: ${descriptionResult.error.message}`);
++							reportReady(descriptionResult.value);
++						} catch (error) {
++							if (!sourceReady) rejectReady(error instanceof Error ? error : new Error("connection generation failed", { cause: error }));
++						}
++					})();
+ 					try {
+-						const timeout = new AbortController();
+-						const [description] = await Promise.all([this.api.host.describe({}), Promise.race([streamsOpen, sleep(this.config.streamOpenTimeoutMs, timeout.signal)])]);
+-						timeout.abort();
+-						const descriptionResult = description.result;
+-						if (!descriptionResult.ok) throw new Error(`host.describe failed: ${descriptionResult.error.code}: ${descriptionResult.error.message}`);
++						const host = await Promise.race([waitForReady(ready, this.config, ac.signal), sourceLost]);
+ 						if (ac.signal.aborted) throw new Error("generation aborted during readiness handshake");
+ 						this.attempt = 0;
+ 						this.emitState("connected");
+ 						if (this.isGenerationActive(ac)) this.callSink(() => {
+-							this.sinks.onConnected?.(descriptionResult.value);
++							this.sinks.onConnected?.(host);
+ 						});
+-					} catch {
+-						if (!ac.signal.aborted) ac.abort();
++					} catch (error) {
++						if (!ac.signal.aborted) ac.abort(error);
+ 					}
+ 					await failed;
+ 					if (!this.isRunning()) return;
+-					this.emitState("reconnecting");
+-					this.attempt += 1;
+-					console.warn(`[web-runtime] connection lost, retry #${this.attempt}`);
+-					const idle = new AbortController();
+-					await sleep(this.backoffDelay(this.attempt), idle.signal);
++					if (manualAttempt) this.attempt = 0;
++					retry = true;
+ 				}
+ 			}
+ 			/** Deduplicated state emission (sink isolation applies). */
+@@ -144,6 +257,38 @@
+ 				}
+ 			}
+ 		};
++		/** Report a slow handshake before the hard deadline ends its generation. */
++		function waitForReady(ready, config, signal) {
++			return new Promise((resolve, reject) => {
++				let settled = false;
++				const warning = setTimeout(() => {
++					console.warn(`[connection] generation is still not ready after ${String(config.generationReadyWarnMs)}ms`);
++				}, config.generationReadyWarnMs);
++				const timeout = setTimeout(() => {
++					const error = /* @__PURE__ */ new Error(`connection generation was not ready within ${String(config.generationReadyTimeoutMs)}ms`);
++					console.warn(`[connection] ${error.message}; cancelling generation`);
++					finish({ error });
++				}, config.generationReadyTimeoutMs);
++				const aborted = () => {
++					finish({ error: new Error("connection generation aborted", { cause: signal.reason }) });
++				};
++				const finish = (outcome) => {
++					if (settled) return;
++					settled = true;
++					clearTimeout(warning);
++					clearTimeout(timeout);
++					signal.removeEventListener("abort", aborted);
++					if ("error" in outcome) reject(outcome.error);
++					else resolve(outcome.value);
++				};
++				signal.addEventListener("abort", aborted, { once: true });
++				ready.then((value) => {
++					finish({ value });
++				}, (error) => {
++					finish({ error });
++				});
++			});
++		}
+ 		//#endregion
+ 		//#region ../../llm/llm/lib/types/brand.js
+ 		/**

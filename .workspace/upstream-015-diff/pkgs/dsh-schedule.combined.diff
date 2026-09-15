@@ -1,0 +1,981 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/README.i18n.yaml	2026-09-11 14:27:15.228964503 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/README.i18n.yaml	2026-09-12 14:56:17.498840544 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/schedule/schedule/README.md
+-README.md: 7a8b14fcf1e335aab2c9a0c717e38ae08c81eb6c
+-README.zh.md: c250ad5889fc92e9c47e23e32e0b87b9bd793901
++README.md: f56c689198b7e17a85f43a1ecb6e5f1527da6a91
++README.zh.md: 7180565370d83a7207c73aa9a2539219974dace0
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/README.md	2026-09-11 14:27:15.199964091 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/README.md	2026-09-12 14:56:17.497979347 +0800
+@@ -1,154 +1,56 @@
+----
+-description: "Session-local durable reminders: the schedule_create, schedule_list, and schedule_delete tools and live-owner delivery, for users and maintainers choosing, configuring, or debugging the package."
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-schedule
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-Schedule lets you ask the model for durable reminders that return as ordinary follow-up messages in the same conversation. Create one-time reminders for a delay or absolute time, repeat them at fixed intervals, list pending reminders, and cancel them. Reminders survive restarts, but delivery requires a live root agent: closed sessions keep reminders overdue until resumed. Delivery never uses email, SMS, push, or browser notifications. Enable the Schedule overlay to expose the reminder tools and active-reminder catalog; sidebar alarms are best-effort indicators of known active reminders, not proof that reminder delivery is currently running.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## Use this package
+-
+-Use Schedule when you want a reminder to arrive as a message in the same conversation — for example, "remind me in 30 minutes to follow up on the migration" or "check back every hour while this build runs". The agent creates, lists, and cancels reminders through its ordinary tools; you only enable the overlay once.
+-
+-### When to choose it
+-
+-Choose Schedule when you want reminders delivered as messages in the same live conversation. Avoid it when delivery must reach you outside the session — there is no email, SMS, push, or browser notification — or when you need calendar-style rules such as "every weekday at 9": repeating reminders run on a fixed interval only.
+-
+-### Enable Schedule
+-
+-Add the Schedule overlay to a `dsh web` session; the reminder tools then appear in the conversation and the model can use them right away:
+-
+-```sh
+-dsh web --patch apps/cli/config/examples/schedule/cordis.yml
+-```
+-
+-Success looks like this: ask the model "remind me in 10 minutes to review the PR", and it replies with the reminder's id, its target time, and a `scheduled` state. If storage cannot be confirmed at that moment, the tool reports `persistence_uncertain` and suggests re-listing instead of claiming success.
+-
+-Enable the overlay before starting the session you want reminders in: a session that was already running when the overlay loaded does not have the reminder tools.
+-
+-### Schedule a reminder
+-
+-One-time reminders come in two forms: after a delay — for example "in 30 minutes" — or at an absolute time, given either as an instant with an explicit offset such as `2026-09-01T15:00:00+08:00` or as a local date and time with a named zone such as `Europe/Berlin` (the browser's zone applies only when the time-context overlay is present). Repeating reminders run on a fixed interval of at least 5 minutes and stay aligned to the time you first set them. Every reminder needs content to show when it fires.
+-
+-A successful create returns the reminder with its id, target time, state, and delivery mode; `schedule_list` shows all pending reminders in the order you created them; canceling by id removes a pending reminder, and an unknown or already-finished id reports `schedule_not_found` without changing anything.
+-
+-Input that cannot become a reminder — an empty prompt, more than one selector, an invalid time zone, a non-future or out-of-range time, a repeating interval below 5 minutes — returns a stable error code instead of succeeding. The generated [tool catalog](../../../docs/tool-catalog.md#deepseek-aidsh-schedule) owns the exact arguments each tool accepts.
+-
+-### When reminders fire
+-
+-Due reminders appear as ordinary follow-up messages after the conversation becomes idle; the agent never interrupts a running turn. An already-live idle agent can claim maintenance and deliver immediately without another resume. One-time reminders fire before any repeating batch, and several repeating reminders due at once arrive together in one message ordered by time. If the session is closed or cold when a reminder comes due, it stays overdue until a future live root agent resumes the session — nothing is sent outside the session. A repeating reminder that missed intervals while the session was away presents only its latest due occurrence, not a backlog. The optional Web catalog shows only active records and is not a delivery receipt; dispatch means the follow-up was queued and recorded, not that the model succeeded or the user read the answer.
++`dsh-schedule` gives future live root Agents three Session-scoped tools for durable reminders. Version 1 accepts positive safe-integer `after_seconds` delays, explicit absolute `at` targets, and fixed-rate `every_seconds` intervals of at least five minutes. The Session event log owns reminder state; timers, tool values, and model follow-ups are disposable projections of that log.
+ 
+------
++## Composition
+ 
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
++Load this function plugin after `ctx.sessions`, `ctx.agents`, `ctx.tools`, `ctx.sessionPersistence`, and the persistence listener that implements Session flushes. Static injection makes a missing persistence service a composition error. The plugin listens only to later `agent/created` events, installs on runtime roots, and registers all tools through the exact `agent.ctx`. Agents that already existed when the plugin loaded and runtime children do not receive Schedule.
+ 
+-<details>
+-<summary>Implementation internals — click to expand</summary>
++Time-context is not a Schedule dependency. A composition may mount `@deepseek-ai/dsh-time-context` so the model can interpret natural language in the browser's request-local zone, as the official Schedule Web overlay does. The model must still pass an explicit offset or `time_zone` to `schedule_create`; Schedule never imports or infers from model context.
+ 
+-This section explains the design decisions behind the plugin and points at the code that realizes them; the observable behavior is fully covered in [Use this package](#use-this-package).
++Every operation that reads or decides from the Schedule fold first awaits `ctx.sessions.flush(session)`. A missing, rejected, or detached persistence path returns `persistence_uncertain`; it never turns an unconfirmed live suffix into a list or not-found answer. A successful create or actual delete also awaits a post-append barrier before confirming the mutation.
+ 
+-### Scope and composition
++## Durable state
+ 
+-The plugin declares `inject = ['agents', 'sessions', 'tools', 'sessionPersistence']`, so a missing persistence service is a composition error. It observes only `agent/created` events published after it loads, installs on those root Agents, and registers all three tools through the exact `agent.ctx`; Agents already live at load time and runtime children never receive Schedule.
++The package owns the strict version-1 `schedule/change` create, delete, and dispatch union. Every create record contains a stable Session-local `ScheduleId`, the trimmed prompt, and a four-digit-year RFC 3339 UTC `scheduledAt`. An `after` record also stores `afterSeconds`; an `at` record stores no copy of its submitted offset, local calendar fields, or interpreting zone; an `every` record stores `everySeconds` and treats `scheduledAt` as the earliest creation-anchor-aligned occurrence not yet dispatched. Delete and one-shot dispatch carry only the id. Every dispatch adds `acceptedAt`, from which replay advances directly to the first anchor-aligned target after that decision time.
+ 
+-Time-context is not a Schedule dependency. The official Web overlay mounts `@deepseek-ai/dsh-time-context` so the model can interpret natural language in the browser's request-local zone, but the model must still pass an explicit offset or `time_zone` to `schedule_create`; Schedule never imports or infers from model context.
++Replay rejects unknown versions, extra fields, reused ids, mismatched one-shot or Every dispatch shapes, and delete or dispatch transitions against inactive records. Normal Sessions fold the complete log. A fork folds only `session.events.slice(session.header.seedLength ?? 0)`, so it does not inherit its parent's reminders. The package's `./invariant` companion applies the same policy to existing logs and candidate events.
+ 
+-Session projection is optional. When `ctx.sessionProjections` exists, the plugin registers the strict `schedule` unit and exposes the complete active `ScheduleRecord[]`; a headless composition without the registry keeps the same tools and runtime. The browser-safe record vocabulary is available from the type-only `@deepseek-ai/dsh-schedule/client` export. The shipped Web bundle resolves `ui-schedule` through a disabled row, and the explicit Schedule overlay enables that row alongside the Host Schedule services.
++## Absolute-time input
+ 
+-### Design philosophy
++The `at` selector is either a strict `YYYY-MM-DDTHH:mm:ss[.S|.SS|.SSS](Z|±HH:MM)` string or `{ date: "YYYY-MM-DD", time: "HH:mm:ss[.S|.SS|.SSS]", time_zone: string }`. The string identifies an instant through `Z` or its numeric offset. The local form always requires explicit `UTC` or a valid IANA Area/Location zone. Missing `time_zone`, offset-free strings, extra keys, normalized calendar dates, invalid offsets, and non-future targets are rejected.
+ 
+-The package rests on one separation and three commitments:
++Schedule owns deterministic calendar normalization. Local times inside a daylight-saving gap are rejected. An overlap chooses its first, earlier instant. A successful create retains only canonical UTC `scheduledAt`; no Schedule path reads the browser, Session header, model time-context, connection, or process time zone.
+ 
+-- **The Session log owns the state.** Version-1 `schedule/change` events are the only durable authority; timers, tool values, and follow-ups are disposable projections rebuilt from the fold.
+-- **Strict replay.** The decoder rejects unknown versions, extra fields, reused ids, mismatched dispatch shapes, and transitions against inactive records, so a corrupt stream fails loudly instead of deriving wrong views.
+-- **Persistence before decision.** Every read or decision awaits the shared Session flush barrier, and create and delete confirm only after a second post-append barrier.
+-- **Session-local delivery only.** No external channel, no cold-session scheduler, and no receipt: due work enters the same conversation or stays active.
++## Management tools
+ 
+-### Source map
++The generated [tool catalog](../../../docs/tool-catalog.md) owns the argument and output schemas for `schedule_create`, `schedule_list`, and `schedule_delete`. Their canonical values use camelCase record fields even though model input uses `after_seconds` and `time_zone`.
+ 
+-| File | Role |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | Plugin entry: `inject`, `agent/created` observation, per-root runtime and tool installation |
+-| [`src/tools.ts`](src/tools.ts) | Tool definitions, preflight, serialized transactions, closed error union |
+-| [`src/domain.ts`](src/domain.ts) | Strict decoding, fold, time validation, framing, occurrence arithmetic |
+-| [`src/runtime.ts`](src/runtime.ts) | Live timer owner: maintenance claim, follow-up, dispatch barrier |
+-| [`src/persistence.ts`](src/persistence.ts) | Schedule-owned use of the shared session durability barrier |
+-| [`src/projection.ts`](src/projection.ts) | Optional seed-aware Session projection and strict checkpoint schema |
+-| [`src/client.ts`](src/client.ts) | Browser-safe type-only `ScheduleRecord` export |
+-| [`src/transaction.ts`](src/transaction.ts) | Agent-scoped serialization for reads and durable mutations |
+-| [`src/invariant.ts`](src/invariant.ts) | `./invariant` companion applying replay policy to existing logs and candidate events |
++One Agent-scoped queue serializes each accepted management transaction and the live owner's due transaction from preflight through any post-append barrier. `schedule_create` requires exactly one of `after_seconds`, `at`, or `every_seconds`, validates shape-only failures before entering the queue, then checkpoints, allocates a never-reused id, appends create, and checkpoints again. `schedule_list` returns active records in creation order with `state: "scheduled" | "overdue"` and `deliveryMode: "session-local"`. `schedule_delete` rejects an empty or whitespace-padded id before the queue and appends only for an active id; an unknown or terminal id returns `{ id, deleted: false, code: "schedule_not_found" }` after preflight.
+ 
+-### Durable state and replay
++Every successful management preflight also asks the live owner to recompute. This recovers a retained create or delete batch after a previous post-append barrier returned `persistence_uncertain`, without a Schedule-specific persistence-retry timer.
+ 
+-A normal Session folds its complete event stream. A fork folds only `session.ownEvents()`, so a child never inherits its parent's reminders. The Schedule projection receives the Session's exact `inheritedEventCount` from the projection registry and applies the same transition function after that cut. Every create record carries a stable Session-local `ScheduleId`, the trimmed prompt, and a four-digit-year RFC 3339 UTC `scheduledAt`; an `after` record also stores `afterSeconds`, an `at` record stores no copy of its submitted offset or local fields, and an `every` record stores `everySeconds` with `scheduledAt` as the earliest creation-anchor-aligned occurrence not yet dispatched. Delete and one-shot dispatch carry only the id; an `every` dispatch adds `acceptedAt`, and replay advances directly to the first anchor-aligned target after that decision time.
++The closed version-1 domain error codes are `invalid_prompt`, `invalid_selector`, `invalid_rule`, `invalid_time_zone`, `not_future`, `time_out_of_range`, `frequency_too_high`, `corrupt_schedule_log`, `persistence_uncertain`, and `internal_error`. Diagnostics are stable and do not expose backend exceptions. Rendered content is deterministic JSON of the canonical value; generic tool-result policy remains responsible for any model-facing spill behavior.
+ 
+-### Client projection
++## Delivery lifecycle
+ 
+-The optional `schedule` projection checkpoints `{ inheritedEventCount, active, seenIds }` as strict plain JSON and publishes only the complete `active` array. Its schema reuses the durable Schedule decoder, rejects duplicate or inconsistent ids, and propagates corrupt durable events through the existing Session read failure instead of publishing a partial catalog. Live lazy build, event-driven build, cold restore, history reads, and detached Subagent reads all use the exact Session cut and the same owned-suffix transition.
++The live owner derives the earliest target from the durable fold. It splits waits longer than the Node timer range and rereads the wall clock after every wake, so a rollback cannot fire early and a forward jump makes the record overdue. Due one-shots have priority and enter one later turn at a time. When no one-shot is due, all overdue Every records form one batch in target and creation order.
+ 
+-The projection carries durable records only. It does not persist or transmit scheduled-versus-overdue status, localized text, relative time, browser-local time, sorting state, popover state, runtime liveness, or delivery receipts. [`dsh-client-ui-schedule`](../../client/ui-schedule/README.md) derives catalog presentation from the complete array and the viewing browser's clock. [`dsh-client-ui-workspace`](../../client/ui-workspace/README.md) derives only whether the list value is a non-empty array, so ordinary and search rows may briefly omit or retain the alarm when the durable projection cache is missing or stale.
++An overdue reminder first checkpoints persistence. If a turn or another maintenance task owns the Agent, `runMaintenance()` rejects the idle-phase claim; the record stays active and the owner retries after `whenIdle()`. A successful maintenance task refolds, samples one decision time, builds the appropriate fixed framing, synchronously queues `followup()`, and appends dispatch before releasing the phase. A one-shot appends its id. Each Every record in a batch appends its id plus the same `acceptedAt`; integer arithmetic selects that record's latest due creation-anchor-aligned occurrence and advances it directly to the first future target. Missed intervals are never enumerated or replayed, distinct overdue records each contribute one occurrence, and there is no shared recurrence gate. Waking input remains parked until release, after which the owner checkpoints dispatch.
+ 
+-### Time validation
++The follow-up opens a normal later turn after the Agent becomes fully idle; it never steers or interrupts the current conversation. Its assistant output appears through the ordinary transcript, with no independent receipt or Schedule-specific browser UI. Dispatch means the follow-up was queued and recorded, not that the model succeeded or the user read the answer.
+ 
+-Calendar normalization is deterministic. Local times inside a daylight-saving gap are rejected; an overlap chooses its first, earlier instant. Schedule time validation reads no browser, Session-header time-zone field, model time-context, connection, or process time zone, so replay never depends on ambient time-zone state.
++Framing or synchronous follow-up failure writes no dispatch. An append failure faults that owner because the message may already be queued; a barrier rejection leaves dispatch pending for a later ordinary preflight. Agent or plugin disposal cancels timers, stops new work, and awaits in-flight preflights and idle waits without deleting durable records.
+ 
+-### Management pipeline
+-
+-One Agent-scoped queue serializes each accepted management transaction with the live owner's due transaction from preflight through any post-append barrier. `schedule_create` checkpoints, allocates a never-reused id, appends the create event, and checkpoints again; a cancelled caller stops before append. Every successful management preflight also asks the live owner to recompute, which recovers a retained create or delete batch after a previous post-append barrier returned `persistence_uncertain`.
+-
+-Every read or decision from the fold first awaits `ctx.sessions.flush(session)`; a missing, rejected, or detached persistence path returns `persistence_uncertain`, and create and an actual delete await a second barrier after append before confirming the mutation. Shape-only failures are validated before the serialized transaction. Input, time, and durability failures return a closed set of stable version-1 error codes; the closed union and each code's conditions live in [`src/tools.ts`](src/tools.ts).
+-
+-### Live owner
+-
+-The owner splits long waits into bounded timer segments and rereads the wall clock after every wake. Due work claims the idle maintenance phase, samples one decision time, builds the complete escaped framing before `followup()`, appends dispatch only after synchronous enqueue returns, releases maintenance, and then awaits durability. Missed fixed-rate intervals are never enumerated: integer arithmetic selects each record's latest due creation-anchor-aligned occurrence and advances it directly to the first future target.
+-
+-An overdue reminder first checkpoints persistence, then claims the Agent's idle maintenance phase through `runMaintenance()`; if a turn or another maintenance task owns the Agent, the claim is rejected, the record stays active, and the owner retries after `whenIdle()`. A successful maintenance task refolds, samples one decision time, builds the fixed framing, synchronously queues `followup()`, and appends the dispatch before releasing the phase. Dispatch means the follow-up was queued and recorded, not that the model succeeded or the user read the answer. Framing or synchronous follow-up failure writes no dispatch; an append failure faults the owner because the message may already be queued; a barrier rejection leaves dispatch pending for a later ordinary preflight. Agent or plugin disposal cancels timers and stops new work without deleting durable records.
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-Read these pages when the package-level contract is not enough. They move from the shared subsystem contracts to the exact tool schemas and the decision evidence behind the delivery design.
+-
+-- [Session-local Schedule subsystem](../../../docs/subsystems/schedule.md) — durable record, transition, view, and delivery contracts with the exact type definitions.
+-- [Generated tool catalog](../../../docs/tool-catalog.md#deepseek-aidsh-schedule) — the complete `schedule_create`, `schedule_list`, and `schedule_delete` schemas the model receives.
+-- [Durable Web Schedule decision](../../../.agents/notes/implemented/feature/2026-08-05-durable-web-schedule.md) — persistence and lifecycle decisions behind the package.
+-- [Conversational delivery decision](../../../.agents/notes/archived/simplification/2026-08-09-conversational-schedule-delivery.md) — the no-receipt boundary and follow-up delivery.
+-- [Explicit time-zone boundary](../../../.agents/notes/implemented/simplification/2026-08-09-explicit-schedule-time-zone.md) — why the model must always pass an explicit zone.
+-- [Bounded fixed-rate Schedule](../../../.agents/notes/archived/simplification/2026-08-09-bounded-fixed-rate-schedule.md) — recurrence scope: latest-only catch-up and batch delivery.
+-- [Schedule user guide](../../../docs/user/guide/schedule.md) — the official configuration path for mounting this package with time-context.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+ ### Scoped management tools
+ 
+ #### What the model sees
+ 
+-The model sees the three generated tool schemas only in a live root Agent created after this plugin loads; the [generated tool catalog](../../../docs/tool-catalog.md#deepseek-aidsh-schedule) owns the exact argument and result schemas. Tool results contain the canonical JSON values described above.
++The model sees the three generated tool schemas only in a live root Agent created after this plugin loads. Tool results contain the canonical JSON values described above.
+ 
+ #### Token effect
+ 
+@@ -206,11 +108,6 @@
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits describe when Schedule does not fit your use case or needs special operational care. They are current package constraints, not a general reminder-service comparison or a task backlog.
+-
+ - **Session-local delivery only** — a reminder runs on time only while its original Session is live; a cold Session receives no external notification and processes an overdue record only after resume.
+ - **Activity-driven retry** — a rejected due preflight or contained framing/enqueue failure leaves the record active but starts no private retry timer; later Agent activity or a successful Schedule preflight triggers recomputation.
+ - **Explicit local zone** — `at` never imports browser context; callers must translate natural language into either an offset-bearing RFC 3339 string or a local object with `time_zone`.
+@@ -218,16 +115,3 @@
+ - **Latest-only catch-up** — an overdue Every record contributes only its latest due occurrence, so Schedule never replays a missed backlog.
+ - **Narrow crash duplicate window** — a crash after synchronous follow-up admission but before the dispatch checkpoint can repeat the reminder; the package does not claim model completion, user acknowledgement, or exactly-once effects.
+ - **Load-order boundary** — the plugin does not scan or adopt Agents that were already live when it loaded.
+-- **Catalog is read-only current state** — the optional Web surface has no history, mutation, retry, or acknowledgement semantics; terminal records disappear and delivery remains ordinary conversation output.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-This Dev Note is working context for maintainers: open directions that are not decided. It is explicitly non-authoritative — shipped behavior, limits, and accepted rationale live in the sections above, the package code, and the linked Agent Notes.
+-
+-Calendar-based recurrence remains a future product boundary rather than a dormant compatibility branch; the bounded fixed-rate decision is the shipped scope. An external notification channel for cold Sessions stays explicitly out of scope. Neither direction has a schedule or design owner.
+-
+-</details>
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/README.zh.md	2026-09-11 14:27:15.201964119 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/README.zh.md	2026-09-12 14:56:17.497979347 +0800
+@@ -1,168 +1,70 @@
+----
+-description: "面向用户与维护者的会话本地持久提醒说明：schedule_create、schedule_list 与 schedule_delete 工具及 live owner 交付，用于选择、配置或排查本包。"
+-kind: "package-reference"
+----
+-
+ # @deepseek-ai/dsh-schedule
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-Schedule 让你向模型请求持久提醒；提醒会作为普通 follow-up 消息返回同一会话。你可以创建延时或绝对时间的一次性提醒、按固定间隔重复提醒、列出待处理提醒，也可以取消提醒。提醒在重启后仍然存在，但交付需要 live 根 agent：已关闭的会话会让提醒保持逾期，直到恢复。交付绝不会使用电子邮件、短信、推送或浏览器通知。启用 Schedule overlay 即可提供提醒工具和活动提醒目录；侧边栏闹钟只是已知活动提醒的尽力而为指示，不证明提醒交付当前正在运行。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## 使用本包
+-
+-当你希望提醒作为消息出现在同一会话中时使用 Schedule——例如「30 分钟后提醒我跟进迁移」或「构建运行期间每小时检查一次」。agent 会通过它的普通工具为你创建、列出和取消提醒；你只需启用一次 overlay。
+-
+-### 何时选择
+-
+-当你希望提醒以消息形式在同一 live 会话中交付时，选择 Schedule。当交付必须到达会话之外时请避开它——没有电子邮件、短信、推送或浏览器通知——或者当你需要「每个工作日 9 点」这类日历规则时：重复提醒只按固定间隔运行。
+-
+-### 启用 Schedule
+-
+-把 Schedule overlay 添加到 `dsh web` 会话；提醒工具随即出现在会话中，模型可以立即使用它们：
+-
+-```sh
+-dsh web --patch apps/cli/config/examples/schedule/cordis.yml
+-```
+-
+-成功的样子如下：让模型「10 分钟后提醒我审阅 PR」，它会回复提醒的 id、目标时间与 `scheduled` 状态。如果那一刻存储无法确认，工具会报告 `persistence_uncertain` 并建议重新列出，而不是声称成功。
+-
+-请在你想要提醒的会话开始前启用 overlay：overlay 加载时已在运行的会话没有提醒工具。
+-
+-### 安排提醒
+-
+-一次性提醒有两种形式：延时后——例如「30 分钟后」——或绝对时间，可以给出带显式偏移量的时刻，如 `2026-09-01T15:00:00+08:00`，也可以给出带命名时区（如 `Europe/Berlin`）的本地日期与时间（只有加载 time-context overlay 时才应用浏览器时区）。重复提醒按至少 5 分钟的固定间隔运行，并与你首次设置的时间保持对齐。每条提醒都需要在触发时展示的内容。
+-
+-创建成功会返回带 id、目标时间、状态与交付模式的提醒；`schedule_list` 按创建顺序显示所有待处理提醒；按 id 取消会移除待处理提醒，未知或已结束的 id 会报告 `schedule_not_found` 且不改变任何内容。
+-
+-无法成为提醒的输入——空提示词、多于一个 selector、无效时区、非未来或超出范围的时间、低于 5 分钟的重复间隔——会返回稳定的错误代码而不是成功。生成的[工具目录](../../../docs/tool-catalog.zh.md#deepseek-aidsh-schedule)拥有每个工具接受的精确参数。
+-
+-### 提醒何时触发
+-
+-到期提醒会在会话空闲后作为普通 follow-up 消息出现；agent 绝不会中断正在运行的轮次。已经 live 且空闲的 agent 可以认领 maintenance 并立即交付，无需再次恢复。一次性提醒先于任何重复批次触发；同时到期的多条重复提醒会按时间顺序合并为一条消息。如果会话在提醒到期时已关闭或 cold，提醒会保持逾期，直到未来的 live 根 agent 恢复会话——会话之外不会发送任何内容。错过若干间隔的重复提醒只展示最新一个到期发生时点，不展示积压。可选 Web 目录只显示活动记录，并不充当交付回执；dispatch 表示 follow-up 已入队并被记录，不表示模型成功或用户已读取回答。
++`dsh-schedule` 为未来创建的 live 根 agent（智能体）提供 3 个会话范围内的工具，用于管理持久提醒。版本 1 接受正的安全整数 `after_seconds` 延时、显式绝对时间 `at` 目标，以及至少 5 分钟的固定速率 `every_seconds` 间隔。会话事件日志拥有提醒状态；timer、工具值和模型 follow-up 都是该日志的可丢弃投影。
+ 
+------
++## 组合
+ 
+-<a id="understand-the-implementation"></a>
+-## 理解实现
++请在 `ctx.sessions`、`ctx.agents`、`ctx.tools`、`ctx.sessionPersistence`，以及实现 Session flush 的持久化监听器之后加载此函数插件。静态注入会使缺少持久化服务的组合直接失败。此插件只监听后续的 `agent/created` 事件，在运行时根 agent 上安装，并通过完全相同的 `agent.ctx` 注册所有工具。插件加载时已经存在的 agent 与运行时子 agent 不会获得 Schedule。
+ 
+-<details>
+-<summary>实现细节——点击展开</summary>
++Time-context 不是 Schedule 的依赖。组合可以挂载 `@deepseek-ai/dsh-time-context`，使模型能够按浏览器的请求本地时区解释自然语言；官方 Schedule Web overlay 正是如此。模型仍必须向 `schedule_create` 传入显式偏移量或 `time_zone`；Schedule 绝不会从模型上下文中导入或推断该值。
+ 
+-本节解释插件背后的设计决策，并指出实现它们的代码位置；可观察行为已在[使用本包](#use-this-package)中完整说明。
++每项从 Schedule 折叠结果读取或作出判断的操作，都会先等待 `ctx.sessions.flush(session)`。持久化路径缺失、拒绝或已分离时，操作返回 `persistence_uncertain`；它绝不会把未经确认的 live 后缀当成列表或未找到结果。成功创建或实际删除后，还会等待追加后的持久化 barrier（屏障）再确认变更。
+ 
+-### 作用域与组合
++## 持久状态
+ 
+-插件声明 `inject = ['agents', 'sessions', 'tools', 'sessionPersistence']`，因此缺少持久化服务会直接构成组合错误。它只观察加载后发布的 `agent/created` 事件，在这些根 agent 上安装，并通过完全相同的 `agent.ctx` 注册全部三个工具；加载时已经 live 的 agent 与运行时子 agent 永远不会获得 Schedule。
++此包拥有严格的版本 1 `schedule/change` create、delete 与 dispatch 联合。每条 create 记录都包含稳定的会话本地 `ScheduleId`、已 trim 的提示词，以及使用四位年份的 RFC 3339 UTC `scheduledAt`。`after` 记录还会存储 `afterSeconds`；`at` 记录不会保留所提交的偏移量、本地日历字段或解释该值时所用的时区；`every` 记录存储 `everySeconds`，并把 `scheduledAt` 视为尚未 dispatch 的最早一个创建锚点对齐发生时点。delete 与一次性 dispatch 只携带 id。Every dispatch 还会添加 `acceptedAt`；回放会据此直接推进到该决策时点之后的第一个锚点对齐目标。
+ 
+-Time-context 不是 Schedule 的依赖。官方 Web overlay 挂载 `@deepseek-ai/dsh-time-context`，让模型能够按浏览器请求本地时区解释自然语言；但模型仍必须向 `schedule_create` 传入显式偏移量或 `time_zone`；Schedule 绝不会从模型上下文导入或推断该值。
++回放会拒绝未知版本、额外字段、重复使用的 id、形状不匹配的一次性或 Every dispatch，以及针对非活动记录的 delete 或 dispatch 转换。普通会话折叠完整日志。fork 只折叠 `session.events.slice(session.header.seedLength ?? 0)`，因此不会继承父会话的提醒。此包的 `./invariant` 配套模块会对现有日志和候选事件应用相同策略。
+ 
+-Session projection 是可选能力。`ctx.sessionProjections` 存在时，插件会注册严格的 `schedule` 单元并公开完整的活动 `ScheduleRecord[]`；不带注册表的 headless 组合仍保留相同工具与 runtime。浏览器安全的记录词汇由纯类型出口 `@deepseek-ai/dsh-schedule/client` 提供。随附 Web bundle 通过 disabled row 解析 `ui-schedule`，显式 Schedule overlay 再与 Host Schedule 服务一起启用该 row。
++## 绝对时间输入
+ 
+-### 设计理念
++`at` selector 可以是严格的 `YYYY-MM-DDTHH:mm:ss[.S|.SS|.SSS](Z|±HH:MM)` 字符串，也可以是 `{ date: "YYYY-MM-DD", time: "HH:mm:ss[.S|.SS|.SSS]", time_zone: string }`。字符串通过 `Z` 或数值偏移量标识一个时刻。本地形式始终要求显式 `UTC` 或有效的 IANA Area/Location 时区。缺少 `time_zone`、不带偏移量的字符串、额外键、需要规范化的日历日期、无效偏移量和非未来目标都会被拒绝。
+ 
+-本包建立在一个分离与三项承诺之上：
++Schedule 负责确定性的日历规范化。落在夏令时缺口内的本地时间会被拒绝；遇到重叠时会选择第一次出现的较早时刻。创建成功后只保留规范化后的 UTC `scheduledAt`；Schedule 的任何路径都不会读取浏览器、Session 标头、模型 time-context、连接或进程时区。
+ 
+-- **会话日志拥有状态。** 版本 1 的 `schedule/change` 事件是唯一持久权威；timer、工具值与 follow-up 都是从折叠结果重建的可丢弃投影。
+-- **严格回放。** 解码器拒绝未知版本、额外字段、重复使用的 id、形状不匹配的 dispatch 以及针对非活动记录的转换，因此损坏的流会大声失败，而不是派生出错误视图。
+-- **先持久化再决策。** 每项读取或决策都等待共享的会话 flush barrier，create 与 delete 只在第二个 post-append barrier 之后才确认。
+-- **仅限会话本地交付。** 没有外部渠道、没有 cold 会话调度器、也没有回执：到期工作进入同一会话，否则保持活动。
++## 管理工具
+ 
+-### 源码地图
++生成的[工具目录](../../../docs/tool-catalog.zh.md)负责 `schedule_create`、`schedule_list` 和 `schedule_delete` 的参数与输出 schema。虽然模型输入使用 `after_seconds` 和 `time_zone`，但其规范值中的记录字段使用 camelCase。
+ 
+-| 文件 | 职责 |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | 插件入口：`inject`、`agent/created` 观察、按根的 runtime 与工具安装 |
+-| [`src/tools.ts`](src/tools.ts) | 工具定义、preflight、序列化事务、封闭错误联合 |
+-| [`src/domain.ts`](src/domain.ts) | 严格解码、折叠、时间校验、framing、occurrence 算术 |
+-| [`src/runtime.ts`](src/runtime.ts) | live timer owner：maintenance 认领、follow-up、dispatch barrier |
+-| [`src/persistence.ts`](src/persistence.ts) | Schedule 对共享会话持久化 barrier 的使用 |
+-| [`src/projection.ts`](src/projection.ts) | 可选的 seed-aware Session projection 与严格检查点 schema |
+-| [`src/client.ts`](src/client.ts) | 浏览器安全的纯类型 `ScheduleRecord` 出口 |
+-| [`src/transaction.ts`](src/transaction.ts) | 读取与持久变更的 agent 范围串行化 |
+-| [`src/invariant.ts`](src/invariant.ts) | `./invariant` 配套模块，对现有日志与候选事件应用回放策略 |
++一条 Agent-scoped 队列会将每项已接纳的管理事务与 live owner 的到期事务从 preflight 到任何 post-append barrier 全程串行化。`schedule_create` 要求 `after_seconds`、`at` 与 `every_seconds` 有且只有一项；它会在进入队列前验证只依赖输入形状的失败，随后执行检查点、分配永不复用的 id、追加 create，再次执行检查点。`schedule_list` 按创建顺序返回活动记录，其中包含 `state: "scheduled" | "overdue"` 与 `deliveryMode: "session-local"`。`schedule_delete` 会在进入队列前拒绝空 id 或前后带空白的 id，并只为活动 id 追加事件；未知或已终结的 id 会在 preflight 后返回 `{ id, deleted: false, code: "schedule_not_found" }`。
+ 
+-### 持久状态与回放
++每次成功的管理 preflight 还会要求 live owner 重新计算。如果先前的 post-append barrier 返回 `persistence_uncertain`，这会恢复所保留的 create 或 delete batch，而无需 Schedule 专属的持久化重试 timer。
+ 
+-普通会话折叠完整事件流。fork 只折叠 `session.ownEvents()`，因此子会话永远不会继承父会话的提醒。Schedule projection 从投影注册表接收 Session 的精确 `inheritedEventCount`，并在该切点之后应用同一个 transition 函数。每条 create 记录都携带稳定的会话本地 `ScheduleId`、已 trim 的提示词与四位年份 RFC 3339 UTC `scheduledAt`；`after` 记录还存储 `afterSeconds`，`at` 记录不保留所提交的偏移量或本地字段，`every` 记录存储 `everySeconds`，并把 `scheduledAt` 视为尚未 dispatch 的最早创建锚点对齐发生时点。delete 与一次性 dispatch 只携带 id；`every` dispatch 会附加 `acceptedAt`，回放直接推进到该决策时点之后的第一个锚点对齐目标。
++版本 1 的封闭领域错误代码包括 `invalid_prompt`、`invalid_selector`、`invalid_rule`、`invalid_time_zone`、`not_future`、`time_out_of_range`、`frequency_too_high`、`corrupt_schedule_log`、`persistence_uncertain` 和 `internal_error`。诊断文本保持稳定，不会暴露后端异常。渲染内容是规范值的确定性 JSON；通用工具结果策略仍负责模型可见内容的 spill 行为。
+ 
+-### 客户端 projection
++## 交付生命周期
+ 
+-可选的 `schedule` projection 将 `{ inheritedEventCount, active, seenIds }` 作为严格的纯 JSON 检查点，并且只发布完整的 `active` 数组。其 schema 复用持久 Schedule decoder，拒绝重复或不一致的 id，并让损坏的持久事件通过既有 Session 读取失败传播，而不是发布部分目录。live 惰性构建、事件驱动构建、cold restore、history 读取与 detached Subagent 读取都使用精确 Session 切点与同一套自有后缀 transition。
++live owner 从持久折叠结果派生最早的目标。它会拆分超过 Node timer 范围的等待，并在每次唤醒后重新读取墙钟，因此时钟回拨不会提前触发，时钟前跳则会使记录进入 overdue 状态。已到期的一次性提醒优先，每次进入一个后续轮次。没有一次性提醒到期时，所有逾期 Every 记录会按目标时间和创建顺序组成一个批次。
+ 
+-projection 只携带持久记录。它不持久化或传输 scheduled／overdue 状态、本地化文本、相对时间、浏览器本地时间、排序状态、popover 状态、runtime 存活或交付回执。[`dsh-client-ui-schedule`](../../client/ui-schedule/README.zh.md) 从完整数组与查看方浏览器时钟派生目录呈现。[`dsh-client-ui-workspace`](../../client/ui-workspace/README.zh.md) 只派生列表值是否为非空数组，因此持久 projection cache 缺失或陈旧时，普通行与搜索结果的闹钟可能短暂漏显或残留。
++overdue 提醒首先为持久化建立检查点。如果 agent 已被某个轮次或另一项 maintenance task 占用，`runMaintenance()` 会拒绝对 idle phase 的认领；记录会保持活动，owner 会在 `whenIdle()` 后重试。获准执行的 maintenance task 会重新折叠、采样一个决策时点、构造相应的固定 framing、同步将 `followup()` 入队，并在释放 phase 前追加 dispatch。一次性提醒只追加 id。批次中的每条 Every 记录都会追加其 id 和相同的 `acceptedAt`；整数运算会选择该记录最新一个已到期且与创建锚点对齐的发生时点，并将记录直接推进到第一个未来目标。系统绝不会枚举或回放错过的间隔；每条不同的逾期记录各贡献一个发生时点，并且不存在共享的周期性准入门控。触发唤醒的 input 会保持 parked，直到 phase 释放；随后 owner 为 dispatch 建立检查点。
+ 
+-### 时间校验
++Agent 完全 idle 后，follow-up 会开启一个普通的后续轮次；它绝不会中途引导或中断当前对话。assistant 输出通过普通 transcript（文本记录）显示，不存在独立回执或 Schedule 专属浏览器 UI。dispatch 表示 follow-up 已入队并被记录，不表示模型成功或用户已读取回答。
+ 
+-日历规范化是确定性的。夏令时缺口内的本地时间会被拒绝；重叠时选择第一次出现的较早时刻。Schedule 的时间校验不会读取浏览器、Session header 中的时区字段、模型 time-context、连接或进程时区，因此回放永不依赖环境时区状态。
++framing 构造或同步 follow-up 失败不会写入 dispatch。追加失败会使该 owner 进入故障状态，因为消息可能已经入队；barrier 拒绝会把 dispatch 留给后续普通 preflight。agent 或插件执行资源释放时，会取消 timer、停止新工作，并等待进行中的 preflight 与 idle wait，且不会删除持久记录。
+ 
+-### 管理流水线
+-
+-一条 agent 范围的队列把每项已接纳的管理事务与 live owner 的到期事务从 preflight 到任何 post-append barrier 全程串行化。`schedule_create` 建立检查点、分配永不复用的 id、追加 create 事件，再次建立检查点；被取消的调用方在追加前停止。每次成功的管理 preflight 还会要求 live owner 重新计算，这会在先前的 post-append barrier 返回 `persistence_uncertain` 后恢复所保留的 create 或 delete 批次。
+-
+-每项从折叠结果读取或作出判断的操作都会先等待 `ctx.sessions.flush(session)`；持久化路径缺失、被拒绝或已分离时返回 `persistence_uncertain`，create 与实际 delete 在追加后还会等待第二个 barrier 再确认变更。只依赖输入形状的失败会在序列化事务之前被验证。输入、时间与持久化失败会返回一组封闭的稳定版本 1 错误代码；该封闭联合及各代码的触发条件位于 [`src/tools.ts`](src/tools.ts)。
+-
+-### live owner
+-
+-owner 把长等待拆分为有界的 timer 段，并在每次唤醒后重新读取墙钟。到期工作认领 idle maintenance phase、采样一个决策时点、在 `followup()` 之前构造完整的转义 framing、只在同步入队返回后追加 dispatch、释放 maintenance，然后等待持久化。错过的固定速率间隔永远不会被枚举：整数运算选择每条记录最新一个已到期且与创建锚点对齐的发生时点，并直接推进到第一个未来目标。
+-
+-逾期提醒首先为持久化建立检查点，然后通过 `runMaintenance()` 认领 agent 的 idle maintenance phase；如果某个轮次或另一项 maintenance task 已占用 agent，认领会失败，记录保持活动，owner 在 `whenIdle()` 后重试。获准的 maintenance task 会重新折叠、采样一个决策时点、构造固定 framing、同步将 `followup()` 入队，并在释放 phase 前追加 dispatch。dispatch 表示 follow-up 已入队并被记录，不表示模型成功或用户已读取回答。framing 构造或同步 follow-up 失败不会写入 dispatch；追加失败会使 owner 进入故障状态，因为消息可能已经入队；barrier 拒绝则把 dispatch 留给后续普通 preflight。agent 或插件执行资源释放时取消 timer 并停止新工作，但不删除持久记录。
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-当包级约定不够用时阅读以下页面。它们从共享子系统约定逐步进入精确工具 schema，以及交付设计背后的决策证据。
+-
+-- [仅限会话内的 Schedule 子系统](../../../docs/subsystems/schedule.zh.md)——带精确类型定义的持久记录、转换、视图与交付约定。
+-- [生成的工具目录](../../../docs/tool-catalog.zh.md#deepseek-aidsh-schedule)——模型接收的 `schedule_create`、`schedule_list` 与 `schedule_delete` 完整 schema。
+-- [持久 Web Schedule 决策](../../../.agents/notes/implemented/feature/2026-08-05-durable-web-schedule.zh.md)——本包背后的持久化与生命周期决策。
+-- [对话式交付决策](../../../.agents/notes/archived/simplification/2026-08-09-conversational-schedule-delivery.md)——无回执边界与 follow-up 交付。
+-- [显式时区边界](../../../.agents/notes/implemented/simplification/2026-08-09-explicit-schedule-time-zone.zh.md)——为什么模型必须始终传入显式时区。
+-- [有界固定速率 Schedule](../../../.agents/notes/archived/simplification/2026-08-09-bounded-fixed-rate-schedule.md)——重复调度范围：只追赶最新一次与批次交付。
+-- [Schedule 用户指南](../../../docs/user/guide/schedule.zh.md)——挂载本包与 time-context 的官方配置路径。
+-
+------
+-
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+ ### 范围限定的管理工具
+ 
+-#### 模型看到什么
++#### 模型看到的内容
+ 
+-只有在此插件加载后创建的 live 根 agent 中，模型才会看到三个生成的工具 schema；[生成的工具目录](../../../docs/tool-catalog.zh.md#deepseek-aidsh-schedule)拥有精确的参数与结果 schema。工具结果包含上文所述的规范 JSON 值。
++只有在此插件加载后创建的 live 根 agent 中，模型才会看到 3 个生成的工具 schema。工具结果包含上文所述的规范 JSON 值。
+ 
+ #### Token 影响
+ 
+-安装 Schedule 后，范围限定的 schema 会增加固定的请求前缀。每次执行工具都会经由普通工具结果流水线添加与数据相关的 JSON 结果；本包不增加私有截断或 token 预算。
++安装 Schedule 后，范围限定的 schema 会增加固定的请求前缀。每次执行工具都会经由普通工具结果流水线添加与数据相关的 JSON 结果；此包不增加私有截断或 token 预算。
+ 
+ #### KV Cache 影响
+ 
+-三个 schema 的定义与范围不变时，前缀保持稳定。工具调用和结果会追加到后续历史中，并保留已经可以复用的前缀。
++3 个 schema 的定义与范围不变时，前缀保持稳定。工具调用和结果会追加到后续历史中，并保留已经可以复用的前缀。
+ 
+ ### 到期提醒 follow-up
+ 
+-#### 模型看到什么
++#### 模型看到的内容
+ 
+-对于每条获得准入且已到期的一次性提醒，本包会将以下稳定的用户角色 framing 入队，并对动态值进行 JSON 转义：
++对于每条获得准入且已到期的一次性提醒，此包会将以下稳定的用户角色 framing 入队，并对动态值进行 JSON 转义：
+ 
+ ##### 提醒 framing
+ 
+@@ -184,9 +86,9 @@
+ 
+ ### 到期固定速率批次
+ 
+-#### 模型看到什么
++#### 模型看到的内容
+ 
+-当一条或多条 Every 记录逾期时，本包会排入一条稳定的用户角色 framing。`reminders_json` 是一个按目标时间和创建顺序排列的 JSON 数组；每个对象都包含 `schedule_id`、选中的最新 `occurrence_at`，以及创建时提供的 `reminder_prompt`：
++当一条或多条 Every 记录逾期时，此包会排入一条稳定的用户角色 framing。`reminders_json` 是一个按目标时间和创建顺序排列的 JSON 数组；每个对象都包含 `schedule_id`、选中的最新 `occurrence_at`，以及创建时提供的 `reminder_prompt`：
+ 
+ ##### 固定速率批次 framing
+ 
+@@ -198,36 +100,18 @@
+ 
+ #### Token 影响
+ 
+-无论有多少条不同的 Every 记录到期，每个获得准入的固定速率批次只会增加一条与数据相关的用户角色消息。该消息保留在会话历史中，并持续贡献 token，直到普通压缩（compaction）移除或替换这段历史。
++无论有多少条不同的 Every 记录到期，每个获得准入的固定速率批次只会增加一条与数据相关的用户角色消息。该消息保留在会话历史中，并持续贡献 token，直到普通压缩移除或替换这段历史。
+ 
+ #### KV Cache 影响
+ 
+ 该批次会追加到现有历史之后，并保留可复用的前缀。选中的记录、发生时点和提示词只会影响追加的后缀。
+ 
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制说明 Schedule 何时不适合你的使用场景，或何时需要特别的运维注意。它们是当前包约束，不是通用提醒服务对比或任务积压。
+-
+-- **仅限会话本地交付**——提醒只有在原会话 live 时才能准时运行；cold 会话不会收到外部通知，只有恢复后才会处理逾期记录。
+-- **活动驱动的重试**——到期 preflight 被拒绝或 framing／入队失败被收容后，记录仍保持活动，但不会启动私有重试 timer；后续 agent 活动或成功的 Schedule preflight 会触发重新计算。
+-- **显式本地时区**——`at` 绝不会导入浏览器上下文；调用方必须把自然语言转换为带偏移量的 RFC 3339 字符串，或带 `time_zone` 的本地对象。
+-- **固定间隔，而非日历规则**——`every_seconds` 与创建锚点对齐，且运行频率不能高于每 5 分钟一次；协议不包含日历表达式或 Cron 表达式。
+-- **只追赶最新一次**——逾期 Every 记录只贡献其最新一个到期发生时点，因此 Schedule 绝不会回放因错过间隔而形成的积压。
+-- **存在狭窄的崩溃重复窗口**——同步 follow-up 获得准入后、dispatch 检查点完成前发生崩溃，可能使提醒重复；本包不承诺模型完成、用户确认或副作用恰好执行一次。
+-- **加载顺序边界**——插件不会扫描或接管加载时已经 live 的 agent。
+-- **目录只是只读当前状态**——可选 Web 界面没有历史、mutation、Retry 或 acknowledgement 语义；终结记录会消失，交付仍然是普通对话输出。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
+-
+-本开发备注是维护者的工作上下文：尚未决定的开放方向。它明确不具权威性——已交付的行为、限制与既定理由以上文、包代码和相关 Agent Note 为准。
+-
+-基于日历的重复调度仍是未来的产品边界，而非休眠的兼容分支；有界固定速率决策是已交付的范围。面向 cold 会话的外部通知渠道明确不在范围内。这两个方向都没有进度计划或设计负责人。
++## 已知限制与暂缓事项
+ 
+-</details>
++- **仅限会话本地交付**：提醒只有在原会话 live 时才能准时运行；cold 会话不会收到外部通知，只有恢复后才会处理 overdue 记录。
++- **活动驱动的重试**：到期 preflight 被拒绝或 framing／入队失败被收容后，记录仍保持活动，但不会启动私有重试 timer；后续 Agent 活动或成功的 Schedule preflight 会触发重新计算。
++- **显式本地时区**：`at` 绝不会导入浏览器上下文；调用方必须把自然语言转换为带偏移量的 RFC 3339 字符串，或带 `time_zone` 的本地对象。
++- **固定间隔，而非日历规则**：`every_seconds` 与创建锚点对齐，且运行频率不能高于每 5 分钟一次；协议不包含日历表达式或 Cron 表达式。
++- **只追赶最新一次**：逾期 Every 记录只贡献其最新一个到期发生时点，因此 Schedule 绝不会回放因错过间隔而形成的积压。
++- **存在狭窄的崩溃重复窗口**：同步 follow-up 获得准入后、dispatch 检查点完成前发生崩溃，可能使提醒重复；此包不承诺模型完成、用户确认或副作用恰好执行一次。
++- **加载顺序边界**：插件不会扫描或接管加载时已经 live 的 Agent。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/lib/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/index.js	2026-09-11 14:27:15.133963152 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/lib/index.js	2026-09-12 14:56:17.488978102 +0800
+@@ -1,5 +1,3 @@
+-import { z } from "zod";
+-import { SessionLogOffset } from "@deepseek-ai/dsh-session";
+ import { createUserMessage } from "@deepseek-ai/dsh-llm";
+ import { defineTool } from "@deepseek-ai/dsh-tools";
+ //#region lib/types/domain.js
+@@ -397,37 +395,38 @@
+ 	});
+ }
+ /**
+-* Apply already-decoded Schedule changes to one complete fold value.
+-*
+-* This is the single transition authority shared by full-log replay and the
+-* incremental Session projection. One mutable Map/Set pair spans the whole
+-* batch; the returned arrays are materialized and frozen once.
+-* @param folded - complete active records and used-id history before the changes.
+-* @param changes - strictly decoded durable mutations in log order.
+-* @returns the complete fold value after every mutation.
++* Fold the package-owned stream after the durable fork seed boundary.
++* @param events - Complete ordered session log or candidate-extended log.
++* @param seedLength - Inherited prefix length excluded from child ownership.
++* @returns Active records and all previously used ids.
+ */
+-function applyScheduleChanges(folded, changes) {
+-	const active = new Map(folded.active.map((record) => [record.id, record]));
+-	const seen = new Set(folded.seenIds);
+-	for (const change of changes) switch (change.operation) {
+-		case "create":
+-			if (seen.has(change.schedule.id)) throw new ScheduleLogError(`schedule id ${JSON.stringify(change.schedule.id)} was reused`);
+-			seen.add(change.schedule.id);
+-			active.set(change.schedule.id, change.schedule);
+-			break;
+-		case "delete":
+-			if (!active.delete(change.id)) throw new ScheduleLogError(`schedule delete targets inactive id ${JSON.stringify(change.id)}`);
+-			break;
+-		case "dispatch": {
+-			const record = active.get(change.id);
+-			if (record === void 0) throw new ScheduleLogError(`schedule dispatch targets inactive id ${JSON.stringify(change.id)}`);
+-			const next = dispatchedRecord(record, change);
+-			if (next === void 0) active.delete(change.id);
+-			else active.set(change.id, next);
+-			break;
++function foldScheduleEvents(events, seedLength = 0) {
++	if (!Number.isSafeInteger(seedLength) || seedLength < 0 || seedLength > events.length) throw new ScheduleLogError("schedule seedLength must be within the supplied event log");
++	const active = /* @__PURE__ */ new Map();
++	const seen = /* @__PURE__ */ new Set();
++	for (const event of events.slice(seedLength)) {
++		if (event.type !== "schedule/change") continue;
++		const change = decodeScheduleChange(event.data);
++		switch (change.operation) {
++			case "create":
++				if (seen.has(change.schedule.id)) throw new ScheduleLogError(`schedule id ${JSON.stringify(change.schedule.id)} was reused`);
++				seen.add(change.schedule.id);
++				active.set(change.schedule.id, change.schedule);
++				break;
++			case "delete":
++				if (!active.delete(change.id)) throw new ScheduleLogError(`schedule delete targets inactive id ${JSON.stringify(change.id)}`);
++				break;
++			case "dispatch": {
++				const record = active.get(change.id);
++				if (record === void 0) throw new ScheduleLogError(`schedule dispatch targets inactive id ${JSON.stringify(change.id)}`);
++				const next = dispatchedRecord(record, change);
++				if (next === void 0) active.delete(change.id);
++				else active.set(change.id, next);
++				break;
++			}
++			/* v8 ignore next 3 -- decodeScheduleChange returns a closed operation union. */
++			default: throw new ScheduleLogError(`unknown decoded schedule change ${String(change)}`);
+ 		}
+-		/* v8 ignore next 3 -- decodeScheduleChange returns a closed operation union. */
+-		default: throw new ScheduleLogError(`unknown decoded schedule change ${String(change)}`);
+ 	}
+ 	return Object.freeze({
+ 		active: Object.freeze([...active.values()]),
+@@ -435,23 +434,6 @@
+ 	});
+ }
+ /**
+-* Fold the package-owned stream after the durable fork seed boundary.
+-* @param events - Complete ordered session log or candidate-extended log.
+-* @param inheritedEventCount - Inherited prefix length excluded from child ownership.
+-* @returns Active records and all previously used ids.
+-*/
+-function foldScheduleEvents(events, inheritedEventCount = SessionLogOffset(0)) {
+-	if (!Number.isSafeInteger(inheritedEventCount) || inheritedEventCount < 0 || inheritedEventCount > events.length) throw new ScheduleLogError("schedule inheritedEventCount must be within the supplied event log");
+-	const initial = Object.freeze({
+-		active: Object.freeze([]),
+-		seenIds: Object.freeze([])
+-	});
+-	const changes = function* () {
+-		for (const event of events.slice(inheritedEventCount)) if (event.type === "schedule/change") yield decodeScheduleChange(event.data);
+-	};
+-	return applyScheduleChanges(initial, changes());
+-}
+-/**
+ * Allocate the next readable id without reusing any prior session-local id.
+ * @param folded - Fold containing every previously created id.
+ * @returns A fresh `schedule-N` identity.
+@@ -589,87 +571,6 @@
+ 	].join("\n");
+ }
+ //#endregion
+-//#region lib/types/projection.js
+-/**
+-* Strict Session projection of the Schedule domain's active reminder set.
+-* @module @deepseek-ai/dsh-schedule/projection
+-*/
+-const scheduleId = z.unknown().transform((value, context) => {
+-	try {
+-		return decodeScheduleChange({
+-			version: 1,
+-			operation: "delete",
+-			id: value
+-		}).id;
+-	} catch {
+-		context.addIssue({
+-			code: "custom",
+-			message: "invalid Schedule id"
+-		});
+-		return z.NEVER;
+-	}
+-});
+-const scheduleRecord = z.unknown().transform((value, context) => {
+-	try {
+-		return decodeScheduleChange({
+-			version: 1,
+-			operation: "create",
+-			schedule: value
+-		}).schedule;
+-	} catch {
+-		context.addIssue({
+-			code: "custom",
+-			message: "invalid Schedule record"
+-		});
+-		return z.NEVER;
+-	}
+-});
+-const scheduleRecords = z.array(scheduleRecord);
+-/** Projection definition sharing the Schedule domain's strict transition authority. */
+-const scheduleProjectionDefinition = {
+-	key: "schedule",
+-	stateSchema: z.object({
+-		inheritedEventCount: z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER).transform(SessionLogOffset),
+-		active: scheduleRecords,
+-		seenIds: z.array(scheduleId)
+-	}).strict().superRefine((state, context) => {
+-		const seen = new Set(state.seenIds);
+-		if (seen.size !== state.seenIds.length) context.addIssue({
+-			code: "custom",
+-			message: "seen Schedule ids must be unique"
+-		});
+-		const active = /* @__PURE__ */ new Set();
+-		for (const record of state.active) {
+-			if (!seen.has(record.id)) context.addIssue({
+-				code: "custom",
+-				message: "every active Schedule id must have been seen"
+-			});
+-			if (active.has(record.id)) context.addIssue({
+-				code: "custom",
+-				message: "active Schedule ids must be unique"
+-			});
+-			active.add(record.id);
+-		}
+-	}),
+-	init: (_header, inheritedEventCount) => ({
+-		inheritedEventCount,
+-		active: [],
+-		seenIds: []
+-	}),
+-	apply: (state, event) => {
+-		if (event.seq < state.inheritedEventCount || event.type !== "schedule/change") return state;
+-		return {
+-			inheritedEventCount: state.inheritedEventCount,
+-			...applyScheduleChanges(state, [decodeScheduleChange(event.data)])
+-		};
+-	},
+-	wire: {
+-		viewSchema: scheduleRecords,
+-		view: (state) => state.active
+-	},
+-	stateVersion: 2
+-};
+-//#endregion
+ //#region lib/types/persistence.js
+ /** Schedule-owned use of the shared session durability barrier. */
+ /** Failure to prove that the current live prefix reached a persistence listener. */
+@@ -870,7 +771,7 @@
+ 	/** Fold the current exact runtime suffix and contain a corrupt durable stream. */
+ 	readFolded() {
+ 		try {
+-			return foldScheduleEvents(this.agent.session.ownEvents());
++			return foldScheduleEvents(this.agent.session.events, this.agent.session.header.seedLength ?? 0);
+ 		} catch (error) {
+ 			this.faulted = true;
+ 			const detail = error instanceof ScheduleLogError ? error.message : renderThrown(error);
+@@ -1206,7 +1107,7 @@
+ /** Fold only after a successful preflight, mapping corruption to a stable value. */
+ function foldForTool(agent) {
+ 	try {
+-		return foldScheduleEvents(agent.session.ownEvents());
++		return foldScheduleEvents(agent.session.events, agent.session.header.seedLength ?? 0);
+ 	} catch (error) {
+ 		return error instanceof ScheduleLogError ? corruptLogError() : internalError();
+ 	}
+@@ -1449,9 +1350,6 @@
+ ];
+ /** Install Schedule only for root agents published after this plugin loads. */
+ function apply(ctx) {
+-	ctx.inject(["sessionProjections"], (projectionCtx) => {
+-		projectionCtx.sessionProjections.register(scheduleProjectionDefinition);
+-	});
+ 	const runtimes = /* @__PURE__ */ new Map();
+ 	let stopping = false;
+ 	ctx.effect(() => {
+@@ -1463,7 +1361,7 @@
+ 					runtime.requestDrive();
+ 				});
+ 				const stopStatus = agent.ctx.on("agent/status", ({ status }) => {
+-					if (status === "idle" && agent.session.snapshotEvents().some((event) => event.type === "schedule/change")) runtime.requestDrive();
++					if (status === "idle" && agent.session.events.some((event) => event.type === "schedule/change")) runtime.requestDrive();
+ 				});
+ 				runtime.start();
+ 				return async () => {
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/invariant.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/lib/invariant.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/invariant.js	2026-09-11 14:27:15.156963480 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/lib/invariant.js	2026-09-12 14:56:17.496979208 +0800
+@@ -1,4 +1,3 @@
+-import { SessionLogOffset } from "@deepseek-ai/dsh-session";
+ const MIN_FOUR_DIGIT_YEAR_MS = Date.parse("0001-01-01T00:00:00.000Z");
+ const MAX_FOUR_DIGIT_YEAR_MS = Date.parse("9999-12-31T23:59:59.999Z");
+ const UTC_INSTANT = /^(?!0000)\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\.\d{3}Z$/;
+@@ -210,60 +209,44 @@
+ 	});
+ }
+ /**
+-* Apply already-decoded Schedule changes to one complete fold value.
+-*
+-* This is the single transition authority shared by full-log replay and the
+-* incremental Session projection. One mutable Map/Set pair spans the whole
+-* batch; the returned arrays are materialized and frozen once.
+-* @param folded - complete active records and used-id history before the changes.
+-* @param changes - strictly decoded durable mutations in log order.
+-* @returns the complete fold value after every mutation.
++* Fold the package-owned stream after the durable fork seed boundary.
++* @param events - Complete ordered session log or candidate-extended log.
++* @param seedLength - Inherited prefix length excluded from child ownership.
++* @returns Active records and all previously used ids.
+ */
+-function applyScheduleChanges(folded, changes) {
+-	const active = new Map(folded.active.map((record) => [record.id, record]));
+-	const seen = new Set(folded.seenIds);
+-	for (const change of changes) switch (change.operation) {
+-		case "create":
+-			if (seen.has(change.schedule.id)) throw new ScheduleLogError(`schedule id ${JSON.stringify(change.schedule.id)} was reused`);
+-			seen.add(change.schedule.id);
+-			active.set(change.schedule.id, change.schedule);
+-			break;
+-		case "delete":
+-			if (!active.delete(change.id)) throw new ScheduleLogError(`schedule delete targets inactive id ${JSON.stringify(change.id)}`);
+-			break;
+-		case "dispatch": {
+-			const record = active.get(change.id);
+-			if (record === void 0) throw new ScheduleLogError(`schedule dispatch targets inactive id ${JSON.stringify(change.id)}`);
+-			const next = dispatchedRecord(record, change);
+-			if (next === void 0) active.delete(change.id);
+-			else active.set(change.id, next);
+-			break;
++function foldScheduleEvents(events, seedLength = 0) {
++	if (!Number.isSafeInteger(seedLength) || seedLength < 0 || seedLength > events.length) throw new ScheduleLogError("schedule seedLength must be within the supplied event log");
++	const active = /* @__PURE__ */ new Map();
++	const seen = /* @__PURE__ */ new Set();
++	for (const event of events.slice(seedLength)) {
++		if (event.type !== "schedule/change") continue;
++		const change = decodeScheduleChange(event.data);
++		switch (change.operation) {
++			case "create":
++				if (seen.has(change.schedule.id)) throw new ScheduleLogError(`schedule id ${JSON.stringify(change.schedule.id)} was reused`);
++				seen.add(change.schedule.id);
++				active.set(change.schedule.id, change.schedule);
++				break;
++			case "delete":
++				if (!active.delete(change.id)) throw new ScheduleLogError(`schedule delete targets inactive id ${JSON.stringify(change.id)}`);
++				break;
++			case "dispatch": {
++				const record = active.get(change.id);
++				if (record === void 0) throw new ScheduleLogError(`schedule dispatch targets inactive id ${JSON.stringify(change.id)}`);
++				const next = dispatchedRecord(record, change);
++				if (next === void 0) active.delete(change.id);
++				else active.set(change.id, next);
++				break;
++			}
++			/* v8 ignore next 3 -- decodeScheduleChange returns a closed operation union. */
++			default: throw new ScheduleLogError(`unknown decoded schedule change ${String(change)}`);
+ 		}
+-		/* v8 ignore next 3 -- decodeScheduleChange returns a closed operation union. */
+-		default: throw new ScheduleLogError(`unknown decoded schedule change ${String(change)}`);
+ 	}
+ 	return Object.freeze({
+ 		active: Object.freeze([...active.values()]),
+ 		seenIds: Object.freeze([...seen])
+ 	});
+ }
+-/**
+-* Fold the package-owned stream after the durable fork seed boundary.
+-* @param events - Complete ordered session log or candidate-extended log.
+-* @param inheritedEventCount - Inherited prefix length excluded from child ownership.
+-* @returns Active records and all previously used ids.
+-*/
+-function foldScheduleEvents(events, inheritedEventCount = SessionLogOffset(0)) {
+-	if (!Number.isSafeInteger(inheritedEventCount) || inheritedEventCount < 0 || inheritedEventCount > events.length) throw new ScheduleLogError("schedule inheritedEventCount must be within the supplied event log");
+-	const initial = Object.freeze({
+-		active: Object.freeze([]),
+-		seenIds: Object.freeze([])
+-	});
+-	const changes = function* () {
+-		for (const event of events.slice(inheritedEventCount)) if (event.type === "schedule/change") yield decodeScheduleChange(event.data);
+-	};
+-	return applyScheduleChanges(initial, changes());
+-}
+ //#endregion
+ //#region lib/types/invariant.js
+ /**
+@@ -276,9 +259,9 @@
+ /** Service required before reserving this package's invariant ownership. */
+ const inject = ["invariants"];
+ /** Validate a complete exact-session stream under its fork suffix policy. */
+-function validate(events, fail) {
++function validate(events, seedLength, fail) {
+ 	try {
+-		foldScheduleEvents(events);
++		foldScheduleEvents(events, seedLength);
+ 	} catch (error) {
+ 		/* v8 ignore next -- foldScheduleEvents normalizes every rejected stream to ScheduleLogError. */
+ 		if (!(error instanceof ScheduleLogError)) throw error;
+@@ -287,15 +270,15 @@
+ }
+ /** Install replay and pre-append validation for the owned event stream. */
+ const install = Object.assign((ctx, fail) => {
+-	for (const session of ctx.sessions.list()) validate(session.ownEvents(), fail);
++	for (const session of ctx.sessions.list()) validate(session.events, session.header.seedLength ?? 0, fail);
+ 	ctx.on("session/created", (session) => {
+-		validate(session.ownEvents(), fail);
++		validate(session.events, session.header.seedLength ?? 0, fail);
+ 	}, { global: true });
+ 	ctx.on("internal/dispatch", (_mode, eventName, args) => {
+ 		if (eventName !== "session/event") return;
+ 		const [session, event] = args;
+ 		if (event.type !== "schedule/change") return;
+-		validate([...session.ownEvents(), event], fail);
++		validate([...session.events, event], session.header.seedLength ?? 0, fail);
+ 	}, { global: true });
+ }, { inject: ["sessions"] });
+ /**
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types: client.d.ts
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types: client.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types/domain.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/lib/types/domain.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types/domain.d.ts	2026-09-11 14:27:15.208964219 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/lib/types/domain.d.ts	2026-09-12 14:56:17.497979347 +0800
+@@ -2,7 +2,7 @@
+  * Strict Schedule decoding, replay, time validation, and framing.
+  * @module @deepseek-ai/dsh-schedule
+  */
+-import type { SessionEvent, SessionLogOffset as SessionLogOffsetType } from '@deepseek-ai/dsh-session';
++import type { SessionEvent } from '@deepseek-ai/dsh-session';
+ import type { AfterScheduleRecord, AtInput, AtScheduleRecord, EveryScheduleRecord, OneShotScheduleRecord, ScheduleChange, ScheduleId as ScheduleIdType, ScheduleRecord, ScheduleView } from './types.ts';
+ /** Durable Schedule protocol version implemented by this package. */
+ export declare const SCHEDULE_CHANGE_VERSION: 1;
+@@ -70,23 +70,12 @@
+  */
+ export declare function resolveEveryOccurrence(record: EveryScheduleRecord, acceptedAt: number): EveryOccurrence;
+ /**
+- * Apply already-decoded Schedule changes to one complete fold value.
+- *
+- * This is the single transition authority shared by full-log replay and the
+- * incremental Session projection. One mutable Map/Set pair spans the whole
+- * batch; the returned arrays are materialized and frozen once.
+- * @param folded - complete active records and used-id history before the changes.
+- * @param changes - strictly decoded durable mutations in log order.
+- * @returns the complete fold value after every mutation.
+- */
+-export declare function applyScheduleChanges(folded: FoldedSchedules, changes: Iterable<ScheduleChange>): FoldedSchedules;
+-/**
+  * Fold the package-owned stream after the durable fork seed boundary.
+  * @param events - Complete ordered session log or candidate-extended log.
+- * @param inheritedEventCount - Inherited prefix length excluded from child ownership.
++ * @param seedLength - Inherited prefix length excluded from child ownership.
+  * @returns Active records and all previously used ids.
+  */
+-export declare function foldScheduleEvents(events: readonly SessionEvent[], inheritedEventCount?: SessionLogOffsetType): FoldedSchedules;
++export declare function foldScheduleEvents(events: readonly SessionEvent[], seedLength?: number): FoldedSchedules;
+ /**
+  * Allocate the next readable id without reusing any prior session-local id.
+  * @param folded - Fold containing every previously created id.
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types: domain.js
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types: index.js
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types: invariant.js
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types: persistence.js
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types: projection.d.ts
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types: projection.js
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types: runtime.js
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types: tools.js
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types: transaction.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types/types.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/lib/types/types.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types/types.d.ts	2026-09-11 14:27:15.227964489 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/lib/types/types.d.ts	2026-09-12 14:56:17.498840544 +0800
+@@ -178,10 +178,4 @@
+         'schedule/change': ScheduleChange;
+     }
+ }
+-declare module '@deepseek-ai/dsh-session-projection/types' {
+-    interface SessionProjectionMap {
+-        /** Complete active reminders owned by this Session's post-fork suffix. */
+-        schedule: readonly ScheduleRecord[];
+-    }
+-}
+ //# sourceMappingURL=types.d.ts.map
+\ No newline at end of file
+Only in /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/lib/types: types.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-schedule/package.json	2026-09-11 14:27:15.198964077 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-schedule/package.json	2026-09-12 14:56:17.497979347 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-schedule",
+   "description": "Agent-scoped durable after, at, and fixed-rate reminders over the session event log",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -22,48 +22,38 @@
+       "types": "./lib/types/invariant.d.ts",
+       "default": "./lib/invariant.js"
+     },
+-    "./client": {
+-      "types": "./lib/types/client.d.ts",
+-      "default": "./lib/types/client.js"
+-    },
+     "./src/*": "./src/*",
+     "./package.json": "./package.json"
+   },
+   "files": [
+     "lib/index.js",
+     "lib/invariant.js",
+-    "lib/types/**/*.js",
+     "lib/types/**/*.d.ts"
+   ],
+   "license": "MIT",
+   "peerDependencies": {
+-    "@deepseek-ai/dsh-agent": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-brand": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-invariants": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-llm": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session-persistence": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session-projection": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-tools": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
+-  },
+-  "dependencies": {
+-    "zod": "^4.4.3"
++    "@deepseek-ai/dsh-agent": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-brand": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-llm": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session-persistence": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-tools": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/cordis-plugin-loader": "^1.0.3",
+-    "@deepseek-ai/dsh-agent": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-agent-loop": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-agent-loop-testkit": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-brand": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-invariants": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session-persistence": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session-persistence-jsonl": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-llm": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session-projection": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-system-prompt": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-tools": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/cordis-plugin-loader": "^1.0.2",
++    "@deepseek-ai/dsh-agent": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-agent-loop-testkit": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-brand": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-agent-loop": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session-persistence": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-llm": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session-persistence-jsonl": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-system-prompt": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-tools": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   }
+ }
+\ No newline at end of file

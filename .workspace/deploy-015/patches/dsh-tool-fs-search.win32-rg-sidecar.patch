@@ -1,0 +1,20 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -1,6 +1,6 @@
+ import z from "@deepseek-ai/schemastery";
+ import { MAX_TIMER_DELAY_MS } from "@deepseek-ai/dsh-timeout";
+-import { isAbsolute, relative, sep } from "node:path";
++import { isAbsolute, join, parse, relative, sep } from "node:path";
+ import { defineTool } from "@deepseek-ai/dsh-tools";
+ import { existsSync } from "node:fs";
+ import { HarnessError } from "@deepseek-ai/dsh-llm";
+@@ -119,7 +119,8 @@
+ */
+ function resolveRgPath() {
+ 	rgPathPromise ??= Promise.resolve().then(async () => {
+-		const executableSidecar = `${process.execPath}-rg`;
++		const executable = parse(process.execPath);
++		const executableSidecar = process.platform === "win32" ? join(executable.dir, `${executable.name}-rg.exe`) : `${process.execPath}-rg`;
+ 		if ("pkg" in process && existsSync(executableSidecar)) return executableSidecar;
+ 		return (await import("@vscode/ripgrep")).rgPath;
+ 	});

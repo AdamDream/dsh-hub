@@ -1,0 +1,587 @@
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/README.i18n.yaml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/README.i18n.yaml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/README.i18n.yaml	2026-09-11 14:27:15.143963295 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/README.i18n.yaml	2026-09-12 14:56:17.413430667 +0800
+@@ -2,5 +2,5 @@
+ # side as of the last confirmed-consistent state. Both languages carry equal authority;
+ # after editing either side, bring the other along and re-record with:
+ #   pnpm run verify-translation-pairing --write packages/bundle/headless/README.md
+-README.md: 98a9cb2294d8b05a40287c990b3ff53f755747cf
+-README.zh.md: 0f4721d856357a85964a13433c3bbc701f8fb299
++README.md: 3d9ca350f5f8891e60cfc57c9ca89ef57d9790d3
++README.zh.md: 2c7ea71025aa68db08b10d9faff8f546d12911c6
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/README.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/README.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/README.md	2026-09-11 14:27:15.105962755 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/README.md	2026-09-12 14:56:17.412925011 +0800
+@@ -1,136 +1,20 @@
+----
+-description: "One-shot task mode for dsh: run a single task from the command line and get the final answer printed, for users scripting or automating dsh."
+-kind: "package-bundle"
+----
+-
+-# @deepseek-ai/dsh-headless
++# `@deepseek-ai/dsh-headless`
+ 
+ English | [中文](README.zh.md)
+ 
+-## Summary
+-
+-`dsh-headless` runs one dsh task from the command line and prints the final answer, then exits — no GUI, no server, no browser. Type `dsh --profile headless "run the tests"` and the agent works through the task with the same model, tools, and safety defaults as every other surface. It is ideal for scripts, CI, and one-off jobs: the process opens no ports and leaves nothing running behind. The exit code tells you the outcome — 0 when the task completed, 1 when it aborted or errored. The main boundary: one task per invocation, with no interactive follow-up.
+-
+-## Table of Contents
+-
+-- [Use this package](#use-this-package)
+-- [Understand the implementation](#understand-the-implementation)
+-- [Further Exploration](#further-exploration)
+-- [Model Experience](#model-experience)
+-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
+-- [Dev Note](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## Use this package
+-
+-Run one task, get the final answer, and exit. The task is the command line itself, so the whole invocation is the smallest working example.
+-
+-### Running a one-shot task
+-
+-```sh
+-dsh --profile headless "run the tests"
+-```
+-
+-The agent works through the task, streams each non-empty provider reasoning delta to stderr under a `dsh: reasoning:` heading, then prints the final answer on stdout and exits. Consecutive reasoning deltas stay in one section, and the runner closes that section before later output when the provider supplied no trailing newline. A successful run without reasoning keeps stderr empty; a failure exits 1 and prints `dsh: <code>: <message>` to stderr. A missing or blank task is rejected before anything runs. The task text is supplied through the single `task` setting:
+-
+-| Field | Default | Meaning |
+-|---|---|---|
+-| `task` | required | The task text for the single run |
+-
+-The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-headless) is the exhaustive source for every accepted field and its JSDoc.
+-
+-### When to use it
+-
+-Use headless for scripted or automated dsh runs — CI steps, batch jobs, quick answers from a terminal. Avoid it when you need a multi-turn interactive session or a GUI; the browser surface ([dsh-web-app](../web-app/README.md)) serves that. The process stays alive only for the run, opens no listening port, and exits on its own, so it fits pipelines that wait on the process.
+-
+-### Help and task errors
+-
+-`dsh --profile headless --help` prints the command's help text and exits without running anything. A missing or whitespace-only task is a usage error: nothing runs and the process exits 1.
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## Understand the implementation
+-
+-<details>
+-<summary>Implementation internals — click to expand</summary>
+-
+-The runner is a direct driver over the core API carrier: it creates one fresh Agent through the registry and folds the owned durable event interval into one process-level outcome.
+-
+-### Run flow
++The dsh one-shot bundle. [`cordis.patch.yml`](cordis.patch.yml) rides directly over [`dsh-base`](../base/README.md): it supplies the coding persona and tool mode, disables HMR, mounts Code Mode's worker as a core execution capability, and inserts this package's `headless-runner` plugin (config `{task}`, resolved from the injected `headlessStartup` provider). It mounts no Host, HTTP server, Web runtime, or browser plugin.
+ 
+-The runner awaits the complete application (`ctx.get('loader')?.await()`) so the composed tools and adapters are not half-mounted, reads the shared [`agentDefaultModel`](../../core/agent-default-model/README.md) selection, creates one fresh persisted Agent with that provider and model, and submits the task as an ordinary user message. It streams that Agent's non-empty reasoning deltas to stderr, waits for quiescence, then flushes the Session and folds the owned interval (`firstSeq` onward) into the last non-empty `assistant/message` text and final `turn/end` reason. It writes the final text to stdout and requests exit.
++After the Loader settles, the runner reads the shared [`ctx.agentDefaultModel`](../../core/agent-default-model/README.md), creates one fresh persisted Agent through `ctx.agents`, submits the task as an ordinary user message, and waits for quiescence. It flushes the Session before folding the owned durable event interval, writes the last non-empty assistant text to stdout, and requests exit through the launcher-provided `ctx.appExit` host hook ([`dsh-cmdline`](../../boot/cmdline/README.md)) (final `turn/end` completed → 0, otherwise 1). A terminal `error` reason also writes its code and message to stderr; successful runs keep stderr empty. The process opens no listening port. The task text is this app's command line: the ordinary `headless-startup` provider ([`src/startup.ts`](src/startup.ts)) injects `ctx.cmdlineArgs` ([`dsh-cmdline`](../../boot/cmdline/README.md)), reads the positional argument of `dsh --profile headless "task"`, prints the app's `--help`, and provides `headlessStartup`; the runner injects that service and reads its task from lazy config. A missing or whitespace-only task is rejected before the runner activates.
+ 
+-### Patch surface over base
+-
+-The patch rides over `dsh-base`: it inherits the projection cache, sets the coding persona prefix and separate cwd suffix on the base `system-prompt` row, keeps the same temporary process-wide PTC mode opt-in (`DSH_TOOLS_MODE`) as the Web surface, disables the shared HMR row, inserts PTC mode's worker as a core execution capability, and mounts the startup provider and the runner. The cache checkpoints each persisted one-shot session for later consumers; its durability barrier flushes each covered log prefix before publishing the cache row and may split otherwise coalesced JSONL runs. The startup provider ([`src/startup.ts`](src/startup.ts)) injects `ctx.cmdlineArgs` ([`dsh-cmdline`](../../boot/cmdline/README.md)), reads the positional argument, prints the app's `--help`, and provides `headlessStartup`; the runner injects that service and reads its task from lazy config.
+-
+-### Exit mapping
+-
+-A completed final `turn/end` exits 0; any other outcome — aborted, error, or no turn in the owned interval — exits 1. An `error` reason also writes `dsh: <code>: <message>` to stderr. A direct driver failure (for example, Agent creation) writes `dsh: <message>` to stderr and exits 1.
+-
+-### Source map
+-
+-| File | Role |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | The `headless-runner` plugin: run flow, output contract, exit mapping |
+-| [`src/startup.ts`](src/startup.ts) | The `headless-startup` provider: task positional and `--help` |
+-| [`cordis.patch.yml`](cordis.patch.yml) | The one-shot patch over `dsh-base` |
+-| — | No runtime invariant companion is published; the runner's observable contract (provider reasoning on stderr, final text on stdout, exit code by turn-end reason) is process-level and owned by the launcher e2e; it registers nothing and holds no mutable relation to audit inside the tree. |
+-| [`tests/headless.spec.ts`](tests/headless.spec.ts) | Run flow, aggregation, flush, and exit mapping |
+-| [`tests/startup.spec.ts`](tests/startup.spec.ts) | Command-line parsing over a real Loader tree |
+-
+-### Invariant ownership
+-
+-No invariant companion is published because the runner's observable contract (final text on stdout, exit code by turn-end reason) is process-level and owned by the launcher e2e; the plugin registers nothing and holds no mutable relation to audit inside the tree.
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## Further Exploration
+-
+-Read these pages when you want to go deeper into the shared core, the sibling GUI, or the command-line handoff.
+-
+-- [Bundle package map](../README.md) — the surfaces built on the same core.
+-- [dsh-base](../base/README.md) — the shared core headless runs on.
+-- [dsh-web-app](../web-app/README.md) — the interactive browser sibling for multi-turn work.
+-- [dsh-cmdline](../../boot/cmdline/README.md) — how the launcher hands the command line to the app.
+-- [Generated configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-headless) — every accepted config field and its source declaration.
+-
+------
+-
+-<a id="model-experience"></a>
+ ## Model Experience
+ 
+-None, as the runner submits the task as an ordinary user message and the composed base and headless rows own the prompts and tools.
++None, as the runner submits the task as an ordinary user message; prompts and tools belong to the base and headless bundle rows.
+ 
+ #### KV Cache effect
+ 
+-The runner adds nothing to the request prefix; it only drives one user message through the composed tree.
++None; the runner adds nothing to the request prefix.
+ 
+ ## Known Limitations and Deferred Work
+ 
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-These limits tell you when headless does not fit and what it needs from the `dsh` launcher. They are current package constraints, not a general CLI comparison or a task backlog.
+-
+-- **One task per run** — after the task is answered the process exits; there is no interactive follow-up, so split multi-step work into separate runs.
+-- **Runs through the `dsh` launcher** — starting the headless profile another way fails at startup, because only the launcher can request the process exit.
+-- **No pre-token heartbeat** — stderr stays silent until the provider emits a non-empty reasoning delta; a delayed first token exposes no earlier progress signal.
+-- **Reasoning enters stderr logs** — redirection and supervisors may retain substantially more and potentially sensitive model output; route stderr to a controlled sink when needed.
+-- **Only reasoning and the final answer are printed** — a run without an assistant message prints an empty stdout line and exits 1; intermediate tool output is not printed.
+-
+-<a id="dev-note"></a>
+-### Dev Note
+-
+-<details>
+-<summary>Working context for maintainers — click to expand</summary>
+-
+-None.
+-
+-</details>
++- **One submitted task only** — the runner has no interactive follow-up surface; it waits through any work the Agent completes before returning to idle and prints the last non-empty assistant message in that interval.
++- **`ctx.appExit` is launcher-owned** — booting the headless profile outside the `dsh` launcher fails loud at activation until the host provides the exit request.
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/README.zh.md /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/README.zh.md
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/README.zh.md	2026-09-11 14:27:15.115962897 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/README.zh.md	2026-09-12 14:56:17.412925011 +0800
+@@ -1,136 +1,20 @@
+----
+-description: "dsh 的一次性任务模式：从命令行运行单个任务并打印最终答案，供用户脚本化或自动化 dsh。"
+-kind: "package-bundle"
+----
+-
+-# @deepseek-ai/dsh-headless
++# `@deepseek-ai/dsh-headless`
+ 
+ [English](README.md) | 中文
+ 
+-## 概述
+-
+-`dsh-headless` 从命令行运行一个 dsh 任务并打印最终答案，然后退出——没有 GUI、没有服务器、没有浏览器。输入 `dsh --profile headless "run the tests"`，agent（智能体）会以与其他表层相同的模型、工具与安全默认值完成该任务。它非常适合脚本、CI 与一次性任务：进程不打开任何端口，也不会留下任何后台运行的东西。退出码告诉你结果——任务完成时为 0，中止或出错时为 1。主要边界：每次调用只运行一个任务，没有交互式后续。
+-
+-## 目录
+-
+-- [使用本包](#use-this-package)
+-- [理解实现](#understand-the-implementation)
+-- [进一步探索](#further-exploration)
+-- [模型体验](#model-experience)
+-- [已知限制与延期工作](#known-limitations-and-deferred-work)
+-- [开发备注](#dev-note)
+-
+------
+-
+-<a id="use-this-package"></a>
+-## 使用本包
+-
+-运行一个任务，获得最终答案，然后退出。任务就是命令行本身，因此整条命令就是最小的可运行示例。
+-
+-### 运行一次性任务
+-
+-```sh
+-dsh --profile headless "run the tests"
+-```
+-
+-agent（智能体）会完成该任务，把提供方的每个非空推理增量流式写入 stderr 的 `dsh: reasoning:` 段，然后把最终答案写入 stdout 并退出。连续推理增量保持在同一段中；提供方未给尾换行时，runner 会在后续输出前结束该段。没有推理内容的成功运行保持 stderr 为空；失败时退出码为 1，并以 `dsh: <code>: <message>` 向 stderr 写入错误。缺失或空白任务会在任何内容运行前被拒绝。任务文本通过唯一的 `task` 设置提供：
+-
+-| 字段 | 默认值 | 含义 |
+-|---|---|---|
+-| `task` | 必填 | 单次运行的任务文本 |
+-
+-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-headless)是每个受支持字段及其 JSDoc 的穷尽式真源。
+-
+-### 何时使用
+-
+-在脚本化或自动化的 dsh 运行中使用 headless——CI 步骤、批处理任务、从终端快速获取答案。当需要多轮交互会话或 GUI 时请避免它；浏览器表层（[dsh-web-app](../web-app/README.zh.md)）负责这类场景。进程只为本次运行而存活，不打开监听端口，并且自行退出，因此适合等待进程结束的流水线。
+-
+-### 帮助与任务错误
+-
+-`dsh --profile headless --help` 打印该命令的帮助文本并直接退出，不运行任何内容。缺失或只有空白的任务属于用法错误：什么都不运行，进程退出 1。
+-
+------
+-
+-<a id="understand-the-implementation"></a>
+-## 理解实现
+-
+-<details>
+-<summary>实现细节——点击展开</summary>
+-
+-runner 是核心 API 载体之上的直接驱动器：它通过注册表创建一个全新的 Agent（智能体），并把所属的持久化事件区间折叠成一个进程级结果。
+-
+-### 运行流程
++dsh 一次性任务组合包。[`cordis.patch.yml`](cordis.patch.yml) 直接叠加在 [`dsh-base`](../base/README.zh.md) 之上：提供编码 persona 和工具模式、禁用 HMR（热模块替换）、将 Code Mode 的 worker 作为核心执行能力挂载，并插入本包的 `headless-runner` 插件（配置为 `{task}`，从注入的 `headlessStartup` 提供方解析）。它不挂载任何 Host、HTTP server、Web runtime 或浏览器插件。
+ 
+-runner 等待整个应用结算（`ctx.get('loader')?.await()`），确保已组合的工具与适配器不会半挂载，读取共享的 [`agentDefaultModel`](../../core/agent-default-model/README.zh.md) 选择，用该 provider 与模型创建一个全新的持久化 Agent（智能体），并把任务作为普通用户消息提交。它把该 Agent 的非空推理增量流式写入 stderr、等待完全停稳，然后 flush Session，并把所属区间（从 `firstSeq` 起）折叠为最后一条非空 `assistant/message` 文本与最终 `turn/end` 原因。最后，它把最终文本写入 stdout 并请求退出。
++Loader 结算后，runner 读取共享的 [`ctx.agentDefaultModel`](../../core/agent-default-model/README.zh.md)，通过 `ctx.agents` 创建一个全新的持久化 Agent（智能体），将任务作为普通用户消息提交，并等待完全停稳。它对 Session 执行 flush 后再汇总自身持有的持久化事件区间，将最后一条非空 assistant 文本写入 stdout，再经启动器提供的 `ctx.appExit` 宿主钩子（[`dsh-cmdline`](../../boot/cmdline/README.zh.md)）请求退出（最终 `turn/end` 完成 → 0，否则为 1）。最终结束原因为 `error` 时，还会将 code 与 message 写入 stderr；成功运行时 stderr 保持为空。进程不会打开监听端口。任务文本就是这个应用的命令行：普通 `headless-startup` 提供方（[`src/startup.ts`](src/startup.ts)）注入 `ctx.cmdlineArgs`（[`dsh-cmdline`](../../boot/cmdline/README.zh.md)），读取 `dsh --profile headless "task"` 的位置参数、打印应用自己的 `--help`，并提供 `headlessStartup`；runner 注入该服务，再从惰性配置中读取任务。缺失或只有空白的任务会在 runner 激活前被拒绝。
+ 
+-### 叠加在 base 之上的 patch 表层
+-
+-patch 叠加在 `dsh-base` 之上：继承投影缓存，在基础 `system-prompt` 行上设置编码 persona 前缀与独立的 cwd 后缀，保留与 Web 表层相同的临时进程级 PTC mode 开关（`DSH_TOOLS_MODE`），禁用共享的 HMR 行，把 PTC mode 的 worker 作为核心执行能力插入，并挂载启动提供方与 runner。缓存为每个已持久化的一次性会话写入检查点，供后续消费方使用；其持久性屏障会在发布缓存行前 flush 所覆盖的日志前缀，因此可能拆分原本会合并的 JSONL 行。启动提供方（[`src/startup.ts`](src/startup.ts)）注入 `ctx.cmdlineArgs`（[`dsh-cmdline`](../../boot/cmdline/README.zh.md)），读取位置参数、打印应用自己的 `--help`，并提供 `headlessStartup`；runner 注入该服务，再从惰性配置中读取任务。
+-
+-### 退出映射
+-
+-最终 `turn/end` 完成时退出码为 0；任何其他结果——aborted、error，或所属区间内没有轮次——退出码为 1。结束原因为 `error` 时还会向 stderr 写入 `dsh: <code>: <message>`。直接驱动器失败（例如 Agent 创建失败）向 stderr 写入 `dsh: <message>` 并退出 1。
+-
+-### 源码地图
+-
+-| 文件 | 职责 |
+-|---|---|
+-| [`src/index.ts`](src/index.ts) | `headless-runner` 插件：运行流程、输出约定、退出映射 |
+-| [`src/startup.ts`](src/startup.ts) | `headless-startup` 提供方：任务位置参数与 `--help` |
+-| [`cordis.patch.yml`](cordis.patch.yml) | 叠加在 `dsh-base` 之上的一次性 patch |
+-| — | 不发布运行时不变式伴生入口；可观察的行为属于进程级组合，本包只持有静态 patch 列表。 |
+-| [`tests/headless.spec.ts`](tests/headless.spec.ts) | 运行流程、汇总、flush 与退出映射 |
+-| [`tests/startup.spec.ts`](tests/startup.spec.ts) | 在真实 Loader 树上的命令行解析 |
+-
+-### 不变式归属
+-
+-不发布不变式伴生入口，因为 runner 的可观察约定（stdout 的最终文本、按轮次结束原因决定的退出码）是进程级的、由启动器 e2e 负责；插件不注册任何内容，树内也没有任何可变关系可审计。
+-
+-</details>
+-
+------
+-
+-<a id="further-exploration"></a>
+-## 进一步探索
+-
+-当你想深入了解共享核心、兄弟 GUI 或命令行交接时，阅读以下页面。
+-
+-- [组合包包映射](../README.zh.md)——基于同一核心构建的表层。
+-- [dsh-base](../base/README.zh.md)——headless 运行其上的共享核心。
+-- [dsh-web-app](../web-app/README.zh.md)——用于多轮工作的交互式浏览器兄弟表层。
+-- [dsh-cmdline](../../boot/cmdline/README.zh.md)——启动器如何把命令行交给应用。
+-- [生成配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-headless)——每个受支持配置字段及其源声明。
+-
+------
+-
+-<a id="model-experience"></a>
+ ## 模型体验
+ 
+-无，因为 runner 把任务作为普通用户消息提交，提示词与工具由组合出的 base 与 headless 行提供。
++无影响，因为 runner 把任务作为普通用户消息提交；提示词与工具由 base 和 headless 组合包中的相应条目提供。
+ 
+ #### KV Cache 影响
+ 
+-runner 不向请求前缀添加任何内容；它只是把一条用户消息驱动经过组合出的配置树。
+-
+-## 已知限制与延期工作
+-
+-<a id="known-limitations-and-deferred-work"></a>
+-
+-
+-这些限制告诉你 headless 何时不适用、它需要 `dsh` 启动器提供什么。它们是当前包约束，不是通用的 CLI 对比或任务积压。
+-
+-- **每次运行一个任务**——任务得到回答后进程即退出；没有交互式后续，因此多步工作请拆成多次运行。
+-- **通过 `dsh` 启动器运行**——以其他方式启动 headless profile 会在启动时失败，因为只有启动器能请求进程退出。
+-- **首个 token 前没有心跳**——提供方发出第一个非空推理增量前，stderr 保持静默；延迟首个 token 的提供方不会更早给出进度信号。
+-- **推理进入 stderr 日志**——重定向与监督进程可能保留更多且可能敏感的模型输出；需要时应把 stderr 路由到受控位置。
+-- **只打印推理和最终答案**——没有 assistant 消息的运行向 stdout 打印空行并以 1 退出；中间工具输出不会打印。
+-
+-<a id="dev-note"></a>
+-### 开发备注
+-
+-<details>
+-<summary>维护者的工作上下文——点击展开</summary>
++无；runner 不向请求前缀添加任何内容。
+ 
+-无。
++## 已知限制与暂缓事项
+ 
+-</details>
++- **只提交一个任务**：runner 没有用于交互式后续输入的 surface；它会等待 Agent 在返回 idle 前完成的所有工作，并打印该区间内最后一条非空 assistant 消息。
++- **`ctx.appExit` 由启动器持有**：在 `dsh` 启动器之外启动 headless profile 会在激活时明确报错，直到宿主提供该退出请求。
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/cordis.patch.yml /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/cordis.patch.yml
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/cordis.patch.yml	2026-09-11 14:27:15.146963337 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/cordis.patch.yml	2026-09-12 14:56:17.413430667 +0800
+@@ -6,17 +6,21 @@
+ 
+ - id: system-prompt
+   config:
+-    personaSuffix: Your working directory is {{cwd}}.
+-    personaPrefix: >-
+-      You are a coding agent powered by the {{model}} model.
++    persona: >-
++      You are a coding agent powered by the {{model}} model. Your working directory is {{cwd}}.
++
++# The shared module-reload HMR row stays off; the launcher's watch-only
++# fallback still keeps the user patch layers live until the run exits.
++- id: hmr
++  disabled: true
+ 
+ - id: tools
+   config:
+-    # Keep the same temporary process-wide PTC mode opt-in as the Web surface.
++    # Keep the same temporary process-wide Code Mode opt-in as the Web surface.
+     mode: !!js process.env.DSH_TOOLS_MODE
+ 
+ - insert:
+-    # PTC mode is a core execution capability, not a Web component.
++    # Code Mode is a core execution capability, not a Web component.
+     - id: code-runtime
+       name: '@deepseek-ai/dsh-code-runtime-worker-thread'
+ 
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/lib/index.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/lib/index.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/lib/index.js	2026-09-11 14:27:15.070962257 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/lib/index.js	2026-09-12 14:56:17.411967451 +0800
+@@ -1,17 +1,14 @@
+ import { randomUUID } from "node:crypto";
+ import z from "@deepseek-ai/schemastery";
+-import { brandString } from "@deepseek-ai/dsh-brand";
+ import { installModelSelection } from "@deepseek-ai/dsh-agent";
+ import { createUserMessage } from "@deepseek-ai/dsh-llm";
+-import { assertNever } from "@deepseek-ai/dsh-util-values";
+-import { SessionSeq } from "@deepseek-ai/dsh-session";
++import { SessionId } from "@deepseek-ai/dsh-session";
+ //#region lib/types/index.js
+ /**
+ * @deepseek-ai/dsh-headless — one-shot direct Agent driver. The bundle patch
+ * rides over dsh-base without Host, HTTP, or browser plugins; this runner
+ * creates one Agent through the core registry, drives the task to quiescence,
+-* streams provider reasoning to stderr, flushes its Session, prints the final
+-* assistant text to stdout, and exits.
++* flushes its Session, prints the final assistant text, and exits.
+ *
+ * @module @deepseek-ai/dsh-headless
+ */
+@@ -30,14 +27,12 @@
+ 	stderr: process.stderr
+ };
+ /** Aggregate the last assistant text and turn outcome in one owned interval. */
+-function summarize(session, firstSeq) {
++function summarize(events, firstSeq) {
+ 	let started = false;
+ 	let text = "";
+ 	let reason;
+-	const length = session.seq;
+-	for (let seq = firstSeq; seq < length; seq++) {
+-		const event = session.eventAt(SessionSeq(seq));
+-		if (event === void 0) throw new Error(`headless summary cannot read seq ${String(seq)} below captured length ${String(length)}`);
++	for (const event of events) {
++		if (event.seq < firstSeq) continue;
+ 		if (event.type === "turn/start") {
+ 			started = true;
+ 			continue;
+@@ -54,65 +49,6 @@
+ 		reason
+ 	};
+ }
+-/**
+-* Project provider-reported reasoning from one owned run to stderr as it is
+-* streamed, while keeping final outcome derivation on the durable log.
+-* @param ctx - plugin context carrying the live Assistant frame feed.
+-* @param agent - the exact Agent whose reasoning belongs to this invocation.
+-* @param stderr - progress output sink.
+-* @returns a disposer that also terminates an unterminated reasoning line.
+-*/
+-function streamReasoning(ctx, agent, stderr) {
+-	let open = false;
+-	let endsWithNewline = true;
+-	const close = () => {
+-		if (!open) return;
+-		if (!endsWithNewline) stderr.write("\n");
+-		open = false;
+-		endsWithNewline = true;
+-	};
+-	const dispose = ctx.on("agent/assistant-stream", ({ agent: subject, frame }) => {
+-		if (subject !== agent) return;
+-		if (frame.type === "start") {
+-			close();
+-			return;
+-		}
+-		if (frame.type === "end") {
+-			close();
+-			return;
+-		}
+-		const chunk = frame.chunk;
+-		switch (chunk.type) {
+-			case "reasoning-delta":
+-				if (chunk.text === "") return;
+-				if (!open) {
+-					stderr.write("dsh: reasoning:\n");
+-					open = true;
+-				}
+-				stderr.write(chunk.text);
+-				endsWithNewline = chunk.text.endsWith("\n");
+-				return;
+-			case "block-start":
+-				if (chunk.blockType !== "reasoning") close();
+-				return;
+-			case "block-end":
+-				if (chunk.block.type !== "reasoning") close();
+-				return;
+-			case "usage": return;
+-			case "text-delta":
+-			case "tool-call-delta":
+-			case "finish":
+-				close();
+-				return;
+-			/* v8 ignore next -- closed-union exhaustiveness guard */
+-			default: return assertNever(chunk, "headless reasoning stream");
+-		}
+-	});
+-	return () => {
+-		dispose();
+-		close();
+-	};
+-}
+ /** Report an unexpected direct-driver failure and request a failing exit. */
+ function fail(io, error) {
+ 	io.stderr.write(`dsh: ${error instanceof Error ? error.message : String(error)}\n`);
+@@ -132,7 +68,7 @@
+ 	if (agents === void 0 || defaultModel === void 0 || sessions === void 0) return;
+ 	const selection = defaultModel.currentSelection();
+ 	const { agent } = await agents.create({
+-		sessionId: brandString(`session-${randomUUID()}`),
++		sessionId: SessionId(`session-${randomUUID()}`),
+ 		meta: { cwd: process.cwd() },
+ 		agentOptions: {
+ 			provider: selection.provider,
+@@ -147,21 +83,16 @@
+ 	});
+ 	await agent.whenIdle();
+ 	const firstSeq = agent.session.seq;
+-	const stopReasoning = streamReasoning(ctx, agent, io.stderr);
+-	try {
+-		agent.followup(createUserMessage({
+-			content: [{
+-				type: "text",
+-				text: task
+-			}],
+-			source: { kind: "user" }
+-		}));
+-		await agent.whenIdle();
+-	} finally {
+-		stopReasoning();
+-	}
++	agent.followup(createUserMessage({
++		content: [{
++			type: "text",
++			text: task
++		}],
++		source: { kind: "user" }
++	}));
++	await agent.whenIdle();
+ 	await sessions.flush(agent.session);
+-	const outcome = summarize(agent.session, firstSeq);
++	const outcome = summarize(agent.session.events, firstSeq);
+ 	io.stdout.write(outcome.text + "\n");
+ 	if (outcome.reason?.kind === "error") io.stderr.write(`dsh: ${outcome.reason.error.code}: ${outcome.reason.error.message}\n`);
+ 	io.exit(outcome.reason?.kind === "completed" ? 0 : 1);
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/lib: invariant.js
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/lib/startup.js /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/lib/startup.js
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/lib/startup.js	2026-09-11 14:27:15.090962541 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/lib/startup.js	2026-09-12 14:56:17.412925011 +0800
+@@ -18,7 +18,7 @@
+ * @returns a fresh program, so one process can parse more than once (tests).
+ */
+ function headlessCommand() {
+-	return new Command().name("dsh --profile headless").description("Answer one task, stream reasoning to stderr, print the final assistant message, and exit.").helpOption("-h, --help", "show this help").argument("[task...]", "the task text; multiple words are joined by spaces").addHelpText("after", `
++	return new Command().name("dsh --profile headless").description("Answer one task, print the final assistant message, and exit.").helpOption("-h, --help", "show this help").argument("[task...]", "the task text; multiple words are joined by spaces").addHelpText("after", `
+ Examples:
+   dsh --profile headless "run the tests"     answer one task and exit
+ `);
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/lib/types/index.d.ts /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/lib/types/index.d.ts
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/lib/types/index.d.ts	2026-09-11 14:27:15.128963082 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/lib/types/index.d.ts	2026-09-12 14:56:17.412967589 +0800
+@@ -2,8 +2,7 @@
+  * @deepseek-ai/dsh-headless — one-shot direct Agent driver. The bundle patch
+  * rides over dsh-base without Host, HTTP, or browser plugins; this runner
+  * creates one Agent through the core registry, drives the task to quiescence,
+- * streams provider reasoning to stderr, flushes its Session, prints the final
+- * assistant text to stdout, and exits.
++ * flushes its Session, prints the final assistant text, and exits.
+  *
+  * @module @deepseek-ai/dsh-headless
+  */
+Only in /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/lib/types: invariant.d.ts
+diff -u -r -x node_modules /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/package.json /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/package.json
+--- /home/CNS2026495165/.dsh/profiles-archive/web2-20260915-105429/node_modules/@deepseek-ai/dsh-headless/package.json	2026-09-11 14:27:15.096962627 +0800
++++ /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-headless/package.json	2026-09-12 14:56:17.412925011 +0800
+@@ -1,7 +1,7 @@
+ {
+   "name": "@deepseek-ai/dsh-headless",
+   "description": "The dsh one-shot bundle: a direct core Agent/Session runner over dsh-base with no Host, HTTP, or browser layer",
+-  "version": "0.1.5-rc.2",
++  "version": "0.1.1-rc.2",
+   "publishConfig": {
+     "access": "public"
+   },
+@@ -22,12 +22,17 @@
+       "types": "./lib/types/startup.d.ts",
+       "default": "./lib/startup.js"
+     },
++    "./invariant": {
++      "types": "./lib/types/invariant.d.ts",
++      "default": "./lib/invariant.js"
++    },
+     "./cordis.patch.yml": "./cordis.patch.yml",
+     "./src/*": "./src/*",
+     "./package.json": "./package.json"
+   },
+   "files": [
+     "lib/index.js",
++    "lib/invariant.js",
+     "lib/startup.js",
+     "cordis.patch.yml",
+     "lib/types/**/*.d.ts"
+@@ -40,28 +45,26 @@
+   },
+   "dependencies": {
+     "commander": "^15.0.0",
+-    "@deepseek-ai/dsh-brand": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-cmdline": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-code-runtime-worker-thread": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-util-values": "^0.1.5-rc.2",
+-    "@deepseek-ai/schemastery": "^3.18.2"
++    "@deepseek-ai/dsh-cmdline": "^0.1.1-rc.2",
++    "@deepseek-ai/schemastery": "^3.18.1",
++    "@deepseek-ai/dsh-code-runtime-worker-thread": "^0.1.1-rc.2"
+   },
+   "peerDependencies": {
+-    "@deepseek-ai/cordis-plugin-loader": "^1.0.3",
+-    "@deepseek-ai/dsh-agent": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-agent-default-model": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-llm": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-session": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis": "^4.0.2"
++    "@deepseek-ai/dsh-agent-default-model": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-llm": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-agent": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1",
++    "@deepseek-ai/cordis-plugin-loader": "^1.0.2"
+   },
+   "devDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.2",
+-    "@deepseek-ai/dsh-agent": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-agent-default-model": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-agent-loop": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-agent-loop-testkit": "^0.1.5-rc.2",
+-    "@deepseek-ai/dsh-llm": "^0.1.5-rc.2",
+-    "@deepseek-ai/cordis-plugin-loader": "^1.0.3",
+-    "@deepseek-ai/dsh-session": "^0.1.5-rc.2"
++    "@deepseek-ai/cordis-plugin-loader": "^1.0.2",
++    "@deepseek-ai/dsh-agent": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-agent-default-model": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-invariants": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-llm": "^0.1.1-rc.2",
++    "@deepseek-ai/dsh-session": "^0.1.1-rc.2",
++    "@deepseek-ai/cordis": "^4.0.1"
+   }
+ }
+\ No newline at end of file

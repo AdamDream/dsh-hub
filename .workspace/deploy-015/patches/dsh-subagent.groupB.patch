@@ -1,0 +1,433 @@
+diff --git a/lib/index.js b/lib/index.js
+--- a/lib/index.js	2026-09-15 15:52:52.888491996 +0800
++++ b/lib/index.js	2026-09-15 15:52:52.915189597 +0800
+@@ -1,7 +1,7 @@
+ import { Service } from "@deepseek-ai/cordis";
+ import { scopeTarget } from "@deepseek-ai/dsh-scope";
+ import { assertObjectJsonSchema } from "@deepseek-ai/dsh-tools";
+-import { HarnessError, boundContextSummary, createUserMessage, errorChain } from "@deepseek-ai/dsh-llm";
++import { HarnessError, boundContextSummary, contentHasImage, createUserMessage, errorChain } from "@deepseek-ai/dsh-llm";
+ import { randomUUID } from "node:crypto";
+ import { foldConsumedWork } from "@deepseek-ai/dsh-agent";
+ import { Session, SessionId, snapshotJsonValue } from "@deepseek-ai/dsh-session";
+@@ -490,25 +490,52 @@
+ 	return childDepth;
+ }
+ /**
+-* Resolve the child's `AgentOptions`: the parent's provider/model/maxTokens
+-* route unless the request overrides it, stamped with the child's own
+-* delegation depth.
++* Resolve the parent values inherited by a child. The latest request header
++* owns provider, model, and reasoning effort after request-time selection;
++* creation options remain the fallback before the first request and retain
++* the configured output-token limit.
++* @param parent - delegating parent Agent.
++* @returns detached Agent options for child-option merging.
++*/
++function parentAgentOptionsForDelegation(parent) {
++	const requestConfig = parent.session.requestHeader()?.config;
++	if (requestConfig === void 0) return { ...parent.options };
++	const { provider: _createdProvider, model: _createdModel, reasoningEffort: _createdReasoningEffort, ...createdOptions } = parent.options;
++	return {
++		...createdOptions,
++		provider: requestConfig.provider,
++		model: requestConfig.model,
++		...requestConfig.reasoningEffort === void 0 ? {} : { reasoningEffort: requestConfig.reasoningEffort }
++	};
++}
++/**
++* Resolve the child's `AgentOptions`: the parent's provider/model,
++* reasoning-effort, and maxTokens values unless the request overrides them,
++* stamped with the child's own delegation depth. Changing the route without
++* naming an effort clears the parent's route-owned effort so the selected
++* model resolves its own default.
+ * @param parent - the delegating parent whose route the child inherits.
+ * @param requested - per-child overrides, if any.
+ * @param childDepth - the resolved delegation depth to stamp.
+ * @returns the resolved options for `ctx.agents.create()`.
+ */
+ function resolveChildAgentOptions(parent, requested, childDepth) {
+-	const parentProvider = parent.options.provider;
+-	const parentModel = parent.options.model;
+-	const parentMaxTokens = parent.options.maxTokens;
+-	return {
++	const parentOptions = parentAgentOptionsForDelegation(parent);
++	const parentProvider = parentOptions.provider;
++	const parentModel = parentOptions.model;
++	const parentReasoningEffort = parentOptions.reasoningEffort;
++	const parentMaxTokens = parentOptions.maxTokens;
++	const resolved = {
+ 		...parentProvider !== void 0 ? { provider: parentProvider } : {},
+ 		...parentModel !== void 0 ? { model: parentModel } : {},
++		...parentReasoningEffort !== void 0 ? { reasoningEffort: parentReasoningEffort } : {},
+ 		...parentMaxTokens !== void 0 ? { maxTokens: parentMaxTokens } : {},
+ 		...requested,
+ 		subagentDepth: childDepth
+ 	};
++	const routeChanged = resolved.provider !== parentProvider || resolved.model !== parentModel;
++	if (routeChanged && requested?.reasoningEffort === void 0) delete resolved.reasoningEffort;
++	return resolved;
+ }
+ /**
+ * Build the child session's durable creation metadata: the parent's workspace,
+@@ -777,8 +804,9 @@
+ 		const childId = spec.childId ?? SessionId(randomUUID());
+ 		this.assertChildIdAvailable(childId);
+ 		const childDepth = resolveChildDepth(parent, request.maxDepth);
+-		const agentProvider = request.agentOptions?.provider ?? parent.options.provider;
+-		const agentModel = request.agentOptions?.model ?? parent.options.model;
++		const agentOptions = resolveChildAgentOptions(parent, request.agentOptions, childDepth);
++		const agentProvider = agentOptions.provider;
++		const agentModel = agentOptions.model;
+ 		const descriptor = snapshotSubagentDescriptor({
+ 			mode: "continuable",
+ 			provider: spec.provider,
+@@ -820,7 +848,7 @@
+ 						meta: childSessionMeta(parent, childDepth, lineageSeedLength),
+ 						delegatedPolicies
+ 					},
+-					agentOptions: resolveChildAgentOptions(parent, request.agentOptions, childDepth),
++					agentOptions,
+ 					composition: {
+ 						persona: request.persona,
+ 						toolFilter: request.toolFilter
+@@ -863,6 +891,10 @@
+ 				* which no test can schedule deterministically. The behavior is covered end-to-end by
+ 				* "cold-resumes a delivery that lost the race with final disposal". */
+ 				if (activation.disposal !== void 0) return activation.disposal.then(() => void 0, () => void 0);
++				if (contentHasImage(content)) {
++					await this.assertImageCapable(activation.handle.agent, options.signal);
++					if (activation.disposal !== void 0) return activation.disposal.then(() => void 0, () => void 0);
++				}
+ 				return this.submitAdmitted(activation, content, options.source, parent, options.signal);
+ 			});
+ 			/* v8 ignore start -- only the lost-cutoff arm above returns undefined, so only that
+@@ -1258,6 +1290,10 @@
+ 	*/
+ 	async submitMaterialized(activation, content, source, parent, signal) {
+ 		try {
++			if (contentHasImage(content)) {
++				await this.assertImageCapable(activation.handle.agent, signal);
++				if (disposalOf(activation) !== void 0) throw new SubagentError(`subagent "${activation.childId}" is closing`, "ACTIVATION_CLOSING");
++			}
+ 			return this.submitAdmitted(activation, content, source, parent, signal);
+ 		} catch (error) {
+ 			/* v8 ignore next -- rollback disposal failures must not mask the
+@@ -1434,6 +1470,16 @@
+ 		this.authorizeLineage(parent, activation.childId, activation.handle.agent.session.header.parentSession);
+ 		return this.submit(activation, content, source, parent);
+ 	}
++	/** Refuse image content for a child whose fixed model accepts text only. */
++	async assertImageCapable(agent, signal) {
++		const { provider, model } = agent.options;
++		if (provider === void 0 || model === void 0) return;
++		const llm = this.ctx.get("llm");
++		/* v8 ignore next -- without an LLM registry, delivery defers to projection. */
++		if (llm === void 0) return;
++		const info = await llm.resolveModelInfo(provider, model, signal);
++		if (info.inputModalities !== void 0 && !info.inputModalities.includes("image")) throw new SubagentError(`Model "${model}" does not support image input.`, "MODEL_DOES_NOT_SUPPORT_IMAGES");
++	}
+ 	/**
+ 	* Authorize one operation against the durable direct-parent lineage. Other
+ 	* agents, ancestors, teams, workflows, and hosts remain rejected until an
+@@ -2196,6 +2242,10 @@
+ 	while ((bytes[prefixBytes] & 192) === 128) prefixBytes -= 1;
+ 	return utf8Decoder.decode(bytes.subarray(0, prefixBytes)) + DIAGNOSTIC_TRUNCATION_SUFFIX;
+ }
++/** Enforce the byte limit on a provider-returned diagnostic. */
++function normalizeSubagentDiagnostic(result) {
++	return result.diagnostic === void 0 ? result : { ...result, diagnostic: limitSubagentDiagnostic(result.diagnostic) };
++}
+ /**
+ * The capability advertisement of an out-of-process backend: NONE. A child in
+ * another process cannot honor parent-enforced start features
+@@ -2300,7 +2350,7 @@
+ 		return parts.cancelled() ? {
+ 			output: parts.collectOutput(),
+ 			stopReason: "aborted"
+-		} : result;
++		} : normalizeSubagentDiagnostic(result);
+ 	} catch (error) {
+ 		if (parts.cancelled()) return {
+ 			output: parts.collectOutput(),
+@@ -2362,8 +2412,10 @@
+ 	return result.diagnostic === void 0 ? stopReason : `${stopReason}; diagnostic: ${result.diagnostic}`;
+ }
+ /**
+-* Map a child result to the task outcome: completed carries final text,
+-* aborted is killed, and every other reason is failed without partial output.
++* Map a child result to the task outcome: completed carries final text, local
++* cancellation (`aborted` without a diagnostic) is killed, and provider-
++* diagnosed remote aborts plus every other reason are failed without partial
++* output.
+ * @param result - child terminal result.
+ * @returns outcome for the `ctx.jobs` registration.
+ */
+@@ -2373,7 +2425,10 @@
+ 			status: "completed",
+ 			output: finalText(result.output)
+ 		};
+-		case "aborted": return { status: "killed" };
++		case "aborted": return result.diagnostic === void 0 ? { status: "killed" } : {
++			status: "failed",
++			detail: failureDetail(result)
++		};
+ 		case "error":
+ 		case "max-tokens":
+ 		case "refusal": return {
+@@ -2758,4 +2813,4 @@
+ 	}
+ };
+ //#endregion
+-export { AssistantOutputFold, NO_START_CAPABILITIES, SUBAGENT_DESCRIPTOR_VERSION, SubagentDepthError, SubagentError, SubagentRunId, SubagentRuntime, SubagentRuntime as default, appendDelegatedPolicyOverrides, applyChildComposition, assertPositiveFinite, assertSubagentMaxDepth, assertUsableCwd, captureDelegatedPolicyOverrides, childSessionMeta, delegationDepthOf, finalAssistantOutput, foldSubagentDescriptor, resolveChildAgentOptions, resolveChildCwd, resolveChildDepth, seedDescriptorTurn, settleRun, settleRunResult, snapshotSubagentDescriptor, subprocessRunHandle, validateConfiguredCwd };
++export { AssistantOutputFold, NO_START_CAPABILITIES, SUBAGENT_DESCRIPTOR_VERSION, SubagentDepthError, SubagentError, SubagentRunId, SubagentRuntime, SubagentRuntime as default, appendDelegatedPolicyOverrides, applyChildComposition, assertPositiveFinite, assertSubagentMaxDepth, assertUsableCwd, captureDelegatedPolicyOverrides, childSessionMeta, delegationDepthOf, finalAssistantOutput, foldSubagentDescriptor, parentAgentOptionsForDelegation, resolveChildAgentOptions, resolveChildCwd, resolveChildDepth, seedDescriptorTurn, settleRun, settleRunResult, snapshotSubagentDescriptor, subprocessRunHandle, validateConfiguredCwd };
+diff --git a/lib/types/child-agent.d.ts b/lib/types/child-agent.d.ts
+--- a/lib/types/child-agent.d.ts	2026-09-15 15:52:52.889024739 +0800
++++ b/lib/types/child-agent.d.ts	2026-09-15 15:52:52.914436775 +0800
+@@ -30,9 +30,20 @@
+  */
+ export declare function resolveChildDepth(parent: Agent, maxDepth: number | undefined): number;
+ /**
+- * Resolve the child's `AgentOptions`: the parent's provider/model/maxTokens
+- * route unless the request overrides it, stamped with the child's own
+- * delegation depth.
++ * Resolve the parent values inherited by a child. The latest request header
++ * owns provider, model, and reasoning effort after request-time selection;
++ * creation options remain the fallback before the first request and retain
++ * the configured output-token limit.
++ * @param parent - delegating parent Agent.
++ * @returns detached Agent options for child-option merging.
++ */
++export declare function parentAgentOptionsForDelegation(parent: Agent): AgentOptions;
++/**
++ * Resolve the child's `AgentOptions`: the parent's provider/model,
++ * reasoning-effort, and maxTokens values unless the request overrides them,
++ * stamped with the child's own delegation depth. Changing the route without
++ * naming an effort clears the parent's route-owned effort so the selected
++ * model resolves its own default.
+  * @param parent - the delegating parent whose route the child inherits.
+  * @param requested - per-child overrides, if any.
+  * @param childDepth - the resolved delegation depth to stamp.
+diff --git a/lib/types/child-agent.js b/lib/types/child-agent.js
+--- a/lib/types/child-agent.js	2026-09-15 15:52:52.888647191 +0800
++++ b/lib/types/child-agent.js	2026-09-15 15:52:52.915141976 +0800
+@@ -40,25 +40,56 @@
+     return childDepth;
+ }
+ /**
+- * Resolve the child's `AgentOptions`: the parent's provider/model/maxTokens
+- * route unless the request overrides it, stamped with the child's own
+- * delegation depth.
++ * Resolve the parent values inherited by a child. The latest request header
++ * owns provider, model, and reasoning effort after request-time selection;
++ * creation options remain the fallback before the first request and retain
++ * the configured output-token limit.
++ * @param parent - delegating parent Agent.
++ * @returns detached Agent options for child-option merging.
++ */
++export function parentAgentOptionsForDelegation(parent) {
++    const requestConfig = parent.session.requestHeader()?.config;
++    if (requestConfig === undefined)
++        return { ...parent.options };
++    const { provider: _createdProvider, model: _createdModel, reasoningEffort: _createdReasoningEffort, ...createdOptions } = parent.options;
++    return {
++        ...createdOptions,
++        provider: requestConfig.provider,
++        model: requestConfig.model,
++        ...requestConfig.reasoningEffort === undefined
++            ? {}
++            : { reasoningEffort: requestConfig.reasoningEffort },
++    };
++}
++/**
++ * Resolve the child's `AgentOptions`: the parent's provider/model,
++ * reasoning-effort, and maxTokens values unless the request overrides them,
++ * stamped with the child's own delegation depth. Changing the route without
++ * naming an effort clears the parent's route-owned effort so the selected
++ * model resolves its own default.
+  * @param parent - the delegating parent whose route the child inherits.
+  * @param requested - per-child overrides, if any.
+  * @param childDepth - the resolved delegation depth to stamp.
+  * @returns the resolved options for `ctx.agents.create()`.
+  */
+ export function resolveChildAgentOptions(parent, requested, childDepth) {
+-    const parentProvider = parent.options.provider;
+-    const parentModel = parent.options.model;
+-    const parentMaxTokens = parent.options.maxTokens;
+-    return {
++    const parentOptions = parentAgentOptionsForDelegation(parent);
++    const parentProvider = parentOptions.provider;
++    const parentModel = parentOptions.model;
++    const parentReasoningEffort = parentOptions.reasoningEffort;
++    const parentMaxTokens = parentOptions.maxTokens;
++    const resolved = {
+         ...parentProvider !== undefined ? { provider: parentProvider } : {},
+         ...parentModel !== undefined ? { model: parentModel } : {},
++        ...parentReasoningEffort !== undefined ? { reasoningEffort: parentReasoningEffort } : {},
+         ...parentMaxTokens !== undefined ? { maxTokens: parentMaxTokens } : {},
+         ...requested,
+         subagentDepth: childDepth,
+     };
++    const routeChanged = resolved.provider !== parentProvider || resolved.model !== parentModel;
++    if (routeChanged && requested?.reasoningEffort === undefined)
++        delete resolved.reasoningEffort;
++    return resolved;
+ }
+ /**
+  * Build the child session's durable creation metadata: the parent's workspace,
+diff --git a/lib/types/continuation.js b/lib/types/continuation.js
+--- a/lib/types/continuation.js	2026-09-15 15:52:52.888689562 +0800
++++ b/lib/types/continuation.js	2026-09-15 15:52:52.914769969 +0800
+@@ -21,7 +21,7 @@
+  * @module @deepseek-ai/dsh-subagent
+  */
+ import { randomUUID } from 'node:crypto';
+-import { boundContextSummary, createUserMessage, errorChain } from '@deepseek-ai/dsh-llm';
++import { boundContextSummary, contentHasImage, createUserMessage, errorChain } from '@deepseek-ai/dsh-llm';
+ import { SessionId } from '@deepseek-ai/dsh-session';
+ import { foldSubagentDescriptor, snapshotSubagentDescriptor } from "./descriptor.js";
+ import { appendDelegatedPolicyOverrides, applyChildComposition, captureDelegatedPolicyOverrides, childSessionMeta, resolveChildAgentOptions, resolveChildDepth, } from "./child-agent.js";
+@@ -161,8 +161,9 @@
+         const childDepth = resolveChildDepth(parent, request.maxDepth);
+         // Snapshot before any await: invalid descriptor JSON rejects the call
+         // before a child exists, and the detached value is what reaches the log.
+-        const agentProvider = request.agentOptions?.provider ?? parent.options.provider;
+-        const agentModel = request.agentOptions?.model ?? parent.options.model;
++        const agentOptions = resolveChildAgentOptions(parent, request.agentOptions, childDepth);
++        const agentProvider = agentOptions.provider;
++        const agentModel = agentOptions.model;
+         const descriptor = snapshotSubagentDescriptor({
+             mode: 'continuable',
+             provider: spec.provider,
+@@ -202,7 +203,7 @@
+                 provider: spec.provider,
+                 parent,
+                 create: { seed, meta: childSessionMeta(parent, childDepth, lineageSeedLength), delegatedPolicies },
+-                agentOptions: resolveChildAgentOptions(parent, request.agentOptions, childDepth),
++                agentOptions,
+                 composition: { persona: request.persona, toolFilter: request.toolFilter },
+                 signal: spec.signal,
+             });
+@@ -249,6 +250,12 @@
+                 if (activation.disposal !== undefined) {
+                     return activation.disposal.then(() => undefined, () => undefined);
+                 }
++                if (contentHasImage(content)) {
++                    await this.assertImageCapable(activation.handle.agent, options.signal);
++                    if (activation.disposal !== undefined) {
++                        return activation.disposal.then(() => undefined, () => undefined);
++                    }
++                }
+                 return this.submitAdmitted(activation, content, options.source, parent, options.signal);
+             });
+             /* v8 ignore start -- only the lost-cutoff arm above returns undefined, so only that
+@@ -672,6 +679,12 @@
+      */
+     async submitMaterialized(activation, content, source, parent, signal) {
+         try {
++            if (contentHasImage(content)) {
++                await this.assertImageCapable(activation.handle.agent, signal);
++                if (disposalOf(activation) !== undefined) {
++                    throw new SubagentError(`subagent "${activation.childId}" is closing`, 'ACTIVATION_CLOSING');
++                }
++            }
+             return this.submitAdmitted(activation, content, source, parent, signal);
+         }
+         catch (error) {
+@@ -896,6 +909,20 @@
+         this.authorizeLineage(parent, activation.childId, activation.handle.agent.session.header.parentSession);
+         return this.submit(activation, content, source, parent);
+     }
++    /** Refuse image content for a child whose fixed model accepts text only. */
++    async assertImageCapable(agent, signal) {
++        const { provider, model } = agent.options;
++        if (provider === undefined || model === undefined)
++            return;
++        const llm = this.ctx.get('llm');
++        /* v8 ignore next -- without an LLM registry, delivery defers to projection. */
++        if (llm === undefined)
++            return;
++        const info = await llm.resolveModelInfo(provider, model, signal);
++        if (info.inputModalities !== undefined && !info.inputModalities.includes('image')) {
++            throw new SubagentError(`Model "${model}" does not support image input.`, 'MODEL_DOES_NOT_SUPPORT_IMAGES');
++        }
++    }
+     /**
+      * Authorize one operation against the durable direct-parent lineage. Other
+      * agents, ancestors, teams, workflows, and hosts remain rejected until an
+diff --git a/lib/types/index.d.ts b/lib/types/index.d.ts
+--- a/lib/types/index.d.ts	2026-09-15 15:52:52.888575475 +0800
++++ b/lib/types/index.d.ts	2026-09-15 15:52:52.914351563 +0800
+@@ -49,7 +49,7 @@
+ export { SubagentError } from './error.ts';
+ export { settleRun } from './run-settlement.ts';
+ export { assertSubagentMaxDepth, delegationDepthOf } from './depth.ts';
+-export { appendDelegatedPolicyOverrides, applyChildComposition, captureDelegatedPolicyOverrides, childSessionMeta, resolveChildAgentOptions, resolveChildDepth, SubagentDepthError, } from './child-agent.ts';
++export { appendDelegatedPolicyOverrides, applyChildComposition, captureDelegatedPolicyOverrides, childSessionMeta, parentAgentOptionsForDelegation, resolveChildAgentOptions, resolveChildDepth, SubagentDepthError, } from './child-agent.ts';
+ export type { ChildComposition, DelegatedPolicyOverrides } from './child-agent.ts';
+ export type { ContinuableStart, ContinuableStartSpec, CoordinatorMessageSource, SubagentFollowupOptions, SubagentInterruptAuthority, SubagentReportDelivery, SubagentReportMessageSource, SubagentReportOptions, SubagentSettledMessageSource, } from './continuation.ts';
+ export type { ContinuableSetupContribution } from './activation-setup-registry.ts';
+diff --git a/lib/types/index.js b/lib/types/index.js
+--- a/lib/types/index.js	2026-09-15 15:52:52.888798459 +0800
++++ b/lib/types/index.js	2026-09-15 15:52:52.914553878 +0800
+@@ -49,7 +49,7 @@
+ export { SubagentError } from "./error.js";
+ export { settleRun } from "./run-settlement.js";
+ export { assertSubagentMaxDepth, delegationDepthOf } from "./depth.js";
+-export { appendDelegatedPolicyOverrides, applyChildComposition, captureDelegatedPolicyOverrides, childSessionMeta, resolveChildAgentOptions, resolveChildDepth, SubagentDepthError, } from "./child-agent.js";
++export { appendDelegatedPolicyOverrides, applyChildComposition, captureDelegatedPolicyOverrides, childSessionMeta, parentAgentOptionsForDelegation, resolveChildAgentOptions, resolveChildDepth, SubagentDepthError, } from "./child-agent.js";
+ /** Named provider registry with one-shot runs, durable discovery, and continuable-child operations. */
+ export class SubagentRuntime extends Service {
+     providers = new Map();
+diff --git a/lib/types/out-of-process.js b/lib/types/out-of-process.js
+--- a/lib/types/out-of-process.js	2026-09-15 15:52:52.888885725 +0800
++++ b/lib/types/out-of-process.js	2026-09-15 15:52:52.914682362 +0800
+@@ -34,6 +34,12 @@
+     return utf8Decoder.decode(bytes.subarray(0, prefixBytes))
+         + DIAGNOSTIC_TRUNCATION_SUFFIX;
+ }
++/** Enforce the byte limit on a provider-returned diagnostic. */
++function normalizeSubagentDiagnostic(result) {
++    return result.diagnostic === undefined
++        ? result
++        : { ...result, diagnostic: limitSubagentDiagnostic(result.diagnostic) };
++}
+ /**
+  * The capability advertisement of an out-of-process backend: NONE. A child in
+  * another process cannot honor parent-enforced start features
+@@ -157,7 +163,7 @@
+         const result = await parts.attempt();
+         return parts.cancelled()
+             ? { output: parts.collectOutput(), stopReason: 'aborted' }
+-            : result;
++            : normalizeSubagentDiagnostic(result);
+     }
+     catch (error) {
+         // Cover a rejection already queued when cancellation arrives.
+diff --git a/lib/types/run-settlement.js b/lib/types/run-settlement.js
+--- a/lib/types/run-settlement.js	2026-09-15 15:52:52.888945949 +0800
++++ b/lib/types/run-settlement.js	2026-09-15 15:52:52.915120766 +0800
+@@ -20,8 +20,10 @@
+         : `${stopReason}; diagnostic: ${result.diagnostic}`;
+ }
+ /**
+- * Map a child result to the task outcome: completed carries final text,
+- * aborted is killed, and every other reason is failed without partial output.
++ * Map a child result to the task outcome: completed carries final text, local
++ * cancellation (`aborted` without a diagnostic) is killed, and provider-
++ * diagnosed remote aborts plus every other reason are failed without partial
++ * output.
+  * @param result - child terminal result.
+  * @returns outcome for the `ctx.jobs` registration.
+  */
+@@ -30,7 +32,9 @@
+         case 'completed':
+             return { status: 'completed', output: finalText(result.output) };
+         case 'aborted':
+-            return { status: 'killed' };
++            return result.diagnostic === undefined
++                ? { status: 'killed' }
++                : { status: 'failed', detail: failureDetail(result) };
+         case 'error':
+         case 'max-tokens':
+         case 'refusal':
