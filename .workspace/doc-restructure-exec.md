@@ -79,3 +79,16 @@ Luxweft 风格清单 9 节：语言与受众 / 归属表开头（谁拥有什么
 - 三文件已就绪，可 git add + commit（建议一条 `docs: README 重构（Luxweft 风格）+ 功能地图 + DOC-STYLE 约定`）。
 - 后续新写 dsh-hub 文档一律按 `DOC-STYLE.md`；功能地图状态随部署演进更新（新增能力时在对应类别加行，状态带日期）。
 - 若主代理/用户后续推进「examples/minimal-plugin 脚手架 + 写第一个插件」文档线，可在 README 从这里开始表加一行路由、在 DOC-STYLE 保持不动。
+
+---
+
+## 6. 追加四要素（第二轮，2026-09-16 用户指示）
+
+| # | 要素 | 落实 | 位置 |
+|---|---|---|---|
+| ① | **fail-closed 普适规则** | 从落盘报告取 4 组事实并表述为 README 规则 3「应用失败即失败，绝不静默部分生效（fail-closed）」：补丁脚本校验失败 FAIL 退出非零不静默（lag-fix-exec.md U-9）+ `--rollback`；cordis 热载刷新失败整次回滚无残留（p0a-patch-hmr-exec.md §0/§1）；ws_flash 高危确认模态 fail-closed 未授权模板拒绝（workerspace-exec.md §1-2 四道闸）；能力检测未知声明保守回退 vision-adam（vision-settings-capability-exec.md §2）。规则节更名「三条能解释大部分行为的规则」 | README.md 规则 3；DOC-STYLE.md §3（fail-closed 为必写规则，附四组事实来源） |
+| ② | **demo 代码块规范** | DOC-STYLE 新增 §4「代码块规范」：完整可复制 / 与真实命令逐字一致 / 带预期输出注释（`# 预期输出：…`）/ 可运行验证（`--dry-run` 零副作用先行）；README Runbook 索引下新增「补丁重放」示例代码块（命令与真实脚本逐字一致，已核对脚本名与预期输出行） | DOC-STYLE.md §4；README.md Runbook 索引示例块 |
+| ③ | **实现参考（可执行规范）** | 仿 Luxweft「参考 Pack = 最接近可执行的规范」：README 新增「实现参考」节——`.workspace/` 各 exec 报告与 `deploy-*/patches/*.patch` 即可执行规范，patch 可直接 `patch -p1` 于包目录应用（应用后与 deploy-*/ 副本逐字节一致）；重放脚本是其可执行封装。DOC-STYLE §10 同步约定「实现参考即可执行规范」 | README.md「实现参考」节；DOC-STYLE.md §10；文档分层 Tier 3 补 patches 行 |
+| ④ | **脚手架 examples/minimal-plugin/** | 新建 `examples/minimal-plugin/`（4 文件）：package.json（@local/dsh-minimal-plugin，peer 仅 cordis/dsh-tools/dsh-settings/schemastery）、lib/index.js（最小 host 插件：name/inject/apply + 1 个示例工具 minimal_hello + 可选 settings 段 + ctx.effect 清理）、lib/client.js（最小客户端骨架，头部注明**可选**——host-only 不需要；启用需 dsh.client 字段且 client 模块 id==包名）、README（拷贝 + cordis insert（bare 包名）+ 热载/重启二选一 + 验证 + 回滚 + 写插件纪律：id==包名、工具名前缀、高危走 approval fail-closed）。README「从这里开始」加「写第一个插件」路由（链接脚手架） | `examples/minimal-plugin/`（新建）；README.md 从这里开始路由表 + 仓库内容表 + 文档分层 Tier 1 |
+
+**自复核（追加部分）**：全量死链复查 0 缺失（含新增脚手架 README）；`node --check` lib/index.js、lib/client.js 通过，package.json JSON 合法；命令块与真实脚本名逐字核对（replay-lag-fix.sh / patch-official-015.sh / patch-official-slots.sh --apply / dsh-restart.sh --yes）；fail-closed 四组事实全部来自落盘报告原文 grep 核实；脚手架以 @local/dsh-workerspace 薄插件为最小范本（package.json peer 面、exports、installSettingsSection/defineTool 形状、cordis insert YAML 形式均对照其部署包）。范围与约束不变：仍只写仓库根下文档/脚手架与本报告，未碰 `~/.dsh`/全局树，未用 sandbox_permissions。**自裁决：通过。**

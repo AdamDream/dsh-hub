@@ -38,6 +38,7 @@
 | `dsh-wallpaper-local/` | 壁纸插件本地 fork（@local/dsh-wallpaper，静态图版） |
 | `session-board/` | 会话状态看板（@deepseek-ai/dsh-session-board） |
 | `pi-taste-analysis/` | taste 条目分析工具与 pi-taste 调研文档 |
+| `examples/minimal-plugin/` | 最小 @local 插件脚手架：拷贝 + cordis insert 即启动（写第一个插件的起点） |
 | `cc-switch-src/` | 第三方 vendored 项目（cc-switch，非自研）——已 gitignore 并移除，**不入库**（含公开 Gemini OAuth 凭据，见 git log 80ef4ec6） |
 | `.workspace/` | 审计/诊断/部署产物与证据（探针、Runbook、事故记录、重放脚本、deploy-*/ 部署包等） |
 | `FEATURE-MAP.md` | 功能地图：所有能力的状态与起点（插件/补丁/热载三类） |
@@ -53,11 +54,12 @@
 | **改插件/补丁代码后想生效** | 先判断冷热：插件 client bundle 替换 + 刷新浏览器即可；宿主 lib 代码 → `.workspace/deploy-lag/dsh-restart.sh` 重启 |
 | **改 settings 想立即生效** | 行为开关键（dsh-usage 5 键 / dsh-btw 4 键）值级热载；schema/代码类改动需重启一次 |
 | **查热载能力 / 免重启清单** | [功能地图](FEATURE-MAP.md) 热载节 · `.workspace/deploy-lag/README.md` §9（P0-a 实测固化） |
-| **写插件 / 改 UI** | 参考 `@local` 先例（`dsh-usage` 手写 bundle、`dsh-workerspace` host-only、`dsh-ssh-gui` 三类传输）与对应 exec 报告 |
+| **写第一个插件** | [examples/minimal-plugin/README.md](examples/minimal-plugin/README.md)（拷贝 + cordis insert 即启动） |
+| **写复杂插件 / 改 UI** | 参考 `@local` 先例（`dsh-usage` 手写 bundle、`dsh-workerspace` host-only、`dsh-ssh-gui` 三类传输）与对应 exec 报告 |
 | **回滚** | 各补丁脚本 `--rollback`（备份在 `.workspace/backup-*`、`.workspace/deploy-*/backup-*`、`~/.dsh/backups/`） |
 | **查某能力的证据与决策** | `.workspace/*-audit.md`（审计）、`.workspace/*-exec.md`（修订执行复核一体），两阶段闭环产物即证据 |
 
-## 两条能解释大部分行为的规则
+## 三条能解释大部分行为的规则
 
 1. **补丁归脚本，进程归 dsh-restart。**
    官方包补丁一律由重放脚本管理（`replay-lag-fix.sh` / `patch-official-015.sh` /
@@ -74,26 +76,54 @@
    （来源：`.workspace/p0a-patch-hmr-exec.md`、`.workspace/p0b-settings-switch-exec.md`、
    `.workspace/usage-tooltip-exec.md` §5 生效方式。）
 
+3. **应用失败即失败，绝不静默部分生效（fail-closed）。**
+   补丁脚本每个单元应用后必校验（node --check + 锚点 + sha256/字节比对），校验失败 →
+   FAIL 退出非零、绝不静默继续（`--rollback` 一键还原，备份在各自脚本备份目录）；
+   `cordis.patch.yml` 热载刷新失败 → 整次回滚、无残留（P0-a 实测）；
+   `ws_flash` 高危烧录每次调用都须确认模态，未授权模板一律拒绝（fail-closed）；
+   模型能力**未知声明 → 保守回退 vision-adam**，绝不把图直发给文本模型。
+   未知即拒绝、失败即大声失败，是本仓库所有自动化改动的共同底线。
+   （来源：`.workspace/lag-fix-exec.md` U-9、`.workspace/borrow-015-exec.md` §3、
+   `.workspace/p0a-patch-hmr-exec.md` §0/§1、`.workspace/workerspace-exec.md` §1-2、
+   `.workspace/vision-settings-capability-exec.md` §2。）
+
 ## 文档分层
 
 | 页面 | 回答什么 |
 | --- | --- |
 | **Tier 0 · 约定与范式** | |
-| [README（本页）](README.md) | 这是什么仓库、从哪里开始、两条规则、Runbook 去哪找 |
+| [README（本页）](README.md) | 这是什么仓库、从哪里开始、三条规则、Runbook 去哪找 |
 | [DOC-STYLE.md](DOC-STYLE.md) | 未来所有 dsh-hub 文档的写作约定（归属表/状态词汇/诚实边界/导航表） |
 | 方法论 | 两阶段闭环（审计 → 修订执行复核一体），见本机 `~/.dsh/AGENTS.md`（不入库） |
 | **Tier 1 · 部署与验证** | |
 | [总 Runbook](.workspace/master-runbook.md) | 已部署清单、六项启动修复、事故记录、验收矩阵、回滚 |
 | 各主题 Runbook | 见下方「部署与验证 Runbook 索引」 |
+| [examples/minimal-plugin/](examples/minimal-plugin/README.md) | 最小 @local 插件脚手架：拷贝 + cordis insert 即启动 |
 | **Tier 2 · 能力** | |
 | [功能地图 FEATURE-MAP.md](FEATURE-MAP.md) | 每个能力的状态与起点——先读这一页 |
 | **Tier 3 · 参考与证据** | |
 | `.workspace/*-audit.md` / `*-exec.md` | 每项能力的审计结论、交付单元、执行与自复核证据、问题清单 |
+| `.workspace/deploy-*/patches/*.patch` | 官方包补丁的可应用 unified diff（即「可执行规范」，见下节） |
 
 ## 部署与验证 Runbook 索引（全量以这些文件为准，本页不再内嵌步骤）
 
 > 部署前必读：① 先读对应 Runbook 再动手；② 审计各插件与补丁是否适配你的
 > DSH 版本；③ 切勿把 `~/.dsh` 下的 settings/credentials/会话数据带入任何环境。
+
+示例：全局树重装后的补丁重放（幂等，可重复执行；命令与真实重放脚本逐字一致）：
+
+```bash
+cd .workspace/deploy-lag
+bash replay-lag-fix.sh --dry-run         # 先预览：前置校验 + 全部步骤，零写入
+# 预期输出：前置校验通过 → 打印各单元备份/应用/校验计划（--dry-run 零写入）；已应用时 → 「全部单元均已应用，无操作。」
+bash patch-official-015.sh               # 0.1.5 借码 12+ 单元（同样先 --dry-run 可预览）
+bash replay-lag-fix.sh                   # 应用 lag-fix 5 补丁 + settings（备份 → 应用 → 校验 → PASS）
+# 预期输出（关键行）：「全部单元 PASS」；重跑第二次 → 「全部单元均已应用，无操作。」exit 0
+cd .workspace/deploy-slots && bash patch-official-slots.sh --apply   # 槽位 B
+cd .workspace/deploy-lag && ./dsh-restart.sh --yes                  # 重启使宿主 lib 生效 + 冒烟 200
+# 预期输出：SIGTERM → dispose → 重启 → ✅ http://127.0.0.1:3080/ (HTTP 200)
+# 回滚：各脚本 --rollback（备份在各自备份目录）
+```
 
 | 主题 | 入口 |
 | --- | --- |
@@ -111,6 +141,20 @@
 | btw P0 materialize（dsh-subagent 官方补丁） | [.workspace/deploy-p0/APPLY-P0.md](.workspace/deploy-p0/APPLY-P0.md) |
 | 重启辅助（dsh-restart，`--help` 内嵌 Runbook） | [.workspace/deploy-lag/dsh-restart.sh](.workspace/deploy-lag/dsh-restart.sh) |
 | 运行时热载能力（P0-a 实测固化） | [.workspace/deploy-lag/README.md](.workspace/deploy-lag/README.md) §9 |
+
+## 实现参考（可执行规范）
+
+仿 Luxweft「参考 Pack = 最接近可执行的规范」：本仓库的等价物是
+**`.workspace/` 各 exec 报告与 `.workspace/deploy-*/patches/*.patch`**。
+
+- **patch 文件即规范**：`deploy-015/patches/*.patch`、`deploy-lag/patches/*.patch`、
+  `deploy-slots/patches/*.patch` 都是 unified diff，**可直接 `patch -p1` 在包目录应用**
+  （如 `cd <包目录> && patch -p1 < .../xxx.patch`），应用后与 `deploy-*/` 完整副本逐字节一致
+  ——每个补丁的语义、锚点与回滚方式都以它为准。
+- **exec 报告即决策记录**：每项能力的实现理由、交付单元、验证证据与问题清单在对应
+  `*-exec.md` / `*-audit.md`；文档说「已实现·实测」时，证据链在这些文件里可复判。
+- 重放脚本（`replay-lag-fix.sh` / `patch-official-015.sh` / `patch-official-slots.sh`）是这些
+  规范的可执行封装：备份 → 应用 → 校验 → 回滚 → 幂等，全部内置。
 
 ## 运行时依赖（不在本仓库，需本机具备）
 
