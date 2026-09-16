@@ -41,6 +41,44 @@
 
 ## 部署前必读
 
-1. 先读 `.workspace/` 下对应 Runbook（如 `btw-v2-runbook.md`、`combined-restore-runbook.md`）
+1. 先读 `.workspace/` 下对应 Runbook（如 `btw-v2-runbook.md`、`combined-restore-runbook.md`、`master-runbook.md`）
 2. 审计各插件与补丁是否适配你的 DSH 版本
 3. 切勿把 `~/.dsh` 下的 settings/credentials/会话数据带入任何环境
+
+## 部署与验证 Runbook（本机基线）
+
+### 0. 前置事实
+- DSH 0.1.1-rc.2 全局安装于 `~/.npm-global/...`；`~/.dsh/profiles/*` 为符号链接农场（**绝不对 `~/.dsh/profiles/web` 执行 npm/pnpm install**——会重装未打补丁副本遮蔽全局补丁树，曾致全体补丁失效）。
+- 密钥全部在 `~/.dsh/.credentials.yaml`（`ADAM_API_KEY`/`OPENCODE_GO_API_KEY`/`DEEPSEEK_API_KEY`），**永不入库**。
+
+### 1. 补丁重放（全局树重装后一键恢复，幂等）
+```bash
+cd ~/dsh/.workspace/deploy-lag
+bash replay-lag-fix.sh            # 5 既有补丁：②b 非流式 / mux+FrameQueue+应答帧守卫 / 图片变换 / materialize / tok·s / x-opencode-session
+bash patch-official-015.sh        # 0.1.5 借鉴：lean 12 项（可先 --dry-run）
+cd ~/dsh/.workspace/deploy-slots && bash patch-official-slots.sh --apply   # 槽位 B：sidebar.workspaces.remoteHosts
+# 组A/组B/组C 补丁：见 .workspace/deploy-015/patches/*.patch（组B 已含 materialize 前置，顺序 dsh-subagent→fork→spawn→tool-subagent）
+```
+
+### 2. 重启与静态核验
+```bash
+npx @deepseek-ai/dsh web
+curl -s http://127.0.0.1:3080/ | grep -o '"id":"[^"]*"' | grep -E 'ssh-gui|pptmaster|workerspace|usage|taste|wallpaper|dsh-btw'
+curl -s -X POST http://127.0.0.1:3080/ssh-gui/nodes.list -H 'content-type: application/json' -d '{"type":"client-request","rpcId":"s1","method":"nodes.list","payload":{}}'
+```
+
+### 3. GUI 验收矩阵
+| 项 | 操作 | 期望 |
+|---|---|---|
+| btw | 打开冷子代理 btw / 粘贴图片 | 能打开（materialize）；模型声明 image 则直传、否则 vision-adam 转文本+R1-9 包装；转录见缩略图+分析 |
+| 识图设置 | 设置页「vision-adam 识图设置」 | model/baseURL/apiKeyEnv/maxTokens 可编辑写 settings.yaml vision-adam 段 |
+| 分布式控制 | 侧栏「分布式节点」/ header「节点」 | SSH/串口/TCP 串口三类节点 CRUD、SSH 打开为工作区、串口控制台、nodes.json 0600 |
+| usage | 三图悬停 | 自绘 tooltip（日期+token） |
+| ppt-master | 新会话 | `available_skills` 含 ppt-master，可生成/编辑 PPTX |
+| workerspace | 新会话 | `sw_*`（远程）+ `ws_serial_*`/`ws_flash`（本地 USB） |
+| 回归 | 模型选择器/主会话打字机 | adam/opencode 可选；打字机正常 |
+
+### 4. 回滚
+- 官方补丁：`replay-lag-fix.sh --rollback` / `patch-official-015.sh --rollback` / `patch-official-slots.sh --rollback`（备份均在各自脚本备份目录）
+- 插件：`~/.dsh/backups/` 与 `.workspace/backup-*`、`~/.dsh/profiles/.backup-p0-*`
+- web2 已归档：`~/.dsh/profiles-archive/web2-20260915-105429/`（勿直接启用）
