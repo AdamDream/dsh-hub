@@ -1,0 +1,59 @@
+--- a/lib/index.js	2026-09-16 14:08:00.578409311 +0800
++++ b/lib/index.js	2026-09-16 14:08:00.579842636 +0800
+@@ -1,5 +1,6 @@
+ import { isDeepStrictEqual } from "node:util";
+ import { createUserMessage } from "@deepseek-ai/dsh-llm";
++import { carrierKeyOf } from "@deepseek-ai/dsh-scope";
+ //#region lib/types/prompt.js
+ /** Model-visible continuation prompt for one same-session goal round. */
+ /**
+@@ -63,6 +64,7 @@
+ 			attempt: void 0,
+ 			competingQueued: false,
+ 			needsCheckpoint: false,
++			pendingSubagents: 0,
+ 			requested: false,
+ 			run: void 0,
+ 			stopping: false
+@@ -77,7 +79,7 @@
+ 	}
+ 	/** Whether this exact lifecycle is quiescent with no competing prompt. */
+ 	function readyToDrive(state) {
+-		return ctx.fiber.state === 2 && !state.stopping && ctx.agents.get(state.agent.id) === state.agent && state.agent.status === "idle" && !state.competingQueued;
++		return ctx.fiber.state === 2 && !state.stopping && ctx.agents.get(state.agent.id) === state.agent && state.agent.status === "idle" && state.pendingSubagents === 0 && !state.competingQueued;
+ 	}
+ 	/** Recheck every condition that an awaited checkpoint may have changed. */
+ 	function readyAfterCheckpoint(state) {
+@@ -253,6 +255,32 @@
+ 			const attempt = stateFor(agent).attempt;
+ 			if (attempt !== void 0 && sameQueued(message.content, message.source, attempt)) attempt.cancelled = true;
+ 		});
++		/**
++		* Keep one pending-subagent count per parent agent so goal rounds are not
++		* injected while the parent waits for a background subagent to settle.
++		* The lifecycle pair is scope-filtered: the listener's `this` is the
++		* delegating-parent carrier, so `carrierKeyOf(this)` resolves the exact
++		* Agent that spawned the run (the event payload itself has no parent).
++		* On the closing edge, reuse the competing-queue gate as the narrow-window
++		* fallback: `subagent/end` fires at settle while the settlement notice is
++		* still in flight to the parent inbox, so without the gate a drive() could
++		* slip a goal round in ahead of the notice; the gate clears on the agent's
++		* next idle exactly like any other competing message.
++		*/
++		ctx.on("subagent/start", function (info) {
++			const parent = carrierKeyOf(this);
++			const state = parent === void 0 ? void 0 : states.get(parent);
++			if (state !== void 0) state.pendingSubagents += 1;
++		});
++		ctx.on("subagent/end", function (info) {
++			const parent = carrierKeyOf(this);
++			const state = parent === void 0 ? void 0 : states.get(parent);
++			if (state === void 0) return;
++			if (state.pendingSubagents === 0) return;
++			state.pendingSubagents -= 1;
++			if (state.pendingSubagents === 0) state.competingQueued = true;
++			requestDrive(state);
++		});
+ 		ctx.on("session/event", (session, event) => {
+ 			const agent = ctx.agents.get(session.id);
+ 			if (agent === void 0 || agent.session !== session) return;

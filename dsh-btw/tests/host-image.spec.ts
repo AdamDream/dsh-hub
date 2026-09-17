@@ -65,7 +65,7 @@ function childHandle() {
   const handle = {
     agent: {
       status: 'idle',
-      session: { events: [], header: {} },
+      session: { events: [], header: {}, requestHeader: () => undefined },
       inject, followup, cancel,
     },
     dispose,
@@ -87,7 +87,15 @@ function refFor(index: number, mediaType: string, name?: string) {
 function hostHarness(create: () => Promise<AgentHandle>) {
   const ctx = new Context()
   const parentId = nextParentId()
-  const agents = { get: vi.fn(), create: vi.fn(create), resume: vi.fn(async () => { throw new Error('no persisted session') }) }
+  let runSetup: ((childCtx: unknown) => void) | undefined
+  const agents = {
+    get: vi.fn(),
+    create: vi.fn((options: { setup?: (childCtx: unknown) => void }) => {
+      runSetup = options.setup
+      return create()
+    }),
+    resume: vi.fn(async () => { throw new Error('no persisted session') }),
+  }
   const parent = {
     status: 'idle',
     session: { events: seedEvents() },
@@ -104,15 +112,24 @@ function hostHarness(create: () => Promise<AgentHandle>) {
   }
   ctx.provide('attachments', attachments as never)
   const settings = {
-    get: vi.fn((namespace: string) => namespace === 'vision-adam'
-      ? { model: 'deepseek-v4.1-flash', maxTokens: 2000 }
-      : undefined),
+    get: vi.fn((namespace: string) => {
+      if (namespace === 'vision-adam') return { model: 'deepseek-v4.1-flash', maxTokens: 2000 }
+      // P0-b: `dsh-btw` settings section; per-case tests override this stub.
+      if (namespace === 'dsh-btw') return {}
+      return undefined
+    }),
   }
   ctx.provide('settings', settings as never)
   ctx.provide('subagents', {} as never)
   ctx.provide('sessionQuery', {} as never)
   const service = new SideChatService(ctx)
-  return { ctx, service, agents, parentId, attachments, settings }
+  return {
+    ctx, service, agents, parentId, attachments, settings,
+    // The real `agents.create` runs `setup(childCtx)` (composeChild) before the
+    // handle resolves; the harness replays it after the stub child handle exists
+    // so `entry.modelSelection` installs like production (能力检测依赖它取模型).
+    runSetup: (childCtx: unknown) => { runSetup?.(childCtx) },
+  }
 }
 
 /** Open a side chat whose child handle is already attached (Path A). */
@@ -122,6 +139,11 @@ async function opened(contexts: Context[]) {
   contexts.push(env.ctx)
   const created = childHandle()
   await env.service.start({ parentSessionId: env.parentId, chatToken: TOKEN })
+  env.runSetup({
+    agent: created.handle.agent,
+    on: vi.fn(),
+    tools: { guard: vi.fn(), register: vi.fn() },
+  })
   child.resolve(created.handle)
   await Promise.resolve()
   await Promise.resolve()
@@ -330,5 +352,111 @@ describe('btw Host image admission (U-D/E/F)', () => {
     const result = await env.service.readSideChatImage({ chatToken: TOKEN, attachmentId: 'att-0' })
     expect(result.ok).toBe(false)
     if (!result.ok) expect(result.error.code).toBe('not-open')
+  })
+
+  it('passes images directly when the side-chat model declares image input (能力检测直传)', async () => {
+    const { env, created } = await opened(contexts)
+    env.ctx.provide('llm', {
+      resolveModelInfo: vi.fn(async () => ({ inputModalities: ['text', 'image'] })),
+    } as never)
+
+    const result = await env.service.send({
+      chatToken: TOKEN, requestId: REQUEST, text: 'See this',
+      images: [{ type: 'image', mediaType: 'image/png', data: 'aGVsbG8=', name: 'clip.png' }],
+    })
+
+    expect(result.ok).toBe(true)
+    // No vision-adam round trip: no options read, no key resolution, no analysis.
+    expect(vision.resolveOptions).not.toHaveBeenCalled()
+    expect(vision.resolveApiKey).not.toHaveBeenCalled()
+    expect(vision.analyzeImageBytes).not.toHaveBeenCalled()
+    // The child message carries the raw image content block beside the text.
+    expect(created.followup).toHaveBeenCalledTimes(1)
+    const followupMessage = created.followup.mock.calls[0]![0] as {
+      content: readonly unknown[]
+    }
+    expect(followupMessage.content).toEqual([
+      { type: 'text', text: 'See this' },
+      { type: 'image', attachment: expect.objectContaining({ attachmentId: 'att-0', mediaType: 'image/png', name: 'clip.png' }) },
+    ])
+    // Transcript still records the admitted refs for the thumbnail surface.
+    const transcript = env.service.read({ chatToken: TOKEN })
+    expect(transcript.ok).toBe(true)
+    if (transcript.ok) {
+      expect(transcript.value.messages[0]).toMatchObject({
+        images: [{ attachmentId: 'att-0', mediaType: 'image/png' }],
+      })
+    }
+  })
+
+  it('keeps the vision-adam text path when the side-chat model declares text only', async () => {
+    const { env, created } = await opened(contexts)
+    env.ctx.provide('llm', {
+      resolveModelInfo: vi.fn(async () => ({ inputModalities: ['text'] })),
+    } as never)
+
+    const result = await env.service.send({
+      chatToken: TOKEN, requestId: REQUEST, text: 'Describe it',
+      images: [{ type: 'image', mediaType: 'image/png', data: 'aGVsbG8=' }],
+    })
+
+    expect(result.ok).toBe(true)
+    expect(vision.analyzeImageBytes).toHaveBeenCalledTimes(1)
+    expect(created.followup).toHaveBeenCalledTimes(1)
+    const followupMessage = created.followup.mock.calls[0]![0] as { content: readonly { type: 'text', text: string }[] }
+    expect(followupMessage.content[0]!.text).toContain('用户附带了 1 张图片')
+    expect(followupMessage.content.every(block => block.type === 'text')).toBe(true)
+  })
+
+  it('rejects the image send when dsh-btw.vision.autoTransform is false (P0-b switch)', async () => {
+    const { env, created } = await opened(contexts)
+    env.ctx.provide('llm', {
+      resolveModelInfo: vi.fn(async () => ({ inputModalities: ['text'] })),
+    } as never)
+    // P0-b: `dsh-btw.vision.autoTransform: false` — no auto vision-adam text
+    // transform; a text-only model refuses the image send with a readable error.
+    env.settings.get.mockImplementation((namespace: string) => {
+      if (namespace === 'vision-adam') return { model: 'deepseek-v4.1-flash', maxTokens: 2000 }
+      if (namespace === 'dsh-btw') return { vision: { autoTransform: false } }
+      return undefined
+    })
+
+    const result = await env.service.send({
+      chatToken: TOKEN, requestId: REQUEST, text: 'Describe it',
+      images: [{ type: 'image', mediaType: 'image/png', data: 'aGVsbG8=' }],
+    })
+
+    expect(result.ok).toBe(false)
+    if (!result.ok) {
+      expect(result.error.code).toBe('invalid-input')
+      expect(result.error.message).toContain('autoTransform')
+    }
+    // No vision-adam round trip, no child message, request stays retryable.
+    expect(vision.resolveOptions).not.toHaveBeenCalled()
+    expect(vision.resolveApiKey).not.toHaveBeenCalled()
+    expect(vision.analyzeImageBytes).not.toHaveBeenCalled()
+    expect(created.followup).not.toHaveBeenCalled()
+    const transcript = env.service.read({ chatToken: TOKEN })
+    expect(transcript.ok).toBe(true)
+    if (transcript.ok) expect(transcript.value.messages).toHaveLength(0)
+  })
+
+  it('falls back to vision-adam when the declaration cannot be resolved (保守回退)', async () => {
+    const { env, created } = await opened(contexts)
+    env.ctx.provide('llm', {
+      resolveModelInfo: vi.fn(async () => { throw new Error('no such model in registry') }),
+    } as never)
+
+    const result = await env.service.send({
+      chatToken: TOKEN, requestId: REQUEST, text: 'Fallback',
+      images: [{ type: 'image', mediaType: 'image/png', data: 'aGVsbG8=' }],
+    })
+
+    expect(result.ok).toBe(true)
+    expect(vision.analyzeImageBytes).toHaveBeenCalledTimes(1)
+    expect(created.followup).toHaveBeenCalledTimes(1)
+    const followupMessage = created.followup.mock.calls[0]![0] as { content: readonly { type: 'text', text: string }[] }
+    expect(followupMessage.content[0]!.text).toContain('用户附带了 1 张图片')
+    expect(followupMessage.content.every(block => block.type === 'text')).toBe(true)
   })
 })

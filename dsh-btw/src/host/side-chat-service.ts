@@ -21,7 +21,7 @@ import {
 import type {} from '@deepseek-ai/dsh-workspace'
 
 import { BtwRegistry, type BtwIndexExtras } from './btw-registry.ts'
-import { analyzeImages, wrapImageDescriptions } from './vision.ts'
+import { analyzeImages, modelAcceptsImage, readBtwSettings, wrapImageDescriptions } from './vision.ts'
 import type {
   AnswerSideChatRequest,
   AnswerSideChatResult,
@@ -1010,6 +1010,7 @@ export class SideChatService extends TypertRemoteService {
 
     let effectiveText = text
     let imageRefs: readonly ImageAttachmentRef[] = []
+    let directContent: ContentBlock[] | undefined
     if (images.length > 0) {
       // U-D: admit the pasted images through the attachments store first
       // (canonical base64 + batch limits). Admission failure rejects the
@@ -1027,22 +1028,48 @@ export class SideChatService extends TypertRemoteService {
       } catch (error: unknown) {
         return { ok: false, error: { code: 'invalid-input', message: errorText(error) } }
       }
-      // U-D/U-I: synchronously turn every image into text (vision-adam) and
-      // wrap it with the R1-9 template. A failed analysis reports an error and
-      // never sends; the requestId is left unrecorded so retrying re-runs it.
-      try {
-        const inputs = await Promise.all(imageRefs.map(async ref => {
-          const stored = await attachments.readImage(ref, entry.abort.signal)
-          return { mediaType: ref.mediaType, data: Buffer.from(stored.data).toString('base64') }
-        }))
-        const descriptions = await analyzeImages(this.ctx, inputs, entry.abort.signal)
-        effectiveText = wrapImageDescriptions(descriptions, text)
-      } catch (error: unknown) {
-        return { ok: false, error: { code: 'internal', message: `vision-adam 分析失败: ${errorText(error)}` } }
+      // 能力检测：侧聊当前模型声明支持 image → 原图直传（消息内容携带
+      // `image` 内容块，附件轨照常记录，不做 vision-adam 分析、不做 R1-9 包装）；
+      // 否则（文本模型或声明不可解析 → 保守）走既有 vision-adam 转文本路径。
+      const route = entry.modelSelection?.current
+      if (route !== undefined && await modelAcceptsImage(this.ctx, route)) {
+        directContent = [
+          ...(text.length > 0 ? [{ type: 'text' as const, text }] : []),
+          ...imageRefs.map(ref => ({ type: 'image' as const, attachment: ref })),
+        ]
+      } else {
+        // U-D/U-I: synchronously turn every image into text (vision-adam) and
+        // wrap it with the R1-9 template. A failed analysis reports an error and
+        // never sends; the requestId is left unrecorded so retrying re-runs it.
+        // P0-b: `dsh-btw.vision.autoTransform` (default true) — false = do not
+        // auto-transform; a text-only model rejects the image send instead.
+        const btwVision = readBtwSettings(this.ctx).vision
+        if (btwVision?.autoTransform === false) {
+          return {
+            ok: false,
+            error: {
+              code: 'invalid-input',
+              message: '当前模型不支持图片，且 dsh-btw.vision.autoTransform 已关闭（不自动转文本）。请开启该开关或改用支持图片的模型。',
+            },
+          }
+        }
+        try {
+          const inputs = await Promise.all(imageRefs.map(async ref => {
+            const stored = await attachments.readImage(ref, entry.abort.signal)
+            return { mediaType: ref.mediaType, data: Buffer.from(stored.data).toString('base64') }
+          }))
+          const descriptions = await analyzeImages(this.ctx, inputs, entry.abort.signal)
+          effectiveText = wrapImageDescriptions(descriptions, text)
+        } catch (error: unknown) {
+          return { ok: false, error: { code: 'internal', message: `vision-adam 分析失败: ${errorText(error)}` } }
+        }
       }
     }
 
-    const message = createUserMessage({ content: [{ type: 'text', text: effectiveText }], source: { kind: 'user' } })
+    const message = createUserMessage({
+      content: directContent ?? [{ type: 'text', text: effectiveText }],
+      source: { kind: 'user' },
+    })
     entry.sentRequests.set(request.requestId, String(message.id))
     if (imageRefs.length > 0) entry.imageRefsByMessageId.set(String(message.id), imageRefs)
     const pending: PendingSideChatMessage = {

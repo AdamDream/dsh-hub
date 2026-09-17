@@ -68,6 +68,40 @@ data/                 # 运行时可写目录（回退链末位，不入库）
 > `ctx.connection.register(ctx, '/usage', handle)` 形态，宿主 `inject=['connection','webServer']`；
 > 通道未注册/不可用时卡片显示「宿主未注册 /usage RPC 通道」，不会白屏）。
 
+## 行为开关（P0-b，settings 热载试点）
+
+`dsh-usage` 命名空间携带**纯行为开关**，改 `~/.dsh/settings.yaml` 的
+`dsh-usage:` 段即**值级热载生效，无需重启**（dsh-settings-file chokidar watch →
+命名空间 re-resolve → deep-equal commit → 客户端 settingsScope 快照更新 →
+卡片重渲染）。无该段/无键 = 默认值 = 与旧版行为完全一致。
+
+| 键 | 默认 | 行为 |
+|---|---|---|
+| `dsh-usage.ui.tooltip` | `true` | 三图自绘跟随鼠标 tooltip（面积/柱状/热力图）。`false` = 无自绘浮层（热力图保留原生 `<title>` 兜底） |
+| `dsh-usage.heatmap.peakRing` | `true` | 峰值日单元格 2px 环（`--du-heat-peak-stroke`）。`false` = 峰值格不画环 |
+| `dsh-usage.heatmap.monthLabels` | `true` | 热力图月份标签行（覆盖列跨度居中）。`false` = 不渲染月份标签 |
+| `dsh-usage.heatmap.legendNote` | `true` | 热力图图例说明行（"单位 tokens/日 · 灰格 = 无数据 · 峰值…"）。`false` = 隐藏 |
+| `dsh-usage.heatmap.levels` | `6` | 热力图强度分桶数（1..6；默认 6 = FILLS 满档）。调小 = 更少的强度档位 |
+
+示例：
+
+```yaml
+dsh-usage:
+  ui:
+    tooltip: false
+  heatmap:
+    peakRing: false
+    monthLabels: false
+    legendNote: false
+    levels: 4
+```
+
+客户端读取走 `ctx.settingsScope.bind({ namespace: 'dsh-usage' })`（客户端
+settingsScope 服务，dsh-client-ui-settings 提供；package.json
+`dsh.client.inject` 已声明）；settingsScope 不可用时回退默认值（= 现状）。
+宿主侧 schema 在 `lib/index.js`（`Config`），只增不改、默认值兼容旧文档。
+
+
 ## 统计口径（同上，卡片内展示）
 
 请求数 / 输入(未缓存) / 输出 / 缓存读 / 缓存写 / 命中率，四桶可切换趋势图。

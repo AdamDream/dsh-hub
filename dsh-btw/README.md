@@ -168,6 +168,42 @@ The child is tagged with `origin: subagent` but intentionally has no durable `pa
 
 The development dependency graph uses the coherent rc.8 package set while public peer ranges include rc.7. The plugin is also installed and boot-tested against the local DSH 0.1.0-rc.7 checkout. Published rc.7 packages currently resolve several caret peers to rc.8, so pinning every standalone development dependency to rc.7 creates duplicate type universes and is not a faithful application install.
 
+## Settings behavior switches (P0-b, hot-reload)
+
+The `dsh-btw` settings namespace carries **pure behavior switches**. Editing
+`~/.dsh/settings.yaml` `dsh-btw:` section hot-applies **without a restart**:
+dsh-settings-file chokidar watches the file → the namespace re-resolves → a
+deep-equal change commits (`settings/updated`) → the host re-reads on the next
+call while the client surface re-renders through its settingsScope. No section
+/ no key = defaults = pre-P0-b behavior (old config compatible).
+
+| Key | Default | Behavior |
+| --- | --- | --- |
+| `dsh-btw.ui.banner` | `true` | Side-chat running banner. `false` = hidden while running |
+| `dsh-btw.ui.modelSelect` | `true` | Header model selector. `false` = hidden (model keeps its current value) |
+| `dsh-btw.ui.imageBadge` | `true` | Multi-image sequence badge on thumbnails. `false` = hidden |
+| `dsh-btw.vision.autoTransform` | `true` | Image auto-transform to text (vision-adam) when the side-chat model does not declare image input. `false` = do not auto-transform; a text-only model rejects the image send with a readable error |
+
+Example:
+
+```yaml
+dsh-btw:
+  ui:
+    banner: false
+    modelSelect: false
+    imageBadge: false
+  vision:
+    autoTransform: false
+```
+
+Client reads go through `ctx.settingsScope.bind({ namespace: 'dsh-btw' })`
+(`@deepseek-ai/dsh-client-ui-settings` provides the service; package.json
+`dsh.client.inject` declares it); when the scope is unavailable the surface
+keeps the defaults. Host reads go through the `settings` service
+(`src/host/vision.ts` `readBtwSettings`). The schema lives in `src/index.ts`
+(`BTW_SETTINGS_SCHEMA`) and grows only-additively with defaulted values.
+
+
 ## Development
 
 ```bash

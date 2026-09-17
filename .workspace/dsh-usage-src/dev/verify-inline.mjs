@@ -153,8 +153,21 @@ const total = (label, a, b) => {
 	return true;
 };
 
-// heatmapGrid battery (unchanged from the heatmap redesign)
-const optsList = [{}, { gap: 4 }, { startWeekday: 1 }, { gap: 2, startWeekday: 6 }];
+// heatmapGrid battery (unchanged from the heatmap redesign; P0-b adds
+// `levels` variants to prove the configurable bucket count stays in sync).
+const optsList = [
+	{},
+	{ gap: 4 },
+	{ startWeekday: 1 },
+	{ gap: 2, startWeekday: 6 },
+	{ levels: 1 },
+	{ levels: 3 },
+	{ levels: 6 },
+	{ levels: 0 },
+	{ levels: 99 },
+	{ levels: 2.5 },
+	{ gap: 3, startWeekday: 3, levels: 4 },
+];
 let heatCases = 0;
 datasets.forEach((days, i) => {
 	optsList.forEach((opts, j) => {
@@ -209,10 +222,16 @@ const geomTokens = [
 	"day: s.day",
 	"day: v.day",
 	"2026-09-14 tooltip",
+	// P0-b: configurable intensity bucket count (both copies must read opts.levels)
+	"opts.levels",
+	"levels >= 1",
+	"Math.min(6, opts.levels)",
 ];
 const renderTokens = [
 	"无数据", "总用量", "峰值", "tokens/日", "灰格", "--du-heat-peak-stroke", "--du-heat-month-fill",
 	"du_tip", "du_tipDay", "du_tipValue", "du_tipUnit", "du_tipMuted", "du_tipL", "du_tipR", "du_tipD", "--du-tip-ax", "--du-tip-ay", "tipTokens", "onMouseMove", "tipAtEvent", "hitAreaPoints", "hitBarRects", "hitGridCells",
+	// P0-b: settings switches live in the render layer (client.js only)
+	"settingsScope", "peakRingEnabled", "monthLabelsEnabled", "legendNoteEnabled", "tooltipEnabled", "usageSettingsOf", "heatmap.levels",
 ];
 let tokenFail = 0;
 for (const tok of geomTokens) {

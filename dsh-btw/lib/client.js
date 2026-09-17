@@ -1126,6 +1126,60 @@ window.__ModuleLoader__.load({
 			});
 		}
 		//#endregion
+		//#region src/client/btw-settings.ts
+		const BTW_SETTINGS_DEFAULTS = Object.freeze({
+			ui: Object.freeze({
+				banner: true,
+				modelSelect: true,
+				imageBadge: true
+			}),
+			vision: Object.freeze({ autoTransform: true })
+		});
+		/** Narrow one raw settings section (wire value) to the surface's reads. */
+		function decodeBtwSettings(section) {
+			const value = section !== null && typeof section === "object" ? section : {};
+			const ui = value.ui !== null && typeof value.ui === "object" ? value.ui : {};
+			const vision = value.vision !== null && typeof value.vision === "object" ? value.vision : {};
+			return {
+				ui: {
+					banner: ui.banner !== false,
+					modelSelect: ui.modelSelect !== false,
+					imageBadge: ui.imageBadge !== false
+				},
+				vision: { autoTransform: vision.autoTransform !== false }
+			};
+		}
+		/**
+		* Bind the `dsh-btw` namespace scope on the calling fiber, degrading to
+		* `undefined` when the settingsScope service or the namespace is unavailable
+		* (the surface then keeps BTW_SETTINGS_DEFAULTS = current behavior).
+		*/
+		function bindBtwSettings(binder) {
+			if (binder === void 0 || typeof binder.bind !== "function") return void 0;
+			try {
+				return binder.bind({
+					namespace: "dsh-btw",
+					decode: decodeBtwSettings
+				});
+			} catch {
+				return;
+			}
+		}
+		/**
+		* Reactive settings snapshot for the surface (P0-b). Subscribes to the bound
+		* scope so settings.yaml edits re-render the surface without a restart; a
+		* missing scope degrades to BTW_SETTINGS_DEFAULTS (现状).
+		*
+		* getSnapshot returns the scope's OWN decoded `value` (a stable reference
+		* until the next change — required by useSyncExternalStore) or the frozen
+		* DEFAULTS; it never synthesizes a fresh object per call.
+		*/
+		function useBtwSettings(scope) {
+			const subscribe = (0, react.useCallback)((listener) => scope === void 0 ? () => {} : scope.subscribe(listener), [scope]);
+			const getSnapshot = (0, react.useCallback)(() => scope === void 0 ? BTW_SETTINGS_DEFAULTS : scope.getSnapshot().value ?? BTW_SETTINGS_DEFAULTS, [scope]);
+			return (0, react.useSyncExternalStore)(subscribe, getSnapshot, getSnapshot);
+		}
+		//#endregion
 		//#region src/client/SideChatSurface.tsx
 		function useSessionSnapshot(face) {
 			const subscribe = (0, react.useCallback)((listener) => face?.subscribe(listener) ?? (() => {}), [face]);
@@ -1355,7 +1409,7 @@ window.__ModuleLoader__.load({
 				})]
 			}), document.body);
 		}
-		function SideChatSurface({ controller, parentSessionId, viewStore, t, surfaceMode, onMinimize, onEnd }) {
+		function SideChatSurface({ controller, parentSessionId, viewStore, t, surfaceMode, settingsScope, onMinimize, onEnd }) {
 			const state = (0, react.useSyncExternalStore)(controller.subscribe, controller.getSnapshot, controller.getSnapshot);
 			const parent = controller.binding(parentSessionId)?.session;
 			const parentSnapshot = useSessionSnapshot(parent);
@@ -1363,6 +1417,7 @@ window.__ModuleLoader__.load({
 			const subscribeView = (0, react.useCallback)((listener) => viewStore.subscribe(listener), [viewStore]);
 			const getView = (0, react.useCallback)(() => viewStore.get(parentKey), [parentKey, viewStore]);
 			const view = (0, react.useSyncExternalStore)(subscribeView, getView, getView);
+			const settings = useBtwSettings(settingsScope);
 			const draft = view.draft;
 			const sendError = view.sendError;
 			const attachments = view.attachments;
@@ -1566,7 +1621,7 @@ window.__ModuleLoader__.load({
 						}), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 							className: side_chat_module_css_default.headerActions,
 							children: [
-								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("select", {
+								settings.ui?.modelSelect !== false && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("select", {
 									className: side_chat_module_css_default.modelSelect,
 									value: state.model ?? "deepseek-v4-flash",
 									disabled: !interactive,
@@ -1636,7 +1691,7 @@ window.__ModuleLoader__.load({
 						ref: scrollRef,
 						"aria-live": "polite",
 						children: [
-							running && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+							running && settings.ui?.banner !== false && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 								className: side_chat_module_css_default.runningBanner,
 								role: "status",
 								"aria-live": "polite",
@@ -1701,7 +1756,7 @@ window.__ModuleLoader__.load({
 														lightboxOpenerRef.current = event.currentTarget;
 														setLightbox(ref);
 													},
-													children: [images.length > 1 && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+													children: [images.length > 1 && settings.ui?.imageBadge !== false && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 														className: side_chat_module_css_default.messageImageBadge,
 														"aria-hidden": "true",
 														children: index + 1
@@ -1861,7 +1916,7 @@ window.__ModuleLoader__.load({
 			const service = value;
 			return typeof service.registerTab === "function" && typeof service.isTabEnabled === "function" && typeof service.openTab === "function" && typeof service.closeTab === "function" && Array.isArray(service.features) && service.features.includes("targetedOpen");
 		}
-		function BetterSidebarSideChat({ hostContext, controller, viewStore, presentation, scope, visible }) {
+		function BetterSidebarSideChat({ hostContext, controller, viewStore, presentation, settingsScope, scope, visible }) {
 			const parentSessionId = scope.sessionId;
 			const subscribeLocale = (0, react.useCallback)((listener) => hostContext.locale.subscribe(listener), [hostContext]);
 			const getLocaleSnapshot = (0, react.useCallback)(() => hostContext.locale.getSnapshot(), [hostContext]);
@@ -1890,6 +1945,7 @@ window.__ModuleLoader__.load({
 				viewStore,
 				t,
 				surfaceMode: "better-sidebar",
+				settingsScope,
 				onMinimize: minimize,
 				onEnd: end
 			});
@@ -1898,11 +1954,13 @@ window.__ModuleLoader__.load({
 			ctx;
 			controller;
 			viewStore;
+			settingsScope;
 			attachment;
-			constructor(ctx, controller, viewStore) {
+			constructor(ctx, controller, viewStore, settingsScope) {
 				this.ctx = ctx;
 				this.controller = controller;
 				this.viewStore = viewStore;
+				this.settingsScope = settingsScope;
 			}
 			subscribe(listener) {
 				return this.viewStore.subscribe(listener);
@@ -1982,7 +2040,8 @@ window.__ModuleLoader__.load({
 						hostContext: this.ctx,
 						controller: this.controller,
 						viewStore: this.viewStore,
-						presentation: this
+						presentation: this,
+						settingsScope: this.settingsScope
 					})
 				};
 				if (service.features.includes("badge")) descriptor.badge = () => {
@@ -2744,7 +2803,7 @@ window.__ModuleLoader__.load({
 		}
 		//#endregion
 		//#region src/client/SideChatDrawer.tsx
-		function SideChatDrawer({ controller, viewStore, parentSessionId, t, onMinimize, onEnd }) {
+		function SideChatDrawer({ controller, viewStore, parentSessionId, settingsScope, t, onMinimize, onEnd }) {
 			const state = (0, react.useSyncExternalStore)(controller.subscribe, controller.getSnapshot, controller.getSnapshot);
 			const activeParentSessionId = state.parentSessionId ?? parentSessionId;
 			const parentKey = String(activeParentSessionId);
@@ -2802,6 +2861,7 @@ window.__ModuleLoader__.load({
 							viewStore,
 							t,
 							surfaceMode: "drawer",
+							settingsScope,
 							onMinimize,
 							onEnd
 						})]
@@ -8517,7 +8577,8 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 			"slots",
 			"sessions",
 			"remote",
-			"locale"
+			"locale",
+			"settingsScope"
 		];
 		async function apply(ctx) {
 			const disposeRemote = await ctx.remote.$mount(TYPERT_REMOTE);
@@ -8529,7 +8590,8 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 		function installSideChat(ctx) {
 			const controller = new SideChatController(ctx, ctx.remote.sideChat);
 			const viewStore = new SideChatViewStore();
-			const presentation = new SideChatPresentation(ctx, controller, viewStore);
+			const settingsScope = bindBtwSettings(ctx.settingsScope);
+			const presentation = new SideChatPresentation(ctx, controller, viewStore, settingsScope);
 			ctx.effect(() => ctx.locale.register("btw", {
 				zh,
 				en
@@ -8563,6 +8625,7 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 						controller,
 						viewStore,
 						presentation,
+						settingsScope,
 						parentSessionId,
 						onMinimize: () => {
 							const current = activeParent();

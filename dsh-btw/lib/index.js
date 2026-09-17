@@ -1,4 +1,6 @@
 import { y as sideChatImageMediaTypeSchema } from "./remote-DxLkxvnp.js";
+import z from "@deepseek-ai/schemastery";
+import { settingsNamespace } from "@deepseek-ai/dsh-settings";
 import { randomUUID } from "node:crypto";
 import { readFileSync, realpathSync } from "node:fs";
 import { homedir } from "node:os";
@@ -161,6 +163,48 @@ var BtwRegistry = class {
 };
 //#endregion
 //#region src/host/vision.ts
+function routeOf(value) {
+	if (value === null || typeof value !== "object") return void 0;
+	const record = value;
+	if (typeof record.provider === "string" && record.provider.length > 0 && typeof record.model === "string" && record.model.length > 0) return {
+		provider: record.provider,
+		model: record.model
+	};
+}
+/**
+* Resolve the route one agent runs under, mirroring the host's `selectionFor`
+* tiers on the public surface only: the session's logged request header first
+* (`agent.session.requestHeader()?.config`, the dsh-session public API — the
+* same value the host's log tier reads), then the `agentDefaultModel`
+* selection service (the host's default tier), then undefined. A route the
+* host picked in-memory but has not logged yet is not visible here; the host
+* gate still validates the final send against its own authoritative
+* selection, so this can only ever be more conservative, never unsafe.
+*/
+function resolveAgentRoute(ctx, agent) {
+	const logged = (agent?.session)?.requestHeader?.();
+	const route = routeOf(logged?.config);
+	if (route !== void 0) return route;
+	const defaults = ctx.get?.("agentDefaultModel");
+	return routeOf(defaults?.currentSelection?.());
+}
+/**
+* Whether one route DECLARES image input. True only when the LLM registry's
+* `resolveModelInfo` returns `inputModalities` containing 'image'. Every
+* other outcome — route unresolvable, registry absent, lookup failure, a
+* missing or image-less modality list — returns false, so callers keep the
+* conservative vision-adam text path (text is accepted by any model).
+*/
+async function modelAcceptsImage(ctx, route, signal) {
+	const llm = ctx.get?.("llm");
+	if (llm?.resolveModelInfo === void 0) return false;
+	try {
+		const info = await llm.resolveModelInfo(route.provider, route.model, signal);
+		return Array.isArray(info?.inputModalities) && info.inputModalities.includes("image");
+	} catch {
+		return false;
+	}
+}
 /** Defaults used when no `vision-adam` settings section is available (R1-4/R1-5). */
 const VISION_DEFAULTS = Object.freeze({
 	model: "deepseek-v4.1-flash",
@@ -198,6 +242,19 @@ function readVisionConfig(ctx) {
 		if (section !== null && typeof section === "object") return section;
 	} catch {}
 	return VISION_DEFAULTS;
+}
+/**
+* P0-b: read the `dsh-btw` settings section (registered in src/index.ts).
+* Returns a partial section; every surprise (service absent, namespace
+* unregistered, malformed value) degrades to an empty object so callers fall
+* back to their own defaults (= current behavior).
+*/
+function readBtwSettings(ctx) {
+	try {
+		const section = ctx.get("settings")?.get?.("dsh-btw");
+		if (section !== null && typeof section === "object") return section;
+	} catch {}
+	return {};
 }
 /**
 * Analyze every image synchronously (before the message is admitted) and
@@ -1109,6 +1166,7 @@ var SideChatService = class extends TypertRemoteService {
 		};
 		let effectiveText = text;
 		let imageRefs = [];
+		let directContent;
 		if (images.length > 0) {
 			const attachments = this.ctx.get("attachments");
 			if (attachments === void 0) return {
@@ -1134,27 +1192,44 @@ var SideChatService = class extends TypertRemoteService {
 					}
 				};
 			}
-			try {
-				const inputs = await Promise.all(imageRefs.map(async (ref) => {
-					const stored = await attachments.readImage(ref, entry.abort.signal);
-					return {
-						mediaType: ref.mediaType,
-						data: Buffer.from(stored.data).toString("base64")
-					};
-				}));
-				effectiveText = wrapImageDescriptions(await analyzeImages(this.ctx, inputs, entry.abort.signal), text);
-			} catch (error) {
-				return {
+			const route = entry.modelSelection?.current;
+			if (route !== void 0 && await modelAcceptsImage(this.ctx, route)) directContent = [...text.length > 0 ? [{
+				type: "text",
+				text
+			}] : [], ...imageRefs.map((ref) => ({
+				type: "image",
+				attachment: ref
+			}))];
+			else {
+				if (readBtwSettings(this.ctx).vision?.autoTransform === false) return {
 					ok: false,
 					error: {
-						code: "internal",
-						message: `vision-adam 分析失败: ${errorText(error)}`
+						code: "invalid-input",
+						message: "当前模型不支持图片，且 dsh-btw.vision.autoTransform 已关闭（不自动转文本）。请开启该开关或改用支持图片的模型。"
 					}
 				};
+				try {
+					const inputs = await Promise.all(imageRefs.map(async (ref) => {
+						const stored = await attachments.readImage(ref, entry.abort.signal);
+						return {
+							mediaType: ref.mediaType,
+							data: Buffer.from(stored.data).toString("base64")
+						};
+					}));
+					effectiveText = wrapImageDescriptions(await analyzeImages(this.ctx, inputs, entry.abort.signal), text);
+				} catch (error) {
+					return {
+						ok: false,
+						error: {
+							code: "internal",
+							message: `vision-adam 分析失败: ${errorText(error)}`
+						}
+					};
+				}
 			}
 		}
 		const message = createUserMessage({
-			content: [{
+			content: directContent ?? [{
 				type: "text",
 				text: effectiveText
 			}],
@@ -1497,6 +1572,17 @@ var SideChatService = class extends TypertRemoteService {
 };
 //#endregion
 //#region src/host/prompt-transform.ts
+/**
+* Default decision: resolve the agent's route (logged request header, then
+* the agent-default selection) and ask the LLM registry for its DECLARED
+* input modalities. Unknown/absent declarations are false — the caller then
+* keeps the vision-adam text path.
+*/
+function defaultPromptImageDecision(ctx, agent) {
+	const route = resolveAgentRoute(ctx, agent);
+	if (route === void 0) return Promise.resolve(false);
+	return modelAcceptsImage(ctx, route);
+}
 /** Keep only wire parts whose media type the attachment/vision chain accepts. */
 function toVisionInputs(parts) {
 	const inputs = [];
@@ -1512,10 +1598,11 @@ function toVisionInputs(parts) {
 	return inputs;
 }
 /**
-* Build the waterfall handler. The analyzer is injectable for tests; the
-* default runs the vision-adam fan-out from `vision.ts`.
+* Build the waterfall handler. The analyzer and the direct-pass decision are
+* injectable for tests; the defaults run the vision-adam fan-out from
+* `vision.ts` and the declared-modality check.
 */
-function createPromptImageTransformHandler(ctx, analyze = analyzeImages) {
+function createPromptImageTransformHandler(ctx, analyze = analyzeImages, passDirect = defaultPromptImageDecision) {
 	return async (payload, next) => {
 		const resolved = await next();
 		const effective = resolved === void 0 ? payload.content : resolved;
@@ -1523,6 +1610,7 @@ function createPromptImageTransformHandler(ctx, analyze = analyzeImages) {
 		if (imageParts.length === 0) return void 0;
 		const inputs = toVisionInputs(imageParts);
 		if (inputs.length === 0) return void 0;
+		if (await passDirect(ctx, payload.agent)) return void 0;
 		const originalText = effective.filter((part) => part.type === "text").map((part) => typeof part.text === "string" ? part.text : "").join("\n");
 		return [{
 			type: "text",
@@ -1537,9 +1625,40 @@ function registerPromptImageTransform(ctx) {
 //#endregion
 //#region src/index.ts
 const name = "dsh-btw";
+/** Settings namespace brand for the `dsh-btw` section. */
+const BTW_SETTINGS_NS = settingsNamespace("dsh-btw");
+/**
+* `dsh-btw` settings namespace (P0-b settings 行为开关试点). Values hot-reload:
+* editing `~/.dsh/settings.yaml` `dsh-btw:` section republishes and the host
+* re-reads on the next call while the client re-renders via settingsScope —
+* no restart. Keys are pure behavior switches; defaults equal the pre-P0-b
+* behavior (absent section = defaults = 现状). Schema grows only-additively.
+*/
+const BTW_SETTINGS_SCHEMA = z.object({
+	ui: z.object({
+		banner: z.boolean().default(true),
+		modelSelect: z.boolean().default(true),
+		imageBadge: z.boolean().default(true)
+	}).default({
+		banner: true,
+		modelSelect: true,
+		imageBadge: true
+	}),
+	vision: z.object({ autoTransform: z.boolean().default(true) }).default({ autoTransform: true })
+}).default({
+	ui: {
+		banner: true,
+		modelSelect: true,
+		imageBadge: true
+	},
+	vision: { autoTransform: true }
+});
 function apply(ctx) {
+	ctx.inject(["settings"], (settingsCtx) => {
+		settingsCtx.settings.register(BTW_SETTINGS_NS, BTW_SETTINGS_SCHEMA);
+	});
 	ctx.plugin(SideChatService);
 	registerPromptImageTransform(ctx);
 }
 //#endregion
-export { BtwRegistry, READ_ONLY_TOOL_CANDIDATES, READ_ONLY_TOOL_SET, SideChatService, apply, btwHome, btwIndexPath, buildProgressDigest, completedTurnSeed, isSideChatToolAllowed, name };
+export { BTW_SETTINGS_NS, BTW_SETTINGS_SCHEMA, BtwRegistry, READ_ONLY_TOOL_CANDIDATES, READ_ONLY_TOOL_SET, SideChatService, apply, btwHome, btwIndexPath, buildProgressDigest, completedTurnSeed, isSideChatToolAllowed, name };

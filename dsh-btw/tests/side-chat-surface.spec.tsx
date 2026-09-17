@@ -528,6 +528,38 @@ describe('SideChatSurface controls', () => {
     expect(mount.querySelector('[role="status"]')).toBeNull()
   })
 
+  it('hides the running banner while running when dsh-btw.ui.banner is false (P0-b switch)', () => {
+    currentSnapshot = {
+      ...openSnapshot,
+      running: true,
+      currentAction: { kind: 'tool', tool: 'read', turn: 2, step: 1 },
+    }
+    const snapshot = Object.freeze({ status: 'ready' as const, value: Object.freeze({ ui: Object.freeze({ banner: false }) }), base: undefined, user: undefined, revision: 0, writable: false, mode: 'host' as const })
+    const scope = {
+      subscribe: () => () => {},
+      getSnapshot: () => snapshot,
+    }
+    const onMinimize = (): void => { viewStore.minimize('parent') }
+    const onEnd = async (): Promise<void> => { await controller.close() }
+    const t = ((key: string) => key) as never
+    act(() => {
+      root.render(
+        <SideChatSurface
+          parentSessionId={'parent' as never}
+          controller={controller}
+          viewStore={viewStore}
+          t={t}
+          surfaceMode="drawer"
+          settingsScope={scope as never}
+          onMinimize={onMinimize}
+          onEnd={onEnd}
+        />,
+      )
+    })
+
+    expect(mount.querySelector('[role="status"]')).toBeNull()
+  })
+
   it('renders tool digests as DisclosureRows with running state and IN/OUT fold', () => {
     currentSnapshot = {
       ...openSnapshot,

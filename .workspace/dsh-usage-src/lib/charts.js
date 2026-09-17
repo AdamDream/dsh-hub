@@ -66,7 +66,10 @@ export function barRects(values, w, h, opts = {}) {
  * peak-cell ring and the legend note).
  * @param {Array<{day: string, total: number}>} days
  * @param {number} cell - cell size in px (width = cell * 53 + gap * 52).
- * @param {{startWeekday?: number, gap?: number}} [opts]
+ * @param {{startWeekday?: number, gap?: number, levels?: number}} [opts]
+ *   P0-b: `opts.levels` overrides the intensity bucket count (1..6, default
+ *   6 = FILLS 满档). Level 0 stays "no data"; buckets 1..levels map onto the
+ *   `--du-heat-1..6` ramp (levels < 6 simply stops early).
  * @returns {{cells: Array<{x: number, y: number, size: number, fill: string,
  *   stroke: string, strokeWidth: number, day: string, value: number,
  *   level: number}>, weeks: number, width: number, levels: number,
@@ -76,7 +79,10 @@ export function heatmapGrid(days, cell, opts = {}) {
 	const gap = Number.isFinite(opts.gap) ? opts.gap : 3;
 	const startWeekday = Number.isFinite(opts.startWeekday) ? opts.startWeekday : 0;
 	const size = cell;
-	const levels = 6; // 0 (none) + 6 intensity buckets → ≤7
+	// P0-b: intensity bucket count from opts (clamped 1..6); default 6.
+	const levels = Number.isInteger(opts.levels) && opts.levels >= 1
+		? Math.min(6, opts.levels)
+		: 6;
 	if (!Array.isArray(days) || days.length === 0) {
 		return { cells: [], weeks: 0, width: 0, levels, months: [], peak: 0, peakDay: "" };
 	}

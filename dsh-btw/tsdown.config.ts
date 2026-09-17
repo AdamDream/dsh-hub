@@ -69,8 +69,9 @@ export default [
     outDir: 'lib', format: ['esm'], platform: 'node', target: 'es2024', fixedExtension: false, dts: true, clean: true,
     deps: { neverBundle: [
       '@deepseek-ai/cordis', '@deepseek-ai/dsh-agent', '@deepseek-ai/dsh-attachment', '@deepseek-ai/dsh-llm',
-      '@deepseek-ai/dsh-session', '@deepseek-ai/dsh-subagent', '@deepseek-ai/dsh-tools',
-      '@deepseek-ai/dsh-typert-protocol', '@deepseek-ai/dsh-vision-adam', '@deepseek-ai/dsh-workspace', 'zod',
+      '@deepseek-ai/dsh-session', '@deepseek-ai/dsh-settings', '@deepseek-ai/dsh-subagent', '@deepseek-ai/dsh-tools',
+      '@deepseek-ai/dsh-typert-protocol', '@deepseek-ai/dsh-vision-adam', '@deepseek-ai/dsh-workspace',
+      '@deepseek-ai/schemastery', 'zod',
     ] },
   },
   {

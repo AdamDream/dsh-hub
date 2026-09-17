@@ -10,6 +10,7 @@ import { NS } from './locales.ts'
 import { SideChatSign } from './SideChatSign.tsx'
 import { SideChatSurface } from './SideChatSurface.tsx'
 import type { SideChatViewState, SideChatViewStore } from './view-store.ts'
+import type { BtwSettingsSection, SettingsScope } from './btw-settings.ts'
 
 export const SIDE_CHAT_TAB_TYPE = 'dsh-btw:conversation'
 
@@ -37,6 +38,7 @@ interface BetterSidebarSideChatProps extends TabComponentProps {
   controller: SideChatController
   viewStore: SideChatViewStore
   presentation: SideChatPresentation
+  settingsScope: SettingsScope<BtwSettingsSection> | undefined
 }
 
 function BetterSidebarSideChat({
@@ -44,6 +46,7 @@ function BetterSidebarSideChat({
   controller,
   viewStore,
   presentation,
+  settingsScope,
   scope,
   visible,
 }: BetterSidebarSideChatProps) {
@@ -83,6 +86,7 @@ function BetterSidebarSideChat({
       viewStore={viewStore}
       t={t}
       surfaceMode="better-sidebar"
+      settingsScope={settingsScope}
       onMinimize={minimize}
       onEnd={end}
     />
@@ -96,6 +100,7 @@ export class SideChatPresentation {
     private readonly ctx: ClientContext,
     private readonly controller: SideChatController,
     private readonly viewStore: SideChatViewStore,
+    private readonly settingsScope?: SettingsScope<BtwSettingsSection> | undefined,
   ) {}
 
   subscribe(listener: () => void): () => void {
@@ -194,6 +199,7 @@ export class SideChatPresentation {
           controller={this.controller}
           viewStore={this.viewStore}
           presentation={this}
+          settingsScope={this.settingsScope}
         />
       ),
     }

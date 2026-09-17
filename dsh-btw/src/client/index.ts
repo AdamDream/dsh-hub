@@ -1,4 +1,5 @@
 import type { ClientContext, SessionId } from '@deepseek-ai/dsh-client-runtime/client'
+import type { SettingsScope } from '@deepseek-ai/dsh-client-runtime/client'
 import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
 import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
 import type {} from '@deepseek-ai/dsh-client-locale/client'
@@ -10,9 +11,10 @@ import { SideChatDrawer } from './SideChatDrawer.tsx'
 import { SideChatViewStore } from './view-store.ts'
 import { en, NS, zh } from './locales.ts'
 import remoteContribution from './remote.ts'
+import { bindBtwSettings } from './btw-settings.ts'
 
 export const name = 'dsh-btw/client'
-export const inject = ['slots', 'sessions', 'remote', 'locale']
+export const inject = ['slots', 'sessions', 'remote', 'locale', 'settingsScope']
 
 export async function apply(ctx: ClientContext): Promise<() => Promise<void>> {
   const disposeRemote = await ctx.remote.$mount(remoteContribution)
@@ -23,7 +25,14 @@ export async function apply(ctx: ClientContext): Promise<() => Promise<void>> {
 function installSideChat(ctx: ClientContext): void {
   const controller = new SideChatController(ctx, ctx.remote.sideChat)
   const viewStore = new SideChatViewStore()
-  const presentation = new SideChatPresentation(ctx, controller, viewStore)
+  // P0-b: bind the `dsh-btw` settings namespace scope on this fiber; when the
+  // settingsScope service is unavailable the surface keeps BTW_SETTINGS_DEFAULTS
+  // (= current behavior). Read structurally: the service type augmentation
+  // lives in dsh-client-ui-settings (not a btw dependency at type level).
+  const settingsScope = bindBtwSettings((ctx as unknown as {
+    settingsScope?: { bind<T>(spec: { namespace: string; decode?: (section: unknown) => T | undefined }): SettingsScope<T> }
+  }).settingsScope)
+  const presentation = new SideChatPresentation(ctx, controller, viewStore, settingsScope)
   ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'btw: client dictionaries')
   ctx.effect(() => () => { void controller.dispose() }, 'btw: controller lifecycle')
 
@@ -59,6 +68,7 @@ function installSideChat(ctx: ClientContext): void {
           controller,
           viewStore,
           presentation,
+          settingsScope,
           parentSessionId,
           onMinimize: () => {
             const current = activeParent()

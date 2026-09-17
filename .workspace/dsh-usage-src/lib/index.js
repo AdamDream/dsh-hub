@@ -36,8 +36,36 @@ const inject = ["connection", "webServer"];
 /** Ingest cadence: 30–60s window → 45s, constant (AUDIT U09 step 3). */
 const INGEST_INTERVAL_MS = 45_000;
 
-/** Declarative config surface — empty by design (no configuration items). */
-const Config = z.object({}).default({});
+/**
+ * Declarative config surface (P0-b settings 行为开关试点). Values hot-reload:
+ * editing `~/.dsh/settings.yaml` `dsh-usage:` section republishes and the
+ * client card re-renders without a restart. Keys are pure behavior switches;
+ * defaults equal the pre-P0-b behavior (absent section = defaults = 现状).
+ * Schema grows only-additively (no key removal) so old documents stay valid.
+ */
+const Config = z
+	.object({
+		ui: z
+			.object({
+				// 三图自绘跟随鼠标 tooltip（面积/柱状/热力图）。false = 回到
+				// 无自绘浮层（热力图仍保留原生 <title> 兜底）。
+				tooltip: z.boolean().default(true),
+			})
+			.default({}),
+		heatmap: z
+			.object({
+				// 峰值日单元格的 2px 环（--du-heat-peak-stroke）。
+				peakRing: z.boolean().default(true),
+				// 月份标签行（覆盖列跨度居中，仅在有数据月份显示）。
+				monthLabels: z.boolean().default(true),
+				// 图例说明行（"单位 tokens/日 · 灰格 = 无数据 · 峰值…"）。
+				legendNote: z.boolean().default(true),
+				// 热力图强度分桶数（1..6，默认 6 = FILLS 满档）。
+				levels: z.number().min(1).max(6).default(6),
+			})
+			.default({}),
+	})
+	.default({});
 
 /** Defensive logger with the `dsh-usage` prefix (AUDIT U09 step 6). */
 function createLogger(ctx) {
@@ -64,10 +92,10 @@ function createLogger(ctx) {
 export function apply(ctx) {
 	const log = createLogger(ctx);
 
-	// 1. Settings namespace (B8) — empty schema; the Plugins tab pairs this
-	//    namespace with the client card keyed `dsh-usage`.
+	// 1. Settings namespace (B8 + P0-b) — behavior switches with defaults; the
+	//    Plugins tab pairs this namespace with the client card keyed `dsh-usage`.
 	ctx.inject(["settings"], (settingsCtx) => {
-		settingsCtx.settings.register("dsh-usage", z.object({}).default({}));
+		settingsCtx.settings.register("dsh-usage", Config);
 	});
 
 	let db = null;

@@ -1,4 +1,5 @@
 import { $ as listSideChatTreeRequestSchema, A as SideChatImageMediaType, B as answerSideChatResultSchema, C as SendSideChatValue, D as SideChatCurrentAction, E as SetSideChatModelValue, F as SideChatTreeEntry, G as btwQuestionSchema, H as btwAnswerSchema, I as StartSideChatRequest, J as closeSideChatRequestSchema, K as cancelSideChatRequestSchema, L as StartSideChatResult, M as SideChatImageRef, N as SideChatToolDigest, O as SideChatError, P as SideChatTranscriptMessage, Q as listSideChatProjectResultSchema, R as StartSideChatValue, S as SendSideChatResult, St as startSideChatValueSchema, T as SetSideChatModelResult, U as btwModelSchema, V as answerSideChatValueSchema, W as btwPendingQuestionSchema, X as closeSideChatValueSchema, Y as closeSideChatResultSchema, Z as listSideChatProjectRequestSchema, _ as ReadSideChatImageRequest, _t as sideChatToolDigestSchema, a as BtwModel, at as sendSideChatRequestSchema, b as ReadSideChatResult, bt as startSideChatRequestSchema, c as CancelSideChatRequest, ct as setSideChatModelRequestSchema, d as CloseSideChatResult, dt as sideChatCurrentActionSchema, et as listSideChatTreeResultSchema, f as CloseSideChatValue, ft as sideChatErrorCodeSchema, g as ListSideChatTreeResult, gt as sideChatImageRefSchema, h as ListSideChatTreeRequest, ht as sideChatImagePartSchema, i as BtwAnswer, it as readSideChatResultSchema, j as SideChatImagePart, k as SideChatErrorCode, l as CancelSideChatResult, lt as setSideChatModelResultSchema, m as ListSideChatProjectResult, mt as sideChatImageMediaTypeSchema, n as AnswerSideChatResult, nt as readSideChatImageResultSchema, o as BtwPendingQuestion, ot as sendSideChatResultSchema, p as ListSideChatProjectRequest, pt as sideChatErrorSchema, q as cancelSideChatResultSchema, r as AnswerSideChatValue, rt as readSideChatRequestSchema, s as BtwQuestion, st as sendSideChatValueSchema, t as AnswerSideChatRequest, tt as readSideChatImageRequestSchema, u as CloseSideChatRequest, ut as setSideChatModelValueSchema, v as ReadSideChatImageResult, vt as sideChatTranscriptMessageSchema, w as SetSideChatModelRequest, x as SendSideChatRequest, xt as startSideChatResultSchema, y as ReadSideChatRequest, yt as sideChatTreeEntrySchema, z as answerSideChatRequestSchema } from "./remote-BmXjp3i9.js";
+import z from "@deepseek-ai/schemastery";
 import { Context } from "@deepseek-ai/cordis";
 import { TypertRemoteService } from "@deepseek-ai/dsh-typert-protocol";
 import { Agent } from "@deepseek-ai/dsh-agent";
@@ -176,6 +177,46 @@ declare function isSideChatToolAllowed(name: string): boolean;
 //#endregion
 //#region src/index.d.ts
 declare const name = "dsh-btw";
+/** Settings namespace brand for the `dsh-btw` section. */
+declare const BTW_SETTINGS_NS: import("@deepseek-ai/dsh-settings").SettingsNamespace;
+/**
+ * `dsh-btw` settings namespace (P0-b settings 行为开关试点). Values hot-reload:
+ * editing `~/.dsh/settings.yaml` `dsh-btw:` section republishes and the host
+ * re-reads on the next call while the client re-renders via settingsScope —
+ * no restart. Keys are pure behavior switches; defaults equal the pre-P0-b
+ * behavior (absent section = defaults = 现状). Schema grows only-additively.
+ */
+declare const BTW_SETTINGS_SCHEMA: z<Schemastery.ObjectS<{
+  ui: z<Schemastery.ObjectS<{
+    banner: z<boolean, boolean>;
+    modelSelect: z<boolean, boolean>;
+    imageBadge: z<boolean, boolean>;
+  }>, Schemastery.ObjectT<{
+    banner: z<boolean, boolean>;
+    modelSelect: z<boolean, boolean>;
+    imageBadge: z<boolean, boolean>;
+  }>>;
+  vision: z<Schemastery.ObjectS<{
+    autoTransform: z<boolean, boolean>;
+  }>, Schemastery.ObjectT<{
+    autoTransform: z<boolean, boolean>;
+  }>>;
+}>, Schemastery.ObjectT<{
+  ui: z<Schemastery.ObjectS<{
+    banner: z<boolean, boolean>;
+    modelSelect: z<boolean, boolean>;
+    imageBadge: z<boolean, boolean>;
+  }>, Schemastery.ObjectT<{
+    banner: z<boolean, boolean>;
+    modelSelect: z<boolean, boolean>;
+    imageBadge: z<boolean, boolean>;
+  }>>;
+  vision: z<Schemastery.ObjectS<{
+    autoTransform: z<boolean, boolean>;
+  }>, Schemastery.ObjectT<{
+    autoTransform: z<boolean, boolean>;
+  }>>;
+}>>;
 declare function apply(ctx: Context): void;
 //#endregion
-export { type AnswerSideChatRequest, type AnswerSideChatResult, type AnswerSideChatValue, type BtwAnswer, type BtwModel, type BtwPendingQuestion, type BtwQuestion, BtwRegistry, type CancelSideChatRequest, type CancelSideChatResult, type CloseSideChatRequest, type CloseSideChatResult, type CloseSideChatValue, type ListSideChatProjectRequest, type ListSideChatProjectResult, type ListSideChatTreeRequest, type ListSideChatTreeResult, READ_ONLY_TOOL_CANDIDATES, READ_ONLY_TOOL_SET, type ReadSideChatImageRequest, type ReadSideChatImageResult, type ReadSideChatRequest, type ReadSideChatResult, type SendSideChatRequest, type SendSideChatResult, type SendSideChatValue, type SetSideChatModelRequest, type SetSideChatModelResult, type SetSideChatModelValue, type SideChatCurrentAction, type SideChatError, type SideChatErrorCode, type SideChatImageMediaType, type SideChatImagePart, type SideChatImageRef, SideChatService, type SideChatToolDigest, type SideChatTranscriptMessage, type SideChatTreeEntry, type StartSideChatRequest, type StartSideChatResult, type StartSideChatValue, type answerSideChatRequestSchema, type answerSideChatResultSchema, type answerSideChatValueSchema, apply, type btwAnswerSchema, btwHome, btwIndexPath, type btwModelSchema, type btwPendingQuestionSchema, type btwQuestionSchema, buildProgressDigest, type cancelSideChatRequestSchema, type cancelSideChatResultSchema, type closeSideChatRequestSchema, type closeSideChatResultSchema, type closeSideChatValueSchema, completedTurnSeed, isSideChatToolAllowed, type listSideChatProjectRequestSchema, type listSideChatProjectResultSchema, type listSideChatTreeRequestSchema, type listSideChatTreeResultSchema, name, type readSideChatImageRequestSchema, type readSideChatImageResultSchema, type readSideChatRequestSchema, type readSideChatResultSchema, type sendSideChatRequestSchema, type sendSideChatResultSchema, type sendSideChatValueSchema, type setSideChatModelRequestSchema, type setSideChatModelResultSchema, type setSideChatModelValueSchema, type sideChatCurrentActionSchema, type sideChatErrorCodeSchema, type sideChatErrorSchema, type sideChatImageMediaTypeSchema, type sideChatImagePartSchema, type sideChatImageRefSchema, type sideChatToolDigestSchema, type sideChatTranscriptMessageSchema, type sideChatTreeEntrySchema, type startSideChatRequestSchema, type startSideChatResultSchema, type startSideChatValueSchema };
+export { type AnswerSideChatRequest, type AnswerSideChatResult, type AnswerSideChatValue, BTW_SETTINGS_NS, BTW_SETTINGS_SCHEMA, type BtwAnswer, type BtwModel, type BtwPendingQuestion, type BtwQuestion, BtwRegistry, type CancelSideChatRequest, type CancelSideChatResult, type CloseSideChatRequest, type CloseSideChatResult, type CloseSideChatValue, type ListSideChatProjectRequest, type ListSideChatProjectResult, type ListSideChatTreeRequest, type ListSideChatTreeResult, READ_ONLY_TOOL_CANDIDATES, READ_ONLY_TOOL_SET, type ReadSideChatImageRequest, type ReadSideChatImageResult, type ReadSideChatRequest, type ReadSideChatResult, type SendSideChatRequest, type SendSideChatResult, type SendSideChatValue, type SetSideChatModelRequest, type SetSideChatModelResult, type SetSideChatModelValue, type SideChatCurrentAction, type SideChatError, type SideChatErrorCode, type SideChatImageMediaType, type SideChatImagePart, type SideChatImageRef, SideChatService, type SideChatToolDigest, type SideChatTranscriptMessage, type SideChatTreeEntry, type StartSideChatRequest, type StartSideChatResult, type StartSideChatValue, type answerSideChatRequestSchema, type answerSideChatResultSchema, type answerSideChatValueSchema, apply, type btwAnswerSchema, btwHome, btwIndexPath, type btwModelSchema, type btwPendingQuestionSchema, type btwQuestionSchema, buildProgressDigest, type cancelSideChatRequestSchema, type cancelSideChatResultSchema, type closeSideChatRequestSchema, type closeSideChatResultSchema, type closeSideChatValueSchema, completedTurnSeed, isSideChatToolAllowed, type listSideChatProjectRequestSchema, type listSideChatProjectResultSchema, type listSideChatTreeRequestSchema, type listSideChatTreeResultSchema, name, type readSideChatImageRequestSchema, type readSideChatImageResultSchema, type readSideChatRequestSchema, type readSideChatResultSchema, type sendSideChatRequestSchema, type sendSideChatResultSchema, type sendSideChatValueSchema, type setSideChatModelRequestSchema, type setSideChatModelResultSchema, type setSideChatModelValueSchema, type sideChatCurrentActionSchema, type sideChatErrorCodeSchema, type sideChatErrorSchema, type sideChatImageMediaTypeSchema, type sideChatImagePartSchema, type sideChatImageRefSchema, type sideChatToolDigestSchema, type sideChatTranscriptMessageSchema, type sideChatTreeEntrySchema, type startSideChatRequestSchema, type startSideChatResultSchema, type startSideChatValueSchema };

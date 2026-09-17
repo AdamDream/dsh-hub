@@ -70,7 +70,8 @@ window.__ModuleLoader__.load({
 			const gap = opts && Number.isFinite(opts.gap) ? opts.gap : 3;
 			const startWeekday = opts && Number.isFinite(opts.startWeekday) ? opts.startWeekday : 0;
 			const size = cell;
-			const levels = 6;
+			// P0-b: intensity bucket count from opts (clamped 1..6); default 6.
+			const levels = Number.isInteger(opts && opts.levels) && opts.levels >= 1 ? Math.min(6, opts.levels) : 6;
 			if (!Array.isArray(days) || days.length === 0) return { cells: [], weeks: 0, width: 0, levels, months: [], peak: 0, peakDay: "" };
 			const sorted = days.slice().sort((a, b) => (a.day < b.day ? -1 : a.day > b.day ? 1 : 0));
 			const first = parseDay(sorted[0].day);
@@ -303,6 +304,10 @@ window.__ModuleLoader__.load({
 			const series = (props.rows || []).map((r) => ({ day: r.day, value: bucketValue(r, props.bucket) }));
 			const w = 560;
 			const h = 150;
+			// P0-b: settings switch `dsh-usage.ui.tooltip` (default true) — the
+			// self-drawn hover tooltip. false = no custom float layer, no mouse
+			// hit-testing (pre-tooltip behavior; heatmap keeps <title>).
+			const tooltipEnabled = props.tooltip !== false;
 			// 2026-09-14 tooltip: self-drawn hover tooltip — hit-testing runs
 			// in viewBox coordinates on the svg's onMouseMove; the tooltip
 			// layer is a fixed-position .du_tip div following the mouse
@@ -348,19 +353,26 @@ window.__ModuleLoader__.load({
 				const ay = Math.max(10, Math.min(40 - 18, e.clientY - pos.top));
 				setTip({ left: pos.left, top: pos.top, dir: pos.dir, ax: ax, ay: ay, day: hit.day.slice(5), valueText: hit.valueText, muted: false });
 			};
-			const tipEl = tip
+			const tipEl = tooltipEnabled && tip
 				? react.createElement("div", { className: "du_tip du_tip" + tip.dir.toUpperCase(), style: { left: tip.left + "px", top: tip.top + "px", "--du-tip-ax": tip.ax + "px", "--du-tip-ay": tip.ay + "px" } },
 						react.createElement("div", { className: "du_tipDay" }, tip.day),
 						react.createElement("div", { className: "du_tipValue" },
 							tip.muted ? tip.valueText : react.createElement("span", null, tip.valueText, react.createElement("span", { className: "du_tipUnit" }, " tokens"))))
 				: null;
 			return react.createElement("div", { style: { position: "relative" } },
-				react.createElement("svg", { viewBox: "0 0 " + w + " " + h, className: "du_svg", role: "img", "aria-label": "usage trend", onMouseMove: onMove, onMouseLeave: () => setTip(null) }, children),
+				react.createElement("svg", { viewBox: "0 0 " + w + " " + h, className: "du_svg", role: "img", "aria-label": "usage trend", ...(tooltipEnabled ? { onMouseMove: onMove, onMouseLeave: () => setTip(null) } : {}) }, children),
 				tipEl);
 		}
 		function HeatmapChart(props) {
 			const cell = 11;
-			const grid = heatmapGrid(props.days || [], cell);
+			// P0-b: settings switches — heatmap.levels (1..6, default 6),
+			// peakRing / monthLabels / legendNote (default true), ui.tooltip.
+			const levels = Number.isInteger(props.levels) && props.levels >= 1 ? Math.min(6, props.levels) : 6;
+			const peakRingEnabled = props.peakRing !== false;
+			const monthLabelsEnabled = props.monthLabels !== false;
+			const legendNoteEnabled = props.legendNote !== false;
+			const tooltipEnabled = props.tooltip !== false;
+			const grid = heatmapGrid(props.days || [], cell, { levels });
 			const monthRow = 16;
 			const gridH = monthRow + 7 * (cell + 3) - 3;
 			// 2026-09-14 tooltip: self-drawn hover tooltip on top of the
@@ -377,19 +389,23 @@ window.__ModuleLoader__.load({
 			// ring (theme-opposite of the peak fill), legend + a unit/peak note
 			// line (label-secondary text).
 			const rects = grid.cells.map((c) => {
-				const isPeak = c.day === grid.peakDay;
+				const isPeak = peakRingEnabled && c.day === grid.peakDay;
 				return react.createElement("g", { key: c.day },
 					react.createElement("title", null, c.level === 0 ? c.day + " · 无数据" : c.day + " · 总用量 " + formatTokens(c.value) + " tokens"),
 					react.createElement("rect", { x: c.x, y: c.y, width: c.size, height: c.size, rx: 2, fill: c.fill, stroke: isPeak ? "var(--du-heat-peak-stroke)" : c.stroke, strokeWidth: isPeak ? 2 : c.strokeWidth }));
 			});
-			const monthLabels = grid.months.map((m) =>
-				react.createElement("text", { key: m.label + "-" + m.x, x: m.x, y: 12, textAnchor: "middle", fill: "var(--du-heat-month-fill)", fontSize: 12 }, m.label));
+			const monthLabels = monthLabelsEnabled
+				? grid.months.map((m) =>
+						react.createElement("text", { key: m.label + "-" + m.x, x: m.x, y: 12, textAnchor: "middle", fill: "var(--du-heat-month-fill)", fontSize: 12 }, m.label))
+				: [];
 			const legend = react.createElement("div", { className: "du_legend" },
 				react.createElement("span", null, "少"),
-				FILLS.slice(1).map((f) => react.createElement("span", { key: f, className: "du_swatch", style: { background: f } })),
+				FILLS.slice(1, levels + 1).map((f) => react.createElement("span", { key: f, className: "du_swatch", style: { background: f } })),
 				react.createElement("span", null, "多"));
-			const legendNote = react.createElement("div", { className: "du_heatNote" },
-				"单位 tokens/日 · 灰格 = 无数据 · 峰值 " + formatTokens(grid.peak) + " tokens/日（" + grid.peakDay + "）");
+			const legendNote = legendNoteEnabled
+				? react.createElement("div", { className: "du_heatNote" },
+						"单位 tokens/日 · 灰格 = 无数据 · 峰值 " + formatTokens(grid.peak) + " tokens/日（" + grid.peakDay + "）")
+				: null;
 			const onMove = (e) => {
 				const svg = e.currentTarget;
 				const rect = svg.getBoundingClientRect();
@@ -406,7 +422,7 @@ window.__ModuleLoader__.load({
 				const ay = Math.max(10, Math.min(40 - 18, e.clientY - pos.top));
 				setTip({ left: pos.left, top: pos.top, dir: pos.dir, ax: ax, ay: ay, day: c.day.slice(5), valueText: noData ? "无数据" : tipTokens(c.value), muted: noData });
 			};
-			const tipEl = tip
+			const tipEl = tooltipEnabled && tip
 				? react.createElement("div", { className: "du_tip du_tip" + tip.dir.toUpperCase(), style: { left: tip.left + "px", top: tip.top + "px", "--du-tip-ax": tip.ax + "px", "--du-tip-ay": tip.ay + "px" } },
 						react.createElement("div", { className: "du_tipDay" }, tip.day),
 						react.createElement("div", { className: "du_tipValue" + (tip.muted ? " du_tipMuted" : "") },
@@ -414,7 +430,7 @@ window.__ModuleLoader__.load({
 				: null;
 			return react.createElement(react.Fragment, null,
 				react.createElement("div", { style: { position: "relative" } },
-					react.createElement("svg", { viewBox: "0 0 " + Math.max(grid.width, 200) + " " + gridH, className: "du_svg", role: "img", "aria-label": "usage heatmap", onMouseMove: onMove, onMouseLeave: () => setTip(null) },
+					react.createElement("svg", { viewBox: "0 0 " + Math.max(grid.width, 200) + " " + gridH, className: "du_svg", role: "img", "aria-label": "usage heatmap", ...(tooltipEnabled ? { onMouseMove: onMove, onMouseLeave: () => setTip(null) } : {}) },
 						monthLabels,
 						react.createElement("g", { transform: "translate(0," + monthRow + ")" }, rects)),
 					tipEl),
@@ -437,6 +453,18 @@ window.__ModuleLoader__.load({
 		function UsageCard(props) {
 			const rpc = props.rpc;
 			const sessions = props.sessions;
+			// P0-b: reactive settings snapshot — settings.yaml edits hot-reload
+			// the card (scope.subscribe → setState → re-render) without a
+			// restart. Missing/loading/unavailable scope → defaults (现状).
+			const [settings, setSettings] = react.useState(() => usageSettingsOf(
+				props.settingsScope ? props.settingsScope.getSnapshot() : null,
+			));
+			react.useEffect(() => {
+				if (!props.settingsScope) return;
+				const update = () => setSettings(usageSettingsOf(props.settingsScope.getSnapshot()));
+				update();
+				return props.settingsScope.subscribe(update);
+			}, [props.settingsScope]);
 			const [dataSource, setDataSource] = react.useState("all");
 			const [rangeDays, setRangeDays] = react.useState(7);
 			const [customFrom, setCustomFrom] = react.useState("");
@@ -677,10 +705,10 @@ window.__ModuleLoader__.load({
 						react.createElement("select", { className: "du_select", value: chartMode, onChange: (e) => setChartMode(e.target.value) },
 							react.createElement("option", { value: "area" }, "面积图"),
 							react.createElement("option", { value: "bar" }, "柱状图"))),
-					react.createElement(TrendChart, { rows: timeseries, bucket: bucket, mode: chartMode })),
+					react.createElement(TrendChart, { rows: timeseries, bucket: bucket, mode: chartMode, tooltip: settings.ui.tooltip })),
 				react.createElement("div", { className: "du_panel" },
 					react.createElement("div", { className: "du_panelTitle" }, "热力图（按日总量）"),
-					react.createElement(HeatmapChart, { days: heatmap })),
+					react.createElement(HeatmapChart, { days: heatmap, tooltip: settings.ui.tooltip, peakRing: settings.heatmap.peakRing, monthLabels: settings.heatmap.monthLabels, legendNote: settings.heatmap.legendNote, levels: settings.heatmap.levels })),
 				react.createElement("div", { className: "du_tabs" },
 					TABS.map((t) => react.createElement("button", { key: t.key, type: "button", className: "du_tab" + (tab === t.key ? " du_tabActive" : ""), onClick: () => setTab(t.key) }, t.label))),
 				tabBody,
@@ -688,12 +716,45 @@ window.__ModuleLoader__.load({
 		}
 		//#endregion
 		//#region plugin face (bundle exports.inject = service names; apply registers the card slot)
-		const inject = ["slots", "connection", "sessions"];
+		const inject = ["slots", "connection", "sessions", "settingsScope"];
+		// P0-b: narrow the settingsScope snapshot to the keys the card reads;
+		// absent/loading/unavailable sections resolve to the defaults (无键 =
+		// 现状, old-config compatible). Defaults mirror lib/index.js schema
+		// defaults: ui.tooltip=true; heatmap.{peakRing,monthLabels,legendNote}=
+		// true, heatmap.levels=6.
+		function usageSettingsOf(snapshot) {
+			const value = snapshot && snapshot.value && typeof snapshot.value === "object" ? snapshot.value : {};
+			const ui = value.ui && typeof value.ui === "object" ? value.ui : {};
+			const heatmap = value.heatmap && typeof value.heatmap === "object" ? value.heatmap : {};
+			return {
+				ui: { tooltip: ui.tooltip !== false },
+				heatmap: {
+					peakRing: heatmap.peakRing !== false,
+					monthLabels: heatmap.monthLabels !== false,
+					legendNote: heatmap.legendNote !== false,
+					levels: Number.isInteger(heatmap.levels) && heatmap.levels >= 1 ? Math.min(6, heatmap.levels) : 6,
+				},
+			};
+		}
 		function apply(ctx) {
-			// `useStore` placeholder: the dsh-usage settings namespace is empty
-			// (AUDIT B8 — no configuration items), so the card reads nothing from
-			// the settings store; the face still exposes the hook per AUDIT U10.
+			// `useStore` placeholder: the dsh-usage settings namespace now
+			// carries behavior switches (P0-b) read through the settingsScope
+			// bound below; the card consumes them via the `settingsScope` prop
+			// (snapshot value + subscribe), so settings.yaml edits hot-reload
+			// the card without a restart.
 			const useStore = () => ({});
+			// P0-b: bind the `dsh-usage` namespace scope on this fiber; when the
+			// settingsScope service is unavailable the card falls back to
+			// USAGE_SETTINGS_DEFAULTS (current behavior).
+			let settingsScope = null;
+			try {
+				const binder = ctx.settingsScope;
+				if (binder && typeof binder.bind === "function") {
+					settingsScope = binder.bind({ namespace: "dsh-usage" });
+				}
+			} catch {
+				settingsScope = null;
+			}
 			ctx.slots.inject("settings.plugin.item", () => ctx.slots.register({
 				name: "settings.plugin.item",
 				key: "dsh-usage",
@@ -703,7 +764,7 @@ window.__ModuleLoader__.load({
 				// defensively anyway — when the injection is missing the card
 				// falls back to the ready-made `rpcAvailable=false` state
 				// ("宿主未注册 /usage RPC 通道") instead of a render TypeError.
-				inject: () => ({ useStore, rpc: ctx.connection?.rpc ?? null, sessions: ctx.sessions }),
+				inject: () => ({ useStore, rpc: ctx.connection?.rpc ?? null, sessions: ctx.sessions, settingsScope }),
 			}, UsageCard));
 		}
 		//#endregion

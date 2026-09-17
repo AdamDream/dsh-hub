@@ -1,0 +1,15 @@
+PASS  S1 baseline: idle+armed goal injects round 1  (followups=1)
+PASS  S1 follow-up: completed round then idle drives round 2  (followups=2)
+PASS  S2: pending subagent blocks goal round injection  (followups=2 (must stay 2))
+PASS  S4: narrow window -- end without consumed notice still blocks drive  (followups=2 (must stay 2))
+PASS  S4: notice consumed -> drive resumes  (followups=3 (must be 3))
+PASS  S3a: second pending subagent blocks drive  (followups=3)
+PASS  S3b: second subagent end (notice in flight) blocks drive  (followups=3)
+PASS  S3c: second notice consumed -> drive resumes  (followups=4 (must be 4))
+PASS  S5a: two pending subagents block drive  (followups=4)
+PASS  S5b: first of two ends still blocks drive  (followups=4 (must stay 4))
+PASS  S5c: first notice consumed, second subagent still pending -> still blocked  (followups=4 (must stay 4))
+PASS  S5d: all subagents settled+consumed -> drive resumes  (followups=5 (must be 5))
+PASS  S6: round-limit still blocks via existing path  (blocked=["round-limit"])
+
+==== 13/13 checks passed ====

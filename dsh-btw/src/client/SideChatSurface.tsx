@@ -13,6 +13,8 @@ import { NS } from './locales.ts'
 import { SideChatSign } from './SideChatSign.tsx'
 import { SideChatToolRow } from './SideChatToolRow.tsx'
 import type { SideChatDraftImage, SideChatPresentationMode, SideChatViewStore } from './view-store.ts'
+import type { BtwSettingsSection, SettingsScope } from './btw-settings.ts'
+import { useBtwSettings } from './btw-settings.ts'
 import css from './side-chat.module.css'
 
 type Snapshot = ReturnType<SessionFace['getSnapshot']>
@@ -51,6 +53,8 @@ export interface SideChatSurfaceProps extends PropsLocale<typeof NS> {
   surfaceMode: SideChatPresentationMode
   onMinimize: () => void
   onEnd: () => Promise<void>
+  /** P0-b: bound `dsh-btw` settings scope; undefined keeps the defaults. */
+  settingsScope?: SettingsScope<BtwSettingsSection> | undefined
 }
 
 function QuestionCard({
@@ -224,6 +228,7 @@ export function SideChatSurface({
   viewStore,
   t,
   surfaceMode,
+  settingsScope,
   onMinimize,
   onEnd,
 }: SideChatSurfaceProps) {
@@ -234,6 +239,9 @@ export function SideChatSurface({
   const subscribeView = useCallback((listener: () => void) => viewStore.subscribe(listener), [viewStore])
   const getView = useCallback(() => viewStore.get(parentKey), [parentKey, viewStore])
   const view = useSyncExternalStore(subscribeView, getView, getView)
+  // P0-b: reactive settings (banner / modelSelect / imageBadge switches);
+  // a missing scope keeps BTW_SETTINGS_DEFAULTS = current behavior.
+  const settings = useBtwSettings(settingsScope)
   const draft = view.draft
   const sendError = view.sendError
   const attachments = view.attachments
@@ -435,20 +443,22 @@ export function SideChatSurface({
           </div>
         </div>
         <div className={css.headerActions}>
-          <select
-            className={css.modelSelect}
-            value={state.model ?? 'deepseek-v4-flash'}
-            disabled={!interactive}
-            aria-label={t('drawer.model')}
-            title={t('drawer.modelNextTurn')}
-            onChange={event => {
-              void controller.setModel(event.target.value as BtwModel)
-            }}
-          >
-            <option value="deepseek-v4-flash">deepseek-v4-flash</option>
-            <option value="glm-5.3">glm-5.3</option>
-            <option value="deepseek-v4-pro">deepseek-v4-pro</option>
-          </select>
+          {settings.ui?.modelSelect !== false && (
+            <select
+              className={css.modelSelect}
+              value={state.model ?? 'deepseek-v4-flash'}
+              disabled={!interactive}
+              aria-label={t('drawer.model')}
+              title={t('drawer.modelNextTurn')}
+              onChange={event => {
+                void controller.setModel(event.target.value as BtwModel)
+              }}
+            >
+              <option value="deepseek-v4-flash">deepseek-v4-flash</option>
+              <option value="glm-5.3">glm-5.3</option>
+              <option value="deepseek-v4-pro">deepseek-v4-pro</option>
+            </select>
+          )}
           <button
             ref={endButtonRef}
             className={css.endButton}
@@ -478,7 +488,7 @@ export function SideChatSurface({
       </div>
 
       <div className={css.transcript} ref={scrollRef} aria-live="polite">
-        {running && (
+        {running && settings.ui?.banner !== false && (
           <div className={css.runningBanner} role="status" aria-live="polite">
             <span className={css.runningBannerText}>
               {state.currentAction?.kind === 'tool'
@@ -546,7 +556,7 @@ export function SideChatSurface({
                       {/* 2026-09-14 btw-ui: sequence badge (top-left, white
                           pill, black digits); only for multi-image messages
                           to avoid single-thumbnail noise. */}
-                      {images.length > 1 && (
+                      {images.length > 1 && settings.ui?.imageBadge !== false && (
                         <span className={css.messageImageBadge} aria-hidden="true">{index + 1}</span>
                       )}
                       <img src={dataUrl} alt={ref.name ?? ''} className={css.messageImage} />

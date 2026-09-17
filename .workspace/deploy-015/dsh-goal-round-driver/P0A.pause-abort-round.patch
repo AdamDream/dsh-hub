@@ -1,0 +1,14 @@
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -231,9 +231,10 @@
+ 				requestDrive(state);
+ 			}
+ 		});
+-		ctx.on("goal/changed", ({ agent }) => {
++		ctx.on("goal/changed", ({ agent, change }) => {
+ 			const state = stateFor(agent);
+ 			state.needsCheckpoint = true;
++			if (change.operation === "pause" && agent.status === "running" && ctx.agents.currentInitiator() !== agent) agent.cancel({ kind: "user" }, { keepInbox: true });
+ 			requestDrive(state);
+ 		});
+ 		ctx.on("agent/inbox/inserted", ({ agent, message }) => {

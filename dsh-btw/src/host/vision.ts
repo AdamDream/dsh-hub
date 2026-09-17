@@ -34,6 +34,70 @@ export interface VisionImageInput {
   readonly data: string
 }
 
+/** The LLM registry face btw reads model metadata from (structural; injected). */
+export interface ModelInfoLlm {
+  resolveModelInfo?(
+    provider: string,
+    model: string,
+    signal?: AbortSignal,
+  ): Promise<{ readonly inputModalities?: readonly string[] }>
+}
+
+/** One provider/model route a session runs (or will run) under. */
+export interface ModelRoute {
+  readonly provider: string
+  readonly model: string
+}
+
+function routeOf(value: unknown): ModelRoute | undefined {
+  if (value === null || typeof value !== 'object') return undefined
+  const record = value as { provider?: unknown; model?: unknown }
+  if (typeof record.provider === 'string' && record.provider.length > 0
+    && typeof record.model === 'string' && record.model.length > 0) {
+    return { provider: record.provider, model: record.model }
+  }
+  return undefined
+}
+
+/**
+ * Resolve the route one agent runs under, mirroring the host's `selectionFor`
+ * tiers on the public surface only: the session's logged request header first
+ * (`agent.session.requestHeader()?.config`, the dsh-session public API — the
+ * same value the host's log tier reads), then the `agentDefaultModel`
+ * selection service (the host's default tier), then undefined. A route the
+ * host picked in-memory but has not logged yet is not visible here; the host
+ * gate still validates the final send against its own authoritative
+ * selection, so this can only ever be more conservative, never unsafe.
+ */
+export function resolveAgentRoute(ctx: Context, agent: unknown): ModelRoute | undefined {
+  const session = (agent as { session?: { requestHeader?: () => { config?: unknown } | undefined } })?.session
+  const logged = session?.requestHeader?.()
+  const route = routeOf(logged?.config)
+  if (route !== undefined) return route
+  const defaults = (ctx as { get?: (name: string) => unknown }).get?.('agentDefaultModel') as
+    | { currentSelection?: () => unknown }
+    | undefined
+  return routeOf(defaults?.currentSelection?.())
+}
+
+/**
+ * Whether one route DECLARES image input. True only when the LLM registry's
+ * `resolveModelInfo` returns `inputModalities` containing 'image'. Every
+ * other outcome — route unresolvable, registry absent, lookup failure, a
+ * missing or image-less modality list — returns false, so callers keep the
+ * conservative vision-adam text path (text is accepted by any model).
+ */
+export async function modelAcceptsImage(ctx: Context, route: ModelRoute, signal?: AbortSignal): Promise<boolean> {
+  const llm = (ctx as { get?: (name: string) => unknown }).get?.('llm') as ModelInfoLlm | undefined
+  if (llm?.resolveModelInfo === undefined) return false
+  try {
+    const info = await llm.resolveModelInfo(route.provider, route.model, signal)
+    return Array.isArray(info?.inputModalities) && info.inputModalities.includes('image')
+  } catch {
+    return false
+  }
+}
+
 /** Defaults used when no `vision-adam` settings section is available (R1-4/R1-5). */
 export const VISION_DEFAULTS: VisionOptions = Object.freeze({
   model: 'deepseek-v4.1-flash',
@@ -87,6 +151,23 @@ function readVisionConfig(ctx: Context): unknown {
     // settings service missing or the namespace is unregistered — defaults below
   }
   return VISION_DEFAULTS
+}
+
+/**
+ * P0-b: read the `dsh-btw` settings section (registered in src/index.ts).
+ * Returns a partial section; every surprise (service absent, namespace
+ * unregistered, malformed value) degrades to an empty object so callers fall
+ * back to their own defaults (= current behavior).
+ */
+export function readBtwSettings(ctx: Context): { vision?: { autoTransform?: boolean } } {
+  try {
+    const settings = ctx.get('settings') as { get?: (namespace: string) => unknown } | undefined
+    const section = settings?.get?.('dsh-btw') as { vision?: { autoTransform?: boolean } } | undefined
+    if (section !== null && typeof section === 'object') return section
+  } catch {
+    // settings service missing or the namespace is unregistered — defaults below
+  }
+  return {}
 }
 
 /**

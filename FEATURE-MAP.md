@@ -25,9 +25,9 @@
 | **dsh-btw 侧边对话 v2** | 已实现·实测（2026-09-12 部署；09-16 增量：能力检测 + 行为开关） | [btw-v2-runbook.md](.workspace/btw-v2-runbook.md) · [vision-settings-capability-exec.md](.workspace/vision-settings-capability-exec.md) · [p0b-settings-switch-exec.md](.workspace/p0b-settings-switch-exec.md) | 侧聊插件：粘贴图片经 vision-adam 转文本 + R1-9 模板包装、转录缩略图可放大；子代理树/项目总览跳转列表（listTree/listProject）；面板对齐（运行横幅、工具行、图片序号徽标）；模型声明支持图片时原图直传。 |
 | **dsh-usage 用量统计 + tooltip** | 已实现·实测（2026-09-14） | [usage-tooltip-exec.md](.workspace/usage-tooltip-exec.md) · [usage-heatmap-exec.md](.workspace/usage-heatmap-exec.md) | 面积/柱状/热力图（自绘 SVG，蓝单色系）；三图自绘跟随鼠标 tooltip（日期 MM-DD + token 紧凑格式化，四象限防溢出）；热力图蓝阶/空心/月份标签/峰值环。 |
 | **行为开关（settings 值级热载）** | 已实现·实测（2026-09-16） | [p0b-settings-switch-exec.md](.workspace/p0b-settings-switch-exec.md) | dsh-usage 5 键（ui.tooltip / heatmap.peakRing / monthLabels / legendNote / levels）+ dsh-btw 4 键（ui.banner / modelSelect / imageBadge / vision.autoTransform）；改 `~/.dsh/settings.yaml` 即生效，默认值 = 旧行为。 |
-| **vision-adam 识图（opencode 网关）** | 已实现·实测（2026-09-12 配置化；09-14 提示词） | [vision-prompt-exec.md](.workspace/vision-prompt-exec.md) · [combined-restore-runbook.md](.workspace/combined-restore-runbook.md) | 默认 opencode 网关（deepseek-v4.1-flash、三头认证 x-api-key/x-opencode-session）；提示词为「完整转录 + 审美/设计合理性分析」（真实 API 冒烟通过）。 |
+| **vision-adam 识图（2026-09-17 起走 adam 网关）** | 已实现·实测（2026-09-12 配置化；09-14 提示词；09-17 换网关） | [vision-prompt-exec.md](.workspace/vision-prompt-exec.md) · [mmt-probe/RESULTS.md](.workspace/mmt-probe/RESULTS.md) | 默认网关 = adam（`https://llmapi.roboscience.xyz/v1/` + `ADAM_API_KEY`，model `deepseek-v4.1-flash`，maxTokens 393216 实测被接受）；提示词为「完整转录 + 审美/设计合理性分析」（真实 API 冒烟通过）。opencode go 网关配置可作为回退手动改回。 |
 | **vision-adam 识图设置页** | 已实现·实测（2026-09-16 部署） | [deploy-vision-settings/README.md](.workspace/deploy-vision-settings/README.md) | settings.section「vision-adam 识图设置」（order 60）：model / baseURL / apiKeyEnv / maxTokens 字段级读写，清空即恢复默认；apiKey/maxBytes 等键永不触碰。 |
-| **图像能力检测（直传 vs 转文本）** | 已实现·**条件**（2026-09-16；当前部署未生效） | [vision-settings-capability-exec.md](.workspace/vision-settings-capability-exec.md) §2/§3 | 模型条目声明 `input` 含 `image` → 主会话/btw 原图直传，否则 vision-adam 转文本（检测基准 = 声明，非运行时探测）；当前 settings.yaml 未声明 input → 仍全部走 vision-adam，直传需配置层加 `input: [text, image]`（代码外动作）。 |
+| **图像能力检测（直传 vs 转文本）** | 已实现·**实测生效**（2026-09-16 实现；2026-09-17 声明并实测直传） | [vision-settings-capability-exec.md](.workspace/vision-settings-capability-exec.md) §2/§3 · [mmt-probe/RESULTS.md](.workspace/mmt-probe/RESULTS.md) | 模型条目声明 `input` 含 `image` → 主会话/btw 原图直传，否则 vision-adam 转文本（检测基准 = 声明，非运行时探测）。2026-09-17 实测 adam 网关 `deepseek-v4.1-flash` 原生多模态**可用**（UI 图大字/色值逐字命中 15/17）→ settings.yaml 已为 `deepseek-v4.1-flash`、`deepseek-v4-flash-vision-exp` 声明 `input: [text, image]`，主会话带截图不再经识图插件；`deepseek-v4-flash` **故意不声明**（实测看不懂图、静默空输出）。 |
 | **dsh-pptmaster（skill + 插件）** | 已实现·实测（2026-09-14 部署） | [deploy-pptmaster/04-Runbook.md](.workspace/deploy-pptmaster/04-Runbook.md) · [pptmaster-exec.md](.workspace/pptmaster-exec.md) | PPT 生成/编辑：skill `ppt-master`（pn1024/dsh-ppt-master v6.1.0，attribution_guard 通过）+ 插件 `@local/dsh-pptmaster`（dsh-workbuddy-ppt 0.1.0 改名，工具 `pptmaster_*`）；工作区 .pptx 落盘约定见 03-integration.md。 |
 | **dsh-workerspace 本地串口/烧录** | 已实现·**未真机**（2026-09-14；42 单测本地全绿） | [deploy-workerspace/RUNBOOK.md](.workspace/deploy-workerspace/RUNBOOK.md) · [workerspace-exec.md](.workspace/workerspace-exec.md) | `ws_serial_list/open/send/read/close`（stty 默认后端 + serialport 可选）+ `ws_flash`（白名单模板 esptool/openocd/dfu-util/uuu/fastboot + 高危确认模态 + 输出脱敏）；**真机串口探测/烧录未实测**，装后必须真 boot 冒烟（静态兼容 ≠ 能启动）。 |
 | **分布式控制（dsh-ssh-gui v0.2.0）** | 已实现·**未真机**（2026-09-15；81/81 单测本地通过） | [deploy-ssh-gui/RUNBOOK.md](.workspace/deploy-ssh-gui/RUNBOOK.md) · [distributed-control-exec.md](.workspace/distributed-control-exec.md) | 统一「分布式控制节点」：SSH / 本地串口 / TCP 串口三类传输，`~/.dsh/remote-workspaces/nodes.json`（0600）统一注册表（machines.json 首启迁移 + 双向同步）；侧栏「分布式节点」树、settings 三类 CRUD、header「节点」命令面板/串口控制台（不内嵌 PTY）；keyRef 只存引用名；exec 审计恒开。**真机 SSH/串口/serial-tcp 服务器未实测**（需部署后按 RUNBOOK §5）。 |
@@ -62,8 +62,11 @@
   [deploy-workerspace/RUNBOOK.md](.workspace/deploy-workerspace/RUNBOOK.md) §5 实测后才算「已实现·实测」。
 - **分布式控制真机面未实测**：SSH 命令执行、真串口、serial-tcp 服务器、nodes.json 0600 落盘均需部署后按
   [deploy-ssh-gui/RUNBOOK.md](.workspace/deploy-ssh-gui/RUNBOOK.md) 实测。
-- **vision 原图直传是条件能力**：检测基准 = 模型条目声明（settings.yaml `input` 字段），当前部署未声明 → 仍走 vision-adam；
-  未声明时把图直发给文本模型被宿主闸门拒绝属预期。
+- **vision 原图直传已按声明生效**：检测基准 = 模型条目声明（settings.yaml `input` 字段）。2026-09-17 已为 adam
+  `deepseek-v4.1-flash` / `deepseek-v4-flash-vision-exp` 声明 `input: [text, image]`（实测原生多模态可用）→ 主会话原图直传；
+  未声明 `image` 的模型（如 `deepseek-v4-flash`）仍走 vision-adam 转文本，把图直发给未声明的模型会被宿主闸门拒绝（预期）。
+- **直传的小字保真度有限**：实测小字（10-11px）在直传下会退化为语义替换式幻觉（放大裁剪后同一路径 3/3 正确）；
+  用户裁决不做放大预处理，故小字场景仍以 vision-adam 路径对照为准。
 - **B 通道热载未投产**（见上）；**S15/S16 workspace UI 顺延**；**P0-B startsRequestSeries 勿借**。
 - 本仓库为个人定制部署，clone 到别处大概率不能开箱即用；能力状态随部署演进，以最新 exec 报告与 README 验收矩阵为准。
 

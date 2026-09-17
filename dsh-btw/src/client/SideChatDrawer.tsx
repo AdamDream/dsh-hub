@@ -6,6 +6,7 @@ import { NS } from './locales.ts'
 import { SideChatJumpList } from './SideChatJumpList.tsx'
 import { SideChatSurface } from './SideChatSurface.tsx'
 import type { SideChatViewStore } from './view-store.ts'
+import type { BtwSettingsSection, SettingsScope } from './btw-settings.ts'
 import { overlayPlacementStyle, useOverlayPlacement } from './use-overlay-placement.ts'
 import css from './side-chat.module.css'
 
@@ -13,6 +14,8 @@ export interface SideChatDrawerInjected {
   controller: SideChatController
   viewStore: SideChatViewStore
   parentSessionId: SessionId
+  /** P0-b: bound `dsh-btw` settings scope; undefined keeps the defaults. */
+  settingsScope?: SettingsScope<BtwSettingsSection> | undefined
   onMinimize: () => void
   onEnd: () => Promise<void>
 }
@@ -22,6 +25,7 @@ export function SideChatDrawer({
   controller,
   viewStore,
   parentSessionId,
+  settingsScope,
   t,
   onMinimize,
   onEnd,
@@ -82,6 +86,7 @@ export function SideChatDrawer({
           viewStore={viewStore}
           t={t}
           surfaceMode="drawer"
+          settingsScope={settingsScope}
           onMinimize={onMinimize}
           onEnd={onEnd}
         />
