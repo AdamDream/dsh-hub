@@ -106,6 +106,23 @@ $ <统计本会话 user/message 中 source.kind=goal 的记录>
 ```
 ⏳ 完整的"等待期"观测窗口在本次回合结束后才成立（子代理 settle 期间）。收尾时按同一判据复查并回填本节。
 
+**✅ 观测结果（2026-09-17 18:16:22 → 18:17:30，真实窗口，判据级）**
+
+窗口构造：17:53:05 `goal/create`（revision 1，armed）→ 18:16:22 `turn/end`（我主动结束回合，此时后台子代理 `730cbce5` 于 18:16:10 派出、仍在飞）。
+
+```
+18:16:22  turn/end                {"turn":1,"reason":{"kind":"completed"}}     ← 等待窗口开始
+18:17:30  agent/inbox/spliced     {"target":"next-turn","inserted":[{"content":[{"type":"text",
+                                   "text":"Background subagent 730cbce5-… failed before it finished."…
+                                  ← 唤醒源 = 子代理 settle 通知，不是 goal 轮
+18:17:30  turn/start              {"turn":2}                                   ← 被通知唤醒（设计内行为）
+```
+全会话统计：`type=user/message` 且 `data.source.kind === "goal"` 的记录 **0 条**（含 round>0 与 round 0）。
+⇒ **等待期内没有发生任何 goal 轮注入；父 agent 是被子代理通知唤醒的，不是被空转轮唤醒的。**
+
+**判定：P0-4 通过**（判据 = 等待期零 goal 源注入 + 唤醒源为 subagent 通知）。补强证据：该驱动的门控代码已复核（`pendingSubagents` 计数来自 `subagent/start`/`subagent/end`，静默条件含 `state.pendingSubagents === 0 && !state.competingQueued`，见 `部署位 dsh-goal-round-driver/lib/index.js:82`、`:270-289`）。
+**注意**：本轮为该补丁的**首次活体实测**（此前只有 mock 断言）；补丁文件 mtime 09-16 14:10，即旧进程亦已加载，故"旧进程是否空转"没有对照样本（无对照不构成本项缺陷，已如实记录）。
+
 ---
 
 ## 2. P1 三项
@@ -264,8 +281,14 @@ $ ls .workspace/deploy-pptmaster/.venv-ppt-test/ | wc -l               → 5   �
 | ≈1,055,800（chars 5,236,767） | ❌ 500 |
 | ≈1.46M / ≈2.58M（第一轮） | ❌ 500 |
 
-→ 真实窗口 ∈ **(998,887, ≈1,055,800]**，与 2^20 = 1,048,576 吻合 ⇒ `deepseek-v4.1-flash: contextWindow: 1000000` 有实测支撑且不越界。
-**重要副产物**：该网关对超窗请求**不返回长度错误文案**，而是 `{"code":"get_channel_failed","message":"分组 auto 下模型 … 的可用渠道不存在"}` —— 客户端窗口声明不准时，排障会被误导到"渠道路由"方向。
+→ **只能确证下界**：`≥ 998,887`（该尺寸实测被接受）。**上界不成立，先前推论已作废**：18:17:30 一个 `inputTokens=0` 的**零尺寸**请求同样被
+```
+503 {"code":"model_not_found","message":"No available channel for model deepseek-v4.1-flash under group auto (distributor)"}
+```
+拒掉（`llm/retry` 重试 5 次后 `turn/end` reason=error）⇒ 三次"大尺寸被拒"（≈1,055,800 / ≈1.46M / ≈2.58M，错误码 `get_channel_failed`）**与请求尺寸无关**，是同一类**渠道路由故障**，不能当作窗口边界证据。
+**用户补充事实**：该公司自建网关对 `deepseek-v4.1-flash` 的路由本身就有问题（本次故障即源于此，与窗口无关）。
+因此 `deepseek-v4.1-flash: contextWindow: 1000000` 的依据仅为"≥998,887 实测接受"这一下界，**不是**测得的真实上限；该值与 2^20 的一致性只是巧合级旁证，不足以当结论。
+待办（未做）：`probe-channel-availability.sh`（v4.1-flash vs v4-flash 各 10 次极小请求的通道可用率对比）**已写好但按你的指示未运行**（已知网关问题，不再消耗配额）。
 
 ### 3.7 baseURL 尾斜杠判定 ✅ 结案：provider 层无害，真凶是 vision-adam 手写拼接 — `.workspace/acceptance-probe/fact-baseurl-slash.md`
 
@@ -274,11 +297,18 @@ $ ls .workspace/deploy-pptmaster/.venv-ppt-test/ | wc -l               → 5   �
 - **已加固**：该行改为先归一化 `.replace(/\/+$/, "")`；部署位与 `.workspace/dsh-vision-adam-src` 逐字节一致（`f331b3d8…`），`node --check` 通过，归一化行为本地实测三种输入均产出单斜杠 URL。
 - 另按裁决去掉 provider 层尾斜杠（消除对 SDK 消重的单一依赖）。
 
-### 3.8 `agent-default-model` 于 18:06:44 被第三方改动（已核实为用户应急切换并恢复）
+### 3.8 `agent-default-model` 的三次变更（含一次我自己的错误处置，已按你的纠正撤销）
 
-- 实测：`agent-default-model.model` 在 **18:06:44** 由 `deepseek-v4.1-flash` 变为 `deepseek-v4-flash`（我 18:04 的备份里仍是 v4.1-flash，且我只改过 `contextWindow` 与 provider `baseURL`）。
-- 用户确认：是其在另一会话因 4.1 窗口故障不可用时**临时应急**切到已声明窗口的 v4-flash。
-- 处置：窗口已在 18:04 修好且经受压探测确证，故于 **18:12:39** 恢复为 `deepseek-v4.1-flash`（三处统一裁决不变）。恢复后同一失败会话在 18:07 之后已无溢出失败记录。
+时间线（全部实测）：
+| 时刻 | 值 | 谁 | 依据 |
+|---|---|---|---|
+| ~17:45 之前 | `deepseek-v4.1-flash` | 既有裁决「三处统一」 | — |
+| **18:06:44** | `deepseek-v4-flash` | **你** | 另一会话因 `deepseek-v4.1-flash` 不可用，切到可用的 v4 应急 |
+| **18:12:39** | `deepseek-v4.1-flash` | **我** | ❌ **我的误判**：我把它当成"窗口故障导致的临时规避"，而窗口已在 18:04 修好，于是按现行裁决恢复了 |
+| **18:27** | `deepseek-v4-flash` | **我（按你的纠正撤销上一步）** | 你指出根因是**公司自建网关对 `deepseek-v4.1-flash` 的路由本身有问题**，与窗口无关 |
+
+**教训（记录在案）**：我在"窗口已修好 ⇒ 应急规避可以撤销"这一步做了**未经确认的因果推断**——把用户的操作归因到我自己刚修的那个故障上，而真实原因是另一个（网关路由）。正确做法是先问"这次切换是因为窗口吗"，再决定是否恢复。报告此处保留原始判断痕迹，不抹掉。
+现状：`agent-default-model = adam/deepseek-v4-flash`；45 条 `contextWindow` 声明保留（窗口修复本身与本次回退无关，且下界实测有效）。
 
 ---
 
@@ -295,7 +325,9 @@ $ ls .workspace/deploy-pptmaster/.venv-ppt-test/ | wc -l               → 5   �
 | S21 显式模型选择 → **否决启用** | 未改任何开关；FEATURE-MAP §二 S21 行补入定性（缺宿主半边、启用即 throw） |
 | preset 热重载 → **不做** + 顺手修正注释 | `~/.dsh/profiles/web/cordis.patch.yml:8-16` 注释改为与代码一致（新建会话已热；不热的是改动前已存在的会话） |
 | 历史大文件 → **路线 A**（保留历史 + 停止跟踪 venv） | `git rm -r --cached` 1817 文件 + `.gitignore`；历史未动 |
-| overflow → **只加 contextWindow + 给其余条目补齐** | 40 条落地（证据优先保守档），`deepseek-v4.1-flash` 保持 1000000（实测支撑） |
+| overflow → **只加 contextWindow + 给其余条目补齐** | 40 条落地（证据优先保守档），`deepseek-v4.1-flash` 保持 1000000（仅下界 ≥998,887 实测支撑，上界未确证，见 §3.6 更正） |
+| 主默认模型 → **改回 `deepseek-v4-flash`** | 你的纠正：根因是公司自建网关对 v4.1 的路由问题，与窗口无关；我 18:12 的恢复属误判已撤销，见 §3.8 |
+| 三处路由范围 → **只改主会话，subagent / btw 保持 v4.1-flash 不动** | 未改 `dsh-subagent` 段、未改 `dsh-btw.model.default`；已知它们会间歇撞同一网关故障（本会话已有一个复核档因此中断） |
 | overflow 后续 → **本轮做受控加压探测** | 两轮探测完成，窗口夹到 (998,887, ≈1,055,800]，见 §3.6 |
 | 附带修复：vision-adam 加固 / 去 provider 尾斜杠 / vitest 断言加固 / 残渣清理 | 全部完成，见 §3.2 / §3.3 / §3.7 |
 | 修复产物去向 → 本地 commit + push | 见 §6 |
@@ -321,6 +353,7 @@ $ ls .workspace/deploy-pptmaster/.venv-ppt-test/ | wc -l               → 5   �
 | `.workspace/acceptance-probe/fact-baseurl-slash.md` | provider 层尾斜杠无害；真凶是 vision-adam 手写拼接（已加固） |
 | `.workspace/acceptance-probe/probe-context-window{,-round2}.sh` + `.log` | 受压探测脚本与原始响应（窗口 ∈ (998,887, ≈1,055,800]） |
 | `.workspace/acceptance-probe/fill-context-windows.py` | 40 条落地脚本（含 N/A 排除与主模型恢复） |
+| `.workspace/acceptance-probe/probe-channel-availability.sh` | **已写好未运行**：v4.1-flash vs v4-flash 通道可用率对比脚本（按你指示不再消耗配额） |
 | `.workspace/acceptance-probe/push-log3-GH001-archive.txt` | 原 `push-log3.txt` 关键内容归档（原件已删） |
 
 ---
