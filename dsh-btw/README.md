@@ -183,6 +183,8 @@ call while the client surface re-renders through its settingsScope. No section
 | `dsh-btw.ui.modelSelect` | `true` | Header model selector. `false` = hidden (model keeps its current value) |
 | `dsh-btw.ui.imageBadge` | `true` | Multi-image sequence badge on thumbnails. `false` = hidden |
 | `dsh-btw.vision.autoTransform` | `true` | Image auto-transform to text (vision-adam) when the side-chat model does not declare image input. `false` = do not auto-transform; a text-only model rejects the image send with a readable error |
+| `dsh-btw.model.default` | `deepseek-v4.1-flash` | Default model for new / resumed side conversations (host re-reads per call — hot). Cleared/absent falls back to the constant default |
+| `dsh-btw.model.options` | *(absent)* | Routable model list (drawer options + host-sanitize set). Absent/empty falls back to `[deepseek-v4.1-flash, glm-5.3, deepseek-v4-pro]` |
 
 Example:
 
@@ -203,6 +205,28 @@ keeps the defaults. Host reads go through the `settings` service
 (`src/host/vision.ts` `readBtwSettings`). The schema lives in `src/index.ts`
 (`BTW_SETTINGS_SCHEMA`) and grows only-additively with defaulted values.
 
+## Side-chat model
+
+Every side conversation routes through the `adam` provider. The routable set
+is `deepseek-v4.1-flash` (default), `glm-5.3`, and `deepseek-v4-pro`; the
+drawer's model selector offers exactly these three. The default and the enum
+live in `src/shared/remote.ts` (`btwModelSchema`) and
+`src/host/side-chat-service.ts` (`BTW_FALLBACK_MODELS` /
+`BTW_FALLBACK_DEFAULT_MODEL`).
+
+Both the default and the routable list are **settings-driven and hot**
+(`dsh-btw.model.default` / `dsh-btw.model.options`, P0-b style): the host
+re-reads the namespace on every call, so editing `~/.dsh/settings.yaml`
+applies to the next side conversation **without a restart**; a cleared or
+absent section falls back to the constants above (old config compatible).
+Note the wire contract (`btwModelSchema`) stays a compile-time set — an
+`options` entry outside it is rejected by strict validation if picked.
+
+Legacy conversations persisted with `deepseek-v4-flash` before the
+v4.1-flash switch are read back through `sanitizeBtwModel`, which maps the
+legacy id onto `deepseek-v4.1-flash` (and any unknown value onto the default)
+before anything crosses the wire — so a persisted old selection degrades
+gracefully instead of failing schema validation.
 
 ## Development
 

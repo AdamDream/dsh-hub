@@ -1,0 +1,46 @@
+106a107,137
+> * Effective configured child Agent options for one delegation, layering the
+> * hot-reloaded `dsh-subagent` settings namespace over the preset-static
+> * agentOptions: a non-empty settings `provider`/`model` overrides the preset
+> * field; a missing key keeps the preset value; a failed settings read (service
+> * absent, namespace unregistered, or a throwing `get`) falls back to the
+> * preset exactly — the previous static-route behavior — and never throws.
+> * Read per dispatch, so editing settings.yaml takes effect on the next
+> * delegation without a restart.
+> * @param runtimeCtx - install context whose `settings` service owns the namespace.
+> * @param configured - preset-static tool-instance child defaults (may be undefined).
+> * @returns the effective configured child Agent options.
+> */
+> function effectiveConfiguredAgentOptions(runtimeCtx, configured) {
+> 	let settingsValue;
+> 	try {
+> 		const settings = runtimeCtx.get("settings");
+> 		settingsValue = settings === void 0 || typeof settings.get !== "function" ? void 0 : settings.get("dsh-subagent");
+> 	} catch {
+> 		settingsValue = void 0;
+> 	}
+> 	if (settingsValue === void 0 || typeof settingsValue !== "object" || settingsValue === null) return configured;
+> 	const provider = typeof settingsValue.provider === "string" && settingsValue.provider.length > 0 ? settingsValue.provider : void 0;
+> 	const model = typeof settingsValue.model === "string" && settingsValue.model.length > 0 ? settingsValue.model : void 0;
+> 	if (provider === void 0 && model === void 0) return configured;
+> 	return {
+> 		...(configured ?? {}),
+> 		...(provider === void 0 ? {} : { provider }),
+> 		...(model === void 0 ? {} : { model })
+> 	};
+> }
+> /**
+496c527,531
+< 						const requiresRoutePreflight = hasDelegationModelRequest(modelRequest) || hasConfiguredLlmSelection(config.agentOptions);
+---
+> 						// P0' `dsh-subagent` settings default layer: hot, per-dispatch read.
+> 						// Settings win over the preset-static agentOptions; missing or failed
+> 						// reads fall back to the preset route unchanged (previous behavior).
+> 						const effectiveAgentOptions = effectiveConfiguredAgentOptions(runtimeCtx, config.agentOptions);
+> 						const requiresRoutePreflight = hasDelegationModelRequest(modelRequest) || hasConfiguredLlmSelection(effectiveAgentOptions);
+499,500c534,535
+< 							...config.agentOptions
+< 						} : config.agentOptions, modelRequest, modelSelectionEnabled);
+---
+> 							...effectiveAgentOptions
+> 						} : effectiveAgentOptions, modelRequest, modelSelectionEnabled);

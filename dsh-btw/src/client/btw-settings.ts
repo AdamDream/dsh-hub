@@ -24,11 +24,24 @@ export interface BtwSettingsSection {
   readonly vision?: {
     readonly autoTransform?: boolean
   }
+  readonly model?: {
+    /** 侧聊默认模型（select 兜底；缺失回退 BTW_DEFAULT_MODEL）。 */
+    readonly default?: string
+    /** 可路由模型清单（select 选项；缺失回退 BTW_FALLBACK_MODEL_OPTIONS）。 */
+    readonly options?: readonly string[]
+  }
 }
+
+/** 侧聊默认模型常量（与 host `BTW_FALLBACK_DEFAULT_MODEL` 一致）。 */
+export const BTW_DEFAULT_MODEL = 'deepseek-v4.1-flash'
+
+/** 侧聊可路由模型清单常量（与 host `BTW_FALLBACK_MODELS` 一致）。 */
+export const BTW_FALLBACK_MODEL_OPTIONS = Object.freeze(['deepseek-v4.1-flash', 'glm-5.3', 'deepseek-v4-pro'])
 
 export const BTW_SETTINGS_DEFAULTS: BtwSettingsSection = Object.freeze({
   ui: Object.freeze({ banner: true, modelSelect: true, imageBadge: true }),
   vision: Object.freeze({ autoTransform: true }),
+  model: Object.freeze({ default: BTW_DEFAULT_MODEL, options: BTW_FALLBACK_MODEL_OPTIONS }),
 })
 
 /** Narrow one raw settings section (wire value) to the surface's reads. */
@@ -36,6 +49,7 @@ export function decodeBtwSettings(section: unknown): BtwSettingsSection {
   const value = section !== null && typeof section === 'object' ? section as BtwSettingsSection : {}
   const ui = value.ui !== null && typeof value.ui === 'object' ? value.ui : {}
   const vision = value.vision !== null && typeof value.vision === 'object' ? value.vision : {}
+  const model = value.model !== null && typeof value.model === 'object' ? value.model : {}
   return {
     ui: {
       banner: ui.banner !== false,
@@ -44,6 +58,14 @@ export function decodeBtwSettings(section: unknown): BtwSettingsSection {
     },
     vision: {
       autoTransform: vision.autoTransform !== false,
+    },
+    model: {
+      default: typeof model.default === 'string' && model.default !== '' ? model.default : BTW_DEFAULT_MODEL,
+      options: (() => {
+        if (!Array.isArray(model.options) || model.options.length === 0) return BTW_FALLBACK_MODEL_OPTIONS
+        const options = model.options.filter((option): option is string => typeof option === 'string')
+        return options.length > 0 ? options : BTW_FALLBACK_MODEL_OPTIONS
+      })(),
     },
   }
 }

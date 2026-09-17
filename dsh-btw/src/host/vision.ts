@@ -159,10 +159,25 @@ function readVisionConfig(ctx: Context): unknown {
  * unregistered, malformed value) degrades to an empty object so callers fall
  * back to their own defaults (= current behavior).
  */
-export function readBtwSettings(ctx: Context): { vision?: { autoTransform?: boolean } } {
+export interface BtwModelSettings {
+  /** 侧聊默认模型（缺失 → 调用方回退代码常量）。 */
+  readonly default?: string
+  /** 可路由模型清单（缺失 → 调用方回退代码常量清单）。 */
+  readonly options?: readonly string[]
+}
+
+export function readBtwSettings(ctx: Context): {
+  ui?: { banner?: boolean; modelSelect?: boolean; imageBadge?: boolean }
+  vision?: { autoTransform?: boolean }
+  model?: BtwModelSettings
+} {
   try {
     const settings = ctx.get('settings') as { get?: (namespace: string) => unknown } | undefined
-    const section = settings?.get?.('dsh-btw') as { vision?: { autoTransform?: boolean } } | undefined
+    const section = settings?.get?.('dsh-btw') as {
+      ui?: { banner?: boolean; modelSelect?: boolean; imageBadge?: boolean }
+      vision?: { autoTransform?: boolean }
+      model?: BtwModelSettings
+    } | undefined
     if (section !== null && typeof section === 'object') return section
   } catch {
     // settings service missing or the namespace is unregistered — defaults below

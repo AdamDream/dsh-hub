@@ -37,7 +37,29 @@ export const BTW_SETTINGS_SCHEMA = z.object({
 			autoTransform: z.boolean().default(true),
 		})
 		.default({ autoTransform: true }),
-}).default({ ui: { banner: true, modelSelect: true, imageBadge: true }, vision: { autoTransform: true } })
+	model: z
+		.object({
+			// 侧聊默认模型（新开/恢复侧聊未显式指定模型时路由到的模型；
+			// host 每次调用热读，改 settings.yaml 无需重启，缺失回退代码常量）。
+			default: z.string().default('deepseek-v4.1-flash'),
+			// 可路由模型清单（抽屉选项与 host 合法集；空数组/缺失回退代码
+			// 常量清单）。注意：wire 远端契约（btwModelSchema）仍是编译期
+			// 固定集合，若 options 配置了契约之外的模型，选择它会被 strict
+			// 校验拒绝。
+			options: z.array(z.string()).default(['deepseek-v4.1-flash', 'glm-5.3', 'deepseek-v4-pro']),
+		})
+		.default({
+			default: 'deepseek-v4.1-flash',
+			options: ['deepseek-v4.1-flash', 'glm-5.3', 'deepseek-v4-pro'],
+		}),
+}).default({
+	ui: { banner: true, modelSelect: true, imageBadge: true },
+	vision: { autoTransform: true },
+	model: {
+		default: 'deepseek-v4.1-flash',
+		options: ['deepseek-v4.1-flash', 'glm-5.3', 'deepseek-v4-pro'],
+	},
+})
 
 export function apply(ctx: Context): void {
 	ctx.inject(['settings'], settingsCtx => {

@@ -1,0 +1,9 @@
+settings.describe on test instance (:8091), namespace dsh-subagent:
+  [after appending section to settings.yaml, no restart]
+    resolved: {"provider": "adam", "model": "glm-5.3"} | user: {"provider": "adam", "model": "glm-5.3"} | base: {"provider": "adam", "model": "deepseek-v4.1-flash"} | revision: 1
+  [after clearing the section, no restart]
+    resolved: {"provider": "adam", "model": "deepseek-v4.1-flash"} | user: null | base: {"provider": "adam", "model": "deepseek-v4.1-flash"} | revision: 2
+  [settings.mutate set provider+model (GUI 保存路径), no restart]
+    ok: true | revision: 3 → settings.yaml 实盘出现 dsh-subagent: {provider: adam, model: glm-5.3}
+  [settings.mutate unset both (GUI 清空路径), no restart]
+    ok: true | revision: 4 → resolved 回退 {"provider": "adam", "model": "deepseek-v4.1-flash"} | user: {}

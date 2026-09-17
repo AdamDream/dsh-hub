@@ -1,4 +1,4 @@
-import { y as sideChatImageMediaTypeSchema } from "./remote-DxLkxvnp.js";
+import { y as sideChatImageMediaTypeSchema } from "./remote-Dv1GpyGK.js";
 import z from "@deepseek-ai/schemastery";
 import { settingsNamespace } from "@deepseek-ai/dsh-settings";
 import { randomUUID } from "node:crypto";
@@ -243,12 +243,6 @@ function readVisionConfig(ctx) {
 	} catch {}
 	return VISION_DEFAULTS;
 }
-/**
-* P0-b: read the `dsh-btw` settings section (registered in src/index.ts).
-* Returns a partial section; every surprise (service absent, namespace
-* unregistered, malformed value) degrades to an empty object so callers fall
-* back to their own defaults (= current behavior).
-*/
 function readBtwSettings(ctx) {
 	try {
 		const section = ctx.get("settings")?.get?.("dsh-btw");
@@ -339,16 +333,70 @@ const SIDE_CHAT_PERSONA = "You are in a persistent side conversation (btw), sepa
 const SIDE_CHAT_BOUNDARY = "Side conversation boundary. Everything before this message is inherited history from the parent thread and is reference context only, not your current task. Do not continue any earlier plan, edit, command, approval, or tool call. Only direct user messages after this boundary are active instructions. This conversation is read-only.";
 /** Marker injected with the digest notice so the digest stays identifiable in the child log. */
 const DIGEST_SUMMARY = "Main conversation progress snapshot";
-/** The three routable side-conversation models (provider is always `adam`). */
-const BTW_MODELS = [
-	"deepseek-v4-flash",
+/**
+* Fallback routable side-conversation models (provider is always `adam`).
+* The routable set and the default are settings-driven (P0-b 热载):
+* `dsh-btw.model.options` / `dsh-btw.model.default` are read on every call
+* (host re-reads the namespace each time, so editing `~/.dsh/settings.yaml`
+* applies without a restart); an absent or malformed section falls back to
+* these constants (= pre-hot-read behavior).
+*/
+const BTW_FALLBACK_MODELS = [
+	"deepseek-v4.1-flash",
 	"glm-5.3",
 	"deepseek-v4-pro"
 ];
 const BTW_PROVIDER = "adam";
-const DEFAULT_BTW_MODEL = "deepseek-v4-flash";
-function sanitizeBtwModel(model) {
-	return model !== void 0 && BTW_MODELS.includes(model) ? model : DEFAULT_BTW_MODEL;
+const BTW_FALLBACK_DEFAULT_MODEL = "deepseek-v4.1-flash";
+/**
+* Legacy persisted model ids mapped onto their replacement. Side conversations
+* created before the v4-flash → v4.1-flash switch (2026-09-16) keep their
+* flash-class intent (the persisted id lives in the child session request
+* header and is read on every resume); anything unknown degrades to the
+* default. The wire schemas never carry these ids — every host emission goes
+* through `sanitizeBtwModel` first, so a legacy id can never trip strict
+* client-side validation.
+*/
+const BTW_LEGACY_MODEL_MAP = { "deepseek-v4-flash": "deepseek-v4.1-flash" };
+/**
+* The routable model list right now: `dsh-btw.model.options` when configured
+* (non-empty array), else the fallback constant list. Read per call → 热载.
+*/
+function btwRoutableModels(ctx) {
+	const options = readBtwSettings(ctx).model?.options;
+	return Array.isArray(options) && options.length > 0 ? options : BTW_FALLBACK_MODELS;
+}
+/**
+* The default model right now: `dsh-btw.model.default` validated against the
+* current routable set, else the fallback constant. Read per call → 热载.
+*/
+function btwDefaultModel(ctx) {
+	return sanitizeBtwModel(readBtwSettings(ctx).model?.default, btwRoutableModels(ctx));
+}
+/**
+* Normalize one model candidate to a routable value: a legacy persisted id
+* maps onto its replacement first, then the candidate passes when it is in
+* the routable set (`routable` or the fallback constant list), else the
+* default. Never throws — strict wire validation can therefore never be
+* tripped by persisted or configured values.
+*/
+function sanitizeBtwModel(model, routable) {
+	if (model === void 0) return BTW_FALLBACK_DEFAULT_MODEL;
+	const legacy = BTW_LEGACY_MODEL_MAP[model];
+	if (legacy !== void 0) return legacy;
+	if ((routable ?? BTW_FALLBACK_MODELS).includes(model)) return model;
+	return BTW_FALLBACK_DEFAULT_MODEL;
+}
+/**
+* The model a side conversation reports right now: the composed selection
+* (explicit pick / persisted header) sanitized against the current routable
+* set, or the settings-resolved default while the child is still opening.
+* Read per call, so a settings.yaml edit surfaces on the very next read.
+*/
+function btwCurrentModel(ctx, entry) {
+	const current = entry.modelSelection?.current?.model;
+	if (current === void 0) return btwDefaultModel(ctx);
+	return sanitizeBtwModel(current, btwRoutableModels(ctx));
 }
 function failure(code, message) {
 	return {
@@ -524,7 +572,7 @@ function progressDigestLines(parent) {
 	if (!running && toolCalls.length === 0 && partial.trim() === "") lines.push("- The main agent has finished its latest turn; no work is in progress.");
 	return lines.join("\n");
 }
-function transcript(entry) {
+function transcript(entry, ctx) {
 	const events = entry.handle?.agent.session.events.slice(entry.seedLength) ?? [];
 	const messages = [];
 	const messageIds = /* @__PURE__ */ new Set();
@@ -670,7 +718,7 @@ function transcript(entry) {
 		partial,
 		reasoning,
 		running: childRunning || queued,
-		model: sanitizeBtwModel(entry.modelSelection?.current?.model),
+		model: btwCurrentModel(ctx, entry),
 		...currentAction === void 0 ? {} : { currentAction },
 		...childRunning && runningTool !== void 0 ? { runningTool } : {},
 		...pendingQuestion === void 0 ? {} : { pendingQuestion: {
@@ -760,7 +808,7 @@ var SideChatService = class extends TypertRemoteService {
 				meta: hiddenSideChatMeta(parent, childDepth, seed.length),
 				agentOptions: resolveChildAgentOptions(parent, {
 					provider: BTW_PROVIDER,
-					model: request.model ?? DEFAULT_BTW_MODEL
+					model: request.model ?? btwDefaultModel(this.ctx)
 				}, childDepth),
 				signal: entry.abort.signal,
 				setup: (childCtx) => this.composeChild(childCtx, parent, allowedTools, entry)
@@ -866,7 +914,7 @@ var SideChatService = class extends TypertRemoteService {
 				resumeSessionId: childId,
 				agentOptions: resolveChildAgentOptions(parent, {
 					provider: BTW_PROVIDER,
-					model: request.model ?? DEFAULT_BTW_MODEL
+					model: request.model ?? btwDefaultModel(this.ctx)
 				}, childDepth),
 				signal: entry.abort.signal,
 				setup: (childCtx) => this.composeChild(childCtx, parent, allowedTools, entry)
@@ -922,17 +970,18 @@ var SideChatService = class extends TypertRemoteService {
 	*/
 	installBtwModelSelection(childCtx, childAgent) {
 		let picked;
+		const ctx = this.ctx;
 		const selection = {
 			get current() {
 				if (picked !== void 0) return picked;
 				const logged = childAgent.session.requestHeader()?.config;
 				if (logged === void 0) return {
 					provider: BTW_PROVIDER,
-					model: DEFAULT_BTW_MODEL
+					model: btwDefaultModel(ctx)
 				};
 				return {
 					provider: logged.provider,
-					model: sanitizeBtwModel(logged.model)
+					model: sanitizeBtwModel(logged.model, btwRoutableModels(ctx))
 				};
 			},
 			set current(next) {
@@ -1129,7 +1178,7 @@ var SideChatService = class extends TypertRemoteService {
 		};
 		return {
 			ok: true,
-			value: transcript(entry)
+			value: transcript(entry, this.ctx)
 		};
 	}
 	async send(request) {
@@ -1363,7 +1412,7 @@ var SideChatService = class extends TypertRemoteService {
 		};
 		entry.modelSelection.current = {
 			provider: BTW_PROVIDER,
-			model: request.model
+			model: sanitizeBtwModel(request.model, btwRoutableModels(this.ctx))
 		};
 		return {
 			ok: true,
@@ -1492,7 +1541,7 @@ var SideChatService = class extends TypertRemoteService {
 				chatToken: entry.chatToken,
 				seedLength: entry.seedLength,
 				resumed: entry.resumed,
-				model: sanitizeBtwModel(entry.modelSelection?.current?.model)
+				model: btwCurrentModel(this.ctx, entry)
 			}
 		};
 	}
@@ -1644,14 +1693,37 @@ const BTW_SETTINGS_SCHEMA = z.object({
 		modelSelect: true,
 		imageBadge: true
 	}),
-	vision: z.object({ autoTransform: z.boolean().default(true) }).default({ autoTransform: true })
+	vision: z.object({ autoTransform: z.boolean().default(true) }).default({ autoTransform: true }),
+	model: z.object({
+		default: z.string().default("deepseek-v4.1-flash"),
+		options: z.array(z.string()).default([
+			"deepseek-v4.1-flash",
+			"glm-5.3",
+			"deepseek-v4-pro"
+		])
+	}).default({
+		default: "deepseek-v4.1-flash",
+		options: [
+			"deepseek-v4.1-flash",
+			"glm-5.3",
+			"deepseek-v4-pro"
+		]
+	})
 }).default({
 	ui: {
 		banner: true,
 		modelSelect: true,
 		imageBadge: true
 	},
-	vision: { autoTransform: true }
+	vision: { autoTransform: true },
+	model: {
+		default: "deepseek-v4.1-flash",
+		options: [
+			"deepseek-v4.1-flash",
+			"glm-5.3",
+			"deepseek-v4-pro"
+		]
+	}
 });
 function apply(ctx) {
 	ctx.inject(["settings"], (settingsCtx) => {

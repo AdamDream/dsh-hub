@@ -13,9 +13,13 @@ const sideChatErrorSchema = z.object({
 	code: sideChatErrorCodeSchema,
 	message: z.string()
 }).strict();
-/** The three models a side conversation may route to (provider is always `adam`). */
+/**
+* The three models a side conversation may route to (provider is always `adam`).
+* `deepseek-v4-flash` was replaced by `deepseek-v4.1-flash` (2026-09-16);
+* persisted legacy selections are mapped host-side (see `sanitizeBtwModel`).
+*/
 const btwModelSchema = z.enum([
-	"deepseek-v4-flash",
+	"deepseek-v4.1-flash",
 	"glm-5.3",
 	"deepseek-v4-pro"
 ]);

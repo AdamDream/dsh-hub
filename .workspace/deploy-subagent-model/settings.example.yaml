@@ -1,0 +1,21 @@
+# dsh-subagent 段示例（settings.yaml）
+
+# 1) 不写该段（推荐默认态）→ 子代理默认路由 = preset 固定路由 adam/deepseek-v4.1-flash。
+
+# 2) 覆盖 model（provider 缺省时沿用 preset 的 adam）：
+# dsh-subagent:
+#   model: glm-5.3
+
+# 3) 同时覆盖 provider + model：
+# dsh-subagent:
+#   provider: adam
+#   model: glm-5.3
+
+# 4) 清空/回退默认：删除该段，或置空：
+# dsh-subagent: {}
+
+# 说明：
+# - 热生效：改完即影响下一次 subagent / subagent_fork 派发，无需重启（部署重启一次之后）。
+# - model 清单事实源 = llm-pi-ai.providers.*.models（设置页下拉同源）。
+# - 非法值会在每次派发时被 preflight 实时校验并抛出清晰错误。
+# - 默认值恒为 preset 固定路由 adam/deepseek-v4.1-flash（AGENTS.md 裁决不变）。

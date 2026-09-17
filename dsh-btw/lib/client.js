@@ -1127,26 +1127,47 @@ window.__ModuleLoader__.load({
 		}
 		//#endregion
 		//#region src/client/btw-settings.ts
+		/** 侧聊默认模型常量（与 host `BTW_FALLBACK_DEFAULT_MODEL` 一致）。 */
+		const BTW_DEFAULT_MODEL = "deepseek-v4.1-flash";
+		/** 侧聊可路由模型清单常量（与 host `BTW_FALLBACK_MODELS` 一致）。 */
+		const BTW_FALLBACK_MODEL_OPTIONS = Object.freeze([
+			"deepseek-v4.1-flash",
+			"glm-5.3",
+			"deepseek-v4-pro"
+		]);
 		const BTW_SETTINGS_DEFAULTS = Object.freeze({
 			ui: Object.freeze({
 				banner: true,
 				modelSelect: true,
 				imageBadge: true
 			}),
-			vision: Object.freeze({ autoTransform: true })
+			vision: Object.freeze({ autoTransform: true }),
+			model: Object.freeze({
+				default: BTW_DEFAULT_MODEL,
+				options: BTW_FALLBACK_MODEL_OPTIONS
+			})
 		});
 		/** Narrow one raw settings section (wire value) to the surface's reads. */
 		function decodeBtwSettings(section) {
 			const value = section !== null && typeof section === "object" ? section : {};
 			const ui = value.ui !== null && typeof value.ui === "object" ? value.ui : {};
 			const vision = value.vision !== null && typeof value.vision === "object" ? value.vision : {};
+			const model = value.model !== null && typeof value.model === "object" ? value.model : {};
 			return {
 				ui: {
 					banner: ui.banner !== false,
 					modelSelect: ui.modelSelect !== false,
 					imageBadge: ui.imageBadge !== false
 				},
-				vision: { autoTransform: vision.autoTransform !== false }
+				vision: { autoTransform: vision.autoTransform !== false },
+				model: {
+					default: typeof model.default === "string" && model.default !== "" ? model.default : BTW_DEFAULT_MODEL,
+					options: (() => {
+						if (!Array.isArray(model.options) || model.options.length === 0) return BTW_FALLBACK_MODEL_OPTIONS;
+						const options = model.options.filter((option) => typeof option === "string");
+						return options.length > 0 ? options : BTW_FALLBACK_MODEL_OPTIONS;
+					})()
+				}
 			};
 		}
 		/**
@@ -1621,29 +1642,19 @@ window.__ModuleLoader__.load({
 						}), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 							className: side_chat_module_css_default.headerActions,
 							children: [
-								settings.ui?.modelSelect !== false && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("select", {
+								settings.ui?.modelSelect !== false && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("select", {
 									className: side_chat_module_css_default.modelSelect,
-									value: state.model ?? "deepseek-v4-flash",
+									value: state.model ?? settings.model?.default ?? "deepseek-v4.1-flash",
 									disabled: !interactive,
 									"aria-label": t("drawer.model"),
 									title: t("drawer.modelNextTurn"),
 									onChange: (event) => {
 										controller.setModel(event.target.value);
 									},
-									children: [
-										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("option", {
-											value: "deepseek-v4-flash",
-											children: "deepseek-v4-flash"
-										}),
-										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("option", {
-											value: "glm-5.3",
-											children: "glm-5.3"
-										}),
-										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("option", {
-											value: "deepseek-v4-pro",
-											children: "deepseek-v4-pro"
-										})
-									]
+									children: (settings.model?.options ?? BTW_FALLBACK_MODEL_OPTIONS).map((option) => /* @__PURE__ */ (0, react_jsx_runtime.jsx)("option", {
+										value: option,
+										children: option
+									}, option))
 								}),
 								/* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
 									ref: endButtonRef,
@@ -8262,9 +8273,13 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 			]),
 			message: string()
 		}).strict();
-		/** The three models a side conversation may route to (provider is always `adam`). */
+		/**
+		* The three models a side conversation may route to (provider is always `adam`).
+		* `deepseek-v4-flash` was replaced by `deepseek-v4.1-flash` (2026-09-16);
+		* persisted legacy selections are mapped host-side (see `sanitizeBtwModel`).
+		*/
 		const btwModelSchema = _enum([
-			"deepseek-v4-flash",
+			"deepseek-v4.1-flash",
 			"glm-5.3",
 			"deepseek-v4-pro"
 		]);

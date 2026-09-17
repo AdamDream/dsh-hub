@@ -1,4 +1,4 @@
-import { t as sideChatRemoteDescriptors } from "./remote-descriptors-xg8tvseq.js";
+import { t as sideChatRemoteDescriptors } from "./remote-descriptors-D37stQ5y.js";
 //#region src/client/remote.ts
 const TYPERT_REMOTE = {
 	package: "@local/dsh-btw",

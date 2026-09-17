@@ -1,6 +1,7 @@
 import { Context } from '@deepseek-ai/cordis'
 import type { Agent, AgentHandle } from '@deepseek-ai/dsh-agent'
 import type { SessionEvent } from '@deepseek-ai/dsh-session'
+import { resolveChildAgentOptions } from '@deepseek-ai/dsh-subagent'
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
@@ -14,7 +15,7 @@ vi.mock('@deepseek-ai/dsh-subagent', () => ({
   resolveChildDepth: vi.fn(() => 1),
 }))
 
-import { SideChatService } from '../src/host/side-chat-service.ts'
+import { SideChatService, sanitizeBtwModel } from '../src/host/side-chat-service.ts'
 
 let parentSequence = 0
 
@@ -79,20 +80,45 @@ function childHandle() {
   return { handle, inject, followup, cancel, dispose }
 }
 
-function hostHarness(create: () => Promise<AgentHandle>, events: SessionEvent[] = seedEvents(), status: 'idle' | 'running' = 'idle') {
+function hostHarness(
+  create: () => Promise<AgentHandle>,
+  events: SessionEvent[] = seedEvents(),
+  status: 'idle' | 'running' = 'idle',
+  settingsSection?: { current: unknown },
+) {
   const ctx = new Context()
   const parentId = nextParentId()
-  const agents = { get: vi.fn(), create: vi.fn(create), resume: vi.fn(async () => { throw new Error('no persisted session') }) }
+  let runSetup: ((childCtx: unknown) => void) | undefined
+  const agents = {
+    get: vi.fn(),
+    create: vi.fn((options: { setup?: (childCtx: unknown) => void }) => {
+      runSetup = options.setup
+      return create()
+    }),
+    resume: vi.fn(async () => { throw new Error('no persisted session') }),
+  }
   const parent = {
     status,
     session: { events },
     ctx: { agents, tools: { get: vi.fn(() => undefined) } },
   } as unknown as Agent
-  agents.get.mockImplementation(id => String(id) === parentId ? parent : undefined)
+  agents.get.mockImplementation(() => parent)
   ctx.provide('agents', agents as never)
   ctx.provide('sessions', {} as never)
+  // `dsh-btw` namespace stub; `settingsSection` (when given) is read by value
+  // on every call, so mutating it simulates a settings.yaml hot edit.
+  const settings = {
+    get: vi.fn((namespace: string) => (namespace === 'dsh-btw' ? settingsSection?.current : undefined)),
+  }
+  ctx.provide('settings', settings as never)
   const service = new SideChatService(ctx)
-  return { ctx, service, agents, parentId }
+  return {
+    ctx, service, agents, parentId, settings,
+    // The real `agents.create` runs `setup(childCtx)` (composeChild) before the
+    // handle resolves; the harness replays it so `entry.modelSelection`
+    // installs like production (reads the persisted request header).
+    runSetup: (childCtx: unknown) => { runSetup?.(childCtx) },
+  }
 }
 
 describe('btw Host opening admission', () => {
@@ -317,5 +343,136 @@ describe('btw Host opening admission', () => {
     expect(created.inject).not.toHaveBeenCalled()
     expect(created.followup).not.toHaveBeenCalled()
     expect(created.dispose).toHaveBeenCalledTimes(1)
+  })
+
+  it('defaults the side-chat model to deepseek-v4.1-flash without crashing', async () => {
+    const child = Promise.withResolvers<AgentHandle>()
+    const env = hostHarness(() => child.promise)
+    contexts.push(env.ctx)
+    const created = childHandle()
+
+    const result = await env.service.start({ parentSessionId: env.parentId, chatToken: TOKEN })
+    const read = env.service.read({ chatToken: TOKEN })
+    child.resolve(created.handle)
+    await Promise.resolve()
+
+    // The default routes to adam/deepseek-v4.1-flash on start and on read;
+    // no model selection installed yet degrades to the same default.
+    expect(result).toMatchObject({ ok: true, value: { model: 'deepseek-v4.1-flash' } })
+    expect(read).toMatchObject({ ok: true, value: { model: 'deepseek-v4.1-flash' } })
+    expect(resolveChildAgentOptions).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ provider: 'adam', model: 'deepseek-v4.1-flash' }),
+      expect.anything(),
+    )
+  })
+
+  it('resumes a persisted legacy deepseek-v4-flash header on deepseek-v4.1-flash (no white-screen)', async () => {
+    const child = Promise.withResolvers<AgentHandle>()
+    const env = hostHarness(() => child.promise)
+    contexts.push(env.ctx)
+    const created = childHandle()
+    // Simulate a conversation persisted before the switch: the child session
+    // request header carries the legacy model id, read by
+    // `installBtwModelSelection` on every resume.
+    ;(created.handle.agent.session as { requestHeader?: () => unknown }).requestHeader = () => ({
+      config: { provider: 'adam', model: 'deepseek-v4-flash' },
+    })
+
+    const result = await env.service.start({ parentSessionId: env.parentId, chatToken: TOKEN })
+    env.runSetup({ agent: created.handle.agent, on: vi.fn(), tools: { guard: vi.fn(), register: vi.fn() } })
+    child.resolve(created.handle)
+    await Promise.resolve()
+    await Promise.resolve()
+
+    // The legacy id never reaches the wire: it is mapped onto the replacement,
+    // so strict client-side schema validation cannot reject the read.
+    const read = env.service.read({ chatToken: TOKEN })
+    expect(result).toMatchObject({ ok: true, value: { model: 'deepseek-v4.1-flash' } })
+    expect(read).toMatchObject({ ok: true, value: { model: 'deepseek-v4.1-flash' } })
+  })
+
+  it('hot-reads the settings default model between starts (no restart)', async () => {
+    const section: { current: unknown } = { current: { model: { default: 'glm-5.3' } } }
+    const child = Promise.withResolvers<AgentHandle>()
+    const env = hostHarness(() => child.promise, seedEvents(), 'idle', section)
+    contexts.push(env.ctx)
+    const created = childHandle()
+
+    const first = await env.service.start({ parentSessionId: env.parentId, chatToken: TOKEN })
+    expect(first).toMatchObject({ ok: true, value: { model: 'glm-5.3' } })
+    expect(resolveChildAgentOptions).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ provider: 'adam', model: 'glm-5.3' }),
+      expect.anything(),
+    )
+
+    // Simulate editing `~/.dsh/settings.yaml` `dsh-btw.model.default` and
+    // saving: the host re-reads the namespace per call, so the next start
+    // picks up the new default in the same process — no restart.
+    section.current = { model: { default: 'deepseek-v4-pro' } }
+    const second = await env.service.start({ parentSessionId: nextParentId(), chatToken: ADOPTED_TOKEN })
+    expect(second).toMatchObject({ ok: true, value: { model: 'deepseek-v4-pro' } })
+
+    // Clearing the section falls back to the constant default.
+    section.current = {}
+    const third = await env.service.start({ parentSessionId: nextParentId(), chatToken: REQUEST })
+    expect(third).toMatchObject({ ok: true, value: { model: 'deepseek-v4.1-flash' } })
+    child.resolve(created.handle)
+    await Promise.resolve()
+    await Promise.resolve()
+    expect(env.settings.get).toHaveBeenCalledWith('dsh-btw')
+  })
+
+  it('normalizes a setModel pick against the settings routable options', async () => {
+    const section: { current: unknown } = { current: { model: { options: ['deepseek-v4.1-flash'] } } }
+    const child = Promise.withResolvers<AgentHandle>()
+    const env = hostHarness(() => child.promise, seedEvents(), 'idle', section)
+    contexts.push(env.ctx)
+    const created = childHandle()
+
+    await env.service.start({ parentSessionId: env.parentId, chatToken: TOKEN })
+    env.runSetup({ agent: created.handle.agent, on: vi.fn(), tools: { guard: vi.fn(), register: vi.fn() } })
+    child.resolve(created.handle)
+    await Promise.resolve()
+    await Promise.resolve()
+
+    // glm-5.3 was routed out of the list via settings: the pick degrades to
+    // the default instead of routing off-list.
+    const set = await env.service.setModel({ chatToken: TOKEN, model: 'glm-5.3' })
+    expect(set).toMatchObject({ ok: true, value: { accepted: true } })
+    expect(env.service.read({ chatToken: TOKEN })).toMatchObject({
+      ok: true,
+      value: { model: 'deepseek-v4.1-flash' },
+    })
+  })
+})
+
+describe('btw model resolution (v4-flash → v4.1-flash replacement)', () => {
+  it('maps the persisted legacy id onto its replacement', () => {
+    // A conversation persisted with `deepseek-v4-flash` before the switch
+    // resumes on the replacement model — the schema itself never sees the
+    // legacy id, so strict client validation cannot be tripped.
+    expect(sanitizeBtwModel('deepseek-v4-flash')).toBe('deepseek-v4.1-flash')
+  })
+
+  it('passes current enum values through untouched', () => {
+    expect(sanitizeBtwModel('deepseek-v4.1-flash')).toBe('deepseek-v4.1-flash')
+    expect(sanitizeBtwModel('glm-5.3')).toBe('glm-5.3')
+    expect(sanitizeBtwModel('deepseek-v4-pro')).toBe('deepseek-v4-pro')
+  })
+
+  it('degrades undefined and unknown values to the default', () => {
+    expect(sanitizeBtwModel(undefined)).toBe('deepseek-v4.1-flash')
+    expect(sanitizeBtwModel('garbage-model')).toBe('deepseek-v4.1-flash')
+  })
+
+  it('honors a settings-provided routable set (options 热读)', () => {
+    const routable = ['deepseek-v4.1-flash', 'glm-5.3']
+    expect(sanitizeBtwModel('glm-5.3', routable)).toBe('glm-5.3')
+    expect(sanitizeBtwModel('deepseek-v4-pro', routable)).toBe('deepseek-v4.1-flash')
+    expect(sanitizeBtwModel('deepseek-v4.1-flash', ['deepseek-v4.1-flash'])).toBe('deepseek-v4.1-flash')
+    // The legacy id maps onto its replacement even when listed in options.
+    expect(sanitizeBtwModel('deepseek-v4-flash', ['deepseek-v4-flash', 'glm-5.3'])).toBe('deepseek-v4.1-flash')
   })
 })

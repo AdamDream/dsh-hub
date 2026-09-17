@@ -9,8 +9,12 @@ export type SideChatErrorCode = z.infer<typeof sideChatErrorCodeSchema>
 export const sideChatErrorSchema = z.object({ code: sideChatErrorCodeSchema, message: z.string() }).strict()
 export type SideChatError = z.infer<typeof sideChatErrorSchema>
 
-/** The three models a side conversation may route to (provider is always `adam`). */
-export const btwModelSchema = z.enum(['deepseek-v4-flash', 'glm-5.3', 'deepseek-v4-pro'])
+/**
+ * The three models a side conversation may route to (provider is always `adam`).
+ * `deepseek-v4-flash` was replaced by `deepseek-v4.1-flash` (2026-09-16);
+ * persisted legacy selections are mapped host-side (see `sanitizeBtwModel`).
+ */
+export const btwModelSchema = z.enum(['deepseek-v4.1-flash', 'glm-5.3', 'deepseek-v4-pro'])
 export type BtwModel = z.infer<typeof btwModelSchema>
 
 export const startSideChatRequestSchema = z.object({

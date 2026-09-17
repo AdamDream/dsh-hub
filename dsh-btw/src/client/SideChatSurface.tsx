@@ -14,7 +14,7 @@ import { SideChatSign } from './SideChatSign.tsx'
 import { SideChatToolRow } from './SideChatToolRow.tsx'
 import type { SideChatDraftImage, SideChatPresentationMode, SideChatViewStore } from './view-store.ts'
 import type { BtwSettingsSection, SettingsScope } from './btw-settings.ts'
-import { useBtwSettings } from './btw-settings.ts'
+import { BTW_DEFAULT_MODEL, BTW_FALLBACK_MODEL_OPTIONS, useBtwSettings } from './btw-settings.ts'
 import css from './side-chat.module.css'
 
 type Snapshot = ReturnType<SessionFace['getSnapshot']>
@@ -446,7 +446,7 @@ export function SideChatSurface({
           {settings.ui?.modelSelect !== false && (
             <select
               className={css.modelSelect}
-              value={state.model ?? 'deepseek-v4-flash'}
+              value={state.model ?? settings.model?.default ?? BTW_DEFAULT_MODEL}
               disabled={!interactive}
               aria-label={t('drawer.model')}
               title={t('drawer.modelNextTurn')}
@@ -454,9 +454,9 @@ export function SideChatSurface({
                 void controller.setModel(event.target.value as BtwModel)
               }}
             >
-              <option value="deepseek-v4-flash">deepseek-v4-flash</option>
-              <option value="glm-5.3">glm-5.3</option>
-              <option value="deepseek-v4-pro">deepseek-v4-pro</option>
+              {(settings.model?.options ?? BTW_FALLBACK_MODEL_OPTIONS).map(option => (
+                <option key={option} value={option}>{option}</option>
+              ))}
             </select>
           )}
           <button

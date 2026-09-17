@@ -71,15 +71,74 @@ const SIDE_CHAT_BOUNDARY = 'Side conversation boundary. Everything before this m
 /** Marker injected with the digest notice so the digest stays identifiable in the child log. */
 const DIGEST_SUMMARY = 'Main conversation progress snapshot'
 
-/** The three routable side-conversation models (provider is always `adam`). */
-const BTW_MODELS = ['deepseek-v4-flash', 'glm-5.3', 'deepseek-v4-pro'] as const
+/**
+ * Fallback routable side-conversation models (provider is always `adam`).
+ * The routable set and the default are settings-driven (P0-b 热载):
+ * `dsh-btw.model.options` / `dsh-btw.model.default` are read on every call
+ * (host re-reads the namespace each time, so editing `~/.dsh/settings.yaml`
+ * applies without a restart); an absent or malformed section falls back to
+ * these constants (= pre-hot-read behavior).
+ */
+export const BTW_FALLBACK_MODELS = ['deepseek-v4.1-flash', 'glm-5.3', 'deepseek-v4-pro'] as const
 const BTW_PROVIDER = 'adam'
-const DEFAULT_BTW_MODEL = 'deepseek-v4-flash'
+export const BTW_FALLBACK_DEFAULT_MODEL = 'deepseek-v4.1-flash'
 
-function sanitizeBtwModel(model: string | undefined): BtwModel {
-  return model !== undefined && (BTW_MODELS as readonly string[]).includes(model)
-    ? model as BtwModel
-    : DEFAULT_BTW_MODEL
+/**
+ * Legacy persisted model ids mapped onto their replacement. Side conversations
+ * created before the v4-flash → v4.1-flash switch (2026-09-16) keep their
+ * flash-class intent (the persisted id lives in the child session request
+ * header and is read on every resume); anything unknown degrades to the
+ * default. The wire schemas never carry these ids — every host emission goes
+ * through `sanitizeBtwModel` first, so a legacy id can never trip strict
+ * client-side validation.
+ */
+const BTW_LEGACY_MODEL_MAP: Readonly<Record<string, BtwModel>> = {
+  'deepseek-v4-flash': 'deepseek-v4.1-flash',
+}
+
+/**
+ * The routable model list right now: `dsh-btw.model.options` when configured
+ * (non-empty array), else the fallback constant list. Read per call → 热载.
+ */
+function btwRoutableModels(ctx: Context): readonly string[] {
+  const options = readBtwSettings(ctx).model?.options
+  return Array.isArray(options) && options.length > 0 ? options : BTW_FALLBACK_MODELS
+}
+
+/**
+ * The default model right now: `dsh-btw.model.default` validated against the
+ * current routable set, else the fallback constant. Read per call → 热载.
+ */
+function btwDefaultModel(ctx: Context): BtwModel {
+  return sanitizeBtwModel(readBtwSettings(ctx).model?.default, btwRoutableModels(ctx))
+}
+
+/**
+ * Normalize one model candidate to a routable value: a legacy persisted id
+ * maps onto its replacement first, then the candidate passes when it is in
+ * the routable set (`routable` or the fallback constant list), else the
+ * default. Never throws — strict wire validation can therefore never be
+ * tripped by persisted or configured values.
+ */
+export function sanitizeBtwModel(model: string | undefined, routable?: readonly string[]): BtwModel {
+  if (model === undefined) return BTW_FALLBACK_DEFAULT_MODEL
+  const legacy = BTW_LEGACY_MODEL_MAP[model]
+  if (legacy !== undefined) return legacy
+  const allowed = routable ?? BTW_FALLBACK_MODELS
+  if ((allowed as readonly string[]).includes(model)) return model as BtwModel
+  return BTW_FALLBACK_DEFAULT_MODEL
+}
+
+/**
+ * The model a side conversation reports right now: the composed selection
+ * (explicit pick / persisted header) sanitized against the current routable
+ * set, or the settings-resolved default while the child is still opening.
+ * Read per call, so a settings.yaml edit surfaces on the very next read.
+ */
+function btwCurrentModel(ctx: Context, entry: LiveSideChat): BtwModel {
+  const current = entry.modelSelection?.current?.model
+  if (current === undefined) return btwDefaultModel(ctx)
+  return sanitizeBtwModel(current, btwRoutableModels(ctx))
 }
 
 function failure(code: SideChatErrorCode, message: string): StartSideChatResult {
@@ -364,7 +423,7 @@ interface PendingBtwQuestion {
   reject: (reason: Error) => void
 }
 
-function transcript(entry: LiveSideChat): Extract<ReadSideChatResult, { ok: true }>['value'] {
+function transcript(entry: LiveSideChat, ctx: Context): Extract<ReadSideChatResult, { ok: true }>['value'] {
   const events = entry.handle?.agent.session.events.slice(entry.seedLength) ?? []
   const messages: Extract<ReadSideChatResult, { ok: true }>['value']['messages'][number][] = []
   const messageIds = new Set<string>()
@@ -529,7 +588,7 @@ function transcript(entry: LiveSideChat): Extract<ReadSideChatResult, { ok: true
     revision: events.at(-1)?.seq ?? entry.seedLength,
     messages, partial, reasoning,
     running: childRunning || queued,
-    model: sanitizeBtwModel(entry.modelSelection?.current?.model),
+    model: btwCurrentModel(ctx, entry),
     ...(currentAction === undefined ? {} : { currentAction }),
     ...(childRunning && runningTool !== undefined ? { runningTool } : {}),
     ...(pendingQuestion === undefined ? {} : {
@@ -638,7 +697,7 @@ export class SideChatService extends TypertRemoteService {
         meta: hiddenSideChatMeta(parent, childDepth, seed.length),
         agentOptions: resolveChildAgentOptions(parent, {
           provider: BTW_PROVIDER,
-          model: request.model ?? DEFAULT_BTW_MODEL,
+          model: request.model ?? btwDefaultModel(this.ctx),
         }, childDepth),
         signal: entry.abort.signal,
         setup: childCtx => this.composeChild(childCtx, parent, allowedTools, entry),
@@ -767,7 +826,7 @@ export class SideChatService extends TypertRemoteService {
         resumeSessionId: childId,
         agentOptions: resolveChildAgentOptions(parent, {
           provider: BTW_PROVIDER,
-          model: request.model ?? DEFAULT_BTW_MODEL,
+          model: request.model ?? btwDefaultModel(this.ctx),
         }, childDepth),
         signal: entry.abort.signal,
         setup: childCtx => this.composeChild(childCtx, parent, allowedTools, entry),
@@ -821,12 +880,13 @@ export class SideChatService extends TypertRemoteService {
    */
   private installBtwModelSelection(childCtx: Context, childAgent: Agent): ModelSelectionRef {
     let picked: ModelSelection | undefined
+    const ctx = this.ctx
     const selection: ModelSelectionRef = {
       get current(): ModelSelection | undefined {
         if (picked !== undefined) return picked
         const logged = childAgent.session.requestHeader()?.config
-        if (logged === undefined) return { provider: BTW_PROVIDER, model: DEFAULT_BTW_MODEL }
-        return { provider: logged.provider, model: sanitizeBtwModel(logged.model) }
+        if (logged === undefined) return { provider: BTW_PROVIDER, model: btwDefaultModel(ctx) }
+        return { provider: logged.provider, model: sanitizeBtwModel(logged.model, btwRoutableModels(ctx)) }
       },
       set current(next: ModelSelection | undefined) {
         picked = next
@@ -984,7 +1044,7 @@ export class SideChatService extends TypertRemoteService {
       return { ok: false, error: { code: 'not-open', message: 'This side conversation is no longer open.' } }
     }
     if (entry.openingError !== undefined) return { ok: false, error: entry.openingError }
-    return { ok: true, value: transcript(entry) }
+    return { ok: true, value: transcript(entry, this.ctx) }
   }
 
   async send(request: SendSideChatRequest): Promise<SendSideChatResult> {
@@ -1154,7 +1214,13 @@ export class SideChatService extends TypertRemoteService {
     if (entry.modelSelection === undefined) {
       return { ok: false, error: { code: 'not-open', message: 'This side conversation is still opening.' } }
     }
-    entry.modelSelection.current = { provider: BTW_PROVIDER, model: request.model }
+    // The requested model is wire-validated; normalize it against the current
+    // routable set too (settings `model.options`), so a pick that is no longer
+    // routable degrades to the default instead of routing off-list.
+    entry.modelSelection.current = {
+      provider: BTW_PROVIDER,
+      model: sanitizeBtwModel(request.model, btwRoutableModels(this.ctx)),
+    }
     return { ok: true, value: { chatToken: request.chatToken, accepted: true } }
   }
 
@@ -1253,7 +1319,7 @@ export class SideChatService extends TypertRemoteService {
         chatToken: entry.chatToken,
         seedLength: entry.seedLength,
         resumed: entry.resumed,
-        model: sanitizeBtwModel(entry.modelSelection?.current?.model),
+        model: btwCurrentModel(this.ctx, entry),
       },
     }
   }

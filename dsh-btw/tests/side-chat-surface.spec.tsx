@@ -606,4 +606,94 @@ describe('SideChatSurface controls', () => {
     expect(row?.closest('[data-state]')?.getAttribute('data-state')).toBe('error')
     expect(row?.textContent).toContain('no such file')
   })
+
+  it('defaults the model selector to deepseek-v4.1-flash with no legacy option', () => {
+    renderSurface()
+
+    const select = mount.querySelector<HTMLSelectElement>('[aria-label="drawer.model"]')
+    expect(select).not.toBeNull()
+    expect(select?.value).toBe('deepseek-v4.1-flash')
+    const options = [...(select?.options ?? [])].map(option => option.value)
+    expect(options).toEqual(['deepseek-v4.1-flash', 'glm-5.3', 'deepseek-v4-pro'])
+    expect(options).not.toContain('deepseek-v4-flash')
+  })
+
+  it('follows the host-reported model in the selector', () => {
+    currentSnapshot = { ...openSnapshot, model: 'glm-5.3' as const }
+    renderSurface()
+
+    const select = mount.querySelector<HTMLSelectElement>('[aria-label="drawer.model"]')
+    expect(select?.value).toBe('glm-5.3')
+  })
+
+  it('renders settings-driven model options and default (P0-b 热载)', () => {
+    const snapshot = Object.freeze({
+      status: 'ready' as const,
+      value: Object.freeze({
+        model: Object.freeze({ default: 'glm-5.3', options: Object.freeze(['glm-5.3', 'deepseek-v4.1-flash']) }),
+      }),
+      base: undefined, user: undefined, revision: 0, writable: false, mode: 'host' as const,
+    })
+    const scope = {
+      subscribe: () => () => {},
+      getSnapshot: () => snapshot,
+    }
+    const onMinimize = (): void => { viewStore.minimize('parent') }
+    const onEnd = async (): Promise<void> => { await controller.close() }
+    const t = ((key: string) => key) as never
+    act(() => {
+      root.render(
+        <SideChatSurface
+          parentSessionId={'parent' as never}
+          controller={controller}
+          viewStore={viewStore}
+          t={t}
+          surfaceMode="drawer"
+          settingsScope={scope as never}
+          onMinimize={onMinimize}
+          onEnd={onEnd}
+        />,
+      )
+    })
+
+    const select = mount.querySelector<HTMLSelectElement>('[aria-label="drawer.model"]')
+    // The settings default applies while the host has not reported a model.
+    expect(select?.value).toBe('glm-5.3')
+    expect([...(select?.options ?? [])].map(option => option.value))
+      .toEqual(['glm-5.3', 'deepseek-v4.1-flash'])
+  })
+
+  it('falls back to the constant model list when settings omit model.options', () => {
+    const snapshot = Object.freeze({
+      status: 'ready' as const,
+      value: Object.freeze({ ui: Object.freeze({ banner: true }) }),
+      base: undefined, user: undefined, revision: 0, writable: false, mode: 'host' as const,
+    })
+    const scope = {
+      subscribe: () => () => {},
+      getSnapshot: () => snapshot,
+    }
+    const onMinimize = (): void => { viewStore.minimize('parent') }
+    const onEnd = async (): Promise<void> => { await controller.close() }
+    const t = ((key: string) => key) as never
+    act(() => {
+      root.render(
+        <SideChatSurface
+          parentSessionId={'parent' as never}
+          controller={controller}
+          viewStore={viewStore}
+          t={t}
+          surfaceMode="drawer"
+          settingsScope={scope as never}
+          onMinimize={onMinimize}
+          onEnd={onEnd}
+        />,
+      )
+    })
+
+    const select = mount.querySelector<HTMLSelectElement>('[aria-label="drawer.model"]')
+    expect(select?.value).toBe('deepseek-v4.1-flash')
+    expect([...(select?.options ?? [])].map(option => option.value))
+      .toEqual(['deepseek-v4.1-flash', 'glm-5.3', 'deepseek-v4-pro'])
+  })
 })

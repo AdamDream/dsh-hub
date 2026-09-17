@@ -1,0 +1,11 @@
+child session 34cb2b9b-b6ee-4ee5-94ed-4425f96c3ffd (settings override active: dsh-subagent: {provider: adam, model: glm-5.3})
+  session record:
+    type=session  id=34cb2b9b-b6ee-4ee5-94ed-4425f96c3ffd  parentSession=session-86a35f05-...  origin=subagent  delegationDepth=1  agentPreset=standard-glm
+  subagent/descriptor:
+    {"version": 2, "mode": "continuable", "provider": "spawn", "label": "e2e model check", "agentProvider": "adam", "agentModel": "glm-5.3"}
+  request/header:
+    {"header": {"config": {"provider": "adam", "model": "glm-5.3", "maxTokens": 1000000}, ...}}
+  request/context:
+    {"provider": "adam", "model": "glm-5.3", "contextWindow": 1000000}
+  assistant/message source:
+    {"kind": "model", "provider": "adam", "model": "glm-5.3", ...}

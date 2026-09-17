@@ -23,9 +23,13 @@ declare const sideChatErrorSchema: z.ZodObject<{
   message: z.ZodString;
 }, z.core.$strict>;
 type SideChatError = z.infer<typeof sideChatErrorSchema>;
-/** The three models a side conversation may route to (provider is always `adam`). */
+/**
+ * The three models a side conversation may route to (provider is always `adam`).
+ * `deepseek-v4-flash` was replaced by `deepseek-v4.1-flash` (2026-09-16);
+ * persisted legacy selections are mapped host-side (see `sanitizeBtwModel`).
+ */
 declare const btwModelSchema: z.ZodEnum<{
-  "deepseek-v4-flash": "deepseek-v4-flash";
+  "deepseek-v4.1-flash": "deepseek-v4.1-flash";
   "glm-5.3": "glm-5.3";
   "deepseek-v4-pro": "deepseek-v4-pro";
 }>;
@@ -34,7 +38,7 @@ declare const startSideChatRequestSchema: z.ZodObject<{
   parentSessionId: z.ZodString;
   chatToken: z.ZodString;
   model: z.ZodOptional<z.ZodEnum<{
-    "deepseek-v4-flash": "deepseek-v4-flash";
+    "deepseek-v4.1-flash": "deepseek-v4.1-flash";
     "glm-5.3": "glm-5.3";
     "deepseek-v4-pro": "deepseek-v4-pro";
   }>>;
@@ -47,7 +51,7 @@ declare const startSideChatValueSchema: z.ZodObject<{
   seedLength: z.ZodNumber;
   resumed: z.ZodBoolean;
   model: z.ZodOptional<z.ZodEnum<{
-    "deepseek-v4-flash": "deepseek-v4-flash";
+    "deepseek-v4.1-flash": "deepseek-v4.1-flash";
     "glm-5.3": "glm-5.3";
     "deepseek-v4-pro": "deepseek-v4-pro";
   }>>;
@@ -62,7 +66,7 @@ declare const startSideChatResultSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
     seedLength: z.ZodNumber;
     resumed: z.ZodBoolean;
     model: z.ZodOptional<z.ZodEnum<{
-      "deepseek-v4-flash": "deepseek-v4-flash";
+      "deepseek-v4.1-flash": "deepseek-v4.1-flash";
       "glm-5.3": "glm-5.3";
       "deepseek-v4-pro": "deepseek-v4-pro";
     }>>;
@@ -307,7 +311,7 @@ declare const readSideChatResultSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
       }, z.core.$strict>>;
     }, z.core.$strict>>;
     model: z.ZodOptional<z.ZodEnum<{
-      "deepseek-v4-flash": "deepseek-v4-flash";
+      "deepseek-v4.1-flash": "deepseek-v4.1-flash";
       "glm-5.3": "glm-5.3";
       "deepseek-v4-pro": "deepseek-v4-pro";
     }>>;
@@ -485,7 +489,7 @@ type CloseSideChatResult = z.infer<typeof closeSideChatResultSchema>;
 declare const setSideChatModelRequestSchema: z.ZodObject<{
   chatToken: z.ZodString;
   model: z.ZodEnum<{
-    "deepseek-v4-flash": "deepseek-v4-flash";
+    "deepseek-v4.1-flash": "deepseek-v4.1-flash";
     "glm-5.3": "glm-5.3";
     "deepseek-v4-pro": "deepseek-v4-pro";
   }>;

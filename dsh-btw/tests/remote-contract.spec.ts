@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   answerSideChatRequestSchema, answerSideChatResultSchema,
+  btwModelSchema,
   cancelSideChatRequestSchema, cancelSideChatResultSchema,
   closeSideChatRequestSchema, closeSideChatResultSchema,
   listSideChatProjectRequestSchema, listSideChatProjectResultSchema,
@@ -8,6 +9,7 @@ import {
   readSideChatImageRequestSchema, readSideChatImageResultSchema,
   readSideChatRequestSchema, readSideChatResultSchema,
   sendSideChatRequestSchema, sendSideChatResultSchema,
+  setSideChatModelRequestSchema,
   sideChatImagePartSchema, sideChatImageRefSchema,
   startSideChatRequestSchema, startSideChatResultSchema,
 } from '../src/shared/remote.ts'
@@ -195,5 +197,27 @@ describe('btw remote schemas', () => {
       chatToken: token, revision: 22, running: false, partial: '', reasoning: '', messages: [],
       currentAction: { kind: 'tool', tool: '', turn: 1, step: 0 },
     } })).toThrow()
+  })
+
+  it('routes the wire model enum on deepseek-v4.1-flash only (v4-flash replaced)', () => {
+    expect(btwModelSchema.parse('deepseek-v4.1-flash')).toBe('deepseek-v4.1-flash')
+    expect(btwModelSchema.parse('glm-5.3')).toBe('glm-5.3')
+    expect(btwModelSchema.parse('deepseek-v4-pro')).toBe('deepseek-v4-pro')
+    // The legacy id is off the wire contract: only the host-side sanitizer
+    // maps it onto the replacement, so strict clients never see it.
+    expect(() => btwModelSchema.parse('deepseek-v4-flash')).toThrow()
+    expect(() => setSideChatModelRequestSchema.parse({ chatToken: token, model: 'deepseek-v4-flash' })).toThrow()
+    expect(setSideChatModelRequestSchema.parse({ chatToken: token, model: 'deepseek-v4.1-flash' }).model)
+      .toBe('deepseek-v4.1-flash')
+    // A read result with a legacy model id fails strict validation — proving
+    // the host must sanitize before emitting (it does, see sanitizeBtwModel).
+    expect(() => readSideChatResultSchema.parse({ ok: true, value: {
+      chatToken: token, revision: 1, running: false, partial: '', reasoning: '', messages: [],
+      model: 'deepseek-v4-flash',
+    } })).toThrow()
+    expect(readSideChatResultSchema.parse({ ok: true, value: {
+      chatToken: token, revision: 1, running: false, partial: '', reasoning: '', messages: [],
+      model: 'deepseek-v4.1-flash',
+    } }).ok).toBe(true)
   })
 })

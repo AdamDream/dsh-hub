@@ -1,0 +1,14 @@
+{
+  "name": "p1-hotswap-lab",
+  "private": true,
+  "type": "module",
+  "description": "P1 gate experiment: CJS+ESM mixed pure-function hot reload feasibility (cordis-hmr partialReload minimal repro)",
+  "scripts": {
+    "test": "node --expose-internals --expose-gc run-all.mjs",
+    "t1": "node --expose-internals tests/t1-cjs.mjs",
+    "t2": "node --expose-internals tests/t2-esm.mjs",
+    "t3": "node --expose-internals tests/t3-mixed.mjs",
+    "t4": "node --expose-internals tests/t4-rollback.mjs",
+    "t5": "node --expose-internals --expose-gc tests/t5-memory.mjs"
+  }
+}
