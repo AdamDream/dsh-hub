@@ -121,7 +121,19 @@ $ <统计本会话 user/message 中 source.kind=goal 的记录>
 ⇒ **等待期内没有发生任何 goal 轮注入；父 agent 是被子代理通知唤醒的，不是被空转轮唤醒的。**
 
 **判定：P0-4 通过**（判据 = 等待期零 goal 源注入 + 唤醒源为 subagent 通知）。补强证据：该驱动的门控代码已复核（`pendingSubagents` 计数来自 `subagent/start`/`subagent/end`，静默条件含 `state.pendingSubagents === 0 && !state.competingQueued`，见 `部署位 dsh-goal-round-driver/lib/index.js:82`、`:270-289`）。
-**注意**：本轮为该补丁的**首次活体实测**（此前只有 mock 断言）；补丁文件 mtime 09-16 14:10，即旧进程亦已加载，故"旧进程是否空转"没有对照样本（无对照不构成本项缺陷，已如实记录）。
+
+**独立复核（`.workspace/acceptance-probe/verify-goal-gate.md`，271 行，观测窗口 18:16:14→18:32:14）**
+- 注入唯一出口 `drive() → agent.followup()`（`G:156`），前置 `readyToDrive`（`G:80-83`）**五道门全真**；等待期由 `pendingSubagents` 单独封死，归零瞬间另置 `competingQueued` 作窄窗兜底（`G:281`），该旗只在父进入 idle 时清除（`G:221`）。
+- **跨包验证**（非照抄）：插件读 `this` 而非事件参数——cordis `dispatch` 以 `args[0]` 作 `thisArg`（`cordis/lib/index.js:259,265`），子代理生命周期确以 carrier 作首参（`dsh-subagent/lib/types/lifecycle.js:30-33`），carrier key **就是父 Agent 对象本身**（`dsh-subagent/lib/index.js:2518` + `dsh-agent/lib/index.js:369`）⇒ `carrierKeyOf(this)` 与 `states` 同键，能命中。
+- **两条决定性补强**（主代理未取到）：① 全会话 `goal/change` **仅 1 条**（17:53:05 create，**无 pause/disarm**）⇒ 观测期内 goal 始终 `active && armed`，零注入是"该注入却未注入"，可归因门控；② settle 通知落库为 `source.kind === "subagent-settled"`（非 `subagent-report`），该会话 9 次 settled **每一次后面都是父的 `turn/start`**，无一次被替换成 goal 轮。
+- **反证检查**：未发现未封堵路径（并发多子代理 / `end` 先于通知 / continuable 冷恢复 / 父非 running / `maxGoalRounds` 边界均判定已封堵，附行号）。**唯一 fail-open 方向**是 `carrierKeyOf(this)` 取不到父 agent 时计数静默不加（`G:271-273/277`）——实际不可达（三处发布点均传活体父 Agent），但建议加 `logger.warn` 把静默 fail-open 变成可观测。
+- **诚实边界**：**未取得补丁前的对照样本**，故"该补丁消除了一个真实存在的空转"这一**因果主张不予背书**；背书的是弱主张——补丁在位时本批 8 个等待/结算实例上等待期零注入。（补丁 mtime 09-16 14:10，早于旧进程启动，故旧进程亦已加载，无法构造前后对照。）
+
+**R1 加固已落地（但未生效，等你安排重启）**：按你的裁决"现在就改"，已在部署位 `dsh-goal-round-driver/lib/index.js` 的两处归因失败分支加 `ctx.logger.warn`（`subagent/start` 的 no-op 分支 + `subagent/end` 的 `state === void 0` 提前 return 分支），把唯一 fail-open 方向从**静默**变为**可观测**。
+- **仅日志、零行为变更**：计数与门控逻辑逐字未动（`start` 用 `else` 接替原来的隐式 no-op；`end` 加 warn 后照旧 `return`）。
+- `ctx.logger` 在该文件内既有 7 处同类用法（`:93/:113/:159/:181/:187/:197/:229`），`inject` 列表（`agents`/`goals`/`sessions`）无需改动 → 不引入新依赖。
+- `node --check` 通过；sha `c4f3ea68…` → **`4351e1742d3a6db1deb3b95e5006976e10b15c897362eb4518a0e42fcecb1b76`**；备份 `~/.dsh/backups/goal-round-driver.index.js.r1warn-20260917-183347.bak`；diff 归档 `.workspace/acceptance-probe/goal-r1-warn.diff`。
+- **生效条件：下一次 dsh web 重启**（宿主 lib 属冷面）。不生效不影响任何现有行为。
 
 ---
 
@@ -139,7 +151,7 @@ PASS: btw default model is settings-driven and hot-read (no restart needed for v
 ```
 代码读点（部署位 `@local/dsh-btw/lib/index.js`）：默认常量 `:210` / `:350` / `:1698` 均为 `deepseek-v4.1-flash`；legacy 映射 `:360` `{ "deepseek-v4-flash": "deepseek-v4.1-flash" }`；注释 `:339` `dsh-btw.model.options / dsh-btw.model.default are read on every call`；schema/注册 `:1686` `BTW_SETTINGS_SCHEMA`、`:1730` `settings.register(BTW_SETTINGS_NS, ...)`；读点 `:248` `ctx.get("settings")?.get?.("dsh-btw")`。
 
-⏳ **目视项（需你确认）**：打开 btw 抽屉 → 选择器应显示 `deepseek-v4.1-flash`，下拉为 `v4.1-flash / glm-5.3 / deepseek-v4-pro` 三值。
+✅ **用户目视确认（2026-09-17 18:31）：是**（btw 抽屉默认模型与三值下拉均正确）。
 
 ### P1-6 设置页「子代理模型」（order 70）✅ 服务端/客户端取证通过 ⏳ 目视待你确认
 
@@ -160,9 +172,9 @@ order: 70                                         ← 排序值
 ```
 宿主半边（`部署位/@local/dsh-subagent-model/lib/index.js`）：`installSettingsSection(ctx, NS, Config, {...DEFAULT_ROUTE, ...config}, {setSource, onChange})`，`inject = []`（无宿主服务硬依赖）。
 
-⏳ **目视项（需你确认）**：设置 → 「子代理模型」可读写 provider/model，保存即热生效。
+✅ **用户目视确认（2026-09-17 18:31）：是**（设置页「子代理模型」可见、可读写 provider/model，保存即热生效）。
 
-### P1-7 vision 原图直传 ⚠️ 结构证据齐备 + 需重启后新贴一张图
+### P1-7 vision 原图直传 ✅ 通过（用户贴图实测）
 
 已取到的证据：
 - **能力声明**：`settings.yaml` `adam.deepseek-v4.1-flash` 条目 `input: [text, image]`（同 provider 的 `deepseek-v4-flash` **故意未声明**）。
@@ -170,12 +182,23 @@ order: 70                                         ← 排序值
 - **请求图落盘**：`~/.dsh/attachments/v1/request-images/3f/3f0fc7f1…`（201,992 B，2026-09-17 16:42）。
 - **会话内的 image part**：`session-bc0b7655-…` 中出现 `"type":"image"`（mtime 17:45，即**重启前**的那次直传）。
 
-⏳ **缺的最后一步（需你操作）**：重启后**新贴一张图**并发送，然后核对：
+**✅ 已完成（2026-09-17 18:31，你贴了截图）——P1-7 通过，且证据比预期完整**
+
+会话记录原文（`session-cb106ec3…/session.jsonl.zstd`）：
+```json
+{"type":"user/message","seq":141553,"time":1789641113147,"data":{"content":[
+ {"type":"image","attachment":{"attachmentId":"sha256:077b16c15b937189d36c10ef3fb1bff9ad5a4b66deafeddb7453b0b32d2b53d9",
+   "mediaType":"image/png","width":2048,"height":1152,"bytes":1766643,"name":"image.png",
+   "originalDimensions":{"width":5120,"height":2880}}},
+ {"type":"text","text":"看下落盘，第一，是的，第二，是的，第三，截图发你了"}],...}}
 ```
-S=$(zstd -dc ~/.dsh/sessions/--home-CNS2026495165-dsh--/<你的会话>/session.jsonl.zstd | grep -c '"type":"image"')
-ls -t ~/.dsh/attachments/v1/request-images/*/* | head -3
-```
-（我可以代跑，你只需贴图。判据：出现新的 request-image 文件 + 会话内 image part 计数 +1。）
+- **会话内 image part**（非 vision-adam 转文本）⇒ 原图直传成立。
+- **原始对象落盘**：`attachments/v1/objects/07/077b16c1…` = PNG 2048×1152 RGBA，1,766,643 B。
+- **请求图落盘**：`attachments/v1/request-images/bd/bd67c9f2…` = WebP 2048×1152，196,370 B，**18:31:53 写入**（`request-images/` 累计 2 个文件，另一个是 16:42 那次）。
+- **消费模型**：`assistant/message` 的 model 来源在 18:32:07 / 18:32:21 / 18:32:32 均为 `adam/deepseek-v4.1-flash` —— 即声明了 `input: [text, image]` 的那个。
+- **一个值得记录的细节**：原图 5120×2880 被 harness **降采样到 2048×1152** 后才作为请求图发出。这与"不做放大预处理"的裁决不冲突，但它说明小字保真度的上限由这一步决定（`originalDimensions` 字段把原始尺寸也留档了）。
+
+**另一个必须记录的交互**：`agent-default-model` 在 18:27 已改为 `deepseek-v4-flash`，但**本会话仍跑在 `deepseek-v4.1-flash`**（见上：18:32 的 model 来源）。即默认模型的改动只对**新会话**生效，已存在的会话保持自己的路由 —— 这与 `6b9b6c3f` 会话在 18:07 跟随了当时的新默认值（v4-flash）并不矛盾：那是另一条会话在其自身生命周期内解析默认值的结果，具体口径（会话创建时钉住 vs 每轮解析）本报告未定论，**留作后续需核实的开放项**。
 
 ---
 
@@ -314,10 +337,10 @@ $ ls .workspace/deploy-pptmaster/.venv-ppt-test/ | wc -l               → 5   �
 
 ## 4. 待你操作 / 已执行裁决
 
-**需你动手（2 项目视 + 1 项贴图）**
-1. 设置 → 「子代理模型」是否可见、可读写、保存后是否热生效（对应 §2 P1-6）。
-2. btw 抽屉默认是否显示 `deepseek-v4.1-flash`，下拉是否三值（对应 §2 P1-5）。
-3. 贴一张图并发送，我核对 image part 与 request-image 落盘（对应 §2 P1-7）。
+**你已完成的目视/实测确认（2026-09-17 18:31）**
+1. ✅ 设置 → 「子代理模型」可见、可读写、保存即热生效（对应 §2 P1-6）。
+2. ✅ btw 抽屉默认 `deepseek-v4.1-flash`、下拉三值（对应 §2 P1-5）。
+3. ✅ 贴图实测：会话内 image part + request-image 落盘（对应 §2 P1-7）。
 
 **本轮已执行的裁决（逐项落地证据见上）**
 | 裁决 | 落地 |
@@ -365,6 +388,7 @@ $ ls .workspace/deploy-pptmaster/.venv-ppt-test/ | wc -l               → 5   �
 | `~/.dsh/settings.yaml` | adam 40 条补 `contextWindow`（证据优先保守档）；provider `baseURL` 去尾斜杠；`agent-default-model` 恢复 `deepseek-v4.1-flash`（备份 `settings.yaml.cwfill-20260917-181239.bak`、`…acceptance-20260917-180406.bak`） |
 | `~/.dsh/profiles/node_modules/@deepseek-ai/dsh-vision-adam/lib/index.js` + `.workspace/dsh-vision-adam-src/lib/index.js` | baseURL 归一化 `.replace(/\/+$/, "")`（两份逐字节一致 `f331b3d8…`） |
 | `~/.dsh/profiles/web/cordis.patch.yml` | 第 8-16 行注释按源码事实修正 |
+| `~/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-goal-round-driver/lib/index.js` | R1 加固：两处归因失败分支加 `ctx.logger.warn`（仅日志、零行为变更；**冷面，待下次重启生效**；sha `4351e1742d3a…`；diff 见 `.workspace/acceptance-probe/goal-r1-warn.diff`） |
 | `.gitignore` | 新增 venv 测试环境与用户截图两条 |
 | `dsh-btw/tests/host-opening.spec.ts` | 固定 tick 轮询 → wall-clock 条件等待 |
 | `.workspace/RESTART-ACCEPTANCE.md` | 顶部状态更新（重启已完成）+ §3 回滚表修正（R1 glob、嵌套包路径、btw 备份黄灯） |

@@ -1,0 +1,17 @@
+273a274,281
+> 			/**
+> 			* R1 hardening (2026-09-17 独立复核建议): attribution failure used to be
+> 			* silent, which is the only fail-open direction of this gate — the run is
+> 			* never counted, so a goal round may still be injected while it settles.
+> 			* The three publish sites all pass a live parent agent (unreachable today),
+> 			* so this is a visibility change only: no counting change, no behavior change.
+> 			*/
+> 			else ctx.logger.warn(`goal-round-driver: subagent/start could not attribute the run to a tracked parent agent (${parent === void 0 ? "no parent carrier" : "untracked parent agent"}); the pending-subagent gate stays open for it, so a goal round may be injected while it settles`);
+278c286,290
+< 			if (state === void 0) return;
+---
+> 			if (state === void 0) {
+> 				// R1 hardening (2026-09-17): same silent fail-open direction as above.
+> 				ctx.logger.warn(`goal-round-driver: subagent/end could not attribute the run to a tracked parent agent (${parent === void 0 ? "no parent carrier" : "untracked parent agent"}); pendingSubagents was not decremented`);
+> 				return;
+> 			}
