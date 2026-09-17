@@ -52,7 +52,8 @@
 | **部署后要重启 + 验收** | [总 Runbook](.workspace/master-runbook.md) → 对应主题 Runbook（见下方索引） |
 | **全局树重装后要补丁重放** | `.workspace/deploy-lag/replay-lag-fix.sh` → `patch-official-015.sh` → `patch-official-slots.sh`（先 `--dry-run` 预览） |
 | **改插件/补丁代码后想生效** | 先判断冷热：插件 client bundle 替换 + 刷新浏览器即可；宿主 lib 代码 → `.workspace/deploy-lag/dsh-restart.sh` 重启 |
-| **改 settings 想立即生效** | 行为开关键（dsh-usage 5 键 / dsh-btw 4 键）值级热载；schema/代码类改动需重启一次 |
+| **改 settings 想立即生效** | 值级热载（无需重启）：行为开关键（dsh-usage 5 键 / dsh-btw 4 键）、**模型窗口 `contextWindow`**、**子代理路由 `dsh-subagent:` 段**、btw 默认模型 `dsh-btw.model.default`；schema/代码类改动需重启一次 |
+| **模型报 `CONTEXT_WINDOW_EXCEEDED` 但明明没到窗口** | [acceptance-exec.md](.workspace/acceptance-exec.md) §3.6：模型条目未声明 `contextWindow` 会回落默认 **262144**；该网关超窗时返回的是 `500 get_channel_failed` 而非长度错误 |
 | **查热载能力 / 免重启清单** | [功能地图](FEATURE-MAP.md) 热载节 · `.workspace/deploy-lag/README.md` §9（P0-a 实测固化） |
 | **写第一个插件** | [examples/minimal-plugin/README.md](examples/minimal-plugin/README.md)（拷贝 + cordis insert 即启动） |
 | **写复杂插件 / 改 UI** | 参考 `@local` 先例（`dsh-usage` 手写 bundle、`dsh-workerspace` host-only、`dsh-ssh-gui` 三类传输）与对应 exec 报告 |

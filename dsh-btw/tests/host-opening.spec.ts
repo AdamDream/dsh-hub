@@ -142,7 +142,16 @@ describe('btw Host opening admission', () => {
       })
     // The durable index is consulted (one small fs roundtrip) before the
     // fresh fork is acknowledged; the child creation itself stays pending.
-    for (let tick = 0; tick < 100 && !settled; tick += 1) {
+    //
+    // Bound the wait by wall-clock, not by a fixed number of event-loop turns:
+    // an event-loop turn carries no time, so on a loaded machine (concurrent
+    // agents/subagents competing for the loop) the fs roundtrip can outlive 100
+    // `setImmediate` ticks and fail the assertion spuriously — observed once at
+    // 2026-09-17 17:54 under concurrent load, while 3/3 full-suite re-runs and
+    // 10/10 isolated runs passed. `child` stays pending throughout, so the
+    // assertion keeps its original meaning.
+    const settleDeadline = Date.now() + 10_000
+    while (!settled && Date.now() < settleDeadline) {
       await new Promise(resolve => setImmediate(resolve))
     }
     const settledBeforeChild = settled

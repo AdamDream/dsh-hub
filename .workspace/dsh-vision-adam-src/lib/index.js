@@ -158,7 +158,12 @@ async function analyzeImageBytes(options, apiKey, mediaType, base64, question, s
     "content-type": "application/json",
     "user-agent": USER_AGENT
   };
-  const response = await fetch(`${options.baseURL}/chat/completions`, {
+  // 尾斜杠归一化（2026-09-17 加固）：`${baseURL}/chat/completions` 在 baseURL 带尾斜杠时
+  // 会拼出 `/v1//chat/completions`（实测网关回 "Invalid URL (POST /v1//chat/completions)"，
+  // 失败工具 analyze_image）。provider 侧因 OpenAI SDK 会切前导斜杠而无症状，
+  // 这条手写拼接没有消重，必须自己归一。
+  const baseURL = options.baseURL.replace(/\/+$/, "");
+  const response = await fetch(`${baseURL}/chat/completions`, {
     method: "POST",
     headers,
     body: JSON.stringify({
