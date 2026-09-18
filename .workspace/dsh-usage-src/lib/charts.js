@@ -216,6 +216,14 @@ export function fillBuckets(rows, opts = {}) {
 	const list = Array.isArray(rows) ? rows : [];
 	const granularity = opts.granularity === "hour" ? "hour" : "day";
 	if (!Number.isFinite(opts.from) || !Number.isFinite(opts.to) || opts.to < opts.from) return list;
+	// 2026-09-18 fix: an EMPTY input means "this granularity has no data" (the
+	// host refused the bucket width, or the window is genuinely empty). It must
+	// NOT be turned into a dense window of zeros: that fabricates a chart of
+	// real-looking zero usage AND defeats every caller's "no data → fall back"
+	// test, because the filled array is then never empty — which is exactly how
+	// the hourly trend ended up plotting 57 zero buckets with hour labels while
+	// the panel title still said 按日.
+	if (list.length === 0) return list;
 	const cap = Number.isFinite(opts.cap) && opts.cap > 0 ? Math.floor(opts.cap) : 2200;
 	const byKey = new Map();
 	for (const row of list) {
@@ -230,12 +238,19 @@ export function fillBuckets(rows, opts = {}) {
 		cache_write_tokens: 0,
 	});
 	const out = [];
+	let matched = 0;
+	const take = (key) => {
+		const hit = byKey.get(key);
+		if (hit === undefined) return zeroRow(key);
+		matched += 1;
+		return hit;
+	};
 	if (granularity === "hour") {
 		const start = new Date(opts.from);
 		let cursor = new Date(start.getFullYear(), start.getMonth(), start.getDate(), start.getHours());
 		while (cursor.getTime() <= opts.to && out.length < cap) {
 			const key = `${formatDay(cursor)} ${String(cursor.getHours()).padStart(2, "0")}`;
-			out.push(byKey.get(key) || zeroRow(key));
+			out.push(take(key));
 			cursor = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate(), cursor.getHours() + 1);
 		}
 	} else {
@@ -243,10 +258,16 @@ export function fillBuckets(rows, opts = {}) {
 		let cursor = new Date(start.getFullYear(), start.getMonth(), start.getDate());
 		while (cursor.getTime() <= opts.to && out.length < cap) {
 			const key = formatDay(cursor);
-			out.push(byKey.get(key) || zeroRow(key));
+			out.push(take(key));
 			cursor = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() + 1);
 		}
 	}
+	// 2026-09-18 fix: if not one input row landed in the generated window, the
+	// input's bucket keys do not belong to the requested granularity (e.g. a host
+	// that answered a `hour` request with `day` keys). Handing back a wall of
+	// fabricated zeros would read as real data; keep the caller's own rows and
+	// let it decide.
+	if (matched === 0) return list;
 	// Any rows outside [from,to] (host clock skew) are appended so no data is lost.
 	const seen = new Set(out.map((r) => r.day));
 	for (const row of list) {

@@ -73,15 +73,50 @@ same("rollupBuckets 1", charts.rollupBuckets(dense, 1), inline.rollupBuckets(den
 // --- 2. geometry invariants ------------------------------------------------
 const winFrom = new Date(2026, 8, 11, 10).getTime();
 const winTo = new Date(2026, 8, 18, 10).getTime();
-const fullWindow = charts.fillBuckets([], { granularity: "hour", from: winFrom, to: winTo });
-ok("fillBuckets 空输入也生成连续窗口（7 天 + 1 小时 = 169）", fullWindow.length === 169, `实际 ${fullWindow.length}`);
-ok("fillBuckets 零行形状完整", fullWindow.every((r) => typeof r.day === "string" && r.requests === 0 && r.input_tokens === 0 && r.cache_write_tokens === 0));
+
+// --- 2026-09-18 regression: an empty input must stay EMPTY -------------------
+// The first revision synthesised a dense zero window from an empty input. That
+// looked harmless and even got its own assertion here — but it fabricated
+// "0 tokens" for every point of the trend chart (57 zero buckets with hour
+// labels) whenever the host refused the `hour` granularity, and it defeated the
+// caller's "no data → fall back to daily" test because a filled array is never
+// empty. This case now guards the opposite direction.
+const emptyFill = charts.fillBuckets([], { granularity: "hour", from: winFrom, to: winTo });
+ok("fillBuckets 空输入 → 空返回（不合成零窗口）", emptyFill.length === 0, `实际 ${emptyFill.length}`);
+const emptyDayFill = charts.fillBuckets([], { granularity: "day", from: winFrom, to: winTo });
+ok("fillBuckets 空输入（day）→ 空返回", emptyDayFill.length === 0, `实际 ${emptyDayFill.length}`);
+
+// Expected window built independently of the implementation under test.
+const denseKeys = [];
+{
+	let cursor = new Date(winFrom);
+	cursor = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate(), cursor.getHours());
+	while (cursor.getTime() <= winTo) {
+		denseKeys.push(
+			`${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}-${String(cursor.getDate()).padStart(2, "0")} `
+			+ String(cursor.getHours()).padStart(2, "0"),
+		);
+		cursor = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate(), cursor.getHours() + 1);
+	}
+}
+ok("测试自建窗口 = 169 小时（7 天 + 1 小时）", denseKeys.length === 169, `实际 ${denseKeys.length}`);
+
+// Wrong key shape (day keys answered for an `hour` request) must not be turned
+// into a wall of fabricated zeros — keep the caller's rows.
+const dayKeyed = [{ day: "2026-09-17", requests: 3, input_tokens: 30, output_tokens: 3, cache_read_tokens: 300, cache_write_tokens: 0 }];
+const wrongShape = charts.fillBuckets(dayKeyed, { granularity: "hour", from: winFrom, to: winTo });
+ok(
+	"fillBuckets 键形不匹配（day 键 × hour 粒度）→ 原样返回真实行",
+	wrongShape.length === 1 && wrongShape[0].input_tokens === 30,
+	`实际 length=${wrongShape.length} input=${wrongShape[0] && wrongShape[0].input_tokens}`,
+);
+
 // Sparse feed: every third hour carries usage → the fill must restore the run.
-const sparseRows = fullWindow
+const sparseRows = denseKeys
 	.filter((_, i) => i % 3 === 0)
-	.map((r, i) => ({ ...r, requests: i, input_tokens: i * 100, output_tokens: i * 10, cache_read_tokens: i * 1000 }));
+	.map((day, i) => ({ day, requests: i, input_tokens: i * 100, output_tokens: i * 10, cache_read_tokens: i * 1000, cache_write_tokens: 0 }));
 const dense169 = charts.fillBuckets(sparseRows, { granularity: "hour", from: winFrom, to: winTo });
-ok("fillBuckets 稀疏输入 → 仍补齐 169 个连续小时", dense169.length === 169, `实际 ${dense169.length}`);
+ok("fillBuckets 稀疏输入（键形匹配）→ 补齐 169 个连续小时", dense169.length === 169, `实际 ${dense169.length}`);
 ok("fillBuckets 空桶补 0", dense169.filter((r) => r.input_tokens === 0).length > 0);
 const rolled = charts.rollupBuckets(dense169, 3);
 ok("rollupBuckets 3 小时 → 57 桶", rolled.length === 57, `实际 ${rolled.length}`);

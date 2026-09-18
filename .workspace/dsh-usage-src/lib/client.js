@@ -147,6 +147,13 @@ window.__ModuleLoader__.load({
 			const o = opts || {};
 			const granularity = o.granularity === "hour" ? "hour" : "day";
 			if (!Number.isFinite(o.from) || !Number.isFinite(o.to) || o.to < o.from) return list;
+			// 2026-09-18 fix: an EMPTY input means "no data at this granularity" and
+			// must stay empty — synthesising a dense zero window fabricates a chart
+			// of real-looking zero usage and defeats every "no data → fall back"
+			// test (the filled array is never empty), which is exactly how the
+			// hourly trend plotted 57 zero buckets with hour labels while the panel
+			// title still read 按日.
+			if (list.length === 0) return list;
 			const cap = Number.isFinite(o.cap) && o.cap > 0 ? Math.floor(o.cap) : 2200;
 			const byKey = new Map();
 			for (const row of list) {
@@ -154,12 +161,19 @@ window.__ModuleLoader__.load({
 			}
 			const zeroRow = (key) => ({ day: key, requests: 0, input_tokens: 0, output_tokens: 0, cache_read_tokens: 0, cache_write_tokens: 0 });
 			const out = [];
+			let matched = 0;
+			const take = (key) => {
+				const hit = byKey.get(key);
+				if (hit === undefined) return zeroRow(key);
+				matched += 1;
+				return hit;
+			};
 			if (granularity === "hour") {
 				const start = new Date(o.from);
 				let cursor = new Date(start.getFullYear(), start.getMonth(), start.getDate(), start.getHours());
 				while (cursor.getTime() <= o.to && out.length < cap) {
 					const key = formatDay(cursor) + " " + String(cursor.getHours()).padStart(2, "0");
-					out.push(byKey.get(key) || zeroRow(key));
+					out.push(take(key));
 					cursor = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate(), cursor.getHours() + 1);
 				}
 			} else {
@@ -167,10 +181,14 @@ window.__ModuleLoader__.load({
 				let cursor = new Date(start.getFullYear(), start.getMonth(), start.getDate());
 				while (cursor.getTime() <= o.to && out.length < cap) {
 					const key = formatDay(cursor);
-					out.push(byKey.get(key) || zeroRow(key));
+					out.push(take(key));
 					cursor = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() + 1);
 				}
 			}
+			// 2026-09-18 fix: nothing matched ⇒ the input's keys are not of the
+			// requested granularity (e.g. a host answering `hour` with `day` keys);
+			// keep the caller's rows instead of a wall of fabricated zeros.
+			if (matched === 0) return list;
 			const seen = new Set(out.map((r) => r.day));
 			for (const row of list) {
 				if (row && typeof row.day === "string" && !seen.has(row.day)) {
@@ -871,6 +889,19 @@ window.__ModuleLoader__.load({
 			const statusLine = status
 				? "上次 ingest：" + (status.lastIngest ? fmtDate(status.lastIngest) : "—") + " · 来源事件：dsh " + (status.eventsDsh || 0) + " / cc " + (status.eventsCc || 0)
 				: "状态通道不可用";
+			// 2026-09-18: the hourly trend series is computed ONCE here and drives
+			// both the panel title and the chart, so they can never disagree about
+			// which series is on screen. It is offered only when the host actually
+			// returned hourly buckets (a host predating the `hour` granularity
+			// rejects the call → empty state → the chart falls back to the daily
+			// series). Guarding on the RAW rows matters: `fillBuckets` completes
+			// sparse hours but leaves an empty input empty, and an earlier revision
+			// keyed the fallback on the FILLED array — which is never empty — so a
+			// rejected hour call produced 57 fabricated zero buckets and the whole
+			// trend read "0 tokens".
+			const hourlyRows = Array.isArray(timeseriesHour) && timeseriesHour.length > 0
+				? rollupBuckets(fillBuckets(timeseriesHour, { granularity: "hour", from: range.from, to: range.to }), 3)
+				: [];
 			return react.createElement("div", { className: "du_root" },
 				react.createElement("div", { className: "du_head" },
 					react.createElement("div", { className: "du_title" }, "Token 用量 · dsh-usage"),
@@ -905,14 +936,14 @@ window.__ModuleLoader__.load({
 				react.createElement("div", { className: "du_note" },
 					"口径：请求数 = 含 usage 的调用（dsh 按 turn:step 并集去重，cc 按 message.id 去重）；输入 = 未缓存输入（cc 已扣除缓存读/写，B3）；总 tokens = 输入+输出+缓存读+缓存写；命中率 = 缓存读/(输入+缓存读)。本地时区。"),
 				react.createElement("div", { className: "du_panel" },
-					react.createElement("div", { className: "du_panelTitle" }, chartMode === "area" && timeseriesHour.length > 0 ? "趋势（3 小时合并）" : "趋势（按日）"),
+					react.createElement("div", { className: "du_panelTitle" }, chartMode === "area" && hourlyRows.length > 0 ? "趋势（3 小时合并）" : "趋势（按日）"),
 					react.createElement("div", { className: "du_toolbar" },
 						react.createElement("select", { className: "du_select", value: bucket, onChange: (e) => setBucket(e.target.value) },
 							BUCKETS.map((b) => react.createElement("option", { key: b.key, value: b.key }, b.label))),
 						react.createElement("select", { className: "du_select", value: chartMode, onChange: (e) => setChartMode(e.target.value) },
 							react.createElement("option", { value: "area" }, "面积图"),
 							react.createElement("option", { value: "bar" }, "柱状图"))),
-					react.createElement(TrendChart, { rows: fillBuckets(timeseries, { granularity: "day", from: range.from, to: range.to }), hourly: rollupBuckets(fillBuckets(timeseriesHour, { granularity: "hour", from: range.from, to: range.to }), 3), bucket: bucket, mode: chartMode, tooltip: settings.ui.tooltip })),
+					react.createElement(TrendChart, { rows: fillBuckets(timeseries, { granularity: "day", from: range.from, to: range.to }), hourly: hourlyRows, bucket: bucket, mode: chartMode, tooltip: settings.ui.tooltip })),
 				react.createElement("div", { className: "du_panel" },
 					react.createElement("div", { className: "du_panelTitle" }, "热力图（按日总量）"),
 					react.createElement(HeatmapChart, { days: heatmap, tooltip: settings.ui.tooltip, peakRing: settings.heatmap.peakRing, monthLabels: settings.heatmap.monthLabels, legendNote: settings.heatmap.legendNote, levels: settings.heatmap.levels })),
