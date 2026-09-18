@@ -13,7 +13,7 @@ window.__ModuleLoader__.load({
 		// 先例), session rows drill down via ctx.sessions.select.
 		//#endregion
 		//#region styles (data-plugin style + --dsw-* tokens, official idiom)
-		const css = ".du_root{box-sizing:border-box;display:flex;flex-direction:column;gap:10px;padding:14px;font-size:13px;line-height:20px}.du_head{align-items:center;gap:8px;flex-wrap:wrap;display:flex}.du_title{color:var(--dsw-alias-label-primary);font-size:15px;font-weight:600}.du_sub{color:var(--dsw-alias-label-caption);font-size:11px}.du_toolbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.du_select{color:var(--dsw-alias-label-secondary);background:var(--dsw-alias-interactive-bg-hover);border:1px solid var(--dsw-alias-border-l2);border-radius:8px;padding:2px 6px;font:inherit;font-size:12px}.du_btn{color:var(--dsw-alias-label-primary);cursor:pointer;background:var(--dsw-alias-button-ghost-active-fill);border:1px solid var(--dsw-alias-border-inverted);border-radius:8px;padding:2px 10px;font:inherit;font-size:12px}.du_btn:hover{background:var(--dsw-alias-interactive-bg-hover)}.du_btn:disabled{opacity:.4;cursor:default}.du_error{color:var(--dsw-alias-state-error-primary);border:1px solid var(--dsw-alias-border-l2);border-radius:8px;padding:6px 10px;font-size:12px;line-height:18px}.du_errorDetail{color:var(--dsw-alias-label-caption);font-family:var(--ds-font-family-code,monospace);font-size:11px;word-break:break-all}.du_hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px}.du_stat{border:1px solid var(--dsw-alias-border-l2);border-radius:10px;padding:6px 10px;min-width:0}.du_statLabel{color:var(--dsw-alias-label-caption);font-size:11px}.du_statValue{color:var(--dsw-alias-label-primary);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}.du_note{color:var(--dsw-alias-label-caption);font-size:11px;line-height:16px}.du_panel{border:1px solid var(--dsw-alias-border-l2);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}.du_panelTitle{color:var(--dsw-alias-label-secondary);font-size:12px;font-weight:500}.du_svg{width:100%;max-width:560px;height:auto}.du_tabs{display:flex;gap:4px;flex-wrap:wrap}.du_tab{color:var(--dsw-alias-label-secondary);cursor:pointer;background:none;border:1px solid var(--dsw-alias-border-l2);border-radius:999px;padding:2px 10px;font:inherit;font-size:12px}.du_tabActive{color:var(--dsw-alias-label-primary);background:var(--dsw-alias-button-ghost-active-fill);border-color:var(--dsw-alias-border-inverted)}.du_tableWrap{max-height:260px;overflow:auto;border:1px solid var(--dsw-alias-border-l2);border-radius:8px}.du_table{border-collapse:collapse;width:100%;font-size:12px}.du_table th{color:var(--dsw-alias-label-caption);background:var(--dsw-alias-interactive-bg-hover);padding:4px 8px;text-align:left;font-weight:500;position:sticky;top:0}.du_table td{padding:4px 8px;border-top:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);font-variant-numeric:tabular-nums;white-space:nowrap}.du_table tr.du_clickable{cursor:pointer}.du_table tr.du_clickable:hover td{background:var(--dsw-alias-interactive-bg-hover)}.du_legend{display:flex;gap:4px;align-items:center;color:var(--dsw-alias-label-secondary);font-size:12px;flex-wrap:wrap}.du_swatch{width:10px;height:10px;border-radius:2px;display:inline-block}.du_heatNote{color:var(--dsw-alias-label-secondary);font-size:12px;line-height:16px}.du_tip{position:fixed;z-index:1000;pointer-events:none;background:#ffffff;border:1px solid #d8dce2;border-radius:8px;padding:4px 7px;font-size:11px;line-height:13px;box-shadow:0 4px 16px rgba(0,0,0,.18);white-space:nowrap}.du_tipDay{color:var(--dsw-alias-label-secondary);font-size:10px;line-height:12px;font-variant-numeric:tabular-nums}.du_tipValue{color:var(--dsw-alias-label-primary);font-weight:600;font-variant-numeric:tabular-nums;line-height:14px;font-size:12px}.du_tipUnit{color:var(--dsw-alias-label-caption);font-weight:400;font-size:10px;line-height:14px}.du_tipMuted{color:var(--dsw-alias-label-caption);font-weight:400}.du_tip::before{content:'';position:absolute;top:-5px;left:var(--du-tip-ax,14px);width:8px;height:8px;background:#ffffff;border-left:1px solid #d8dce2;border-top:1px solid #d8dce2;transform:rotate(45deg)}.du_tip.du_tipL::before{top:var(--du-tip-ay,14px);left:-5px;border-left:1px solid #d8dce2;border-top:1px solid #d8dce2;transform:rotate(-45deg)}.du_tip.du_tipR::before{top:var(--du-tip-ay,14px);left:auto;right:-5px;border-right:1px solid #d8dce2;border-top:1px solid #d8dce2;transform:rotate(45deg)}.du_tip.du_tipD::before{top:auto;bottom:-5px;left:var(--du-tip-ax,14px);border-right:1px solid #d8dce2;border-bottom:1px solid #d8dce2;transform:rotate(45deg)}body[data-ds-dark-theme] .du_tip{background:#2b303b;border-color:#8b93a1;box-shadow:0 6px 20px rgba(0,0,0,.55)}body[data-ds-dark-theme] .du_tip::before{background:#2b303b;border-left-color:#8b93a1;border-top-color:#8b93a1}body[data-ds-dark-theme] .du_tip.du_tipR::before{border-right-color:#8b93a1;border-top-color:#8b93a1}body[data-ds-dark-theme] .du_tip.du_tipD::before{border-right-color:#8b93a1;border-bottom-color:#8b93a1}body[data-ds-dark-theme] .du_tip.du_tipL::before{border-left-color:#8b93a1;border-top-color:#8b93a1}body{--du-heat-0:#f3f4f6;--du-heat-0-stroke:#9ca3af;--du-heat-0-stroke-width:1px;--du-heat-1:#dbeafe;--du-heat-2:#93c5fd;--du-heat-3:#60a5fa;--du-heat-4:#3b82f6;--du-heat-5:#2563eb;--du-heat-6:#1e3a8a;--du-heat-peak-stroke:#ffffff;--du-heat-month-fill:var(--dsw-alias-label-caption)}body[data-ds-dark-theme]{--du-heat-0:#2f3540;--du-heat-0-stroke:#8b93a1;--du-heat-0-stroke-width:1.5px;--du-heat-1:#1e3a8a;--du-heat-2:#2563eb;--du-heat-3:#3b82f6;--du-heat-4:#60a5fa;--du-heat-5:#93c5fd;--du-heat-6:#bfdbfe;--du-heat-peak-stroke:#0f1115;--du-heat-month-fill:var(--dsw-alias-label-secondary)}";
+		const css = ".du_root{box-sizing:border-box;display:flex;flex-direction:column;gap:10px;padding:14px;font-size:13px;line-height:20px}.du_head{align-items:center;gap:8px;flex-wrap:wrap;display:flex}.du_title{color:var(--dsw-alias-label-primary);font-size:15px;font-weight:600}.du_sub{color:var(--dsw-alias-label-caption);font-size:11px}.du_toolbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.du_select{color:var(--dsw-alias-label-secondary);background:var(--dsw-alias-interactive-bg-hover);border:1px solid var(--dsw-alias-border-l2);border-radius:8px;padding:2px 6px;font:inherit;font-size:12px}.du_btn{color:var(--dsw-alias-label-primary);cursor:pointer;background:var(--dsw-alias-button-ghost-active-fill);border:1px solid var(--dsw-alias-border-inverted);border-radius:8px;padding:2px 10px;font:inherit;font-size:12px}.du_btn:hover{background:var(--dsw-alias-interactive-bg-hover)}.du_btn:disabled{opacity:.4;cursor:default}.du_error{color:var(--dsw-alias-state-error-primary);border:1px solid var(--dsw-alias-border-l2);border-radius:8px;padding:6px 10px;font-size:12px;line-height:18px}.du_errorDetail{color:var(--dsw-alias-label-caption);font-family:var(--ds-font-family-code,monospace);font-size:11px;word-break:break-all}.du_hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px}.du_stat{border:1px solid var(--dsw-alias-border-l2);border-radius:10px;padding:6px 10px;min-width:0}.du_statLabel{color:var(--dsw-alias-label-caption);font-size:11px}.du_statValue{color:var(--dsw-alias-label-primary);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}.du_note{color:var(--dsw-alias-label-caption);font-size:11px;line-height:16px}.du_panel{border:1px solid var(--dsw-alias-border-l2);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}.du_panelTitle{color:var(--dsw-alias-label-secondary);font-size:12px;font-weight:500}.du_svg{width:100%;max-width:560px;height:auto}.du_tabs{display:flex;gap:4px;flex-wrap:wrap}.du_tab{color:var(--dsw-alias-label-secondary);cursor:pointer;background:none;border:1px solid var(--dsw-alias-border-l2);border-radius:999px;padding:2px 10px;font:inherit;font-size:12px}.du_tabActive{color:var(--dsw-alias-label-primary);background:var(--dsw-alias-button-ghost-active-fill);border-color:var(--dsw-alias-border-inverted)}.du_tableWrap{max-height:260px;overflow:auto;border:1px solid var(--dsw-alias-border-l2);border-radius:8px}.du_table{border-collapse:collapse;width:100%;font-size:12px}.du_table th{color:var(--dsw-alias-label-caption);background:var(--dsw-alias-interactive-bg-hover);padding:4px 8px;text-align:left;font-weight:500;position:sticky;top:0}.du_table td{padding:4px 8px;border-top:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);font-variant-numeric:tabular-nums;white-space:nowrap}.du_table tr.du_clickable{cursor:pointer}.du_table tr.du_clickable:hover td{background:var(--dsw-alias-interactive-bg-hover)}.du_legend{display:flex;gap:4px;align-items:center;color:var(--dsw-alias-label-secondary);font-size:12px;flex-wrap:wrap}.du_swatch{width:10px;height:10px;border-radius:2px;display:inline-block}.du_heatNote{color:var(--dsw-alias-label-secondary);font-size:12px;line-height:16px}.du_tip{position:fixed;z-index:1000;pointer-events:none;background:#ffffff;border:1px solid #d8dce2;border-radius:8px;padding:4px 7px;font-size:11px;line-height:13px;box-shadow:0 4px 16px rgba(0,0,0,.18);white-space:nowrap}.du_tipDay{color:var(--dsw-alias-label-secondary);font-size:10px;line-height:12px;font-variant-numeric:tabular-nums}.du_tipValue{color:var(--dsw-alias-label-primary);font-weight:600;font-variant-numeric:tabular-nums;line-height:14px;font-size:12px}.du_tipUnit{color:var(--dsw-alias-label-caption);font-weight:400;font-size:10px;line-height:14px}.du_tipMuted{color:var(--dsw-alias-label-caption);font-weight:400}.du_tip::before{content:'';position:absolute;top:-5px;left:var(--du-tip-ax,14px);width:8px;height:8px;background:#ffffff;border-left:1px solid #d8dce2;border-top:1px solid #d8dce2;transform:rotate(45deg)}.du_tip.du_tipL::before{top:var(--du-tip-ay,14px);left:-5px;border-left:1px solid #d8dce2;border-top:1px solid #d8dce2;transform:rotate(-45deg)}.du_tip.du_tipR::before{top:var(--du-tip-ay,14px);left:auto;right:-5px;border-right:1px solid #d8dce2;border-top:1px solid #d8dce2;transform:rotate(45deg)}.du_tip.du_tipD::before{top:auto;bottom:-5px;left:var(--du-tip-ax,14px);border-right:1px solid #d8dce2;border-bottom:1px solid #d8dce2;transform:rotate(45deg)}body[data-ds-dark-theme] .du_tip{background:#2b303b;border-color:#8b93a1;box-shadow:0 6px 20px rgba(0,0,0,.55)}body[data-ds-dark-theme] .du_tip::before{background:#2b303b;border-left-color:#8b93a1;border-top-color:#8b93a1}body[data-ds-dark-theme] .du_tip.du_tipR::before{border-right-color:#8b93a1;border-top-color:#8b93a1}body[data-ds-dark-theme] .du_tip.du_tipD::before{border-right-color:#8b93a1;border-bottom-color:#8b93a1}body[data-ds-dark-theme] .du_tip.du_tipL::before{border-left-color:#8b93a1;border-top-color:#8b93a1}body{--du-heat-0:#f3f4f6;--du-heat-0-stroke:#9ca3af;--du-heat-0-stroke-width:1px;--du-heat-1:#dbeafe;--du-heat-2:#93c5fd;--du-heat-3:#60a5fa;--du-heat-4:#3b82f6;--du-heat-5:#2563eb;--du-heat-6:#1e3a8a;--du-heat-peak-stroke:#ffffff;--du-heat-month-fill:var(--dsw-alias-label-caption);--du-trend-line:#60a5fa;--du-trend-fill:#1e3a8a99;--du-bar-low:#f5c451;--du-bar-high:#f08a3c}body[data-ds-dark-theme]{--du-heat-0:#2f3540;--du-heat-0-stroke:#8b93a1;--du-heat-0-stroke-width:1.5px;--du-heat-1:#1e3a8a;--du-heat-2:#2563eb;--du-heat-3:#3b82f6;--du-heat-4:#60a5fa;--du-heat-5:#93c5fd;--du-heat-6:#bfdbfe;--du-heat-peak-stroke:#0f1115;--du-heat-month-fill:var(--dsw-alias-label-secondary);--du-trend-line:#93c5fd;--du-trend-fill:#1e3a8a8c;--du-bar-low:#f5c451;--du-bar-high:#f08a3c}";
 		const tagId = "@local/dsh-usage/dsh-usage-card.css";
 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
 			const tag = document.createElement("style");
@@ -53,6 +53,154 @@ window.__ModuleLoader__.load({
 			const line = points.map((p, i) => (i === 0 ? "M" : "L") + p.x + "," + p.y).join(" ");
 			const area = line + " L" + points[points.length - 1].x + "," + baseline + " L" + points[0].x + "," + baseline + " Z";
 			return { line, area, w, h };
+		}
+		// 2026-09-18: linear blend between two #rrggbb colours (bar ramp). The
+		// theme endpoints come from --du-bar-low/--du-bar-high; only the
+		// arithmetic lives here (mirrors charts.js mixHex).
+		function mixHex(low, high, t) {
+			const parse = (hex) => {
+				if (typeof hex !== "string") return null;
+				const text = hex.trim().replace(/^#/, "");
+				if (!/^[0-9a-fA-F]{6}$/.test(text)) return null;
+				return [parseInt(text.slice(0, 2), 16), parseInt(text.slice(2, 4), 16), parseInt(text.slice(4, 6), 16)];
+			};
+			const a = parse(low);
+			const b = parse(high);
+			if (a === null || b === null) return low;
+			const p = Number.isFinite(t) ? Math.min(1, Math.max(0, t)) : 0;
+			const channel = (i) => Math.round(a[i] + (b[i] - a[i]) * p);
+			return "#" + [0, 1, 2].map((i) => channel(i).toString(16).padStart(2, "0")).join("");
+		}
+		// 2026-09-18: bucket key → axis/tooltip label. `slice(5)` alone is
+		// correct for `YYYY-MM-DD` but degenerates for an hourly
+		// `YYYY-MM-DD HH` key (prints the same day label a dozen times).
+		function bucketLabel(key) {
+			const text = typeof key === "string" ? key : String(key == null ? "" : key);
+			const space = text.indexOf(" ");
+			if (space > 0) return text.slice(5, 10) + " " + text.slice(space + 1);
+			return text.length >= 10 ? text.slice(5, 10) : text;
+		}
+		// 2026-09-18: monotone cubic (Fritsch–Carlson) area path — never
+		// overshoots between samples, so the curve cannot invent values above
+		// the data (mirrors charts.js smoothAreaPath).
+		function smoothAreaPath(points, w, h, opts) {
+			const baseline = opts && Number.isFinite(opts.baseline) ? opts.baseline : h;
+			if (!Array.isArray(points) || points.length === 0) return { line: "", area: "", w, h };
+			if (points.length < 3) return areaPath(points, w, h, opts);
+			const n = points.length;
+			const xs = points.map((p) => Number(p.x));
+			const ys = points.map((p) => Number(p.y));
+			if (!xs.every(Number.isFinite) || !ys.every(Number.isFinite)) return areaPath(points, w, h, opts);
+			const delta = new Array(n - 1);
+			const slope = new Array(n - 1);
+			for (let i = 0; i < n - 1; i += 1) {
+				delta[i] = xs[i + 1] - xs[i];
+				slope[i] = delta[i] > 0 ? (ys[i + 1] - ys[i]) / delta[i] : 0;
+			}
+			const m = new Array(n);
+			m[0] = slope[0];
+			m[n - 1] = slope[n - 2];
+			for (let i = 1; i < n - 1; i += 1) {
+				const s0 = slope[i - 1];
+				const s1 = slope[i];
+				if (s0 * s1 <= 0) {
+					m[i] = 0;
+				} else {
+					const w1 = 2 * delta[i] + delta[i - 1];
+					const w2 = delta[i] + 2 * delta[i - 1];
+					m[i] = (w1 + w2) / (w1 / s0 + w2 / s1);
+				}
+			}
+			for (let i = 0; i < n - 1; i += 1) {
+				if (slope[i] === 0) {
+					m[i] = 0;
+					m[i + 1] = 0;
+					continue;
+				}
+				const a = m[i] / slope[i];
+				const b = m[i + 1] / slope[i];
+				const sum = a * a + b * b;
+				if (sum > 9) {
+					const t = 3 / Math.sqrt(sum);
+					m[i] = t * a * slope[i];
+					m[i + 1] = t * b * slope[i];
+				}
+			}
+			const round = (value) => Math.round(value * 100) / 100;
+			let line = "M" + round(xs[0]) + "," + round(ys[0]);
+			for (let i = 0; i < n - 1; i += 1) {
+				const third = delta[i] / 3;
+				const c1x = round(xs[i] + third);
+				const c1y = round(ys[i] + m[i] * third);
+				const c2x = round(xs[i + 1] - third);
+				const c2y = round(ys[i + 1] - m[i + 1] * third);
+				line += " C" + c1x + "," + c1y + " " + c2x + "," + c2y + " " + round(xs[i + 1]) + "," + round(ys[i + 1]);
+			}
+			const area = line + " L" + round(xs[n - 1]) + "," + baseline + " L" + round(xs[0]) + "," + baseline + " Z";
+			return { line, area, w, h };
+		}
+		// 2026-09-18: dense bucket series (missing buckets → 0). Scaled charts
+		// place buckets by INDEX, so a sparse hourly series would silently
+		// compress the time axis (mirrors charts.js fillBuckets).
+		function fillBuckets(rows, opts) {
+			const list = Array.isArray(rows) ? rows : [];
+			const o = opts || {};
+			const granularity = o.granularity === "hour" ? "hour" : "day";
+			if (!Number.isFinite(o.from) || !Number.isFinite(o.to) || o.to < o.from) return list;
+			const cap = Number.isFinite(o.cap) && o.cap > 0 ? Math.floor(o.cap) : 2200;
+			const byKey = new Map();
+			for (const row of list) {
+				if (row && typeof row.day === "string") byKey.set(row.day, row);
+			}
+			const zeroRow = (key) => ({ day: key, requests: 0, input_tokens: 0, output_tokens: 0, cache_read_tokens: 0, cache_write_tokens: 0 });
+			const out = [];
+			if (granularity === "hour") {
+				const start = new Date(o.from);
+				let cursor = new Date(start.getFullYear(), start.getMonth(), start.getDate(), start.getHours());
+				while (cursor.getTime() <= o.to && out.length < cap) {
+					const key = formatDay(cursor) + " " + String(cursor.getHours()).padStart(2, "0");
+					out.push(byKey.get(key) || zeroRow(key));
+					cursor = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate(), cursor.getHours() + 1);
+				}
+			} else {
+				const start = new Date(o.from);
+				let cursor = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+				while (cursor.getTime() <= o.to && out.length < cap) {
+					const key = formatDay(cursor);
+					out.push(byKey.get(key) || zeroRow(key));
+					cursor = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() + 1);
+				}
+			}
+			const seen = new Set(out.map((r) => r.day));
+			for (const row of list) {
+				if (row && typeof row.day === "string" && !seen.has(row.day)) {
+					seen.add(row.day);
+					out.push(row);
+				}
+			}
+			return out;
+		}
+		// 2026-09-18: sum N consecutive buckets into one (the trend curve rides a
+		// 3-hour roll-up: ~2/3 of the hourly buckets are empty, so a plain hourly
+		// curve is a row of isolated spikes). `day` = the group's last hour,
+		// `hours` = how many hours the group actually holds (mirrors charts.js
+		// rollupBuckets).
+		function rollupBuckets(rows, hoursPerBucket) {
+			const list = Array.isArray(rows) ? rows : [];
+			const size = Number.isFinite(hoursPerBucket) && hoursPerBucket >= 1 ? Math.floor(hoursPerBucket) : 1;
+			if (size <= 1 || list.length === 0) return list;
+			const fields = ["requests", "input_tokens", "output_tokens", "cache_read_tokens", "cache_write_tokens"];
+			const out = [];
+			for (let i = 0; i < list.length; i += size) {
+				const chunk = list.slice(i, i + size);
+				const last = chunk[chunk.length - 1];
+				const row = { day: last.day, hours: chunk.length };
+				for (const field of fields) {
+					row[field] = chunk.reduce((sum, item) => sum + Number(item[field] || 0), 0);
+				}
+				out.push(row);
+			}
+			return out;
 		}
 		function barRects(values, w, h, opts) {
 			const pad = opts && Number.isFinite(opts.pad) ? opts.pad : 1;
@@ -148,10 +296,16 @@ window.__ModuleLoader__.load({
 				const height = (s.value / max) * (h - 4);
 				return { x: i * slot, y: baseline - height, width: slot, height, value: s.value, day: s.day };
 			});
+			// 2026-09-18: append the final tick only when it does not crowd its
+			// predecessor (hourly series otherwise overlapped the last two labels).
 			const tickEvery = Math.max(1, Math.ceil(series.length / 8));
 			const ticks = series
-				.map((s, i) => ({ label: s.day.slice(5), x: i * slot + slot / 2 }))
-				.filter((_, i) => i % tickEvery === 0 || i === series.length - 1);
+				.map((s, i) => ({ label: bucketLabel(s.day), x: i * slot + slot / 2, index: i }))
+				.filter((t, i) => i % tickEvery === 0);
+			const lastIndex = series.length - 1;
+			if (ticks.length === 0 || lastIndex - ticks[ticks.length - 1].index >= Math.ceil(tickEvery * 0.6)) {
+				ticks.push({ label: bucketLabel(series[lastIndex].day), x: lastIndex * slot + slot / 2, index: lastIndex });
+			}
 			return { rects, ticks };
 		}
 		function scaleArea(series, w, h) {
@@ -159,10 +313,15 @@ window.__ModuleLoader__.load({
 			const max = Math.max(1, ...series.map((s) => s.value));
 			const slot = series.length > 1 ? w / (series.length - 1) : w;
 			const points = series.map((s, i) => ({ x: i * slot, y: h - (s.value / max) * (h - 4) - 2, day: s.day, value: s.value }));
+			// 2026-09-18: same tick-spacing rule as scaleBars.
 			const tickEvery = Math.max(1, Math.ceil(series.length / 8));
 			const ticks = series
-				.map((s, i) => ({ label: s.day.slice(5), x: i * slot }))
-				.filter((_, i) => i % tickEvery === 0 || i === series.length - 1);
+				.map((s, i) => ({ label: bucketLabel(s.day), x: i * slot, index: i }))
+				.filter((t, i) => i % tickEvery === 0);
+			const lastIndex = series.length - 1;
+			if (ticks.length === 0 || lastIndex - ticks[ticks.length - 1].index >= Math.ceil(tickEvery * 0.6)) {
+				ticks.push({ label: bucketLabel(series[lastIndex].day), x: lastIndex * slot, index: lastIndex });
+			}
 			return { points, ticks };
 		}
 		function formatTokens(value) {
@@ -295,13 +454,41 @@ window.__ModuleLoader__.load({
 			const dd = String(d.getDate()).padStart(2, "0");
 			return d.getFullYear() + "-" + mm + "-" + dd;
 		}
+		// 2026-09-18: read one theme custom property off <body> (the same
+		// `body` / `body[data-ds-dark-theme]` split the CSS uses) with a
+		// fallback so a missing var can never blank a chart.
+		function themeVar(name, fallback) {
+			try {
+				if (typeof document === "undefined" || !document.body) return fallback;
+				const value = getComputedStyle(document.body).getPropertyValue(name);
+				return value && value.trim() ? value.trim() : fallback;
+			} catch (cause) {
+				return fallback;
+			}
+		}
+		// 2026-09-18: anchor the first/last tick to the chart edge so its label is
+		// not clipped by the viewBox (mid labels stay centered on their bucket).
+		function tickAnchor(x, w) {
+			if (x <= 0.5) return "start";
+			if (x >= w - 0.5) return "end";
+			return "middle";
+		}
 		function StatBox(props) {
 			return react.createElement("div", { className: "du_stat" },
 				react.createElement("div", { className: "du_statLabel" }, props.label),
 				react.createElement("div", { className: "du_statValue" }, props.value));
 		}
 		function TrendChart(props) {
-			const series = (props.rows || []).map((r) => ({ day: r.day, value: bucketValue(r, props.bucket) }));
+			const mode = props.mode === "bar" ? "bar" : "area";
+			// 2026-09-18: the area mode rides the HOURLY series (smooth curve); the
+			// bar mode keeps the DAILY series. `props.hourly` stays empty when the
+			// host does not serve hourly buckets yet (a pre-restart host rejects
+			// granularity "hour") — the area mode then falls back to the daily
+			// series instead of failing the whole card.
+			const rows = mode === "bar"
+				? (props.rows || [])
+				: ((props.hourly && props.hourly.length > 0) ? props.hourly : (props.rows || []));
+			const series = rows.map((r) => ({ day: r.day, value: bucketValue(r, props.bucket) }));
 			const w = 560;
 			const h = 150;
 			// P0-b: settings switch `dsh-usage.ui.tooltip` (default true) — the
@@ -316,28 +503,38 @@ window.__ModuleLoader__.load({
 			if (series.length === 0) return react.createElement("div", { className: "du_note" }, "暂无趋势数据");
 			const children = [];
 			let hitFn = null;
-			if (props.mode === "bar") {
+			if (mode === "bar") {
 				const scaled = scaleBars(series, w, h);
 				const rects = barRects(scaled.rects, w, h);
 				hitFn = (mx, my) => {
 					const i = hitBarRects(rects, mx, my);
 					return i >= 0 ? { day: rects[i].day, valueText: tipTokens(rects[i].value) } : null;
 				};
-				children.push(react.createElement("g", { fill: "var(--dsw-state-business-primary)" },
-					rects.map((r) => react.createElement("rect", { key: r.x + "-" + r.y, x: r.x, y: r.y, width: r.width, height: r.height, rx: 1 }))));
-				children.push(react.createElement("g", { fill: "var(--dsw-alias-label-caption)", fontSize: 9, textAnchor: "middle" },
-					scaled.ticks.map((t) => react.createElement("text", { key: "t" + t.x, x: t.x, y: h - 2 }, t.label))));
+				// 2026-09-18 bar ramp: each bar takes its colour from the theme's
+				// yellow→orange ramp at its own normalized value (linear), so a
+				// busier day reads warmer. The endpoints live in the CSS
+				// (--du-bar-low / --du-bar-high) so light and dark can differ.
+				const rampLow = themeVar("--du-bar-low", "#eab308");
+				const rampHigh = themeVar("--du-bar-high", "#ea580c");
+				const rampMax = Math.max(1, ...series.map((s) => s.value));
+				children.push(react.createElement("g", null,
+					rects.map((r) => react.createElement("rect", { key: r.x + "-" + r.y, x: r.x, y: r.y, width: r.width, height: r.height, rx: 1, fill: mixHex(rampLow, rampHigh, r.value / rampMax) }))));
+				children.push(react.createElement("g", { fill: "var(--dsw-alias-label-caption)", fontSize: 10, textAnchor: "middle" },
+					scaled.ticks.map((t) => react.createElement("text", { key: "t" + t.x, x: t.x, y: h - 2, textAnchor: tickAnchor(t.x, w) }, t.label))));
 			} else {
 				const scaled = scaleArea(series, w, h);
-				const geom = areaPath(scaled.points, w, h);
+				// 2026-09-18: monotone-cubic smoothing (no overshoot). The fill is the
+				// deep-blue wash --du-trend-fill (alpha baked into the token so the
+				// themes can differ), the outline is --du-trend-line.
+				const geom = smoothAreaPath(scaled.points, w, h);
 				hitFn = (mx, my) => {
 					const i = hitAreaPoints(scaled.points, mx, my, 12);
 					return i >= 0 ? { day: scaled.points[i].day, valueText: tipTokens(scaled.points[i].value) } : null;
 				};
-				children.push(react.createElement("path", { d: geom.area, fill: "var(--dsw-state-business-secondary)", opacity: 0.35 }));
-				children.push(react.createElement("path", { d: geom.line, fill: "none", stroke: "var(--dsw-state-business-primary)", strokeWidth: 2 }));
-				children.push(react.createElement("g", { fill: "var(--dsw-alias-label-caption)", fontSize: 9, textAnchor: "middle" },
-					scaled.ticks.map((t) => react.createElement("text", { key: "t" + t.x, x: t.x, y: h - 2 }, t.label))));
+				children.push(react.createElement("path", { d: geom.area, fill: "var(--du-trend-fill)", stroke: "none" }));
+				children.push(react.createElement("path", { d: geom.line, fill: "none", stroke: "var(--du-trend-line)", strokeWidth: 2, strokeLinejoin: "round", strokeLinecap: "round" }));
+				children.push(react.createElement("g", { fill: "var(--dsw-alias-label-caption)", fontSize: 10, textAnchor: "middle" },
+					scaled.ticks.map((t) => react.createElement("text", { key: "t" + t.x, x: t.x, y: h - 2, textAnchor: tickAnchor(t.x, w) }, t.label))));
 			}
 			const onMove = (e) => {
 				const svg = e.currentTarget;
@@ -351,7 +548,7 @@ window.__ModuleLoader__.load({
 				// arrow pivot tracks the pointer (clamped inside the card)
 				const ax = Math.max(10, Math.min(110 - 18, e.clientX - pos.left));
 				const ay = Math.max(10, Math.min(40 - 18, e.clientY - pos.top));
-				setTip({ left: pos.left, top: pos.top, dir: pos.dir, ax: ax, ay: ay, day: hit.day.slice(5), valueText: hit.valueText, muted: false });
+				setTip({ left: pos.left, top: pos.top, dir: pos.dir, ax: ax, ay: ay, day: bucketLabel(hit.day), valueText: hit.valueText, muted: false });
 			};
 			const tipEl = tooltipEnabled && tip
 				? react.createElement("div", { className: "du_tip du_tip" + tip.dir.toUpperCase(), style: { left: tip.left + "px", top: tip.top + "px", "--du-tip-ax": tip.ax + "px", "--du-tip-ay": tip.ay + "px" } },
@@ -477,6 +674,9 @@ window.__ModuleLoader__.load({
 			const [loading, setLoading] = react.useState(false);
 			const [summary, setSummary] = react.useState(null);
 			const [timeseries, setTimeseries] = react.useState([]);
+			// 2026-09-18: hourly series for the smooth trend curve (optional — see
+			// the granularity "hour" call in loadAll).
+			const [timeseriesHour, setTimeseriesHour] = react.useState([]);
 			const [heatmap, setHeatmap] = react.useState([]);
 			const [byModel, setByModel] = react.useState([]);
 			const [byProject, setByProject] = react.useState([]);
@@ -508,17 +708,24 @@ window.__ModuleLoader__.load({
 						rpc.call(CHANNEL, "byModel", payload),
 						rpc.call(CHANNEL, "byProject", payload),
 						rpc.call(CHANNEL, "byDay", payload),
+						// 2026-09-18: hourly buckets for the trend curve. Deliberately
+						// OUTSIDE the all-or-nothing gate below: a host predating the
+						// hourly whitelist rejects this with invalid-params, and that
+						// must degrade to the daily trend (previous behavior) instead
+						// of blanking the whole card.
+						rpc.call(CHANNEL, "timeseries", Object.assign({ granularity: "hour" }, payload)).catch(() => null),
 					]);
-					if (calls.every((r) => r && r.ok)) {
+					if (calls.slice(0, 6).every((r) => r && r.ok)) {
 						setSummary(calls[0].value);
 						setTimeseries(calls[1].value || []);
 						setHeatmap(calls[2].value || []);
 						setByModel(calls[3].value || []);
 						setByProject(calls[4].value || []);
 						setByDay(calls[5].value || []);
+						setTimeseriesHour(calls[6] && calls[6].ok ? calls[6].value || [] : []);
 						setError(null);
 					} else {
-						const failed = calls.find((r) => !r || !r.ok);
+						const failed = calls.slice(0, 6).find((r) => !r || !r.ok);
 						setError((failed && failed.error) || { code: "internal", message: "unknown rpc failure" });
 					}
 				} catch (cause) {
@@ -698,14 +905,14 @@ window.__ModuleLoader__.load({
 				react.createElement("div", { className: "du_note" },
 					"口径：请求数 = 含 usage 的调用（dsh 按 turn:step 并集去重，cc 按 message.id 去重）；输入 = 未缓存输入（cc 已扣除缓存读/写，B3）；总 tokens = 输入+输出+缓存读+缓存写；命中率 = 缓存读/(输入+缓存读)。本地时区。"),
 				react.createElement("div", { className: "du_panel" },
-					react.createElement("div", { className: "du_panelTitle" }, "趋势"),
+					react.createElement("div", { className: "du_panelTitle" }, chartMode === "area" && timeseriesHour.length > 0 ? "趋势（3 小时合并）" : "趋势（按日）"),
 					react.createElement("div", { className: "du_toolbar" },
 						react.createElement("select", { className: "du_select", value: bucket, onChange: (e) => setBucket(e.target.value) },
 							BUCKETS.map((b) => react.createElement("option", { key: b.key, value: b.key }, b.label))),
 						react.createElement("select", { className: "du_select", value: chartMode, onChange: (e) => setChartMode(e.target.value) },
 							react.createElement("option", { value: "area" }, "面积图"),
 							react.createElement("option", { value: "bar" }, "柱状图"))),
-					react.createElement(TrendChart, { rows: timeseries, bucket: bucket, mode: chartMode, tooltip: settings.ui.tooltip })),
+					react.createElement(TrendChart, { rows: fillBuckets(timeseries, { granularity: "day", from: range.from, to: range.to }), hourly: rollupBuckets(fillBuckets(timeseriesHour, { granularity: "hour", from: range.from, to: range.to }), 3), bucket: bucket, mode: chartMode, tooltip: settings.ui.tooltip })),
 				react.createElement("div", { className: "du_panel" },
 					react.createElement("div", { className: "du_panelTitle" }, "热力图（按日总量）"),
 					react.createElement(HeatmapChart, { days: heatmap, tooltip: settings.ui.tooltip, peakRing: settings.heatmap.peakRing, monthLabels: settings.heatmap.monthLabels, legendNote: settings.heatmap.legendNote, levels: settings.heatmap.levels })),

@@ -305,6 +305,8 @@ export function dataSourceClause(dataSources) {
 
 /** ms→seconds / null-safe number helpers for `strftime('...','unixepoch','localtime')`. */
 const DAY_SQL = "strftime('%Y-%m-%d', ts / 1000, 'unixepoch', 'localtime')";
+/** 2026-09-18: hour-precision bucket key (`YYYY-MM-DD HH`), same local-time basis. */
+const HOUR_SQL = "strftime('%Y-%m-%d %H', ts / 1000, 'unixepoch', 'localtime')";
 
 /**
  * Build the shared event WHERE fragment from filters. When `prefix` is given
@@ -377,17 +379,22 @@ FROM usage_events ${clause}`)
 }
 
 /**
- * `timeseries` — per-day four buckets (trend chart).
+ * `timeseries` — per-bucket four-token totals (trend chart).
+ * 2026-09-18: `filters.granularity` selects the bucket width — `"day"`
+ * (default, unchanged) or `"hour"` (`YYYY-MM-DD HH`, local time). The bucket
+ * key keeps the wire field name `day` in both modes so the render layer,
+ * tooltips and tables need no contract change.
  * @param {import("node:sqlite").DatabaseSync} db
- * @param {object} filters
+ * @param {{granularity?: "day"|"hour"}} filters
  * @returns {Array<{day: string, requests: number, input_tokens: number,
  *   output_tokens: number, cache_read_tokens: number, cache_write_tokens: number}>}
  */
 export function queryTimeseries(db, filters = {}) {
 	const { clause, values } = eventWhere(filters);
+	const bucketSql = filters.granularity === "hour" ? HOUR_SQL : DAY_SQL;
 	return db
 		.prepare(`
-SELECT ${DAY_SQL} AS day,
+SELECT ${bucketSql} AS day,
        COUNT(*) AS requests,
        COALESCE(SUM(input_tokens), 0) AS input_tokens,
        COALESCE(SUM(output_tokens), 0) AS output_tokens,

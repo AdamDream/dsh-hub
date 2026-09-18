@@ -156,6 +156,58 @@ describe('btw persistence index and resume', () => {
     expect(digest.content[0]!.text).toContain('Main agent status')
   })
 
+  // 2026-09-18 D1 fix: a resumed conversation must restore its durable image
+  // refs from the persisted log. They used to be written only when a message was
+  // admitted on a LIVE entry, so reopening a side chat lost every historical
+  // image — the transcript dropped its thumbnails and `readImage` answered
+  // "Unknown attachment id" although the bytes were still in the store.
+  it('restores the image refs of a resumed child from the persisted log (D1)', async () => {
+    const ref = { attachmentId: 'att-9', mediaType: 'image/png' as const, bytes: 4, width: 1, height: 1, name: 'shot.png' }
+    const resumed = resumedHandle()
+    // `transcript()` slices `events.slice(entry.seedLength)` by ARRAY INDEX (in
+    // production seq and index line up), so the harness events must be a real
+    // run: index 0 = inherited seed, index 1 = the side chat's own image message.
+    const session = resumed.handle.agent.session as unknown as { header: { seedLength: number }, events: unknown[] }
+    session.header.seedLength = 1
+    session.events = [
+      { seq: 0, time: 1, type: 'user/message', data: { id: 'seed', content: [{ type: 'text', text: 'parent history' }], source: { kind: 'user' } } },
+      {
+        seq: 1,
+        time: 3,
+        type: 'user/message',
+        data: {
+          id: 'm-img',
+          content: [{ type: 'text', text: '看这个' }, { type: 'image', attachment: ref }],
+          source: { kind: 'user' },
+        },
+      },
+    ]
+    const env = hostHarness({ resume: async () => resumed.handle })
+    contexts.push(env.ctx)
+    const readImage = vi.fn(async (candidate: { attachmentId: string }) => ({
+      ref: candidate,
+      data: new TextEncoder().encode(`bytes-of-${candidate.attachmentId}`),
+    }))
+    env.ctx.provide('attachments', { readImage } as never)
+    await seedIndex(env.parentId, 'persisted-child')
+
+    const opened = await env.service.start({ parentSessionId: env.parentId, chatToken: TOKEN })
+    expect(opened).toMatchObject({ ok: true, value: { resumed: true } })
+
+    // … the transcript surfaces the image again …
+    const transcript = await env.service.read({ chatToken: TOKEN })
+    expect(transcript).toMatchObject({ ok: true })
+    const messages = (transcript as { value: { messages: { id: string, images?: unknown[] }[] } }).value.messages
+    expect(messages.find(message => message.id === 'm-img')?.images).toEqual([
+      { attachmentId: 'att-9', mediaType: 'image/png', name: 'shot.png' },
+    ])
+
+    // … and the verified bytes are readable again.
+    const bytes = await env.service.readSideChatImage({ chatToken: TOKEN, attachmentId: 'att-9' })
+    expect(bytes).toMatchObject({ ok: true, value: { mediaType: 'image/png' } })
+    expect(readImage).toHaveBeenCalledTimes(1)
+  })
+
   it('records a freshly forked child in the durable index', async () => {
     const env = hostHarness()
     contexts.push(env.ctx)

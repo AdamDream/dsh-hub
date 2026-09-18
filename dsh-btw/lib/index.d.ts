@@ -72,10 +72,28 @@ declare class SideChatService extends TypertRemoteService {
   /** Switch the side conversation's model for subsequent turns (takes effect on the next step). */
   setModel(request: SetSideChatModelRequest): Promise<SetSideChatModelResult>;
   /**
+   * 2026-09-18 D1 fix: rebuild the durable image refs of a RESUMED side chat.
+   *
+   * `imageRefsByMessageId` is only ever written when a message is admitted on a
+   * LIVE entry (`sendMessage`), so a resumed conversation began with an empty
+   * map: every historical image disappeared from the transcript, and
+   * `sideChat/readImage` answered "Unknown attachment id" for ids whose bytes
+   * were still sitting in the attachments store — the user-visible symptom was
+   * "the screenshot is gone / the model cannot find it".
+   *
+   * The refs are reconstructible from the child log itself: each admitted image
+   * is recorded there as an `image` part carrying its durable `attachment`
+   * reference (that is the same shape `sendMessage` sends when the model
+   * accepts images directly). This walks the child's own slice of the log once,
+   * after the resume settles, and restores the map.
+   */
+  private hydrateImageRefs;
+  /**
    * U-F: read the verified bytes behind one admitted image back to the client
    * for display (R1-10 thumbnails). The child session log only carries text,
    * so `sessions.readAttachment` cannot serve these refs — they live in
-   * `imageRefsByMessageId` on the live entry.
+   * `imageRefsByMessageId` on the live entry (restored on resume by
+   * {@link hydrateImageRefs}).
    */
   readSideChatImage(request: ReadSideChatImageRequest): Promise<ReadSideChatImageResult>;
   /**
@@ -171,7 +189,7 @@ declare class BtwRegistry {
  * hidden child session having no client answer scope), which is exactly why
  * btw ships its own channel.
  */
-declare const READ_ONLY_TOOL_CANDIDATES: readonly ["read", "read_image", "glob", "grep", "lsp", "view_image", "web_search", "skill", "session_event_read", "session_event_search", "session_event_trace", "session_search", "session_trace", "job_list", "job_output", "terminal_list", "terminal_read", "list_agents", "get_goal", "mnemon_document_search", "mnemon_memory_bodies", "mnemon_recall", "mnemon_related", "mnemon_status"];
+declare const READ_ONLY_TOOL_CANDIDATES: readonly ["read", "read_image", "analyze_image", "glob", "grep", "lsp", "view_image", "web_search", "skill", "session_event_read", "session_event_search", "session_event_trace", "session_search", "session_trace", "job_list", "job_output", "terminal_list", "terminal_read", "list_agents", "get_goal", "mnemon_document_search", "mnemon_memory_bodies", "mnemon_recall", "mnemon_related", "mnemon_status"];
 declare const READ_ONLY_TOOL_SET: ReadonlySet<string>;
 declare function isSideChatToolAllowed(name: string): boolean;
 //#endregion

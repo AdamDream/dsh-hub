@@ -50,8 +50,8 @@ const ENDPOINTS = new Set([
 	"refresh",
 ]);
 
-/** `timeseries` granularity whitelist — v1 supports day-only. */
-const GRANULARITIES = new Set(["day"]);
+/** `timeseries` granularity whitelist — day (default) or hour buckets. */
+const GRANULARITIES = new Set(["day", "hour"]);
 
 /** `dataSources` whitelist (single value or array items). */
 const DATA_SOURCES = new Set(["dsh", "cc", "all"]);
@@ -140,6 +140,10 @@ function normalizeFilters(endpoint, payload) {
 		if (typeof granularity !== "string" || !GRANULARITIES.has(granularity)) {
 			throw new UsageRpcError("invalid-params", `usage: granularity must be one of [${[...GRANULARITIES].join(",")}]`);
 		}
+		// 2026-09-18: the validation above used to be dead weight — the accepted
+		// value never reached the query layer, so `timeseries` was day-only in
+		// practice no matter what the client asked for.
+		filters.granularity = granularity;
 	}
 	if (endpoint === "heatmap") {
 		if (payload.year !== undefined && !Number.isInteger(payload.year)) {

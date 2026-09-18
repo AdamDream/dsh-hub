@@ -10,6 +10,67 @@
  */
 
 /**
+ * 2026-09-18 trend roll-up: sum N consecutive buckets into one.
+ *
+ * Why this exists: with a 7-day hourly window about two thirds of the buckets
+ * carry no usage at all, so the "smooth curve" is really a row of isolated
+ * spikes separated by flat zero stretches — the smoothing has almost nothing to
+ * smooth. Summing 3 consecutive hours (pure client-side; the host still serves
+ * hourly buckets) yields ~57 points and a curve that actually flows while
+ * keeping the within-day structure.
+ *
+ * The bucket key is the LAST hour of each group, and `hours` records how many
+ * hours the group actually holds (the trailing group of a window is usually
+ * partial), so a renderer can tell a full bucket from a partial one.
+ * @param {Array<object>} rows - dense bucket rows (`day` + the five counters).
+ * @param {number} [hoursPerBucket] - group size (default 3; ≤1 returns the input).
+ * @returns {Array<object>} rolled-up rows.
+ */
+export function rollupBuckets(rows, hoursPerBucket = 3) {
+	const list = Array.isArray(rows) ? rows : [];
+	const size = Number.isFinite(hoursPerBucket) && hoursPerBucket >= 1 ? Math.floor(hoursPerBucket) : 1;
+	if (size <= 1 || list.length === 0) return list;
+	const fields = ["requests", "input_tokens", "output_tokens", "cache_read_tokens", "cache_write_tokens"];
+	const out = [];
+	for (let i = 0; i < list.length; i += size) {
+		const chunk = list.slice(i, i + size);
+		const last = chunk[chunk.length - 1];
+		const row = { day: last.day, hours: chunk.length };
+		for (const field of fields) {
+			row[field] = chunk.reduce((sum, item) => sum + Number(item[field] || 0), 0);
+		}
+		out.push(row);
+	}
+	return out;
+}
+
+/**
+ * 2026-09-18 bar ramp: linear blend between two `#rrggbb` colours.
+ *
+ * Pure on purpose — the render layer reads the theme's endpoint colours off the
+ * `--du-bar-low` / `--du-bar-high` custom properties (theme-aware) and only the
+ * arithmetic lives here, so it stays unit-testable and inline-parity-checkable.
+ * @param {string} low - `#rrggbb` at t=0.
+ * @param {string} high - `#rrggbb` at t=1.
+ * @param {number} t - blend position, clamped to 0..1.
+ * @returns {string} `#rrggbb`, or `low` when either input is unparseable.
+ */
+export function mixHex(low, high, t) {
+	const parse = (hex) => {
+		if (typeof hex !== "string") return null;
+		const text = hex.trim().replace(/^#/, "");
+		if (!/^[0-9a-fA-F]{6}$/.test(text)) return null;
+		return [parseInt(text.slice(0, 2), 16), parseInt(text.slice(2, 4), 16), parseInt(text.slice(4, 6), 16)];
+	};
+	const a = parse(low);
+	const b = parse(high);
+	if (a === null || b === null) return low;
+	const p = Number.isFinite(t) ? Math.min(1, Math.max(0, t)) : 0;
+	const channel = (i) => Math.round(a[i] + (b[i] - a[i]) * p);
+	return `#${[0, 1, 2].map((i) => channel(i).toString(16).padStart(2, "0")).join("")}`;
+}
+
+/**
  * Area-chart geometry: smooth-less polyline path + filled baseline path.
  * @param {Array<{x: number, y: number}>} points - already-scaled points.
  * @param {number} w - viewBox width.
@@ -26,6 +87,177 @@ export function areaPath(points, w, h, opts = {}) {
 	const area = `${line} L${points[points.length - 1].x},${baseline} L${points[0].x},${baseline} Z`;
 	return { line, area, w, h };
 }
+
+/**
+ * 2026-09-18 trend smoothing: monotone cubic (Fritsch–Carlson) area path.
+ *
+ * Why monotone and not Catmull-Rom: token counts are non-negative, and an
+ * overshooting spline invents peaks above the real maximum (or below zero)
+ * between two samples — a chart that lies about the data. Fritsch–Carlson
+ * tangents are limited so each segment stays monotone between its endpoints,
+ * so the curve never leaves the envelope of the data it interpolates.
+ *
+ * The output uses cubic Béziers with control points at 1/3 of the segment
+ * (the standard monotone-cubic → Bézier conversion), and the filled variant
+ * closes onto `baseline` exactly like `areaPath`, so the render layer can
+ * swap the two without touching anything else.
+ * @param {Array<{x: number, y: number}>} points - already-scaled points (x strictly increasing).
+ * @param {number} w - viewBox width.
+ * @param {number} h - viewBox height.
+ * @param {{baseline?: number}} [opts]
+ * @returns {{line: string, area: string, w: number, h: number}}
+ */
+export function smoothAreaPath(points, w, h, opts = {}) {
+	const baseline = Number.isFinite(opts.baseline) ? opts.baseline : h;
+	if (!Array.isArray(points) || points.length === 0) {
+		return { line: "", area: "", w, h };
+	}
+	if (points.length < 3) {
+		// 1–2 points carry no curvature; the straight path is already monotone.
+		return areaPath(points, w, h, opts);
+	}
+	const n = points.length;
+	const xs = points.map((p) => Number(p.x));
+	const ys = points.map((p) => Number(p.y));
+	if (!xs.every(Number.isFinite) || !ys.every(Number.isFinite)) {
+		return areaPath(points, w, h, opts);
+	}
+	// Segment slopes (x is strictly increasing; a degenerate run falls back to flat).
+	const delta = new Array(n - 1);
+	const slope = new Array(n - 1);
+	for (let i = 0; i < n - 1; i += 1) {
+		delta[i] = xs[i + 1] - xs[i];
+		slope[i] = delta[i] > 0 ? (ys[i + 1] - ys[i]) / delta[i] : 0;
+	}
+	// Initial tangents: one-sided at the ends, weighted harmonic mean inside.
+	const m = new Array(n);
+	m[0] = slope[0];
+	m[n - 1] = slope[n - 2];
+	for (let i = 1; i < n - 1; i += 1) {
+		const s0 = slope[i - 1];
+		const s1 = slope[i];
+		if (s0 * s1 <= 0) {
+			// local extremum (or a plateau): a zero tangent keeps the curve inside.
+			m[i] = 0;
+		} else {
+			const w1 = 2 * delta[i] + delta[i - 1];
+			const w2 = delta[i] + 2 * delta[i - 1];
+			m[i] = (w1 + w2) / (w1 / s0 + w2 / s1);
+		}
+	}
+	// Fritsch–Carlson limiter: keep (m_i/slope_i, m_{i+1}/slope_i) inside the
+	// monotonicity circle of radius 3.
+	for (let i = 0; i < n - 1; i += 1) {
+		if (slope[i] === 0) {
+			m[i] = 0;
+			m[i + 1] = 0;
+			continue;
+		}
+		const a = m[i] / slope[i];
+		const b = m[i + 1] / slope[i];
+		const sum = a * a + b * b;
+		if (sum > 9) {
+			const t = 3 / Math.sqrt(sum);
+			m[i] = t * a * slope[i];
+			m[i + 1] = t * b * slope[i];
+		}
+	}
+	const round = (value) => Math.round(value * 100) / 100;
+	let line = `M${round(xs[0])},${round(ys[0])}`;
+	for (let i = 0; i < n - 1; i += 1) {
+		const third = delta[i] / 3;
+		const c1x = round(xs[i] + third);
+		const c1y = round(ys[i] + m[i] * third);
+		const c2x = round(xs[i + 1] - third);
+		const c2y = round(ys[i + 1] - m[i + 1] * third);
+		line += ` C${c1x},${c1y} ${c2x},${c2y} ${round(xs[i + 1])},${round(ys[i + 1])}`;
+	}
+	const area = `${line} L${round(xs[n - 1])},${baseline} L${round(xs[0])},${baseline} Z`;
+	return { line, area, w, h };
+}
+
+/**
+ * 2026-09-18 bucket axis labels.
+ *
+ * The previous code took `key.slice(5)` unconditionally, which is right for a
+ * `YYYY-MM-DD` bucket but silently degenerates for an hourly `YYYY-MM-DD HH`
+ * bucket (`"2026-09-17 19"` → `"09-17"`), printing the same label a dozen times
+ * across one axis. The format is now driven by the bucket key shape itself
+ * (space = hour precision), so day and hour series can never be mixed up.
+ * @param {string} key - bucket key (`YYYY-MM-DD` or `YYYY-MM-DD HH`).
+ * @returns {string} axis/tooltip label (`MM-DD` or `MM-DD HH`).
+ */
+export function bucketLabel(key) {
+	const text = typeof key === "string" ? key : String(key ?? "");
+	const space = text.indexOf(" ");
+	if (space > 0) return `${text.slice(5, 10)} ${text.slice(space + 1)}`;
+	return text.length >= 10 ? text.slice(5, 10) : text;
+}
+
+/**
+ * 2026-09-18 hourly trend: dense bucket series (missing buckets filled with 0).
+ *
+ * `scaleArea`/`scaleBars` place buckets by INDEX, not by timestamp, so a
+ * sparse series (real data: 297 non-empty hours out of 720) silently compresses
+ * the time axis and draws a chart whose x positions do not mean what they say.
+ * Every series that feeds a scaled chart must therefore be filled to a
+ * continuous run of buckets first.
+ *
+ * Buckets are generated in LOCAL time, walking with `Date` component arithmetic
+ * (not `+3600000`) so a DST boundary cannot shift the labels away from the
+ * `'localtime'` buckets the host SQL produces.
+ * @param {Array<{day: string}>} rows - sparse rows from the host (`day` = bucket key).
+ * @param {{granularity?: "day"|"hour", from?: number, to?: number, cap?: number}} [opts]
+ *   `from`/`to` are ms epoch bounds (inclusive); `cap` bounds the bucket count
+ *   (default 2200) so a pathological range cannot blow up the SVG.
+ * @returns {Array<object>} dense rows; missing buckets are zero-filled.
+ */
+export function fillBuckets(rows, opts = {}) {
+	const list = Array.isArray(rows) ? rows : [];
+	const granularity = opts.granularity === "hour" ? "hour" : "day";
+	if (!Number.isFinite(opts.from) || !Number.isFinite(opts.to) || opts.to < opts.from) return list;
+	const cap = Number.isFinite(opts.cap) && opts.cap > 0 ? Math.floor(opts.cap) : 2200;
+	const byKey = new Map();
+	for (const row of list) {
+		if (row && typeof row.day === "string") byKey.set(row.day, row);
+	}
+	const zeroRow = (key) => ({
+		day: key,
+		requests: 0,
+		input_tokens: 0,
+		output_tokens: 0,
+		cache_read_tokens: 0,
+		cache_write_tokens: 0,
+	});
+	const out = [];
+	if (granularity === "hour") {
+		const start = new Date(opts.from);
+		let cursor = new Date(start.getFullYear(), start.getMonth(), start.getDate(), start.getHours());
+		while (cursor.getTime() <= opts.to && out.length < cap) {
+			const key = `${formatDay(cursor)} ${String(cursor.getHours()).padStart(2, "0")}`;
+			out.push(byKey.get(key) || zeroRow(key));
+			cursor = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate(), cursor.getHours() + 1);
+		}
+	} else {
+		const start = new Date(opts.from);
+		let cursor = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+		while (cursor.getTime() <= opts.to && out.length < cap) {
+			const key = formatDay(cursor);
+			out.push(byKey.get(key) || zeroRow(key));
+			cursor = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() + 1);
+		}
+	}
+	// Any rows outside [from,to] (host clock skew) are appended so no data is lost.
+	const seen = new Set(out.map((r) => r.day));
+	for (const row of list) {
+		if (row && typeof row.day === "string" && !seen.has(row.day)) {
+			seen.add(row.day);
+			out.push(row);
+		}
+	}
+	return out;
+}
+
 
 /**
  * Bar-chart rects for one value series.
@@ -207,10 +439,19 @@ export function scaleBars(series, w, h) {
 			day: s.day,
 		};
 	});
+	// 2026-09-18: keep the arithmetic ticks and append the final bucket only when
+	// it does not crowd its predecessor. With a 169-point hourly series the last
+	// tick used to land ~14 slots after the previous one, so the two labels
+	// overlapped; the render layer anchors the first/last label per edge so the
+	// text cannot be clipped by the viewBox either.
 	const tickEvery = Math.max(1, Math.ceil(series.length / 8));
 	const ticks = series
-		.map((s, i) => ({ label: s.day.slice(5), x: i * slot + slot / 2 }))
-		.filter((_, i) => i % tickEvery === 0 || i === series.length - 1);
+		.map((s, i) => ({ label: bucketLabel(s.day), x: i * slot + slot / 2, index: i }))
+		.filter((t, i) => i % tickEvery === 0);
+	const lastIndex = series.length - 1;
+	if (ticks.length === 0 || lastIndex - ticks[ticks.length - 1].index >= Math.ceil(tickEvery * 0.6)) {
+		ticks.push({ label: bucketLabel(series[lastIndex].day), x: lastIndex * slot + slot / 2, index: lastIndex });
+	}
 	return { rects, ticks };
 }
 
@@ -234,10 +475,15 @@ export function scaleArea(series, w, h) {
 		day: s.day,
 		value: s.value,
 	}));
+	// 2026-09-18: same tick-spacing rule as scaleBars (see the note there).
 	const tickEvery = Math.max(1, Math.ceil(series.length / 8));
 	const ticks = series
-		.map((s, i) => ({ label: s.day.slice(5), x: i * slot }))
-		.filter((_, i) => i % tickEvery === 0 || i === series.length - 1);
+		.map((s, i) => ({ label: bucketLabel(s.day), x: i * slot, index: i }))
+		.filter((t, i) => i % tickEvery === 0);
+	const lastIndex = series.length - 1;
+	if (ticks.length === 0 || lastIndex - ticks[ticks.length - 1].index >= Math.ceil(tickEvery * 0.6)) {
+		ticks.push({ label: bucketLabel(series[lastIndex].day), x: lastIndex * slot, index: lastIndex });
+	}
 	return { points, ticks };
 }
 

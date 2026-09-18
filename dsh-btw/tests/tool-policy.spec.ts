@@ -22,4 +22,13 @@ describe('btw tool policy', () => {
   it('has no duplicate candidate names', () => {
     expect(new Set(READ_ONLY_TOOL_CANDIDATES).size).toBe(READ_ONLY_TOOL_CANDIDATES.length)
   })
+
+  // 2026-09-18 D2 fix: the side chat must be able to reach the vision fallback
+  // the main conversation has. Without `analyze_image`, a side chat whose own
+  // model cannot see images had no way to ask about a pasted screenshot.
+  it('lets the side chat call analyze_image as well as read_image', () => {
+    expect(READ_ONLY_TOOL_CANDIDATES).toContain('read_image')
+    expect(READ_ONLY_TOOL_CANDIDATES).toContain('analyze_image')
+    expect(isSideChatToolAllowed('analyze_image')).toBe(true)
+  })
 })

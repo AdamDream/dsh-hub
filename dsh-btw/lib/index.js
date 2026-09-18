@@ -295,6 +295,7 @@ async function analyzeImages(ctx, images, signal) {
 const READ_ONLY_TOOL_CANDIDATES = Object.freeze([
 	"read",
 	"read_image",
+	"analyze_image",
 	"glob",
 	"grep",
 	"lsp",
@@ -927,6 +928,7 @@ var SideChatService = class extends TypertRemoteService {
 			}
 			entry.handle = handle;
 			entry.seedLength = handle.agent.session.header.seedLength ?? 0;
+			this.hydrateImageRefs(entry, handle.agent);
 			handle.agent.inject(createUserMessage({
 				content: [{
 					type: "text",
@@ -1423,10 +1425,44 @@ var SideChatService = class extends TypertRemoteService {
 		};
 	}
 	/**
+	* 2026-09-18 D1 fix: rebuild the durable image refs of a RESUMED side chat.
+	*
+	* `imageRefsByMessageId` is only ever written when a message is admitted on a
+	* LIVE entry (`sendMessage`), so a resumed conversation began with an empty
+	* map: every historical image disappeared from the transcript, and
+	* `sideChat/readImage` answered "Unknown attachment id" for ids whose bytes
+	* were still sitting in the attachments store — the user-visible symptom was
+	* "the screenshot is gone / the model cannot find it".
+	*
+	* The refs are reconstructible from the child log itself: each admitted image
+	* is recorded there as an `image` part carrying its durable `attachment`
+	* reference (that is the same shape `sendMessage` sends when the model
+	* accepts images directly). This walks the child's own slice of the log once,
+	* after the resume settles, and restores the map.
+	*/
+	hydrateImageRefs(entry, agent) {
+		const events = agent.session.events.slice(entry.seedLength);
+		for (const event of events) {
+			if (event.type !== "user/message") continue;
+			const content = event.data.content;
+			if (!Array.isArray(content)) continue;
+			const refs = [];
+			for (const part of content) {
+				if (part === null || typeof part !== "object") continue;
+				const candidate = part;
+				if (candidate.type !== "image") continue;
+				const attachment = candidate.attachment;
+				if (attachment !== void 0 && typeof attachment.attachmentId === "string") refs.push(attachment);
+			}
+			if (refs.length > 0) entry.imageRefsByMessageId.set(String(event.data.id), refs);
+		}
+	}
+	/**
 	* U-F: read the verified bytes behind one admitted image back to the client
 	* for display (R1-10 thumbnails). The child session log only carries text,
 	* so `sessions.readAttachment` cannot serve these refs — they live in
-	* `imageRefsByMessageId` on the live entry.
+	* `imageRefsByMessageId` on the live entry (restored on resume by
+	* {@link hydrateImageRefs}).
 	*/
 	async readSideChatImage(request) {
 		const entry = this.byToken.get(request.chatToken);

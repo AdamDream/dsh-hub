@@ -18,7 +18,13 @@
  * btw ships its own channel.
  */
 export const READ_ONLY_TOOL_CANDIDATES = Object.freeze([
-  'read', 'read_image', 'glob', 'grep', 'lsp', 'view_image', 'web_search', 'skill',
+  // 2026-09-18: `analyze_image` joins `read_image`. The vision tool is
+  // read-only (it reads an attachment and asks the vision model about it), and
+  // without it a side chat whose own model cannot see images had no fallback at
+  // all, while the main conversation always had one. Candidates are still
+  // intersected with the parent's registered tools, so this only adds the tool
+  // where the deployment actually exposes it.
+  'read', 'read_image', 'analyze_image', 'glob', 'grep', 'lsp', 'view_image', 'web_search', 'skill',
   'session_event_read', 'session_event_search', 'session_event_trace', 'session_search', 'session_trace',
   'job_list', 'job_output', 'terminal_list', 'terminal_read', 'list_agents', 'get_goal',
   'mnemon_document_search', 'mnemon_memory_bodies', 'mnemon_recall', 'mnemon_related', 'mnemon_status',

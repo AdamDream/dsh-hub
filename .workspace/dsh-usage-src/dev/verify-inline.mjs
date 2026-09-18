@@ -54,7 +54,7 @@ function extractFills(src) {
 	throw new Error("unmatched bracket for FILLS");
 }
 
-function buildModule(fillsSrc, parseDaySrc, formatDaySrc, heatmapGridSrc, scaleBarsSrc, barRectsSrc, scaleAreaSrc) {
+function buildModule(fillsSrc, parseDaySrc, formatDaySrc, heatmapGridSrc, scaleBarsSrc, barRectsSrc, scaleAreaSrc, bucketLabelSrc) {
 	const body =
 		fillsSrc +
 		"\n" +
@@ -69,7 +69,12 @@ function buildModule(fillsSrc, parseDaySrc, formatDaySrc, heatmapGridSrc, scaleB
 		barRectsSrc +
 		"\n" +
 		scaleAreaSrc +
-		"\nreturn { FILLS, parseDay, formatDay, heatmapGrid, scaleBars, barRects, scaleArea };";
+		"\n" +
+		// 2026-09-18: scaleBars/scaleArea now label buckets through bucketLabel
+		// (hour keys used to degrade to a repeated MM-DD label), so the built
+		// module must carry it too.
+		bucketLabelSrc +
+		"\nreturn { FILLS, parseDay, formatDay, heatmapGrid, scaleBars, barRects, scaleArea, bucketLabel };";
 	return new Function(body)();
 }
 
@@ -81,6 +86,7 @@ const charts = buildModule(
 	extractFn(chartsSrc, "scaleBars"),
 	extractFn(chartsSrc, "barRects"),
 	extractFn(chartsSrc, "scaleArea"),
+	extractFn(chartsSrc, "bucketLabel"),
 );
 const inline = buildModule(
 	extractFills(clientSrc),
@@ -90,6 +96,7 @@ const inline = buildModule(
 	extractFn(clientSrc, "scaleBars"),
 	extractFn(clientSrc, "barRects"),
 	extractFn(clientSrc, "scaleArea"),
+	extractFn(clientSrc, "bucketLabel"),
 );
 
 // --- 1. functional equivalence --------------------------------------------
