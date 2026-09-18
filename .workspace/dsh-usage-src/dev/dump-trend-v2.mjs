@@ -74,6 +74,45 @@ const rollupGeom = charts.smoothAreaPath(rollupScaled.points, W, H);
 const rollup3Scaled = charts.scaleArea(hourRollup3, W, H);
 const rollup3Geom = charts.smoothAreaPath(rollup3Scaled.points, W, H);
 
+// --- 2026-09-18b: the shipped 24h gear (04:00 → 04:00, one bucket per hour) ---
+const db2 = new DatabaseSync(dbPath, { readOnly: true });
+// Two windows are dumped: the live one (04:00 → now, curve stops at the current
+// hour) and a complete past one, so the review shows both the "today so far"
+// and the full-day shapes. Labels use tickEvery=1 + hourTickLabel exactly like
+// the client asks for.
+const dayRowsWindow = (from, to) => charts.fillBuckets(
+	queryTimeseries(db2, { from, to, dataSources: "all", granularity: "hour" }),
+	{ granularity: "hour", from, to },
+);
+const nowMs = Date.now();
+const liveWin = charts.usageDayWindow(nowMs);
+const pastWin = charts.usageDayWindow(liveWin.from - 1);
+const view24 = (win, fillTo, partial) => {
+	const rows = dayRowsWindow(win.from, fillTo);
+	const series = rows.map((r) => ({ day: r.day, value: total(r) }));
+	const scaled = charts.scaleArea(series, W, H, { tickEvery: 1, tickFormatter: charts.hourTickLabel });
+	const geom = charts.smoothAreaPath(scaled.points, W, H, { tail: partial });
+	const barScaled = charts.scaleBars(series, W, H, { tickEvery: 1, tickFormatter: charts.hourTickLabel });
+	const barRectList = charts.barRects(barScaled.rects, W, H);
+	const barMax = Math.max(1, ...series.map((s) => s.value));
+	return {
+		window: { from: win.from, to: win.to, fillTo },
+		partial,
+		buckets: rows.length,
+		nonEmpty: rows.filter((r) => total(r) > 0).length,
+		peak: series.reduce((a, b) => (b.value > a.value ? b : a), series[0] ?? { day: "-", value: 0 }),
+		points: scaled.points,
+		ticks: scaled.ticks,
+		smoothLine: geom.line,
+		smoothArea: geom.area,
+		tailLine: geom.tailLine,
+		bars: barRectList.map((r, i) => ({ ...r, fill: charts.mixHex("#f5c451", "#f08a3c", r.value / barMax), partialBar: partial && i === barRectList.length - 1 })),
+	};
+};
+const hour24Live = view24(liveWin, Math.min(liveWin.to - 1, nowMs), true);
+const hour24Past = view24(pastWin, pastWin.to - 1, false);
+db2.close();
+
 // --- bars (daily, unchanged granularity) ---
 const barsScaled = charts.scaleBars(daySeries, W, H);
 const barRects = charts.barRects(barsScaled.rects, W, H);
@@ -153,6 +192,10 @@ writeFileSync(
 				ticks: rollup3Scaled.ticks,
 				smoothLine: rollup3Geom.line,
 				smoothArea: rollup3Geom.area,
+			},
+			hour24: {
+				live: hour24Live,
+				past: hour24Past,
 			},
 			hourSeries: hourSeries.map((s) => ({ ...s, label: charts.bucketLabel(s.day), formatted: charts.formatTokens(s.value) })),
 			daySeries: daySeries.map((s) => ({ ...s, label: charts.bucketLabel(s.day), formatted: charts.formatTokens(s.value) })),

@@ -45,6 +45,43 @@ export function rollupBuckets(rows, hoursPerBucket = 3) {
 }
 
 /**
+ * 2026-09-18 intraday window: the `anchorHour → anchorHour` "usage day".
+ *
+ * The trend panel's 24h gear watches a single day running 04:00 → next 04:00
+ * local time (a 04:00 boundary keeps one working session from being split by
+ * midnight). A reference instant exactly ON the boundary belongs to the window
+ * that starts there, which is what makes the date picker work: pass
+ * `new Date('<date>T04:00:00')` and you get that date's own window.
+ * Component arithmetic (not `+86400000`) keeps it correct across DST.
+ * @param {number} refMs - reference instant (any ms inside the wanted window).
+ * @param {number} [anchorHour] - boundary hour, default 4.
+ * @returns {{from: number, to: number}} window bounds in ms (to − from = 24h).
+ */
+export function usageDayWindow(refMs, anchorHour = 4) {
+	const hour = Number.isInteger(anchorHour) && anchorHour >= 0 && anchorHour <= 23 ? anchorHour : 4;
+	const ref = new Date(Number.isFinite(refMs) ? refMs : Date.now());
+	let start = new Date(ref.getFullYear(), ref.getMonth(), ref.getDate(), hour, 0, 0, 0);
+	if (ref.getTime() < start.getTime()) start = new Date(ref.getFullYear(), ref.getMonth(), ref.getDate() - 1, hour, 0, 0, 0);
+	const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1, hour, 0, 0, 0);
+	return { from: start.getTime(), to: end.getTime() };
+}
+
+/**
+ * 2026-09-18 intraday axis label: `YYYY-MM-DD HH` → `HH` (two digits).
+ *
+ * A 24h window puts 24 ticks across the chart, so every tick gets a label and
+ * there is room for exactly two digits. Tooltips keep the full
+ * {@link bucketLabel} form ("09-18 14") so no information is lost.
+ * @param {string} key - bucket key (`YYYY-MM-DD HH`).
+ * @returns {string} two-digit hour, or the plain bucketLabel for other shapes.
+ */
+export function hourTickLabel(key) {
+	const text = typeof key === "string" ? key : String(key ?? "");
+	const space = text.indexOf(" ");
+	return space > 0 ? text.slice(space + 1) : bucketLabel(text);
+}
+
+/**
  * 2026-09-18 bar ramp: linear blend between two `#rrggbb` colours.
  *
  * Pure on purpose — the render layer reads the theme's endpoint colours off the
@@ -68,6 +105,33 @@ export function mixHex(low, high, t) {
 	const p = Number.isFinite(t) ? Math.min(1, Math.max(0, t)) : 0;
 	const channel = (i) => Math.round(a[i] + (b[i] - a[i]) * p);
 	return `#${[0, 1, 2].map((i) => channel(i).toString(16).padStart(2, "0")).join("")}`;
+}
+
+/**
+ * 2026-09-18b: the tail of a path (its last segment) plus a filled wedge for it.
+ *
+ * The live 04:00 → 04:00 window ends in an hour that is still running, so its
+ * bucket is a partial sum: drawn like the rest, the curve looks like usage
+ * collapsed to zero. The render layer draws this tail dashed / semi-transparent
+ * instead, which says "not finished yet" without hiding the data point.
+ * @param {string} line - a full `M… (C|L)…` path.
+ * @param {{x: number, y: number}} penultimate - the second-to-last point.
+ * @param {{x: number, y: number}} last - the last point.
+ * @param {number} baseline - area baseline.
+ * @returns {{tailLine: string, tailArea: string}} empty strings when the path
+ *   has a single segment or none.
+ */
+function tailOf(line, penultimate, last, baseline) {
+	const cut = Math.max(line.lastIndexOf(" C"), line.lastIndexOf(" L"));
+	if (cut <= 0) return { tailLine: "", tailArea: "" };
+	const start = `M${round2(penultimate.x)},${round2(penultimate.y)}`;
+	const tailLine = `${start} ${line.slice(cut + 1)}`;
+	return { tailLine, tailArea: `${tailLine} L${round2(last.x)},${baseline} L${round2(penultimate.x)},${baseline} Z` };
+}
+
+/** Round to 2 decimals (path strings stay short). */
+function round2(value) {
+	return Math.round(value * 100) / 100;
 }
 
 /**
@@ -110,17 +174,25 @@ export function areaPath(points, w, h, opts = {}) {
 export function smoothAreaPath(points, w, h, opts = {}) {
 	const baseline = Number.isFinite(opts.baseline) ? opts.baseline : h;
 	if (!Array.isArray(points) || points.length === 0) {
-		return { line: "", area: "", w, h };
+		return { line: "", area: "", tailLine: "", tailArea: "", w, h };
 	}
 	if (points.length < 3) {
 		// 1–2 points carry no curvature; the straight path is already monotone.
-		return areaPath(points, w, h, opts);
+		const straight = areaPath(points, w, h, opts);
+		if (opts.tail !== true || points.length < 2) {
+			return { line: straight.line, area: straight.area, tailLine: "", tailArea: "", w: straight.w, h: straight.h };
+		}
+		const t = tailOf(straight.line, points[points.length - 2], points[points.length - 1], baseline);
+		return { line: straight.line, area: straight.area, tailLine: t.tailLine, tailArea: t.tailArea, w: straight.w, h: straight.h };
 	}
 	const n = points.length;
 	const xs = points.map((p) => Number(p.x));
 	const ys = points.map((p) => Number(p.y));
 	if (!xs.every(Number.isFinite) || !ys.every(Number.isFinite)) {
-		return areaPath(points, w, h, opts);
+		const straight = areaPath(points, w, h, opts);
+		if (opts.tail !== true) return { line: straight.line, area: straight.area, tailLine: "", tailArea: "", w: straight.w, h: straight.h };
+		const tf = tailOf(straight.line, points[n - 2], points[n - 1], baseline);
+		return { line: straight.line, area: straight.area, tailLine: tf.tailLine, tailArea: tf.tailArea, w: straight.w, h: straight.h };
 	}
 	// Segment slopes (x is strictly increasing; a degenerate run falls back to flat).
 	const delta = new Array(n - 1);
@@ -162,18 +234,18 @@ export function smoothAreaPath(points, w, h, opts = {}) {
 			m[i + 1] = t * b * slope[i];
 		}
 	}
-	const round = (value) => Math.round(value * 100) / 100;
-	let line = `M${round(xs[0])},${round(ys[0])}`;
+	let line = `M${round2(xs[0])},${round2(ys[0])}`;
 	for (let i = 0; i < n - 1; i += 1) {
 		const third = delta[i] / 3;
-		const c1x = round(xs[i] + third);
-		const c1y = round(ys[i] + m[i] * third);
-		const c2x = round(xs[i + 1] - third);
-		const c2y = round(ys[i + 1] - m[i + 1] * third);
-		line += ` C${c1x},${c1y} ${c2x},${c2y} ${round(xs[i + 1])},${round(ys[i + 1])}`;
+		const c1x = round2(xs[i] + third);
+		const c1y = round2(ys[i] + m[i] * third);
+		const c2x = round2(xs[i + 1] - third);
+		const c2y = round2(ys[i + 1] - m[i + 1] * third);
+		line += ` C${c1x},${c1y} ${c2x},${c2y} ${round2(xs[i + 1])},${round2(ys[i + 1])}`;
 	}
-	const area = `${line} L${round(xs[n - 1])},${baseline} L${round(xs[0])},${baseline} Z`;
-	return { line, area, w, h };
+	const area = `${line} L${round2(xs[n - 1])},${baseline} L${round2(xs[0])},${baseline} Z`;
+	const t = opts.tail === true ? tailOf(line, points[n - 2], points[n - 1], baseline) : { tailLine: "", tailArea: "" };
+	return { line, area, tailLine: t.tailLine, tailArea: t.tailArea, w, h };
 }
 
 /**
@@ -444,7 +516,7 @@ function formatDay(date) {
  * @param {number} h - chart height.
  * @returns {{rects: Array<object>, ticks: Array<{label: string, x: number}>}}
  */
-export function scaleBars(series, w, h) {
+export function scaleBars(series, w, h, opts = {}) {
 	if (!Array.isArray(series) || series.length === 0) return { rects: [], ticks: [] };
 	const max = Math.max(1, ...series.map((s) => s.value));
 	const slot = w / series.length;
@@ -465,13 +537,19 @@ export function scaleBars(series, w, h) {
 	// tick used to land ~14 slots after the previous one, so the two labels
 	// overlapped; the render layer anchors the first/last label per edge so the
 	// text cannot be clipped by the viewBox either.
-	const tickEvery = Math.max(1, Math.ceil(series.length / 8));
+	// 2026-09-18b: `opts.tickEvery` (e.g. 1 for the 24h intraday view, where every
+	// hour is labelled) and `opts.tickFormatter` override the automatic density
+	// and the label text.
+	const tickEvery = Number.isFinite(opts.tickEvery) && opts.tickEvery >= 1
+		? Math.floor(opts.tickEvery)
+		: Math.max(1, Math.ceil(series.length / 8));
+	const label = typeof opts.tickFormatter === "function" ? opts.tickFormatter : bucketLabel;
 	const ticks = series
-		.map((s, i) => ({ label: bucketLabel(s.day), x: i * slot + slot / 2, index: i }))
+		.map((s, i) => ({ label: label(s.day), x: i * slot + slot / 2, index: i }))
 		.filter((t, i) => i % tickEvery === 0);
 	const lastIndex = series.length - 1;
 	if (ticks.length === 0 || lastIndex - ticks[ticks.length - 1].index >= Math.ceil(tickEvery * 0.6)) {
-		ticks.push({ label: bucketLabel(series[lastIndex].day), x: lastIndex * slot + slot / 2, index: lastIndex });
+		ticks.push({ label: label(series[lastIndex].day), x: lastIndex * slot + slot / 2, index: lastIndex });
 	}
 	return { rects, ticks };
 }
@@ -486,7 +564,7 @@ export function scaleBars(series, w, h) {
  * @param {number} h - chart height.
  * @returns {{points: Array<{x: number, y: number, day?: string, value?: number}>, ticks: Array<{label: string, x: number}>}}
  */
-export function scaleArea(series, w, h) {
+export function scaleArea(series, w, h, opts = {}) {
 	if (!Array.isArray(series) || series.length === 0) return { points: [], ticks: [] };
 	const max = Math.max(1, ...series.map((s) => s.value));
 	const slot = series.length > 1 ? w / (series.length - 1) : w;
@@ -496,14 +574,18 @@ export function scaleArea(series, w, h) {
 		day: s.day,
 		value: s.value,
 	}));
-	// 2026-09-18: same tick-spacing rule as scaleBars (see the note there).
-	const tickEvery = Math.max(1, Math.ceil(series.length / 8));
+	// 2026-09-18: same tick-spacing rule as scaleBars (see the note there),
+	// including the `opts.tickEvery` / `opts.tickFormatter` overrides.
+	const tickEvery = Number.isFinite(opts.tickEvery) && opts.tickEvery >= 1
+		? Math.floor(opts.tickEvery)
+		: Math.max(1, Math.ceil(series.length / 8));
+	const label = typeof opts.tickFormatter === "function" ? opts.tickFormatter : bucketLabel;
 	const ticks = series
-		.map((s, i) => ({ label: bucketLabel(s.day), x: i * slot, index: i }))
+		.map((s, i) => ({ label: label(s.day), x: i * slot, index: i }))
 		.filter((t, i) => i % tickEvery === 0);
 	const lastIndex = series.length - 1;
 	if (ticks.length === 0 || lastIndex - ticks[ticks.length - 1].index >= Math.ceil(tickEvery * 0.6)) {
-		ticks.push({ label: bucketLabel(series[lastIndex].day), x: lastIndex * slot, index: lastIndex });
+		ticks.push({ label: label(series[lastIndex].day), x: lastIndex * slot, index: lastIndex });
 	}
 	return { points, ticks };
 }

@@ -80,17 +80,70 @@ window.__ModuleLoader__.load({
 			if (space > 0) return text.slice(5, 10) + " " + text.slice(space + 1);
 			return text.length >= 10 ? text.slice(5, 10) : text;
 		}
+		// 2026-09-18b: the 04:00 → 04:00 "usage day" window of the 24h gear.
+		// A reference instant exactly ON the boundary belongs to the window that
+		// starts there — that is what makes the date picker work (pass
+		// `new Date('<date>T04:00:00')` and you get that date's own window).
+		// Component arithmetic keeps it DST-correct (mirrors charts.js).
+		function usageDayWindow(refMs, anchorHour) {
+			const hour = Number.isInteger(anchorHour) && anchorHour >= 0 && anchorHour <= 23 ? anchorHour : 4;
+			const ref = new Date(Number.isFinite(refMs) ? refMs : Date.now());
+			let start = new Date(ref.getFullYear(), ref.getMonth(), ref.getDate(), hour, 0, 0, 0);
+			if (ref.getTime() < start.getTime()) start = new Date(ref.getFullYear(), ref.getMonth(), ref.getDate() - 1, hour, 0, 0, 0);
+			const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1, hour, 0, 0, 0);
+			return { from: start.getTime(), to: end.getTime() };
+		}
+		// 2026-09-18b: intraday axis label — `YYYY-MM-DD HH` → `HH`. The 24h gear
+		// labels every bucket, so exactly two digits fit; tooltips keep the full
+		// bucketLabel form so the date is never lost.
+		function hourTickLabel(key) {
+			const text = typeof key === "string" ? key : String(key == null ? "" : key);
+			const space = text.indexOf(" ");
+			return space > 0 ? text.slice(space + 1) : bucketLabel(text);
+		}
+		// 2026-09-18b: `MM-DD HH:00` of a window bound, for the panel title.
+		function windowLabel(ms) {
+			const date = new Date(ms);
+			const mm = String(date.getMonth() + 1).padStart(2, "0");
+			const dd = String(date.getDate()).padStart(2, "0");
+			const hh = String(date.getHours()).padStart(2, "0");
+			return mm + "-" + dd + " " + hh + ":00";
+		}
+		// 2026-09-18b: tail of a path (its last segment) + a filled wedge for it, so
+		// the still-running bucket can be drawn dashed (mirrors charts.js tailOf).
+		function tailOf(line, penultimate, last, baseline) {
+			const cut = Math.max(line.lastIndexOf(" C"), line.lastIndexOf(" L"));
+			if (cut <= 0) return { tailLine: "", tailArea: "" };
+			const start = "M" + round2(penultimate.x) + "," + round2(penultimate.y);
+			const tailLine = start + " " + line.slice(cut + 1);
+			return { tailLine: tailLine, tailArea: tailLine + " L" + round2(last.x) + "," + baseline + " L" + round2(penultimate.x) + "," + baseline + " Z" };
+		}
+		function round2(value) {
+			return Math.round(value * 100) / 100;
+		}
 		// 2026-09-18: monotone cubic (Fritsch–Carlson) area path — never
 		// overshoots between samples, so the curve cannot invent values above
 		// the data (mirrors charts.js smoothAreaPath).
 		function smoothAreaPath(points, w, h, opts) {
 			const baseline = opts && Number.isFinite(opts.baseline) ? opts.baseline : h;
-			if (!Array.isArray(points) || points.length === 0) return { line: "", area: "", w, h };
-			if (points.length < 3) return areaPath(points, w, h, opts);
+			if (!Array.isArray(points) || points.length === 0) return { line: "", area: "", tailLine: "", tailArea: "", w, h };
+			// 2026-09-18b: opts.tail = true additionally returns the last segment
+			// (and its wedge) so the render layer can dash the still-running bucket.
+			if (points.length < 3) {
+				const straight = areaPath(points, w, h, opts);
+				if (!opts || opts.tail !== true || points.length < 2) return { line: straight.line, area: straight.area, tailLine: "", tailArea: "", w: straight.w, h: straight.h };
+				const t = tailOf(straight.line, points[points.length - 2], points[points.length - 1], baseline);
+				return { line: straight.line, area: straight.area, tailLine: t.tailLine, tailArea: t.tailArea, w: straight.w, h: straight.h };
+			}
 			const n = points.length;
 			const xs = points.map((p) => Number(p.x));
 			const ys = points.map((p) => Number(p.y));
-			if (!xs.every(Number.isFinite) || !ys.every(Number.isFinite)) return areaPath(points, w, h, opts);
+			if (!xs.every(Number.isFinite) || !ys.every(Number.isFinite)) {
+				const straight = areaPath(points, w, h, opts);
+				if (!opts || opts.tail !== true) return { line: straight.line, area: straight.area, tailLine: "", tailArea: "", w: straight.w, h: straight.h };
+				const t = tailOf(straight.line, points[n - 2], points[n - 1], baseline);
+				return { line: straight.line, area: straight.area, tailLine: t.tailLine, tailArea: t.tailArea, w: straight.w, h: straight.h };
+			}
 			const delta = new Array(n - 1);
 			const slope = new Array(n - 1);
 			for (let i = 0; i < n - 1; i += 1) {
@@ -126,7 +179,7 @@ window.__ModuleLoader__.load({
 					m[i + 1] = t * b * slope[i];
 				}
 			}
-			const round = (value) => Math.round(value * 100) / 100;
+			const round = round2;
 			let line = "M" + round(xs[0]) + "," + round(ys[0]);
 			for (let i = 0; i < n - 1; i += 1) {
 				const third = delta[i] / 3;
@@ -137,7 +190,8 @@ window.__ModuleLoader__.load({
 				line += " C" + c1x + "," + c1y + " " + c2x + "," + c2y + " " + round(xs[i + 1]) + "," + round(ys[i + 1]);
 			}
 			const area = line + " L" + round(xs[n - 1]) + "," + baseline + " L" + round(xs[0]) + "," + baseline + " Z";
-			return { line, area, w, h };
+			const tail = opts && opts.tail === true ? tailOf(line, points[n - 2], points[n - 1], baseline) : { tailLine: "", tailArea: "" };
+			return { line, area, tailLine: tail.tailLine, tailArea: tail.tailArea, w, h };
 		}
 		// 2026-09-18: dense bucket series (missing buckets → 0). Scaled charts
 		// place buckets by INDEX, so a sparse hourly series would silently
@@ -305,7 +359,8 @@ window.__ModuleLoader__.load({
 			}
 			return { cells, weeks, width: weeks * (size + gap) - gap, levels, months, peak: maxTotal, peakDay };
 		}
-		function scaleBars(series, w, h) {
+		function scaleBars(series, w, h, opts) {
+			const o = opts || {};
 			if (!Array.isArray(series) || series.length === 0) return { rects: [], ticks: [] };
 			const max = Math.max(1, ...series.map((s) => s.value));
 			const slot = w / series.length;
@@ -316,29 +371,34 @@ window.__ModuleLoader__.load({
 			});
 			// 2026-09-18: append the final tick only when it does not crowd its
 			// predecessor (hourly series otherwise overlapped the last two labels).
-			const tickEvery = Math.max(1, Math.ceil(series.length / 8));
+			// 2026-09-18b: opts.tickEvery (1 = label every bucket, the 24h intraday
+			// view) and opts.tickFormatter (2-digit hour) override the defaults.
+			const tickEvery = Number.isFinite(o.tickEvery) && o.tickEvery >= 1 ? Math.floor(o.tickEvery) : Math.max(1, Math.ceil(series.length / 8));
+			const label = typeof o.tickFormatter === "function" ? o.tickFormatter : bucketLabel;
 			const ticks = series
-				.map((s, i) => ({ label: bucketLabel(s.day), x: i * slot + slot / 2, index: i }))
+				.map((s, i) => ({ label: label(s.day), x: i * slot + slot / 2, index: i }))
 				.filter((t, i) => i % tickEvery === 0);
 			const lastIndex = series.length - 1;
 			if (ticks.length === 0 || lastIndex - ticks[ticks.length - 1].index >= Math.ceil(tickEvery * 0.6)) {
-				ticks.push({ label: bucketLabel(series[lastIndex].day), x: lastIndex * slot + slot / 2, index: lastIndex });
+				ticks.push({ label: label(series[lastIndex].day), x: lastIndex * slot + slot / 2, index: lastIndex });
 			}
 			return { rects, ticks };
 		}
-		function scaleArea(series, w, h) {
+		function scaleArea(series, w, h, opts) {
+			const o = opts || {};
 			if (!Array.isArray(series) || series.length === 0) return { points: [], ticks: [] };
 			const max = Math.max(1, ...series.map((s) => s.value));
 			const slot = series.length > 1 ? w / (series.length - 1) : w;
 			const points = series.map((s, i) => ({ x: i * slot, y: h - (s.value / max) * (h - 4) - 2, day: s.day, value: s.value }));
-			// 2026-09-18: same tick-spacing rule as scaleBars.
-			const tickEvery = Math.max(1, Math.ceil(series.length / 8));
+			// 2026-09-18: same tick-spacing rule and overrides as scaleBars.
+			const tickEvery = Number.isFinite(o.tickEvery) && o.tickEvery >= 1 ? Math.floor(o.tickEvery) : Math.max(1, Math.ceil(series.length / 8));
+			const label = typeof o.tickFormatter === "function" ? o.tickFormatter : bucketLabel;
 			const ticks = series
-				.map((s, i) => ({ label: bucketLabel(s.day), x: i * slot, index: i }))
+				.map((s, i) => ({ label: label(s.day), x: i * slot, index: i }))
 				.filter((t, i) => i % tickEvery === 0);
 			const lastIndex = series.length - 1;
 			if (ticks.length === 0 || lastIndex - ticks[ticks.length - 1].index >= Math.ceil(tickEvery * 0.6)) {
-				ticks.push({ label: bucketLabel(series[lastIndex].day), x: lastIndex * slot, index: lastIndex });
+				ticks.push({ label: label(series[lastIndex].day), x: lastIndex * slot, index: lastIndex });
 			}
 			return { points, ticks };
 		}
@@ -445,6 +505,9 @@ window.__ModuleLoader__.load({
 		//#endregion
 		//#region card components
 		const CHANNEL = "/usage";
+		// 2026-09-18b: boundary hour of the intraday "usage day" (04:00 → 04:00),
+		// so one working session is not split by midnight.
+		const TREND_ANCHOR_HOUR = 4;
 		const BUCKETS = [
 			{ key: "total", label: "总 tokens" },
 			{ key: "input_tokens", label: "输入(未缓存)" },
@@ -498,15 +561,21 @@ window.__ModuleLoader__.load({
 		}
 		function TrendChart(props) {
 			const mode = props.mode === "bar" ? "bar" : "area";
-			// 2026-09-18: the area mode rides the HOURLY series (smooth curve); the
-			// bar mode keeps the DAILY series. `props.hourly` stays empty when the
-			// host does not serve hourly buckets yet (a pre-restart host rejects
-			// granularity "hour") — the area mode then falls back to the daily
-			// series instead of failing the whole card.
-			const rows = mode === "bar"
-				? (props.rows || [])
-				: ((props.hourly && props.hourly.length > 0) ? props.hourly : (props.rows || []));
+			// 2026-09-18b: the GEAR decides the data — `hour` = the 24h intraday
+			// window (04:00 → 04:00, one bucket per hour), `day` = the daily series
+			// over the range selector. Both drawing modes (area / bar) follow the
+			// same gear, so switching the drawing never silently changes the time
+			// axis. `props.hourly` is empty when the host cannot serve hourly
+			// buckets yet (a pre-restart host rejects granularity "hour") → the
+			// chart falls back to the daily series instead of failing the card.
+			const usingHourly = props.grain === "hour" && Array.isArray(props.hourly) && props.hourly.length > 0;
+			const rows = usingHourly ? props.hourly : (props.rows || []);
 			const series = rows.map((r) => ({ day: r.day, value: bucketValue(r, props.bucket) }));
+			// 2026-09-18b: in the 24h gear every bucket gets a 2-digit hour label.
+			const tickOpts = usingHourly ? { tickEvery: 1, tickFormatter: hourTickLabel } : undefined;
+			// 2026-09-18b: the caller decides whether the LAST bucket is still
+			// running (today / the current hour); only the final segment changes.
+			const partialTail = props.partial === true;
 			const w = 560;
 			const h = 150;
 			// P0-b: settings switch `dsh-usage.ui.tooltip` (default true) — the
@@ -522,7 +591,7 @@ window.__ModuleLoader__.load({
 			const children = [];
 			let hitFn = null;
 			if (mode === "bar") {
-				const scaled = scaleBars(series, w, h);
+				const scaled = scaleBars(series, w, h, tickOpts);
 				const rects = barRects(scaled.rects, w, h);
 				hitFn = (mx, my) => {
 					const i = hitBarRects(rects, mx, my);
@@ -535,22 +604,39 @@ window.__ModuleLoader__.load({
 				const rampLow = themeVar("--du-bar-low", "#eab308");
 				const rampHigh = themeVar("--du-bar-high", "#ea580c");
 				const rampMax = Math.max(1, ...series.map((s) => s.value));
+				// 2026-09-18b: the still-running bucket (today / the current hour) is
+				// a PARTIAL sum — rendered lighter so it cannot read as a drop in usage.
 				children.push(react.createElement("g", null,
-					rects.map((r) => react.createElement("rect", { key: r.x + "-" + r.y, x: r.x, y: r.y, width: r.width, height: r.height, rx: 1, fill: mixHex(rampLow, rampHigh, r.value / rampMax) }))));
+					rects.map((r, i) => react.createElement("rect", {
+						key: r.x + "-" + r.y,
+						x: r.x,
+						y: r.y,
+						width: r.width,
+						height: r.height,
+						rx: 1,
+						fill: mixHex(rampLow, rampHigh, r.value / rampMax),
+						...(partialTail && i === rects.length - 1 ? { fillOpacity: 0.45 } : {}),
+					}))));
 				children.push(react.createElement("g", { fill: "var(--dsw-alias-label-caption)", fontSize: 10, textAnchor: "middle" },
 					scaled.ticks.map((t) => react.createElement("text", { key: "t" + t.x, x: t.x, y: h - 2, textAnchor: tickAnchor(t.x, w) }, t.label))));
 			} else {
-				const scaled = scaleArea(series, w, h);
+				const scaled = scaleArea(series, w, h, tickOpts);
 				// 2026-09-18: monotone-cubic smoothing (no overshoot). The fill is the
 				// deep-blue wash --du-trend-fill (alpha baked into the token so the
 				// themes can differ), the outline is --du-trend-line.
-				const geom = smoothAreaPath(scaled.points, w, h);
+				const geom = smoothAreaPath(scaled.points, w, h, { tail: partialTail });
 				hitFn = (mx, my) => {
 					const i = hitAreaPoints(scaled.points, mx, my, 12);
 					return i >= 0 ? { day: scaled.points[i].day, valueText: tipTokens(scaled.points[i].value) } : null;
 				};
 				children.push(react.createElement("path", { d: geom.area, fill: "var(--du-trend-fill)", stroke: "none" }));
 				children.push(react.createElement("path", { d: geom.line, fill: "none", stroke: "var(--du-trend-line)", strokeWidth: 2, strokeLinejoin: "round", strokeLinecap: "round" }));
+				// 2026-09-18b: the LAST segment covers the still-running bucket, whose
+				// sum is incomplete — a dashed overlay says "in progress" instead of
+				// letting the tail look like usage collapsed to zero.
+				if (partialTail && geom.tailLine !== "") {
+					children.push(react.createElement("path", { d: geom.tailLine, fill: "none", stroke: "var(--du-trend-line)", strokeWidth: 2, strokeLinecap: "round", strokeDasharray: "4 3" }));
+				}
 				children.push(react.createElement("g", { fill: "var(--dsw-alias-label-caption)", fontSize: 10, textAnchor: "middle" },
 					scaled.ticks.map((t) => react.createElement("text", { key: "t" + t.x, x: t.x, y: h - 2, textAnchor: tickAnchor(t.x, w) }, t.label))));
 			}
@@ -687,6 +773,13 @@ window.__ModuleLoader__.load({
 			const [refreshSec, setRefreshSec] = react.useState(30);
 			const [bucket, setBucket] = react.useState("total");
 			const [chartMode, setChartMode] = react.useState("area");
+			// 2026-09-18b: trend GEAR — `hour` = the 24h intraday window
+			// (04:00 → 04:00, one bucket per hour), `day` = the range selector's
+			// daily series. `trendDay` empty = the current window; a date picks that
+			// date's own 04:00 → next 04:00 window (history browsing).
+			const [trendGrain, setTrendGrain] = react.useState("hour");
+			const [trendDay, setTrendDay] = react.useState("");
+			const [trendWindow, setTrendWindow] = react.useState(() => usageDayWindow(Date.now(), TREND_ANCHOR_HOUR));
 			const [tab, setTab] = react.useState("byModel");
 			const [error, setError] = react.useState(null);
 			const [loading, setLoading] = react.useState(false);
@@ -719,6 +812,16 @@ window.__ModuleLoader__.load({
 				}
 				setLoading(true);
 				try {
+					// 2026-09-18b: the intraday series has its OWN window (04:00 →
+					// 04:00 of the selected day), independent of the card-level range
+					// selector. Recomputed on every load so a long-lived tab rolls
+					// over the 04:00 boundary by itself.
+					const trendWin = trendDay === ""
+						? usageDayWindow(Date.now(), TREND_ANCHOR_HOUR)
+						: usageDayWindow(
+							new Date(trendDay + "T" + String(TREND_ANCHOR_HOUR).padStart(2, "0") + ":00:00").getTime(),
+							TREND_ANCHOR_HOUR,
+						);
 					const calls = await Promise.all([
 						rpc.call(CHANNEL, "summary", payload),
 						rpc.call(CHANNEL, "timeseries", Object.assign({ granularity: "day" }, payload)),
@@ -726,12 +829,11 @@ window.__ModuleLoader__.load({
 						rpc.call(CHANNEL, "byModel", payload),
 						rpc.call(CHANNEL, "byProject", payload),
 						rpc.call(CHANNEL, "byDay", payload),
-						// 2026-09-18: hourly buckets for the trend curve. Deliberately
-						// OUTSIDE the all-or-nothing gate below: a host predating the
-						// hourly whitelist rejects this with invalid-params, and that
-						// must degrade to the daily trend (previous behavior) instead
-						// of blanking the whole card.
-						rpc.call(CHANNEL, "timeseries", Object.assign({ granularity: "hour" }, payload)).catch(() => null),
+						// Deliberately OUTSIDE the all-or-nothing gate below: a host
+						// predating the hourly whitelist rejects this with
+						// invalid-params, and that must degrade to the daily trend
+						// instead of blanking the whole card.
+						rpc.call(CHANNEL, "timeseries", { granularity: "hour", from: trendWin.from, to: trendWin.to, dataSources: dataSource }).catch(() => null),
 					]);
 					if (calls.slice(0, 6).every((r) => r && r.ok)) {
 						setSummary(calls[0].value);
@@ -741,6 +843,7 @@ window.__ModuleLoader__.load({
 						setByProject(calls[4].value || []);
 						setByDay(calls[5].value || []);
 						setTimeseriesHour(calls[6] && calls[6].ok ? calls[6].value || [] : []);
+						setTrendWindow(trendWin);
 						setError(null);
 					} else {
 						const failed = calls.slice(0, 6).find((r) => !r || !r.ok);
@@ -751,7 +854,7 @@ window.__ModuleLoader__.load({
 				} finally {
 					setLoading(false);
 				}
-			}, [rpcAvailable, rpc, payload, range.from, dataSource]);
+			}, [rpcAvailable, rpc, payload, range.from, dataSource, trendDay]);
 			const loadSessions = react.useCallback(async () => {
 				if (!rpcAvailable) return;
 				const from = sessionFrom ? new Date(sessionFrom + "T00:00:00").getTime() : range.from;
@@ -900,8 +1003,22 @@ window.__ModuleLoader__.load({
 			// rejected hour call produced 57 fabricated zero buckets and the whole
 			// trend read "0 tokens".
 			const hourlyRows = Array.isArray(timeseriesHour) && timeseriesHour.length > 0
-				? rollupBuckets(fillBuckets(timeseriesHour, { granularity: "hour", from: range.from, to: range.to }), 3)
+				? fillBuckets(timeseriesHour, { granularity: "hour", from: trendWindow.from, to: Math.min(trendWindow.to - 1, Date.now()) })
 				: [];
+			const dailyRows = fillBuckets(timeseries, { granularity: "day", from: range.from, to: range.to });
+			// 2026-09-18b: "the last bucket is still running" — the current intraday
+			// window (its final hour) or a daily series whose last day is today.
+			const trendPartial = trendGrain === "hour"
+				? (hourlyRows.length > 1 && trendWindow.to > Date.now())
+				: (dailyRows.length > 1 && dailyRows[dailyRows.length - 1].day === formatDay(new Date()));
+			// 2026-09-18b: title states the gear AND the window it covers; when the
+			// host cannot serve hourly buckets the fallback is named explicitly so
+			// the reader is never shown a daily curve under an "hourly" label.
+			const trendTitle = trendGrain === "hour" && hourlyRows.length > 0
+				? "趋势（逐小时 " + windowLabel(trendWindow.from) + "–" + windowLabel(trendWindow.to) + "）"
+				: (trendGrain === "hour"
+					? "趋势（按日 · 宿主暂不支持小时粒度，重启后生效）"
+					: "趋势（按日）");
 			return react.createElement("div", { className: "du_root" },
 				react.createElement("div", { className: "du_head" },
 					react.createElement("div", { className: "du_title" }, "Token 用量 · dsh-usage"),
@@ -936,14 +1053,31 @@ window.__ModuleLoader__.load({
 				react.createElement("div", { className: "du_note" },
 					"口径：请求数 = 含 usage 的调用（dsh 按 turn:step 并集去重，cc 按 message.id 去重）；输入 = 未缓存输入（cc 已扣除缓存读/写，B3）；总 tokens = 输入+输出+缓存读+缓存写；命中率 = 缓存读/(输入+缓存读)。本地时区。"),
 				react.createElement("div", { className: "du_panel" },
-					react.createElement("div", { className: "du_panelTitle" }, chartMode === "area" && hourlyRows.length > 0 ? "趋势（3 小时合并）" : "趋势（按日）"),
+					react.createElement("div", { className: "du_panelTitle" }, trendTitle),
 					react.createElement("div", { className: "du_toolbar" },
+						react.createElement("select", { className: "du_select", value: trendGrain, onChange: (e) => setTrendGrain(e.target.value) },
+							react.createElement("option", { value: "hour" }, "24h 逐小时"),
+							react.createElement("option", { value: "day" }, "按日")),
+						trendGrain === "hour"
+							? react.createElement(react.Fragment, null,
+									react.createElement("input", {
+										type: "date",
+										className: "du_select",
+										value: trendDay,
+										max: formatDay(new Date()),
+										title: "选择要回看的那一天（" + TREND_ANCHOR_HOUR + ":00 → 次日 " + TREND_ANCHOR_HOUR + ":00）",
+										onChange: (e) => setTrendDay(e.target.value),
+									}),
+									trendDay === ""
+										? null
+										: react.createElement("button", { type: "button", className: "du_btn", onClick: () => setTrendDay("") }, "回到今日"))
+							: null,
 						react.createElement("select", { className: "du_select", value: bucket, onChange: (e) => setBucket(e.target.value) },
 							BUCKETS.map((b) => react.createElement("option", { key: b.key, value: b.key }, b.label))),
 						react.createElement("select", { className: "du_select", value: chartMode, onChange: (e) => setChartMode(e.target.value) },
 							react.createElement("option", { value: "area" }, "面积图"),
 							react.createElement("option", { value: "bar" }, "柱状图"))),
-					react.createElement(TrendChart, { rows: fillBuckets(timeseries, { granularity: "day", from: range.from, to: range.to }), hourly: hourlyRows, bucket: bucket, mode: chartMode, tooltip: settings.ui.tooltip })),
+					react.createElement(TrendChart, { rows: dailyRows, hourly: hourlyRows, grain: trendGrain, partial: trendPartial, bucket: bucket, mode: chartMode, tooltip: settings.ui.tooltip })),
 				react.createElement("div", { className: "du_panel" },
 					react.createElement("div", { className: "du_panelTitle" }, "热力图（按日总量）"),
 					react.createElement(HeatmapChart, { days: heatmap, tooltip: settings.ui.tooltip, peakRing: settings.heatmap.peakRing, monthLabels: settings.heatmap.monthLabels, legendNote: settings.heatmap.legendNote, levels: settings.heatmap.levels })),

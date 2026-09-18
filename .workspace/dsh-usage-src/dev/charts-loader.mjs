@@ -48,11 +48,11 @@ export function extractFills(src) {
 
 export function loadChartsModule(src) {
 	const fillsSrc = extractFills(src);
-	const fns = ["parseDay", "formatDay", "heatmapGrid", "scaleBars", "barRects", "scaleArea", "areaPath", "formatTokens", "mixHex", "bucketLabel", "smoothAreaPath", "fillBuckets", "rollupBuckets"];
+	const fns = ["parseDay", "formatDay", "heatmapGrid", "scaleBars", "barRects", "scaleArea", "areaPath", "formatTokens", "mixHex", "bucketLabel", "smoothAreaPath", "fillBuckets", "rollupBuckets", "usageDayWindow", "hourTickLabel", "round2", "tailOf"];
 	const fnSrcs = fns.map((name) => extractFn(src, name));
 	const body =
 		fillsSrc + "\n" + fnSrcs.join("\n") +
-		"\nreturn { FILLS, parseDay, formatDay, heatmapGrid, scaleBars, barRects, scaleArea, areaPath, formatTokens, mixHex, bucketLabel, smoothAreaPath, fillBuckets, rollupBuckets };";
+		"\nreturn { FILLS, parseDay, formatDay, heatmapGrid, scaleBars, barRects, scaleArea, areaPath, formatTokens, mixHex, bucketLabel, smoothAreaPath, fillBuckets, rollupBuckets, usageDayWindow, hourTickLabel, round2, tailOf };";
 	return new Function(body)();
 }
 
