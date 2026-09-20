@@ -1,0 +1,438 @@
+===== usage-plugin.sh：DRY-RUN（只动工作区内副本） / target=deployed =====
+PKG=/home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-usage
+WORK=/home/CNS2026495165/dsh/.workspace/lag-fix
+REPO_ROOT=/home/CNS2026495165/dsh
+ℹ️ live 已处于本单元「改后」状态 → 基线取自最近备份的 pre-sha 内容：/home/CNS2026495165/dsh/.workspace/lag-fix/backup-usage/deployed/backup-20260920-154018
+副本目录（工作区内，保留供核对）：/home/CNS2026495165/dsh/.workspace/lag-fix/tmp/dryrun-deployed-20260920-154721
+  · db.js / client.js          = 应用后副本
+  · db.js.pre / client.js.pre  = pre-patch 基线（SHA256SUMS.orig 对应之内容）
+[PASS] A1 锚点唯一命中（db.js）：export function queryHeatmap(db, filters = {}) {…
+[PASS] A2 锚点唯一命中（db.js）：export function rebuildDailyForDays(db, days) {…
+[SKIP] A0 锚点 0 次（视为已应用或目标漂移，由后续逐单元替换判定）
+[PASS] B2-poll 锚点唯一命中（client.js）：if (refreshSec <= 0) return;…
+[PASS] B2-option 锚点唯一命中（client.js）：react.createElement("option", { value: "30" }, "30s …
+APPLIED db-route（1 处替换）
+[PASS] 副本应用成功：db-route
+APPLIED db-rebuild（1 处替换）
+[PASS] 副本应用成功：db-rebuild
+APPLIED client-range（1 处替换）
+[PASS] 副本应用成功：client-range
+APPLIED client-poll（6 处替换）
+[PASS] 副本应用成功：client-poll
+
+──────── diff -u（左=pre-patch 基线，右=应用后副本）────────
+--- a/lib/db.js (pre-patch)
++++ b/lib/db.js (patched)
+@@ -222,6 +222,17 @@
+ export function rebuildDailyForDays(db, days) {
+ 	if (days.length === 0) return;
+ 	const placeholders = days.map(() => "?").join(", ");
++	// 2026-09-20 (audit §5 A2): the recompute used to filter with
++	// `strftime('%Y-%m-%d', ts/1000,'unixepoch','localtime') IN (...)`, which
++	// cannot use an index → `SCAN usage_events` on every ingest pass (150ms for
++	// 3 affected days, 282ms for 31). Replaced by the equivalent 2) `ts`
++	// half-open range [startMs, endMs) driven by `idx_events_ts`
++	// (`SCAN` → `SEARCH ... USING INDEX idx_events_ts`), 150ms → 22ms, with
++	// byte-identical output (verified: identical=true). The SELECT/GROUP BY day
++	// expression is unchanged — it is the bucket key over the already-filtered
++	// rows, not a filter.
++	const lo = days.reduce((acc, day) => Math.min(acc, localDayMs(day)), Number.POSITIVE_INFINITY);
++	const hiExclusive = days.reduce((acc, day) => Math.max(acc, localDayMs(day)), Number.NEGATIVE_INFINITY) + 86_400_000;
+ 	db.exec("BEGIN");
+ 	try {
+ 		db.prepare(`DELETE FROM usage_daily WHERE day IN (${placeholders})`).run(...days);
+@@ -238,13 +249,16 @@
+        SUM(cache_read_tokens) AS cache_read_tokens,
+        SUM(cache_write_tokens) AS cache_write_tokens
+ FROM usage_events
+-WHERE strftime('%Y-%m-%d', ts / 1000, 'unixepoch', 'localtime') IN (${placeholders})
+-GROUP BY day, data_source, COALESCE(model, '(unknown)'), COALESCE(project, '(unknown)')`).run(...days);
++WHERE ts >= ? AND ts < ?
++GROUP BY day, data_source, COALESCE(model, '(unknown)'), COALESCE(project, '(unknown)')`).run(lo, hiExclusive);
+ 		db.exec("COMMIT");
+ 	} catch (error) {
+ 		db.exec("ROLLBACK");
+ 		throw error;
+ 	}
++	// The just-recomputed days may include the newest one → refresh the
++	// `MAX(day)` staleness gate that guards the usage_daily read route.
++	invalidateMaxDailyDayCache();
+ }
+ 
+ /**
+@@ -413,34 +427,215 @@
+ 		}));
+ }
+ 
++/** Local-day helpers for the `usage_daily` route (2026-09-20, audit §4.5/A1).
++ * Built on `getFullYear`/`getMonth`/`getDate` — never on fixed 86400000
++ * arithmetic, which is what made the card's rolling window misaligned. */
++function localDayOf(ms) {
++	const d = new Date(ms);
++	const p = (n) => String(n).padStart(2, "0");
++	return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
++}
++/** `YYYY-MM-DD` → local-midnight epoch ms (`new Date(y, m-1, d)` handles DST). */
++function localDayMs(day) {
++	const [y, m, d] = String(day).split("-").map(Number);
++	return new Date(y, m - 1, d).getTime();
++}
++/** Whether `ms` sits exactly on a local midnight (the day-alignment gate). */
++function isLocalDayStart(ms) {
++	const d = new Date(ms);
++	return d.getHours() === 0 && d.getMinutes() === 0 && d.getSeconds() === 0 && d.getMilliseconds() === 0;
++}
++/** Whether `ms` is the last millisecond of a local day (the inclusive `to`).
++ * Anchor on the local-calendar next midnight instead of comparing `ms + 1`:
++ * `1798732800000 + 1` is `.001` past midnight, not midnight, because the epoch
++ * is a float — the naive form silently rejected every day-aligned `to`. */
++function isLocalDayEnd(ms) {
++	const d = new Date(ms);
++	const nextMidnight = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).getTime();
++	return ms === nextMidnight - 1;
++}
++/** `MAX(day)` of the pre-aggregation table — null when it is empty. */
++function queryMaxDailyDay(db) {
++	const row = db.prepare("SELECT MAX(day) AS day FROM usage_daily").get();
++	return row && typeof row.day === "string" && row.day.length > 0 ? row.day : null;
++}
++/**
++ * `usage_daily` staleness gate (audit §4.5(2)): the pre-aggregation table is
++ * only trusted for local days it has actually aggregated — i.e. `day <= MAX(day)`.
++ * The margin is INGEST_INTERVAL_MS (45s, mirrors lib/index.js) so a
++ * just-landed day is not raced; by the same token any ingest failure keeps the
++ * affected days on the raw-events path instead of serving stale numbers.
++ * `rebuildDailyForDays` invalidates the cache right after each ingest pass.
++ */
++const MAX_DAILY_DAY_TTL_MS = 45_000;
++let maxDailyDayCache = { at: 0, value: null };
++function maxDailyDayMs(db) {
++	const now = Date.now();
++	if (maxDailyDayCache.value !== null && now - maxDailyDayCache.at < MAX_DAILY_DAY_TTL_MS) {
++		return maxDailyDayCache.value;
++	}
++	const day = queryMaxDailyDay(db);
++	const value = day === null ? null : localDayMs(day);
++	maxDailyDayCache = { at: now, value };
++	return value;
++}
++/** Invalidate the `MAX(day)` cache (called after each `usage_daily` rewrite). */
++function invalidateMaxDailyDayCache() {
++	maxDailyDayCache = { at: 0, value: null };
++}
++/** Row-shape adapter shared by both routes (identical column alias). */
++const asDayTotals = (rows) => rows.map((row) => ({ day: row.day, total: Number(row.total) }));
++
+ /**
+  * `heatmap` — per-day grand-total grid for one year (GitHub-style).
++ *
++ * 2026-09-20 (audit §5 A1+A2): the day bucket used to be filtered with
++ * `strftime('%Y-%m-%d', ts/1000, 'unixepoch', 'localtime') BETWEEN ? AND ?`,
++ * i.e. a per-row `strftime` over the whole table (`SCAN usage_events`) — 289ms
++ * of synchronous SQLite work inside the host event loop per poll cycle.
++ * Two changes, both read-only (no index is created, `usage.db` is never written):
++ *   1. `usage_daily` fast path — the pre-aggregation table is a row-for-row
++ *      mirror of `usage_events` (audit §4.2) and its PK starts with `day`, so a
++ *      year of data costs ~0.05ms instead of 289ms.
++ *   2. sargable fallback — the raw-events path now filters on a `ts` half-open
++ *      range driven by `idx_events_ts` (`SCAN` → `SEARCH`), 289ms → ~162ms.
++ *
++ * Correctness gates (audit §4.5), both enforced HERE, host-side, so a client
++ * that still sends a rolling window can never get a wrong number:
++ *   (1) day-aligned window — `usage_daily` is day-granular, so an unaligned
++ *       window rounded onto days would silently over-count (+1.29% at 30 days,
++ *       up to +9.85% on a busy boundary day). Not aligned → raw events only.
++ *   (2) `day <= MAX(day)` — days the ingest has not aggregated yet (typically
++ *       today, and any day after an ingest failure) must come from raw events,
++ *       never from a stale `usage_daily` row.
++ * Because the year grid always extends past the last aggregated day, gate (2)
++ * is applied as a WINDOW SPLIT rather than an all-or-nothing fallback: the part
++ * of the window that is already aggregated is served by `usage_daily`, the
++ * remainder by the sargable events query, and the two disjoint segments are
++ * merged by day. Result: identical rows to the events-only query (verified
++ * T3/T4/T5/T6), ~0.05ms instead of 289ms whenever the tail is empty.
+  * @param {import("node:sqlite").DatabaseSync} db
+- * @param {{year?: number, dataSources?: unknown}} filters
++ * @param {{year?: number, from?: number, to?: number, dataSources?: unknown}} filters
+  * @returns {Array<{day: string, total: number}>}
+  */
+ export function queryHeatmap(db, filters = {}) {
+ 	const year = Number.isFinite(filters.year) ? filters.year : new Date().getFullYear();
+-	const start = `${year}-01-01`;
+-	const end = `${year}-12-31`;
+-	const { clause, values } = eventWhere({ ...filters, from: undefined, to: undefined });
+-	// `eventWhere` already returns its fragment with the leading "WHERE ";
+-	// strip it once so the combined predicate below stays valid (REVIEW P0
+-	// found the previous `WHERE ${where}` here double-prefixed → syntax error;
+-	// the endpoint was never exercised before the RPC channel existed).
+-	const condition = [clause ? clause.replace(/^WHERE\s+/i, "") : "", `${DAY_SQL} BETWEEN ? AND ?`]
+-		.filter((part) => part.length > 0)
+-		.join(" AND ");
+-	const where = condition.length > 0 ? `WHERE ${condition}` : "";
+-	return db
+-		.prepare(`
++	// Window: explicit from/to when the caller supplies them (rpc normalizeFilters
++	// already validated them), else the whole requested local year
++	// [1/1 00:00, next 1/1 00:00) — the shape the card actually requests.
++	const hasFrom = Number.isFinite(filters.from);
++	const hasTo = Number.isFinite(filters.to);
++	// `from`/`to` are INCLUSIVE milliseconds (rpc + the old string `BETWEEN
++	// '${year}-01-01' AND '${year}-12-31'` both are), so the internal half-open
++	// upper edge is toExclusive = to + 1 — do NOT conflate the two: treating the
++	// exclusive edge as the last millisecond silently drops the final day.
++	const startMs = hasFrom ? filters.from : new Date(year, 0, 1).getTime();
++	const toInclusive = hasTo ? filters.to : new Date(year + 1, 0, 1).getTime() - 1;
++	const lo = Math.min(startMs, toInclusive);
++	const hi = Math.max(startMs, toInclusive); // 请求上界（含）
++	const toExclusive = hi + 1; // 内部半开上界
++	// Gate (1): both edges must sit on local day boundaries (start of a day /
++	// end of a day) for day-granular aggregation to be exact.
++	const aligned = isLocalDayStart(lo) && isLocalDayEnd(hi);
++	const maxDayMs = maxDailyDayMs(db);
++	// 前置护栏（前瞻性，2026-09-20 复核加入）：`usage_daily` 的维度只有
++	// (day, data_source, model, project) —— **没有 `is_subagent`、也没有 `provider`**。
++	// 当前没有任何查询按这两列过滤（全插件 grep 只有建表/INSERT/迁移路径用到），
++	// 但一旦将来有查询按它们过滤而仍走 daily，就会**静默把全量当成过滤结果**：
++	// 实测 `is_subagent=1` 有 10,154 行（含 10 天）、`provider` 有 5 个取值
++	// （adam/claude/opencode-go/deepseek-official/opencode），按 is_subagent 过滤时
++	// daily 会多给 10,154 行（-9.7% 到 -100% 量级的静默错误）。
++	// 因此这里做**按能力判断**：只要调用方带了 daily 表达不了的过滤维度，就整体回落
++	// 到精确的 sargable events 路线。回退路径始终可用（`idx_events_ts` 已存在）。
++	const DAILY_UNSUPPORTED_FILTERS = ["is_subagent", "provider"];
++	const hasDailyUnsupportedFilter = DAILY_UNSUPPORTED_FILTERS.some((k) => filters[k] !== undefined && filters[k] !== null);
++	// Gate (2): only days the ingest has already aggregated (`day <= MAX(day)`)
++	// may come from `usage_daily`. The year grid always extends past that day, so
++	// the aggregated SEGMENT is [lo, min(hi, MAX(day))] — `null maxDay` or an
++	// empty intersection means no aggregated day at all → pure events path.
++	// Segments are disjoint and merged by day below, so no day is counted twice.
++	// Everything below is in EXCLUSIVE upper bounds: `dailyEndExclusive` is the
++	// first instant after the last aggregated day. (Deriving an inclusive "end
++	// of MAX(day)" as `dayStart + 86_400_000 - 1` loses 1ms to float precision
++	// and left `tailFrom === toExclusive`, which still issued an empty-range
++	// probe: ~10ms, because `idx_events_ts` is ~432 pages against a page cache
++	// far smaller than the 35MB database.)
++	const maxDayNextExclusive = maxDayMs === null ? Number.NEGATIVE_INFINITY : localDayMs(localDayOf(maxDayMs)) + 86_400_000;
++	const dailyEndExclusive = Math.min(toExclusive, maxDayNextExclusive);
++	const useDaily = aligned && maxDayMs !== null && lo < dailyEndExclusive && !hasDailyUnsupportedFilter;
++	// Raw-events segment start: the whole window when there is no aggregated
++	// segment, else the first instant after it. On the year-grid fast path a
++	// window that ends at the last aggregated day yields tailFrom === toExclusive,
++	// so the raw-events query is never issued (see the note above on the empty
++	// probe cost).
++	// 维度护栏命中（或窗口不日对齐 / 无已聚合日）时 useDaily=false → tailFrom=lo，
++	// 即整个窗口都走精确的 sargable events 路线。
++	const tailFrom = useDaily ? Math.min(dailyEndExclusive, toExclusive) : lo;
++	const rows = [];
++	if (useDaily) {
++		// Days of the aggregated segment: localDayOf(lo) .. min(localDayOf(segmentEnd), maxDay).
++		const dayFrom = localDayOf(lo);
++		const dayTo = localDayOf(dailyEndExclusive - 1); // inclusive last aggregated day
++		const parts = ["day >= ?", "day <= ?"];
++		const values = [dayFrom, dayTo];
++		const ds = dataSourceClause(filters.dataSources);
++		if (ds.clause) {
++			parts.push(ds.clause);
++			values.push(...ds.values);
++		}
++		rows.push(...asDayTotals(db
++			.prepare(`
++SELECT day,
++       SUM(input_tokens + output_tokens + cache_read_tokens + cache_write_tokens) AS total
++FROM usage_daily
++WHERE ${parts.join(" AND ")}
++GROUP BY day ORDER BY day`)
++			.all(...values)));
++	}
++	// Raw-events segment covers [tailFrom, toExclusive): skipped entirely on a
++	// fully aggregated window (tailFrom === toExclusive), the whole window when it
++	// is not day aligned, and the unaggregated remainder otherwise. Both segments
++	// are REQUIRED whenever tailFrom < toExclusive — returning only the daily rows
++	// here silently dropped that remainder (caught by the T6 harness on
++	// 2026-09-20, see reports/unit-A.md).
++	// Cheap existence precondition for the tail: `idx_events_ts` answers
++	// `COUNT(*)` over an empty range in ~0.01ms, while running the grouped
++	// `strftime` shape over that same empty range costs ~10ms because the
++	// `data_source IN (...)` residual forces a walk of the UNIQUE index across
++	// all ~105k rows (audit §3.6). The year grid always has a tail segment, so
++	// this guard is what keeps the fast path at ~0.1ms.
++	const tailHasRows = tailFrom < toExclusive
++		&& Number(db.prepare("SELECT COUNT(*) AS c FROM usage_events WHERE ts >= ? AND ts < ?").get(tailFrom, toExclusive).c) > 0;
++	if (tailHasRows) {
++		const { clause, values } = eventWhere({ ...filters, from: undefined, to: undefined });
++		// `eventWhere` already returns its fragment with the leading "WHERE ";
++		// strip it once so the combined predicate below stays valid (REVIEW P0
++		// found the previous `WHERE ${where}` here double-prefixed → syntax error;
++		// the endpoint was never exercised before the RPC channel existed).
++		// The day predicate is a `ts` half-open range (audit §3.1/§3.2), NOT a
++		// per-row `strftime`: the grouping key stays DAY_SQL over the already-
++		// filtered rows, so the output rows are identical to the old query.
++		const condition = [clause ? clause.replace(/^WHERE\s+/i, "") : "", "ts >= ? AND ts < ?"]
++			.filter((part) => part.length > 0)
++			.join(" AND ");
++		const where = condition.length > 0 ? `WHERE ${condition}` : "";
++		rows.push(...asDayTotals(db
++			.prepare(`
+ SELECT ${DAY_SQL} AS day,
+        SUM(input_tokens + output_tokens + cache_read_tokens + cache_write_tokens) AS total
+ FROM usage_events
+ ${where}
+ GROUP BY day ORDER BY day`)
+-		.all(...values, start, end)
+-		.map((row) => ({ day: row.day, total: Number(row.total) }));
++			.all(...values, tailFrom, toExclusive)));
++	}
++	// Disjoint segments → a plain day-keyed merge is exact; sort keeps the
++	// ascending-day contract the heatmap renderer expects.
++	if (useDaily && tailHasRows) {
++		const merged = new Map();
++		for (const row of rows) merged.set(row.day, (merged.get(row.day) ?? 0) + row.total);
++		return [...merged.entries()].map(([day, total]) => ({ day, total })).sort((a, b) => (a.day < b.day ? -1 : a.day > b.day ? 1 : 0));
++	}
++	return rows;
+ }
+ 
+ /**
+--- a/lib/client.js (pre-patch)
++++ b/lib/client.js (patched)
+@@ -770,7 +770,39 @@
+ 			const [rangeDays, setRangeDays] = react.useState(7);
+ 			const [customFrom, setCustomFrom] = react.useState("");
+ 			const [customTo, setCustomTo] = react.useState("");
+-			const [refreshSec, setRefreshSec] = react.useState(30);
++				const [refreshSec, setRefreshSec] = react.useState(60);
++				const [pollVisible, setPollVisible] = react.useState(true);
++				const cardRef = react.useRef(null);
++				// Set inside the effect below; the IntersectionObserver callback reads it
++				// so a visibility change never needs to re-create the observer (the
++				// closures stay current through these refs, mirroring loadAllRef below).
++				const setPollVisibleRef = react.useRef(null);
++				const ioRef = react.useRef(null);
++				/** Node ↔ observer binding kept in a ref callback (it runs exactly once,
++				 * when the card mounts — an effect's dependency array would re-observe on
++				 * every render). Null on detach; remount re-observes. */
++				const attachCardRef = react.useCallback((node) => {
++					if (ioRef.current) {
++						ioRef.current.disconnect();
++						ioRef.current = null;
++					}
++					cardRef.current = node;
++					if (node === null) return;
++					if (typeof IntersectionObserver !== "function") {
++						if (setPollVisibleRef.current) setPollVisibleRef.current(true);
++						return;
++					}
++					const observer = new IntersectionObserver(
++						(entries) => {
++							for (const entry of entries) {
++								if (setPollVisibleRef.current) setPollVisibleRef.current(Boolean(entry.isIntersecting));
++							}
++						},
++						{ threshold: 0 },
++					);
++					observer.observe(node);
++					ioRef.current = observer;
++				}, []);
+ 			const [bucket, setBucket] = react.useState("total");
+ 			const [chartMode, setChartMode] = react.useState("area");
+ 			// 2026-09-18b: trend GEAR — `hour` = the 24h intraday window
+@@ -797,9 +829,39 @@
+ 			const [sessionFrom, setSessionFrom] = react.useState("");
+ 			const [sessionTo, setSessionTo] = react.useState("");
+ 			const rpcAvailable = rpc && typeof rpc.call === "function";
++			const loadAllRef = react.useRef(null);
++
+ 			const range = react.useMemo(() => {
+ 				const now = Date.now();
+-				if (rangeDays > 0) return { from: now - rangeDays * 86400000, to: now };
++				// 2026-09-20 (audit §4.5(1)/§5 A0): the rolling window was
++				// `now - N*86400000`, which shares the host's day-granularity
++				// pre-aggregation only by accident. Align "近 N 天" to local
++				// calendar days instead — [today 00:00 - (N-1) days, today 23:59:59.999].
++				// `setDate(getDate()-n)` (never `- n*86400000`) keeps the walk DST-safe.
++				if (rangeDays > 0) {
++					// ⚠️ 时间戳算术的浮点陷阱（实测踩到两次）：`new Date(...).getTime()`
++					// 是 float，`midnight - 1` 会算成「次日 .001」而不是「前一日 .999」
++					// （实测 `1789919999999.001`）；反过来 `midnight + 1` 会算成当天
++					// `.001`。所以**任何「±1ms 取日边界」的写法都必须落在整毫秒的
++					// Date 对象上再做算术**，并统一走 localDayStart / localDayEnd。
++					const localDayStart = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
++					const localDayEnd = (d) => {
++						const nextStart = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).getTime();
++						return new Date(nextStart).getTime() - 1;
++					};
++					// 顺序很重要：先在**整数毫秒**的日边界上做日历回退，再取窗口末端。
++					// 若先取 `to`（含 `.999` 小数）再 `setDate`，`start` 会继承那个小数
++					// 毫秒，`start !== localDayStart(start)` → 守卫永远不成立（实测踩到）。
++					const start = new Date(localDayStart(new Date(now)));
++					start.setDate(start.getDate() - (rangeDays - 1));
++					const to = new Date(localDayEnd(new Date(now))); // 今天 23:59:59.999（整数毫秒）
++					// 守卫：窗口两端都必须落在本地日边界（宿主侧还有第二道闸门，
++					// 这里不成立只会退回滚动窗口 → 只损失速度、不会算错）。
++					if (start.getTime() === localDayStart(start) && to.getTime() === localDayEnd(to)) {
++						return { from: start.getTime(), to: to.getTime() };
++					}
++					return { from: now - rangeDays * 86400000, to: now };
++				}
+ 				const from = customFrom ? new Date(customFrom + "T00:00:00").getTime() : undefined;
+ 				const to = customTo ? new Date(customTo + "T23:59:59").getTime() : undefined;
+ 				return { from, to };
+@@ -855,6 +917,7 @@
+ 					setLoading(false);
+ 				}
+ 			}, [rpcAvailable, rpc, payload, range.from, dataSource, trendDay]);
++			loadAllRef.current = loadAll;
+ 			const loadSessions = react.useCallback(async () => {
+ 				if (!rpcAvailable) return;
+ 				const from = sessionFrom ? new Date(sessionFrom + "T00:00:00").getTime() : range.from;
+@@ -886,9 +949,21 @@
+ 			}, [loadAll, loadSessions, loadStatus]);
+ 			react.useEffect(() => {
+ 				if (refreshSec <= 0) return;
+-				const timer = setInterval(() => void loadAll(), refreshSec * 1000);
++				// 2026-09-20 (audit §5 B2): the card is a settings-page section —
++				// while it is scrolled out of view (or the tab is in the
++				// background) it must not poll at all: every cycle costs the host
++				// ~0.3-0.5s of blocked event loop. Only the timer is gated; the
++				// initial load and the manual refresh stay unconditional.
++				if (!pollVisible || (typeof document !== "undefined" && document.hidden)) return;
++				// latest-callback ref: the interval must NOT restart when a filter
++				// change replaces loadAll's identity.
++				const timer = setInterval(() => {
++					if (typeof document !== "undefined" && document.hidden) return;
++					const run = loadAllRef.current;
++					if (typeof run === "function") void run();
++				}, refreshSec * 1000);
+ 				return () => clearInterval(timer);
+-			}, [refreshSec, loadAll]);
++			}, [refreshSec, pollVisible]);
+ 			const onManualRefresh = async () => {
+ 				if (rpcAvailable) {
+ 					try {
+@@ -1019,7 +1094,8 @@
+ 				: (trendGrain === "hour"
+ 					? "趋势（按日 · 宿主暂不支持小时粒度，重启后生效）"
+ 					: "趋势（按日）");
+-			return react.createElement("div", { className: "du_root" },
++			// 可见性门控的观察目标（B2）：卡片滚出视口/标签页不可见时停止轮询。
++			return react.createElement("div", { className: "du_root", ref: attachCardRef },
+ 				react.createElement("div", { className: "du_head" },
+ 					react.createElement("div", { className: "du_title" }, "Token 用量 · dsh-usage"),
+ 					react.createElement("div", { className: "du_sub" }, "dsh + Claude Code 双源统计（不计费）")),
+@@ -1041,7 +1117,8 @@
+ 					react.createElement("select", { className: "du_select", value: String(refreshSec), onChange: (e) => setRefreshSec(Number(e.target.value)) },
+ 						react.createElement("option", { value: "0" }, "不轮询"),
+ 						react.createElement("option", { value: "5" }, "5s 刷新"),
+-						react.createElement("option", { value: "30" }, "30s 刷新"),
++						react.createElement("option", { value: "60" }, "60s 刷新"),
++					react.createElement("option", { value: "30" }, "30s 刷新"),
+ 						react.createElement("option", { value: "60" }, "60s 刷新")),
+ 					react.createElement("button", { type: "button", className: "du_btn", disabled: loading, onClick: () => void onManualRefresh() }, loading ? "加载中…" : "手动刷新")),
+ 				error
+──────── diff 结束 ────────
+[PASS] node --check 通过：db.js
+[PASS] node --check 通过：client.js
+
+真实目标（未被触碰）：/home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-usage/lib/{db.js,client.js}
+  live: 77ab2e8ec489024f46d97c2428af978c3adb6c293b36da42922144930f242ef8  db.js
+  live: c267687b62de6f712238351492f5b903c75cfd2b86b8638660f6b2ba8df7714f  client.js
+===== DRY-RUN 通过：真实文件未被修改（可安全 --apply --target deployed）=====

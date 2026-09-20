@@ -1,0 +1,20 @@
+离线复核：evidence/probe-simulated-post-patch.json（0 次 HTTP）  响应 472584 B
+
+条目：285（顶层 85 / subagent 200）
+字节：items 472471 B / 信封 472584 B
+[PASS] A1 条目数 ≤ 顶层+200（当前阈值 285；审计快照值为 284）
+[PASS] A2 字节 ≤ 500 KB
+
+基线：2361 条 / 3885937 B → 现在 285 条 / 472471 B
+       条目 −87.9%，字节 −87.8%
+[PASS] A3a 顶层会话一条不少（基线 84 条）
+[PASS] A3b 多出的 1 条顶层会话均为快照之后新建（updatedAt > 1789885381804）
+       多出：session-4ca42e5a-813b-4d9d-b757-aca82d224da6
+[PASS] A6 顶层行全部带 runningSubagentCount（number）
+       顶层 runningSubagentCount 之和 = 4（>0 表示状态点有数据）
+[PASS] A7 subagent 行 ≤ 200
+       保留的 subagent updatedAt 区间：[1789888440281, 1789534467515]（应为最新的 200 条）
+
+行字段并集：agentPreset, blank, cwd, origin, parentSessionId, projections, running, runningSubagentCount, sessionId, updatedAt
+
+===== 探针全部 PASS =====

@@ -1,0 +1,15 @@
+# 单元 C2 基线记录（权威值是 workspace-enhancement-perf.sh 内的 LIVE_PRE_SHA / PATCHED_SHA 常量）
+# live 文件：/home/CNS2026495165/.dsh/profiles/node_modules/dsh-workspace-enhancement/lib/client.js
+# live 大小：266652 字节 / 5442 行 / mtime 2026-09-14 14:54:49 / 权限 644
+pre_patch_sha256 aef0a3e663af487abe91698135c7cc70b3138ad4716475fdd5a52e1293fed094
+patched_sha256   7df7a655ee660eb29dd8ee87d4b20fa3f06a16faee80c52baf612d6e7ffef90d
+# patched：patched/client.js 267026 字节 / 5453 行（+374 字节 / +11 行）
+# 锚点（补丁前 token → 补丁后 token）
+#   C2-1  remoteSessionIndex 内层去重：
+#         live : const unique = ids.filter((id, index) => ids.indexOf(id) === index);   [全局 2 次: 4093, 4124]
+#         patch: const unique = Array.from(new Set(ids));                              [全局 1 次: 4121 处]
+#         live : if (unique.length === 1 && unique[0] !== void 0) index.set(title, unique[0]);
+#         patch: if (unique.length === 1) index.set(title, unique[0]);
+#   C2-2  installSidebarRowBadges 的 sources.sessions：
+#         live : sessions: () => {   [全局 1 次: 5418]
+#         patch: sessions: (() => {  [全局 1 次: 5418 起]

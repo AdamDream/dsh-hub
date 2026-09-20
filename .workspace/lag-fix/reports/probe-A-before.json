@@ -1,0 +1,212 @@
+{
+  "label": "baseline-before-patch",
+  "base": "http://127.0.0.1:3080",
+  "cycles": 2,
+  "at": "2026-09-20T07:26:46.660Z",
+  "hostProbe": {
+    "samples": 10,
+    "min": 2.42,
+    "median": 31.93,
+    "p95": 313.91,
+    "max": 313.91,
+    "maxSampleTs": "2026-09-20T07:26:46.086Z"
+  },
+  "perEndpoint": {
+    "summary": {
+      "min": 12.74,
+      "median": 13.13,
+      "max": 13.51,
+      "runs": 2
+    },
+    "timeseries(day)": {
+      "min": 47.36,
+      "median": 50.94,
+      "max": 54.52,
+      "runs": 2
+    },
+    "heatmap": {
+      "min": 285.23,
+      "median": 297,
+      "max": 308.77,
+      "runs": 2
+    },
+    "byModel": {
+      "min": 40.14,
+      "median": 42.14,
+      "max": 44.14,
+      "runs": 2
+    },
+    "byProject": {
+      "min": 18.06,
+      "median": 18.47,
+      "max": 18.88,
+      "runs": 2
+    },
+    "byDay": {
+      "min": 45.53,
+      "median": 48.24,
+      "max": 50.95,
+      "runs": 2
+    },
+    "timeseries(hour)": {
+      "min": 14.27,
+      "median": 14.59,
+      "max": 14.9,
+      "runs": 2
+    }
+  },
+  "cycleTotals": [
+    {
+      "cycle": 1,
+      "totalMs": 498.49,
+      "calls": [
+        {
+          "key": "summary",
+          "ms": 13.51,
+          "ok": true
+        },
+        {
+          "key": "timeseries(day)",
+          "ms": 47.36,
+          "ok": true,
+          "rows": 5
+        },
+        {
+          "key": "heatmap",
+          "ms": 308.77,
+          "ok": true,
+          "rows": 31
+        },
+        {
+          "key": "byModel",
+          "ms": 44.14,
+          "ok": true,
+          "rows": 3
+        },
+        {
+          "key": "byProject",
+          "ms": 18.88,
+          "ok": true,
+          "rows": 4
+        },
+        {
+          "key": "byDay",
+          "ms": 50.95,
+          "ok": true,
+          "rows": 5
+        },
+        {
+          "key": "timeseries(hour)",
+          "ms": 14.9,
+          "ok": true,
+          "rows": 0
+        }
+      ]
+    },
+    {
+      "cycle": 2,
+      "totalMs": 470.5,
+      "calls": [
+        {
+          "key": "summary",
+          "ms": 12.74,
+          "ok": true
+        },
+        {
+          "key": "timeseries(day)",
+          "ms": 54.52,
+          "ok": true,
+          "rows": 5
+        },
+        {
+          "key": "heatmap",
+          "ms": 285.23,
+          "ok": true,
+          "rows": 31
+        },
+        {
+          "key": "byModel",
+          "ms": 40.14,
+          "ok": true,
+          "rows": 3
+        },
+        {
+          "key": "byProject",
+          "ms": 18.06,
+          "ok": true,
+          "rows": 4
+        },
+        {
+          "key": "byDay",
+          "ms": 45.53,
+          "ok": true,
+          "rows": 5
+        },
+        {
+          "key": "timeseries(hour)",
+          "ms": 14.27,
+          "ok": true,
+          "rows": 0
+        }
+      ]
+    }
+  ],
+  "verdict": {
+    "singleCycleBlockMs": 313.91,
+    "heatmapMs": 285.23,
+    "blockUnder40ms": false,
+    "heatmapUnder1ms": false
+  },
+  "rawHostSamples": [
+    {
+      "ts": "2026-09-20T07:26:45.692Z",
+      "ms": 2.42,
+      "ok": true
+    },
+    {
+      "ts": "2026-09-20T07:26:45.751Z",
+      "ms": 39.36,
+      "ok": true
+    },
+    {
+      "ts": "2026-09-20T07:26:46.086Z",
+      "ms": 313.91,
+      "ok": true
+    },
+    {
+      "ts": "2026-09-20T07:26:46.123Z",
+      "ms": 17.77,
+      "ok": true
+    },
+    {
+      "ts": "2026-09-20T07:26:46.178Z",
+      "ms": 34.07,
+      "ok": true
+    },
+    {
+      "ts": "2026-09-20T07:26:46.202Z",
+      "ms": 4.29,
+      "ok": true
+    },
+    {
+      "ts": "2026-09-20T07:26:46.261Z",
+      "ms": 39.44,
+      "ok": true
+    },
+    {
+      "ts": "2026-09-20T07:26:46.566Z",
+      "ms": 285.34,
+      "ok": true
+    },
+    {
+      "ts": "2026-09-20T07:26:46.600Z",
+      "ms": 12.93,
+      "ok": true
+    },
+    {
+      "ts": "2026-09-20T07:26:46.649Z",
+      "ms": 29.79,
+      "ok": true
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+ "idle_main_20s": {
+  "script_ms": 2428.057,
+  "task_ms": 3087.073,
+  "style_ms": 418.904,
+  "frames": {
+   "frames": 1075,
+   "p50": 16.7,
+   "p95": 16.8,
+   "p99": 100.1,
+   "over50": 22,
+   "max": 133.4
+  }
+ },
+ "open_settings_20s": {
+  "script_ms": 2550.539,
+  "task_ms": 3460.544,
+  "style_ms": 646.75,
+  "frames": {
+   "frames": 1057,
+   "p50": 16.7,
+   "p95": 16.8,
+   "p99": 116.6,
+   "over50": 26,
+   "max": 133.4
+  },
+  "api_calls": 1
+ },
+ "hold_settings_20s": {
+  "script_ms": 3795.447,
+  "task_ms": 4897.955,
+  "style_ms": 857.235,
+  "frames": {
+   "frames": 975,
+   "p50": 16.7,
+   "p95": 16.8,
+   "p99": 116.7,
+   "over50": 40,
+   "max": 150
+  }
+ },
+ "session_list": {
+  "bytes": 3763290,
+  "shape": {
+   "type": null,
+   "rpcId": null,
+   "result": {
+    "ok": null,
+    "value": {
+     "items": {
+      "arrayLen": 2361,
+      "sample": [
+       "sessionId",
+       "updatedAt",
+       "running",
+       "blank",
+       "cwd",
+       "agentPreset",
+       "projections"
+      ]
+     }
+    }
+   }
+  }
+ },
+ "api_call_counts": [
+  [
+   "/api/credentials.describe",
+   4
+  ],
+  [
+   "/api/dynamicCordisRunner/inventory",
+   3
+  ],
+  [
+   "/api/agentPreset.list",
+   3
+  ],
+  [
+   "/api/settings.describe",
+   2
+  ],
+  [
+   "/api/dynamicCordisRunner/syncInspectManifest",
+   2
+  ],
+  [
+   "/api/host.describe",
+   1
+  ],
+  [
+   "/api/workspace.list",
+   1
+  ],
+  [
+   "/api/session.list",
+   1
+  ],
+  [
+   "/api/session.history",
+   1
+  ],
+  [
+   "/api/commands/list",
+   1
+  ],
+  [
+   "/api/skill.list",
+   1
+  ],
+  [
+   "/api/session.models",
+   1
+  ],
+  [
+   "/api/llm.providers",
+   1
+  ],
+  [
+   "/api/subagent.list",
+   1
+  ]
+ ],
+ "dom_nodes": 759,
+ "heap_mb": 73.05
+}

@@ -1,0 +1,118 @@
+{
+ "baseline_probe": [
+  2.4,
+  1.9,
+  2.3,
+  2.9,
+  2.3,
+  1.7,
+  2.2,
+  2.1,
+  2.7,
+  2.8
+ ],
+ "after_open_settings_reqs": [
+  {
+   "url": "/api/agentPreset.list",
+   "method": "POST",
+   "ms": 3.3
+  }
+ ],
+ "plugins_tab": {
+  "reqs": [
+   {
+    "url": "/usage/summary",
+    "method": "POST",
+    "ms": 15
+   },
+   {
+    "url": "/usage/timeseries",
+    "method": "POST",
+    "ms": 62
+   },
+   {
+    "url": "/usage/heatmap",
+    "method": "POST",
+    "ms": 356.7
+   },
+   {
+    "url": "/usage/byModel",
+    "method": "POST",
+    "ms": 371.9
+   },
+   {
+    "url": "/usage/byProject",
+    "method": "POST",
+    "ms": 387.6
+   },
+   {
+    "url": "/usage/timeseries",
+    "method": "POST",
+    "ms": 336.8
+   },
+   {
+    "url": "/usage/sessions",
+    "method": "POST",
+    "ms": 84
+   },
+   {
+    "url": "/usage/status",
+    "method": "POST",
+    "ms": 72.9
+   },
+   {
+    "url": "/usage/byDay",
+    "method": "POST",
+    "ms": 475.2
+   },
+   {
+    "url": "/usage/summary",
+    "method": "POST",
+    "ms": 13.9
+   },
+   {
+    "url": "/usage/byDay",
+    "method": "POST",
+    "ms": 48.2
+   },
+   {
+    "url": "/usage/timeseries",
+    "method": "POST",
+    "ms": 105.7
+   },
+   {
+    "url": "/usage/timeseries",
+    "method": "POST",
+    "ms": 56.2
+   },
+   {
+    "url": "/usage/heatmap",
+    "method": "POST",
+    "ms": 414.2
+   },
+   {
+    "url": "/usage/byModel",
+    "method": "POST",
+    "ms": 432.3
+   },
+   {
+    "url": "/usage/byProject",
+    "method": "POST",
+    "ms": 449.4
+   }
+  ],
+  "host_latency_during_45s": {
+   "n": 150,
+   "median": 2.1,
+   "p95": 4.2,
+   "max": 476.5,
+   "stalls_over_100ms": [
+    476.5,
+    297.5
+   ],
+   "stalls_over_300ms": [
+    476.5
+   ]
+  }
+ }
+}

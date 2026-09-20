@@ -1,0 +1,268 @@
+===== server-session-filter（单元 B1）模式：dry =====
+PKG=/home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-host-apiproxy
+subagent 下发上限：200（常量在源文件内，可用 globalThis.__DSH_SUBAGENT_LIST_MAX 覆盖）
+[PASS] 锚点校验通过（sessionListFields / 内存分支 / 冷会话分支，两个文件各 1 次唯一命中）
+工作区副本：/home/CNS2026495165/dsh/.workspace/lag-fix/tmp/B1/dryrun-20260920-152602
+TRANSFORM_OK 212617 -> 215933
+TRANSFORM_OK 171157 -> 174810
+[PASS] 两份副本均变换成功且通过 ESM 语法校验（node --check）
+
+================ diff -u  lib/index.js（宿主实际加载的入口）================
+--- /home/CNS2026495165/dsh/.workspace/lag-fix/tmp/B1/dryrun-20260920-152602/lib/index.js	2026-09-20 15:26:02.025160557 +0800
++++ /home/CNS2026495165/dsh/.workspace/lag-fix/tmp/B1/dryrun-20260920-152602/b1-index.patched.js	2026-09-20 15:26:02.055743463 +0800
+@@ -1227,7 +1227,50 @@
+ 	return Math.max(header.createdAt, metadata?.lastPromptAt ?? 0);
+ }
+ /** Shared Session-header projection for list baselines and creation frames. */
+-function sessionListFields(header, events = []) {
++/* dsh-lag-fix B1: subagent 会话下发上限 */
++const SUBAGENT_LIST_MAX = Number.isFinite(globalThis.__DSH_SUBAGENT_LIST_MAX)
++  ? Math.max(0, Math.trunc(globalThis.__DSH_SUBAGENT_LIST_MAX))
++  : 200;
++/* dsh-lag-fix B1: 聚合字段 runningSubagentCount */
++/**
++ * 为**顶层**会话补 runningSubagentCount：沿「不间断 subagent 血缘链」统计其 running 后代，
++ * 语义与客户端 indexSubagentDescendants(byId) 一致，但由宿主在**截断之后**的行上计算，
++ * 因此侧边栏「N 个子代理运行中」状态点不再依赖被截断的 subagent 行（消费方 C1）。
++ * 成本：只遍历本次已产出的行 + live agent 表，无新增投影/读盘。
++ * @param items - listVisibleSessionSummaries 产出的行（已排序、已截断）。
++ * @returns 同一数组（原对象上补字段）。
++ */
++function annotateRunningSubagentCounts(items) {
++	const childrenOf = new Map();
++	for (const item of items) {
++		const parentId = item.parentSessionId;
++		if (parentId === void 0) continue;
++		const bucket = childrenOf.get(parentId);
++		if (bucket === void 0) childrenOf.set(parentId, [item.sessionId]);
++		else bucket.push(item.sessionId);
++	}
++	const liveStatus = new Map();
++	for (const session of ctx.sessions.list()) liveStatus.set(session.id, ctx.agents.get(session.id)?.status === "running");
++	for (const item of items) {
++		if (item.origin === "subagent") continue;
++		let count = 0;
++		const seen = new Set([item.sessionId]);
++		const queue = [item.sessionId];
++		while (queue.length > 0) {
++			const next = childrenOf.get(queue.shift());
++			if (next === void 0) continue;
++			for (const childId of next) {
++				if (seen.has(childId)) continue;
++				seen.add(childId);
++				if (liveStatus.get(childId) === true) count += 1;
++				queue.push(childId);
++			}
++		}
++		item.runningSubagentCount = count;
++	}
++	return items;
++}
++function sessionListFields(header, events = [], extra = void 0) {
+ 	const agentPreset = resolveSessionPreset({
+ 		header,
+ 		events
+@@ -1236,7 +1279,9 @@
+ 		...header.parentSession === void 0 ? {} : { parentSessionId: header.parentSession },
+ 		...header.origin === void 0 ? {} : { origin: header.origin },
+ 		...header.cwd === void 0 ? {} : { cwd: header.cwd },
+-		...agentPreset === void 0 ? {} : { agentPreset }
++		...agentPreset === void 0 ? {} : { agentPreset },
++		/* dsh-lag-fix B1: 聚合字段 runningSubagentCount */
++		...extra === void 0 ? {} : extra
+ 	};
+ }
+ /** SessionSummary projection for attached (in-memory) sessions. */
+@@ -2184,12 +2229,34 @@
+ 				...projections === void 0 ? {} : { projections }
+ 			};
+ 		};
+-		const items = ctx.sessions.list().map(summarizeAttached);
++		/* dsh-lag-fix B1: 顶层全发 + subagent 最近 N 条 */
++	const attachedSessions = ctx.sessions.list();
++	const attachedSubagents = attachedSessions.filter((session) => session.header.origin === "subagent");
++	attachedSubagents.sort((a, b) => sessionListUpdatedAt(b.header, sessionListMetadata(b.events)) - sessionListUpdatedAt(a.header, sessionListMetadata(a.events)));
++	const keep = new Set();
++	for (const session of attachedSessions) if (session.header.origin !== "subagent") keep.add(session.id);
++	for (const session of attachedSubagents.slice(0, SUBAGENT_LIST_MAX)) keep.add(session.id);
++	const items = attachedSessions.filter((session) => keep.has(session.id)).map(summarizeAttached);
+ 		signal?.throwIfAborted();
+ 		const attached = new Set(items.map((item) => item.sessionId));
+ 		const persistence = ctx.get("sessionPersistence");
+ 		if (persistence !== void 0) {
+-			const cold = (await persistence.list(signal)).filter((meta) => !attached.has(meta.id) && meta.cwd !== void 0);
++			// 冷会话同源分流：顶层 id 一条不少；subagent 只保留「最近 SUBAGENT_LIST_MAX 条」作为候选，
++			// 其余在下面的 filter 中直接剔除，避免为它们做投影与冷读（本次削峰的主路径）。
++			const coldSource = (await persistence.list(signal));
++			const coldSubagentCandidates = coldSource
++			  .filter((meta) => meta.origin === "subagent")
++			  .sort((a, b) => b.updatedAt - a.updatedAt)
++			  .slice(0, SUBAGENT_LIST_MAX);
++			const coldSubagentIds = new Set(coldSubagentCandidates.map((meta) => meta.id));
++			let coldSubagentSeen = 0;
++			const cold = coldSource.filter((meta) => {
++			  if (attached.has(meta.id) || meta.cwd === void 0) return false;
++			  if (meta.origin !== "subagent") return true;
++			  if (!coldSubagentIds.has(meta.id)) return false;
++			  coldSubagentSeen += 1;
++			  return coldSubagentSeen <= SUBAGENT_LIST_MAX;
++			});
+ 			signal?.throwIfAborted();
+ 			for (let offset = 0; offset < cold.length; offset += COLD_SUMMARY_BATCH_SIZE) {
+ 				signal?.throwIfAborted();
+@@ -2217,8 +2284,12 @@
+ 				items.push(...summaries);
+ 			}
+ 		}
+-		items.sort((a, b) => b.updatedAt - a.updatedAt);
+-		return items;
++				items.sort((a, b) => b.updatedAt - a.updatedAt);
++		// 收口：合并排序后按 updatedAt 只留「最近的 SUBAGENT_LIST_MAX 条 subagent」；顶层一条不丢。
++		const subagentItems = items.filter((item) => item.origin === "subagent");
++		const overflow = subagentItems.slice(SUBAGENT_LIST_MAX);
++		const retained = overflow.length === 0 ? items : items.filter((item) => !overflow.some((drop) => drop.sessionId === item.sessionId));
++		return annotateRunningSubagentCounts(retained);
+ 	}
+ 	/**
+ 	* Resolve the goal service THIS agent runs.
+
+================ diff -u  lib/types/api-proxy.js ================
+--- /home/CNS2026495165/dsh/.workspace/lag-fix/tmp/B1/dryrun-20260920-152602/lib/types/api-proxy.js	2026-09-20 15:26:02.026749703 +0800
++++ /home/CNS2026495165/dsh/.workspace/lag-fix/tmp/B1/dryrun-20260920-152602/b1-api-proxy.patched.js	2026-09-20 15:26:02.112744409 +0800
+@@ -378,7 +378,50 @@
+     return Math.max(header.createdAt, metadata?.lastPromptAt ?? 0);
+ }
+ /** Shared Session-header projection for list baselines and creation frames. */
+-function sessionListFields(header, events = []) {
++/* dsh-lag-fix B1: subagent 会话下发上限 */
++const SUBAGENT_LIST_MAX = Number.isFinite(globalThis.__DSH_SUBAGENT_LIST_MAX)
++  ? Math.max(0, Math.trunc(globalThis.__DSH_SUBAGENT_LIST_MAX))
++  : 200;
++/* dsh-lag-fix B1: 聚合字段 runningSubagentCount */
++/**
++ * 为**顶层**会话补 runningSubagentCount：沿「不间断 subagent 血缘链」统计其 running 后代，
++ * 语义与客户端 indexSubagentDescendants(byId) 一致，但由宿主在**截断之后**的行上计算，
++ * 因此侧边栏「N 个子代理运行中」状态点不再依赖被截断的 subagent 行（消费方 C1）。
++ * 成本：只遍历本次已产出的行 + live agent 表，无新增投影/读盘。
++ * @param items - listVisibleSessionSummaries 产出的行（已排序、已截断）。
++ * @returns 同一数组（原对象上补字段）。
++ */
++function annotateRunningSubagentCounts(items) {
++    const childrenOf = new Map();
++    for (const item of items) {
++        const parentId = item.parentSessionId;
++        if (parentId === void 0) continue;
++        const bucket = childrenOf.get(parentId);
++        if (bucket === void 0) childrenOf.set(parentId, [item.sessionId]);
++        else bucket.push(item.sessionId);
++    }
++    const liveStatus = new Map();
++    for (const session of ctx.sessions.list()) liveStatus.set(session.id, ctx.agents.get(session.id)?.status === 'running');
++    for (const item of items) {
++        if (item.origin === 'subagent') continue;
++        let count = 0;
++        const seen = new Set([item.sessionId]);
++        const queue = [item.sessionId];
++        while (queue.length > 0) {
++            const next = childrenOf.get(queue.shift());
++            if (next === void 0) continue;
++            for (const childId of next) {
++                if (seen.has(childId)) continue;
++                seen.add(childId);
++                if (liveStatus.get(childId) === true) count += 1;
++                queue.push(childId);
++            }
++        }
++        item.runningSubagentCount = count;
++    }
++    return items;
++}
++function sessionListFields(header, events = [], extra = void 0) {
+     // The preset comes from the log, not the header: a session that switched
+     // while blank ran its turns under the newer composition, and a picker
+     // showing the creation-time value would contradict what the model saw.
+@@ -388,6 +431,8 @@
+         ...header.origin === undefined ? {} : { origin: header.origin },
+         ...header.cwd === undefined ? {} : { cwd: header.cwd },
+         ...agentPreset === undefined ? {} : { agentPreset },
++    /* dsh-lag-fix B1: 聚合字段 runningSubagentCount */
++    ...extra === void 0 ? {} : extra
+     };
+ }
+ /** SessionSummary projection for attached (in-memory) sessions. */
+@@ -1413,13 +1458,34 @@
+                 ...projections === undefined ? {} : { projections },
+             };
+         };
+-        const items = ctx.sessions.list().map(summarizeAttached);
++        /* dsh-lag-fix B1: 顶层全发 + subagent 最近 N 条 */
++  const attachedSessions = ctx.sessions.list();
++  const attachedSubagents = attachedSessions.filter((session) => session.header.origin === 'subagent');
++  attachedSubagents.sort((a, b) => sessionListUpdatedAt(b.header, sessionListMetadata(b.events)) - sessionListUpdatedAt(a.header, sessionListMetadata(a.events)));
++  const keep = new Set();
++  for (const session of attachedSessions) if (session.header.origin !== 'subagent') keep.add(session.id);
++  for (const session of attachedSubagents.slice(0, SUBAGENT_LIST_MAX)) keep.add(session.id);
++  const items = attachedSessions.filter((session) => keep.has(session.id)).map(summarizeAttached);
+         signal?.throwIfAborted();
+         const attached = new Set(items.map(item => item.sessionId));
+         const persistence = ctx.get('sessionPersistence');
+         if (persistence !== undefined) {
+-            const cold = (await persistence.list(signal))
+-                .filter(meta => !attached.has(meta.id) && meta.cwd !== undefined);
++            // 冷会话同源分流：顶层 id 一条不少；subagent 只保留「最近 SUBAGENT_LIST_MAX 条」作为候选，
++            // 其余在下面的 filter 中直接剔除，避免为它们做投影与冷读（本次削峰的主路径）。
++            const coldSource = (await persistence.list(signal));
++            const coldSubagentCandidates = coldSource
++              .filter((meta) => meta.origin === 'subagent')
++              .sort((a, b) => b.updatedAt - a.updatedAt)
++              .slice(0, SUBAGENT_LIST_MAX);
++            const coldSubagentIds = new Set(coldSubagentCandidates.map((meta) => meta.id));
++            let coldSubagentSeen = 0;
++            const cold = coldSource.filter((meta) => {
++              if (attached.has(meta.id) || meta.cwd === void 0) return false;
++              if (meta.origin !== 'subagent') return true;
++              if (!coldSubagentIds.has(meta.id)) return false;
++              coldSubagentSeen += 1;
++              return coldSubagentSeen <= SUBAGENT_LIST_MAX;
++            });
+             signal?.throwIfAborted();
+             for (let offset = 0; offset < cold.length; offset += COLD_SUMMARY_BATCH_SIZE) {
+                 signal?.throwIfAborted();
+@@ -1455,8 +1521,12 @@
+                 items.push(...summaries);
+             }
+         }
+-        items.sort((a, b) => b.updatedAt - a.updatedAt);
+-        return items;
++                items.sort((a, b) => b.updatedAt - a.updatedAt);
++        // 收口：合并排序后按 updatedAt 只留「最近的 SUBAGENT_LIST_MAX 条 subagent」；顶层一条不丢。
++        const subagentItems = items.filter((item) => item.origin === 'subagent');
++        const overflow = subagentItems.slice(SUBAGENT_LIST_MAX);
++        const retained = overflow.length === 0 ? items : items.filter((item) => !overflow.some((drop) => drop.sessionId === item.sessionId));
++        return annotateRunningSubagentCounts(retained);
+     }
+     /**
+      * Resolve the goal service THIS agent runs.
+
+== 语义自测（真实 payload：顶层 ID 逐条相等 / subagent ≤200 / 聚合计数与客户端一致）==
+payload: 2361 行（顶层 84 / subagent 2277）
+[PASS] N=200：顶层会话逐 ID 相等（84 条）
+[PASS] N=200：subagent 行数 ≤ 200
+[PASS] N=200：条目总数 ≤ 顶层+200
+[PASS] N=200：保留的 subagent 全为 updatedAt 最新的 200 条
+字节：全量 3885937 → 保留 475385（−87.8%）
+[PASS] N=200：字节 ≤ 500KB
+[PASS] N=0：只剩顶层
+[PASS] N=∞：一条不丢
+[PASS] 聚合：从副本抽出 annotateRunningSubagentCounts
+payload 中 running===true 的 subagent：3 条
+[PASS] 聚合：每个顶层行都写入了 runningSubagentCount（number）
+[PASS] 聚合：计数与客户端 indexSubagentDescendants 逐 id 相等
+聚合：1 个顶层会话的 runningSubagentCount > 0（payload 快照下）
+[PASS] 聚合：全部 3 条 running subagent 都在保留窗口内（状态点可达）
+[PASS] 边界记录：N=0 时聚合计数归零（已知限制；本单元取 N=200）
+
+===== 语义自测全部 PASS =====
+[PASS] 语义自测全部通过
+
+===== DRY-RUN 完成（live 文件未改动）=====

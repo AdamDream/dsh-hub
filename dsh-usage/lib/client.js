@@ -214,7 +214,39 @@ window.__ModuleLoader__.load({
 			const [rangeDays, setRangeDays] = react.useState(7);
 			const [customFrom, setCustomFrom] = react.useState("");
 			const [customTo, setCustomTo] = react.useState("");
-			const [refreshSec, setRefreshSec] = react.useState(30);
+				const [refreshSec, setRefreshSec] = react.useState(60);
+				const [pollVisible, setPollVisible] = react.useState(true);
+				const cardRef = react.useRef(null);
+				// Set inside the effect below; the IntersectionObserver callback reads it
+				// so a visibility change never needs to re-create the observer (the
+				// closures stay current through these refs, mirroring loadAllRef below).
+				const setPollVisibleRef = react.useRef(null);
+				const ioRef = react.useRef(null);
+				/** Node ↔ observer binding kept in a ref callback (it runs exactly once,
+				 * when the card mounts — an effect's dependency array would re-observe on
+				 * every render). Null on detach; remount re-observes. */
+				const attachCardRef = react.useCallback((node) => {
+					if (ioRef.current) {
+						ioRef.current.disconnect();
+						ioRef.current = null;
+					}
+					cardRef.current = node;
+					if (node === null) return;
+					if (typeof IntersectionObserver !== "function") {
+						if (setPollVisibleRef.current) setPollVisibleRef.current(true);
+						return;
+					}
+					const observer = new IntersectionObserver(
+						(entries) => {
+							for (const entry of entries) {
+								if (setPollVisibleRef.current) setPollVisibleRef.current(Boolean(entry.isIntersecting));
+							}
+						},
+						{ threshold: 0 },
+					);
+					observer.observe(node);
+					ioRef.current = observer;
+				}, []);
 			const [bucket, setBucket] = react.useState("total");
 			const [chartMode, setChartMode] = react.useState("area");
 			const [tab, setTab] = react.useState("byModel");
@@ -231,9 +263,39 @@ window.__ModuleLoader__.load({
 			const [sessionFrom, setSessionFrom] = react.useState("");
 			const [sessionTo, setSessionTo] = react.useState("");
 			const rpcAvailable = rpc && typeof rpc.call === "function";
+			const loadAllRef = react.useRef(null);
+
 			const range = react.useMemo(() => {
 				const now = Date.now();
-				if (rangeDays > 0) return { from: now - rangeDays * 86400000, to: now };
+				// 2026-09-20 (audit §4.5(1)/§5 A0): the rolling window was
+				// `now - N*86400000`, which shares the host's day-granularity
+				// pre-aggregation only by accident. Align "近 N 天" to local
+				// calendar days instead — [today 00:00 - (N-1) days, today 23:59:59.999].
+				// `setDate(getDate()-n)` (never `- n*86400000`) keeps the walk DST-safe.
+				if (rangeDays > 0) {
+					// ⚠️ 时间戳算术的浮点陷阱（实测踩到两次）：`new Date(...).getTime()`
+					// 是 float，`midnight - 1` 会算成「次日 .001」而不是「前一日 .999」
+					// （实测 `1789919999999.001`）；反过来 `midnight + 1` 会算成当天
+					// `.001`。所以**任何「±1ms 取日边界」的写法都必须落在整毫秒的
+					// Date 对象上再做算术**，并统一走 localDayStart / localDayEnd。
+					const localDayStart = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+					const localDayEnd = (d) => {
+						const nextStart = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).getTime();
+						return new Date(nextStart).getTime() - 1;
+					};
+					// 顺序很重要：先在**整数毫秒**的日边界上做日历回退，再取窗口末端。
+					// 若先取 `to`（含 `.999` 小数）再 `setDate`，`start` 会继承那个小数
+					// 毫秒，`start !== localDayStart(start)` → 守卫永远不成立（实测踩到）。
+					const start = new Date(localDayStart(new Date(now)));
+					start.setDate(start.getDate() - (rangeDays - 1));
+					const to = new Date(localDayEnd(new Date(now))); // 今天 23:59:59.999（整数毫秒）
+					// 守卫：窗口两端都必须落在本地日边界（宿主侧还有第二道闸门，
+					// 这里不成立只会退回滚动窗口 → 只损失速度、不会算错）。
+					if (start.getTime() === localDayStart(start) && to.getTime() === localDayEnd(to)) {
+						return { from: start.getTime(), to: to.getTime() };
+					}
+					return { from: now - rangeDays * 86400000, to: now };
+				}
 				const from = customFrom ? new Date(customFrom + "T00:00:00").getTime() : undefined;
 				const to = customTo ? new Date(customTo + "T23:59:59").getTime() : undefined;
 				return { from, to };
@@ -272,6 +334,7 @@ window.__ModuleLoader__.load({
 					setLoading(false);
 				}
 			}, [rpcAvailable, rpc, payload, range.from, dataSource]);
+			loadAllRef.current = loadAll;
 			const loadSessions = react.useCallback(async () => {
 				if (!rpcAvailable) return;
 				const from = sessionFrom ? new Date(sessionFrom + "T00:00:00").getTime() : range.from;
@@ -303,9 +366,21 @@ window.__ModuleLoader__.load({
 			}, [loadAll, loadSessions, loadStatus]);
 			react.useEffect(() => {
 				if (refreshSec <= 0) return;
-				const timer = setInterval(() => void loadAll(), refreshSec * 1000);
+				// 2026-09-20 (audit §5 B2): the card is a settings-page section —
+				// while it is scrolled out of view (or the tab is in the
+				// background) it must not poll at all: every cycle costs the host
+				// ~0.3-0.5s of blocked event loop. Only the timer is gated; the
+				// initial load and the manual refresh stay unconditional.
+				if (!pollVisible || (typeof document !== "undefined" && document.hidden)) return;
+				// latest-callback ref: the interval must NOT restart when a filter
+				// change replaces loadAll's identity.
+				const timer = setInterval(() => {
+					if (typeof document !== "undefined" && document.hidden) return;
+					const run = loadAllRef.current;
+					if (typeof run === "function") void run();
+				}, refreshSec * 1000);
 				return () => clearInterval(timer);
-			}, [refreshSec, loadAll]);
+			}, [refreshSec, pollVisible]);
 			const onManualRefresh = async () => {
 				if (rpcAvailable) {
 					try {
@@ -409,7 +484,8 @@ window.__ModuleLoader__.load({
 			const statusLine = status
 				? "上次 ingest：" + (status.lastIngest ? fmtDate(status.lastIngest) : "—") + " · 来源事件：dsh " + (status.eventsDsh || 0) + " / cc " + (status.eventsCc || 0)
 				: "状态通道不可用";
-			return react.createElement("div", { className: "du_root" },
+			// 可见性门控的观察目标（B2）：卡片滚出视口/标签页不可见时停止轮询。
+			return react.createElement("div", { className: "du_root", ref: attachCardRef },
 				react.createElement("div", { className: "du_head" },
 					react.createElement("div", { className: "du_title" }, "Token 用量 · dsh-usage"),
 					react.createElement("div", { className: "du_sub" }, "dsh + Claude Code 双源统计（不计费）")),
@@ -431,7 +507,8 @@ window.__ModuleLoader__.load({
 					react.createElement("select", { className: "du_select", value: String(refreshSec), onChange: (e) => setRefreshSec(Number(e.target.value)) },
 						react.createElement("option", { value: "0" }, "不轮询"),
 						react.createElement("option", { value: "5" }, "5s 刷新"),
-						react.createElement("option", { value: "30" }, "30s 刷新"),
+						react.createElement("option", { value: "60" }, "60s 刷新"),
+					react.createElement("option", { value: "30" }, "30s 刷新"),
 						react.createElement("option", { value: "60" }, "60s 刷新")),
 					react.createElement("button", { type: "button", className: "du_btn", disabled: loading, onClick: () => void onManualRefresh() }, loading ? "加载中…" : "手动刷新")),
 				error

@@ -1,0 +1,20 @@
+[PASS] 抽到 s 的取值表达式
+[PASS] [s] 宿主字段=3 → 取 3
+[PASS] [s] 宿主字段=0 → 取 0（不是回落 7）
+[PASS] [s] 宿主字段缺失 → 回落 runningCount=7
+[PASS] [s] 宿主与就地都无 → 0
+[PASS] [s] 宿主字段为字符串时不采用 → 回落 7
+[PASS] [s] 不在 byId 的会话靠宿主字段仍得 5
+[PASS] 抽到 summary 的取值表达式
+[PASS] [summary] 宿主字段=3 → 取 3
+[PASS] [summary] 宿主字段=0 → 取 0（不是回落 7）
+[PASS] [summary] 宿主字段缺失 → 回落 runningCount=7
+[PASS] [summary] 宿主与就地都无 → 0
+[PASS] [summary] 宿主字段为字符串时不采用 → 回落 7
+[PASS] [summary] 不在 byId 的会话靠宿主字段仍得 5
+[PASS] entryCache 判据已包含 runningSubagentCount
+[PASS] 相同 runningSubagentCount → 复用旧条目（缓存命中）
+[PASS] 计数由 2 变 3 → 不复用（状态点会刷新）
+[PASS] 计数由 3 变 2 → 不复用
+
+===== 客户端语义自测全部 PASS =====

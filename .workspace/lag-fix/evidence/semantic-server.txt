@@ -1,0 +1,18 @@
+payload: 2361 行（顶层 84 / subagent 2277）
+[PASS] N=200：顶层会话逐 ID 相等（84 条）
+[PASS] N=200：subagent 行数 ≤ 200
+[PASS] N=200：条目总数 ≤ 顶层+200
+[PASS] N=200：保留的 subagent 全为 updatedAt 最新的 200 条
+字节：全量 3885937 → 保留 475385（−87.8%）
+[PASS] N=200：字节 ≤ 500KB
+[PASS] N=0：只剩顶层
+[PASS] N=∞：一条不丢
+[PASS] 聚合：从副本抽出 annotateRunningSubagentCounts
+payload 中 running===true 的 subagent：3 条
+[PASS] 聚合：每个顶层行都写入了 runningSubagentCount（number）
+[PASS] 聚合：计数与客户端 indexSubagentDescendants 逐 id 相等
+聚合：1 个顶层会话的 runningSubagentCount > 0（payload 快照下）
+[PASS] 聚合：全部 3 条 running subagent 都在保留窗口内（状态点可达）
+[PASS] 边界记录：N=0 时聚合计数归零（已知限制；本单元取 N=200）
+
+===== 语义自测全部 PASS =====

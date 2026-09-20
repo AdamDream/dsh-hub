@@ -1,0 +1,124 @@
+{
+  "at": "2026-09-20T07:27:52.896Z",
+  "db": "/home/CNS2026495165/.dsh/storages/usage/usage.db",
+  "liveModule": "/home/CNS2026495165/dsh/.workspace/lag-fix/tmp/mod/orig-db.js",
+  "patchedModule": "/home/CNS2026495165/dsh/.workspace/lag-fix/tmp/mod/patched-db.js",
+  "fails": 0,
+  "results": [
+    {
+      "test": "T8a 补丁后 db.js 无 DROP INDEX/VACUUM/ANALYZE，且 usage_events 写语句集合与原件相同",
+      "status": "PASS",
+      "detail": "写语句集合=[INSERT INTO USAGE_EVENTS]"
+    },
+    {
+      "test": "T8b db.js 的 CREATE INDEX 集合与原件完全相同（未新建索引）",
+      "status": "PASS",
+      "detail": "live=[model,project,ts] patched=[model,project,ts]"
+    },
+    {
+      "test": "T8c 库内索引集合与实测基线一致（6 个，未新增）",
+      "status": "PASS",
+      "detail": "idx_events_model,idx_events_project,idx_events_ts,sqlite_autoindex_sync_state_1,sqlite_autoindex_usage_daily_1,sqlite_autoindex_usage_events_1"
+    },
+    {
+      "test": "T1 usage_daily 与 usage_events 全量镜像（requests/4 桶/天数）",
+      "status": "PASS",
+      "detail": "{\"events\":{\"rows\":104907,\"days\":31,\"i\":3341737613,\"o\":109180005,\"cr\":11227670276,\"cw\":42529305},\"daily\":{\"rows\":104907,\"days\":31,\"i\":3341737613,\"o\":109180005,\"cr\":11227670276,\"cw\":42529305}}"
+    },
+    {
+      "test": "T2a 新版谓词计划出现 SEARCH usage_events USING INDEX idx_events_ts",
+      "status": "PASS",
+      "detail": "7 0 162 SEARCH usage_events USING INDEX idx_events_ts (ts>? AND ts<?) | 17 0 0 USE TEMP B-TREE FOR GROUP BY"
+    },
+    {
+      "test": "T2b 旧版谓词计划为 SCAN usage_events（对照基线）",
+      "status": "PASS",
+      "detail": "6 0 207 SCAN usage_events USING COVERING INDEX idx_events_ts | 13 0 0 USE TEMP B-TREE FOR GROUP BY"
+    },
+    {
+      "test": "T2c daily 路线计划走 usage_daily 的 day 索引且无 TEMP B-TREE",
+      "status": "PASS",
+      "detail": "7 0 166 SEARCH usage_daily USING INDEX sqlite_autoindex_usage_daily_1 (day>? AND day<?)"
+    },
+    {
+      "test": "T3a 日对齐全年（2026）queryHeatmap 新旧逐行全等（31 行）",
+      "status": "PASS",
+      "detail": "rows=31 全等"
+    },
+    {
+      "test": "T3b 单日窗口 queryHeatmap（daily 路线）与独立 SQL 真值逐行全等",
+      "status": "PASS",
+      "detail": "2026-08-19 / 2026-09-18"
+    },
+    {
+      "test": "T4 now-7*86400000 形态下 queryHeatmap 逐行全等（闸门生效，不静默多算）",
+      "status": "PASS",
+      "detail": "rows=31"
+    },
+    {
+      "test": "T4 now-30*86400000 形态下 queryHeatmap 逐行全等（闸门生效，不静默多算）",
+      "status": "PASS",
+      "detail": "rows=31"
+    },
+    {
+      "test": "T4c year 参数语义未被 from/to 误伤（客户端 heatmap 只传 year/dataSources）",
+      "status": "PASS",
+      "detail": "rows=31"
+    },
+    {
+      "test": "T5 dataSources=dsh 逐行全等",
+      "status": "PASS",
+      "detail": "rows=23"
+    },
+    {
+      "test": "T5 dataSources=cc 逐行全等",
+      "status": "PASS",
+      "detail": "rows=10"
+    },
+    {
+      "test": "T5 dataSources=dsh 逐行全等",
+      "status": "PASS",
+      "detail": "rows=23"
+    },
+    {
+      "test": "T5 dataSources=cc 逐行全等",
+      "status": "PASS",
+      "detail": "rows=10"
+    },
+    {
+      "test": "T6a 未聚合日窗口（toDay > MAX(day)）与独立真值逐行全等",
+      "status": "PASS",
+      "detail": "events=5385 rows=1"
+    },
+    {
+      "test": "T6b 反事实证明：日取整 daily 比真值多算（闸门拦住的正是这个误差）",
+      "status": "PASS",
+      "detail": "ref=10310975630 dailyRounded=10419760029 误差=+1.055%"
+    },
+    {
+      "test": "T6c 非日对齐滚动窗口与独立真值逐行全等（闸门拒绝 day 取整）",
+      "status": "PASS",
+      "detail": "events=80120 rows=21"
+    },
+    {
+      "test": "T7 耗时(ms, min-of-3 中位)",
+      "status": "INFO",
+      "detail": {
+        "liveQueryHeatmap": 273.14521300000024,
+        "patchedQueryHeatmap": 0.08123299999988376,
+        "eventsSargable": 153.23470399999997,
+        "dailyRoute": 0.04950300000018615
+      }
+    },
+    {
+      "test": "T7a 补丁后 queryHeatmap ≥100× 快于原件（热路径必须走 daily）",
+      "status": "PASS",
+      "detail": "273.1ms → 0.1ms（×3362）"
+    },
+    {
+      "test": "T7b 补丁后单发耗时达到审计验收门槛（<1ms）",
+      "status": "PASS",
+      "detail": "0.081ms"
+    }
+  ]
+}

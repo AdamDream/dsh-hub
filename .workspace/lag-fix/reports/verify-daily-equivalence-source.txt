@@ -1,0 +1,40 @@
+[info] db=/home/CNS2026495165/.dsh/storages/usage/usage.db readOnly=true
+[info] live=/home/CNS2026495165/dsh/.workspace/lag-fix/tmp/mod/pre-db.js
+[info] patched=/home/CNS2026495165/dsh/.workspace/lag-fix/tmp/mod/patched-db.js
+[PASS] T8a 补丁后 db.js 无 DROP INDEX/VACUUM/ANALYZE，且 usage_events 写语句集合与原件相同 :: 写语句集合=[INSERT INTO USAGE_EVENTS]
+[PASS] T8b db.js 的 CREATE INDEX 集合与原件完全相同（未新建索引） :: live=[model,project,ts] patched=[model,project,ts]
+[PASS] T8c 库内索引集合与实测基线一致（6 个，未新增） :: idx_events_model,idx_events_project,idx_events_ts,sqlite_autoindex_sync_state_1,sqlite_autoindex_usage_daily_1,sqlite_autoindex_usage_events_1
+[PASS] T1 usage_daily 与 usage_events 全量镜像（requests/4 桶/天数） :: {"events":{"rows":104907,"days":31,"i":3341737613,"o":109180005,"cr":11227670276,"cw":42529305},"daily":{"rows":104907,"days":31,"i":3341737613,"o":109180005,"cr":11227670276,"cw":42529305}}
+[PASS] T2a 新版谓词计划出现 SEARCH usage_events USING INDEX idx_events_ts :: 7 0 162 SEARCH usage_events USING INDEX idx_events_ts (ts>? AND ts<?) | 17 0 0 USE TEMP B-TREE FOR GROUP BY
+[PASS] T2b 旧版谓词计划为 SCAN usage_events（对照基线） :: 6 0 207 SCAN usage_events USING COVERING INDEX idx_events_ts | 13 0 0 USE TEMP B-TREE FOR GROUP BY
+[PASS] T2c daily 路线计划走 usage_daily 的 day 索引且无 TEMP B-TREE :: 7 0 166 SEARCH usage_daily USING INDEX sqlite_autoindex_usage_daily_1 (day>? AND day<?)
+[info] year=2026 MAX(day)=2026-09-18 MAX(event day)=2026-09-18 今天=2026-09-20T07:47:16.641Z
+[PASS] T3a 日对齐全年（2026）queryHeatmap 新旧逐行全等（31 行） :: rows=31 全等
+[PASS] T3b 单日窗口 queryHeatmap（daily 路线）与独立 SQL 真值逐行全等 :: 2026-08-19 / 2026-09-18
+[PASS] T4 now-7*86400000 形态下 queryHeatmap 逐行全等（闸门生效，不静默多算） :: rows=31
+[PASS] T4 now-30*86400000 形态下 queryHeatmap 逐行全等（闸门生效，不静默多算） :: rows=31
+[PASS] T4c year 参数语义未被 from/to 误伤（客户端 heatmap 只传 year/dataSources） :: rows=31
+[PASS] T5 dataSources=dsh 逐行全等 :: rows=23
+[PASS] T5 dataSources=cc 逐行全等 :: rows=10
+[PASS] T5 dataSources=dsh 逐行全等 :: rows=23
+[PASS] T5 dataSources=cc 逐行全等 :: rows=10
+[PASS] T6a 未聚合日窗口（toDay > MAX(day)）与独立真值逐行全等 :: events=5385 rows=1
+[PASS] T6b 反事实证明：日取整 daily 比真值多算（闸门拦住的正是这个误差） :: ref=10298505547 dailyRounded=10419760029 误差=+1.177%
+[PASS] T6c 非日对齐滚动窗口与独立真值逐行全等（闸门拒绝 day 取整） :: events=79895 rows=21
+[PASS] T9a usage_daily 确实没有 is_subagent / provider 列（护栏的事实前提） :: day,data_source,model,project,requests,input_tokens,output_tokens,cache_read_tokens,cache_write_tokens
+[PASS] T9b is_subagent 过滤（非日对齐窗口）下与参考真值逐行全等 :: rows=21
+[PASS] T9c 该过滤未产生未定义行为（结果与无过滤一致，与原件语义相同） :: rows=21
+[PASS] T9d 日对齐全年 + is_subagent 过滤：与原件语义一致（原件同样忽略该过滤） :: rows=31
+[PASS] T9e 反事实：库内 is_subagent=1 有实际行数（daily 无法表达 → 差量真实存在） :: is_subagent=1 行数=10154，daily 全量=104907（差 94753 行）
+[INFO] T7 耗时：原件路线=282.8ms(31 行)  补丁后 daily 路线=0.044ms(31 行)  补丁后 queryHeatmap 单发=0.094ms（×6416）
+[PASS] T7a 两条路线返回相同行数（口径一致，非空转） :: old=31 new=31
+[PASS] T7b 补丁后 daily 路线 ≥100× 快于原件路线 :: 282.8ms → 0.044ms（×6416）
+[PASS] T7c 补丁后 queryHeatmap 单发达到审计验收门槛（<1ms） :: 0.094ms
+[PASS] T7d 原件路线确实昂贵（>50ms，证明基线未被语句缓存污染） :: 282.8ms
+[PASS] T9a usage_daily 确实没有 is_subagent / provider 列（护栏的事实前提） :: day,data_source,model,project,requests,input_tokens,output_tokens,cache_read_tokens,cache_write_tokens
+[PASS] T9b is_subagent 过滤（非日对齐窗口）下与参考真值逐行全等 :: rows=21
+[PASS] T9c 该过滤未产生未定义行为（结果与无过滤一致，与原件语义相同） :: rows=21
+[PASS] T9d 日对齐全年 + is_subagent 过滤：与原件语义一致（原件同样忽略该过滤） :: rows=31
+[PASS] T9e 反事实：库内 is_subagent=1 有实际行数（daily 无法表达 → 差量真实存在） :: is_subagent=1 行数=10154，daily 全量=104907（差 94753 行）
+[summary] ALL PASS（SKIP 项见上）
+[summary] JSON 已写出：/home/CNS2026495165/dsh/.workspace/lag-fix/reports/verify-daily-equivalence-source.json

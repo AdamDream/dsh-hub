@@ -1,0 +1,19 @@
+离线复核：evidence/probe-pre-patch.json（0 次 HTTP）  响应 3924952 B
+
+条目：2386（顶层 85 / subagent 2301）
+字节：items 3924839 B / 信封 3924952 B
+[FAIL] A1 条目数 ≤ 顶层+200（当前阈值 285；审计快照值为 284） — 实得 2386
+[FAIL] A2 字节 ≤ 500 KB — 实得 3924952 B
+
+基线：2361 条 / 3885937 B → 现在 2386 条 / 3924839 B
+       条目 −-1.1%，字节 −-1.0%
+[PASS] A3a 顶层会话一条不少（基线 84 条）
+[PASS] A3b 多出的 1 条顶层会话均为快照之后新建（updatedAt > 1789885381804）
+       多出：session-4ca42e5a-813b-4d9d-b757-aca82d224da6
+[FAIL] A6 顶层行全部带 runningSubagentCount（number） — 0/85
+       顶层 runningSubagentCount 之和 = 0（>0 表示状态点有数据）
+[FAIL] A7 subagent 行 ≤ 200 — 实得 2301
+
+行字段并集：agentPreset, blank, cwd, origin, parentSessionId, projections, running, sessionId, updatedAt
+
+===== 探针 4 项 FAIL =====

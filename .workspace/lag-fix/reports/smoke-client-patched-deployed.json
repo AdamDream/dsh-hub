@@ -1,0 +1,67 @@
+{
+  "client": "/home/CNS2026495165/dsh/.workspace/lag-fix/tmp/patched/client.js",
+  "at": "2026-09-20T07:47:27.554Z",
+  "fails": 0,
+  "results": [
+    {
+      "test": "S1 客户端 bundle 可被 ModuleLoader 载入并注册",
+      "status": "PASS",
+      "detail": "entries=1 id=@local/dsh-usage"
+    },
+    {
+      "test": "S1a factory(require) 返回含 apply/inject 的 exports",
+      "status": "PASS",
+      "detail": "keys=apply,inject inject=[slots,connection,sessions,settingsScope]"
+    },
+    {
+      "test": "S1b apply() 注册设置卡片且无异常",
+      "status": "PASS",
+      "detail": "UsageCard=function"
+    },
+    {
+      "test": "S1c 渲染 + effect 执行无异常（含新增 ref/observer 代码路径）",
+      "status": "PASS",
+      "detail": "renders=8"
+    },
+    {
+      "test": "S2a 可见时建立了轮询定时器",
+      "status": "PASS",
+      "detail": "timers=1 ms=60000"
+    },
+    {
+      "test": "S2b 默认轮询周期为 60s（用户裁决：30s → 60s）",
+      "status": "PASS",
+      "detail": "周期=60000"
+    },
+    {
+      "test": "S2c 建立了 IntersectionObserver 观察卡片根节点（可见性门控）",
+      "status": "PASS",
+      "detail": "observers=1"
+    },
+    {
+      "test": "S3a 从补丁后 client.js 成功抽出 A0 的 rangeDays 分支",
+      "status": "PASS",
+      "detail": "marker=const localD…"
+    },
+    {
+      "test": "S3b A0：rangeDays 各档窗口均落在本地日边界（from 00:00:00.000 / to 23:59:59.999，共 N 个自然日）",
+      "status": "PASS",
+      "detail": "2026-09-20 15:30:00+1d→2026-09-19T16:00:00..2026-09-20T15:59:59 fromOK=true toOK=true spanOK=true | 2026-09-20 15:30:00+7d→2026-09-13T16:00:00..2026-09-20T15:59:59 fromOK=true toOK=true spanOK=true | 2026-09-20 15:30:00+30d→2026-08-21T16:00:00..2026-09-20T15:59:59 fromOK=true toOK=true spanOK=true | 2026-09-20 00:00:01+7d→2026-09-13T16:00:00..2026-09-20T15:59:59 fromOK=true toOK=true spanOK=true | 2026-09-20 23:59:59+90d→2026-06-22T16:00:00..2026-09-20T15:59:59 fromOK=true toOK=true spanOK=true"
+    },
+    {
+      "test": "S4a 从补丁后 client.js 成功抽出 B2 的轮询门控体",
+      "status": "PASS",
+      "detail": "extract-poll-gate"
+    },
+    {
+      "test": "S4b B2：轮询门控五态（含用户要求保留的 refreshSec=0）逐条符合预期",
+      "status": "PASS",
+      "detail": "可见 + 60s → 建立定时器: timer=true | refreshSec=0（不轮询）→ 不建立: timer=false | 卡片不可见 → 不建立: timer=false | 标签页隐藏 → 不建立: timer=false | 两者都不可见 → 不建立: timer=false"
+    },
+    {
+      "test": "S4c 定时器周期 = refreshSec*1000（默认 60 → 60000ms）",
+      "status": "PASS",
+      "detail": "ms=60000"
+    }
+  ]
+}

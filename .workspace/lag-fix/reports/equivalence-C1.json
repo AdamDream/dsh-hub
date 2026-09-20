@@ -1,0 +1,179 @@
+{
+  "baseline": {
+    "file": "sandbox/C1/client.baseline-pristine.js",
+    "sha1": "aba836a0c42dfb45f98a625854f777b19260d7dd"
+  },
+  "patched": {
+    "file": "/home/CNS2026495165/dsh/.workspace/lag-fix/patched/client-runtime.client.js",
+    "sha1": "f7a0d8ab55b39e5da65a346b64982ff9767df3a9"
+  },
+  "node": "v22.23.2",
+  "passed": 10,
+  "skipped": 0,
+  "failed": 0,
+  "total": 10,
+  "results": [
+    {
+      "id": "P1.a",
+      "name": "清理后 entryCache 键集等价（6 组输入）",
+      "ok": true,
+      "skipped": false,
+      "detail": [
+        {
+          "scenario": "普通：全部命中",
+          "remainingKeys": 40
+        },
+        {
+          "scenario": "部分 stale",
+          "remainingKeys": 40
+        },
+        {
+          "scenario": "全 stale",
+          "remainingKeys": 0
+        },
+        {
+          "scenario": "items 空",
+          "remainingKeys": 0
+        },
+        {
+          "scenario": "cache 空",
+          "remainingKeys": 0
+        },
+        {
+          "scenario": "items 含重复 id",
+          "remainingKeys": 40
+        }
+      ]
+    },
+    {
+      "id": "P1.b",
+      "name": "整段 buildListSnapshot 等价（N=2361，三轮）",
+      "ok": true,
+      "skipped": false,
+      "detail": {
+        "firstCacheKeys": 1900,
+        "thirdCacheKeys": 900,
+        "thirdItems": 900
+      }
+    },
+    {
+      "id": "P4.a",
+      "name": "五种 mutation × 有/无索引：返回数组逐元素等价",
+      "ok": true,
+      "skipped": false,
+      "detail": {
+        "cases": 25
+      }
+    },
+    {
+      "id": "P4.b",
+      "name": "随机模糊 500 组 × 12 步：逐元素等价",
+      "ok": true,
+      "skipped": false,
+      "detail": {
+        "steps": 6000,
+        "longestArray": 10
+      }
+    },
+    {
+      "id": "P4.c",
+      "name": "调用点集成：recordMutation 单发 / 回放循环（1/3/64 次）等价",
+      "ok": true,
+      "skipped": false,
+      "detail": {
+        "replay_1": 30,
+        "replay_3": 30,
+        "replay_64": 30
+      }
+    },
+    {
+      "id": "P2.a",
+      "name": "内容不变 ⇒ list.set 实参引用不变（连续 3 次）",
+      "ok": true,
+      "skipped": false,
+      "detail": {
+        "baselineDistinct": 3,
+        "patchedDistinct": 1
+      }
+    },
+    {
+      "id": "P2.b",
+      "name": "内容变化 ⇒ 引用变化（8 类字段/结构 + jobs + catalogs）",
+      "ok": true,
+      "skipped": false,
+      "detail": [
+        {
+          "case": "updatedAt 变化",
+          "refChanged": true
+        },
+        {
+          "case": "title 变化",
+          "refChanged": true
+        },
+        {
+          "case": "running 变化",
+          "refChanged": true
+        },
+        {
+          "case": "cwd 变化（→ displayTitle）",
+          "refChanged": true
+        },
+        {
+          "case": "blank 变化",
+          "refChanged": true
+        },
+        {
+          "case": "新增会话",
+          "refChanged": true
+        },
+        {
+          "case": "删除会话",
+          "refChanged": true
+        },
+        {
+          "case": "顺序变化",
+          "refChanged": true
+        },
+        {
+          "case": "jobsBySession 变化",
+          "refChanged": true
+        },
+        {
+          "case": "subagentsByParent 变化",
+          "refChanged": true
+        }
+      ]
+    },
+    {
+      "id": "P2.c",
+      "name": "7 字段逐值等价（含 byId 键集与逐项字段）+ 条目引用复用度",
+      "ok": true,
+      "skipped": false,
+      "detail": {
+        "entries": 30,
+        "byIdReused": 30,
+        "idsReused": true,
+        "topLevelReused": true
+      }
+    },
+    {
+      "id": "P2.d",
+      "name": "首跑（无上一份投影）与上一份投影错配时不崩且字段正确",
+      "ok": true,
+      "skipped": false,
+      "detail": {
+        "firstRunIds": 10,
+        "mismatchedGuardOk": true
+      }
+    },
+    {
+      "id": "P2.e",
+      "name": "地址链（subagent 视图）：额外 byId 条目、displayTitle 覆盖与改名传播",
+      "ok": true,
+      "skipped": false,
+      "detail": {
+        "addressChainEntry": true
+      }
+    }
+  ]
+}

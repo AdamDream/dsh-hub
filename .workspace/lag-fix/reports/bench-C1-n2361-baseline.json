@@ -1,0 +1,41 @@
+{
+  "file": "sandbox/C1/client.baseline-pristine.js",
+  "kind": "baseline",
+  "n": 2361,
+  "reps": 200,
+  "node": "v22.23.2",
+  "results": [
+    {
+      "label": "P1 清理行 · 现状 items.some 逐 id（N=2361）",
+      "ms": 5.4578
+    },
+    {
+      "label": "P1 清理行 · 交付写法 预建 Set + 逐 id 判定（N=2361）",
+      "ms": 0.1701
+    },
+    {
+      "label": "P1 整段 buildListSnapshot（baseline 原文，N=2361）",
+      "ms": 14.4415
+    },
+    {
+      "label": "P4 索引重建单独计时（对象索引，N=2361）",
+      "ms": 0.043
+    },
+    {
+      "label": "P4 单次 upsert 命中（baseline 路径，N=2361）",
+      "ms": 0.0246
+    },
+    {
+      "label": "P4 单次 upsert 未命中新增（baseline 路径，N=2361）",
+      "ms": 0.0587
+    },
+    {
+      "label": "P4 单次 activity（baseline 路径，N=2361）",
+      "ms": 0.0179
+    },
+    {
+      "label": "P4 回放 64 次 upsert（baseline 路径，N=2361）",
+      "ms": 1.0487
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+--- /home/CNS2026495165/.dsh/profiles/node_modules/dsh-workspace-enhancement/lib/client.js	2026-09-14 14:54:49.203333066 +0800
++++ patched/client.js	2026-09-20 15:01:26.610742803 +0800
+@@ -4121,8 +4121,8 @@
+ 			const index = /* @__PURE__ */ new Map();
+ 			for (const [title, ids] of byTitle) {
+ 				if (localTitles.has(title)) continue;
+-				const unique = ids.filter((id, index) => ids.indexOf(id) === index);
+-				if (unique.length === 1 && unique[0] !== void 0) index.set(title, unique[0]);
++				const unique = Array.from(new Set(ids));
++				if (unique.length === 1) index.set(title, unique[0]);
+ 			}
+ 			return index;
+ 		}
+@@ -5415,14 +5415,25 @@
+ 					title: item.title,
+ 					path: item.path
+ 				})) ?? [],
+-				sessions: () => {
+-					const state = sessionsFeed?.getSnapshot();
+-					if (state === void 0) return [];
+-					return Object.values(state.byId).map((row) => ({
+-						title: row.displayTitle,
+-						...typeof row.cwd === "string" ? { cwd: row.cwd } : {}
+-					}));
+-				}
++				sessions: (() => {
++					/**
++					* Memoized by snapshot identity: the feeds publish a new state object
++					* per update, so an unchanged reference implies unchanged rows and the
++					* last projection is reused verbatim (same array contents, same order).
++					*/
++					let cachedState;
++					let cachedRows = [];
++					return () => {
++						const state = sessionsFeed?.getSnapshot();
++						if (state === cachedState) return cachedRows;
++						cachedState = state;
++						cachedRows = state === void 0 ? [] : Object.values(state.byId).map((row) => ({
++							title: row.displayTitle,
++							...typeof row.cwd === "string" ? { cwd: row.cwd } : {}
++						}));
++						return cachedRows;
++					};
++				})()
+ 			}, (onChange) => {
+ 				const un1 = workspacesFeed?.subscribe(onChange);
+ 				const un2 = sessionsFeed?.subscribe(onChange);

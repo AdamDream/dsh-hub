@@ -1,0 +1,68 @@
+===== workspace-ui-runsubagent-count（单元 B1/C1）模式：dry =====
+UI=/home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-ui-workspace/lib/client.js
+RT=/home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-runtime/lib/client.js
+[PASS] 锚点校验通过（3 处单行锚点各 1 次唯一命中）
+工作区副本：/home/CNS2026495165/dsh/.workspace/lag-fix/tmp/B1/dryrun-client-20260920-152602
+TRANSFORM_OK 113461 -> 113665
+TRANSFORM_OK 392055 -> 392115
+[PASS] 两份副本均变换成功且通过 ESM 语法校验
+
+================ diff -u  dsh-client-ui-workspace/lib/client.js ================
+--- /home/CNS2026495165/dsh/.workspace/lag-fix/tmp/B1/dryrun-client-20260920-152602/dsh-client-ui-workspace/lib/client.js	2026-09-20 15:26:02.240824613 +0800
++++ /home/CNS2026495165/dsh/.workspace/lag-fix/tmp/B1/dryrun-client-20260920-152602/b1-ui-workspace.patched.js	2026-09-20 15:26:02.257746815 +0800
+@@ -168,7 +168,7 @@
+ 				title: sessionTitle(s),
+ 				blank: s.blank,
+ 				running: s.running,
+-				runningSubagentCount: descendants.get(s.id)?.runningCount ?? 0,
++				runningSubagentCount: typeof s.runningSubagentCount === "number" ? s.runningSubagentCount : (descendants.get(s.id)?.runningCount ?? 0), /* dsh-lag-fix B1/C1 */
+ 				completed: s.completed === true,
+ 				updatedAt: s.updatedAt,
+ 				...s.pendingInteraction === void 0 ? {} : { pendingInteraction: s.pendingInteraction }
+@@ -283,7 +283,7 @@
+ 						title: sessionTitle(summary),
+ 						workspace: labelOf(summary),
+ 						running: summary.running,
+-						runningSubagentCount: descendants.get(summary.id)?.runningCount ?? 0,
++						runningSubagentCount: typeof summary.runningSubagentCount === "number" ? summary.runningSubagentCount : (descendants.get(summary.id)?.runningCount ?? 0), /* dsh-lag-fix B1/C1 */
+ 						...summary.pendingInteraction === void 0 ? {} : { pendingInteraction: summary.pendingInteraction },
+ 						completed: summary.completed === true,
+ 						...match === void 0 ? {} : { snippet: match.snippet }
+
+================ diff -u  dsh-client-runtime/lib/client.js ================
+--- /home/CNS2026495165/dsh/.workspace/lag-fix/tmp/B1/dryrun-client-20260920-152602/dsh-client-runtime/lib/client.js	2026-09-20 15:26:02.242366640 +0800
++++ /home/CNS2026495165/dsh/.workspace/lag-fix/tmp/B1/dryrun-client-20260920-152602/b1-client-runtime.patched.js	2026-09-20 15:26:02.299747512 +0800
+@@ -8569,7 +8569,7 @@
+ 				}
+ 				const items = flattenLineage(merged, pendingInteractions, this.completedNotifications).map((entry) => {
+ 					const prev = this.entryCache.get(entry.sessionId);
+-					if (prev !== void 0 && prev.updatedAt === entry.updatedAt && prev.running === entry.running && prev.blank === entry.blank && prev.agentPreset === entry.agentPreset && prev.parentSessionId === entry.parentSessionId && prev.cwd === entry.cwd && prev.origin === entry.origin && prev.title === entry.title && prev.depth === entry.depth && prev.pendingInteraction === entry.pendingInteraction && prev.projectionValues === entry.projectionValues && prev.completed === entry.completed) return prev;
++					if (prev !== void 0 && prev.updatedAt === entry.updatedAt && prev.running === entry.running && prev.blank === entry.blank && prev.agentPreset === entry.agentPreset && prev.parentSessionId === entry.parentSessionId && prev.cwd === entry.cwd && prev.origin === entry.origin && prev.title === entry.title && prev.depth === entry.depth && prev.pendingInteraction === entry.pendingInteraction && prev.projectionValues === entry.projectionValues && prev.completed === entry.completed && prev.runningSubagentCount === entry.runningSubagentCount) return prev;
+ 					this.entryCache.set(entry.sessionId, entry);
+ 					return entry;
+ 				});
+
+== 客户端取值语义自测（宿主字段优先 / 回落 / 非 number 防御 / entryCache 新鲜度）==
+[PASS] 抽到 s 的取值表达式
+[PASS] [s] 宿主字段=3 → 取 3
+[PASS] [s] 宿主字段=0 → 取 0（不是回落 7）
+[PASS] [s] 宿主字段缺失 → 回落 runningCount=7
+[PASS] [s] 宿主与就地都无 → 0
+[PASS] [s] 宿主字段为字符串时不采用 → 回落 7
+[PASS] [s] 不在 byId 的会话靠宿主字段仍得 5
+[PASS] 抽到 summary 的取值表达式
+[PASS] [summary] 宿主字段=3 → 取 3
+[PASS] [summary] 宿主字段=0 → 取 0（不是回落 7）
+[PASS] [summary] 宿主字段缺失 → 回落 runningCount=7
+[PASS] [summary] 宿主与就地都无 → 0
+[PASS] [summary] 宿主字段为字符串时不采用 → 回落 7
+[PASS] [summary] 不在 byId 的会话靠宿主字段仍得 5
+[PASS] entryCache 判据已包含 runningSubagentCount
+[PASS] 相同 runningSubagentCount → 复用旧条目（缓存命中）
+[PASS] 计数由 2 变 3 → 不复用（状态点会刷新）
+[PASS] 计数由 3 变 2 → 不复用
+
+===== 客户端语义自测全部 PASS =====
+[PASS] 客户端语义自测全部通过
+
+===== DRY-RUN 完成（live 文件未改动）=====

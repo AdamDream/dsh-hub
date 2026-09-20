@@ -1,0 +1,41 @@
+{
+  "file": "patched/client-runtime.client.js",
+  "kind": "patched",
+  "n": 2361,
+  "reps": 200,
+  "node": "v22.23.2",
+  "results": [
+    {
+      "label": "P1 清理行 · 交付写法 预建 Set + 逐 id 判定（N=2361）",
+      "ms": 0.1769
+    },
+    {
+      "label": "P1 整段 buildListSnapshot（patched 原文，N=2361）",
+      "ms": 0.4209
+    },
+    {
+      "label": "P4 索引重建单独计时（对象索引，N=2361）",
+      "ms": 0.0433
+    },
+    {
+      "label": "P4 单次 upsert 命中（patched 路径，N=2361）",
+      "ms": 0.0535
+    },
+    {
+      "label": "P4 单次 upsert 未命中新增（patched 路径，N=2361）",
+      "ms": 0.0731
+    },
+    {
+      "label": "P4 单次 activity（patched 路径，N=2361）",
+      "ms": 0.0524
+    },
+    {
+      "label": "P4 回放 64 次 upsert（patched 路径，N=2361）",
+      "ms": 3.1331
+    },
+    {
+      "label": "P4 回放 64 次 upsert（索引只建一次，N=2361）",
+      "ms": 0.94
+    }
+  ]
+}

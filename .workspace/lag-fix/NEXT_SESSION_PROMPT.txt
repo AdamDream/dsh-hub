@@ -1,0 +1,56 @@
+# 重启后接续提示词（可直接整段粘贴到新回合）
+
+## 一句话背景
+宿主重启会把当前回合打断（我跑在宿主进程里）。重启完成后，把下面这段贴给我，我按它继续收口。
+
+---
+
+## 粘贴这段
+
+```
+继续 goal-93254121 的收口。宿主已重启，代码补丁已全部落地。请按顺序做：
+
+1. 复测：bash .workspace/lag-fix/probes/verify-post-restart.sh
+   —— 按验收门槛逐项判定：B1 服务端过滤（session.list 条目 ≤287、字节 ≤500KB、顶层 84+ 条 ID 一条不少、
+      runningSubagentCount 字段出现）、A 宿主侧耗时（heatmap <40ms、单周期阻塞 <40ms、无 >100ms 事件循环停顿）、
+      C1 客户端负载（对照基线：空闲 121ms/s、设置页停留 190ms/s、p99 116.7ms、>50ms 帧 22/40）。
+2. B2 phase 2：bash .workspace/lag-fix/scripts/cleanup-sessions.sh --apply --phase 2 --days 7
+   —— 清理 projcache 孤儿键（预计 ~1,670）与 sync_state 悬空行（预计 ~2,334）；校验 projcache ≈732 行、sync_state ≈410 行。
+3. Track D 文档整理（已就绪、未执行）：先读 .workspace/docs-reorg/reports/track-D-prep.md，
+   按它的阶段序执行；注意三件必须处理的事：
+   (a) .gitignore 需重写 12 条规则（尤其 `.workspace/backup-*/` → `.workspace/backups/`），
+       否则 51MiB 的 venv 与备份目录会被提交扫进 git；
+   (b) 18 个文件含旧绝对路径硬编码，需同步改；
+   (c) deploy 批次必须整体移动、不要重命名（3 个重放脚本靠 $SCRIPT_DIR/../deploy-* 相对引用）。
+   另外：`port-*.md` 已按用户裁决改为进 `docs/runbooks/`（生成器已改，勿用准备档原始映射）。
+   用 git mv 分两次提交并打 tag 回滚点。
+4. 交付：Runbook（可直接复制的命令序列）+ 前后对比复测数据 + 落盘补丁文件；更新 .workspace/lag-fix/reports/DECISIONS.md。
+```
+
+---
+
+## 当前状态（供核对，勿凭记忆）
+
+- **基线 tag**：`pre-lagfix-20260920-150310`（HEAD `2c0650db`）
+- **代码补丁：已全部落地**
+  - C1（client-runtime，P1+P2，**P4 经实测弃用**）→ live sha1 `a0fb4bb225d3…`（含 B1 追加的字段后）
+  - B1 客户端（ui-workspace + client-runtime 新鲜度链）→ `5596cec54007…` / 已在 runtime 内
+  - C2（workspace-enhancement）→ sha256 `7df7a655ee660eb2…`
+  - A（@local/dsh-usage，source + deployed 双目标）→ deployed `db.js 77ab2e8e…`、`client.js c267687b…`
+  - B1 服务端（`dsh-host-apiproxy/lib/index.js` **生效件** + `lib/types/api-proxy.js` 同改）→ 待重启生效
+- **客户端热替换已验证**：四个包的 rev 与落地文件 sha1 逐位一致（`a0fb4bb225d3` / `5596cec54007` / `1988a5bb4e94` / `b295bb00e32b`）
+- **数据**：phase1 已删 1,670 会话（734 MiB）+ 1,597 废弃文件；会话目录 2,402 → 732；sessions 1.2G → 473M；
+  备份在 `.workspace/lag-fix/backup/B2/20260920-074510`（738.53 MiB）
+- **客户端侧改后实测（重启前）**：空闲 script 121→**45 ms/s**、设置页停留 190→**81.4 ms/s**、空闲 >50ms 帧 22→**9**、停留 40→**24**
+  （服务端过滤尚未生效，N 仍 ~2,396，故帧 p99 尚未达到 <50ms 门槛）
+
+## 坑（务必记住）
+
+1. **C1 的 `--dry-run` 现在会退出 1**：因为 live 已是"合法子集已应用（P1+P2）"状态，属**正确的 fail-closed**。
+   要复现全绿：`C1_TARGET=$PWD/sandbox/C1/client.baseline-pristine.js bash patches/client-runtime-perf.sh --dry-run`
+2. **C1 探针的 `session_list` 字段不可信**（它报 680 字节/N=null，实际 3.94MB）→ 以 B1 的 `probes/session-list-shape.mjs` 为准。
+3. **B1 服务端是冷面**：必须重启才生效；刷新浏览器无效。客户端是热面：GET 读盘 + `no-cache`，`?rev=` 仅缓存破坏串。
+4. **各档备份根已隔离**：`backup/C1`、`backup/B1`、`backup/B2`、`patches/backup/C2`、`backup-usage-<target>`；
+   跑 `--rollback` 前确认脚本自带所有权校验（四档均已具备）。
+5. **同一文件集合单一写入者**：`dsh-client-runtime/lib/client.js` 被 C1 与 B1 先后修改（已顺序化完成，锚点式补丁天然免疫）。
+6. 图片声明已补（`adam/deepseek-v4-pro: input: [text,image]`）；热载状态待你用一张截图实测。

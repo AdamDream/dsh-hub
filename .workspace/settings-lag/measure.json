@@ -1,0 +1,97 @@
+{
+ "boot": {
+  "ms_to_dom": 6042,
+  "title": "DeepSeek Harness"
+ },
+ "clicked_selector": "button:has-text(\"设置\")",
+ "baseline": {
+  "label": "baseline(主界面)",
+  "frames": 304,
+  "frame_p50": 16.7,
+  "frame_p95": 33.3,
+  "frame_max": 116.7,
+  "janky_frames_over_50ms": 10,
+  "longtasks": 5,
+  "longtask_total_ms": 350,
+  "longtask_max_ms": 95,
+  "dom_nodes": 588,
+  "js_heap_mb": 82.159,
+  "cdp_TaskDuration": 1.71502,
+  "cdp_ScriptDuration": 1.022216,
+  "cdp_LayoutDuration": 0.042559,
+  "cdp_RecalcStyleDuration": 0.228477,
+  "cdp_JSEventListeners": 232,
+  "cdp_Nodes": 769
+ },
+ "after": {
+  "label": "after-open-settings",
+  "frames": 491,
+  "frame_p50": 16.7,
+  "frame_p95": 116.6,
+  "frame_max": 133.5,
+  "janky_frames_over_50ms": 40,
+  "longtasks": 0,
+  "longtask_total_ms": 0,
+  "longtask_max_ms": 0,
+  "dom_nodes": 759,
+  "js_heap_mb": 93.437,
+  "cdp_TaskDuration": 6.811756,
+  "cdp_ScriptDuration": 4.990119,
+  "cdp_LayoutDuration": 0.047328,
+  "cdp_RecalcStyleDuration": 1.116907,
+  "cdp_JSEventListeners": 253,
+  "cdp_Nodes": 1007
+ },
+ "later": {
+  "label": "settings+27s",
+  "frames": 709,
+  "frame_p50": 16.7,
+  "frame_p95": 33.4,
+  "frame_max": 149.9,
+  "janky_frames_over_50ms": 34,
+  "longtasks": 0,
+  "longtask_total_ms": 0,
+  "longtask_max_ms": 0,
+  "dom_nodes": 759,
+  "js_heap_mb": 63.043,
+  "cdp_TaskDuration": 11.246531,
+  "cdp_ScriptDuration": 8.333874,
+  "cdp_LayoutDuration": 0.047328,
+  "cdp_RecalcStyleDuration": 1.952458,
+  "cdp_JSEventListeners": 253,
+  "cdp_Nodes": 1007
+ },
+ "slow_requests": [
+  {
+   "url": "/api/session.list",
+   "method": "POST",
+   "ms": 619.705
+  },
+  {
+   "url": "/api/subagent.list",
+   "method": "POST",
+   "ms": 333.304
+  },
+  {
+   "url": "/api/agentPreset.list",
+   "method": "POST",
+   "ms": 148.495
+  },
+  {
+   "url": "/api/dynamicCordisRunner/inventory",
+   "method": "POST",
+   "ms": 142.154
+  },
+  {
+   "url": "/api/workspace.list",
+   "method": "POST",
+   "ms": 139.717
+  },
+  {
+   "url": "/api/settings.describe",
+   "method": "POST",
+   "ms": 139.7
+  }
+ ],
+ "console_errors": []
+}

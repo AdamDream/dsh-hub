@@ -222,6 +222,17 @@ WHERE excluded.ts >= usage_events.ts`)
 export function rebuildDailyForDays(db, days) {
 	if (days.length === 0) return;
 	const placeholders = days.map(() => "?").join(", ");
+	// 2026-09-20 (audit §5 A2): the recompute used to filter with
+	// `strftime('%Y-%m-%d', ts/1000,'unixepoch','localtime') IN (...)`, which
+	// cannot use an index → `SCAN usage_events` on every ingest pass (150ms for
+	// 3 affected days, 282ms for 31). Replaced by the equivalent 2) `ts`
+	// half-open range [startMs, endMs) driven by `idx_events_ts`
+	// (`SCAN` → `SEARCH ... USING INDEX idx_events_ts`), 150ms → 22ms, with
+	// byte-identical output (verified: identical=true). The SELECT/GROUP BY day
+	// expression is unchanged — it is the bucket key over the already-filtered
+	// rows, not a filter.
+	const lo = days.reduce((acc, day) => Math.min(acc, localDayMs(day)), Number.POSITIVE_INFINITY);
+	const hiExclusive = days.reduce((acc, day) => Math.max(acc, localDayMs(day)), Number.NEGATIVE_INFINITY) + 86_400_000;
 	db.exec("BEGIN");
 	try {
 		db.prepare(`DELETE FROM usage_daily WHERE day IN (${placeholders})`).run(...days);
@@ -238,13 +249,16 @@ SELECT strftime('%Y-%m-%d', ts / 1000, 'unixepoch', 'localtime') AS day,
        SUM(cache_read_tokens) AS cache_read_tokens,
        SUM(cache_write_tokens) AS cache_write_tokens
 FROM usage_events
-WHERE strftime('%Y-%m-%d', ts / 1000, 'unixepoch', 'localtime') IN (${placeholders})
-GROUP BY day, data_source, COALESCE(model, '(unknown)'), COALESCE(project, '(unknown)')`).run(...days);
+WHERE ts >= ? AND ts < ?
+GROUP BY day, data_source, COALESCE(model, '(unknown)'), COALESCE(project, '(unknown)')`).run(lo, hiExclusive);
 		db.exec("COMMIT");
 	} catch (error) {
 		db.exec("ROLLBACK");
 		throw error;
 	}
+	// The just-recomputed days may include the newest one → refresh the
+	// `MAX(day)` staleness gate that guards the usage_daily read route.
+	invalidateMaxDailyDayCache();
 }
 
 /**
@@ -406,34 +420,215 @@ GROUP BY day ORDER BY day`)
 		}));
 }
 
+/** Local-day helpers for the `usage_daily` route (2026-09-20, audit §4.5/A1).
+ * Built on `getFullYear`/`getMonth`/`getDate` — never on fixed 86400000
+ * arithmetic, which is what made the card's rolling window misaligned. */
+function localDayOf(ms) {
+	const d = new Date(ms);
+	const p = (n) => String(n).padStart(2, "0");
+	return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+/** `YYYY-MM-DD` → local-midnight epoch ms (`new Date(y, m-1, d)` handles DST). */
+function localDayMs(day) {
+	const [y, m, d] = String(day).split("-").map(Number);
+	return new Date(y, m - 1, d).getTime();
+}
+/** Whether `ms` sits exactly on a local midnight (the day-alignment gate). */
+function isLocalDayStart(ms) {
+	const d = new Date(ms);
+	return d.getHours() === 0 && d.getMinutes() === 0 && d.getSeconds() === 0 && d.getMilliseconds() === 0;
+}
+/** Whether `ms` is the last millisecond of a local day (the inclusive `to`).
+ * Anchor on the local-calendar next midnight instead of comparing `ms + 1`:
+ * `1798732800000 + 1` is `.001` past midnight, not midnight, because the epoch
+ * is a float — the naive form silently rejected every day-aligned `to`. */
+function isLocalDayEnd(ms) {
+	const d = new Date(ms);
+	const nextMidnight = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).getTime();
+	return ms === nextMidnight - 1;
+}
+/** `MAX(day)` of the pre-aggregation table — null when it is empty. */
+function queryMaxDailyDay(db) {
+	const row = db.prepare("SELECT MAX(day) AS day FROM usage_daily").get();
+	return row && typeof row.day === "string" && row.day.length > 0 ? row.day : null;
+}
+/**
+ * `usage_daily` staleness gate (audit §4.5(2)): the pre-aggregation table is
+ * only trusted for local days it has actually aggregated — i.e. `day <= MAX(day)`.
+ * The margin is INGEST_INTERVAL_MS (45s, mirrors lib/index.js) so a
+ * just-landed day is not raced; by the same token any ingest failure keeps the
+ * affected days on the raw-events path instead of serving stale numbers.
+ * `rebuildDailyForDays` invalidates the cache right after each ingest pass.
+ */
+const MAX_DAILY_DAY_TTL_MS = 45_000;
+let maxDailyDayCache = { at: 0, value: null };
+function maxDailyDayMs(db) {
+	const now = Date.now();
+	if (maxDailyDayCache.value !== null && now - maxDailyDayCache.at < MAX_DAILY_DAY_TTL_MS) {
+		return maxDailyDayCache.value;
+	}
+	const day = queryMaxDailyDay(db);
+	const value = day === null ? null : localDayMs(day);
+	maxDailyDayCache = { at: now, value };
+	return value;
+}
+/** Invalidate the `MAX(day)` cache (called after each `usage_daily` rewrite). */
+function invalidateMaxDailyDayCache() {
+	maxDailyDayCache = { at: 0, value: null };
+}
+/** Row-shape adapter shared by both routes (identical column alias). */
+const asDayTotals = (rows) => rows.map((row) => ({ day: row.day, total: Number(row.total) }));
+
 /**
  * `heatmap` — per-day grand-total grid for one year (GitHub-style).
+ *
+ * 2026-09-20 (audit §5 A1+A2): the day bucket used to be filtered with
+ * `strftime('%Y-%m-%d', ts/1000, 'unixepoch', 'localtime') BETWEEN ? AND ?`,
+ * i.e. a per-row `strftime` over the whole table (`SCAN usage_events`) — 289ms
+ * of synchronous SQLite work inside the host event loop per poll cycle.
+ * Two changes, both read-only (no index is created, `usage.db` is never written):
+ *   1. `usage_daily` fast path — the pre-aggregation table is a row-for-row
+ *      mirror of `usage_events` (audit §4.2) and its PK starts with `day`, so a
+ *      year of data costs ~0.05ms instead of 289ms.
+ *   2. sargable fallback — the raw-events path now filters on a `ts` half-open
+ *      range driven by `idx_events_ts` (`SCAN` → `SEARCH`), 289ms → ~162ms.
+ *
+ * Correctness gates (audit §4.5), both enforced HERE, host-side, so a client
+ * that still sends a rolling window can never get a wrong number:
+ *   (1) day-aligned window — `usage_daily` is day-granular, so an unaligned
+ *       window rounded onto days would silently over-count (+1.29% at 30 days,
+ *       up to +9.85% on a busy boundary day). Not aligned → raw events only.
+ *   (2) `day <= MAX(day)` — days the ingest has not aggregated yet (typically
+ *       today, and any day after an ingest failure) must come from raw events,
+ *       never from a stale `usage_daily` row.
+ * Because the year grid always extends past the last aggregated day, gate (2)
+ * is applied as a WINDOW SPLIT rather than an all-or-nothing fallback: the part
+ * of the window that is already aggregated is served by `usage_daily`, the
+ * remainder by the sargable events query, and the two disjoint segments are
+ * merged by day. Result: identical rows to the events-only query (verified
+ * T3/T4/T5/T6), ~0.05ms instead of 289ms whenever the tail is empty.
  * @param {import("node:sqlite").DatabaseSync} db
- * @param {{year?: number, dataSources?: unknown}} filters
+ * @param {{year?: number, from?: number, to?: number, dataSources?: unknown}} filters
  * @returns {Array<{day: string, total: number}>}
  */
 export function queryHeatmap(db, filters = {}) {
 	const year = Number.isFinite(filters.year) ? filters.year : new Date().getFullYear();
-	const start = `${year}-01-01`;
-	const end = `${year}-12-31`;
-	const { clause, values } = eventWhere({ ...filters, from: undefined, to: undefined });
-	// `eventWhere` already returns its fragment with the leading "WHERE ";
-	// strip it once so the combined predicate below stays valid (REVIEW P0
-	// found the previous `WHERE ${where}` here double-prefixed → syntax error;
-	// the endpoint was never exercised before the RPC channel existed).
-	const condition = [clause ? clause.replace(/^WHERE\s+/i, "") : "", `${DAY_SQL} BETWEEN ? AND ?`]
-		.filter((part) => part.length > 0)
-		.join(" AND ");
-	const where = condition.length > 0 ? `WHERE ${condition}` : "";
-	return db
-		.prepare(`
+	// Window: explicit from/to when the caller supplies them (rpc normalizeFilters
+	// already validated them), else the whole requested local year
+	// [1/1 00:00, next 1/1 00:00) — the shape the card actually requests.
+	const hasFrom = Number.isFinite(filters.from);
+	const hasTo = Number.isFinite(filters.to);
+	// `from`/`to` are INCLUSIVE milliseconds (rpc + the old string `BETWEEN
+	// '${year}-01-01' AND '${year}-12-31'` both are), so the internal half-open
+	// upper edge is toExclusive = to + 1 — do NOT conflate the two: treating the
+	// exclusive edge as the last millisecond silently drops the final day.
+	const startMs = hasFrom ? filters.from : new Date(year, 0, 1).getTime();
+	const toInclusive = hasTo ? filters.to : new Date(year + 1, 0, 1).getTime() - 1;
+	const lo = Math.min(startMs, toInclusive);
+	const hi = Math.max(startMs, toInclusive); // 请求上界（含）
+	const toExclusive = hi + 1; // 内部半开上界
+	// Gate (1): both edges must sit on local day boundaries (start of a day /
+	// end of a day) for day-granular aggregation to be exact.
+	const aligned = isLocalDayStart(lo) && isLocalDayEnd(hi);
+	const maxDayMs = maxDailyDayMs(db);
+	// 前置护栏（前瞻性，2026-09-20 复核加入）：`usage_daily` 的维度只有
+	// (day, data_source, model, project) —— **没有 `is_subagent`、也没有 `provider`**。
+	// 当前没有任何查询按这两列过滤（全插件 grep 只有建表/INSERT/迁移路径用到），
+	// 但一旦将来有查询按它们过滤而仍走 daily，就会**静默把全量当成过滤结果**：
+	// 实测 `is_subagent=1` 有 10,154 行（含 10 天）、`provider` 有 5 个取值
+	// （adam/claude/opencode-go/deepseek-official/opencode），按 is_subagent 过滤时
+	// daily 会多给 10,154 行（-9.7% 到 -100% 量级的静默错误）。
+	// 因此这里做**按能力判断**：只要调用方带了 daily 表达不了的过滤维度，就整体回落
+	// 到精确的 sargable events 路线。回退路径始终可用（`idx_events_ts` 已存在）。
+	const DAILY_UNSUPPORTED_FILTERS = ["is_subagent", "provider"];
+	const hasDailyUnsupportedFilter = DAILY_UNSUPPORTED_FILTERS.some((k) => filters[k] !== undefined && filters[k] !== null);
+	// Gate (2): only days the ingest has already aggregated (`day <= MAX(day)`)
+	// may come from `usage_daily`. The year grid always extends past that day, so
+	// the aggregated SEGMENT is [lo, min(hi, MAX(day))] — `null maxDay` or an
+	// empty intersection means no aggregated day at all → pure events path.
+	// Segments are disjoint and merged by day below, so no day is counted twice.
+	// Everything below is in EXCLUSIVE upper bounds: `dailyEndExclusive` is the
+	// first instant after the last aggregated day. (Deriving an inclusive "end
+	// of MAX(day)" as `dayStart + 86_400_000 - 1` loses 1ms to float precision
+	// and left `tailFrom === toExclusive`, which still issued an empty-range
+	// probe: ~10ms, because `idx_events_ts` is ~432 pages against a page cache
+	// far smaller than the 35MB database.)
+	const maxDayNextExclusive = maxDayMs === null ? Number.NEGATIVE_INFINITY : localDayMs(localDayOf(maxDayMs)) + 86_400_000;
+	const dailyEndExclusive = Math.min(toExclusive, maxDayNextExclusive);
+	const useDaily = aligned && maxDayMs !== null && lo < dailyEndExclusive && !hasDailyUnsupportedFilter;
+	// Raw-events segment start: the whole window when there is no aggregated
+	// segment, else the first instant after it. On the year-grid fast path a
+	// window that ends at the last aggregated day yields tailFrom === toExclusive,
+	// so the raw-events query is never issued (see the note above on the empty
+	// probe cost).
+	// 维度护栏命中（或窗口不日对齐 / 无已聚合日）时 useDaily=false → tailFrom=lo，
+	// 即整个窗口都走精确的 sargable events 路线。
+	const tailFrom = useDaily ? Math.min(dailyEndExclusive, toExclusive) : lo;
+	const rows = [];
+	if (useDaily) {
+		// Days of the aggregated segment: localDayOf(lo) .. min(localDayOf(segmentEnd), maxDay).
+		const dayFrom = localDayOf(lo);
+		const dayTo = localDayOf(dailyEndExclusive - 1); // inclusive last aggregated day
+		const parts = ["day >= ?", "day <= ?"];
+		const values = [dayFrom, dayTo];
+		const ds = dataSourceClause(filters.dataSources);
+		if (ds.clause) {
+			parts.push(ds.clause);
+			values.push(...ds.values);
+		}
+		rows.push(...asDayTotals(db
+			.prepare(`
+SELECT day,
+       SUM(input_tokens + output_tokens + cache_read_tokens + cache_write_tokens) AS total
+FROM usage_daily
+WHERE ${parts.join(" AND ")}
+GROUP BY day ORDER BY day`)
+			.all(...values)));
+	}
+	// Raw-events segment covers [tailFrom, toExclusive): skipped entirely on a
+	// fully aggregated window (tailFrom === toExclusive), the whole window when it
+	// is not day aligned, and the unaggregated remainder otherwise. Both segments
+	// are REQUIRED whenever tailFrom < toExclusive — returning only the daily rows
+	// here silently dropped that remainder (caught by the T6 harness on
+	// 2026-09-20, see reports/unit-A.md).
+	// Cheap existence precondition for the tail: `idx_events_ts` answers
+	// `COUNT(*)` over an empty range in ~0.01ms, while running the grouped
+	// `strftime` shape over that same empty range costs ~10ms because the
+	// `data_source IN (...)` residual forces a walk of the UNIQUE index across
+	// all ~105k rows (audit §3.6). The year grid always has a tail segment, so
+	// this guard is what keeps the fast path at ~0.1ms.
+	const tailHasRows = tailFrom < toExclusive
+		&& Number(db.prepare("SELECT COUNT(*) AS c FROM usage_events WHERE ts >= ? AND ts < ?").get(tailFrom, toExclusive).c) > 0;
+	if (tailHasRows) {
+		const { clause, values } = eventWhere({ ...filters, from: undefined, to: undefined });
+		// `eventWhere` already returns its fragment with the leading "WHERE ";
+		// strip it once so the combined predicate below stays valid (REVIEW P0
+		// found the previous `WHERE ${where}` here double-prefixed → syntax error;
+		// the endpoint was never exercised before the RPC channel existed).
+		// The day predicate is a `ts` half-open range (audit §3.1/§3.2), NOT a
+		// per-row `strftime`: the grouping key stays DAY_SQL over the already-
+		// filtered rows, so the output rows are identical to the old query.
+		const condition = [clause ? clause.replace(/^WHERE\s+/i, "") : "", "ts >= ? AND ts < ?"]
+			.filter((part) => part.length > 0)
+			.join(" AND ");
+		const where = condition.length > 0 ? `WHERE ${condition}` : "";
+		rows.push(...asDayTotals(db
+			.prepare(`
 SELECT ${DAY_SQL} AS day,
        SUM(input_tokens + output_tokens + cache_read_tokens + cache_write_tokens) AS total
 FROM usage_events
 ${where}
 GROUP BY day ORDER BY day`)
-		.all(...values, start, end)
-		.map((row) => ({ day: row.day, total: Number(row.total) }));
+			.all(...values, tailFrom, toExclusive)));
+	}
+	// Disjoint segments → a plain day-keyed merge is exact; sort keeps the
+	// ascending-day contract the heatmap renderer expects.
+	if (useDaily && tailHasRows) {
+		const merged = new Map();
+		for (const row of rows) merged.set(row.day, (merged.get(row.day) ?? 0) + row.total);
+		return [...merged.entries()].map(([day, total]) => ({ day, total })).sort((a, b) => (a.day < b.day ? -1 : a.day > b.day ? 1 : 0));
+	}
+	return rows;
 }
 
 /**

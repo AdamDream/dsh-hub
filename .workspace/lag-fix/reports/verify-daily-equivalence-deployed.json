@@ -1,0 +1,186 @@
+{
+  "at": "2026-09-20T07:47:27.525Z",
+  "db": "/home/CNS2026495165/.dsh/storages/usage/usage.db",
+  "liveModule": "/home/CNS2026495165/dsh/.workspace/lag-fix/tmp/mod/pre-db.js",
+  "patchedModule": "/home/CNS2026495165/dsh/.workspace/lag-fix/tmp/mod/patched-db.js",
+  "fails": 0,
+  "results": [
+    {
+      "test": "T8a 补丁后 db.js 无 DROP INDEX/VACUUM/ANALYZE，且 usage_events 写语句集合与原件相同",
+      "status": "PASS",
+      "detail": "写语句集合=[INSERT INTO USAGE_EVENTS]"
+    },
+    {
+      "test": "T8b db.js 的 CREATE INDEX 集合与原件完全相同（未新建索引）",
+      "status": "PASS",
+      "detail": "live=[model,project,ts] patched=[model,project,ts]"
+    },
+    {
+      "test": "T8c 库内索引集合与实测基线一致（6 个，未新增）",
+      "status": "PASS",
+      "detail": "idx_events_model,idx_events_project,idx_events_ts,sqlite_autoindex_sync_state_1,sqlite_autoindex_usage_daily_1,sqlite_autoindex_usage_events_1"
+    },
+    {
+      "test": "T1 usage_daily 与 usage_events 全量镜像（requests/4 桶/天数）",
+      "status": "PASS",
+      "detail": "{\"events\":{\"rows\":104907,\"days\":31,\"i\":3341737613,\"o\":109180005,\"cr\":11227670276,\"cw\":42529305},\"daily\":{\"rows\":104907,\"days\":31,\"i\":3341737613,\"o\":109180005,\"cr\":11227670276,\"cw\":42529305}}"
+    },
+    {
+      "test": "T2a 新版谓词计划出现 SEARCH usage_events USING INDEX idx_events_ts",
+      "status": "PASS",
+      "detail": "7 0 162 SEARCH usage_events USING INDEX idx_events_ts (ts>? AND ts<?) | 17 0 0 USE TEMP B-TREE FOR GROUP BY"
+    },
+    {
+      "test": "T2b 旧版谓词计划为 SCAN usage_events（对照基线）",
+      "status": "PASS",
+      "detail": "6 0 207 SCAN usage_events USING COVERING INDEX idx_events_ts | 13 0 0 USE TEMP B-TREE FOR GROUP BY"
+    },
+    {
+      "test": "T2c daily 路线计划走 usage_daily 的 day 索引且无 TEMP B-TREE",
+      "status": "PASS",
+      "detail": "7 0 166 SEARCH usage_daily USING INDEX sqlite_autoindex_usage_daily_1 (day>? AND day<?)"
+    },
+    {
+      "test": "T3a 日对齐全年（2026）queryHeatmap 新旧逐行全等（31 行）",
+      "status": "PASS",
+      "detail": "rows=31 全等"
+    },
+    {
+      "test": "T3b 单日窗口 queryHeatmap（daily 路线）与独立 SQL 真值逐行全等",
+      "status": "PASS",
+      "detail": "2026-08-19 / 2026-09-18"
+    },
+    {
+      "test": "T4 now-7*86400000 形态下 queryHeatmap 逐行全等（闸门生效，不静默多算）",
+      "status": "PASS",
+      "detail": "rows=31"
+    },
+    {
+      "test": "T4 now-30*86400000 形态下 queryHeatmap 逐行全等（闸门生效，不静默多算）",
+      "status": "PASS",
+      "detail": "rows=31"
+    },
+    {
+      "test": "T4c year 参数语义未被 from/to 误伤（客户端 heatmap 只传 year/dataSources）",
+      "status": "PASS",
+      "detail": "rows=31"
+    },
+    {
+      "test": "T5 dataSources=dsh 逐行全等",
+      "status": "PASS",
+      "detail": "rows=23"
+    },
+    {
+      "test": "T5 dataSources=cc 逐行全等",
+      "status": "PASS",
+      "detail": "rows=10"
+    },
+    {
+      "test": "T5 dataSources=dsh 逐行全等",
+      "status": "PASS",
+      "detail": "rows=23"
+    },
+    {
+      "test": "T5 dataSources=cc 逐行全等",
+      "status": "PASS",
+      "detail": "rows=10"
+    },
+    {
+      "test": "T6a 未聚合日窗口（toDay > MAX(day)）与独立真值逐行全等",
+      "status": "PASS",
+      "detail": "events=5385 rows=1"
+    },
+    {
+      "test": "T6b 反事实证明：日取整 daily 比真值多算（闸门拦住的正是这个误差）",
+      "status": "PASS",
+      "detail": "ref=10298377857 dailyRounded=10419760029 误差=+1.179%"
+    },
+    {
+      "test": "T6c 非日对齐滚动窗口与独立真值逐行全等（闸门拒绝 day 取整）",
+      "status": "PASS",
+      "detail": "events=79893 rows=21"
+    },
+    {
+      "test": "T9a usage_daily 确实没有 is_subagent / provider 列（护栏的事实前提）",
+      "status": "PASS",
+      "detail": "day,data_source,model,project,requests,input_tokens,output_tokens,cache_read_tokens,cache_write_tokens"
+    },
+    {
+      "test": "T9b is_subagent 过滤（非日对齐窗口）下与参考真值逐行全等",
+      "status": "PASS",
+      "detail": "rows=21"
+    },
+    {
+      "test": "T9c 该过滤未产生未定义行为（结果与无过滤一致，与原件语义相同）",
+      "status": "PASS",
+      "detail": "rows=21"
+    },
+    {
+      "test": "T9d 日对齐全年 + is_subagent 过滤：与原件语义一致（原件同样忽略该过滤）",
+      "status": "PASS",
+      "detail": "rows=31"
+    },
+    {
+      "test": "T9e 反事实：库内 is_subagent=1 有实际行数（daily 无法表达 → 差量真实存在）",
+      "status": "PASS",
+      "detail": "is_subagent=1 行数=10154，daily 全量=104907（差 94753 行）"
+    },
+    {
+      "test": "T7 耗时(ms, min-of-5)",
+      "status": "INFO",
+      "detail": {
+        "oldRouteMs": 279.86593500000026,
+        "newRouteMs": 0.045595999999932246,
+        "patchedQueryHeatmapMs": 0.07041300000037154,
+        "ratio": 6137.94927187508,
+        "rowsOld": 31,
+        "rowsNew": 31
+      }
+    },
+    {
+      "test": "T7a 两条路线返回相同行数（口径一致，非空转）",
+      "status": "PASS",
+      "detail": "old=31 new=31"
+    },
+    {
+      "test": "T7b 补丁后 daily 路线 ≥100× 快于原件路线",
+      "status": "PASS",
+      "detail": "279.9ms → 0.046ms（×6138）"
+    },
+    {
+      "test": "T7c 补丁后 queryHeatmap 单发达到审计验收门槛（<1ms）",
+      "status": "PASS",
+      "detail": "0.070ms"
+    },
+    {
+      "test": "T7d 原件路线确实昂贵（>50ms，证明基线未被语句缓存污染）",
+      "status": "PASS",
+      "detail": "279.9ms"
+    },
+    {
+      "test": "T9a usage_daily 确实没有 is_subagent / provider 列（护栏的事实前提）",
+      "status": "PASS",
+      "detail": "day,data_source,model,project,requests,input_tokens,output_tokens,cache_read_tokens,cache_write_tokens"
+    },
+    {
+      "test": "T9b is_subagent 过滤（非日对齐窗口）下与参考真值逐行全等",
+      "status": "PASS",
+      "detail": "rows=21"
+    },
+    {
+      "test": "T9c 该过滤未产生未定义行为（结果与无过滤一致，与原件语义相同）",
+      "status": "PASS",
+      "detail": "rows=21"
+    },
+    {
+      "test": "T9d 日对齐全年 + is_subagent 过滤：与原件语义一致（原件同样忽略该过滤）",
+      "status": "PASS",
+      "detail": "rows=31"
+    },
+    {
+      "test": "T9e 反事实：库内 is_subagent=1 有实际行数（daily 无法表达 → 差量真实存在）",
+      "status": "PASS",
+      "detail": "is_subagent=1 行数=10154，daily 全量=104907（差 94753 行）"
+    }
+  ]
+}

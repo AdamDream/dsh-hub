@@ -1,0 +1,16 @@
+[PASS] P1.a — 清理后 entryCache 键集等价（6 组输入）
+[PASS] P1.b — 整段 buildListSnapshot 等价（N=2361，三轮）
+[info] 交付副本含 P4：false（P4 相关用例将标记 SKIP：其区域未打补丁，恒等于基线）
+[SKIP] P4.a — 五种 mutation × 有/无索引：返回数组逐元素等价（交付副本未包含 P4（--only P1,P2））
+[SKIP] P4.b — 随机模糊 500 组 × 12 步：逐元素等价（交付副本未包含 P4）
+[SKIP] P4.c — 调用点集成：recordMutation 单发 / 回放循环（1/3/64 次）等价（交付副本未包含 P4）
+[PASS] P2.a — 内容不变 ⇒ list.set 实参引用不变（连续 3 次）
+[PASS] P2.b — 内容变化 ⇒ 引用变化（8 类字段/结构 + jobs + catalogs）
+[PASS] P2.c — 7 字段逐值等价（含 byId 键集与逐项字段）+ 条目引用复用度
+[PASS] P2.d — 首跑（无上一份投影）与上一份投影错配时不崩且字段正确
+[PASS] P2.e — 地址链（subagent 视图）：额外 byId 条目、displayTitle 覆盖与改名传播
+
+等价性单测：7 通过 / 3 跳过 / 0 失败（共 10 例）
+baseline sha1 = aba836a0c42dfb45f98a625854f777b19260d7dd  (/home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-runtime/lib/client.js)
+patched  sha1 = 867207a9f4956805f3bf56d28dba77a0a387c54c  (patched/client-runtime.client-only-P1-P2.js)
+已写入 reports/equivalence-C1-only-P1P2.json

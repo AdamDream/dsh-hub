@@ -1,0 +1,238 @@
+--- /home/CNS2026495165/dsh/.workspace/lag-fix/sandbox/C1/client.baseline-20260920-154440.js	2026-09-20 15:44:40.706016117 +0800
++++ /home/CNS2026495165/dsh/.workspace/lag-fix/patched/client-runtime.client.js	2026-09-20 15:44:40.741812215 +0800
+@@ -8084,7 +8084,8 @@
+ 							for (const s of baseline) if (!this.prevRunning.has(s.sessionId)) this.prevRunning.set(s.sessionId, s.running);
+ 							let summaries = baseline;
+ 							for (const mutation of mutations) {
+-								summaries = applyMutation(summaries, mutation);
++								/* dsh-perf-fix P4 v1 */ /* refreshList replay: array identity changes per step, so the index is rebuilt per step. */
++								summaries = mutation.kind === "upsert" ? applyMutation(summaries, mutation, indexSummaries(summaries)) : applyMutation(summaries, mutation);
+ 								this.summaries = summaries;
+ 								this.syncCompletedNotifications();
+ 							}
+@@ -8247,7 +8248,13 @@
+ 			/** Apply immediately and retain for replay when a list response is in flight. */
+ 			recordMutation(mutation) {
+ 				this.listMutations?.push(mutation);
+-				this.summaries = applyMutation(this.summaries, mutation);
++				/* dsh-perf-fix P4 v1 */ /* recordMutation: rebuild the index only for upserts, so lookups stay O(1). */
++				if (mutation.kind === "upsert") {
++					const nextSummaries = applyMutation(this.summaries, mutation, indexSummaries(this.summaries));
++					this.summaries = nextSummaries;
++				} else {
++					this.summaries = applyMutation(this.summaries, mutation);
++				}
+ 				this.syncCompletedNotifications();
+ 				this.notifier.markDirty();
+ 			}
+@@ -8573,7 +8580,12 @@
+ 					this.entryCache.set(entry.sessionId, entry);
+ 					return entry;
+ 				});
+-				for (const id of this.entryCache.keys()) if (!items.some((e) => e.sessionId === id)) this.entryCache.delete(id);
++			/* dsh-perf-fix P1 v1 */ /* entryCache cleanup: build the live-id set once, then retire stale rows in O(N). */
++			{
++				const liveIds = /* @__PURE__ */ new Set();
++				for (const entry of items) liveIds.add(entry.sessionId);
++				for (const id of this.entryCache.keys()) if (!liveIds.has(id)) this.entryCache.delete(id);
++			}
+ 				if (!(items.length === this.itemsCache.length && items.every((e, i) => e === this.itemsCache[i]))) this.itemsCache = items;
+ 				const selected = this.selected;
+ 				const current = selected !== void 0 && (items.some((item) => item.sessionId === selected) || this.addresses.has(selected)) ? selected : void 0;
+@@ -8589,11 +8601,19 @@
+ 				};
+ 			}
+ 		};
++
++		/* dsh-perf-fix P4 v1 */ /** indexSummaries: build the sessionId index for one summaries array. */
++		function indexSummaries(summaries) {
++			const index = /* @__PURE__ */ Object.create(null);
++			for (const summary of summaries) index[summary.sessionId] = summary;
++			return index;
++		}
+ 		/** Apply one list mutation without deriving display order. */
+-		function applyMutation(summaries, mutation) {
++		function applyMutation(summaries, mutation, index) {
+ 			switch (mutation.kind) {
+ 				case "upsert": {
+-					const existing = summaries.find((summary) => summary.sessionId === mutation.summary.sessionId);
++					/* dsh-perf-fix P4 v1 */ /* upsert lookup: O(1) via the caller index, else the original scan. */
++					const existing = index === void 0 ? summaries.find((summary) => summary.sessionId === mutation.summary.sessionId) : index[mutation.summary.sessionId];
+ 					if (existing === void 0) return [mutation.summary, ...summaries];
+ 					const filled = {
+ 						...existing,
+@@ -8604,22 +8624,36 @@
+ 						...mutation.summary.agentPreset !== void 0 ? { agentPreset: mutation.summary.agentPreset } : {}
+ 					};
+ 					if (filled.cwd === existing.cwd && filled.parentSessionId === existing.parentSessionId && filled.origin === existing.origin && filled.blank === existing.blank && filled.agentPreset === existing.agentPreset) return [...summaries];
+-					return summaries.map((summary) => summary.sessionId === mutation.summary.sessionId ? filled : summary);
+-				}
+-				case "remove": return summaries.filter((summary) => summary.sessionId !== mutation.sessionId);
+-				case "status": return summaries.map((summary) => summary.sessionId === mutation.sessionId && (summary.running !== mutation.running || mutation.running && summary.blank) ? {
+-					...summary,
+-					running: mutation.running,
+-					blank: summary.blank && !mutation.running
+-				} : summary);
+-				case "activity": return summaries.map((summary) => summary.sessionId === mutation.sessionId && mutation.updatedAt > summary.updatedAt ? {
+-					...summary,
+-					updatedAt: mutation.updatedAt
+-				} : summary);
+-				case "engaged": return summaries.map((summary) => summary.sessionId === mutation.sessionId && summary.blank ? {
+-					...summary,
+-					blank: false
+-				} : summary);
++					/* dsh-perf-fix P4 v1 */ /* upsert materialization: return the mapped array (index stays caller-owned). */
++					const upserted = summaries.map((summary) => summary.sessionId === mutation.summary.sessionId ? filled : summary);
++					return upserted;
++				}
++					case "remove": {
++						const removed = summaries.filter((summary) => summary.sessionId !== mutation.sessionId);
++						return removed;
++					}
++					case "status": {
++						const statused = summaries.map((summary) => summary.sessionId === mutation.sessionId && (summary.running !== mutation.running || mutation.running && summary.blank) ? {
++						...summary,
++						running: mutation.running,
++						blank: summary.blank && !mutation.running
++					} : summary);
++						return statused;
++					}
++					case "activity": {
++						const activity = summaries.map((summary) => summary.sessionId === mutation.sessionId && mutation.updatedAt > summary.updatedAt ? {
++						...summary,
++						updatedAt: mutation.updatedAt
++					} : summary);
++						return activity;
++					}
++					case "engaged": {
++						const engaged = summaries.map((summary) => summary.sessionId === mutation.sessionId && summary.blank ? {
++						...summary,
++						blank: false
++					} : summary);
++						return engaged;
++					}
+ 			}
+ 		}
+ 		/** Temporary source-plane bridge while the Host contract and client project build independently. */
+@@ -8833,6 +8867,56 @@
+ 			}
+ 			return id;
+ 		}
++
++		/* dsh-perf-fix P2 v1 */ /** reference-stabilization comparators (new declarations; no behavior change). */
++		function sameIdList(previous, next) {
++			if (previous === next) return true;
++			if (previous === void 0 || previous === null || previous.length !== next.length) return false;
++			for (let i = 0; i < next.length; i += 1) if (previous[i] !== next[i]) return false;
++			return true;
++		}
++		/** Flat view compare for the manager's plain JobView records. */
++		function sameJobViewList(previous, next) {
++			if (previous === next) return true;
++			if (previous === void 0 || previous.length !== next.length) return false;
++			for (let i = 0; i < next.length; i += 1) {
++				const a = previous[i];
++				const b = next[i];
++				if (a === b) continue;
++				if (a === void 0 || b === void 0) return false;
++				if (a.id !== b.id || a.kind !== b.kind || a.label !== b.label || a.status !== b.status || a.detail !== b.detail || a.startedAt !== b.startedAt || a.finishedAt !== b.finishedAt) return false;
++			}
++			return true;
++		}
++		/** Field compare over the SubagentCatalog rows the subagent surfaces read. */
++		function sameSubagentCatalogs(previous, next) {
++			if (previous === next) return true;
++			if (previous === void 0 || next === void 0) return false;
++			const keys = Object.keys(next);
++			if (keys.length !== Object.keys(previous).length) return false;
++			for (const key of keys) {
++				const before = previous[key];
++				const after = next[key];
++				if (before === after) continue;
++				if (before === void 0 || after === void 0) return false;
++				if (before.state !== after.state || before.error !== after.error || before.parentAvailable !== after.parentAvailable) return false;
++				if (!sameSubagentCatalogEntries(before.entries, after.entries)) return false;
++			}
++			return true;
++		}
++		function sameSubagentCatalogEntries(previous, next) {
++			if (previous === next) return true;
++			if (previous === void 0 || next === void 0 || previous.length !== next.length) return false;
++			for (let i = 0; i < next.length; i += 1) {
++				const a = previous[i];
++				const b = next[i];
++				if (a === b) continue;
++				if (a === void 0 || b === void 0) return false;
++				if (a.kind !== b.kind || a.id !== b.id || a.label !== b.label || a.activity !== b.activity) return false;
++			}
++			return true;
++		}
++
+ 		/**
+ 		* Increment a trailing fork number while preserving its half-width or
+ 		* full-width parentheses; an unnumbered title starts with ` (1)`.
+@@ -9264,6 +9348,47 @@
+ 						address = this.manager.navigationAddress(address.parentSessionId);
+ 					}
+ 				}
++				/* dsh-perf-fix P2 v1 */ /* projectList: reuse the previous projection object when content is unchanged. */
++				const previousProjection = this.listProjection !== void 0 && this.listProjection === this.list.getSnapshot() ? this.listProjection : void 0;
++				const copiedPrevious = previousProjection !== void 0 && sameIdList(previousProjection.ids, ids);
++				if (copiedPrevious) {
++					/* Carry the previous projection's extra rows (address-chain children) forward before diffing. */
++					for (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0) byId[id] = previousProjection.byId[id];
++				}
++				const liveKeys = Object.keys(byId);
++				const stableIds = copiedPrevious ? previousProjection.ids : ids;
++				const stableById = {};
++				let reusedEntries = 0;
++				for (const id of liveKeys) {
++					const entry = byId[id];
++					const previousEntry = previousProjection === void 0 ? void 0 : previousProjection.byId[id];
++					const reusable = previousEntry !== void 0 && previousEntry.id === entry.id && previousEntry.displayTitle === entry.displayTitle && previousEntry.running === entry.running && previousEntry.completed === entry.completed && previousEntry.blank === entry.blank && previousEntry.updatedAt === entry.updatedAt && previousEntry.pendingInteraction === entry.pendingInteraction && previousEntry.projectionValues === entry.projectionValues && previousEntry.title === entry.title && previousEntry.cwd === entry.cwd && previousEntry.parentId === entry.parentId && previousEntry.origin === entry.origin && previousEntry.agentPreset === entry.agentPreset;
++					stableById[id] = reusable ? previousEntry : entry;
++					if (reusable) reusedEntries += 1;
++				}
++				const nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length ? previousProjection.byId : stableById;
++				let nextSubagentsByParent = subagentsByParent;
++				if (previousProjection !== void 0 && sameSubagentCatalogs(previousProjection.subagentsByParent, subagentsByParent)) nextSubagentsByParent = previousProjection.subagentsByParent;
++				let nextJobsBySession = jobsBySession;
++				if (previousProjection !== void 0 && nextJobsBySession !== previousProjection.jobsBySession) {
++					let jobsEqual = Object.keys(previousProjection.jobsBySession).length === Object.keys(jobsBySession).length;
++					if (jobsEqual) for (const key of Object.keys(jobsBySession)) if (!sameJobViewList(previousProjection.jobsBySession[key], jobsBySession[key])) {
++						jobsEqual = false;
++						break;
++					}
++					if (jobsEqual) nextJobsBySession = previousProjection.jobsBySession;
++				}
++				const unchangedProjection = previousProjection !== void 0 && previousProjection.ids === stableIds && previousProjection.byId === nextById && previousProjection.current === current && previousProjection.phase === phase && previousProjection.currentAddress === currentAddress && previousProjection.subagentsByParent === nextSubagentsByParent && previousProjection.jobsBySession === nextJobsBySession;
++				const nextProjection = unchangedProjection ? previousProjection : {
++					ids: stableIds,
++					byId: nextById,
++					current,
++					phase,
++					subagentsByParent: nextSubagentsByParent,
++					jobsBySession: nextJobsBySession,
++					currentAddress
++				};
++				this.listProjection = nextProjection;
+ 				const persisted = this.selection.getSnapshot().sessionId;
+ 				if (current === void 0) {
+ 					if (persisted !== void 0) this.selection.set({});
+@@ -9271,15 +9396,7 @@
+ 					sessionId: current,
+ 					...currentAddress === void 0 ? {} : { subagentAddress: currentAddress }
+ 				});
+-				this.list.set({
+-					ids,
+-					byId,
+-					current,
+-					phase,
+-					subagentsByParent,
+-					jobsBySession,
+-					currentAddress
+-				});
++				this.list.set(nextProjection);
+ 				this.pruneScopes();
+ 			}
+ 			/** Tear down scope + instance for no-longer-eligible sessions off stage; the staged one defers until the stage moves. */

@@ -1,0 +1,64 @@
+── 1) dry-run（副本应用 + diff + 校验）──
+   dry-run 退出码 = 0（0 = 通过）
+── 2) 真实文件 sha256（应用前/后必须完全一致）──
+802834b56ab3ff400b540279a04534b61b1b996996b539b123b7f9a080160b96  db.js
+a4f5a529f391a6d8517a98c31961c1f5d1de4a092e031efd1670ab1e17ce3b48  client.js
+   [PASS] 真实文件与 dry-run 前快照逐字节一致（dry-run 未触碰真实路径）
+── 3) 重建副本 + 软链依赖 ──
+verify 副本重建完成
+   dsh-home-paths -> /home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-home-paths
+── 4) node --check（副本语法）──
+   [PASS] node --check db.js（补丁后）
+   [PASS] node --check client.js（补丁后）
+   [PASS] node --check client.js（原件，对照）
+   [PASS] 复核用依赖解析就绪（node_modules 软链存在）
+── 5) 只读等价性复核（daily vs events 逐行一致 + 闸门 + EXPLAIN）──
+[info] db=/home/CNS2026495165/.dsh/storages/usage/usage.db readOnly=true
+[info] live=/home/CNS2026495165/dsh/.workspace/lag-fix/tmp/mod/orig-db.js
+[info] patched=/home/CNS2026495165/dsh/.workspace/lag-fix/tmp/mod/patched-db.js
+[PASS] T8a 补丁后 db.js 无 DROP INDEX/VACUUM/ANALYZE，且 usage_events 写语句集合与原件相同 :: 写语句集合=[INSERT INTO USAGE_EVENTS]
+[PASS] T8b db.js 的 CREATE INDEX 集合与原件完全相同（未新建索引） :: live=[model,project,ts] patched=[model,project,ts]
+[PASS] T8c 库内索引集合与实测基线一致（6 个，未新增） :: idx_events_model,idx_events_project,idx_events_ts,sqlite_autoindex_sync_state_1,sqlite_autoindex_usage_daily_1,sqlite_autoindex_usage_events_1
+[PASS] T1 usage_daily 与 usage_events 全量镜像（requests/4 桶/天数） :: {"events":{"rows":104907,"days":31,"i":3341737613,"o":109180005,"cr":11227670276,"cw":42529305},"daily":{"rows":104907,"days":31,"i":3341737613,"o":109180005,"cr":11227670276,"cw":42529305}}
+[PASS] T2a 新版谓词计划出现 SEARCH usage_events USING INDEX idx_events_ts :: 7 0 162 SEARCH usage_events USING INDEX idx_events_ts (ts>? AND ts<?) | 17 0 0 USE TEMP B-TREE FOR GROUP BY
+[PASS] T2b 旧版谓词计划为 SCAN usage_events（对照基线） :: 6 0 207 SCAN usage_events USING COVERING INDEX idx_events_ts | 13 0 0 USE TEMP B-TREE FOR GROUP BY
+[PASS] T2c daily 路线计划走 usage_daily 的 day 索引且无 TEMP B-TREE :: 7 0 166 SEARCH usage_daily USING INDEX sqlite_autoindex_usage_daily_1 (day>? AND day<?)
+[info] year=2026 MAX(day)=2026-09-18 MAX(event day)=2026-09-18 今天=2026-09-20T07:25:07.014Z
+[PASS] T3a 日对齐全年（2026）queryHeatmap 新旧逐行全等（31 行） :: rows=31 全等
+[PASS] T3b 单日窗口 queryHeatmap（daily 路线）与独立 SQL 真值逐行全等 :: 2026-08-19 / 2026-09-18
+[PASS] T4 now-7*86400000 形态下 queryHeatmap 逐行全等（闸门生效，不静默多算） :: rows=31
+[PASS] T4 now-30*86400000 形态下 queryHeatmap 逐行全等（闸门生效，不静默多算） :: rows=31
+[PASS] T4c year 参数语义未被 from/to 误伤（客户端 heatmap 只传 year/dataSources） :: rows=31
+[PASS] T5 dataSources=dsh 逐行全等 :: rows=23
+[PASS] T5 dataSources=cc 逐行全等 :: rows=10
+[PASS] T5 dataSources=dsh 逐行全等 :: rows=23
+[PASS] T5 dataSources=cc 逐行全等 :: rows=10
+[PASS] T6a 未聚合日窗口（toDay > MAX(day)）与独立真值逐行全等 :: events=5385 rows=1
+[PASS] T6b 反事实证明：日取整 daily 比真值多算（闸门拦住的正是这个误差） :: ref=10310975630 dailyRounded=10419760029 误差=+1.055%
+[PASS] T6c 非日对齐滚动窗口与独立真值逐行全等（闸门拒绝 day 取整） :: events=80120 rows=21
+[INFO] T7 耗时：原件 queryHeatmap=289.0ms  补丁后=0.1ms  （对照 events sargable=159.2ms, daily=0.05ms）
+[PASS] T7a 补丁后 queryHeatmap ≥100× 快于原件（热路径必须走 daily） :: 289.0ms → 0.1ms（×3546）
+[PASS] T7b 补丁后单发耗时达到审计验收门槛（<1ms） :: 0.081ms
+[summary] ALL PASS（SKIP 项见上）
+[summary] JSON 已写出：/home/CNS2026495165/dsh/.workspace/lag-fix/reports/verify-daily-equivalence.json
+   verifier 退出码 = 0（0 = 全 PASS）
+── 6) 客户端 bundle 冒烟 + 浮点陷阱守卫 ──
+[PASS] S1 客户端 bundle 可被 ModuleLoader 载入并注册 :: entries=1 id=@local/dsh-usage
+[PASS] S1a factory(require) 返回含 apply/inject 的 exports :: keys=apply,inject inject=[slots,connection,sessions,settingsScope]
+[PASS] S1b apply() 注册设置卡片且无异常 :: UsageCard=function
+[PASS] S1c 渲染 + effect 执行无异常（含新增 ref/observer 代码路径） :: renders=8
+[PASS] S2a 可见时建立了轮询定时器 :: timers=1 ms=60000
+[PASS] S2b 默认轮询周期为 60s（用户裁决：30s → 60s） :: 周期=60000
+[PASS] S2c 建立了 IntersectionObserver 观察卡片根节点（可见性门控） :: observers=1
+[PASS] S3a 从补丁后 client.js 成功抽出 A0 的 rangeDays 分支 :: marker=const localD…
+[PASS] S3b A0：rangeDays 各档窗口均落在本地日边界（from 00:00:00.000 / to 23:59:59.999，共 N 个自然日） :: 2026-09-20 15:30:00+1d→2026-09-19T16:00:00..2026-09-20T15:59:59 fromOK=true toOK=true spanOK=true | 2026-09-20 15:30:00+7d→2026-09-13T16:00:00..2026-09-20T15:59:59 fromOK=true toOK=true spanOK=true | 2026-09-20 15:30:00+30d→2026-08-21T16:00:00..2026-09-20T15:59:59 fromOK=true toOK=true spanOK=true | 2026-09-20 00:00:01+7d→2026-09-13T16:00:00..2026-09-20T15:59:59 fromOK=true toOK=true spanOK=true | 2026-09-20 23:59:59+90d→2026-06-22T16:00:00..2026-09-20T15:59:59 fromOK=true toOK=true spanOK=true
+[PASS] S4a 从补丁后 client.js 成功抽出 B2 的轮询门控体 :: extract-poll-gate
+[PASS] S4b B2：轮询门控五态（含用户要求保留的 refreshSec=0）逐条符合预期 :: 可见 + 60s → 建立定时器: timer=true | refreshSec=0（不轮询）→ 不建立: timer=false | 卡片不可见 → 不建立: timer=false | 标签页隐藏 → 不建立: timer=false | 两者都不可见 → 不建立: timer=false
+[PASS] S4c 定时器周期 = refreshSec*1000（默认 60 → 60000ms） :: ms=60000
+[smoke] JSON 已写出：/home/CNS2026495165/dsh/.workspace/lag-fix/reports/smoke-client-patched.json
+[smoke] ALL PASS
+   smoke 退出码 = 0（0 = 全 PASS）
+── 7) 浮点陷阱守卫（禁止对非新建 Date 的 getTime() 做 ±1 取日边界）──
+   [PASS] 无浮点日边界陷阱（±1 只作用在新建 Date 的整数毫秒上；实测踩坑 3 次）
+
+===== 自复核全部通过（真实文件仍未被修改；应用请由主 agent 执行 --apply）=====
