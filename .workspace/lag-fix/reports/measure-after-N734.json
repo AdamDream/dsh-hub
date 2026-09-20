@@ -1,0 +1,116 @@
+{
+  "probe": "measure-after-C1",
+  "url": "http://127.0.0.1:3080",
+  "window_sec": 20,
+  "node": "v22.23.2",
+  "session_list": {
+    "url": "/api/session.list",
+    "status": 200,
+    "bytes": 680,
+    "items": null
+  },
+  "windows": [
+    {
+      "phase": "idle",
+      "window_sec": 20,
+      "script_ms": 328.6,
+      "task_ms": 737.7,
+      "recalc_style_ms": 262,
+      "layout_ms": 0,
+      "script_ms_per_s": 16.4,
+      "frames": 1189,
+      "frame_p50_ms": 16.7,
+      "frame_p99_ms": 16.8,
+      "frame_max_ms": 50.1,
+      "frames_over_50ms": 1,
+      "ws_total": 132,
+      "ws_rate_per_s": 5.3,
+      "ws_by_type": {
+        "server-request": 132
+      },
+      "dom_nodes_total": 584,
+      "dom_nodes_panel": 0
+    },
+    {
+      "phase": "settings-open",
+      "window_sec": 20,
+      "script_ms": 345.8,
+      "task_ms": 942.4,
+      "recalc_style_ms": 362.8,
+      "layout_ms": 2.8,
+      "script_ms_per_s": 17.3,
+      "frames": 1179,
+      "frame_p50_ms": 16.7,
+      "frame_p99_ms": 16.8,
+      "frame_max_ms": 100,
+      "frames_over_50ms": 5,
+      "ws_total": 1245,
+      "ws_rate_per_s": 26.7,
+      "ws_by_type": {
+        "server-request": 1245
+      },
+      "dom_nodes_total": 756,
+      "dom_nodes_panel": 168
+    },
+    {
+      "phase": "settings-dwell",
+      "window_sec": 20,
+      "script_ms": 317.4,
+      "task_ms": 869.3,
+      "recalc_style_ms": 321.2,
+      "layout_ms": 1,
+      "script_ms_per_s": 15.9,
+      "frames": 1178,
+      "frame_p50_ms": 16.7,
+      "frame_p99_ms": 16.8,
+      "frame_max_ms": 100.1,
+      "frames_over_50ms": 4,
+      "ws_total": 1719,
+      "ws_rate_per_s": 25.8,
+      "ws_by_type": {
+        "server-request": 1719
+      },
+      "dom_nodes_total": 756,
+      "dom_nodes_panel": 168
+    }
+  ],
+  "baseline_reference": {
+    "source": ".workspace/settings-lag/DIAGNOSIS.md §1.2（同一方法：rAF + CDP Performance + WS 帧率）",
+    "note": "基线的 M2 数字是在「会话活跃、WS 73 帧/s、N=2361」条件下测得；本探针只有在同等活跃条件下才可逐项对照",
+    "baseline": {
+      "idle_20s": {
+        "script_ms": 2428,
+        "task_ms": 3087,
+        "recalc_style_ms": 419,
+        "frame_p50_ms": 16.7,
+        "frame_p99_ms": 100.1,
+        "frames_over_50ms": 22
+      },
+      "settings_open_20s": {
+        "script_ms": 2550,
+        "task_ms": 3460,
+        "recalc_style_ms": 647,
+        "frame_p50_ms": 16.7,
+        "frame_p99_ms": 116.6,
+        "frames_over_50ms": 26
+      },
+      "settings_dwell_20s": {
+        "script_ms": 3795,
+        "task_ms": 4898,
+        "recalc_style_ms": 857,
+        "frame_p50_ms": 16.7,
+        "frame_p99_ms": 116.7,
+        "frames_over_50ms": 40
+      },
+      "ws_frames_per_s": 73,
+      "session_list": {
+        "items": 2361,
+        "bytes": 3763290
+      },
+      "micro": {
+        "buildListSnapshot_current_ms": 5.66,
+        "buildListSnapshot_fixed_ms": 0.09
+      }
+    }
+  }
+}
