@@ -21,7 +21,7 @@ df -h /home/CNS2026495165 | tail -1
 
 ```bash
 cd /home/CNS2026495165/dsh
-bash .workspace/deploy-lag/dsh-restart.sh --dry-run
+bash .workspace/workstreams/deploy/deploy-lag/dsh-restart.sh --dry-run
 ```
 
 **预期输出**（实测原文）：
@@ -41,14 +41,14 @@ bash .workspace/deploy-lag/dsh-restart.sh --dry-run
 ```
 
 > 若这里报 **「发现多个 dsh web 进程」**：说明有别的实例或探测误报——把该 PID 贴给我，或显式指定：
-> `bash .workspace/deploy-lag/dsh-restart.sh --dry-run --pid 20806`
+> `bash .workspace/workstreams/deploy/deploy-lag/dsh-restart.sh --dry-run --pid 20806`
 
 ---
 
 ## 第 2 步 · 重启（约 20~40 秒；GUI 会短暂断开并自动重连）
 
 ```bash
-bash .workspace/deploy-lag/dsh-restart.sh --yes
+bash .workspace/workstreams/deploy/deploy-lag/dsh-restart.sh --yes
 ```
 
 **预期**：

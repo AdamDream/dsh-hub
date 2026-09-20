@@ -7,7 +7,7 @@
 
 | 线 | 改动 | 部署位 | 备份 |
 |---|---|---|---|
-| 卡顿修复 | ②b 子代理非流式（isSubagent）、tok/s 补丁、x-opencode-session 补丁、apiproxy mux 订阅过滤、FrameQueue 有界（4096，丢最旧普通帧、**应答帧永不丢弃**） | 全局树 4 包（agent-loop / client-ui-subagent / web-search-deepseek / host-apiproxy） | `.workspace/deploy-lag/backup-20260912-160832/` |
+| 卡顿修复 | ②b 子代理非流式（isSubagent）、tok/s 补丁、x-opencode-session 补丁、apiproxy mux 订阅过滤、FrameQueue 有界（4096，丢最旧普通帧、**应答帧永不丢弃**） | 全局树 4 包（agent-loop / client-ui-subagent / web-search-deepseek / host-apiproxy） | `.workspace/workstreams/deploy/deploy-lag/backup-20260912-160832/` |
 | 上下文上限 | adam `deepseek-v4-flash` → `contextWindow: 1000000` + `maxTokens: 990000`（adam 网关实测接受 990000）；vision-adam 段 → `model: deepseek-v4.1-flash` / `baseURL: opencode` / `apiKeyEnv: OPENCODE_GO_API_KEY` / `maxTokens: 393216`（**opencode 网关实测硬上限 [1,393216]，990000 会被拒**；不得在 pi-ai providers 里登记该模型——2026-09-12 事故，见 `.workspace/incident-piai-model-selection.md`） | `~/.dsh/settings.yaml` | 同上 backup 内 settings.yaml |
 | 插件恢复 | 删除 cordis.patch.yml 4 条 0.1.5 残留 disabled（taste/wallpaper/vision-adam/subagent-model-selection-settings）；taste/wallpaper/vision-adam 恢复启用 | `~/.dsh/profiles/web/cordis.patch.yml` | `cordis.patch.yml.bak-plugin-restore-20260912-160933` |
 | vision-adam lib | 旧 v0.2.0（硬编码 adam 网关）→ 配置化新 lib（默认 opencode + deepseek-v4.1-flash + OPENCODE_GO_API_KEY + 三头认证） | `~/.dsh/profiles/node_modules/@deepseek-ai/dsh-vision-adam/lib/index.js` | `index.js.bak-restore-20260912-161015` |

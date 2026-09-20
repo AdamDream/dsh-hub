@@ -39,8 +39,8 @@
 
 ```bash
 cd /home/CNS2026495165/dsh
-bash .workspace/deploy-lag/dsh-restart.sh --dry-run     # 预览：应锁定 PID=20806
-bash .workspace/deploy-lag/dsh-restart.sh --yes         # 执行：SIGTERM → 启动 → boot OK
+bash .workspace/workstreams/deploy/deploy-lag/dsh-restart.sh --dry-run     # 预览：应锁定 PID=20806
+bash .workspace/workstreams/deploy/deploy-lag/dsh-restart.sh --yes         # 执行：SIGTERM → 启动 → boot OK
 ```
 
 ### 3.2 重启后一键复测

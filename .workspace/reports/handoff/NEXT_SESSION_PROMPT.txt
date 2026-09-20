@@ -128,7 +128,7 @@ installBtwModelSelection / transcript / startValue / setModel）每调用热读�
 ### 3.5 文档与工程规范（前序提交，已完成）
 `README.md` 导航中枢 + 从这里开始 + 三条规则（含 fail-closed）+ 状态词汇；`FEATURE-MAP.md` 能力地图
 （本次新增 3 行：新插件 / P0' 补丁 / subagent 模型热载，并修正 vision 网关尾斜杠事实）；
-`DOC-STYLE.md` 风格约定；`examples/minimal-plugin/` 脚手架；`.workspace/deploy-lag/dsh-restart.sh`
+`DOC-STYLE.md` 风格约定；`examples/minimal-plugin/` 脚手架；`.workspace/workstreams/deploy/deploy-lag/dsh-restart.sh`
 一键优雅重启（dry-run/防抖/daemon 全验证）。
 
 ---
@@ -188,8 +188,8 @@ installBtwModelSelection / transcript / startValue / setModel）每调用热读�
 **Runbook / 验收**
 - `.workspace/RESTART-ACCEPTANCE.md` —— 本批次重启验收矩阵 + 逐项回滚（**开工必读**）
 - `.workspace/deploy-subagent-model/README.md` —— 新插件部署/回滚/热载语义
-- `.workspace/master-runbook.md`、`.workspace/deploy-lag/README.md` §9（热载）
-- `.workspace/deploy-lag/dsh-restart.sh` —— 优雅重启辅助（dry-run / `--watch`）
+- `.workspace/master-runbook.md`、`.workspace/workstreams/deploy/deploy-lag/README.md` §9（热载）
+- `.workspace/workstreams/deploy/deploy-lag/dsh-restart.sh` —— 优雅重启辅助（dry-run / `--watch`）
 
 **本批次报告**
 - `.workspace/subagent-model-gui-audit.md`（审计契约）→ `.workspace/subagent-model-settings-exec.md`（执行）

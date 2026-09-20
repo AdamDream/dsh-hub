@@ -1,6 +1,6 @@
 # subagent 多开卡顿修复 — 部署与验证 Runbook
 
-> 依据：`.workspace/lag-audit-mechanism.md`（机制审计）、`.workspace/lag-audit-diff.md`（差异审计）、`.workspace/lag-fix-exec.md`（执行报告，产物在 `.workspace/deploy-lag/`）。
+> 依据：`.workspace/lag-audit-mechanism.md`（机制审计）、`.workspace/lag-audit-diff.md`（差异审计）、`.workspace/lag-fix-exec.md`（执行报告，产物在 `.workspace/workstreams/deploy/deploy-lag/`）。
 > 用户裁决：全量部署（3 补丁 + mux/FrameQueue 加固 + settings 990000）；FrameQueue 丢最旧帧 + **应答帧（approval/question）永不丢弃**；重放脚本固化防重装再清。
 > 部署位：live 全局树（`~/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/`，即当前实际运行底座）+ `~/.dsh/settings.yaml`。
 
