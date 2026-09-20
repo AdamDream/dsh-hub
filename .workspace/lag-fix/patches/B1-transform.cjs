@@ -178,7 +178,7 @@ function snippets(text) {
     ' * @param items - listVisibleSessionSummaries 产出的行（已排序、已截断）。',
     ' * @returns 同一数组（原对象上补字段）。',
     ' */',
-    'function annotateRunningSubagentCounts(items) {',
+    'function annotateRunningSubagentCounts(ctx, items) {',
     `${u}const childrenOf = new Map();`,
     `${u}for (const item of items) {`,
     `${u}${u}const parentId = item.parentSessionId;`,
@@ -210,7 +210,7 @@ function snippets(text) {
     '}',
   ].join('\n');
   const aggFn = aggBody;
-  const aggMarker = `function annotateRunningSubagentCounts(items) {`;
+  const aggMarker = `function annotateRunningSubagentCounts(ctx, items) {`;
 
   // ---- 4) 内存（已 attach）分支：顶层全发 + subagent 最近 N 条 ----
   const itemsOld = `const items = ctx.sessions.list().map(summarizeAttached);`;
@@ -276,7 +276,7 @@ function snippets(text) {
   const subagentItems = items.filter((item) => item.origin === ${lit('subagent')});
   const overflow = subagentItems.slice(SUBAGENT_LIST_MAX);
   const retained = overflow.length === 0 ? items : items.filter((item) => !overflow.some((drop) => drop.sessionId === item.sessionId));
-  return annotateRunningSubagentCounts(retained);`
+  return annotateRunningSubagentCounts(ctx, retained);`
       .replace(/^\n/, '')
       .split('\n')
       .map((line) => (line.trim() === '' ? line : indent + line.slice(2)))
@@ -414,12 +414,19 @@ function verifyServerFilter(text) {
     [MARK_SUBAGENT_MAX, 1],
     [MARK_RUNNING_COUNT, 2],
     [MARK_FILTER, 1],
-    ['function annotateRunningSubagentCounts(items) {', 1],
-    ['return annotateRunningSubagentCounts(retained);', 1],
+    ['function annotateRunningSubagentCounts(ctx, items) {', 1],
+    ['return annotateRunningSubagentCounts(ctx, retained);', 1],
     ['const coldSubagentIds = new Set(cold', 1],
   ]) {
     const actual = countLiteral(text, literal);
     if (actual !== expected) failures.push(`${literal}: 期望 ${expected} 实得 ${actual}`);
+  }
+  // 防复发（2026-09-20 生产事故）：该聚合函数是**模块级**函数，`ctx` 只存在于 createApiProxy 形参里。
+  // 任何「函数体引用 ctx、签名却没声明 ctx」的写法都会在运行时抛 ReferenceError 让 session.list 返 500。
+  if (/function annotateRunningSubagentCounts\(items\)/.test(text)) failures.push('聚合函数签名未声明 ctx（会抛 ReferenceError）');
+  if (/return annotateRunningSubagentCounts\(retained\)/.test(text)) failures.push('聚合函数调用点未传 ctx（会抛 ReferenceError）');
+  if (text.includes('ctx.sessions.list()') && !text.includes('annotateRunningSubagentCounts(ctx, items)')) {
+    failures.push('聚合函数体引用 ctx 但签名未接收 ctx');
   }
   if (text.includes('const items = ctx.sessions.list().map(summarizeAttached);')) failures.push('旧内存分支仍在（过滤未生效）');
   if (!text.includes('coldSubagentIds.has(meta.id)') || !text.includes('coldSubagentSeen <= SUBAGENT_LIST_MAX')) {

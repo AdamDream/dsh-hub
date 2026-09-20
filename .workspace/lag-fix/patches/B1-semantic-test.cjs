@@ -120,7 +120,7 @@ if (patchedCandidates.length === 0) {
   check('聚合：找到已打补丁的副本（先跑 --dry-run 生成）', false, '未找到 tmp/B1/dryrun-*/b1-index.patched.js（先执行 --dry-run）');
 } else {
   const src = fs.readFileSync(patchedCandidates[0], 'utf8');
-  const fnStart = src.indexOf('function annotateRunningSubagentCounts(items) {');
+  const fnStart = src.search(/function annotateRunningSubagentCounts\(/);
   const fnSrc = src.slice(fnStart, src.indexOf('\n}', fnStart) + 2);
   check('聚合：从副本抽出 annotateRunningSubagentCounts', fnStart !== -1 && fnSrc.length > 100, `len=${fnSrc.length}`);
 
@@ -135,9 +135,14 @@ if (patchedCandidates.length === 0) {
     sessions: { list: () => hostSessions },
     agents: { get: (id) => (runningIds.has(id) ? { status: 'running' } : undefined) },
   };
-  const makeFn = new Function('ctx', `${fnSrc}; return annotateRunningSubagentCounts;`);
-  const annotate = makeFn(hostCtx);
-  const afterHost = annotate(rows);
+  // 反盲点（2026-09-20 生产事故根因）：**不得**把 `ctx` 注入成包装函数形参。
+  // 旧写法 `new Function('ctx', fnSrc + '…')` 会把函数体里的自由变量 ctx 悄悄补上，
+  // 于是「模块级函数引用 createApiProxy 形参 ctx」这一致命作用域错误在本测试里永远不可能暴露，
+  // 却在宿主重启后让 POST /api/session.list 返 500（GUI 会话列表全空白）。
+  // 现在 ctx 只能由函数自身签名接收：签名漏声明就会在这里抛 ReferenceError 而 FAIL。
+  const makeFn = new Function(`${fnSrc}; return annotateRunningSubagentCounts;`);
+  const annotate = makeFn();
+  const afterHost = annotate(hostCtx, rows);
 
   // 客户端等价实现（照抄 dsh-client-runtime/lib/client.js:10267 indexSubagentDescendants 的计数语义）
   const byId = {};
@@ -183,7 +188,7 @@ if (patchedCandidates.length === 0) {
   // 已知边界（如实记录，不在本单元范围内修）：聚合函数从**已下发行**重建父子图，
   // 因此 N=0（subagent 行全过滤）时子代计数会归零。这正是本单元选择 N=200 而非 0 的原因。
   const onlyTop = rows.filter((r) => r.origin !== 'subagent');
-  const afterHostN0 = makeFn(hostCtx)(onlyTop.map((r) => ({ ...r })));
+  const afterHostN0 = makeFn()(hostCtx, onlyTop.map((r) => ({ ...r })));
   const nonZeroN0 = afterHostN0.filter((r) => (r.runningSubagentCount ?? 0) > 0).length;
   check('边界记录：N=0 时聚合计数归零（已知限制；本单元取 N=200）', nonZeroN0 === 0 && nonZero >= 1,
     `N=0 得 ${nonZeroN0}，N=200 得 ${nonZero}`);

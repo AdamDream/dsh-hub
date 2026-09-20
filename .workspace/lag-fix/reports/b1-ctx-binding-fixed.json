@@ -1,0 +1,48 @@
+{
+  "at": "2026-09-20T10:35:09.969Z",
+  "file": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-host-apiproxy/lib/index.js",
+  "checks": [
+    {
+      "name": "定位聚合函数",
+      "ok": true,
+      "detail": "signature = function annotateRunningSubagentCounts(ctx, items)"
+    },
+    {
+      "name": "签名声明 ctx 形参",
+      "ok": true,
+      "detail": "function annotateRunningSubagentCounts(ctx, items)"
+    },
+    {
+      "name": "相A 正向：不注入 ctx 调用不抛错",
+      "ok": true,
+      "detail": "no throw"
+    },
+    {
+      "name": "相A 正向：runningSubagentCount 语义正确",
+      "ok": true,
+      "detail": "实得 {\"top1\":2,\"top2\":1} 期望 {\"top1\":2,\"top2\":1}"
+    },
+    {
+      "name": "相B 反向对照：旧签名必须抛 ReferenceError（探针有效性自证）",
+      "ok": true,
+      "detail": "ctx is not defined"
+    }
+  ],
+  "verdict": "PASS",
+  "phaseA": {
+    "ok": true,
+    "error": null,
+    "counts": {
+      "top1": 2,
+      "top2": 1
+    },
+    "expect": {
+      "top1": 2,
+      "top2": 1
+    }
+  },
+  "phaseB": {
+    "threw": true,
+    "error": "ctx is not defined"
+  }
+}
