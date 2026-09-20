@@ -59,6 +59,16 @@ for ep in heatmap byDay byModel byProject summary; do
 done
 
 echo
+echo "===== 4b) 正式门槛测量（固定条件 + 5 次重复 + 区间统计）====="
+echo "  运行： timeout 900 node probes/threshold-run.mjs --reps 5 --window 20 --tag post-restart --out reports/threshold-post-restart.json"
+echo "  与 reports/threshold-pre-restart.json 的区间对照才是门槛判定依据（单次点值不可用）"
+if [ "${RUN_THRESHOLD:-0}" = "1" ]; then
+  timeout 900 node probes/threshold-run.mjs --reps 5 --window 20 --tag post-restart --out reports/threshold-post-restart.json 2>&1 | tail -12
+else
+  echo "  （默认跳过；要跑请加 RUN_THRESHOLD=1）"
+fi
+
+echo
 echo "===== 5) B2 phase 2（孤儿索引清理）====="
 echo "  按需执行： bash .workspace/lag-fix/scripts/cleanup-sessions.sh --apply --phase 2 --days 7"
 echo "  预期：projcache 孤儿 1670 → 清理后 ≈742 行；sync_state 悬空 1670 → 清理后 ≈1074 行（2,744−1,670）"

@@ -103,6 +103,21 @@ B1 两脚本回滚要求 `MANIFEST`（unit + `pre_*`/`post_*` 指纹）与备份
 | `session.list` | ≤287 条 / ≤500KB | 736–742 条 / 1.18MB（已从 2,386–2,396 条 / 3.92MB 降 **−69%**）；服务端过滤补丁已在盘 | ⏳ 待重启（语义模拟值 **285 条 / 472KB**） |
 | `/usage/heatmap` | < 40 ms | 补丁路线实测 **0.046ms**（原件 274.1ms）；宿主侧待重启 | ⏳ |
 
+**正式判定怎么做（协议 v1，2026-09-20 建立）**：
+
+```bash
+# 必须在「有真实流式输出」时跑；先看输出的 ws/s 列，>=50 帧/s 才可用
+timeout 900 node probes/threshold-run.mjs --reps 5 --window 20 --tag post-restart --out reports/threshold-post-restart.json
+```
+- 协议内建：每相 5 次重复 → 报告**中位数与 [min,max]**；会话规模 N 实测（分列 items/信封/items_bytes）；
+  WS 负载**双口径**（信封类型 + 事件种类，后者与基线口径一致）；**逐帧归一化** `ms/1k帧`（跨负载可比的代理指标）；
+  场景数 <60 时打印显式告警。
+- ⚠️ 实测教训：探针**无法自己制造流式负载**，静默态下 ws/s≈0（实测 idle 仅 0.3–0.4 ms/s）——
+  那不是补丁收益的度量。必须与真实流式输出重叠，并用 ws/s 列自证负载达标。
+- 重启前的静默态参考（**非门槛判定用**）：`reports/threshold-pre-restart-loaded2.json` 与
+  `reports/threshold-pre-restart-loaded.json` —— 二者均在「无流式负载」时采集，实测 idle 0.3–0.4 ms/s、
+  p99 16.8ms、>50ms 0、ws/s≈0（脚本已打印显式告警）。它们记录的是**安静时的下限**，不是补丁收益。
+
 **结论**：改善在**所有**运行中方向一致地出现，但**正式门槛判定尚未成立**——需要**匹配条件 + 重复测量**：
 重启后固定 N（≤287）、固定负载、每项 ≥3 次，取中位数与区间。详见 `reports/BEFORE-AFTER.md`（v2）。
 
