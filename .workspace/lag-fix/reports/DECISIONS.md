@@ -93,3 +93,13 @@
 | A | `backup-usage/{source,deployed}/backup-<stamp>/` | ✅ 三重校验（自洽 / MANIFEST / live ∈ {pre,post}），对抗实测 3 场景全拦住 |
 
 另修：`deploy-lag/dsh-restart.sh` 的 `find_server_pids` **自匹配 bug**（awk 命令行含 `bin/dsh` 与 `web` 字串，把自己与管道进程当成宿主，导致"发现多个 dsh web 进程"误报、`--yes` 无法执行）→ 已改为排除自身/awk/grep/ps 且要求 `node` 前缀，dry-run 实测只锁定 PID 20806。
+
+---
+
+## 轮 6 新增（把关动作）
+
+| # | 事项 | 处理 | 证据 |
+|---|---|---|---|
+| G1 | **A 线可见性门控是死代码**（`setPollVisibleRef.current` 从未赋值；4 条交叉审计均漏过，因为只验标记不验行为） | 三处同步修复（部署件 / 源码件 / 替换规格）+ 备份指纹更新；新增**行为探针** `probes/verify-usage-gating.mjs`（自带前提自证，前提不成立报 INCONCLUSIVE） | `reports/finding-A-gating-inert.md`；前后对比：出视口 70s 内请求 **7 → 0** |
+| G2 | 文档整理把 lag-fix 自己 Runbook/脚本里的重启命令路径改坏（用户照跑必失败） | 修 13 处可执行引用；新增 `probes/check-executable-refs.sh`（69 文件、0 不可达）并接入收尾前置检查 | 轮 5 提交 `1f6f6aed` |
+| G3 | 端到端门槛判定受"负载不可控"限制（探针无法自造流式负载） | 建立 `threshold-run.mjs`（重复+区间+双口径+实测 N）并**以 `bench-c1.mjs` 提供与负载无关的确定性证据** | `BEFORE-AFTER.md` §二·bis |

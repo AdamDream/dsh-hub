@@ -221,6 +221,10 @@ window.__ModuleLoader__.load({
 				// so a visibility change never needs to re-create the observer (the
 				// closures stay current through these refs, mirroring loadAllRef below).
 				const setPollVisibleRef = react.useRef(null);
+				/* dsh-perf-fix A-gating-fix v1 */ /* 必须把 setter 接到 ref 上：缺此行时观察器回调里的
+				   `if (setPollVisibleRef.current)` 恒为假 → pollVisible 永远 true → 门控完全失效（死代码）。
+				   与下方 loadAllRef.current = loadAll 同一写法（渲染期赋值）。 */
+				setPollVisibleRef.current = setPollVisible;
 				const ioRef = react.useRef(null);
 				/** Node ↔ observer binding kept in a ref callback (it runs exactly once,
 				 * when the card mounts — an effect's dependency array would re-observe on

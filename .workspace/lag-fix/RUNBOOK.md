@@ -9,7 +9,7 @@
 
 | 线 | 改动 | 生效方式 | 状态 |
 |---|---|---|---|
-| **A** 用量插件主线程冻结 | `queryHeatmap` 分段走 `usage_daily` 预聚合（+ `is_subagent`/`provider` 能力护栏、窗口日对齐、新鲜度闸门）；ingest `rebuildDailyForDays` sargable 化；客户端加 `IntersectionObserver` 可见性门控、轮询 30s→60s（保留"不轮询"项） | **client 半热替换**；**host 半需重启** | ✅ 已落地（source + deployed 双目标） |
+| **A** 用量插件主线程冻结（⚠️ 门控部分见注） | `queryHeatmap` 分段走 `usage_daily` 预聚合（+ `is_subagent`/`provider` 能力护栏、窗口日对齐、新鲜度闸门）；ingest `rebuildDailyForDays` sargable 化；客户端加 `IntersectionObserver` 可见性门控、轮询 30s→60s（保留"不轮询"项） | **client 半热替换**；**host 半需重启** | ✅ 已落地（source + deployed 双目标） |
 | **B1** 会话列表全量下发 | `dsh-host-apiproxy/lib/index.js`（**生效件**）+ `lib/types/api-proxy.js` 同改：顶层全发 + subagent 只发**最近 200 条**；新增 `runningSubagentCount` 聚合字段；客户端消费方最小改动 | **需重启** | ✅ 已落地 |
 | **B2** 会话数据缩容 | 7 天滑动窗口删除旧 subagent 会话（保守例外：父会话同样超期或无父；避 live/lock）；清 1,597 个废弃 projcache 遗留文件 | 数据操作（已执行 phase 1） | ✅ phase 1 完成；phase 2 待重启后 |
 | **C1** 官方客户端运行时 | `dsh-client-runtime`：P1（`entryCache` 清理 O(N²)→Set）+ P2（`list.set` 引用稳定化）。**P4 经实测为负收益，用户裁决弃用**；P3（面板 memo）用户裁决暂缓 | **客户端热替换** | ✅ 已落地生效 |
@@ -126,6 +126,12 @@ timeout 900 node probes/threshold-run.mjs --reps 5 --window 20 --tag post-restar
 - 重启前的静默态参考（**非门槛判定用**）：`reports/threshold-pre-restart-loaded2.json` 与
   `reports/threshold-pre-restart-loaded.json` —— 二者均在「无流式负载」时采集，实测 idle 0.3–0.4 ms/s、
   p99 16.8ms、>50ms 0、ws/s≈0（脚本已打印显式告警）。它们记录的是**安静时的下限**，不是补丁收益。
+
+> ⚠️ **A 线门控的功能缺陷与修复（轮 6 发现）**：可见性门控曾经是**死代码**
+> （`setPollVisibleRef.current` 从未被赋值 → `pollVisible` 恒为 true → 出视口后照旧每 60s 轮询）。
+> 已修（三处同步 + 规格防重放），并以**行为探针**给出前后对比：出视口 70s 内请求 **7 次 → 0 次**。
+> 详见 `reports/finding-A-gating-inert.md`；复验命令：
+> `node .workspace/lag-fix/probes/verify-usage-gating.mjs`。
 
 **结论**：改善在**所有**运行中方向一致地出现，但**正式门槛判定尚未成立**——需要**匹配条件 + 重复测量**：
 重启后固定 N（≤287）、固定负载、每项 ≥3 次，取中位数与区间。详见 `reports/BEFORE-AFTER.md`（v2）。

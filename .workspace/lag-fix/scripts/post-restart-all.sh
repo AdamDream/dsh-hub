@@ -128,6 +128,17 @@ say "===== 4) C1 可控基准（与负载无关）====="
 run "bench-c1" timeout 300 node "$LAG/tools/bench-c1.mjs" --rounds 30 --out "$LAG/reports/bench-c1.json" || true
 grep -E "2361|反向印证|补丁后同一" "$LAG/reports/bench-c1.json" >/dev/null 2>&1 || true
 
+# ── 4c) 用量卡片门控行为复验（A 线；约 2.5 分钟）─────────────────────────
+hr
+say "===== 4c) 用量卡片门控行为复验（可见 70s vs 出视口 70s）====="
+if [ "${SKIP_GATING:-0}" = "1" ]; then
+  say "  已按 SKIP_GATING=1 跳过"
+else
+  run "verify-usage-gating" timeout 600 node "$LAG/probes/verify-usage-gating.mjs" \
+    --phase-sec 70 --out "$LAG/reports/usage-gating-post-restart.json" || \
+    warn "门控复验未通过/不确定——见上输出（INCONCLUSIVE=测试前提未成立）"
+fi
+
 # ── 5) 端到端门槛测量 ───────────────────────────────────────────────────────
 hr
 say "===== 5) 端到端门槛测量（需真实流式负载）====="
