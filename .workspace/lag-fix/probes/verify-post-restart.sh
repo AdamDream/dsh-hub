@@ -61,7 +61,9 @@ done
 echo
 echo "===== 4b) 正式门槛测量（固定条件 + 5 次重复 + 区间统计）====="
 echo "  运行： timeout 900 node probes/threshold-run.mjs --reps 5 --window 20 --tag post-restart --out reports/threshold-post-restart.json"
-echo "  与 reports/threshold-pre-restart.json 的区间对照才是门槛判定依据（单次点值不可用）"
+echo "  判定依据 = 本相区间 vs 基线区间的对照（单次点值不可用）；重启前只有「静默态参考」："
+echo "    reports/threshold-pre-restart-loaded{,2}.json（ws/s≈0，不可用于门槛判定）"
+echo "  ⚠️ 必须在真实流式输出进行时跑，并先看输出的 ws/s 列 >=50 才有效"
 if [ "${RUN_THRESHOLD:-0}" = "1" ]; then
   timeout 900 node probes/threshold-run.mjs --reps 5 --window 20 --tag post-restart --out reports/threshold-post-restart.json 2>&1 | tail -12
 else
