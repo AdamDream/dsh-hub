@@ -507,8 +507,7 @@ window.__ModuleLoader__.load({
 					react.createElement("select", { className: "du_select", value: String(refreshSec), onChange: (e) => setRefreshSec(Number(e.target.value)) },
 						react.createElement("option", { value: "0" }, "不轮询"),
 						react.createElement("option", { value: "5" }, "5s 刷新"),
-						react.createElement("option", { value: "60" }, "60s 刷新"),
-					react.createElement("option", { value: "30" }, "30s 刷新"),
+						react.createElement("option", { value: "30" }, "30s 刷新"),
 						react.createElement("option", { value: "60" }, "60s 刷新")),
 					react.createElement("button", { type: "button", className: "du_btn", disabled: loading, onClick: () => void onManualRefresh() }, loading ? "加载中…" : "手动刷新")),
 				error

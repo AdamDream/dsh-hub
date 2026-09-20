@@ -411,11 +411,6 @@ GROUP BY day, data_source, COALESCE(model, '(unknown)'), COALESCE(project, '(unk
 			loadAllRef.current = loadAll;
 			const loadSessions = react.useCallback(async () => {
 @@OLD
-					react.createElement("option", { value: "30" }, "30s 刷新"),
-@@NEW
-					react.createElement("option", { value: "60" }, "60s 刷新"),
-					react.createElement("option", { value: "30" }, "30s 刷新"),
-@@OLD
 			return react.createElement("div", { className: "du_root" },
 @@NEW
 			// 可见性门控的观察目标（B2）：卡片滚出视口/标签页不可见时停止轮询。
