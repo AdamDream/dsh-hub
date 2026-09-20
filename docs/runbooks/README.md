@@ -9,7 +9,7 @@
 | 场景 | 入口 | 回答什么 |
 | --- | --- | --- |
 | 切到 web2 独立实例并验收 | [docs/runbooks/switch-web2-runbook.md](docs/runbooks/switch-web2-runbook.md) | 启动第二实例、`sleep 12` 后查日志、逐项核对 |
-| 合并手工验收清单 | [docs/runbooks/verify-runbook.md](docs/runbooks/verify-runbook.md) | btw 8 步（`../../.workspace/reports/execs/btw/.workspace/reports/execs/btw/execute-btw.md` U10）+ 壁纸 12 步（`../../.workspace/reports/execs/wallpaper/.workspace/reports/execs/wallpaper/execute-wallpaper.md` §5 U14）合并为一轮 |
+| 合并手工验收清单 | [docs/runbooks/verify-runbook.md](docs/runbooks/verify-runbook.md) | btw 8 步（`../../.workspace/reports/execs/btw/execute-btw.md` U10）+ 壁纸 12 步（`../../.workspace/reports/execs/wallpaper/execute-wallpaper.md` §5 U14）合并为一轮 |
 | 补丁重放 / 重启 / 回滚（全局树） | `.workspace/reports/runbooks/master-runbook.md` | 部署台账、六项启动修复确认、事故记录、重启与静态核验、GUI 验收矩阵、四类回滚路径 |
 | 卡顿修复专属 | `.workspace/reports/runbooks/lag-fix-runbook.md` | lag-fix 5 补丁 + settings 的部署与验证 |
 | btw v2 专属 | `.workspace/reports/runbooks/btw-v2-runbook.md` | btw 升级 v2 主线部署与验收 |

@@ -212,7 +212,7 @@ graph TD
 
 | 位置 | 数量 | 是否被 gitignore |
 | --- | --- | --- |
-| `.workspace/backups/*`（原 `.workspace/backup-*`，迁移后） | 14 个 | **是**（`.gitignore` 原规则 `.workspace/backup-*/`） |
+| `.workspace/backups/*`（原 `.workspace/backup-*`，迁移后） | **8** 个 | **是**（`.gitignore` 已补 `.workspace/backups/`） |
 | `.workspace/workstreams/deploy/deploy-lag/backup-*` | 3 个 | **是**（原规则 `.workspace/workstreams/deploy/deploy-lag/backup-*/`） |
 | `.workspace/workstreams/deploy/deploy-slots/backup-*` | 1 个 | ⚠️ **否**（会进 HEAD 跟踪，与其它备份不一致） |
 | `.workspace/workstreams/deploy/deploy-015/` | 447 个跟踪文件 | ⚠️ **否**（未被 ignore） |
@@ -223,10 +223,10 @@ graph TD
   ——这是可复用的「回滚验证」范式。
 - 部分脚本在回滚后明确提示「请重启 DSH 使宿主侧改动生效」。
 
-> **迁移警告**：把 `.workspace/backup-*` 移入 `.workspace/backups/` 后，原规则
-> `.workspace/backup-*/` **不再匹配**该目录的名字，但新目录 `backups/` 本身不在忽略列表里——
-> **`.gitignore` 必须同步补一条规则，否则备份内容会重新进入跟踪**。本阶段按硬约束**未改
-> `.gitignore`**，该项已作为待办上报（见 `.workspace/docs-reorg/reports/track-D-prep.md` R-1）。
+> **迁移警告（已处置，2026-09-20）**：把 `.workspace/backup-*` 移入 `.workspace/backups/` 后，原规则
+> `.workspace/backup-*/` 不再匹配；**`.gitignore` 已同步补上 `.workspace/backups/` 及备份/临时区
+> 5 条规则**（另有 13 条路径规则随目录重构迁移）。迁移当时的待办记录见
+> `.workspace/reports/docs-reorg/`（R-1）。
 
 ---
 

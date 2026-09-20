@@ -61,6 +61,8 @@ done
 echo
 echo "===== 5) B2 phase 2（孤儿索引清理）====="
 echo "  按需执行： bash .workspace/lag-fix/scripts/cleanup-sessions.sh --apply --phase 2 --days 7"
+echo "  预期：projcache 孤儿 1670 → 清理后 ≈742 行；sync_state 悬空 1670 → 清理后 ≈1074 行（2,744−1,670）"
+echo "  ⚠️ 不要用 ~410 之类的错误阈值判失败——审计已更正（详见 RUNBOOK §3.3）"
 echo
 echo "============================================================"
 echo "结果：PASS=$pass  FAIL=$fail"

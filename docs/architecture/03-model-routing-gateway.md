@@ -33,7 +33,7 @@
 | provider | baseURL | api | apiKeyEnv | 模型条目数 |
 | --- | --- | --- | --- | --- |
 | `opencode-go` | **未设置**（走内置 catalog 默认） | 未设置 | `OPENCODE_GO_API_KEY` | 16 |
-| `adam` | `https://llmapi.roboscience.xyz/v1` | `openai-completions` | `ADAM_API_KEY` | 60+ |
+| `adam` | `https://llmapi.roboscience.xyz/v1` | `openai-completions` | `ADAM_API_KEY` | 50 |
 | `llm-deepseek` | —（段为空对象） | — | — | — |
 
 ### 2.1 模型条目的字段分布（易踩坑）
@@ -167,7 +167,7 @@ graph TD
    路由不可解、注册表缺失、查询抛错、模态缺失/为空——一律 `false`。
 2. **官方 host 闸门未被改动**：`session/prompt-image-transform` 瀑布返回 `undefined` = 不拦截原图继续；
    之后若仍有 image 块而模型未声明 → 拒绝文本模型（fail-closed）。
-3. **本部署净效果**：adam 60+ 条目中只有 2 个声明了 `image` ⇒ 主会话与 btw 侧聊**绝大多数图片流量
+3. **本部署净效果**：adam 50 个条目中有 3 个声明了 `image` ⇒ 图片是否直传取决于当前模型，**部分图片流量
    仍走 vision-adam 转文本**。把图直发给未声明的模型会被宿主闸门拒绝（预期行为，不是 bug）。
 
 ---

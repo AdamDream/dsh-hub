@@ -56,7 +56,7 @@ DSH_ROOT="${DSH_ROOT:-$HOME/.dsh/profiles/node_modules/@deepseek-ai}"
 PKG="$DSH_ROOT/dsh-host-apiproxy"
 LIVE_INDEX="$PKG/lib/index.js"
 LIVE_MODULE="$PKG/lib/types/api-proxy.js"
-BACKUP_ROOT="$B1_DIR/backup/B1"   # 单元独占子目录：backup/ 是多档共用，B1 全部备份落这里
+BACKUP_ROOT="$B1_DIR/backup/B1/server"   # 独占子目录（审计 D2：原与 B1 客户端脚本共用 backup/B1）
 WORK_ROOT="$B1_DIR/tmp/B1"       # 单元独占子目录：避免与他档 dryrun-* 同名互覆
 B1_MAX="${B1_MAX:-200}"
 
@@ -183,22 +183,52 @@ precheck || { fail "前置校验未通过"; exit 1; }
 # 回滚
 # ---------------------------------------------------------------------------
 if [ "$MODE" = rollback ]; then
-  # 只认 B1 独占备份目录（backup/B1/），且必须同时含本单元两个目标文件，否则拒绝执行，
-  # 避免误用他档（A/C1/C2 共用 backup/）的快照覆盖 live 文件。
+  # 只认本脚本独占备份根（backup/B1/server/）。
+  # 审计 D3 修复：必须做**内容校验**——原实现只校验路径，伪造目录（正确路径+垃圾内容）
+  # 会被接受、覆盖 live 后仍打印 [PASS]。现要求：MANIFEST 单元归属 + 备份自校验 + live 归属。
   latest="$(ls -d "$BACKUP_ROOT"/*/ 2>/dev/null | sort | tail -n 1)"
   if [ -z "$latest" ]; then
-    warn "未找到本单元备份（$BACKUP_ROOT/*/），无法回滚"
-    exit 1
+    warn "未找到本单元备份（$BACKUP_ROOT/*/），无法回滚"; exit 1
   fi
   if [ ! -f "$latest/lib/index.js" ] || [ ! -f "$latest/lib/types/api-proxy.js" ]; then
-    warn "$latest 不是本单元（B1）的完整备份（缺少 lib/index.js 或 lib/types/api-proxy.js），拒绝回滚以免误覆 live"
-    exit 1
+    warn "$latest 不是本单元（B1-server）的完整备份，拒绝回滚以免误覆 live"; exit 1
   fi
-  say "使用本单元最新备份：$latest"
+  if [ ! -f "$latest/MANIFEST" ] || [ ! -f "$latest/pre.sha256" ]; then
+    warn "$latest 缺少 MANIFEST/pre.sha256（无法做内容校验），拒绝回滚以免误覆 live"; exit 1
+  fi
+  munit="$(sed -n 's/^unit=//p' "$latest/MANIFEST" | head -1)"
+  if [ "$munit" != "B1-server" ]; then
+    warn "备份 MANIFEST 声明 unit='$munit'（应为 B1-server），拒绝回滚以免误覆 live"; exit 1
+  fi
+  if ! ( cd "$latest" && sha256sum -c pre.sha256 >/dev/null 2>&1 ); then
+    warn "备份内容与 pre.sha256 不符（被篡改或损坏），拒绝回滚"; exit 1
+  fi
+  pre_i="$(sed -n 's/^pre_lib\/index\.js=//p' "$latest/MANIFEST" | head -1)"
+  pre_m="$(sed -n 's/^pre_lib\/types\/api-proxy\.js=//p' "$latest/MANIFEST" | head -1)"
+  post_i="$(sed -n 's/^post_lib\/index\.js=//p' "$latest/MANIFEST" | head -1)"
+  post_m="$(sed -n 's/^post_lib\/types\/api-proxy\.js=//p' "$latest/MANIFEST" | head -1)"
+  if [ -z "$pre_i" ] || [ -z "$pre_m" ] || [ -z "$post_i" ] || [ -z "$post_m" ]; then
+    warn "MANIFEST 缺少 pre_/post_ 记录（无法完成内容校验），拒绝回滚以免误覆 live"; exit 1
+  fi
+  # ① 备份内容必须等于本单元记录的补丁前态
+  if [ "$(sha256sum "$latest/lib/index.js" | cut -d' ' -f1)" != "$pre_i" ] || \
+     [ "$(sha256sum "$latest/lib/types/api-proxy.js" | cut -d' ' -f1)" != "$pre_m" ]; then
+    warn "备份内容与 MANIFEST 的 pre_ 记录不符（伪造/损坏），拒绝回滚（未写入任何 live 文件）"; exit 1
+  fi
+  # ② live 必须等于本单元改后态；或已是补丁前态（幂等回滚）
+  cur_i="$(sha256sum "$LIVE_INDEX" | cut -d' ' -f1)"; cur_m="$(sha256sum "$LIVE_MODULE" | cut -d' ' -f1)"
+  if { [ "$cur_i" != "$post_i" ] || [ "$cur_m" != "$post_m" ]; } && { [ "$cur_i" != "$pre_i" ] || [ "$cur_m" != "$pre_m" ]; }; then
+    warn "live 既非本单元改后态、也非补丁前态（live 与备份不属于同一状态），拒绝回滚（未写入任何 live 文件）"; exit 1
+  fi
+  pass "内容校验全部通过（备份=pre 记录；live=post 记录或 pre 记录）—— 现在执行写入"
   cp "$latest/lib/index.js" "$LIVE_INDEX" && say "已还原 lib/index.js"
   cp "$latest/lib/types/api-proxy.js" "$LIVE_MODULE" && say "已还原 lib/types/api-proxy.js"
+  if [ "$(sha256sum "$LIVE_INDEX" | cut -d' ' -f1)" = "$pre_i" ]; then pass "lib/index.js 还原后 sha256 == pre 记录"
+  else fail "lib/index.js 还原后 sha256 != pre 记录"; fi
+  if [ "$(sha256sum "$LIVE_MODULE" | cut -d' ' -f1)" = "$pre_m" ]; then pass "lib/types/api-proxy.js 还原后 sha256 == pre 记录"
+  else fail "lib/types/api-proxy.js 还原后 sha256 != pre 记录"; fi
   if [ "$(unit_state)" = none ]; then pass "回滚完成：标记已消失"
-  else warn "回滚后标记仍存在——请人工核对备份时间戳与 live 文件"; fi
+  else warn "回滚后标记仍存在——请人工核对"; fi
   say "【生效方式】宿主侧改动：必须**重启 DSH**（npx @deepseek-ai/dsh web）才退出/生效；刷新浏览器无效。"
   exit "$FAILED"
 fi
@@ -261,6 +291,13 @@ mkdir -p "$BACKUP_DIR/lib/types"
 cp "$LIVE_INDEX" "$BACKUP_DIR/lib/index.js"
 cp "$LIVE_MODULE" "$BACKUP_DIR/lib/types/api-proxy.js"
 say "备份完成：$BACKUP_DIR"
+# 审计 D3 修复：记录备份内容指纹与单元归属，供 --rollback 做内容校验（原来只校验路径）
+( cd "$BACKUP_DIR" && sha256sum lib/index.js lib/types/api-proxy.js > pre.sha256 )
+{
+  printf 'unit=B1-server\nstamp=%s\nlive_index=%s\nlive_module=%s\n' "$stamp" "$LIVE_INDEX" "$LIVE_MODULE"
+  while read -r sum rel; do printf 'pre_%s=%s\n' "$rel" "$sum"; done < "$BACKUP_DIR/pre.sha256"
+} > "$BACKUP_DIR/MANIFEST"
+say "已记录 pre.sha256 + MANIFEST（unit=B1-server）"
 
 tmp_index="$BACKUP_DIR/b1-index.patched.js"
 tmp_module="$BACKUP_DIR/b1-api-proxy.patched.js"
@@ -277,6 +314,13 @@ fi
 # 就地复核
 syntax_check "$LIVE_INDEX" "live/index.js" || fail "live index.js 语法校验失败（请 --rollback）"
 syntax_check "$LIVE_MODULE" "live/api-proxy.js" || fail "live api-proxy.js 语法校验失败（请 --rollback）"
+# 记录 post（本单元改后态）指纹：回滚时**先校验再写入**，伪造备份无法匹配 post → 写入前即被拒
+if [ "$FAILED" -eq 0 ]; then
+  {
+    printf 'post_lib/index.js=%s\n' "$(sha256sum "$LIVE_INDEX" | cut -d' ' -f1)"
+    printf 'post_lib/types/api-proxy.js=%s\n' "$(sha256sum "$LIVE_MODULE" | cut -d' ' -f1)"
+  } >> "$BACKUP_DIR/MANIFEST"
+fi
 if [ "$(unit_state)" = done ]; then pass "标记命中：两个文件均已应用"; else fail "标记缺失：应用未生效"; fi
 
 if [ "$FAILED" -eq 0 ]; then

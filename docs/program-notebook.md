@@ -198,11 +198,11 @@ sequenceDiagram
 | `docs/architecture/02-plugin-system.md` | 插件契约、组合图装载、hot/cold 边界、settings 槽 |
 | `docs/architecture/03-model-routing-gateway.md` | provider/model 配置链、子代理路由合并层、网关、图像能力检测 |
 | `docs/architecture/04-ops-deploy.md` | 补丁重放 fail-closed 契约、重启、验收矩阵、测试架构、备份布局 |
-| `docs/runbooks/docs/runbooks/switch-web2-runbook.md` | 切换到 web2 独立实例的验收流程 |
-| `docs/runbooks/docs/runbooks/verify-runbook.md` | 合并手工验收清单（btw 8 步 + 壁纸 12 步） |
+| `docs/runbooks/switch-web2-runbook.md` | 切换到 web2 独立实例的验收流程 |
+| `docs/runbooks/verify-runbook.md` | 合并手工验收清单（btw 8 步 + 壁纸 12 步） |
 | `.workspace/reports/runbooks/` | 主题 Runbook：总 Runbook、lag-fix、btw v2、combined-restore |
 | `.workspace/reports/execs/` `.workspace/reports/audits/` | 每项能力的执行与审计证据 |
-| `.workspace/reports/plans/` | 需求对齐与接线计划（`../.workspace/reports/plans/.workspace/reports/plans/btw-wallpaper-plan.md`、`../.workspace/reports/plans/.workspace/reports/plans/wiring-plan.md`） |
+| `.workspace/reports/plans/` | 需求对齐与接线计划（`../.workspace/reports/plans/btw-wallpaper-plan.md`、`../.workspace/reports/plans/wiring-plan.md`） |
 | `.workspace/reports/reference/local-api-surface.md` | 本地部署 API 面 vs master 源码差异 |
 | `.workspace/workstreams/deploy/*/patches/*.patch` | 官方包补丁的 unified diff（**可执行规范**） |
 | `.workspace/workstreams/deploy/deploy-lag/README.md` §9 | 运行时热载能力矩阵（P0-a 实测固化） |

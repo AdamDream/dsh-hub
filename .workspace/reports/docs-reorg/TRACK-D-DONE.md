@@ -12,8 +12,8 @@
 | 根目录 `.md` | **27 个** | **3 个**（`README.md` / `FEATURE-MAP.md` / `DOC-STYLE.md`） |
 | `.workspace` 顶层条目 | **183 个** | **6 个**（`backups` / `lag-fix` / `probes` / `reports` / `settings-lag` / `workstreams`） |
 | 新建文档 | — | `docs/program-notebook.md`（12 章节）+ `docs/architecture/01..04`（9 个 mermaid 块）+ `docs/runbooks/` |
-| 搬移动作 | — | **204 条全部成功**（`OK=204 / SKIP=0 / FAIL=0`） |
-| 跟踪文件完整性 | 2229 个 | **2229 个，0 丢失**（按映射推导逐一验证存在） |
+| 搬移动作 | — | **204 条命令全部成功**（`OK=204 / SKIP=0 / FAIL=0`；其中 3 条为自映射 no-op，**有效搬移 201 条**） |
+| 跟踪文件完整性 | 2229 个 | **0 丢失**（独立按内容 sha 复核：238 条原地未动、1978 条内容在新路径逐字节命中、13 条有意改写且均有新落点）；本整理**净增 661 条路径**（HEAD 2895）——"2229→2229"应读作"未丢失"而非"未新增" |
 | git 历史 | — | 全部经 `git mv` 保留（`git status` 识别 1975 条 `R100` 重命名） |
 | 引用修正 | — | 70+ 处（README 14 / FEATURE-MAP 26 / DOC-STYLE 4 / docs 8 / 探针脚本 14 …） |
 
@@ -50,24 +50,30 @@
 
 ---
 
-## 四、回滚
+## 四、回滚（**经独立审计更正：三种简单方案都不完整**）
+
+审计实测结论：方案 ①/② 都不能完整回滚；方案 ③ 是唯一能覆盖的，但有独立注意事项。
+
+| 方案 | 能覆盖什么 | 缺口（审计实测） |
+|---|---|---|
+| ① `git reset --hard pre-docs-reorg-20260920-154951` | 全部**跟踪**文件与 `.gitignore`（一并回到旧规则） | **不覆盖 19 条普通 `mv` 搬走的未跟踪/已忽略目录（约 41 MiB）**——它们会滞留在新路径；且丢弃此后**全部提交** |
+| ② `git revert --no-commit <commits>` | 跟踪文件的逆操作 | 有未提交改动时会失败（实测）；同样**不覆盖那 19 条** |
+| ③ 按 `mapping.json` 倒序 `mv` 回原位 | 唯一能覆盖 19 条未跟踪目录 | 回滚后 `.gitignore` 仍是**新规则** → 那 41 MiB 备份重新变成"可入库" |
+
+### 推荐完整回滚步骤
 
 ```bash
 cd /home/CNS2026495165/dsh
-# 方案 1：完全回到整理前（含卡顿修复的工作区侧改动一并回退）
-git reset --hard pre-docs-reorg-20260920-154951
-
-# 方案 2：只回退文档整理、保留卡顿修复
-git revert --no-commit 2ece7258 7cfa1369 && git commit -m "revert docs reorg"
-
-# 方案 3：按映射手工倒序搬回（映射与命令见本目录）
-python3 - <<'PY'
-import json
-m = json.load(open('.workspace/reports/docs-reorg/mapping.json'))
-moves = [e for e in m['entries'] if e['from'] != e['to'] and e.get('moveCmd') in ('git mv', 'mv')]
-for e in reversed(moves):
-    print(f"{e['moveCmd']} '{e['to']}' '{e['from']}'")
-PY
+cp .workspace/reports/docs-reorg/mapping.json /tmp/mapping.json          # ① 映射表存到仓库外
+git reset --hard pre-docs-reorg-20260920-154951                          # ② 跟踪文件 + .gitignore 一起回退
+python3 -c "
+import json, os, subprocess
+m = json.load(open('/tmp/mapping.json'))
+for e in reversed([x for x in m['entries'] if x.get('moveCmd') == 'mv' and x['from'] != x['to']]):
+    if os.path.exists(e['to']) and not os.path.exists(e['from']):
+        os.makedirs(os.path.dirname(e['from']) or '.', exist_ok=True)
+        subprocess.run(['mv', e['to'], e['from']], check=False)
+        print('moved back:', e['to'], '->', e['from'])
+"                                                                        # ③ 补回那 19 条未跟踪目录
+git status --porcelain                                                   # ④ 复核：无新旧并存
 ```
-
-> ⚠️ `git reset --hard` **无法恢复**由普通 `mv` 搬走的**未跟踪**目录（19 条），故先把 `mapping.json` 备份到工作区外。

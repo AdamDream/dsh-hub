@@ -100,7 +100,8 @@ bash .workspace/lag-fix/probes/verify-post-restart.sh
 bash .workspace/lag-fix/scripts/cleanup-sessions.sh --apply --phase 2 --days 7
 ```
 
-**预期**：清理 `session_projcache.json` 孤儿键（约 1,670）+ `sync_state` 悬空行（约 2,334）；校验后 projcache ≈732 行、sync_state ≈410 行。
+**预期（经独立审计更正）**：projcache 孤儿键 **1,670** + `sync_state` **真正悬空 1,670 行**（原写 ~2,334 有误）；
+校验阈值：projcache ≈ **742** 行、`sync_state` ≈ **1,074** 行。详见 RUNBOOK §3.3。
 
 ---
 

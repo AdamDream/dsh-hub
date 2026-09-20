@@ -1,7 +1,7 @@
 # DSH btw + 壁纸 端到端验收 Runbook（重启后执行）
 
 > 前置：两个插件已装好（`~/.dsh/profiles/node_modules/@local/{dsh-btw,dsh-wallpaper}` 真实目录 + cordis.patch.yml 两个 insert）。
-> 本 Runbook 合并 ../../.workspace/reports/execs/btw/.workspace/reports/execs/btw/execute-btw.md U10（8 步）与 ../../.workspace/reports/execs/wallpaper/.workspace/reports/execs/wallpaper/execute-wallpaper.md §5 U14（12 步）。
+> 本 Runbook 合并 ../../.workspace/reports/execs/btw/execute-btw.md U10（8 步）与 ../../.workspace/reports/execs/wallpaper/execute-wallpaper.md §5 U14（12 步）。
 
 ## 0. 重启 DSH（激活插件）
 ```bash

@@ -39,7 +39,7 @@
 ├── examples/minimal-plugin/                     ← 脚手架（4 文件）
 ├── pi-taste-analysis/                           ← 调研档 + vendored 上游 TS 源码（非插件）
 └── .workspace/                                  ← 证据 / 部署 / 探针 / 备份
-    ├── reports/{audits,execs,plans,ports,research,runbooks,diagnostics,incidents,handoff,push-logs}/
+    ├── reports/{audits,execs,plans,reference,research,runbooks,diagnostics,incidents,handoff,push-logs,docs-reorg}/
     ├── workstreams/deploy/deploy-*/             ← 11 个部署批次（含 patches/ 与重放脚本）
     ├── workstreams/{sources,baseline-011,plugin-restore,side-deploy,upstream-015-diff,tmp-tgz-audit}/
     ├── workstreams/research/research*/           ← 插件生态调研（含 vendored 仓库克隆）
@@ -141,7 +141,7 @@ graph TD
 
 - 判定只认**声明**，不做运行时探测：唯一返回「支持」的条件是 `inputModalities` 含 `'image'`；
   路由不可解、注册表缺失、查询抛错、模态缺失/为空一律返回「不支持」。
-- 本部署净效果：adam 60+ 条目中**只有 2 个**声明了 `image` ⇒ 绝大多数图片流量仍走 vision-adam 转文本。
+- 本部署净效果：adam **50 个条目中有 3 个**声明了 `image`（`deepseek-v4-pro`、`deepseek-v4.1-flash`、`deepseek-v4-flash-vision-exp`，见 `settings.yaml:81-85` / `:173-182`）⇒ 图片是否走 vision-adam 转文本**取决于当前会话模型**：主会话默认 `deepseek-v4-pro`（已声明）可原图直传；未声明图片能力的模型（如 `deepseek-v4-flash`）仍走 vision-adam。
 - 行号级证据见 `03-model-routing-gateway.md` §图像能力检测。
 
 ### 4.3 补丁与进程的正交分工

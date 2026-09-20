@@ -57,6 +57,12 @@
 # ============================================================================
 set -u
 
+# 审计 D1 修复：本单元与 B1（workspace-ui-runsubagent-count.sh）共享同一文件
+# dsh-client-runtime/lib/client.js。回滚本单元会把文件还原到 pristine 基线，从而连带抹掉
+# B1 追加的改动（并使 B1 进入 partial、--apply/--rollback 双双受阻）。默认拒绝，需显式 --force-order。
+FORCE_ORDER=0
+for _a in "$@"; do [ "$_a" = "--force-order" ] && FORCE_ORDER=1; done
+
 MODE="${1:---dry-run}"
 ONLY=""
 if [ "${2:-}" = "--only" ]; then ONLY="${3:-}"; fi
@@ -262,6 +268,16 @@ do_dry_run() {
   node "$FIXER" --file "$sandbox" --out "$out" ${ONLY:+--only "$ONLY"} --print-summary > "$fixlog" 2>&1
   local rc=$?
   if [ "$rc" -ne 0 ]; then
+    # 审计 D4 修复：区分「合法子集已应用」（预期状态，dry-run 应 SKIP 退出 0，不该假警报）
+    # 与真实失败（节点锚点缺失、语法错误等仍按 FAIL 处理）。
+    if [ -z "$ONLY" ] && grep -q '合法子集已应用' "$fixlog" 2>/dev/null; then
+      skip "目标已是「合法子集已应用」状态（本单元先前按 --only 落地过）——dry-run 无操作可做，退出 0。"
+      sed -n 's/.*"error": "//p' "$fixlog" | head -1 | sed 's/",$//' | sed 's/^/  说明：/'
+      say "  复现全绿 dry-run：对 pristine 基线副本跑（例如）
+      C1_TARGET=\$PWD/sandbox/C1/client.baseline-pristine.js bash $0 --dry-run"
+      say "  补跑未应用单元：bash $0 --apply --only <未应用单元>   整体重来：bash $0 --rollback"
+      return 0
+    fi
     fail "补丁器返回 $rc；输出如下："
     sed -n '1,60p' "$fixlog"
     return 1
@@ -398,6 +414,19 @@ do_rollback() {
   fi
   say "候选备份（最新）：$dest"
   rollback_owner_ok "$dest" || return 1
+  # 审计 D1：检测他单元标记，默认拒绝（避免连带抹除 B1 的改动）
+  local foreign
+  # 注意：B1 往“本文件”里加的标记不是 'dsh-lag-fix B1'（那个进的是 ui-workspace），
+  # 而是 entryCache 新鲜度链上的 runningSubagentCount 比较（见 workspace-ui-runsubagent-count.sh 的 unit_state）。
+  foreign="$(grep -cF 'runningSubagentCount === entry.runningSubagentCount' "$TARGET" 2>/dev/null | head -1)"; foreign="${foreign:-0}"
+  if [ "$foreign" -gt 0 ] && [ "$FORCE_ORDER" -ne 1 ]; then
+    fail "live 含他单元（B1）的改动标记 ×${foreign}：本文件由 B1 与 C1 共享。"
+    say "  正确顺序：**先**回滚 B1 —— bash workspace-ui-runsubagent-count.sh --rollback"
+    say "  　　　　　**再**回滚本单元；否则会连带抹掉 B1 的改动、使两条恢复路径同时受阻。"
+    say "  如确要连带抹除，显式加 --force-order 承担后果。"
+    return 1
+  fi
+  [ "$foreign" -gt 0 ] && warn "已按 --force-order 继续：本次回滚将连带移除 B1 的改动。"
   local want; want="$(sed -n 's/^pre_sha1=//p' "$dest/META.txt" | head -1)"
   cp -p "$dest/$BACKUP_FILE" "$TARGET" || { fail "还原失败"; return 1; }
   local after; after="$(sha1_of "$TARGET")"

@@ -48,7 +48,7 @@ UI_REL="dsh-client-ui-workspace/lib/client.js"
 RT_REL="dsh-client-runtime/lib/client.js"
 UI="$DSH_ROOT/$UI_REL"
 RT="$DSH_ROOT/$RT_REL"
-BACKUP_ROOT="$B1_DIR/backup/B1"   # 单元独占子目录：backup/ 是多档共用，B1 全部备份落这里
+BACKUP_ROOT="$B1_DIR/backup/B1/client"   # 独占子目录（审计 D2：原与 B1 服务端脚本共用 backup/B1）
 WORK_ROOT="$B1_DIR/tmp/B1"       # 单元独占子目录：避免与他档 dryrun-* 同名互覆
 
 FAILED=0
@@ -146,16 +146,42 @@ say "RT=$RT"
 precheck || { fail "前置校验未通过"; exit 1; }
 
 if [ "$MODE" = rollback ]; then
-  # 只认 B1 独占备份目录（backup/B1/），且必须同时含本单元两个目标文件，避免误覆他档产物。
+  # 只认本脚本独占备份根（backup/B1/client/）。审计 D3 修复：内容校验（MANIFEST 归属 + 备份自校验 + live 归属）。
   latest="$(ls -d "$BACKUP_ROOT"/*/ 2>/dev/null | sort | tail -n 1)"
-  [ -n "$latest" ] || { warn "未找到本单元备份（$BACKUP_ROOT/*/），无法回滚"; exit 1; }
+  if [ -z "$latest" ]; then warn "未找到本单元备份（$BACKUP_ROOT/*/），无法回滚"; exit 1; fi
   if [ ! -f "$latest/$UI_REL" ] || [ ! -f "$latest/$RT_REL" ]; then
-    warn "$latest 不是本单元（B1）的完整备份（缺少 $UI_REL 或 $RT_REL），拒绝回滚以免误覆 live"
-    exit 1
+    warn "$latest 不是本单元（B1-client）的完整备份，拒绝回滚以免误覆 live"; exit 1
   fi
-  say "使用本单元最新备份：$latest"
+  if [ ! -f "$latest/MANIFEST" ] || [ ! -f "$latest/pre.sha256" ]; then
+    warn "$latest 缺少 MANIFEST/pre.sha256（无法做内容校验），拒绝回滚以免误覆 live"; exit 1
+  fi
+  munit="$(sed -n 's/^unit=//p' "$latest/MANIFEST" | head -1)"
+  if [ "$munit" != "B1-client" ]; then
+    warn "备份 MANIFEST 声明 unit='$munit'（应为 B1-client），拒绝回滚以免误覆 live"; exit 1
+  fi
+  if ! ( cd "$latest" && sha256sum -c pre.sha256 >/dev/null 2>&1 ); then
+    warn "备份内容与 pre.sha256 不符（被篡改或损坏），拒绝回滚"; exit 1
+  fi
+  pre_u="$(sed -n "s|^pre_${UI_REL}=||p" "$latest/MANIFEST" | head -1)"
+  pre_r="$(sed -n "s|^pre_${RT_REL}=||p" "$latest/MANIFEST" | head -1)"
+  post_u="$(sed -n "s|^post_${UI_REL}=||p" "$latest/MANIFEST" | head -1)"
+  post_r="$(sed -n "s|^post_${RT_REL}=||p" "$latest/MANIFEST" | head -1)"
+  if [ -z "$pre_u" ] || [ -z "$pre_r" ] || [ -z "$post_u" ] || [ -z "$post_r" ]; then
+    warn "MANIFEST 缺少 pre_/post_ 记录（无法完成内容校验），拒绝回滚以免误覆 live"; exit 1
+  fi
+  if [ "$(sha256sum "$latest/$UI_REL" | cut -d' ' -f1)" != "$pre_u" ] || \
+     [ "$(sha256sum "$latest/$RT_REL" | cut -d' ' -f1)" != "$pre_r" ]; then
+    warn "备份内容与 MANIFEST 的 pre_ 记录不符（伪造/损坏），拒绝回滚（未写入任何 live 文件）"; exit 1
+  fi
+  cur_u="$(sha256sum "$UI" | cut -d' ' -f1)"; cur_r="$(sha256sum "$RT" | cut -d' ' -f1)"
+  if { [ "$cur_u" != "$post_u" ] || [ "$cur_r" != "$post_r" ]; } && { [ "$cur_u" != "$pre_u" ] || [ "$cur_r" != "$pre_r" ]; }; then
+    warn "live 既非本单元改后态、也非补丁前态（live 与备份不属于同一状态），拒绝回滚（未写入任何 live 文件）"; exit 1
+  fi
+  pass "内容校验全部通过（备份=pre 记录；live=post 记录或 pre 记录）—— 现在执行写入"
   cp "$latest/$UI_REL" "$UI" && say "已还原 $UI_REL"
   cp "$latest/$RT_REL" "$RT" && say "已还原 $RT_REL"
+  if [ "$(sha256sum "$UI" | cut -d' ' -f1)" = "$pre_u" ]; then pass "$UI_REL 还原后 sha256 == pre 记录"; else fail "$UI_REL 还原后 sha256 != pre 记录"; fi
+  if [ "$(sha256sum "$RT" | cut -d' ' -f1)" = "$pre_r" ]; then pass "$RT_REL 还原后 sha256 == pre 记录"; else fail "$RT_REL 还原后 sha256 != pre 记录"; fi
   [ "$(unit_state)" = none ] && pass "回滚完成：标记已消失" || warn "回滚后标记仍存在——请人工核对"
   say "【生效方式】客户端 bundle 属热面：/plugins/<id>/client.js 每次 GET 从磁盘读 + no-cache，"
   say "            **刷新浏览器即生效**（无需重启宿主；dsh-client-hmr 500ms 轮询推 rebuilt）。"
@@ -204,6 +230,13 @@ mkdir -p "$BACKUP_DIR/$(dirname "$UI_REL")" "$BACKUP_DIR/$(dirname "$RT_REL")"
 cp "$UI" "$BACKUP_DIR/$UI_REL"
 cp "$RT" "$BACKUP_DIR/$RT_REL"
 say "备份完成：$BACKUP_DIR"
+# 审计 D3 修复：记录备份内容指纹与单元归属，供 --rollback 做内容校验（原来只校验路径）
+( cd "$BACKUP_DIR" && sha256sum "$UI_REL" "$RT_REL" > pre.sha256 )
+{
+  printf 'unit=B1-client\nstamp=%s\nlive_ui=%s\nlive_rt=%s\n' "$stamp" "$UI" "$RT"
+  while read -r sum rel; do printf 'pre_%s=%s\n' "$rel" "$sum"; done < "$BACKUP_DIR/pre.sha256"
+} > "$BACKUP_DIR/MANIFEST"
+say "已记录 pre.sha256 + MANIFEST（unit=B1-client）"
 
 apply_transform "$UI_REL" "$UI" "$BACKUP_DIR/b1-ui-workspace.patched.js" "ui-workspace" || { fail "ui-workspace 变换失败（live 未改动）"; exit 1; }
 apply_transform "$RT_REL" "$RT" "$BACKUP_DIR/b1-client-runtime.patched.js" "client-runtime" || { fail "client-runtime 变换失败（live 未改动）"; exit 1; }
@@ -218,6 +251,13 @@ fi
 syntax_check "$UI" "live/ui-workspace" || fail "live ui-workspace 语法校验失败（请 --rollback）"
 syntax_check "$RT" "live/client-runtime" || fail "live client-runtime 语法校验失败（请 --rollback）"
 [ "$(unit_state)" = done ] && pass "标记命中：两个文件均已应用" || fail "标记缺失：应用未生效"
+# 记录 post（本单元改后态）指纹：回滚时**先校验再写入**，伪造备份无法匹配 post → 写入前即被拒
+if [ "$FAILED" -eq 0 ]; then
+  {
+    printf 'post_%s=%s\n' "$UI_REL" "$(sha256sum "$UI" | cut -d' ' -f1)"
+    printf 'post_%s=%s\n' "$RT_REL" "$(sha256sum "$RT" | cut -d' ' -f1)"
+  } >> "$BACKUP_DIR/MANIFEST"
+fi
 
 if [ "$FAILED" -eq 0 ]; then
   say "===== 应用完成（客户端热面）====="

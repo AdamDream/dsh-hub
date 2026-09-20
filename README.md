@@ -166,5 +166,10 @@ cd .workspace/workstreams/deploy/deploy-lag && ./dsh-restart.sh --yes           
 ## 方法论
 
 - 两阶段闭环（审计 → 修订执行复核一体），详见本机 `~/.dsh/AGENTS.md`（不入库）；阶段产物（audit/exec/runbook）全部落盘 `.workspace/`，磁盘即记忆
-- 模型路由：workflow/subagent/btw 统一 `adam/deepseek-v4-flash`；识图 = opencode `deepseek-v4.1-flash`（网关实测 max_tokens 上限 393216）
+- 模型路由（**以 `~/.dsh/settings.yaml` + preset 的实际生效值为准**，逐条可核；2026-09-20 复核）：
+  - **主会话默认**：`adam/deepseek-v4-pro`（`agent-default-model`）
+  - **subagent / subagent_fork**：`adam/deepseek-v4-pro` —— preset `standard-glm` 提供 `provider: adam`，settings 的 `dsh-subagent` 段只覆盖 `model`，二者是**字段级合并**（`dsh-tool-subagent/lib/index.js` 的 `effectiveConfiguredAgentOptions`：settings 值优先、缺失字段回落 preset）。preset 注释里写的 `deepseek-v4.1-flash` 只是文案陈旧
+  - **workflow**：本仓库**没有"默认模型"配置**，`agent.cordis.yml` 的 `tool-workflow` 行只有 `provider: spawn`，模型继承父代理
+  - **btw 侧聊**：默认 `deepseek-v4.1-flash`，**不跟随主会话**（`dsh-btw/src/host/vision.ts:103`）
+  - **识图（vision-adam）**：`adam` 网关的 `deepseek-v4.1-flash`（`https://llmapi.roboscience.xyz/v1`，`maxTokens` 393216）
 - 本仓库文档写作遵守 [DOC-STYLE.md](DOC-STYLE.md)

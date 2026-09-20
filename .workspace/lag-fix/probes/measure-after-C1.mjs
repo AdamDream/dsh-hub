@@ -37,7 +37,7 @@ const BEFORE = argOf("--baseline", "");
 
 /** 在页面里安装采集器（rAF 帧间隔 + WS 帧计数 + MutationObserver）。 */
 const INSTALL = () => {
-  window.__c1 = { frames: [], ws: {}, wsTotal: 0, panelMutations: 0, started: performance.now() };
+  window.__c1 = { frames: [], ws: {}, wsTotal: 0, panelMutations: 0, started: performance.now(), windowStart: performance.now() };
   let last = performance.now();
   const tick = (t) => {
     window.__c1.frames.push(t - last);
@@ -74,6 +74,8 @@ async function sampleWindow(phase) {
     window.__c1.frames = [];
     window.__c1.ws = {};
     window.__c1.wsTotal = 0;
+    // 修复：分母必须以「本窗口起点」计（原先用装置安装时刻，分子每窗清零 → 越靠后的窗口速率被系统性低估）
+    window.__c1.windowStart = performance.now();
   });
   const cdp = globalThis.__cdp;
   const readMetrics = async () => {
@@ -93,7 +95,7 @@ async function sampleWindow(phase) {
       frame_max_ms: frames.length ? Number(frames[frames.length - 1].toFixed(2)) : null,
       frames_over_50ms: c.frames.filter((x) => x > 50).length,
       ws_total: c.wsTotal,
-      ws_rate_per_s: Number((c.wsTotal / ((performance.now() - c.started) / 1000)).toFixed(1)),
+      ws_rate_per_s: Number((c.wsTotal / Math.max((performance.now() - (c.windowStart ?? c.started)) / 1000, 0.001)).toFixed(1)),
       ws_by_type: c.ws,
       dom_nodes_total: document.querySelectorAll("*").length,
       dom_nodes_panel: document.querySelectorAll('[role="dialog"] *').length
@@ -126,30 +128,34 @@ async function main() {
 
   // 规模：/api/session.list 的条数与字节数（走页面的 fetch，复用登录态）
   const scale = await page.evaluate(async () => {
-    const candidates = ["/api/session.list", "/api/sessions.list"];
-    for (const url of candidates) {
+    // 修复：必须使用 DSH RPC 信封，否则宿主返回 bad-request（原实现恒得 680 B / items:null，
+    // 导致本探针从不真正测量 N——审计发现）。同时分列「信封字节」与「items 字节」，避免口径错标。
+    const url = "/api/session.list";
+    const body = JSON.stringify({
+      type: "client-request",
+      rpcId: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random())),
+      method: "session.list",
+      payload: {}
+    });
+    try {
+      const res = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body });
+      const text = await res.text();
+      let items = null, ok = null, itemsBytes = null, topLevel = null, subagent = null;
       try {
-        const res = await fetch(url, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({})
-        });
-        if (!res.ok) continue;
-        const text = await res.text();
-        let n = null;
-        try {
-          const json = JSON.parse(text);
-          const list = json?.result?.value?.items ?? json?.items ?? json?.value ?? null;
-          if (Array.isArray(list)) n = list.length;
-        } catch {
-          n = null;
+        const json = JSON.parse(text);
+        ok = json?.result?.ok ?? null;
+        const list = json?.result?.value?.items ?? null;
+        if (Array.isArray(list)) {
+          items = list.length;
+          itemsBytes = JSON.stringify(list).length;
+          topLevel = list.filter((x) => x && x.origin !== "subagent").length;
+          subagent = list.filter((x) => x && x.origin === "subagent").length;
         }
-        return { url, status: res.status, bytes: text.length, items: n };
-      } catch (error) {
-        void error;
-      }
+      } catch { /* 保持 null */ }
+      return { url, status: res.status, ok, envelope_bytes: text.length, items_bytes: itemsBytes, items, top_level: topLevel, subagent };
+    } catch (error) {
+      return { url, status: null, ok: null, envelope_bytes: null, items_bytes: null, items: null, error: String(error).slice(0, 120) };
     }
-    return { url: null, status: null, bytes: null, items: null };
   });
 
   const results = [];

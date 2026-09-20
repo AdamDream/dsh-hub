@@ -49,26 +49,46 @@ bash .workspace/deploy-lag/dsh-restart.sh --yes         # 执行：SIGTERM → �
 bash .workspace/lag-fix/probes/verify-post-restart.sh
 ```
 
-### 3.3 phase 2（孤儿索引清理）
+### 3.3 phase 2（孤儿索引清理；**必须在重启之后**）
 
 ```bash
 bash .workspace/lag-fix/scripts/cleanup-sessions.sh --apply --phase 2 --days 7
 ```
 
-### 3.4 回滚（按需，逐单元独立）
+**预期（经独立审计更正，1680/1680 穷举核验）**：
+- `session_projcache.json` 孤儿键 **1,670** 条（删会话后产生）
+- `sync_state` **真正悬空** 1,670 行 —— ⚠️ 先前文档写的 ~2,334 是**错的**：那 2,356 行里绝大多数指向的文件仍存在，悬空是**删完会话才产生**的
+- **校验阈值**：projcache ≈ **742** 行（= 现存会话数）、`sync_state` ≈ **1,074** 行（2,744 − 1,670）
+- ⚠️ **不要**按错误阈值判失败后去"清空全部 `dsh:` 行"：会连带删掉 **686 行仍指向存活会话**的同步状态，触发全量重同步、卡顿复发
+- ⚠️ 宿主仍在校写这两个文件：phase 2 **必须在重启后**执行，并复验"不被回灌"
+
+### 3.4 回滚（**顺序有铁律**）
+
+> ⚠️ `dsh-client-runtime/lib/client.js` 被 **B1 与 C1 两个单元先后修改**（B1 在 entryCache 新鲜度链加了一行、
+> C1 做 P1+P2）。**必须先回滚 B1、再回滚 C1** —— C1 的 `--rollback` 会把文件还原到 pristine 基线，
+> 连带抹掉 B1 的改动并使 B1 进入 partial（两条恢复路径同时受阻）。该护栏已内置（C1 检测到 B1 标记即拒绝，
+> 除非显式 `--force-order`），并已通过沙箱对抗测试。
 
 ```bash
 cd /home/CNS2026495165/dsh
-bash .workspace/lag-fix/patches/client-runtime-perf.sh --rollback              # 客户端热面，刷新即生效
-bash .workspace/lag-fix/patches/workspace-enhancement-perf.sh --rollback       # 同上
-bash .workspace/lag-fix/patches/workspace-ui-runsubagent-count.sh --rollback   # 同上
-bash .workspace/lag-fix/patches/server-session-filter.sh --rollback            # 冷面，需再重启
-bash .workspace/lag-fix/patches/usage-plugin.sh --rollback --target deployed   # 冷面，需再重启
-bash .workspace/lag-fix/scripts/cleanup-sessions.sh --rollback --backup-dir backup/B2/20260920-074510   # 恢复 1,670 个会话
-git reset --hard pre-docs-reorg-20260920-154951                               # 文档整理回退
+
+# ① 先回滚 B1 的客户端半（热面：刷新浏览器即生效）
+bash .workspace/lag-fix/patches/workspace-ui-runsubagent-count.sh --rollback
+# ② 再回滚 C1 / C2（热面）
+bash .workspace/lag-fix/patches/client-runtime-perf.sh --rollback
+bash .workspace/lag-fix/patches/workspace-enhancement-perf.sh --rollback
+# ③ 冷面单元（回滚后需再重启一次宿主才退出效果）
+bash .workspace/lag-fix/patches/server-session-filter.sh --rollback
+bash .workspace/lag-fix/patches/usage-plugin.sh --rollback --target deployed
+# ④ 数据层：恢复 1,670 个已删会话
+bash .workspace/lag-fix/scripts/cleanup-sessions.sh --rollback --backup-dir backup/B2/20260920-074510
+# ⑤ 文档整理：完整回退见 .workspace/reports/docs-reorg/TRACK-D-DONE.md §四
+git reset --hard pre-docs-reorg-20260920-154951
 ```
 
-> 所有 `--rollback` 均已带**所有权校验**（备份不属于本单元即拒绝执行），每个单元的备份根互相隔离（`backup/C1`、`backup/B1`、`backup/B2`、`patches/backup/C2`、`backup-usage/<target>`）。
+**备份根（各单元独占；回滚带内容校验）**：`backup/C1`、`backup/B1/server`、`backup/B1/client`、
+`patches/backup/C2`、`backup-usage/<target>`、`backup/B2`。
+B1 两脚本回滚要求 `MANIFEST`（unit + `pre_*`/`post_*` 指纹）与备份内容自校验全部通过，缺一项即拒绝（**未写入任何 live 文件**）。
 
 ---
 
