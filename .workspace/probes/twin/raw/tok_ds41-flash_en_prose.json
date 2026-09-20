@@ -1,0 +1,68 @@
+{
+ "tag": "tok_ds41-flash_en_prose",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "The quick brown fox jumps over the lazy dog near the riverbank."
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720396.623637,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf013fad6f6042-SIN",
+  "Content-Length": "425",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:17 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=nAwA%2B3M0AfQU6dPDENIjWhOuoR1%2Bw%2FXP%2FeCnW7kFBwkUmwN0KClBl3BTBcEYCpKabUofbrakiLBRX8qvDHeuq8154mD6uXHht%2Fp8wMAP%2BPQ6VXpL8LjUPnItpLEAO358\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833166372441288268d9d6mpqQmEUJ",
+  "X-Request-Id": "b52517f2-5657-41c2-96c9-3cd48cdb2014",
+  "X-Trace-Id": "b52517f2565741c296c93cd48cdb2014",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"b52517f2-5657-41c2-96c9-3cd48cdb2014\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720397,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":44,\"completion_tokens\":1,\"total_tokens\":45,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":1}}}",
+ "json": {
+  "id": "b52517f2-5657-41c2-96c9-3cd48cdb2014",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720397,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 44,
+   "completion_tokens": 1,
+   "total_tokens": 45,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1
+   }
+  }
+ },
+ "elapsed": 1.294
+}

@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_code_r2",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "用 Python 写一个函数，返回斐波那契数列前 n 项，要求带类型标注。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720405.0336843,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01748d0a6042-SIN",
+  "Content-Length": "1894",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:31 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=DogfQzUYKgv3TZbvOoVv7arY6LrbSaIgwNw8wTyFJY5OCfLSJiqqYvF8Tte%2FgCTJRiBaCV0pDHb0N4DUH9zPP89B98PD8I9puCfuitEkfzEcqzo9pJ%2BX5H4r3rWoRp6n\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "20260918083325646582008268d9d6BQz89Zx0",
+  "X-Request-Id": "30fa1f3a-1be3-4e26-b26f-d0793012277b",
+  "X-Trace-Id": "30fa1f3a1be34e26b26fd0793012277b",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"```python\\nfrom typing import List\\n\\ndef fibonacci(n: int) -\\u003e List[int]:\\n    \\\"\\\"\\\"\\n    返回斐波那契数列前 n 项，默认从 F0 = 0, F1 = 1 开始。\\n    \\\"\\\"\\\"\\n    result: List[int\",\"reasoning_content\":\"We need answer in Chinese likely. Need write Python function with type annotations returning first n Fibonacci numbers. Need maybe include example. Need be careful: \\\"斐波那契数列前 n 项\\\" Usually F0=0,F1=1? Need clarify. Could implement with list. Type annotations: from typing import List. Function fib(n: int) -\\u003e List[int]. Need handle n \\u003c=0 return []. Need maybe n=1 returns [0]? Let's decide. Fibonacci sequence commonly starts 0,1,1,2,... We can define. Need maybe use generator? User asks function returns first n terms. We'll provide. Need include code. Need mention F0=0. Let's craft concise.\\n\\nNeed ensure code valid. Let's produce:\\n\\nfrom typing import List\\n\\ndef fibonacci(n: int) -\\u003e List[int]:\\n    \\\"\\\"\\\"Return first n Fibonacci numbers (F0=0, F1=1).\\\"\\\"\\\"\\n    if n \\u003c= 0:\\n        return []\\n    if n == 1:\\n        return [0]\\n    fibs: List[int] = [0, 1]\\n    for _ in range(2, n):\\n        fibs.append(fibs[-1] + fibs[-2])\\n    return fibs[:n]\\n\\nCould be simpler: initialize fibs=[]; a,b=0,1; for _ in range(n): fibs.append(a); a,b=b,a+b; return fibs. This handles n=0. This is more concise and returns first n. This is efficient. Use type annotations. Let's provide that. Need mention \\\"F0=0,F1=1\\\". Let's answer Chinese with code.\",\"role\":\"assistant\"}}],\"created\":1789720407,\"id\":\"30fa1f3a-1be3-4e26-b26f-d0793012277b\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":106,\"completion_tokens\":400,\"total_tokens\":506,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":344}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "```python\nfrom typing import List\n\ndef fibonacci(n: int) -> List[int]:\n    \"\"\"\n    返回斐波那契数列前 n 项，默认从 F0 = 0, F1 = 1 开始。\n    \"\"\"\n    result: List[int",
+     "reasoning_content": "We need answer in Chinese likely. Need write Python function with type annotations returning first n Fibonacci numbers. Need maybe include example. Need be careful: \"斐波那契数列前 n 项\" Usually F0=0,F1=1? Need clarify. Could implement with list. Type annotations: from typing import List. Function fib(n: int) -> List[int]. Need handle n <=0 return []. Need maybe n=1 returns [0]? Let's decide. Fibonacci sequence commonly starts 0,1,1,2,... We can define. Need maybe use generator? User asks function returns first n terms. We'll provide. Need include code. Need mention F0=0. Let's craft concise.\n\nNeed ensure code valid. Let's produce:\n\nfrom typing import List\n\ndef fibonacci(n: int) -> List[int]:\n    \"\"\"Return first n Fibonacci numbers (F0=0, F1=1).\"\"\"\n    if n <= 0:\n        return []\n    if n == 1:\n        return [0]\n    fibs: List[int] = [0, 1]\n    for _ in range(2, n):\n        fibs.append(fibs[-1] + fibs[-2])\n    return fibs[:n]\n\nCould be simpler: initialize fibs=[]; a,b=0,1; for _ in range(n): fibs.append(a); a,b=b,a+b; return fibs. This handles n=0. This is more concise and returns first n. This is efficient. Use type annotations. Let's provide that. Need mention \"F0=0,F1=1\". Let's answer Chinese with code.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720407,
+  "id": "30fa1f3a-1be3-4e26-b26f-d0793012277b",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 106,
+   "completion_tokens": 400,
+   "total_tokens": 506,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 344
+   }
+  }
+ },
+ "elapsed": 6.026
+}

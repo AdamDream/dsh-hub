@@ -1,0 +1,39 @@
+{
+ "tag": "vis_glm-flash",
+ "model": "glm-5.3-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "这张图片是什么颜色？只回答颜色。"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFAAH/q842iAAAAAElFTkSuQmCC"
+      }
+     }
+    ]
+   }
+  ],
+  "max_tokens": 60,
+  "temperature": 0,
+  "model": "glm-5.3-flash"
+ },
+ "status": 500,
+ "headers": {
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Content-Length": "211",
+  "Content-Type": "application/json; charset=utf-8",
+  "Date": "Fri, 18 Sep 2026 08:34:29 GMT",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180834136424651138268d9d6NeYAtVh9",
+  "Connection": "close"
+ },
+ "raw": "{\"error\":{\"message\":\"分组 auto 下模型 glm-5.3-flash 的可用渠道不存在（retry） (request id: 202609180834136424651138268d9d6NeYAtVh9)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"get_channel_failed\"}}",
+ "elapsed": 15.66
+}

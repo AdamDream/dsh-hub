@@ -1,0 +1,20 @@
+{
+ "tag": "E4a_ds41-flash_chat_lpint",
+ "model": "deepseek-v4.1-flash",
+ "path": "/chat/completions",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "max_tokens": 3,
+  "temperature": 0,
+  "logprobs": 5,
+  "model": "deepseek-v4.1-flash"
+ },
+ "status": 500,
+ "raw": "{\"error\":{\"message\":\"json: cannot unmarshal number into Go struct field ***.logprobs of type bool (request id: 202609180839151088524138268d9d6BnNqHcs4)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"invalid_request\"}}",
+ "elapsed": 0.02
+}

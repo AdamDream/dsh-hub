@@ -1,0 +1,260 @@
+{
+ "tag": "E2_ds-pro_p_math_r2",
+ "model": "deepseek-v4-pro",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "Compute 17*23+456/12. Give the final number."
+   }
+  ],
+  "max_tokens": 3,
+  "temperature": 0,
+  "logprobs": true,
+  "top_logprobs": 5,
+  "model": "deepseek-v4-pro"
+ },
+ "status": 200,
+ "raw": "{\"id\":\"156e2726-b6ee-4946-9452-f82268d9ff65\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720647,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We need answer\"},\"finish_reason\":\"length\",\"logprobs\":{\"reasoning_content\":[{\"token\":\"We\",\"logprob\":-0.00012790339,\"bytes\":[87,101],\"top_logprobs\":[{\"token\":\"We\",\"logprob\":-0.00012790339,\"bytes\":[87,101]},{\"token\":\"17\",\"logprob\":-8.992031,\"bytes\":[49,55]},{\"token\":\"Мы\",\"logprob\":-14.062544,\"bytes\":[208,156,209,139]},{\"token\":\"391\",\"logprob\":-14.1088505,\"bytes\":[51,57,49]},{\"token\":\"Need\",\"logprob\":-14.9464245,\"bytes\":[78,101,101,100]}]},{\"token\":\" need\",\"logprob\":-1.1920928e-7,\"bytes\":[32,110,101,101,100],\"top_logprobs\":[{\"token\":\" need\",\"logprob\":-1.1920928e-7,\"bytes\":[32,110,101,101,100]},{\"token\":\" can\",\"logprob\":-16.707357,\"bytes\":[32,99,97,110]},{\"token\":\" compute\",\"logprob\":-17.365532,\"bytes\":[32,99,111,109,112,117,116,101]},{\"token\":\" don\",\"logprob\":-19.481098,\"bytes\":[32,100,111,110]},{\"token\":\" know\",\"logprob\":-19.84477,\"bytes\":[32,107,110,111,119]}]},{\"token\":\" answer\",\"logprob\":-0.0005429701,\"bytes\":[32,97,110,115,119,101,114],\"top_logprobs\":[{\"token\":\" answer\",\"logprob\":-0.0005429701,\"bytes\":[32,97,110,115,119,101,114]},{\"token\":\" compute\",\"logprob\":-7.5209365,\"bytes\":[32,99,111,109,112,117,116,101]},{\"token\":\" solve\",\"logprob\":-14.81099,\"bytes\":[32,115,111,108,118,101]},{\"token\":\" calculate\",\"logprob\":-15.881236,\"bytes\":[32,99,97,108,99,117,108,97,116,101]},{\"token\":\" respond\",\"logprob\":-16.06562,\"bytes\":[32,114,101,115,112,111,110,100]}]}]}}],\"usage\":{\"prompt_tokens\":45,\"completion_tokens\":3,\"total_tokens\":48,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":3}}}",
+ "json": {
+  "id": "156e2726-b6ee-4946-9452-f82268d9ff65",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720647,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We need answer"
+    },
+    "finish_reason": "length",
+    "logprobs": {
+     "reasoning_content": [
+      {
+       "token": "We",
+       "logprob": -0.00012790339,
+       "bytes": [
+        87,
+        101
+       ],
+       "top_logprobs": [
+        {
+         "token": "We",
+         "logprob": -0.00012790339,
+         "bytes": [
+          87,
+          101
+         ]
+        },
+        {
+         "token": "17",
+         "logprob": -8.992031,
+         "bytes": [
+          49,
+          55
+         ]
+        },
+        {
+         "token": "Мы",
+         "logprob": -14.062544,
+         "bytes": [
+          208,
+          156,
+          209,
+          139
+         ]
+        },
+        {
+         "token": "391",
+         "logprob": -14.1088505,
+         "bytes": [
+          51,
+          57,
+          49
+         ]
+        },
+        {
+         "token": "Need",
+         "logprob": -14.9464245,
+         "bytes": [
+          78,
+          101,
+          101,
+          100
+         ]
+        }
+       ]
+      },
+      {
+       "token": " need",
+       "logprob": -1.1920928e-07,
+       "bytes": [
+        32,
+        110,
+        101,
+        101,
+        100
+       ],
+       "top_logprobs": [
+        {
+         "token": " need",
+         "logprob": -1.1920928e-07,
+         "bytes": [
+          32,
+          110,
+          101,
+          101,
+          100
+         ]
+        },
+        {
+         "token": " can",
+         "logprob": -16.707357,
+         "bytes": [
+          32,
+          99,
+          97,
+          110
+         ]
+        },
+        {
+         "token": " compute",
+         "logprob": -17.365532,
+         "bytes": [
+          32,
+          99,
+          111,
+          109,
+          112,
+          117,
+          116,
+          101
+         ]
+        },
+        {
+         "token": " don",
+         "logprob": -19.481098,
+         "bytes": [
+          32,
+          100,
+          111,
+          110
+         ]
+        },
+        {
+         "token": " know",
+         "logprob": -19.84477,
+         "bytes": [
+          32,
+          107,
+          110,
+          111,
+          119
+         ]
+        }
+       ]
+      },
+      {
+       "token": " answer",
+       "logprob": -0.0005429701,
+       "bytes": [
+        32,
+        97,
+        110,
+        115,
+        119,
+        101,
+        114
+       ],
+       "top_logprobs": [
+        {
+         "token": " answer",
+         "logprob": -0.0005429701,
+         "bytes": [
+          32,
+          97,
+          110,
+          115,
+          119,
+          101,
+          114
+         ]
+        },
+        {
+         "token": " compute",
+         "logprob": -7.5209365,
+         "bytes": [
+          32,
+          99,
+          111,
+          109,
+          112,
+          117,
+          116,
+          101
+         ]
+        },
+        {
+         "token": " solve",
+         "logprob": -14.81099,
+         "bytes": [
+          32,
+          115,
+          111,
+          108,
+          118,
+          101
+         ]
+        },
+        {
+         "token": " calculate",
+         "logprob": -15.881236,
+         "bytes": [
+          32,
+          99,
+          97,
+          108,
+          99,
+          117,
+          108,
+          97,
+          116,
+          101
+         ]
+        },
+        {
+         "token": " respond",
+         "logprob": -16.06562,
+         "bytes": [
+          32,
+          114,
+          101,
+          115,
+          112,
+          111,
+          110,
+          100
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 45,
+   "completion_tokens": 3,
+   "total_tokens": 48,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 3
+   }
+  }
+ },
+ "elapsed": 1.334
+}

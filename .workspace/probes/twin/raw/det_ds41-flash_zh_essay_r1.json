@@ -1,0 +1,68 @@
+{
+ "tag": "det_ds41-flash_zh_essay_r1",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "用大约120字介绍杭州西湖，要求语言平实。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720482.5951788,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf035889eb6042-SIN",
+  "Content-Length": "958",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:34:44 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=n7SqDY82Cjra2gnHqpDy05%2BCV%2BTEui3ZkrMmtV0qfdq6ZEYOAtaou01zFIvvcQJ2dJgA4dKd%2BOahUj%2Be54LoiKpgolLl2IZyQvHvzgIP60MFR6p9QdbKlOo1ZSP%2FymzU\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180834426166687758268d9d6ihXMEHWu",
+  "X-Request-Id": "8db4b3f1-4d56-411b-9f04-9df3c917c06c",
+  "X-Trace-Id": "8db4b3f14d56411b9f049df3c917c06c",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"8db4b3f1-4d56-411b-9f04-9df3c917c06c\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720483,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"杭州西湖位于浙江省杭州市，是中国著名的风景名胜。湖面面积约6平方公里，三面环山，一面临城。苏堤、白堤将湖面分隔成几片水域，形成“一山二塔三岛三堤五湖”的格局。湖边有断桥残雪、雷峰塔等景点，四季景色各有特色。2007年被评为国家5A级景区，2011年列入世界文化遗产名录，是杭州最具代表性的地标。\",\"reasoning_content\":\"用户希望我用大约120字介绍杭州西湖，要求语言平实。让我写一篇简洁、朴实的描述。\"},\"finish_reason\":\"stop\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":43,\"completion_tokens\":125,\"total_tokens\":168,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":24}}}",
+ "json": {
+  "id": "8db4b3f1-4d56-411b-9f04-9df3c917c06c",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720483,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "杭州西湖位于浙江省杭州市，是中国著名的风景名胜。湖面面积约6平方公里，三面环山，一面临城。苏堤、白堤将湖面分隔成几片水域，形成“一山二塔三岛三堤五湖”的格局。湖边有断桥残雪、雷峰塔等景点，四季景色各有特色。2007年被评为国家5A级景区，2011年列入世界文化遗产名录，是杭州最具代表性的地标。",
+     "reasoning_content": "用户希望我用大约120字介绍杭州西湖，要求语言平实。让我写一篇简洁、朴实的描述。"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 43,
+   "completion_tokens": 125,
+   "total_tokens": 168,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 24
+   }
+  }
+ },
+ "elapsed": 2.094
+}

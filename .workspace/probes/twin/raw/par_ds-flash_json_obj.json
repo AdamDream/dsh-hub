@@ -1,0 +1,70 @@
+{
+ "tag": "par_ds-flash_json_obj",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "response_format": {
+   "type": "json_object"
+  },
+  "max_tokens": 30,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720381.3609128,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf00dfd9e26042-SIN",
+  "Content-Length": "541",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:04 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=BqIkbvaRKPLeGJ68IWCdNbBz6DlALbpQ3VBg2DdkeZJeaaBQn6YeIrDNErglnpV3hK0TBJKcsXoSoTVegDHaDE2apqDa421g2N2Xu1kSD7CvmqcpdckXqXZHaactzN%2Fb\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833013786451618268d9d6cuh1PnRr",
+  "X-Request-Id": "5b78ac24-46c3-4967-b4ff-99a970f3c13f",
+  "X-Trace-Id": "5b78ac2446c34967b4ff99a970f3c13f",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"We need answer only JSON object. Schema type object any. So output {} maybe. But task says hi. Need JSON object. Could output {} or\",\"role\":\"assistant\"}}],\"created\":1789720383,\"id\":\"5b78ac24-46c3-4967-b4ff-99a970f3c13f\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":201,\"completion_tokens\":30,\"total_tokens\":231,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":30}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "We need answer only JSON object. Schema type object any. So output {} maybe. But task says hi. Need JSON object. Could output {} or",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720383,
+  "id": "5b78ac24-46c3-4967-b4ff-99a970f3c13f",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 201,
+   "completion_tokens": 30,
+   "total_tokens": 231,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 30
+   }
+  }
+ },
+ "elapsed": 3.369
+}

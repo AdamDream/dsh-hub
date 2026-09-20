@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_rand_r0",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "请输出一个 1 到 1000 之间的随机整数，只输出数字。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720438.736885,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf02466eb76042-SIN",
+  "Content-Length": "615",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:34:02 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=JfMbYhvS0w0buu0Ut4dgZ5jHIUV8ETqmNaLj5ByUZvP4VXhd1vlM4XufULUTFcdgS0OYYp7k%2BM0DFd%2FJ8iAzCzJd2IhwZt2SxSnNfgEAZyehjsEWpteGdlYL4pzK6TVB\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833587522033778268d9d6flGpWugZ",
+  "X-Request-Id": "3f75cafc-b775-40aa-a7aa-1eb17d95d9f2",
+  "X-Trace-Id": "3f75cafcb77540aaa7aa1eb17d95d9f2",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"742\",\"reasoning_content\":\"We need answer in Chinese? Need random integer 1-1000 only output number. Need comply. Need pick random. Use mentally. Need maybe 1 to 1000 inclusive. Output only digit. Let's choose 742. Ensure no extra.\",\"role\":\"assistant\"}}],\"created\":1789720441,\"id\":\"3f75cafc-b775-40aa-a7aa-1eb17d95d9f2\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":102,\"completion_tokens\":54,\"total_tokens\":156,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":52}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "742",
+     "reasoning_content": "We need answer in Chinese? Need random integer 1-1000 only output number. Need comply. Need pick random. Use mentally. Need maybe 1 to 1000 inclusive. Output only digit. Let's choose 742. Ensure no extra.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720441,
+  "id": "3f75cafc-b775-40aa-a7aa-1eb17d95d9f2",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 102,
+   "completion_tokens": 54,
+   "total_tokens": 156,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 52
+   }
+  }
+ },
+ "elapsed": 3.892
+}

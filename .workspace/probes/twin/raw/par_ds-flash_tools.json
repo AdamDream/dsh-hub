@@ -1,0 +1,80 @@
+{
+ "tag": "par_ds-flash_tools",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "tools": [
+   {
+    "type": "function",
+    "function": {
+     "name": "get_time",
+     "description": "get current time",
+     "parameters": {
+      "type": "object",
+      "properties": {}
+     }
+    }
+   }
+  ],
+  "max_tokens": 40,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720388.131304,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf010a1ba86042-SIN",
+  "Content-Length": "534",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:11 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=NoGhJiyqeftLrb%2BkFSJgyNhqX9lwiyMRRuI0PUXtARULTS9%2F93ZYtFHKl9hirup2s%2FbC1KlOs5AGweaxSZYQXw0g3DKZgx7VmEKqqHg22QVJ1iYvOJ2UcAlcl8GIMEIa\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833081437091648268d9d6dUuRXI5u",
+  "X-Request-Id": "65ae6f62-8de5-431b-aad6-32362c791286",
+  "X-Trace-Id": "65ae6f628de5431baad632362c791286",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"Hi there! 👋 How can I help you today?\",\"reasoning_content\":\"The user just said \\\"hi\\\". I should respond in a friendly way. No need for tools here.\",\"role\":\"assistant\"}}],\"created\":1789720390,\"id\":\"65ae6f62-8de5-431b-aad6-32362c791286\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":334,\"completion_tokens\":34,\"total_tokens\":368,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":21}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "Hi there! 👋 How can I help you today?",
+     "reasoning_content": "The user just said \"hi\". I should respond in a friendly way. No need for tools here.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720390,
+  "id": "65ae6f62-8de5-431b-aad6-32362c791286",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 334,
+   "completion_tokens": 34,
+   "total_tokens": 368,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 21
+   }
+  }
+ },
+ "elapsed": 3.22
+}

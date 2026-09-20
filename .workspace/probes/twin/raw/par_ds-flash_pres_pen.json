@@ -1,0 +1,68 @@
+{
+ "tag": "par_ds-flash_pres_pen",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "presence_penalty": 1.0,
+  "max_tokens": 8,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720367.7690754,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf008dc86d6042-SIN",
+  "Content-Length": "442",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:32:51 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=KigC3u%2BhM5eQdpFbH2gDTgFVokMdIVQ9d9CnuqE7GKavSw41ia25cEhTcIQayJX5XFpURkkli1riC0buzEMmWHuuE9I80FkZgwul8ALUE%2FBMwnorp%2FUMc1lhIgBlTYYs\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180832477848984388268d9d68ltIGWgP",
+  "X-Request-Id": "52dc90ee-6b57-4f91-88e8-81be65b7bdb9",
+  "X-Trace-Id": "52dc90ee6b574f9188e881be65b7bdb9",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"We need answer. Need maybe greeting.\",\"role\":\"assistant\"}}],\"created\":1789720371,\"id\":\"52dc90ee-6b57-4f91-88e8-81be65b7bdb9\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":84,\"completion_tokens\":8,\"total_tokens\":92,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":8}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "We need answer. Need maybe greeting.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720371,
+  "id": "52dc90ee-6b57-4f91-88e8-81be65b7bdb9",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 84,
+   "completion_tokens": 8,
+   "total_tokens": 92,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 8
+   }
+  }
+ },
+ "elapsed": 3.774
+}

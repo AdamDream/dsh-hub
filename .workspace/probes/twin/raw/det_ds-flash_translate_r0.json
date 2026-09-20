@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_translate_r0",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "把这句话翻译成英文：我们明天上午十点在会议室讨论网关的模型路由策略。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720411.0600936,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01999e016042-SIN",
+  "Content-Length": "1039",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:34 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=NwuOfiaaylextmNdfChN1ekJXz0SLLY9zYanCYwA1tfouk24zrYbf4iwzdFWD1BZgdPtKn3onHBwnng%2BkLYo6nbPghMeGlMFnLxdvmYrsji52mqVgBjIQEupeAHMfp2r\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "20260918083331957223608268d9d6qSjZQgFD",
+  "X-Request-Id": "9117c330-59b5-4eea-ab6a-69ed55e36f0b",
+  "X-Trace-Id": "9117c33059b54eeaab6a69ed55e36f0b",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"We will discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow.\",\"reasoning_content\":\"We need answer translation. Need translate Chinese sentence to English. Sentence: \\\"我们明天上午十点在会议室讨论网关的模型路由策略。\\\" Need accurate. \\\"明天上午十点\\\" = tomorrow at 10 am. \\\"在会议室\\\" in the meeting room. \\\"讨论\\\" discuss. \\\"网关的模型路由策略\\\" the model routing strategy of the gateway / gateway's model routing strategy. Need natural. \\\"We will discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow.\\\" Or \\\"We'll discuss...\\\" Let's provide.\",\"role\":\"assistant\"}}],\"created\":1789720413,\"id\":\"9117c330-59b5-4eea-ab6a-69ed55e36f0b\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":102,\"completion_tokens\":136,\"total_tokens\":238,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":114}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "We will discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow.",
+     "reasoning_content": "We need answer translation. Need translate Chinese sentence to English. Sentence: \"我们明天上午十点在会议室讨论网关的模型路由策略。\" Need accurate. \"明天上午十点\" = tomorrow at 10 am. \"在会议室\" in the meeting room. \"讨论\" discuss. \"网关的模型路由策略\" the model routing strategy of the gateway / gateway's model routing strategy. Need natural. \"We will discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow.\" Or \"We'll discuss...\" Let's provide.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720413,
+  "id": "9117c330-59b5-4eea-ab6a-69ed55e36f0b",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 102,
+   "completion_tokens": 136,
+   "total_tokens": 238,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 114
+   }
+  }
+ },
+ "elapsed": 3.865
+}

@@ -1,0 +1,124 @@
+{
+ "tag": "E1_ds41-flash_r9",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "max_tokens": 3,
+  "temperature": 0,
+  "logprobs": true,
+  "top_logprobs": 3,
+  "model": "deepseek-v4.1-flash"
+ },
+ "status": 200,
+ "raw": "{\"id\":\"180d2a37-c77b-491c-b7ab-aee983c51db6\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720690,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"Hi!\"},\"finish_reason\":\"length\",\"logprobs\":{\"content\":[{\"token\":\"Hi\",\"logprob\":-0.0050030756,\"bytes\":[72,105],\"top_logprobs\":[{\"token\":\"Hi\",\"logprob\":-0.0050030756,\"bytes\":[72,105]},{\"token\":\"Hey\",\"logprob\":-5.439245,\"bytes\":[72,101,121]},{\"token\":\"Hello\",\"logprob\":-7.3567276,\"bytes\":[72,101,108,108,111]}]},{\"token\":\"!\",\"logprob\":-0.007429825,\"bytes\":[33],\"top_logprobs\":[{\"token\":\"!\",\"logprob\":-0.007429825,\"bytes\":[33]},{\"token\":\" there\",\"logprob\":-5.1923814,\"bytes\":[32,116,104,101,114,101]},{\"token\":\".\",\"logprob\":-6.41861,\"bytes\":[46]}]}]}}],\"usage\":{\"prompt_tokens\":31,\"completion_tokens\":3,\"total_tokens\":34,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":0}}}",
+ "json": {
+  "id": "180d2a37-c77b-491c-b7ab-aee983c51db6",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720690,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "Hi!"
+    },
+    "finish_reason": "length",
+    "logprobs": {
+     "content": [
+      {
+       "token": "Hi",
+       "logprob": -0.0050030756,
+       "bytes": [
+        72,
+        105
+       ],
+       "top_logprobs": [
+        {
+         "token": "Hi",
+         "logprob": -0.0050030756,
+         "bytes": [
+          72,
+          105
+         ]
+        },
+        {
+         "token": "Hey",
+         "logprob": -5.439245,
+         "bytes": [
+          72,
+          101,
+          121
+         ]
+        },
+        {
+         "token": "Hello",
+         "logprob": -7.3567276,
+         "bytes": [
+          72,
+          101,
+          108,
+          108,
+          111
+         ]
+        }
+       ]
+      },
+      {
+       "token": "!",
+       "logprob": -0.007429825,
+       "bytes": [
+        33
+       ],
+       "top_logprobs": [
+        {
+         "token": "!",
+         "logprob": -0.007429825,
+         "bytes": [
+          33
+         ]
+        },
+        {
+         "token": " there",
+         "logprob": -5.1923814,
+         "bytes": [
+          32,
+          116,
+          104,
+          101,
+          114,
+          101
+         ]
+        },
+        {
+         "token": ".",
+         "logprob": -6.41861,
+         "bytes": [
+          46
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 31,
+   "completion_tokens": 3,
+   "total_tokens": 34,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0
+   }
+  }
+ },
+ "elapsed": 1.507
+}

@@ -1,0 +1,46 @@
+{
+ "tag": "E3_ds-flash_identity",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "你的确切模型标识符（model id）是什么？请只回答标识符本身。"
+   }
+  ],
+  "max_tokens": 900,
+  "temperature": 0,
+  "model": "deepseek-v4-flash"
+ },
+ "status": 200,
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"deepseek-chat\",\"reasoning_content\":\"我们要求只回答标识符本身。模型标识符可能是\\\"gemini-2.5-pro\\\"？但我是由DeepSeek开发的。用户问\\\"你的确切模型标识符（model id）是什么？\\\" 在DeepSeek API中，模型ID可能是\\\"deepseek-chat\\\"或\\\"deepseek-reasoner\\\"。但作为助手，我需要根据上下文回答。系统提示没有指定模型标识符。通常我会回答\\\"deepseek-chat\\\"或\\\"deepseek-reasoner\\\"。但为了准确，我应当使用我的模型名称。不过由于问题要求只回答标识符本身，我选择\\\"deepseek-chat\\\"。然而，更准确的可能是\\\"deepseek-v3\\\"？让我思考。在DeepSeek的开放平台上，模型ID为\\\"deepseek-chat\\\"指代DeepSeek-V3，而\\\"deepseek-reasoner\\\"指代DeepSeek-R1。但我作为这个接口的模型，很可能就是\\\"deepseek-chat\\\"。但我没有确切信息。为了合规，我应当使用我已知的标识。在之前的对话中，我通常会被认为是\\\"DeepSeek-V3\\\"。但用户要求确切模型标识符，我只回答标识符本身。我决定回答\\\"deepseek-chat\\\"，因为这是API中的模型ID。或者可能\\\"deepseek-v3\\\"？让我们确认：DeepSeek的模型ID有\\\"deepseek-chat\\\"和\\\"deepseek-reasoner\\\"。根据官方文档，deepseek-chat是通用对话模型。所以回答\\\"deepseek-chat\\\"是合适的。但如果你是在问大模型标识符，很多系统会返回\\\"deepseek-v3\\\"或\\\"deepseek-r1\\\"。实际上，DeepSeek-V3的模型ID就是\\\"deepseek-chat\\\"。因此我回答\\\"deepseek-chat\\\"。\",\"role\":\"assistant\"}}],\"created\":1789720636,\"id\":\"c61b02f3-eaf4-43d2-9748-13319f17b004\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":101,\"completion_tokens\":380,\"total_tokens\":481,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":375}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "deepseek-chat",
+     "reasoning_content": "我们要求只回答标识符本身。模型标识符可能是\"gemini-2.5-pro\"？但我是由DeepSeek开发的。用户问\"你的确切模型标识符（model id）是什么？\" 在DeepSeek API中，模型ID可能是\"deepseek-chat\"或\"deepseek-reasoner\"。但作为助手，我需要根据上下文回答。系统提示没有指定模型标识符。通常我会回答\"deepseek-chat\"或\"deepseek-reasoner\"。但为了准确，我应当使用我的模型名称。不过由于问题要求只回答标识符本身，我选择\"deepseek-chat\"。然而，更准确的可能是\"deepseek-v3\"？让我思考。在DeepSeek的开放平台上，模型ID为\"deepseek-chat\"指代DeepSeek-V3，而\"deepseek-reasoner\"指代DeepSeek-R1。但我作为这个接口的模型，很可能就是\"deepseek-chat\"。但我没有确切信息。为了合规，我应当使用我已知的标识。在之前的对话中，我通常会被认为是\"DeepSeek-V3\"。但用户要求确切模型标识符，我只回答标识符本身。我决定回答\"deepseek-chat\"，因为这是API中的模型ID。或者可能\"deepseek-v3\"？让我们确认：DeepSeek的模型ID有\"deepseek-chat\"和\"deepseek-reasoner\"。根据官方文档，deepseek-chat是通用对话模型。所以回答\"deepseek-chat\"是合适的。但如果你是在问大模型标识符，很多系统会返回\"deepseek-v3\"或\"deepseek-r1\"。实际上，DeepSeek-V3的模型ID就是\"deepseek-chat\"。因此我回答\"deepseek-chat\"。",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720636,
+  "id": "c61b02f3-eaf4-43d2-9748-13319f17b004",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 101,
+   "completion_tokens": 380,
+   "total_tokens": 481,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 375
+   }
+  }
+ },
+ "elapsed": 5.936
+}

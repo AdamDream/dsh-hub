@@ -1,0 +1,48 @@
+{
+ "tag": "E4d_ds41-flash_r5",
+ "model": "deepseek-v4.1-flash",
+ "path": "/chat/completions",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "Question: 2+2=? Answer:"
+   }
+  ],
+  "max_tokens": 2,
+  "temperature": 0,
+  "model": "deepseek-v4.1-flash"
+ },
+ "status": 200,
+ "raw": "{\"id\":\"fbd5fbd9-e20e-487e-b74c-bad0a5da2caa\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720972,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We need\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":39,\"completion_tokens\":2,\"total_tokens\":41,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":2}}}",
+ "json": {
+  "id": "fbd5fbd9-e20e-487e-b74c-bad0a5da2caa",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720972,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We need"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 39,
+   "completion_tokens": 2,
+   "total_tokens": 41,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 2
+   }
+  }
+ },
+ "elapsed": 1.368
+}

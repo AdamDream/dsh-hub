@@ -1,0 +1,68 @@
+{
+ "tag": "det_ds41-flash_rand_r1",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "请输出一个 1 到 1000 之间的随机整数，只输出数字。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720511.8465412,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf040f89c26042-SIN",
+  "Content-Length": "784",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:35:13 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=NTGtu%2BeqbCuRCaB8NNwGtY7lbndORKIyHdCQtUf%2FW0gPGGqrwGM6z9UO7QC009djdL4LMKcuEDeUcP9tmLwyPN5JyhxtqV7toSz5WI7yQ%2BXCmTwHOHF1sqBgGiwXVy%2B9\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180835118694998328268d9d6zavwgocH",
+  "X-Request-Id": "77548600-21e7-4c1b-8f70-e1b611b4bcff",
+  "X-Trace-Id": "7754860021e74c1b8f70e1b611b4bcff",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"77548600-21e7-4c1b-8f70-e1b611b4bcff\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720512,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"738\",\"reasoning_content\":\"我们需要回答用户中文请求：“请输出一个 1 到 1000 之间的随机整数，只输出数字。” 需要只输出数字。我们需要生成一个随机整数1-1000。作为AI无法真正随机，但可以选一个。只输出数字，不要解释。需要确保1到1000之间。可以随便选。例如 347。只输出数字。 final only.\"},\"finish_reason\":\"stop\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":49,\"completion_tokens\":84,\"total_tokens\":133,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":82}}}",
+ "json": {
+  "id": "77548600-21e7-4c1b-8f70-e1b611b4bcff",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720512,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "738",
+     "reasoning_content": "我们需要回答用户中文请求：“请输出一个 1 到 1000 之间的随机整数，只输出数字。” 需要只输出数字。我们需要生成一个随机整数1-1000。作为AI无法真正随机，但可以选一个。只输出数字，不要解释。需要确保1到1000之间。可以随便选。例如 347。只输出数字。 final only."
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 49,
+   "completion_tokens": 84,
+   "total_tokens": 133,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 82
+   }
+  }
+ },
+ "elapsed": 1.804
+}

@@ -1,0 +1,50 @@
+{
+ "tag": "E6c_ds41-flash_short",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "system",
+    "content": "S"
+   },
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "deepseek-v4.1-flash"
+ },
+ "status": 200,
+ "raw": "{\"id\":\"540a0de2-9d51-48f0-8bc9-9efad2e7d0da\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789721103,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":32,\"completion_tokens\":1,\"total_tokens\":33,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":0}}}",
+ "json": {
+  "id": "540a0de2-9d51-48f0-8bc9-9efad2e7d0da",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789721103,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": ""
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 32,
+   "completion_tokens": 1,
+   "total_tokens": 33,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0
+   }
+  }
+ },
+ "elapsed": 1.579
+}

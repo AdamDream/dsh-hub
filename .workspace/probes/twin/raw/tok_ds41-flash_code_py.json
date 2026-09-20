@@ -1,0 +1,68 @@
+{
+ "tag": "tok_ds41-flash_code_py",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "def f(x: int) -> int:\n    return x ** 2 + 1\n"
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720397.9180815,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01475f9d6042-SIN",
+  "Content-Length": "425",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:19 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=RqoByayESATFlqaANB27WuRqr2oaxfG2lyFmbLfdrzJsuBIkrX8zcWRYOVYHBTTBqJ7X9qSEM8zGitvAf5DaKV64bY65%2BEnlMvYup4khbBuhQzhibtAKlDWNx7LQg9IC\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833179482454608268d9d6yw4qXPhR",
+  "X-Request-Id": "c7fbb373-d09f-470b-8608-91562b896e15",
+  "X-Trace-Id": "c7fbb373d09f470b860891562b896e15",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"c7fbb373-d09f-470b-8608-91562b896e15\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720398,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":49,\"completion_tokens\":1,\"total_tokens\":50,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":1}}}",
+ "json": {
+  "id": "c7fbb373-d09f-470b-8608-91562b896e15",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720398,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 49,
+   "completion_tokens": 1,
+   "total_tokens": 50,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1
+   }
+  }
+ },
+ "elapsed": 1.287
+}

@@ -1,0 +1,22 @@
+{
+ "tag": "E4c_ds41-flash_json_obj_r0",
+ "model": "deepseek-v4.1-flash",
+ "path": "/chat/completions",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "response_format": {
+   "type": "json_object"
+  },
+  "max_tokens": 20,
+  "model": "deepseek-v4.1-flash"
+ },
+ "status": 500,
+ "raw": "{\"error\":{\"message\":\"分组 auto 下模型 deepseek-v4.1-flash 的可用渠道不存在（retry） (request id: 202609180840535300074098268d9d6INydZGnV)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"get_channel_failed\"}}",
+ "elapsed": 2.687
+}

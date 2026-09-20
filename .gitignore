@@ -11,22 +11,47 @@ node_modules
 .vscode/
 *.swp
 cc-switch-src/
-.workspace/repos/
-.workspace/research-dsh-workerspace/repos/
-.workspace/tmp-ppt-research/
-.workspace/research/tarballs/
-.workspace/research/tgz/
-.workspace/research/tarballs/
-.workspace/deploy-pptmaster/skills/
-.workspace/upstream-015-diff/pkgs/
-.workspace/backup-*/
-.workspace/deploy-lag/backup-*/
-.workspace/deploy-lag/sim/
-.workspace/research-luxweft-doc/
+.workspace/workstreams/research/repos/
+.workspace/workstreams/research/research-dsh-workerspace/repos/
+.workspace/workstreams/research/tmp-ppt-research/
+.workspace/workstreams/research/research/tarballs/
+.workspace/workstreams/research/research/tgz/
+.workspace/workstreams/research/research/tarballs/
+.workspace/workstreams/deploy/deploy-pptmaster/skills/
+.workspace/workstreams/upstream-015-diff/pkgs/
+.workspace/backups/
+.workspace/workstreams/deploy/deploy-lag/backup-*/
+.workspace/workstreams/deploy/deploy-lag/sim/
+.workspace/workstreams/research/research-luxweft-doc/
 
 # 大体积本地测试环境（2026-09-17 停止跟踪：实测 1817 文件 / 51.62 MiB，
 # 占 HEAD 跟踪内容 52.8%，由 3028e624 误入库；文件仍在磁盘上，只是不再入库）
-.workspace/deploy-pptmaster/.venv-ppt-test/
+.workspace/workstreams/deploy/deploy-pptmaster/.venv-ppt-test/
 
 # 用户桌面截图（保持不入库）
-.workspace/mmt-probe/pasted-2048.png
+.workspace/probes/mmt/pasted-2048.png
+
+# ── 2026-09-20 文档整理（Track D）：规则随目录重构同步（原路径 → 新路径）
+#    .workspace/repos/                          -> .workspace/workstreams/research/repos/
+#    .workspace/research-dsh-workerspace/repos/ -> .workspace/workstreams/research/research-dsh-workerspace/repos/
+#    .workspace/tmp-ppt-research/               -> .workspace/workstreams/research/tmp-ppt-research/
+#    .workspace/research/{tarballs,tgz}/        -> .workspace/workstreams/research/research/{tarballs,tgz}/
+#    .workspace/deploy-pptmaster/skills/        -> .workspace/workstreams/deploy/deploy-pptmaster/skills/
+#    .workspace/upstream-015-diff/pkgs/         -> .workspace/workstreams/upstream-015-diff/pkgs/
+#    .workspace/backup-*/                       -> .workspace/backups/
+#    .workspace/deploy-lag/backup-*/            -> .workspace/workstreams/deploy/deploy-lag/backup-*/
+#    .workspace/deploy-lag/sim/                 -> .workspace/workstreams/deploy/deploy-lag/sim/
+#    .workspace/research-luxweft-doc/           -> .workspace/workstreams/research/research-luxweft-doc/
+#    .workspace/deploy-pptmaster/.venv-ppt-test/-> .workspace/workstreams/deploy/deploy-pptmaster/.venv-ppt-test/
+
+# ── 2026-09-20 卡顿修复工作区的备份/临时区（体积大、非文档）
+.workspace/lag-fix/backup/
+.workspace/lag-fix/patches/backup/
+.workspace/lag-fix/backup-usage*/
+.workspace/lag-fix/tmp/
+.workspace/lag-fix/sandbox/
+.workspace/docs-reorg/tmp/
+
+# Python 编译缓存（本次整理时发现被误纳入）
+__pycache__/
+*.pyc

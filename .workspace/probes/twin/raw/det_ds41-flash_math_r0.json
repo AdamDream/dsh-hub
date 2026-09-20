@@ -1,0 +1,68 @@
+{
+ "tag": "det_ds41-flash_math_r0",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "计算 17*23+456/12 的结果，先给出思考要点再给最终答案。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720472.505557,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf031b297e6042-SIN",
+  "Content-Length": "1013",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:34:34 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=pfcad3tBBsEEzJLDRFxPTltv4uIjf1gvz3BF9kqVGiDmwRsx6QFYkxoh7R4VozhUwEJY4r1rBQUSU70hfkZx0a9LAYSuMkgy%2Fj9Kg1LJRVNeVO0ts6NveE1j0F%2BmBkKL\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180834325260609408268d9d6owwpadxo",
+  "X-Request-Id": "4dc10c10-2744-48ba-ba40-48cb9903963f",
+  "X-Trace-Id": "4dc10c10274448baba4048cb9903963f",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"4dc10c10-2744-48ba-ba40-48cb9903963f\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720473,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"思考要点：\\n1. 按运算顺序，先算乘法和除法。\\n2. 17 × 23 = 391\\n3. 456 ÷ 12 = 38\\n4. 最后相加：391 + 38 = 429\\n\\n最终答案：429\",\"reasoning_content\":\"我们需要回答中文。用户要求“计算 17*23+456/12 的结果，先给出思考要点再给最终答案。”我们需要给出思考要点和最终答案。需要遵守运算顺序。计算 17*23=391。456/12=38。相加=429。需先给思考要点再最终答案。要简洁。注意不要用分析。最终回答。可以包括思考要点：先乘除后加减，分别算乘法除法，再相加。最终答案 429。\"},\"finish_reason\":\"stop\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":51,\"completion_tokens\":160,\"total_tokens\":211,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":103}}}",
+ "json": {
+  "id": "4dc10c10-2744-48ba-ba40-48cb9903963f",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720473,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "思考要点：\n1. 按运算顺序，先算乘法和除法。\n2. 17 × 23 = 391\n3. 456 ÷ 12 = 38\n4. 最后相加：391 + 38 = 429\n\n最终答案：429",
+     "reasoning_content": "我们需要回答中文。用户要求“计算 17*23+456/12 的结果，先给出思考要点再给最终答案。”我们需要给出思考要点和最终答案。需要遵守运算顺序。计算 17*23=391。456/12=38。相加=429。需先给思考要点再最终答案。要简洁。注意不要用分析。最终回答。可以包括思考要点：先乘除后加减，分别算乘法除法，再相加。最终答案 429。"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 51,
+   "completion_tokens": 160,
+   "total_tokens": 211,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 103
+   }
+  }
+ },
+ "elapsed": 2.436
+}

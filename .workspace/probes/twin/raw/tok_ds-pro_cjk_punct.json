@@ -1,0 +1,68 @@
+{
+ "tag": "tok_ds-pro_cjk_punct",
+ "model": "deepseek-v4-pro",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "「测试」——……（一）、；：？！【】《》"
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "deepseek-v4-pro"
+ },
+ "t0": 1789720424.7661855,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01ef3e096042-SIN",
+  "Content-Length": "425",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:46 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=CxsZ7bGJiyTaHnTB0CwwarG7VjL20VoEi9Jx6vTqD0rTy9I8nP3vgLe1Hp%2F41UcRcTrsA2bwi9rDaMfzrQwxqsWWoPDy2a%2BlQ7YrOxV9yLAaPuINKWENbEp7cgBgJpmo\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833447983353658268d9d6QfvctlMJ",
+  "X-Request-Id": "9b186d94-4a07-46f1-bbab-5b4a77dfde07",
+  "X-Trace-Id": "9b186d944a0746f1bbab5b4a77dfde07",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"9b186d94-4a07-46f1-bbab-5b4a77dfde07\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720425,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":45,\"completion_tokens\":1,\"total_tokens\":46,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":1}}}",
+ "json": {
+  "id": "9b186d94-4a07-46f1-bbab-5b4a77dfde07",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720425,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 45,
+   "completion_tokens": 1,
+   "total_tokens": 46,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1
+   }
+  }
+ },
+ "elapsed": 1.361
+}

@@ -1,0 +1,50 @@
+{
+ "tag": "E4c_ds-flash_json_obj_r1",
+ "model": "deepseek-v4-flash",
+ "path": "/chat/completions",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "response_format": {
+   "type": "json_object"
+  },
+  "max_tokens": 20,
+  "model": "deepseek-v4-flash"
+ },
+ "status": 200,
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"The user just said \\\"hi\\\". The system prompt instructs me to output only JSON, conforming\",\"role\":\"assistant\"}}],\"created\":1789720828,\"id\":\"d4eb0737-f175-4767-9910-1b5a0734d9ef\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":201,\"completion_tokens\":20,\"total_tokens\":221,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":20}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "The user just said \"hi\". The system prompt instructs me to output only JSON, conforming",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720828,
+  "id": "d4eb0737-f175-4767-9910-1b5a0734d9ef",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 201,
+   "completion_tokens": 20,
+   "total_tokens": 221,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 20
+   }
+  }
+ },
+ "elapsed": 3.774
+}

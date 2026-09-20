@@ -1,0 +1,81 @@
+{
+ "tag": "par_ds41-flash_tools",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "tools": [
+   {
+    "type": "function",
+    "function": {
+     "name": "get_time",
+     "description": "get current time",
+     "parameters": {
+      "type": "object",
+      "properties": {}
+     }
+    }
+   }
+  ],
+  "max_tokens": 40,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720422.0477679,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01de3a7b6042-SIN",
+  "Content-Length": "595",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:43 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=bRrvo7j8gTnqjy8BshvacgMweqVelLHAP6CT2kihbxj6o61XjWIGL1AE9DexSQKz0MHq3isg15VFabHs0i3%2FOFP7R87HDM9qyVG73GGKkRMObVHop4SyBx8tLjlA91SH\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "20260918083342695043698268d9d6XRTLGXG7",
+  "X-Request-Id": "fccfdc8b-17ee-4743-8c09-c409992cddf5",
+  "X-Trace-Id": "fccfdc8b17ee47438c09c409992cddf5",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"fccfdc8b-17ee-4743-8c09-c409992cddf5\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720422,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"The user just said \\\"hi\\\". I should respond warmly. I have a get_time tool available. Should I use it? It's not necessary for a greeting, but it could be useful to know\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":271,\"completion_tokens\":40,\"total_tokens\":311,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":40}}}",
+ "json": {
+  "id": "fccfdc8b-17ee-4743-8c09-c409992cddf5",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720422,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "The user just said \"hi\". I should respond warmly. I have a get_time tool available. Should I use it? It's not necessary for a greeting, but it could be useful to know"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 271,
+   "completion_tokens": 40,
+   "total_tokens": 311,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 40
+   }
+  }
+ },
+ "elapsed": 1.628
+}

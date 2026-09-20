@@ -1,0 +1,68 @@
+{
+ "tag": "det_ds41-flash_translate_r0",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "把这句话翻译成英文：我们明天上午十点在会议室讨论网关的模型路由策略。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720496.3723135,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf03b04cf76042-SIN",
+  "Content-Length": "1409",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:34:58 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=nOWFNNz9UuRJpoGsRgGe8J4M7xKaHOGAGOyPZC1UrUKEkGpLJt6LXGmRRjyoyPeLHfIqVn7SHxITkrJfotlOoh3GjGz78lbJkD5MkBTvGNOiFpkpyCbvhFERyKoZSyBe\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180834563818166398268d9d6mzX7qttc",
+  "X-Request-Id": "fd7601f4-6884-4be9-a3d8-9ab51d90a84e",
+  "X-Trace-Id": "fd7601f468844be9a3d89ab51d90a84e",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"fd7601f4-6884-4be9-a3d8-9ab51d90a84e\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720497,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"We will discuss the gateway’s model routing strategy in the meeting room at 10 a.m. tomorrow.\",\"reasoning_content\":\"We need answer in English translation. User asks Chinese: \\\"把这句话翻译成英文：我们明天上午十点在会议室讨论网关的模型路由策略。\\\" Need translate. We can just provide English. Need perhaps: \\\"We will discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow.\\\" Ensure accurate: 我们明天上午十点在会议室讨论网关的模型路由策略。 \\\"We will discuss the gateway's model routing policy/strategy in the conference room at 10 a.m. tomorrow.\\\" 会议室 = meeting room/conference room. 模型路由策略 = model routing strategy. \\\"网关的\\\" = gateway's. Could be \\\"the model routing strategy for the gateway\\\" maybe. Final only. \\nNeed maybe include \\\"We're going to discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow.\\\" That's good. \\nFinal answer likely just translation. \"},\"finish_reason\":\"stop\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":49,\"completion_tokens\":212,\"total_tokens\":261,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":189}}}",
+ "json": {
+  "id": "fd7601f4-6884-4be9-a3d8-9ab51d90a84e",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720497,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "We will discuss the gateway’s model routing strategy in the meeting room at 10 a.m. tomorrow.",
+     "reasoning_content": "We need answer in English translation. User asks Chinese: \"把这句话翻译成英文：我们明天上午十点在会议室讨论网关的模型路由策略。\" Need translate. We can just provide English. Need perhaps: \"We will discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow.\" Ensure accurate: 我们明天上午十点在会议室讨论网关的模型路由策略。 \"We will discuss the gateway's model routing policy/strategy in the conference room at 10 a.m. tomorrow.\" 会议室 = meeting room/conference room. 模型路由策略 = model routing strategy. \"网关的\" = gateway's. Could be \"the model routing strategy for the gateway\" maybe. Final only. \nNeed maybe include \"We're going to discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow.\" That's good. \nFinal answer likely just translation. "
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 49,
+   "completion_tokens": 212,
+   "total_tokens": 261,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 189
+   }
+  }
+ },
+ "elapsed": 2.444
+}

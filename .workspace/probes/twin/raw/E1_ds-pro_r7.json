@@ -1,0 +1,208 @@
+{
+ "tag": "E1_ds-pro_r7",
+ "model": "deepseek-v4-pro",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "max_tokens": 3,
+  "temperature": 0,
+  "logprobs": true,
+  "top_logprobs": 3,
+  "model": "deepseek-v4-pro"
+ },
+ "status": 200,
+ "raw": "{\"id\":\"5c7c58dd-a585-48ad-8bb0-1e64bbcee1c4\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720712,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We need answer\"},\"finish_reason\":\"length\",\"logprobs\":{\"reasoning_content\":[{\"token\":\"We\",\"logprob\":-0.41480094,\"bytes\":[87,101],\"top_logprobs\":[{\"token\":\"We\",\"logprob\":-0.41480094,\"bytes\":[87,101]},{\"token\":\"The\",\"logprob\":-1.5893118,\"bytes\":[84,104,101]},{\"token\":\"\\u003c｜end▁of▁thinking｜\\u003e\",\"logprob\":-2.172949,\"bytes\":[60,239,189,156,101,110,100,226,150,129,111,102,226,150,129,116,104,105,110,107,105,110,103,239,189,156,62]}]},{\"token\":\" need\",\"logprob\":-0.004561495,\"bytes\":[32,110,101,101,100],\"top_logprobs\":[{\"token\":\" need\",\"logprob\":-0.004561495,\"bytes\":[32,110,101,101,100]},{\"token\":\" just\",\"logprob\":-5.40191,\"bytes\":[32,106,117,115,116]},{\"token\":\" are\",\"logprob\":-11.596751,\"bytes\":[32,97,114,101]}]},{\"token\":\" answer\",\"logprob\":-0.073325776,\"bytes\":[32,97,110,115,119,101,114],\"top_logprobs\":[{\"token\":\" answer\",\"logprob\":-0.073325776,\"bytes\":[32,97,110,115,119,101,114]},{\"token\":\" respond\",\"logprob\":-3.0662324,\"bytes\":[32,114,101,115,112,111,110,100]},{\"token\":\" to\",\"logprob\":-4.499494,\"bytes\":[32,116,111]}]}]}}],\"usage\":{\"prompt_tokens\":31,\"completion_tokens\":3,\"total_tokens\":34,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":3}}}",
+ "json": {
+  "id": "5c7c58dd-a585-48ad-8bb0-1e64bbcee1c4",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720712,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We need answer"
+    },
+    "finish_reason": "length",
+    "logprobs": {
+     "reasoning_content": [
+      {
+       "token": "We",
+       "logprob": -0.41480094,
+       "bytes": [
+        87,
+        101
+       ],
+       "top_logprobs": [
+        {
+         "token": "We",
+         "logprob": -0.41480094,
+         "bytes": [
+          87,
+          101
+         ]
+        },
+        {
+         "token": "The",
+         "logprob": -1.5893118,
+         "bytes": [
+          84,
+          104,
+          101
+         ]
+        },
+        {
+         "token": "<｜end▁of▁thinking｜>",
+         "logprob": -2.172949,
+         "bytes": [
+          60,
+          239,
+          189,
+          156,
+          101,
+          110,
+          100,
+          226,
+          150,
+          129,
+          111,
+          102,
+          226,
+          150,
+          129,
+          116,
+          104,
+          105,
+          110,
+          107,
+          105,
+          110,
+          103,
+          239,
+          189,
+          156,
+          62
+         ]
+        }
+       ]
+      },
+      {
+       "token": " need",
+       "logprob": -0.004561495,
+       "bytes": [
+        32,
+        110,
+        101,
+        101,
+        100
+       ],
+       "top_logprobs": [
+        {
+         "token": " need",
+         "logprob": -0.004561495,
+         "bytes": [
+          32,
+          110,
+          101,
+          101,
+          100
+         ]
+        },
+        {
+         "token": " just",
+         "logprob": -5.40191,
+         "bytes": [
+          32,
+          106,
+          117,
+          115,
+          116
+         ]
+        },
+        {
+         "token": " are",
+         "logprob": -11.596751,
+         "bytes": [
+          32,
+          97,
+          114,
+          101
+         ]
+        }
+       ]
+      },
+      {
+       "token": " answer",
+       "logprob": -0.073325776,
+       "bytes": [
+        32,
+        97,
+        110,
+        115,
+        119,
+        101,
+        114
+       ],
+       "top_logprobs": [
+        {
+         "token": " answer",
+         "logprob": -0.073325776,
+         "bytes": [
+          32,
+          97,
+          110,
+          115,
+          119,
+          101,
+          114
+         ]
+        },
+        {
+         "token": " respond",
+         "logprob": -3.0662324,
+         "bytes": [
+          32,
+          114,
+          101,
+          115,
+          112,
+          111,
+          110,
+          100
+         ]
+        },
+        {
+         "token": " to",
+         "logprob": -4.499494,
+         "bytes": [
+          32,
+          116,
+          111
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 31,
+   "completion_tokens": 3,
+   "total_tokens": 34,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 3
+   }
+  }
+ },
+ "elapsed": 1.641
+}

@@ -1,0 +1,68 @@
+{
+ "tag": "par_ds41-flash_top_k",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "top_k": 5,
+  "max_tokens": 8,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720408.1784637,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01876f166042-SIN",
+  "Content-Length": "420",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:29 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=sPgQsrzel8FY4jVxJfbYqQFfQTafCkKhcsirwy05%2Bqt1dWZSPNUyMX3wGZFukcaeoHjJar1rvDfm%2B1zCt9OiIBmpbJHfgVAucLJwRCFc0vm1sCoiqyk3oyGfiC4XCx32\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833281945211508268d9d61uyBwdPY",
+  "X-Request-Id": "b023d117-e53b-48af-86ba-65f400fd4eed",
+  "X-Trace-Id": "b023d117e53b48af86ba65f400fd4eed",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"b023d117-e53b-48af-86ba-65f400fd4eed\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720408,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"Hi! How can### can I\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":31,\"completion_tokens\":8,\"total_tokens\":39,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":0}}}",
+ "json": {
+  "id": "b023d117-e53b-48af-86ba-65f400fd4eed",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720408,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "Hi! How can### can I"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 31,
+   "completion_tokens": 8,
+   "total_tokens": 39,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0
+   }
+  }
+ },
+ "elapsed": 1.311
+}

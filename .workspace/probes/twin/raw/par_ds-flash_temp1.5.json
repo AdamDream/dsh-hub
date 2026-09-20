@@ -1,0 +1,67 @@
+{
+ "tag": "par_ds-flash_temp1.5",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 1.5,
+  "max_tokens": 8,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720352.4855144,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf002b6cfb6042-SIN",
+  "Content-Length": "435",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:32:35 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=QRad76erHxjWnbmXlDfduxqDY3lmy%2BPwZSeyMyetdlXXHH8BCKkLwQ5eKsNTGwBD32wqE0wApLWR%2F5wYVBNznLA5DxFpM%2BPJrmZ3HEHRokXSUAy8gawjjasFP96OqlPT\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180832325126369558268d9d6VT1rnt8L",
+  "X-Request-Id": "5a1fe53f-b3aa-467f-810c-8d0293ca02d5",
+  "X-Trace-Id": "5a1fe53fb3aa467f810c8d0293ca02d5",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"We Need answer. User says hi.\",\"role\":\"assistant\"}}],\"created\":1789720355,\"id\":\"5a1fe53f-b3aa-467f-810c-8d0293ca02d5\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":84,\"completion_tokens\":8,\"total_tokens\":92,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":8}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "We Need answer. User says hi.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720355,
+  "id": "5a1fe53f-b3aa-467f-810c-8d0293ca02d5",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 84,
+   "completion_tokens": 8,
+   "total_tokens": 92,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 8
+   }
+  }
+ },
+ "elapsed": 3.345
+}

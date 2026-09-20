@@ -1,0 +1,47 @@
+{
+ "tag": "E4b_ds-flash_990000",
+ "model": "deepseek-v4-flash",
+ "path": "/chat/completions",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "max_tokens": 990000,
+  "temperature": 0,
+  "model": "deepseek-v4-flash"
+ },
+ "status": 200,
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"Hi there! How can I help you today?\",\"reasoning_content\":\"We need answer. Need infer context. User said hi. We should respond friendly. Need maybe mention we're DeepSeek. Keep concise.\",\"role\":\"assistant\"}}],\"created\":1789720768,\"id\":\"4a74178c-73c4-4cc9-897f-efddbe414fa6\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":84,\"completion_tokens\":40,\"total_tokens\":124,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":29}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "Hi there! How can I help you today?",
+     "reasoning_content": "We need answer. Need infer context. User said hi. We should respond friendly. Need maybe mention we're DeepSeek. Keep concise.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720768,
+  "id": "4a74178c-73c4-4cc9-897f-efddbe414fa6",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 84,
+   "completion_tokens": 40,
+   "total_tokens": 124,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 29
+   }
+  }
+ },
+ "elapsed": 3.294
+}

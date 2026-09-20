@@ -1,0 +1,68 @@
+{
+ "tag": "tok_ds-pro_code_py",
+ "model": "deepseek-v4-pro",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "def f(x: int) -> int:\n    return x ** 2 + 1\n"
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "deepseek-v4-pro"
+ },
+ "t0": 1789720416.5796204,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01bbfcb46042-SIN",
+  "Content-Length": "425",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:37 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=Xu3ZodFzlMIQU2sWN7%2BfB8YkNFKBQBZ0RFb82%2FvwngkjeT3L5kRnKtzbrIBSu4CE3oOyc0jUjoH8S64lPS2502cYz9fOrkgi7eNiQsIG6XbvNynVeuqK2pCGbBY3%2B%2FEG\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833366037991728268d9d6YXST7fNb",
+  "X-Request-Id": "d8b3ea8e-444a-454e-b0b0-29c526bd98d8",
+  "X-Trace-Id": "d8b3ea8e444a454eb0b029c526bd98d8",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"d8b3ea8e-444a-454e-b0b0-29c526bd98d8\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720417,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":49,\"completion_tokens\":1,\"total_tokens\":50,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":1}}}",
+ "json": {
+  "id": "d8b3ea8e-444a-454e-b0b0-29c526bd98d8",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720417,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 49,
+   "completion_tokens": 1,
+   "total_tokens": 50,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1
+   }
+  }
+ },
+ "elapsed": 1.383
+}

@@ -1,0 +1,205 @@
+{
+ "tag": "E6a_ds-pro_p_zh_r0",
+ "model": "deepseek-v4-pro",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "请用一句话说明什么是网关。"
+   }
+  ],
+  "max_tokens": 2,
+  "temperature": 0,
+  "logprobs": true,
+  "top_logprobs": 5,
+  "model": "deepseek-v4-pro"
+ },
+ "status": 200,
+ "raw": "{\"id\":\"e255b1e6-5ec7-4edf-9032-d0cc10339c14\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789721053,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"我们需要回答\"},\"finish_reason\":\"length\",\"logprobs\":{\"reasoning_content\":[{\"token\":\"我们需要\",\"logprob\":-0.0064710365,\"bytes\":[230,136,145,228,187,172,233,156,128,232,166,129],\"top_logprobs\":[{\"token\":\"我们需要\",\"logprob\":-0.0064710365,\"bytes\":[230,136,145,228,187,172,233,156,128,232,166,129]},{\"token\":\"The\",\"logprob\":-5.425508,\"bytes\":[84,104,101]},{\"token\":\"We\",\"logprob\":-6.3915725,\"bytes\":[87,101]},{\"token\":\"用户\",\"logprob\":-8.078174,\"bytes\":[231,148,168,230,136,183]},{\"token\":\"我们\",\"logprob\":-10.578893,\"bytes\":[230,136,145,228,187,172]}]},{\"token\":\"回答\",\"logprob\":-0.00089212187,\"bytes\":[229,155,158,231,173,148],\"top_logprobs\":[{\"token\":\"回答\",\"logprob\":-0.00089212187,\"bytes\":[229,155,158,231,173,148]},{\"token\":\"用\",\"logprob\":-7.090053,\"bytes\":[231,148,168]},{\"token\":\"中文\",\"logprob\":-10.063796,\"bytes\":[228,184,173,230,150,135]},{\"token\":\"答\",\"logprob\":-11.521777,\"bytes\":[231,173,148]},{\"token\":\"回答问题\",\"logprob\":-12.462991,\"bytes\":[229,155,158,231,173,148,233,151,174,233,162,152]}]}]}}],\"usage\":{\"prompt_tokens\":37,\"completion_tokens\":2,\"total_tokens\":39,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":2}}}",
+ "json": {
+  "id": "e255b1e6-5ec7-4edf-9032-d0cc10339c14",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789721053,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "我们需要回答"
+    },
+    "finish_reason": "length",
+    "logprobs": {
+     "reasoning_content": [
+      {
+       "token": "我们需要",
+       "logprob": -0.0064710365,
+       "bytes": [
+        230,
+        136,
+        145,
+        228,
+        187,
+        172,
+        233,
+        156,
+        128,
+        232,
+        166,
+        129
+       ],
+       "top_logprobs": [
+        {
+         "token": "我们需要",
+         "logprob": -0.0064710365,
+         "bytes": [
+          230,
+          136,
+          145,
+          228,
+          187,
+          172,
+          233,
+          156,
+          128,
+          232,
+          166,
+          129
+         ]
+        },
+        {
+         "token": "The",
+         "logprob": -5.425508,
+         "bytes": [
+          84,
+          104,
+          101
+         ]
+        },
+        {
+         "token": "We",
+         "logprob": -6.3915725,
+         "bytes": [
+          87,
+          101
+         ]
+        },
+        {
+         "token": "用户",
+         "logprob": -8.078174,
+         "bytes": [
+          231,
+          148,
+          168,
+          230,
+          136,
+          183
+         ]
+        },
+        {
+         "token": "我们",
+         "logprob": -10.578893,
+         "bytes": [
+          230,
+          136,
+          145,
+          228,
+          187,
+          172
+         ]
+        }
+       ]
+      },
+      {
+       "token": "回答",
+       "logprob": -0.00089212187,
+       "bytes": [
+        229,
+        155,
+        158,
+        231,
+        173,
+        148
+       ],
+       "top_logprobs": [
+        {
+         "token": "回答",
+         "logprob": -0.00089212187,
+         "bytes": [
+          229,
+          155,
+          158,
+          231,
+          173,
+          148
+         ]
+        },
+        {
+         "token": "用",
+         "logprob": -7.090053,
+         "bytes": [
+          231,
+          148,
+          168
+         ]
+        },
+        {
+         "token": "中文",
+         "logprob": -10.063796,
+         "bytes": [
+          228,
+          184,
+          173,
+          230,
+          150,
+          135
+         ]
+        },
+        {
+         "token": "答",
+         "logprob": -11.521777,
+         "bytes": [
+          231,
+          173,
+          148
+         ]
+        },
+        {
+         "token": "回答问题",
+         "logprob": -12.462991,
+         "bytes": [
+          229,
+          155,
+          158,
+          231,
+          173,
+          148,
+          233,
+          151,
+          174,
+          233,
+          162,
+          152
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 37,
+   "completion_tokens": 2,
+   "total_tokens": 39,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 2
+   }
+  }
+ },
+ "elapsed": 1.801
+}

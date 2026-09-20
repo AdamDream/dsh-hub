@@ -1,0 +1,67 @@
+{
+ "tag": "tok_ds-flash_zh_common",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "今天天气很好，我们一起去公园散步吧。"
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720352.3397954,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf002b2c246042-SIN",
+  "Content-Length": "412",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:32:35 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=NjPc4ID0qw%2FbWw3uEHfQTnTIontKtE0ROL6BzZTivIgG%2Bt%2FX4eZT7F6sM4lN%2BqIYHq%2FRYVGeS2e%2BPQ%2Bber8fRTurp6Tv3AonFq3qEJSwdYS13R%2B4UYbTsNpOR9D1eXuQ\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180832324758841828268d9d6sY6jjRbK",
+  "X-Request-Id": "bdd0a594-b180-4f8d-8dad-4ce9ef579c0f",
+  "X-Trace-Id": "bdd0a594b1804f8d8dad4ce9ef579c0f",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"我们\",\"role\":\"assistant\"}}],\"created\":1789720355,\"id\":\"bdd0a594-b180-4f8d-8dad-4ce9ef579c0f\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":93,\"completion_tokens\":1,\"total_tokens\":94,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":1}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "我们",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720355,
+  "id": "bdd0a594-b180-4f8d-8dad-4ce9ef579c0f",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 93,
+   "completion_tokens": 1,
+   "total_tokens": 94,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1
+   }
+  }
+ },
+ "elapsed": 3.493
+}

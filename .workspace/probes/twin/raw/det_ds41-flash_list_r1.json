@@ -1,0 +1,68 @@
+{
+ "tag": "det_ds41-flash_list_r1",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "列举三种常见的负载均衡算法，每种一句话说明。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720518.2198815,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf04373d266042-SIN",
+  "Content-Length": "1214",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:35:20 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=hDSYxB3zftUA9GTZVWIjpi0Z%2BDhU2NzdoCapoaLcpp9GID2cKiyFUKHGzChRfQjJrZB2LLTWhOYCZFlLo2yhliB%2FJtrRnEWYXpjNAnZoX7QgefiwtI78N4Tt3QQn3zDI\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180835182433209318268d9d6y0lGihJq",
+  "X-Request-Id": "62a57923-0bd7-48d4-92f8-40684f64fec2",
+  "X-Trace-Id": "62a579230bd748d492f840684f64fec2",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"62a57923-0bd7-48d4-92f8-40684f64fec2\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720518,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"1. **轮询**：将请求按顺序依次分发给每台后端服务器。\\n2. **加权轮询**：根据服务器权重比例分发请求，权重越高分到的请求越多。\\n3. **最少连接**：将新请求分配给当前活动连接数最少的服务器。\",\"reasoning_content\":\"我们需要回答中文。用户问：列举三种常见的负载均衡算法，每种一句话说明。需要简洁。可以列轮询、加权轮询、最少连接。每种一句话。注意格式。可以加随机/一致性哈希等。三种即可。需要准确。可以：轮询：请求依次分发给后端服务器；加权轮询：按权重比例分发，权重高的处理更多；最少连接：将新请求发给当前活动连接数最少的服务器。一句话说明。可以。确保没有多余。 final only.\"},\"finish_reason\":\"stop\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":41,\"completion_tokens\":167,\"total_tokens\":208,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":106}}}",
+ "json": {
+  "id": "62a57923-0bd7-48d4-92f8-40684f64fec2",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720518,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "1. **轮询**：将请求按顺序依次分发给每台后端服务器。\n2. **加权轮询**：根据服务器权重比例分发请求，权重越高分到的请求越多。\n3. **最少连接**：将新请求分配给当前活动连接数最少的服务器。",
+     "reasoning_content": "我们需要回答中文。用户问：列举三种常见的负载均衡算法，每种一句话说明。需要简洁。可以列轮询、加权轮询、最少连接。每种一句话。注意格式。可以加随机/一致性哈希等。三种即可。需要准确。可以：轮询：请求依次分发给后端服务器；加权轮询：按权重比例分发，权重高的处理更多；最少连接：将新请求发给当前活动连接数最少的服务器。一句话说明。可以。确保没有多余。 final only."
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 41,
+   "completion_tokens": 167,
+   "total_tokens": 208,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 106
+   }
+  }
+ },
+ "elapsed": 2.294
+}

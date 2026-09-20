@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_rand_r2",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "请输出一个 1 到 1000 之间的随机整数，只输出数字。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720446.460304,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf0276b8d76042-SIN",
+  "Content-Length": "711",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:34:10 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=6b5qcSjiUFVBgkm%2BE6VXb9eV3axeFnNBFW1XHsg1yLldrGJP3QWX7AKQ3HRFmuWRyla5rH%2B15fVlAmd%2FwahGyDGtgHgAWGEVsYMOnouZzwRKSnC2QnUoWDku2kqXsUD9\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180834064812907488268d9d62DRW6E2R",
+  "X-Request-Id": "f3448ba2-d7c3-41c7-86c3-89fbe4b55834",
+  "X-Trace-Id": "f3448ba2d7c341c786c389fbe4b55834",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"837\",\"reasoning_content\":\"We need answer in Chinese? User asks output random integer 1-1000 only number. Need comply. Need choose random. We can maybe use deterministic pseudo-random? Need output only digit. Must not include explanation. Need maybe \\\"742\\\" etc. Ensure between 1 and 1000 inclusive. Need random. I'll pick 837.\",\"role\":\"assistant\"}}],\"created\":1789720449,\"id\":\"f3448ba2-d7c3-41c7-86c3-89fbe4b55834\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":102,\"completion_tokens\":72,\"total_tokens\":174,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":70}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "837",
+     "reasoning_content": "We need answer in Chinese? User asks output random integer 1-1000 only number. Need comply. Need choose random. We can maybe use deterministic pseudo-random? Need output only digit. Must not include explanation. Need maybe \"742\" etc. Ensure between 1 and 1000 inclusive. Need random. I'll pick 837.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720449,
+  "id": "f3448ba2-d7c3-41c7-86c3-89fbe4b55834",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 102,
+   "completion_tokens": 72,
+   "total_tokens": 174,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 70
+   }
+  }
+ },
+ "elapsed": 3.597
+}

@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_zh_essay_r2",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "用大约120字介绍杭州西湖，要求语言平实。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720389.5809736,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01132d6c6042-SIN",
+  "Content-Length": "1005",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:13 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=Vc0OdzxnPC4eLMQC%2B3yH8b2VR4FaUJd9Y3XdwSqzavGmdiBB3cwv%2FGAn5KelYGyiLRW3bzZT6yQHTR5ouHgIcmFuCNwNoBckdJ%2Bvs348a7zgExkiSdK6WS14yebNsJgL\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833095943895698268d9d6yposUYm7",
+  "X-Request-Id": "57cc0419-bd84-4c82-ba5c-9f1ac6c93023",
+  "X-Trace-Id": "57cc0419bd844c82ba5c9f1ac6c93023",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"杭州西湖位于浙江省杭州市区西部，是中国著名的淡水湖之一。湖面碧波荡漾，四周群山环绕，苏堤、白堤横贯湖上，三潭印月、断桥残雪等景点远近闻名。西湖四季景色各异，晴天水光潋滟，雨天山色空蒙。这里历史悠久，人文积淀深厚，自古就是文人墨客吟咏之地，如今也是游客休闲观光的理想去处。\",\"reasoning_content\":\"我们要求用大约120字介绍杭州西湖，语言平实。需要注意字数，内容简洁。可以介绍西湖的位置、特点、文化意义等。避免华丽辞藻。输出中文。\",\"role\":\"assistant\"}}],\"created\":1789720391,\"id\":\"57cc0419-bd84-4c82-ba5c-9f1ac6c93023\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":96,\"completion_tokens\":132,\"total_tokens\":228,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":39}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "杭州西湖位于浙江省杭州市区西部，是中国著名的淡水湖之一。湖面碧波荡漾，四周群山环绕，苏堤、白堤横贯湖上，三潭印月、断桥残雪等景点远近闻名。西湖四季景色各异，晴天水光潋滟，雨天山色空蒙。这里历史悠久，人文积淀深厚，自古就是文人墨客吟咏之地，如今也是游客休闲观光的理想去处。",
+     "reasoning_content": "我们要求用大约120字介绍杭州西湖，语言平实。需要注意字数，内容简洁。可以介绍西湖的位置、特点、文化意义等。避免华丽辞藻。输出中文。",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720391,
+  "id": "57cc0419-bd84-4c82-ba5c-9f1ac6c93023",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 96,
+   "completion_tokens": 132,
+   "total_tokens": 228,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 39
+   }
+  }
+ },
+ "elapsed": 3.496
+}

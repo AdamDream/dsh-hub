@@ -1,0 +1,68 @@
+{
+ "tag": "tok_ds-pro_zh_common",
+ "model": "deepseek-v4-pro",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "今天天气很好，我们一起去公园散步吧。"
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "deepseek-v4-pro"
+ },
+ "t0": 1789720412.9837012,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01a5987a6042-SIN",
+  "Content-Length": "435",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:34 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=V1qetvOFDH%2BWtRjA2ZO5LHgAH1vrxthGzXxI0S8sVfZG8NsqHYz8XY1iTpVApmWanQkG5pNNA44yGgzZZxjrHZQ6V5hlzRuL8exrIKshAU9psHdRiob%2B11qDjkwWce7b\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "20260918083333195692598268d9d6gH1aO7xi",
+  "X-Request-Id": "ce5dc3ff-8b25-4128-b461-11c1eac0c462",
+  "X-Trace-Id": "ce5dc3ff8b254128b46111c1eac0c462",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"ce5dc3ff-8b25-4128-b461-11c1eac0c462\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720413,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"我们需要\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":40,\"completion_tokens\":1,\"total_tokens\":41,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":1}}}",
+ "json": {
+  "id": "ce5dc3ff-8b25-4128-b461-11c1eac0c462",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720413,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "我们需要"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 40,
+   "completion_tokens": 1,
+   "total_tokens": 41,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1
+   }
+  }
+ },
+ "elapsed": 1.343
+}

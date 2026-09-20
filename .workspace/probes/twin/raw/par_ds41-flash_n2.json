@@ -1,0 +1,30 @@
+{
+ "tag": "par_ds41-flash_n2",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "n": 2,
+  "max_tokens": 8,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720415.2438254,
+ "status": 500,
+ "headers": {
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Content-Length": "217",
+  "Content-Type": "application/json; charset=utf-8",
+  "Date": "Fri, 18 Sep 2026 08:33:37 GMT",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833352604000868268d9d6LrP0672K",
+  "Connection": "close"
+ },
+ "raw": "{\"error\":{\"message\":\"分组 auto 下模型 deepseek-v4.1-flash 的可用渠道不存在（retry） (request id: 202609180833352604000868268d9d6LrP0672K)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"get_channel_failed\"}}",
+ "elapsed": 2.67
+}

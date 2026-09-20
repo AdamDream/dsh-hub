@@ -1,0 +1,29 @@
+{
+ "tag": "par_ds41-flash_mt_neg",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": -1,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720431.0534887,
+ "status": 500,
+ "headers": {
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Content-Length": "234",
+  "Content-Type": "application/json; charset=utf-8",
+  "Date": "Fri, 18 Sep 2026 08:33:51 GMT",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "20260918083351728195568268d9d68rVHrN6a",
+  "Connection": "close"
+ },
+ "raw": "{\"error\":{\"message\":\"json: cannot unmarshal number -1 into Go struct field GeneralOpenAIRequest.max_tokens of type uint (request id: 20260918083351728195568268d9d68rVHrN6a)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"invalid_request\"}}",
+ "elapsed": 0.025
+}

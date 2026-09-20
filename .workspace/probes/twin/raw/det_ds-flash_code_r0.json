@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_code_r0",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "用 Python 写一个函数，返回斐波那契数列前 n 项，要求带类型标注。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720393.0769541,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01290d426042-SIN",
+  "Content-Length": "1803",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:19 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=VYJSWCM%2BZJnj9VbveUpN7cB1u9NAQDgUipoJO4clkmBztZnD4cAPTKJ10vLakKXVIGz8Zsp3VeCe8rkhYYAjMZwEpCU4FcNTMizPAPKXf1%2BYn%2FLpOjn2G5pV6PGb9tvA\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "20260918083313914136958268d9d6qf449Z6b",
+  "X-Request-Id": "2df0ce62-bdfa-41cc-b161-97a9b773c684",
+  "X-Trace-Id": "2df0ce62bdfa41ccb16197a9b773c684",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"我们要求用 Python 写一个函数，返回斐波那契数列前 n 项，要求带类型标注。\\n\\n我们需要考虑 n 的含义：通常斐波那契数列是从 F(0)=0, F(1)=1 开始，还是从 F(1)=1, F(2)=1 开始？题目中没有明确，需要我们自己定义。通常 Python 中 fib(0) 可能返回 []，fib(1) 返回 [0] 或 [1]？需要澄清。我们可以写出函数，让 n 表示项数，返回前 n 个斐波那契数。按常见定义，斐波那契数列从 0, 1 开始：F0=0, F1=1, Fn=Fn-1+Fn-2。那么前 n 项：n=0 -\\u003e []，n=1 -\\u003e [0]，n=2 -\\u003e [0,1]，n=5 -\\u003e [0,1,1,2,3]。或者另一种常见是从 1,1 开始。为了通用性，可以定义从 0 和 1 开始，并注明。\\n\\n要求带类型标注，我们需要写类型注解。返回类型是 List[int] 吧。函数签名：def fibonacci(n: int) -\\u003e list[int]: 或 List[int] 从 typing import List。\\n\\n还要考虑 n 为负数？我们可以处理为返回空列表或抛出 ValueError。最好处理一下。\\n\\n实现方式：迭代生成即可，O(n) 时间，O(n) 空间（因为要返回列表）。\\n\\n那么：\\n\\nfrom typing import List\\n\\ndef fibonacci(n: int) -\\u003e List[int]:\\n    \\\"\\\"\\\"返回斐波那契数列的前 n 项，从 F0=0, F1=1 开始。\\n\\n    Args:\\n        n: 非负整数，表示要返回的项数。\\n\\n    Returns:\\n        包含前 n 个斐\",\"role\":\"assistant\"}}],\"created\":1789720395,\"id\":\"2df0ce62-bdfa-41cc-b161-97a9b773c684\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":106,\"completion_tokens\":400,\"total_tokens\":506,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":400}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "我们要求用 Python 写一个函数，返回斐波那契数列前 n 项，要求带类型标注。\n\n我们需要考虑 n 的含义：通常斐波那契数列是从 F(0)=0, F(1)=1 开始，还是从 F(1)=1, F(2)=1 开始？题目中没有明确，需要我们自己定义。通常 Python 中 fib(0) 可能返回 []，fib(1) 返回 [0] 或 [1]？需要澄清。我们可以写出函数，让 n 表示项数，返回前 n 个斐波那契数。按常见定义，斐波那契数列从 0, 1 开始：F0=0, F1=1, Fn=Fn-1+Fn-2。那么前 n 项：n=0 -> []，n=1 -> [0]，n=2 -> [0,1]，n=5 -> [0,1,1,2,3]。或者另一种常见是从 1,1 开始。为了通用性，可以定义从 0 和 1 开始，并注明。\n\n要求带类型标注，我们需要写类型注解。返回类型是 List[int] 吧。函数签名：def fibonacci(n: int) -> list[int]: 或 List[int] 从 typing import List。\n\n还要考虑 n 为负数？我们可以处理为返回空列表或抛出 ValueError。最好处理一下。\n\n实现方式：迭代生成即可，O(n) 时间，O(n) 空间（因为要返回列表）。\n\n那么：\n\nfrom typing import List\n\ndef fibonacci(n: int) -> List[int]:\n    \"\"\"返回斐波那契数列的前 n 项，从 F0=0, F1=1 开始。\n\n    Args:\n        n: 非负整数，表示要返回的项数。\n\n    Returns:\n        包含前 n 个斐",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720395,
+  "id": "2df0ce62-bdfa-41cc-b161-97a9b773c684",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 106,
+   "completion_tokens": 400,
+   "total_tokens": 506,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 400
+   }
+  }
+ },
+ "elapsed": 6.051
+}

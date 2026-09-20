@@ -1,0 +1,27 @@
+{
+ "tag": "err_ds-pro_temp_bad",
+ "model": "deepseek-v4-pro",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 99,
+  "model": "deepseek-v4-pro"
+ },
+ "status": 500,
+ "headers": {
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Content-Length": "213",
+  "Content-Type": "application/json; charset=utf-8",
+  "Date": "Fri, 18 Sep 2026 08:33:09 GMT",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833057759377808268d9d6d4gc3cHI",
+  "Connection": "close"
+ },
+ "raw": "{\"error\":{\"message\":\"分组 auto 下模型 deepseek-v4-pro 的可用渠道不存在（retry） (request id: 202609180833057759377808268d9d6d4gc3cHI)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"get_channel_failed\"}}",
+ "elapsed": 3.849
+}

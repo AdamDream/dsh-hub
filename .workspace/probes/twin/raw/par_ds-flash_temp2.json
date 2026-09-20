@@ -1,0 +1,67 @@
+{
+ "tag": "par_ds-flash_temp2",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 2.0,
+  "max_tokens": 8,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720355.8312309,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf00403efe6042-SIN",
+  "Content-Length": "438",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:32:39 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=Ms0xqgOtEc08yg2wN0hGfJsxVqbbRLdmgLwVof0%2BFkC3XEAffczKBUr55nHRXiZ49DK8ZEja7poZ9t8W6TP8OFAw7T%2FV4%2B3FbQpq2zER%2F4y8xQFNRvseRyxQS4k8zlwL\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180832358408983678268d9d6xmmdH9bC",
+  "X-Request-Id": "2d312138-0c8c-4322-86c7-381715571b7d",
+  "X-Trace-Id": "2d3121380c8c432286c7381715571b7d",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"We need answer. Need think. User\",\"role\":\"assistant\"}}],\"created\":1789720358,\"id\":\"2d312138-0c8c-4322-86c7-381715571b7d\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":84,\"completion_tokens\":8,\"total_tokens\":92,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":8}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "We need answer. Need think. User",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720358,
+  "id": "2d312138-0c8c-4322-86c7-381715571b7d",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 84,
+   "completion_tokens": 8,
+   "total_tokens": 92,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 8
+   }
+  }
+ },
+ "elapsed": 3.716
+}

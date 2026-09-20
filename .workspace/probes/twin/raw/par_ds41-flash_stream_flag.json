@@ -1,0 +1,33 @@
+{
+ "tag": "par_ds41-flash_stream_flag",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "stream": true,
+  "max_tokens": 4,
+  "model": "deepseek-v4.1-flash"
+ },
+ "status": 200,
+ "headers": {
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cache-Control": "no-cache",
+  "Content-Type": "text/event-stream",
+  "Date": "Fri, 18 Sep 2026 08:33:52 GMT",
+  "Via": "1.1 Caddy",
+  "X-Accel-Buffering": "no",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "20260918083351937433018268d9d6TLpGEdBF",
+  "Connection": "close",
+  "Transfer-Encoding": "chunked"
+ },
+ "raw": "data: {\"id\":\"4abe18f0-484f-4e15-b345-53cfe3b03a6b\",\"object\":\"chat.completion.chunk\",\"created\":1789720431,\"model\":\"deepseek/deepseek-flash\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\"},\"logprobs\":null}]}\n\ndata: {\"id\":\"4abe18f0-484f-4e15-b345-53cfe3b03a6b\",\"object\":\"chat.completion.chunk\",\"created\":1789720431,\"model\":\"deepseek/deepseek-flash\",\"choices\":[{\"index\":0,\"delta\":{\"reasoning_content\":\"The\"},\"logprobs\":null}]}\n\ndata: {\"id\":\"4abe18f0-484f-4e15-b345-53cfe3b03a6b\",\"object\":\"chat.completion.chunk\",\"created\":1789720431,\"model\":\"deepseek/deepseek-flash\",\"choices\":[{\"index\":0,\"delta\":{\"reasoning_content\":\" user\"},\"logprobs\":null}]}\n\ndata: {\"id\":\"4abe18f0-484f-4e15-b345-53cfe3b03a6b\",\"object\":\"chat.completion.chunk\",\"created\":1789720431,\"model\":\"deepseek/deepseek-flash\",\"choices\":[{\"index\":0,\"delta\":{\"reasoning_content\":\" just\"},\"logprobs\":null}]}\n\ndata: {\"id\":\"4abe18f0-484f-4e15-b345-53cfe3b03a6b\",\"object\":\"chat.completion.chunk\",\"created\":1789720431,\"model\":\"deepseek/deepseek-flash\",\"choices\":[{\"index\":0,\"delta\":{\"reasoning_content\":\" said\"},\"logprobs\":null}]}\n\ndata: {\"id\":\"4abe18f0-484f-4e15-b345-53cfe3b03a6b\",\"object\":\"chat.completion.chunk\",\"created\":1789720431,\"model\":\"deepseek/deepseek-flash\",\"choices\":[{\"index\":0,\"delta\":{},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":31,\"completion_tokens\":4,\"total_tokens\":35,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":4}}}\n\ndata: [DONE]\n\n",
+ "n_chunks": 6,
+ "ttft": 1.1705825328826904,
+ "elapsed": 1.171
+}

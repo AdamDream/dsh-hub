@@ -1,0 +1,68 @@
+{
+ "tag": "det_ds41-flash_code_r1",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "用 Python 写一个函数，返回斐波那契数列前 n 项，要求带类型标注。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720490.8693154,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf038c3f0d6042-SIN",
+  "Content-Length": "1755",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:34:53 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=p%2B5V%2BBeHyPUurj49PmddE9ZLAnviRjNoOLCeLM8aEuxTD0jis2sxW%2BCdJJbHMZRmnk8fndqFzG1aXvf%2F6LJd%2BbGsbV3YOBncwfDg5tFhq2AIKD8QPWpI5ofmetgIukdQ\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180834508817809728268d9d6wkz6jpjc",
+  "X-Request-Id": "341a7d93-2e7b-4cd7-b6a4-4f33f04e81b0",
+  "X-Trace-Id": "341a7d932e7b4cd7b6a44f33f04e81b0",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"341a7d93-2e7b-4cd7-b6a4-4f33f04e81b0\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720491,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"# 斐波那契数列前 n 项\\n\\n```python\\nfrom typing import List\\n\\n\\ndef fibonacci(n: int) -\\u003e List[int]:\\n    \\\"\\\"\\\"返回斐波那契数列的前 n 项。\\n\\n    约定：F(0)=0, F(1)=1, F(k)=F(k-1)+F(k-2)。\\n\\n    Args:\\n        n: 需要返回的项数，必须为非负整数。\\n\\n    Returns:\\n        长度为 n 的列表，例如 n=5 时返回 [0, 1, 1, 2, 3]。\\n\\n    Raises:\\n        TypeError: n 不是整数。\\n        ValueError: n 为负数。\\n    \\\"\\\"\\\"\\n    if not isinstance(n, int):\\n        raise TypeError(f\\\"n 必须是整数，收到 {type(n).__name__}\\\")\\n    if n \\u003c 0:\\n        raise ValueError(f\\\"n 必须为非负整数，收到 {n}\\\")\\n\\n    result: List[int] = []\\n    a, b = 0, 1\\n    for _ in range(n):\\n        result.append(a)\\n        a, b = b, a + b\\n    return result\\n\\n\\nif __name__ == \\\"__main__\\\":\\n    print(fibonacci(0))   # []\\n    print(fibonacci(1))   # [0]\\n    print(fibonacci(5))   # [0, 1, 1, 2, 3]\\n    print(fibonacci(10))  # [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]\\n```\\n\\n## 说明\\n\\n**时间复杂度** O(n)，\",\"reasoning_content\":\"用户想要一个 Python 函数，返回斐波那契数列的前 n 项，带类型标注。简单任务。我会给出干净的代码，讨论一下选择（list vs generator），也许加上输入校验。\\n\\n保持简洁但完整。中文回复。\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":53,\"completion_tokens\":400,\"total_tokens\":453,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":51}}}",
+ "json": {
+  "id": "341a7d93-2e7b-4cd7-b6a4-4f33f04e81b0",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720491,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "# 斐波那契数列前 n 项\n\n```python\nfrom typing import List\n\n\ndef fibonacci(n: int) -> List[int]:\n    \"\"\"返回斐波那契数列的前 n 项。\n\n    约定：F(0)=0, F(1)=1, F(k)=F(k-1)+F(k-2)。\n\n    Args:\n        n: 需要返回的项数，必须为非负整数。\n\n    Returns:\n        长度为 n 的列表，例如 n=5 时返回 [0, 1, 1, 2, 3]。\n\n    Raises:\n        TypeError: n 不是整数。\n        ValueError: n 为负数。\n    \"\"\"\n    if not isinstance(n, int):\n        raise TypeError(f\"n 必须是整数，收到 {type(n).__name__}\")\n    if n < 0:\n        raise ValueError(f\"n 必须为非负整数，收到 {n}\")\n\n    result: List[int] = []\n    a, b = 0, 1\n    for _ in range(n):\n        result.append(a)\n        a, b = b, a + b\n    return result\n\n\nif __name__ == \"__main__\":\n    print(fibonacci(0))   # []\n    print(fibonacci(1))   # [0]\n    print(fibonacci(5))   # [0, 1, 1, 2, 3]\n    print(fibonacci(10))  # [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]\n```\n\n## 说明\n\n**时间复杂度** O(n)，",
+     "reasoning_content": "用户想要一个 Python 函数，返回斐波那契数列的前 n 项，带类型标注。简单任务。我会给出干净的代码，讨论一下选择（list vs generator），也许加上输入校验。\n\n保持简洁但完整。中文回复。"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 53,
+   "completion_tokens": 400,
+   "total_tokens": 453,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 51
+   }
+  }
+ },
+ "elapsed": 2.794
+}

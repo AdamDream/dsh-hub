@@ -1,0 +1,68 @@
+{
+ "tag": "tok_ds41-flash_url_path",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "https://llmapi.roboscience.xyz/v1/chat/completions?x=1&y=2"
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720404.979191,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01748d056042-SIN",
+  "Content-Length": "425",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:26 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=c%2BYAX9lwXRNfbm6V%2FVqkMIx1DHgyhbacA6q5L9D7UYhQx6YCgdeJvSXF05Wq6srOJzwJ5MyD10v5qVms%2FUtY0Lu49wG3UwoZEX1qrEJvV3PSnJ4wrPUYUnMl3MCCEDdv\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "20260918083325326896608268d9d6h6YgZpKA",
+  "X-Request-Id": "0c09dc8a-85d4-4608-8599-092436db373b",
+  "X-Trace-Id": "0c09dc8a85d446088599092436db373b",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"0c09dc8a-85d4-4608-8599-092436db373b\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720405,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":55,\"completion_tokens\":1,\"total_tokens\":56,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":1}}}",
+ "json": {
+  "id": "0c09dc8a-85d4-4608-8599-092436db373b",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720405,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 55,
+   "completion_tokens": 1,
+   "total_tokens": 56,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1
+   }
+  }
+ },
+ "elapsed": 1.458
+}

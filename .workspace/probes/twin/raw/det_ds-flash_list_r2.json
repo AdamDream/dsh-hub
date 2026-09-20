@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_list_r2",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "列举三种常见的负载均衡算法，每种一句话说明。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720458.2535124,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf02c07eef6042-SIN",
+  "Content-Length": "1012",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:34:22 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=hfCyMykOXGs%2BGTjvsbivs5dspW%2FDFj9wyH77dK2Q4GIJcZuLL8xzEhF4Hr%2BfPeqga1mxUnynUP745s8w9lkCg1DafNOWOjFD2djogZ2M35XsuA0WA7poAlJAVwI8TQpU\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180834182866880208268d9d6JIjnwYqt",
+  "X-Request-Id": "37681793-71fe-41e7-8cb3-7b1d707c312b",
+  "X-Trace-Id": "3768179371fe41e78cb37b1d707c312b",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"1. **轮询法（Round Robin）**：将请求按顺序依次分发到每台后端服务器，循环往复，适合服务器配置相近的场景。  \\n2. **最少连接法（Least Connections）**：动态将请求分配给当前活跃连接数最少的服务器，适合处理长连接或负载不均的场景。  \\n3. **IP哈希法（IP Hash）**：根据客户端IP地址计算哈希值，将同一IP的请求固定路由到同一台服务器，常用于需要会话保持的场景。\",\"reasoning_content\":\"We need answer in Chinese. User asks list three common load balancing algorithms, one sentence each. Need be concise.\",\"role\":\"assistant\"}}],\"created\":1789720460,\"id\":\"37681793-71fe-41e7-8cb3-7b1d707c312b\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":94,\"completion_tokens\":130,\"total_tokens\":224,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":23}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "1. **轮询法（Round Robin）**：将请求按顺序依次分发到每台后端服务器，循环往复，适合服务器配置相近的场景。  \n2. **最少连接法（Least Connections）**：动态将请求分配给当前活跃连接数最少的服务器，适合处理长连接或负载不均的场景。  \n3. **IP哈希法（IP Hash）**：根据客户端IP地址计算哈希值，将同一IP的请求固定路由到同一台服务器，常用于需要会话保持的场景。",
+     "reasoning_content": "We need answer in Chinese. User asks list three common load balancing algorithms, one sentence each. Need be concise.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720460,
+  "id": "37681793-71fe-41e7-8cb3-7b1d707c312b",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 94,
+   "completion_tokens": 130,
+   "total_tokens": 224,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 23
+   }
+  }
+ },
+ "elapsed": 4.026
+}

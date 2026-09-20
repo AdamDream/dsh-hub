@@ -1,0 +1,274 @@
+{
+ "tag": "par_ds41-flash_logprobs",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "logprobs": true,
+  "top_logprobs": 3,
+  "max_tokens": 4,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720414.0229816,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01ac3e126042-SIN",
+  "Content-Length": "1711",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:35 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=fhNmTlgsA7nczPqBf%2FhcIkdo0dEutx3OHN0ho31BDeG%2BatMa5WCDmg1b%2B0z0IIIRHuv0O9Ws7nkYi%2F52nqvxZdY%2BlfGjl422%2FQ6HySd%2FkPnF4cHQ9ptkp2q2EemRzYi9\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "20260918083334823624178268d9d6BoNzTtQ1",
+  "X-Request-Id": "3fbabbbe-89be-4756-ac74-6815f5a79fe6",
+  "X-Trace-Id": "3fbabbbe89be4756ac746815f5a79fe6",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"3fbabbbe-89be-4756-ac74-6815f5a79fe6\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720414,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We need answer to\"},\"finish_reason\":\"length\",\"logprobs\":{\"reasoning_content\":[{\"token\":\"We\",\"logprob\":-0.4725696,\"bytes\":[87,101],\"top_logprobs\":[{\"token\":\"We\",\"logprob\":-0.4725696,\"bytes\":[87,101]},{\"token\":\"The\",\"logprob\":-1.4707004,\"bytes\":[84,104,101]},{\"token\":\"\\u003c｜end▁of▁thinking｜\\u003e\",\"logprob\":-2.15743,\"bytes\":[60,239,189,156,101,110,100,226,150,129,111,102,226,150,129,116,104,105,110,107,105,110,103,239,189,156,62]}]},{\"token\":\" need\",\"logprob\":-0.0030145461,\"bytes\":[32,110,101,101,100],\"top_logprobs\":[{\"token\":\" need\",\"logprob\":-0.0030145461,\"bytes\":[32,110,101,101,100]},{\"token\":\" just\",\"logprob\":-5.81705,\"bytes\":[32,106,117,115,116]},{\"token\":\" should\",\"logprob\":-11.633927,\"bytes\":[32,115,104,111,117,108,100]}]},{\"token\":\" answer\",\"logprob\":-0.070622504,\"bytes\":[32,97,110,115,119,101,114],\"top_logprobs\":[{\"token\":\" answer\",\"logprob\":-0.070622504,\"bytes\":[32,97,110,115,119,101,114]},{\"token\":\" respond\",\"logprob\":-3.1056242,\"bytes\":[32,114,101,115,112,111,110,100]},{\"token\":\" just\",\"logprob\":-4.524085,\"bytes\":[32,106,117,115,116]}]},{\"token\":\" to\",\"logprob\":-1.0813127,\"bytes\":[32,116,111],\"top_logprobs\":[{\"token\":\" to\",\"logprob\":-1.0813127,\"bytes\":[32,116,111]},{\"token\":\" simple\",\"logprob\":-1.353312,\"bytes\":[32,115,105,109,112,108,101]},{\"token\":\".\",\"logprob\":-1.6391854,\"bytes\":[46]}]}]}}],\"usage\":{\"prompt_tokens\":31,\"completion_tokens\":4,\"total_tokens\":35,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":4}}}",
+ "json": {
+  "id": "3fbabbbe-89be-4756-ac74-6815f5a79fe6",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720414,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We need answer to"
+    },
+    "finish_reason": "length",
+    "logprobs": {
+     "reasoning_content": [
+      {
+       "token": "We",
+       "logprob": -0.4725696,
+       "bytes": [
+        87,
+        101
+       ],
+       "top_logprobs": [
+        {
+         "token": "We",
+         "logprob": -0.4725696,
+         "bytes": [
+          87,
+          101
+         ]
+        },
+        {
+         "token": "The",
+         "logprob": -1.4707004,
+         "bytes": [
+          84,
+          104,
+          101
+         ]
+        },
+        {
+         "token": "<｜end▁of▁thinking｜>",
+         "logprob": -2.15743,
+         "bytes": [
+          60,
+          239,
+          189,
+          156,
+          101,
+          110,
+          100,
+          226,
+          150,
+          129,
+          111,
+          102,
+          226,
+          150,
+          129,
+          116,
+          104,
+          105,
+          110,
+          107,
+          105,
+          110,
+          103,
+          239,
+          189,
+          156,
+          62
+         ]
+        }
+       ]
+      },
+      {
+       "token": " need",
+       "logprob": -0.0030145461,
+       "bytes": [
+        32,
+        110,
+        101,
+        101,
+        100
+       ],
+       "top_logprobs": [
+        {
+         "token": " need",
+         "logprob": -0.0030145461,
+         "bytes": [
+          32,
+          110,
+          101,
+          101,
+          100
+         ]
+        },
+        {
+         "token": " just",
+         "logprob": -5.81705,
+         "bytes": [
+          32,
+          106,
+          117,
+          115,
+          116
+         ]
+        },
+        {
+         "token": " should",
+         "logprob": -11.633927,
+         "bytes": [
+          32,
+          115,
+          104,
+          111,
+          117,
+          108,
+          100
+         ]
+        }
+       ]
+      },
+      {
+       "token": " answer",
+       "logprob": -0.070622504,
+       "bytes": [
+        32,
+        97,
+        110,
+        115,
+        119,
+        101,
+        114
+       ],
+       "top_logprobs": [
+        {
+         "token": " answer",
+         "logprob": -0.070622504,
+         "bytes": [
+          32,
+          97,
+          110,
+          115,
+          119,
+          101,
+          114
+         ]
+        },
+        {
+         "token": " respond",
+         "logprob": -3.1056242,
+         "bytes": [
+          32,
+          114,
+          101,
+          115,
+          112,
+          111,
+          110,
+          100
+         ]
+        },
+        {
+         "token": " just",
+         "logprob": -4.524085,
+         "bytes": [
+          32,
+          106,
+          117,
+          115,
+          116
+         ]
+        }
+       ]
+      },
+      {
+       "token": " to",
+       "logprob": -1.0813127,
+       "bytes": [
+        32,
+        116,
+        111
+       ],
+       "top_logprobs": [
+        {
+         "token": " to",
+         "logprob": -1.0813127,
+         "bytes": [
+          32,
+          116,
+          111
+         ]
+        },
+        {
+         "token": " simple",
+         "logprob": -1.353312,
+         "bytes": [
+          32,
+          115,
+          105,
+          109,
+          112,
+          108,
+          101
+         ]
+        },
+        {
+         "token": ".",
+         "logprob": -1.6391854,
+         "bytes": [
+          46
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 31,
+   "completion_tokens": 4,
+   "total_tokens": 35,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 4
+   }
+  }
+ },
+ "elapsed": 1.22
+}

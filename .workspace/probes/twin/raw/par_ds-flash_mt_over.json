@@ -1,0 +1,67 @@
+{
+ "tag": "par_ds-flash_mt_over",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 2000000,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720398.2047005,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01492dfb6042-SIN",
+  "Content-Length": "531",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:20 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=fsmzdM%2BJpbSLrJ7e1DC6DNz2KVv6oJ6ZKr%2BwWTQ84bwImWevDyCrXR%2F3JQXx73On85qUUoyK48Up6Nm5qxFtdGRHN%2FSor4oFEqSmEJ0iB37Gct3hgYXbe%2F%2FjHAkYqkJG\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833182305583358268d9d6IOc0gDTd",
+  "X-Request-Id": "829e13f3-08a6-4e9d-aa98-d77ffba3aba8",
+  "X-Trace-Id": "829e13f308a64e9daa98d77ffba3aba8",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"Hi! How can I help you today?\",\"reasoning_content\":\"We need respond. User says hi. Need greet. We are API assistant? Need be helpful. Keep concise.\",\"role\":\"assistant\"}}],\"created\":1789720399,\"id\":\"829e13f3-08a6-4e9d-aa98-d77ffba3aba8\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":84,\"completion_tokens\":33,\"total_tokens\":117,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":23}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "Hi! How can I help you today?",
+     "reasoning_content": "We need respond. User says hi. Need greet. We are API assistant? Need be helpful. Keep concise.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720399,
+  "id": "829e13f3-08a6-4e9d-aa98-d77ffba3aba8",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 84,
+   "completion_tokens": 33,
+   "total_tokens": 117,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 23
+   }
+  }
+ },
+ "elapsed": 2.237
+}

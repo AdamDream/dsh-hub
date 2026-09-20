@@ -1,0 +1,68 @@
+{
+ "tag": "tok_ds-pro_base64ish",
+ "model": "deepseek-v4-pro",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "aGVsbG8gd29ybGQgdGhpcyBpcyBhIHRlc3Q="
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "deepseek-v4-pro"
+ },
+ "t0": 1789720426.1274772,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01f8ad716042-SIN",
+  "Content-Length": "425",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:48 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=nhvemnDDJtiIjWyPMMEb9sED%2B3sKjLveFspzEJ8h%2FfTfVHqFyVn6jjUVdwTYSN5nFA%2BC7e38l0tM6gDGI83wnu11LvQ9DNTbz%2BDf7kV0bOf6dmULjipEgoB692eWj66n\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833461407792098268d9d67nT4o7kL",
+  "X-Request-Id": "93535c7e-878e-4378-9b88-d818aa19317f",
+  "X-Trace-Id": "93535c7e878e43789b88d818aa19317f",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"93535c7e-878e-4378-9b88-d818aa19317f\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720427,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":55,\"completion_tokens\":1,\"total_tokens\":56,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":1}}}",
+ "json": {
+  "id": "93535c7e-878e-4378-9b88-d818aa19317f",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720427,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 55,
+   "completion_tokens": 1,
+   "total_tokens": 56,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1
+   }
+  }
+ },
+ "elapsed": 2.004
+}

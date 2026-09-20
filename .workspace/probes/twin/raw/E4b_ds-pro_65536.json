@@ -1,0 +1,47 @@
+{
+ "tag": "E4b_ds-pro_65536",
+ "model": "deepseek-v4-pro",
+ "path": "/chat/completions",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "max_tokens": 65536,
+  "temperature": 0,
+  "model": "deepseek-v4-pro"
+ },
+ "status": 200,
+ "raw": "{\"id\":\"ca268233-f19a-41db-aef6-f7583119a57c\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720790,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"Hi! How can\\u003cds_safety\\u003e[用户未成年]否\\n[分类]其他\\n[判定]用户仅以“hi”问候，无实质问题或敏感内容，不涉及政治敏感信息。\\n[规则]无\\u003c/ds_safety\\u003eSafe\"},\"finish_reason\":\"stop\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":31,\"completion_tokens\":54,\"total_tokens\":85,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":0}}}",
+ "json": {
+  "id": "ca268233-f19a-41db-aef6-f7583119a57c",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720790,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "Hi! How can<ds_safety>[用户未成年]否\n[分类]其他\n[判定]用户仅以“hi”问候，无实质问题或敏感内容，不涉及政治敏感信息。\n[规则]无</ds_safety>Safe"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 31,
+   "completion_tokens": 54,
+   "total_tokens": 85,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0
+   }
+  }
+ },
+ "elapsed": 1.967
+}

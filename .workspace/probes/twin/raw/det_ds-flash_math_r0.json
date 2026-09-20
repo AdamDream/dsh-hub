@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_math_r0",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "计算 17*23+456/12 的结果，先给出思考要点再给最终答案。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720368.2508583,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf008e39fb6042-SIN",
+  "Content-Length": "1112",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:32:52 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=0hz%2FjFGu5Q8h8PQ3cakuQhiP2mUvj6CgiNhFEZyoOXHjrIaOk8d%2BeBZxSXZDP1WCCZIwdRisKrYFdOR3wA7nwSyQKLWzqlQFlRsfh0FWWYkaiSpAZxeprrXDhvw4qQlw\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180832482638887558268d9d66ZaFYJmo",
+  "X-Request-Id": "f3bdf87c-e56c-4e49-b120-a57c6bbe7ee3",
+  "X-Trace-Id": "f3bdf87ce56c4e49b120a57c6bbe7ee3",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"思考要点：\\n\\n1. 先算乘法和除法：17×23=391，456÷12=38。\\n2. 再算加法：391+38=429。\\n3. 注意运算顺序：先乘除、后加减。\\n\\n最终答案：429\",\"reasoning_content\":\"We need answer in Chinese. Need comply: \\\"先给出思考要点再给最终答案\\\" Need compute 17*23+456/12. Need maybe explain order operations. Let's calculate: 17*23=391. 456/12=38. Sum=429. Need \\\"思考要点\\\" maybe mention multiplication/division before addition, then addition. Final answer. Since user specifically asks \\\"先给出思考要点再给最终答案\\\" We can structure. Need be careful \\\"思考要点\\\" not hidden chain? It's simple arithmetic. We can provide brief key points. Final maybe with result.\",\"role\":\"assistant\"}}],\"created\":1789720371,\"id\":\"f3bdf87c-e56c-4e49-b120-a57c6bbe7ee3\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":104,\"completion_tokens\":179,\"total_tokens\":283,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":123}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "思考要点：\n\n1. 先算乘法和除法：17×23=391，456÷12=38。\n2. 再算加法：391+38=429。\n3. 注意运算顺序：先乘除、后加减。\n\n最终答案：429",
+     "reasoning_content": "We need answer in Chinese. Need comply: \"先给出思考要点再给最终答案\" Need compute 17*23+456/12. Need maybe explain order operations. Let's calculate: 17*23=391. 456/12=38. Sum=429. Need \"思考要点\" maybe mention multiplication/division before addition, then addition. Final answer. Since user specifically asks \"先给出思考要点再给最终答案\" We can structure. Need be careful \"思考要点\" not hidden chain? It's simple arithmetic. We can provide brief key points. Final maybe with result.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720371,
+  "id": "f3bdf87c-e56c-4e49-b120-a57c6bbe7ee3",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 104,
+   "completion_tokens": 179,
+   "total_tokens": 283,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 123
+   }
+  }
+ },
+ "elapsed": 4.501
+}

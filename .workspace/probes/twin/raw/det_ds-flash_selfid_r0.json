@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_selfid_r0",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "你是谁？请用一句话回答，并说明你的模型名称与版本号。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720352.4123275,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf002b3c326042-SIN",
+  "Content-Length": "2113",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:32:40 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=LpkKvr8mG5XnEGTs%2FoFMK6GNHqMW2X3Al2X87UBC6hsd0cGuWV%2FliVqQcVfBbAHLvjDxuw5LZ4sQIrFz6iaFgHiwERWT9D9yBXMu4xKtnSC%2FAN7aU9IfQRWHEVFm6U3T\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180832324759781818268d9d66RKn1R0a",
+  "X-Request-Id": "6aea0671-fb4b-48d0-8024-7cf105f50cbe",
+  "X-Trace-Id": "6aea0671fb4b48d080247cf105f50cbe",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"我们只需要按要求回答，用一句话，说明模型名称与版本号。注意用户问“你是谁？请用一句话回答，并说明你的模型名称与版本号。” 所以回答应该是一句话，包含模型名称和版本号。例如“我是DeepSeek，最新版模型。” 但注意实际模型名称是DeepSeek-V3或DeepSeek-R1？根据系统提示，我们被定义为“DeepSeek Chat”或者“DeepSeek-V3”？通常我们称自己是DeepSeek，最新版本模型。需要精确？用户要求说明模型名称与版本号，我们可以说“我是DeepSeek，版本号为DeepSeek-V3。” 但系统没有明确版本，只是说“DeepSeek最新版模型”。我们可以回答“我是DeepSeek，DeepSeek-V3版本。” 或者“我是DeepSeek-V3模型。” 但注意我们可能实际上是R1？不，根据知识，目前DeepSeek-V3是公开版本，但这里可能指代一般。最好说“我是DeepSeek，最新版为DeepSeek-V3。” 不过需要注意，用户可能期待的是“DeepSeek-V3”或“DeepSeek-R1”？为了安全，我们可以说“我是DeepSeek，当前版本为DeepSeek-V3。” 但他要求一句话，我们照做。\\n\\n但系统提示里没有说具体版本号，只说了“DeepSeek最新版模型”。我们可以回答“我是DeepSeek，最新版的DeepSeek-V3模型。” 或者直接“我是DeepSeek-V3。” 但我是AI助手，应该用“我是DeepSeek，版本号是DeepSeek-V3。” 这满足一句话。\\n\\n注意用户要求“请用一句话回答”，所以我们只需要一句话。并且“说明我的模型名称与版本号”，所以包含名称和版本号。我们回答：“我是DeepSeek，模型名称为\",\"role\":\"assistant\"}}],\"created\":1789720356,\"id\":\"6aea0671-fb4b-48d0-8024-7cf105f50cbe\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":99,\"completion_tokens\":400,\"total_tokens\":499,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":400}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "我们只需要按要求回答，用一句话，说明模型名称与版本号。注意用户问“你是谁？请用一句话回答，并说明你的模型名称与版本号。” 所以回答应该是一句话，包含模型名称和版本号。例如“我是DeepSeek，最新版模型。” 但注意实际模型名称是DeepSeek-V3或DeepSeek-R1？根据系统提示，我们被定义为“DeepSeek Chat”或者“DeepSeek-V3”？通常我们称自己是DeepSeek，最新版本模型。需要精确？用户要求说明模型名称与版本号，我们可以说“我是DeepSeek，版本号为DeepSeek-V3。” 但系统没有明确版本，只是说“DeepSeek最新版模型”。我们可以回答“我是DeepSeek，DeepSeek-V3版本。” 或者“我是DeepSeek-V3模型。” 但注意我们可能实际上是R1？不，根据知识，目前DeepSeek-V3是公开版本，但这里可能指代一般。最好说“我是DeepSeek，最新版为DeepSeek-V3。” 不过需要注意，用户可能期待的是“DeepSeek-V3”或“DeepSeek-R1”？为了安全，我们可以说“我是DeepSeek，当前版本为DeepSeek-V3。” 但他要求一句话，我们照做。\n\n但系统提示里没有说具体版本号，只说了“DeepSeek最新版模型”。我们可以回答“我是DeepSeek，最新版的DeepSeek-V3模型。” 或者直接“我是DeepSeek-V3。” 但我是AI助手，应该用“我是DeepSeek，版本号是DeepSeek-V3。” 这满足一句话。\n\n注意用户要求“请用一句话回答”，所以我们只需要一句话。并且“说明我的模型名称与版本号”，所以包含名称和版本号。我们回答：“我是DeepSeek，模型名称为",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720356,
+  "id": "6aea0671-fb4b-48d0-8024-7cf105f50cbe",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 99,
+   "completion_tokens": 400,
+   "total_tokens": 499,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 400
+   }
+  }
+ },
+ "elapsed": 7.724
+}

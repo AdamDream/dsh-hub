@@ -7,7 +7,7 @@
 > 本文件与各目录文档。
 
 本仓库承载三样东西：**自装插件源码**（`dsh-btw/`、`dsh-usage/`、`dsh-ssh-gui/` 等）、
-**官方包补丁与重放脚本**（`.workspace/deploy-*/`）、**审计/执行/验证证据**（`.workspace/*-audit.md` / `*-exec.md`）。
+**官方包补丁与重放脚本**（`.workspace/workstreams/deploy/deploy-*/`）、**审计/执行/验证证据**（`.workspace/*-audit.md` / `*-exec.md`）。
 
 ## 状态
 
@@ -49,15 +49,15 @@
 | 你的情况 | 路径 |
 | --- | --- |
 | **第一次接触，想知道这台机器能做什么** | [功能地图 FEATURE-MAP.md](FEATURE-MAP.md)（每项带状态与入口） |
-| **部署后要重启 + 验收** | [总 Runbook](.workspace/master-runbook.md) → 对应主题 Runbook（见下方索引） |
-| **全局树重装后要补丁重放** | `.workspace/deploy-lag/replay-lag-fix.sh` → `patch-official-015.sh` → `patch-official-slots.sh`（先 `--dry-run` 预览） |
-| **改插件/补丁代码后想生效** | 先判断冷热：插件 client bundle 替换 + 刷新浏览器即可；宿主 lib 代码 → `.workspace/deploy-lag/dsh-restart.sh` 重启 |
+| **部署后要重启 + 验收** | [总 Runbook](.workspace/reports/runbooks/master-runbook.md) → 对应主题 Runbook（见下方索引） |
+| **全局树重装后要补丁重放** | `.workspace/workstreams/deploy/deploy-lag/replay-lag-fix.sh` → `patch-official-015.sh` → `patch-official-slots.sh`（先 `--dry-run` 预览） |
+| **改插件/补丁代码后想生效** | 先判断冷热：插件 client bundle 替换 + 刷新浏览器即可；宿主 lib 代码 → `.workspace/workstreams/deploy/deploy-lag/dsh-restart.sh` 重启 |
 | **改 settings 想立即生效** | 值级热载（无需重启）：行为开关键（dsh-usage 5 键 / dsh-btw 4 键）、**模型窗口 `contextWindow`**、**子代理路由 `dsh-subagent:` 段**、btw 默认模型 `dsh-btw.model.default`；schema/代码类改动需重启一次 |
-| **模型报 `CONTEXT_WINDOW_EXCEEDED` 但明明没到窗口** | [acceptance-exec.md](.workspace/acceptance-exec.md) §3.6：模型条目未声明 `contextWindow` 会回落默认 **262144**；该网关超窗时返回的是 `500 get_channel_failed` 而非长度错误 |
-| **查热载能力 / 免重启清单** | [功能地图](FEATURE-MAP.md) 热载节 · `.workspace/deploy-lag/README.md` §9（P0-a 实测固化） |
+| **模型报 `CONTEXT_WINDOW_EXCEEDED` 但明明没到窗口** | [acceptance-exec.md](.workspace/reports/execs/acceptance/acceptance-exec.md) §3.6：模型条目未声明 `contextWindow` 会回落默认 **262144**；该网关超窗时返回的是 `500 get_channel_failed` 而非长度错误 |
+| **查热载能力 / 免重启清单** | [功能地图](FEATURE-MAP.md) 热载节 · `.workspace/workstreams/deploy/deploy-lag/README.md` §9（P0-a 实测固化） |
 | **写第一个插件** | [examples/minimal-plugin/README.md](examples/minimal-plugin/README.md)（拷贝 + cordis insert 即启动） |
 | **写复杂插件 / 改 UI** | 参考 `@local` 先例（`dsh-usage` 手写 bundle、`dsh-workerspace` host-only、`dsh-ssh-gui` 三类传输）与对应 exec 报告 |
-| **回滚** | 各补丁脚本 `--rollback`（备份在 `.workspace/backup-*`、`.workspace/deploy-*/backup-*`、`~/.dsh/backups/`） |
+| **回滚** | 各补丁脚本 `--rollback`（备份在 `.workspace/backup-*`、`.workspace/workstreams/deploy/deploy-*/backup-*`、`~/.dsh/backups/`） |
 | **查某能力的证据与决策** | `.workspace/*-audit.md`（审计）、`.workspace/*-exec.md`（修订执行复核一体），两阶段闭环产物即证据 |
 
 ## 三条能解释大部分行为的规则
@@ -67,15 +67,15 @@
    `patch-official-slots.sh`：备份 → 应用 → 校验 → 回滚 → 幂等，管**代码层**）；
    `dsh-restart.sh` 管**进程层**（SIGTERM 有界等待 dispose → 重启 → 冒烟 200）。
    改代码不重启不生效，重启不改代码——两者正交，标准流水线是「先跑补丁脚本，再跑 dsh-restart」。
-   （来源：`.workspace/deploy-lag/README.md` §0 分工表。）
+   （来源：`.workspace/workstreams/deploy/deploy-lag/README.md` §0 分工表。）
 
 2. **配置与 UI 已热载，宿主代码改动需重启。**
    `settings.yaml` 值级热载（P0-b 实测：改行为开关键无需重启）、`cordis.patch.yml`
    条目级热载（P0-a 实测：insert/remove/disable/name/config 约 1s 生效）、插件
    client bundle 替换后刷新浏览器即生效；而改任何插件/官方包的**宿主 lib 代码**
    都是冷改动，必须 `dsh-restart.sh` 重启一次。
-   （来源：`.workspace/p0a-patch-hmr-exec.md`、`.workspace/p0b-settings-switch-exec.md`、
-   `.workspace/usage-tooltip-exec.md` §5 生效方式。）
+   （来源：`.workspace/reports/execs/p0-hotload/p0a-patch-hmr-exec.md`、`.workspace/reports/execs/p0-hotload/p0b-settings-switch-exec.md`、
+   `.workspace/reports/execs/usage/usage-tooltip-exec.md` §5 生效方式。）
 
 3. **应用失败即失败，绝不静默部分生效（fail-closed）。**
    补丁脚本每个单元应用后必校验（node --check + 锚点 + sha256/字节比对），校验失败 →
@@ -84,9 +84,9 @@
    `ws_flash` 高危烧录每次调用都须确认模态，未授权模板一律拒绝（fail-closed）；
    模型能力**未知声明 → 保守回退 vision-adam**，绝不把图直发给文本模型。
    未知即拒绝、失败即大声失败，是本仓库所有自动化改动的共同底线。
-   （来源：`.workspace/lag-fix-exec.md` U-9、`.workspace/borrow-015-exec.md` §3、
-   `.workspace/p0a-patch-hmr-exec.md` §0/§1、`.workspace/workerspace-exec.md` §1-2、
-   `.workspace/vision-settings-capability-exec.md` §2。）
+   （来源：`.workspace/reports/execs/lagfix/lag-fix-exec.md` U-9、`.workspace/reports/execs/borrow-015/borrow-015-exec.md` §3、
+   `.workspace/reports/execs/p0-hotload/p0a-patch-hmr-exec.md` §0/§1、`.workspace/reports/execs/workerspace/workerspace-exec.md` §1-2、
+   `.workspace/reports/execs/vision/vision-settings-capability-exec.md` §2。）
 
 ## 文档分层
 
@@ -97,14 +97,14 @@
 | [DOC-STYLE.md](DOC-STYLE.md) | 未来所有 dsh-hub 文档的写作约定（归属表/状态词汇/诚实边界/导航表） |
 | 方法论 | 两阶段闭环（审计 → 修订执行复核一体），见本机 `~/.dsh/AGENTS.md`（不入库） |
 | **Tier 1 · 部署与验证** | |
-| [总 Runbook](.workspace/master-runbook.md) | 已部署清单、六项启动修复、事故记录、验收矩阵、回滚 |
+| [总 Runbook](.workspace/reports/runbooks/master-runbook.md) | 已部署清单、六项启动修复、事故记录、验收矩阵、回滚 |
 | 各主题 Runbook | 见下方「部署与验证 Runbook 索引」 |
 | [examples/minimal-plugin/](examples/minimal-plugin/README.md) | 最小 @local 插件脚手架：拷贝 + cordis insert 即启动 |
 | **Tier 2 · 能力** | |
 | [功能地图 FEATURE-MAP.md](FEATURE-MAP.md) | 每个能力的状态与起点——先读这一页 |
 | **Tier 3 · 参考与证据** | |
 | `.workspace/*-audit.md` / `*-exec.md` | 每项能力的审计结论、交付单元、执行与自复核证据、问题清单 |
-| `.workspace/deploy-*/patches/*.patch` | 官方包补丁的可应用 unified diff（即「可执行规范」，见下节） |
+| `.workspace/workstreams/deploy/deploy-*/patches/*.patch` | 官方包补丁的可应用 unified diff（即「可执行规范」，见下节） |
 
 ## 部署与验证 Runbook 索引（全量以这些文件为准，本页不再内嵌步骤）
 
@@ -114,39 +114,39 @@
 示例：全局树重装后的补丁重放（幂等，可重复执行；命令与真实重放脚本逐字一致）：
 
 ```bash
-cd .workspace/deploy-lag
+cd .workspace/workstreams/deploy/deploy-lag
 bash replay-lag-fix.sh --dry-run         # 先预览：前置校验 + 全部步骤，零写入
 # 预期输出：前置校验通过 → 打印各单元备份/应用/校验计划（--dry-run 零写入）；已应用时 → 「全部单元均已应用，无操作。」
 bash patch-official-015.sh               # 0.1.5 借码 12+ 单元（同样先 --dry-run 可预览）
 bash replay-lag-fix.sh                   # 应用 lag-fix 5 补丁 + settings（备份 → 应用 → 校验 → PASS）
 # 预期输出（关键行）：「全部单元 PASS」；重跑第二次 → 「全部单元均已应用，无操作。」exit 0
-cd .workspace/deploy-slots && bash patch-official-slots.sh --apply   # 槽位 B
-cd .workspace/deploy-lag && ./dsh-restart.sh --yes                  # 重启使宿主 lib 生效 + 冒烟 200
+cd .workspace/workstreams/deploy/deploy-slots && bash patch-official-slots.sh --apply   # 槽位 B
+cd .workspace/workstreams/deploy/deploy-lag && ./dsh-restart.sh --yes                  # 重启使宿主 lib 生效 + 冒烟 200
 # 预期输出：SIGTERM → dispose → 重启 → ✅ http://127.0.0.1:3080/ (HTTP 200)
 # 回滚：各脚本 --rollback（备份在各自备份目录）
 ```
 
 | 主题 | 入口 |
 | --- | --- |
-| 总 Runbook（本机基线 + 事故记录 + 验收矩阵） | [.workspace/master-runbook.md](.workspace/master-runbook.md) |
-| 卡顿修复（lag-fix 5 补丁 + settings） | [.workspace/lag-fix-runbook.md](.workspace/lag-fix-runbook.md) |
-| 紧急恢复合并（一次重启统一验证） | [.workspace/combined-restore-runbook.md](.workspace/combined-restore-runbook.md) |
-| btw v2（图片管线/跳转/面板） | [.workspace/btw-v2-runbook.md](.workspace/btw-v2-runbook.md) |
-| 分布式控制（ssh-gui v0.2.0，SSH/串口/TCP 串口） | [.workspace/deploy-ssh-gui/RUNBOOK.md](.workspace/deploy-ssh-gui/RUNBOOK.md) |
-| 本地串口/烧录（workerspace，ws_serial_*/ws_flash） | [.workspace/deploy-workerspace/RUNBOOK.md](.workspace/deploy-workerspace/RUNBOOK.md) |
-| ppt-master（skill + 插件） | [.workspace/deploy-pptmaster/04-Runbook.md](.workspace/deploy-pptmaster/04-Runbook.md) |
-| vision-adam 识图设置页 + 能力检测 | [.workspace/deploy-vision-settings/README.md](.workspace/deploy-vision-settings/README.md) |
-| 识图提示词（完整转录 + 审美分析） | [.workspace/deploy-vision-prompt/APPLY.md](.workspace/deploy-vision-prompt/APPLY.md) |
-| 0.1.5 借码补丁重放（脚本 `--help` 内嵌 Runbook） | [.workspace/deploy-lag/patch-official-015.sh](.workspace/deploy-lag/patch-official-015.sh) |
-| 槽位 B（sidebar.workspaces.remoteHosts） | [.workspace/deploy-slots/REPLAY.md](.workspace/deploy-slots/REPLAY.md) |
-| btw P0 materialize（dsh-subagent 官方补丁） | [.workspace/deploy-p0/APPLY-P0.md](.workspace/deploy-p0/APPLY-P0.md) |
-| 重启辅助（dsh-restart，`--help` 内嵌 Runbook） | [.workspace/deploy-lag/dsh-restart.sh](.workspace/deploy-lag/dsh-restart.sh) |
-| 运行时热载能力（P0-a 实测固化） | [.workspace/deploy-lag/README.md](.workspace/deploy-lag/README.md) §9 |
+| 总 Runbook（本机基线 + 事故记录 + 验收矩阵） | [.workspace/reports/runbooks/master-runbook.md](.workspace/reports/runbooks/master-runbook.md) |
+| 卡顿修复（lag-fix 5 补丁 + settings） | [.workspace/reports/runbooks/lag-fix-runbook.md](.workspace/reports/runbooks/lag-fix-runbook.md) |
+| 紧急恢复合并（一次重启统一验证） | [.workspace/reports/runbooks/combined-restore-runbook.md](.workspace/reports/runbooks/combined-restore-runbook.md) |
+| btw v2（图片管线/跳转/面板） | [.workspace/reports/runbooks/btw-v2-runbook.md](.workspace/reports/runbooks/btw-v2-runbook.md) |
+| 分布式控制（ssh-gui v0.2.0，SSH/串口/TCP 串口） | [.workspace/workstreams/deploy/deploy-ssh-gui/RUNBOOK.md](.workspace/workstreams/deploy/deploy-ssh-gui/RUNBOOK.md) |
+| 本地串口/烧录（workerspace，ws_serial_*/ws_flash） | [.workspace/workstreams/deploy/deploy-workerspace/RUNBOOK.md](.workspace/workstreams/deploy/deploy-workerspace/RUNBOOK.md) |
+| ppt-master（skill + 插件） | [.workspace/workstreams/deploy/deploy-pptmaster/04-Runbook.md](.workspace/workstreams/deploy/deploy-pptmaster/04-Runbook.md) |
+| vision-adam 识图设置页 + 能力检测 | [.workspace/workstreams/deploy/deploy-vision-settings/README.md](.workspace/workstreams/deploy/deploy-vision-settings/README.md) |
+| 识图提示词（完整转录 + 审美分析） | [.workspace/workstreams/deploy/deploy-vision-prompt/APPLY.md](.workspace/workstreams/deploy/deploy-vision-prompt/APPLY.md) |
+| 0.1.5 借码补丁重放（脚本 `--help` 内嵌 Runbook） | [.workspace/workstreams/deploy/deploy-lag/patch-official-015.sh](.workspace/workstreams/deploy/deploy-lag/patch-official-015.sh) |
+| 槽位 B（sidebar.workspaces.remoteHosts） | [.workspace/workstreams/deploy/deploy-slots/REPLAY.md](.workspace/workstreams/deploy/deploy-slots/REPLAY.md) |
+| btw P0 materialize（dsh-subagent 官方补丁） | [.workspace/workstreams/deploy/deploy-p0/APPLY-P0.md](.workspace/workstreams/deploy/deploy-p0/APPLY-P0.md) |
+| 重启辅助（dsh-restart，`--help` 内嵌 Runbook） | [.workspace/workstreams/deploy/deploy-lag/dsh-restart.sh](.workspace/workstreams/deploy/deploy-lag/dsh-restart.sh) |
+| 运行时热载能力（P0-a 实测固化） | [.workspace/workstreams/deploy/deploy-lag/README.md](.workspace/workstreams/deploy/deploy-lag/README.md) §9 |
 
 ## 实现参考（可执行规范）
 
 仿 Luxweft「参考 Pack = 最接近可执行的规范」：本仓库的等价物是
-**`.workspace/` 各 exec 报告与 `.workspace/deploy-*/patches/*.patch`**。
+**`.workspace/` 各 exec 报告与 `.workspace/workstreams/deploy/deploy-*/patches/*.patch`**。
 
 - **patch 文件即规范**：`deploy-015/patches/*.patch`、`deploy-lag/patches/*.patch`、
   `deploy-slots/patches/*.patch` 都是 unified diff，**可直接 `patch -p1` 在包目录应用**

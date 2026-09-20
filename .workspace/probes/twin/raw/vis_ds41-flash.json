@@ -1,0 +1,39 @@
+{
+ "tag": "vis_ds41-flash",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "这张图片是什么颜色？只回答颜色。"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFAAH/q842iAAAAAElFTkSuQmCC"
+      }
+     }
+    ]
+   }
+  ],
+  "max_tokens": 60,
+  "temperature": 0,
+  "model": "deepseek-v4.1-flash"
+ },
+ "status": 500,
+ "headers": {
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Content-Length": "216",
+  "Content-Type": "application/json; charset=utf-8",
+  "Date": "Fri, 18 Sep 2026 08:34:05 GMT",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "20260918083402701411758268d9d6g6lciuoG",
+  "Connection": "close"
+ },
+ "raw": "{\"error\":{\"message\":\"分组 auto 下模型 deepseek-v4.1-flash 的可用渠道不存在（retry） (request id: 20260918083402701411758268d9d6g6lciuoG)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"get_channel_failed\"}}",
+ "elapsed": 3.067
+}

@@ -1,0 +1,68 @@
+{
+ "tag": "par_ds41-flash_temp1.5",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 1.5,
+  "max_tokens": 8,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720403.6931958,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf016b8c676042-SIN",
+  "Content-Length": "454",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:25 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=s2fLg%2F%2FFWSIAuZEf7VZMCfOd3RuqT%2Bmxhg8k%2BNUCiC3s3rwJpVqO14TEKiaMeEt7ppe0UzZ2E8z9PWzF%2Bz72B9m%2FiKxHRFklolrEYlkuvz%2B855y7N5FHRwl2EDBwGDF%2B\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833237191661668268d9d6TT7hKVfi",
+  "X-Request-Id": "4b2a8042-c3fd-44a3-8a93-7ec0a0e98d12",
+  "X-Trace-Id": "4b2a8042c3fd44a38a937ec0a0e98d12",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"4b2a8042-c3fd-44a3-8a93-7ec0a0e98d12\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720404,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"The user just said \\\"hi\\\". That\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":31,\"completion_tokens\":8,\"total_tokens\":39,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":8}}}",
+ "json": {
+  "id": "4b2a8042-c3fd-44a3-8a93-7ec0a0e98d12",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720404,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "The user just said \"hi\". That"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 31,
+   "completion_tokens": 8,
+   "total_tokens": 39,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 8
+   }
+  }
+ },
+ "elapsed": 1.369
+}

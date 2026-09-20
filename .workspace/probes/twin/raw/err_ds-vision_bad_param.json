@@ -1,0 +1,67 @@
+{
+ "tag": "err_ds-vision_bad_param",
+ "model": "deepseek-v4-flash-vision-exp",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "max_tokens": 4,
+  "totally_unknown_param": 1,
+  "model": "deepseek-v4-flash-vision-exp"
+ },
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf014ee9bd6042-SIN",
+  "Content-Length": "455",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:20 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=%2BgjPaMTpcsT3lKsC%2BrhK4wwNA1%2FQY2twpw%2F8Tvx6kp10MRmCerEVeu0gPuPivV47uxAAroIRXc%2Fm7NRtnhHkBL2ip08cVs8yVmLF8zaTcWyLapbJl17iMDBucvZpjq4D\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833191174428448268d9d6TQ1W2bZg",
+  "X-Request-Id": "47a8e471-9058-4bd0-9e18-923633e0d54c",
+  "X-Trace-Id": "47a8e47190584bd09e18923633e0d54c",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"47a8e471-9058-4bd0-9e18-923633e0d54c\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-v4-flash-vision-exp\",\"created\":1789720399,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"The user just said\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":31,\"completion_tokens\":4,\"total_tokens\":35,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":4}}}",
+ "json": {
+  "id": "47a8e471-9058-4bd0-9e18-923633e0d54c",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-v4-flash-vision-exp",
+  "created": 1789720399,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "The user just said"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 31,
+   "completion_tokens": 4,
+   "total_tokens": 35,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 4
+   }
+  }
+ },
+ "elapsed": 1.43
+}

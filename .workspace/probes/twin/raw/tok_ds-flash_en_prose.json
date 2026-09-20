@@ -1,0 +1,67 @@
+{
+ "tag": "tok_ds-flash_en_prose",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "The quick brown fox jumps over the lazy dog near the riverbank."
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720359.1356318,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf0054efbc6042-SIN",
+  "Content-Length": "408",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:32:42 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=Kf3yL0YmfFMksHOspTHGcYjskFAcC20AkIlNXEd0xs5%2B48%2FuJGer4ZwBYYedieJBWV6L0WfuDMUammnwaRI8TVZEX0MNbAK5u5g2OVqM9LqeTN57bPFf9fZkRS%2BfnTM6\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180832391485688248268d9d6ZYajQ1lK",
+  "X-Request-Id": "e4c7a6d3-9dec-4019-afe0-917e8d538bad",
+  "X-Trace-Id": "e4c7a6d39dec4019afe0917e8d538bad",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"We\",\"role\":\"assistant\"}}],\"created\":1789720361,\"id\":\"e4c7a6d3-9dec-4019-afe0-917e8d538bad\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":97,\"completion_tokens\":1,\"total_tokens\":98,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":1}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "We",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720361,
+  "id": "e4c7a6d3-9dec-4019-afe0-917e8d538bad",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 97,
+   "completion_tokens": 1,
+   "total_tokens": 98,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1
+   }
+  }
+ },
+ "elapsed": 3.028
+}

@@ -1,0 +1,68 @@
+{
+ "tag": "tok_ds-pro_en_prose",
+ "model": "deepseek-v4-pro",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "The quick brown fox jumps over the lazy dog near the riverbank."
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "deepseek-v4-pro"
+ },
+ "t0": 1789720415.6087782,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01b61fe56042-SIN",
+  "Content-Length": "425",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:36 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=%2F0iW2qCtJT25w6uTJ0SMlqTtOgFc5joL3mqx6z5b1cfl4bp8Qo87ao5X7icC90uszdfvTnUMH6%2FuWF0vMoxjkoZI7ECFA1D7gxOJnNol3E1LjtK%2FVG3C0cb04imvLqIb\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833356666836778268d9d6n5MGPi25",
+  "X-Request-Id": "016864cb-b4b8-4bd4-83c8-3719bdddca71",
+  "X-Trace-Id": "016864cbb4b84bd483c83719bdddca71",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"016864cb-b4b8-4bd4-83c8-3719bdddca71\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720416,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":44,\"completion_tokens\":1,\"total_tokens\":45,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":1}}}",
+ "json": {
+  "id": "016864cb-b4b8-4bd4-83c8-3719bdddca71",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720416,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 44,
+   "completion_tokens": 1,
+   "total_tokens": 45,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1
+   }
+  }
+ },
+ "elapsed": 0.971
+}

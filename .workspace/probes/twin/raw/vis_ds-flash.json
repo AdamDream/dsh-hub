@@ -1,0 +1,77 @@
+{
+ "tag": "vis_ds-flash",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "这张图片是什么颜色？只回答颜色。"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFAAH/q842iAAAAAElFTkSuQmCC"
+      }
+     }
+    ]
+   }
+  ],
+  "max_tokens": 60,
+  "temperature": 0,
+  "model": "deepseek-v4-flash"
+ },
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf02445fd76042-SIN",
+  "Content-Length": "580",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:34:02 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=uSTQKKnAp8WbqRKV300Z3KbhVsrXwOL7oxUdrfIozHN4hlDTwnl9q8kHsu506JyYorAulXsjOhSiS9TSwsvOFCSUbkFy0dodz%2FeF29Sn6wa0Q7wGqHHb7XMmMQj2pPz5\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833583408314808268d9d6ObrJoPFY",
+  "X-Request-Id": "005a5d30-9dca-4b1f-8eaf-d3a48e59857a",
+  "X-Trace-Id": "005a5d309dca4b1f8eafd3a48e59857a",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"我们只需要回答颜色。图片是1x1像素的PNG，base64解码后是红色？让我们检查。数据：iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP\",\"role\":\"assistant\"}}],\"created\":1789720441,\"id\":\"005a5d30-9dca-4b1f-8eaf-d3a48e59857a\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":156,\"completion_tokens\":60,\"total_tokens\":216,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":60}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "我们只需要回答颜色。图片是1x1像素的PNG，base64解码后是红色？让我们检查。数据：iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720441,
+  "id": "005a5d30-9dca-4b1f-8eaf-d3a48e59857a",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 156,
+   "completion_tokens": 60,
+   "total_tokens": 216,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 60
+   }
+  }
+ },
+ "elapsed": 3.726
+}

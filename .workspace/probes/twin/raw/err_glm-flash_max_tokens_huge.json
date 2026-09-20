@@ -1,0 +1,27 @@
+{
+ "tag": "err_glm-flash_max_tokens_huge",
+ "model": "glm-5.3-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "max_tokens": 99999999999,
+  "model": "glm-5.3-flash"
+ },
+ "status": 500,
+ "headers": {
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Content-Length": "158",
+  "Content-Type": "application/json; charset=utf-8",
+  "Date": "Fri, 18 Sep 2026 08:33:20 GMT",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833205926386588268d9d6fXM9IBuR",
+  "Connection": "close"
+ },
+ "raw": "{\"error\":{\"message\":\"max_tokens is invalid (request id: 202609180833205926386588268d9d6fXM9IBuR)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"invalid_request\"}}",
+ "elapsed": 0.038
+}

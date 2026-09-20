@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_selfid_r1",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "你是谁？请用一句话回答，并说明你的模型名称与版本号。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720360.1398168,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf005b4ecf6042-SIN",
+  "Content-Length": "630",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:32:44 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=ISaHfB%2BLGaxhGjFpQYx%2FbaB1o1TlDt8pNnmVuIWDyHUjVy7kwlXX%2Br1TtVTsayWwJOKSo35%2FUd6J37%2FOGquInHJSYf%2FkX6U0v9BDZPFw6G0VDx%2FbArOZ13zOHWKVjejJ\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180832401720133968268d9d6TrVOTPlw",
+  "X-Request-Id": "232908f8-71ad-4a5e-845a-10db0a1997ea",
+  "X-Trace-Id": "232908f871ad4a5e845a10db0a1997ea",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"我是 DeepSeek 最新版模型，由深度求索公司创造，版本号为 DeepSeek-V3。\",\"reasoning_content\":\"我们只需要按照用户要求，用一句话回答，并说明模型名称和版本号。注意要简洁。我们使用中文。\",\"role\":\"assistant\"}}],\"created\":1789720363,\"id\":\"232908f8-71ad-4a5e-845a-10db0a1997ea\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":99,\"completion_tokens\":51,\"total_tokens\":150,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":26}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "我是 DeepSeek 最新版模型，由深度求索公司创造，版本号为 DeepSeek-V3。",
+     "reasoning_content": "我们只需要按照用户要求，用一句话回答，并说明模型名称和版本号。注意要简洁。我们使用中文。",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720363,
+  "id": "232908f8-71ad-4a5e-845a-10db0a1997ea",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 99,
+   "completion_tokens": 51,
+   "total_tokens": 150,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 26
+   }
+  }
+ },
+ "elapsed": 4.161
+}

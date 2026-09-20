@@ -1,0 +1,50 @@
+{
+ "tag": "E4c_ds-flash_json_obj_r0",
+ "model": "deepseek-v4-flash",
+ "path": "/chat/completions",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "response_format": {
+   "type": "json_object"
+  },
+  "max_tokens": 20,
+  "model": "deepseek-v4-flash"
+ },
+ "status": 200,
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"We need to respond as per instructions. The user said \\\"hi\\\". But we are an AI designed\",\"role\":\"assistant\"}}],\"created\":1789720824,\"id\":\"157d7330-997b-48da-a257-976b53eed4d1\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":201,\"completion_tokens\":20,\"total_tokens\":221,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":20}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "We need to respond as per instructions. The user said \"hi\". But we are an AI designed",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720824,
+  "id": "157d7330-997b-48da-a257-976b53eed4d1",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 201,
+   "completion_tokens": 20,
+   "total_tokens": 221,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 20
+   }
+  }
+ },
+ "elapsed": 4.046
+}

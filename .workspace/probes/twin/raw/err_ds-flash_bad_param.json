@@ -1,0 +1,66 @@
+{
+ "tag": "err_ds-flash_bad_param",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "max_tokens": 4,
+  "totally_unknown_param": 1,
+  "model": "deepseek-v4-flash"
+ },
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf00c6df8b6042-SIN",
+  "Content-Length": "421",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:00 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=ZmcSw4uyP1CobekxCZyC%2F7jxok4Dhy%2BC7BAFAY4C42rtveS%2F0CJm72QPmUkdDVZJ5buWgyp88ZdtDjs7PaupC%2BC2OP0HqXT6VeEzzdhwQhsp%2FOd2Cu9Rngm%2FGbfuqODf\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180832573480510918268d9d6rmJ8ruTg",
+  "X-Request-Id": "dde93b30-001c-4bd4-b01f-388b422297bd",
+  "X-Trace-Id": "dde93b30001c4bd4b01f388b422297bd",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"We need answer.\",\"role\":\"assistant\"}}],\"created\":1789720380,\"id\":\"dde93b30-001c-4bd4-b01f-388b422297bd\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":84,\"completion_tokens\":4,\"total_tokens\":88,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":4}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "We need answer.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720380,
+  "id": "dde93b30-001c-4bd4-b01f-388b422297bd",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 84,
+   "completion_tokens": 4,
+   "total_tokens": 88,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 4
+   }
+  }
+ },
+ "elapsed": 3.495
+}

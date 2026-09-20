@@ -1,0 +1,71 @@
+{
+ "tag": "par_ds41-flash_stop",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "stop": [
+   "\n"
+  ],
+  "max_tokens": 16,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720420.372886,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01d44cef6042-SIN",
+  "Content-Length": "511",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:42 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=8PL4vzF56bKOc1uBp40ny8%2BbaB32DVlJPKqjG3iC6k6EuCvGgQm6k%2FpgCgX3V06mDWnHd0fbzaSxA350MIeBKEJhMnIkgM6dZJHu21Mcqtl6p9tr6s0nf5DvOZpDUD6g\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833403825015488268d9d6B9soyu3p",
+  "X-Request-Id": "2abb3434-b70c-4e9c-a484-5c80c9c2a3c5",
+  "X-Trace-Id": "2abb3434b70c4e9ca4845c80c9c2a3c5",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"2abb3434-b70c-4e9c-a484-5c80c9c2a3c5\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720420,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We need respond to simple greeting. Need likely friendly. We must not mention anything\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":31,\"completion_tokens\":16,\"total_tokens\":47,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":16}}}",
+ "json": {
+  "id": "2abb3434-b70c-4e9c-a484-5c80c9c2a3c5",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720420,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We need respond to simple greeting. Need likely friendly. We must not mention anything"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 31,
+   "completion_tokens": 16,
+   "total_tokens": 47,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 16
+   }
+  }
+ },
+ "elapsed": 1.675
+}

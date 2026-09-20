@@ -1,0 +1,67 @@
+{
+ "tag": "tok_glm-flash_digits",
+ "model": "glm-5.3-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "12345678901234567890123456789012345678901234567890123456789012345678901234567890"
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "glm-5.3-flash"
+ },
+ "t0": 1789720484.9829175,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf03676b336042-SIN",
+  "Content-Length": "400",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:34:50 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=rdGugfWjJdPq9VNPbzKGk2QG1WoCzR3CfHcbTnakNpt41GJYatfMas44BUjShx3x1P0fj5W4mtkzZhazjEdRP1CXttNJrDX8aW45heDNr1MVLonHrxNP7B9SkaVUqWEX\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180834449976239878268d9d6tqk66BEn",
+  "X-Request-Id": "8fbe0114-74d5-4ae3-a3fd-4d53f009b849",
+  "X-Trace-Id": "8fbe011474d54ae3a3fd4d53f009b849",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"The\",\"role\":\"assistant\"}}],\"created\":1789720486,\"id\":\"8fbe0114-74d5-4ae3-a3fd-4d53f009b849\",\"model\":\"glm-5.3-flash\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":62,\"completion_tokens\":1,\"total_tokens\":63,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":1}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "The",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720486,
+  "id": "8fbe0114-74d5-4ae3-a3fd-4d53f009b849",
+  "model": "glm-5.3-flash",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 62,
+   "completion_tokens": 1,
+   "total_tokens": 63,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1
+   }
+  }
+ },
+ "elapsed": 5.923
+}

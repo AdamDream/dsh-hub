@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_math_r1",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "计算 17*23+456/12 的结果，先给出思考要点再给最终答案。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720372.7525597,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf00a9fe2e6042-SIN",
+  "Content-Length": "850",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:32:56 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=GZDqwlz1ah%2FzPkb62T4GqTl%2B31X2gTcZwetGdtXvBefGWyYa4%2Fp%2Fhtew2ekXZy3qg0laYeXcLaIstLANL%2FWbZtCh1HkXV50EhLurh0CEcaGklH2lLcq%2FPa%2FepG%2FwgJoc\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180832527638244718268d9d6LKx7xeUH",
+  "X-Request-Id": "d0b0aeeb-2333-45ac-81da-ddbb5526ec7d",
+  "X-Trace-Id": "d0b0aeeb233345ac81daddbb5526ec7d",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"思考要点：\\n- 先算乘法和除法，再算加法。\\n- 17 × 23 = 391\\n- 456 ÷ 12 = 38\\n- 最后相加：391 + 38 = 429\\n\\n最终答案：429\",\"reasoning_content\":\"We need answer in Chinese. Need compute 17*23+456/12. Need \\\"先给出思考要点再给最终答案\\\". We can provide concise reasoning points then final answer. Compute: 17*23=391. 456/12=38. Sum=429. Need ensure maybe order operations multiplication/division before addition. Final answer.\",\"role\":\"assistant\"}}],\"created\":1789720375,\"id\":\"d0b0aeeb-2333-45ac-81da-ddbb5526ec7d\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":104,\"completion_tokens\":125,\"total_tokens\":229,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":72}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "思考要点：\n- 先算乘法和除法，再算加法。\n- 17 × 23 = 391\n- 456 ÷ 12 = 38\n- 最后相加：391 + 38 = 429\n\n最终答案：429",
+     "reasoning_content": "We need answer in Chinese. Need compute 17*23+456/12. Need \"先给出思考要点再给最终答案\". We can provide concise reasoning points then final answer. Compute: 17*23=391. 456/12=38. Sum=429. Need ensure maybe order operations multiplication/division before addition. Final answer.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720375,
+  "id": "d0b0aeeb-2333-45ac-81da-ddbb5526ec7d",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 104,
+   "completion_tokens": 125,
+   "total_tokens": 229,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 72
+   }
+  }
+ },
+ "elapsed": 3.964
+}

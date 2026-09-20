@@ -3,7 +3,7 @@
 > **Tier 0 · 约定** · [指南地图](README.md)
 
 本文档定义 dsh-hub 仓库所有文档的写作约定（范本：Luxweft Effect Pack 作者指南，
-见 `.workspace/research-luxweft-doc/zh-cn/`）。**未来所有 dsh-hub 文档按此约定写。**
+见 `.workspace/workstreams/research/research-luxweft-doc/zh-cn/`）。**未来所有 dsh-hub 文档按此约定写。**
 约定不覆盖历史文档（`audit-*.md` / `*.exec.md` 等证据类报告按落盘时的档期格式保留），
 但新写的文档、README、功能地图与 Runbook 一律遵守。
 
@@ -32,12 +32,12 @@
 - **fail-closed 是必写规则**（README 规则 3「应用失败即失败，绝不静默部分生效」），
   涉及自动化改动/高危操作的文档都要带上它，且用真实事实支撑：
   - 补丁脚本：每单元应用后必校验（node --check + 锚点 + sha256/字节比对），校验失败 → FAIL
-    退出非零、绝不静默继续，`--rollback` 一键还原（来源：`.workspace/lag-fix-exec.md` U-9）；
-  - `cordis.patch.yml` 热载：刷新失败 → 整次回滚、无残留（来源：`.workspace/p0a-patch-hmr-exec.md` §0/§1）；
+    退出非零、绝不静默继续，`--rollback` 一键还原（来源：`.workspace/reports/execs/lagfix/lag-fix-exec.md` U-9）；
+  - `cordis.patch.yml` 热载：刷新失败 → 整次回滚、无残留（来源：`.workspace/reports/execs/p0-hotload/p0a-patch-hmr-exec.md` §0/§1）；
   - `ws_flash`：高危烧录每次调用都须确认模态，未授权模板一律拒绝（fail-closed，
-    来源：`.workspace/workerspace-exec.md` §1-2 四道闸）；
+    来源：`.workspace/reports/execs/workerspace/workerspace-exec.md` §1-2 四道闸）；
   - 能力检测：模型能力**未知声明 → 保守回退 vision-adam**，绝不把图直发给文本模型
-    （来源：`.workspace/vision-settings-capability-exec.md` §2 回退安全）。
+    （来源：`.workspace/reports/execs/vision/vision-settings-capability-exec.md` §2 回退安全）。
 
 ## 4. 代码块规范（demo 代码块）
 
@@ -46,7 +46,7 @@
 - **完整可复制**：整段命令可从文档直接粘贴执行；需要多个步骤时给完整序列，不用省略号
   替代中间命令。
 - **与真实命令逐字一致**：命令必须与真实脚本/Runbook 一字不差（可从
-  `.workspace/deploy-*/` 脚本复制），不允许示意性改写；环境相关部分用显式占位符
+  `.workspace/workstreams/deploy/deploy-*/` 脚本复制），不允许示意性改写；环境相关部分用显式占位符
   （如 `<deploy>/dsh-workerspace`）并注明可替换。
 - **带预期输出注释**：用 `# 预期输出：…` 注释标出关键成功行（如「全部单元 PASS」、
   「HTTP 200」、「graph 行出现」），读者能自判是否成功。
@@ -97,7 +97,7 @@
   - **Tier 0 · 约定与范式**：README（导航中枢）、DOC-STYLE（本文）、方法论（`~/.dsh/AGENTS.md`，不入库）
   - **Tier 1 · 部署与验证**：`master-runbook.md`、各主题 Runbook（deploy-*/RUNBOOK、APPLY、REPLAY）、`examples/minimal-plugin/`（脚手架）
   - **Tier 2 · 能力**：FEATURE-MAP.md（每项能力的状态与起点）
-  - **Tier 3 · 参考与证据**：`.workspace/*-audit.md`、`*-exec.md`（审计结论、交付单元、自复核证据）、`.workspace/deploy-*/patches/*.patch`（可执行规范）
+  - **Tier 3 · 参考与证据**：`.workspace/*-audit.md`、`*-exec.md`（审计结论、交付单元、自复核证据）、`.workspace/workstreams/deploy/deploy-*/patches/*.patch`（可执行规范）
 
 ## 9. 表格扫读优先
 
@@ -114,4 +114,4 @@
 - 两阶段闭环（审计 → 修订执行复核一体）是全部改动的生产方式；文档记录裁决与取舍，
   不替主代理做设计决策。
 - 歧义/越界如实上报主代理，不自行拍板；本约定自身有歧义时以 Luxweft 范本
-  （`.workspace/research-luxweft-doc/zh-cn/`）为准。
+  （`.workspace/workstreams/research/research-luxweft-doc/zh-cn/`）为准。

@@ -1,0 +1,33 @@
+{
+ "tag": "par_ds-flash_stream_flag",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "stream": true,
+  "max_tokens": 4,
+  "model": "deepseek-v4-flash"
+ },
+ "status": 200,
+ "headers": {
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cache-Control": "no-cache",
+  "Content-Type": "text/event-stream",
+  "Date": "Fri, 18 Sep 2026 08:33:23 GMT",
+  "Via": "1.1 Caddy",
+  "X-Accel-Buffering": "no",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833204915989168268d9d6OVvys2xw",
+  "Connection": "close",
+  "Transfer-Encoding": "chunked"
+ },
+ "raw": "data: {\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"reasoning_content\":\"We\"}}],\"created\":1789720403,\"id\":\"bf5c0d54-7cde-49ae-bdf3-a9d9ef390927\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion.chunk\"}\n\ndata: {\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"reasoning_content\":\" need\"}}],\"created\":1789720403,\"id\":\"bf5c0d54-7cde-49ae-bdf3-a9d9ef390927\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion.chunk\"}\n\ndata: {\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"reasoning_content\":\" answer\"}}],\"created\":1789720403,\"id\":\"bf5c0d54-7cde-49ae-bdf3-a9d9ef390927\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion.chunk\"}\n\ndata: {\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"reasoning_content\":\".\"},\"finish_reason\":\"length\"}],\"created\":1789720403,\"id\":\"bf5c0d54-7cde-49ae-bdf3-a9d9ef390927\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion.chunk\",\"usage\":{\"prompt_tokens\":84,\"completion_tokens\":4,\"total_tokens\":88,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":4}}}\n\ndata: [DONE]\n\n",
+ "n_chunks": 4,
+ "ttft": 3.2298824787139893,
+ "elapsed": 3.23
+}

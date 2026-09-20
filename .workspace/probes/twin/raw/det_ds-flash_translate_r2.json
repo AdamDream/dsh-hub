@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_translate_r2",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "把这句话翻译成英文：我们明天上午十点在会议室讨论网关的模型路由策略。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720419.3398297,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01cd2a856042-SIN",
+  "Content-Length": "851",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:43 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=iyeEEkC1trsSCEWnAdna7Riyd%2FuBvUp6JGz%2BwzabuTLS0V42QhOLMSyJw8pnnsNTaqhnCLC6PYBuno59LoeT1X7MwBCrzRMiDEb8xJptwq6Ky6AHWwSJltJQoqO7p850\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833393547831898268d9d62SmHq939",
+  "X-Request-Id": "9a08e678-57e0-42eb-a4ab-c2db7e535c6c",
+  "X-Trace-Id": "9a08e67857e042eba4abc2db7e535c6c",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"We will discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow.\",\"reasoning_content\":\"我们只需要翻译。注意术语：网关 gateway，模型路由策略 model routing strategy。时间地点。英文：We will discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow. 或者 We'll discuss the model routing strategy for the gateway in the conference room at 10 tomorrow morning. 提供自然英文。\",\"role\":\"assistant\"}}],\"created\":1789720422,\"id\":\"9a08e678-57e0-42eb-a4ab-c2db7e535c6c\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":102,\"completion_tokens\":92,\"total_tokens\":194,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":70}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "We will discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow.",
+     "reasoning_content": "我们只需要翻译。注意术语：网关 gateway，模型路由策略 model routing strategy。时间地点。英文：We will discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow. 或者 We'll discuss the model routing strategy for the gateway in the conference room at 10 tomorrow morning. 提供自然英文。",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720422,
+  "id": "9a08e678-57e0-42eb-a4ab-c2db7e535c6c",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 102,
+   "completion_tokens": 92,
+   "total_tokens": 194,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 70
+   }
+  }
+ },
+ "elapsed": 4.201
+}

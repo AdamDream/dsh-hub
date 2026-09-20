@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_translate_r1",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "把这句话翻译成英文：我们明天上午十点在会议室讨论网关的模型路由策略。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720414.9253712,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01b1a8386042-SIN",
+  "Content-Length": "1267",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:39 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=ANRprus11ZJt3jLtMSwg6R%2BWqQLatUv5LtIocor3xn0DYB71%2FK1LhqThQ0tHFHhmgow4OGBANep7aH0teekpoDC4aJIvjUOzZTMncsEwvPhsHb%2FFEJ%2B%2BOCe9Y6CwbrOg\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833349520089168268d9d63use5s0t",
+  "X-Request-Id": "c7659336-9e49-460a-94a6-ae2b5d87338a",
+  "X-Trace-Id": "c76593369e49460a94a6ae2b5d87338a",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"We will discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow.\",\"reasoning_content\":\"The user wants me to translate a Chinese sentence into English. The sentence is about a meeting to discuss gateway model routing strategy.\\n\\nLet me identify the key components:\\n- Time: tomorrow at 10 AM (上午十点)\\n- Location: in the meeting room (会议室)\\n- Action: discuss (讨论)\\n- Topic: gateway model routing strategy (网关的模型路由策略)\\n\\nThis is a business/technical context. The translation should be professional and clear. \\\"网关\\\" is \\\"gateway,\\\" \\\"模型路由策略\\\" could be \\\"model routing strategy.\\\" The sentence structure is straightforward - subject is \\\"we,\\\" and it's a future plan.\\n\\nI'll translate it in a way that sounds natural in English, keeping the professional tone appropriate for a business meeting context.\",\"role\":\"assistant\"}}],\"created\":1789720417,\"id\":\"c7659336-9e49-460a-94a6-ae2b5d87338a\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":102,\"completion_tokens\":176,\"total_tokens\":278,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":154}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "We will discuss the gateway's model routing strategy in the meeting room at 10 a.m. tomorrow.",
+     "reasoning_content": "The user wants me to translate a Chinese sentence into English. The sentence is about a meeting to discuss gateway model routing strategy.\n\nLet me identify the key components:\n- Time: tomorrow at 10 AM (上午十点)\n- Location: in the meeting room (会议室)\n- Action: discuss (讨论)\n- Topic: gateway model routing strategy (网关的模型路由策略)\n\nThis is a business/technical context. The translation should be professional and clear. \"网关\" is \"gateway,\" \"模型路由策略\" could be \"model routing strategy.\" The sentence structure is straightforward - subject is \"we,\" and it's a future plan.\n\nI'll translate it in a way that sounds natural in English, keeping the professional tone appropriate for a business meeting context.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720417,
+  "id": "c7659336-9e49-460a-94a6-ae2b5d87338a",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 102,
+   "completion_tokens": 176,
+   "total_tokens": 278,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 154
+   }
+  }
+ },
+ "elapsed": 4.414
+}

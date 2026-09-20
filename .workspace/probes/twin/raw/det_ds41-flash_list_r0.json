@@ -1,0 +1,68 @@
+{
+ "tag": "det_ds41-flash_list_r0",
+ "model": "deepseek-v4.1-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "列举三种常见的负载均衡算法，每种一句话说明。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4.1-flash"
+ },
+ "t0": 1789720515.9597642,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf04290c836042-SIN",
+  "Content-Length": "1634",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:35:18 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=ZsbosbkfwkXffMoTXREIvlZ%2Fo4J6NmqDCtPYYmZSyX4XMzAsEeuKdTG9vFcA2bDi0aSEvG5CglfIiPyG218uBQFCJPP6%2FLyb37DM1sJu6sIOPJ1PLXHq09uEBWbwsgWv\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180835159729304898268d9d6Tt3Z9LJh",
+  "X-Request-Id": "5f809148-4d93-496d-b320-3b8b0d9f6bdf",
+  "X-Trace-Id": "5f8091484d93496db3203b8b0d9f6bdf",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"5f809148-4d93-496d-b320-3b8b0d9f6bdf\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720516,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"1. **轮询（Round Robin）**：按顺序将请求依次分发给后端服务器，适合各服务器性能相近的场景。  \\n2. **加权轮询（Weighted Round Robin）**：根据服务器权重分配请求，权重越高分到的请求越多，适合服务器性能不均衡的场景。  \\n3. **最少连接（Least Connections）**：将新请求发送给当前连接数最少的服务器，适合请求处理时间差异较大的场景。\",\"reasoning_content\":\"我们需要回答中文。用户要求列举三种常见负载均衡算法，每种一句话说明。需要简洁。可以列轮询、加权轮询、最少连接，或者随机、IP哈希等。每种一句话。需要确保准确。可以回答：\\n\\n1. 轮询（Round Robin）：按顺序将请求依次分发给后端服务器，适合各服务器性能相近的场景。\\n2. 加权轮询（Weighted Round Robin）：根据服务器权重分配请求，权重越高分到的请求越多，适合性能不均衡的场景。\\n3. 最少连接（Least Connections）：将新请求发送给当前连接数最少的服务器，适合请求处理时间差异较大的场景。\\n\\n这满足三种，每种一句话。可以加上括号英文。最终直接回答。 \"},\"finish_reason\":\"stop\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":41,\"completion_tokens\":248,\"total_tokens\":289,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":152}}}",
+ "json": {
+  "id": "5f809148-4d93-496d-b320-3b8b0d9f6bdf",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720516,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "1. **轮询（Round Robin）**：按顺序将请求依次分发给后端服务器，适合各服务器性能相近的场景。  \n2. **加权轮询（Weighted Round Robin）**：根据服务器权重分配请求，权重越高分到的请求越多，适合服务器性能不均衡的场景。  \n3. **最少连接（Least Connections）**：将新请求发送给当前连接数最少的服务器，适合请求处理时间差异较大的场景。",
+     "reasoning_content": "我们需要回答中文。用户要求列举三种常见负载均衡算法，每种一句话说明。需要简洁。可以列轮询、加权轮询、最少连接，或者随机、IP哈希等。每种一句话。需要确保准确。可以回答：\n\n1. 轮询（Round Robin）：按顺序将请求依次分发给后端服务器，适合各服务器性能相近的场景。\n2. 加权轮询（Weighted Round Robin）：根据服务器权重分配请求，权重越高分到的请求越多，适合性能不均衡的场景。\n3. 最少连接（Least Connections）：将新请求发送给当前连接数最少的服务器，适合请求处理时间差异较大的场景。\n\n这满足三种，每种一句话。可以加上括号英文。最终直接回答。 "
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 41,
+   "completion_tokens": 248,
+   "total_tokens": 289,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 152
+   }
+  }
+ },
+ "elapsed": 2.26
+}

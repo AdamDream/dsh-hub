@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_code_r1",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "用 Python 写一个函数，返回斐波那契数列前 n 项，要求带类型标注。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720399.1288083,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf014f0a376042-SIN",
+  "Content-Length": "2089",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:25 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=XjM%2Bt9oEDolMGGMqRc5HUjz3WxKHzhL4HyylTHwnrTV5Qlf%2F9yQBO2VC4K3JCZo29Yr9ovpVXAGACxRa9aOJCn6f7XlrvRzXRembLcOKrlNSfzzaXxLgHcP%2BO8vbNs2O\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833191747255908268d9d61ADtSX5S",
+  "X-Request-Id": "8423fb2c-8943-49af-954c-5d46fa64d651",
+  "X-Trace-Id": "8423fb2c894349af954c5d46fa64d651",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"We need answer in Chinese likely. Need write Python function with type annotations returning Fibonacci first n terms. Need consider n semantics. \\\"前 n 项\\\" usually list of length n, starting 0,1,... if n\\u003e=0. Need type hints. Could use list[int], Iterator maybe. Need include function signature. Maybe robust handling n \\u003c=0 returns []. Use typing Sequence? Need show code only? User asks \\\"用 Python 写一个函数，返回斐波那契数列前 n 项，要求带类型标注。\\\" We can provide code with explanation concise. Need maybe mention \\\"prefer List[int] from typing or built-in list[int]\\\". Python 3.9+ supports list[int]. Need ensure return type. Let's craft:\\n\\nfrom typing import List\\n\\ndef fib(n: int) -\\u003e List[int]:\\n    if n \\u003c= 0:\\n        return []\\n    result: List[int] = [0]\\n    if n == 1:\\n        return result\\n    result.append(1)\\n    for i in range(2, n):\\n        result.append(result[i-1] + result[i-2])\\n    return result\\n\\nNeed type annotations for variable? result: List[int] optional. Could use list[int]. Also note for n=2 returns [0,1]. Good.\\n\\nCould also implement iterator/generator with Iterator[int], but \\\"返回...前n项\\\" likely list. Let's maybe include both? The prompt says \\\"写一个函数，返回斐波那契数列前 n 项，要求带类型标注。\\\" Need satisfy. We can provide one function. Add example output. Need be mindful \\\"斐波那契数列\\\" begins at 0 or 1? Usually F0=0, F1=1. Mention.\\n\\nLet's compose final in Chinese. Should include code block. Keep concise.\\n\\nNeed maybe \\\"from __future__ import annotations\\\"? Not necessary, but can use List from typing. To be forward compatible\",\"role\":\"assistant\"}}],\"created\":1789720401,\"id\":\"8423fb2c-8943-49af-954c-5d46fa64d651\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":106,\"completion_tokens\":400,\"total_tokens\":506,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":400}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "We need answer in Chinese likely. Need write Python function with type annotations returning Fibonacci first n terms. Need consider n semantics. \"前 n 项\" usually list of length n, starting 0,1,... if n>=0. Need type hints. Could use list[int], Iterator maybe. Need include function signature. Maybe robust handling n <=0 returns []. Use typing Sequence? Need show code only? User asks \"用 Python 写一个函数，返回斐波那契数列前 n 项，要求带类型标注。\" We can provide code with explanation concise. Need maybe mention \"prefer List[int] from typing or built-in list[int]\". Python 3.9+ supports list[int]. Need ensure return type. Let's craft:\n\nfrom typing import List\n\ndef fib(n: int) -> List[int]:\n    if n <= 0:\n        return []\n    result: List[int] = [0]\n    if n == 1:\n        return result\n    result.append(1)\n    for i in range(2, n):\n        result.append(result[i-1] + result[i-2])\n    return result\n\nNeed type annotations for variable? result: List[int] optional. Could use list[int]. Also note for n=2 returns [0,1]. Good.\n\nCould also implement iterator/generator with Iterator[int], but \"返回...前n项\" likely list. Let's maybe include both? The prompt says \"写一个函数，返回斐波那契数列前 n 项，要求带类型标注。\" Need satisfy. We can provide one function. Add example output. Need be mindful \"斐波那契数列\" begins at 0 or 1? Usually F0=0, F1=1. Mention.\n\nLet's compose final in Chinese. Should include code block. Keep concise.\n\nNeed maybe \"from __future__ import annotations\"? Not necessary, but can use List from typing. To be forward compatible",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720401,
+  "id": "8423fb2c-8943-49af-954c-5d46fa64d651",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 106,
+   "completion_tokens": 400,
+   "total_tokens": 506,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 400
+   }
+  }
+ },
+ "elapsed": 5.905
+}

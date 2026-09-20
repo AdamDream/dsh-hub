@@ -1,0 +1,69 @@
+{
+ "tag": "par_ds-flash_stop",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "stop": [
+   "\n"
+  ],
+  "max_tokens": 16,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720384.7306185,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf00f4dfaf6042-SIN",
+  "Content-Length": "412",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:08 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=11cjpDoiAjF4QXQiLputJxk%2BUzFaAzFzTQGoG562a3jPc%2B4IOmN9wgmRrGbZ7Zhp0sDH3bkMfI25gCVNxIwu5kkq06C9g%2FqxSLul0ottEMv8cmLEfL%2FibVl2w63fejmW\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833047449086078268d9d6OKYwQM1w",
+  "X-Request-Id": "e4b6e228-54ac-4efa-b715-afbd73b961df",
+  "X-Trace-Id": "e4b6e22854ac4efab715afbd73b961df",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"Hello! How can I help you today?\",\"role\":\"assistant\"}}],\"created\":1789720387,\"id\":\"e4b6e228-54ac-4efa-b715-afbd73b961df\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":5,\"completion_tokens\":9,\"total_tokens\":14,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":0}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "Hello! How can I help you today?",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720387,
+  "id": "e4b6e228-54ac-4efa-b715-afbd73b961df",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 5,
+   "completion_tokens": 9,
+   "total_tokens": 14,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0
+   }
+  }
+ },
+ "elapsed": 3.4
+}

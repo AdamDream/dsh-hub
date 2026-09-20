@@ -1,0 +1,67 @@
+{
+ "tag": "err_ds-pro_bad_param",
+ "model": "deepseek-v4-pro",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "max_tokens": 4,
+  "totally_unknown_param": 1,
+  "model": "deepseek-v4-pro"
+ },
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01286b436042-SIN",
+  "Content-Length": "441",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:14 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=5Bw%2FrxcYs7vwfce3dsYuCOBoKVNws5W%2F2vejgKeT1Tx3xwHN8qaywfV%2Fvfal5SlbyC0%2Fy6HJrhz4xgKO3EI%2BW2URJQWAMlyvxSPxVMvrzDPT5XUaWaB7bSarFuvu5w1v\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833129965433638268d9d6LBeBHyV6",
+  "X-Request-Id": "6cd8e2cf-51c3-42cc-b77a-1a2dad8e1826",
+  "X-Trace-Id": "6cd8e2cf51c342ccb77a1a2dad8e1826",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"6cd8e2cf-51c3-42cc-b77a-1a2dad8e1826\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720393,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We need respond to\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":31,\"completion_tokens\":4,\"total_tokens\":35,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":4}}}",
+ "json": {
+  "id": "6cd8e2cf-51c3-42cc-b77a-1a2dad8e1826",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720393,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We need respond to"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 31,
+   "completion_tokens": 4,
+   "total_tokens": 35,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 4
+   }
+  }
+ },
+ "elapsed": 1.658
+}

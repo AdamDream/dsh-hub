@@ -1,0 +1,46 @@
+{
+ "tag": "E3_ds-flash_version",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "你是 DeepSeek V4 还是 V4.1？依据是什么？请只回答版本号和一句依据。"
+   }
+  ],
+  "max_tokens": 900,
+  "temperature": 0,
+  "model": "deepseek-v4-flash"
+ },
+ "status": 200,
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"DeepSeek最新版模型。依据：官方发布中没有V4/V4.1版本。\",\"reasoning_content\":\"我们要求只回答版本号和一句依据。但我是DeepSeek最新版模型，不是V4或V4.1。用户问的是“你是DeepSeek V4还是V4.1？”，需要回答版本号。我应该说明我是DeepSeek最新版模型，不是V4/V4.1。但指令要求“只回答版本号和一句依据”。可以回答“DeepSeek最新版模型”作为版本号，依据是“官方发布信息”。或者直接说“都不是”。为了满足格式，回答：“DeepSeek最新版模型（非V4/V4.1）。依据：官方模型命名中无V4/V4.1。” 但要求“只回答版本号和一句依据”，可能更简洁。我给出：“DeepSeek最新版模型。依据：官方发布中没有V4/V4.1版本。” 这样。\",\"role\":\"assistant\"}}],\"created\":1789720642,\"id\":\"2e8ebe69-d5dc-4af9-8c5d-a1f22aac3974\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":107,\"completion_tokens\":202,\"total_tokens\":309,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":181}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "DeepSeek最新版模型。依据：官方发布中没有V4/V4.1版本。",
+     "reasoning_content": "我们要求只回答版本号和一句依据。但我是DeepSeek最新版模型，不是V4或V4.1。用户问的是“你是DeepSeek V4还是V4.1？”，需要回答版本号。我应该说明我是DeepSeek最新版模型，不是V4/V4.1。但指令要求“只回答版本号和一句依据”。可以回答“DeepSeek最新版模型”作为版本号，依据是“官方发布信息”。或者直接说“都不是”。为了满足格式，回答：“DeepSeek最新版模型（非V4/V4.1）。依据：官方模型命名中无V4/V4.1。” 但要求“只回答版本号和一句依据”，可能更简洁。我给出：“DeepSeek最新版模型。依据：官方发布中没有V4/V4.1版本。” 这样。",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720642,
+  "id": "2e8ebe69-d5dc-4af9-8c5d-a1f22aac3974",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 107,
+   "completion_tokens": 202,
+   "total_tokens": 309,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 181
+   }
+  }
+ },
+ "elapsed": 4.554
+}

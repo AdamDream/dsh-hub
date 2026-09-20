@@ -1,0 +1,27 @@
+{
+ "tag": "err_ds-vision_bad_role",
+ "model": "deepseek-v4-flash-vision-exp",
+ "request": {
+  "messages": [
+   {
+    "role": "wizard",
+    "content": "hi"
+   }
+  ],
+  "max_tokens": 4,
+  "model": "deepseek-v4-flash-vision-exp"
+ },
+ "status": 500,
+ "headers": {
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Content-Length": "226",
+  "Content-Type": "application/json; charset=utf-8",
+  "Date": "Fri, 18 Sep 2026 08:33:19 GMT",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833172618938928268d9d68m2LrAVc",
+  "Connection": "close"
+ },
+ "raw": "{\"error\":{\"message\":\"分组 auto 下模型 deepseek-v4-flash-vision-exp 的可用渠道不存在（retry） (request id: 202609180833172618938928268d9d68m2LrAVc)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"get_channel_failed\"}}",
+ "elapsed": 1.843
+}

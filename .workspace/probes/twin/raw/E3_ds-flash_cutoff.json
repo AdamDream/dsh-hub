@@ -1,0 +1,46 @@
+{
+ "tag": "E3_ds-flash_cutoff",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "你的训练数据截止到什么时间？只回答年月。"
+   }
+  ],
+  "max_tokens": 900,
+  "temperature": 0,
+  "model": "deepseek-v4-flash"
+ },
+ "status": 200,
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"2024年7月\",\"reasoning_content\":\"我们只需要回答年月。训练数据截止时间一般说是2024年7月？但作为AI，我应说明。用户要求只回答年月。所以回答“2024年7月”或“2024年6月”？常见说法是2024年7月。确认。\",\"role\":\"assistant\"}}],\"created\":1789720646,\"id\":\"02a59d06-9d25-46c0-b8d7-aa747bec7550\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":94,\"completion_tokens\":65,\"total_tokens\":159,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":59}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "2024年7月",
+     "reasoning_content": "我们只需要回答年月。训练数据截止时间一般说是2024年7月？但作为AI，我应说明。用户要求只回答年月。所以回答“2024年7月”或“2024年6月”？常见说法是2024年7月。确认。",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720646,
+  "id": "02a59d06-9d25-46c0-b8d7-aa747bec7550",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 94,
+   "completion_tokens": 65,
+   "total_tokens": 159,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 59
+   }
+  }
+ },
+ "elapsed": 3.7
+}

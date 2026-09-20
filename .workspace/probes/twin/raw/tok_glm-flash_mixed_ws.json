@@ -1,0 +1,67 @@
+{
+ "tag": "tok_glm-flash_mixed_ws",
+ "model": "glm-5.3-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "a  b\t\tc\n\n\nd     e"
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "glm-5.3-flash"
+ },
+ "t0": 1789720500.1970813,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf03c68dd26042-SIN",
+  "Content-Length": "400",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:35:08 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=IpBGmGh08yIZLj5xX4mI%2B1n2zU4CkWx%2BO%2B6VIRicl2uQfu57tsmevCRVMvkm7w7kKJp%2B%2BCFh3MZSk5CqnWH6%2Bd%2BkvWL7oOSCYueArlGWQuiNXhHFPQLPoKAlvhpo%2BIl7\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180835002093949108268d9d6goCqfdwQ",
+  "X-Request-Id": "1005642e-8bb6-4f34-bb50-6ab0bdfa82fa",
+  "X-Trace-Id": "1005642e8bb64f34bb506ab0bdfa82fa",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"The\",\"role\":\"assistant\"}}],\"created\":1789720501,\"id\":\"1005642e-8bb6-4f34-bb50-6ab0bdfa82fa\",\"model\":\"glm-5.3-flash\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":21,\"completion_tokens\":1,\"total_tokens\":22,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":1}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "The",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720501,
+  "id": "1005642e-8bb6-4f34-bb50-6ab0bdfa82fa",
+  "model": "glm-5.3-flash",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 21,
+   "completion_tokens": 1,
+   "total_tokens": 22,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1
+   }
+  }
+ },
+ "elapsed": 7.879
+}

@@ -1,0 +1,67 @@
+{
+ "tag": "meta_qwen38-flash",
+ "model": "qwen3.8-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "1+1=?"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 4,
+  "model": "qwen3.8-flash"
+ },
+ "t0": 1789720342.6200073,
+ "status": 200,
+ "headers": {
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3ceffee5ff6ce67-SIN",
+  "Content-Length": "354",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:32:25 GMT",
+  "Req-Arrive-Time": "1789720342967",
+  "Req-Cost-Time": "1935",
+  "Resp-Start-Time": "1789720344903",
+  "Server": "cloudflare",
+  "Set-Cookie": "__cf_bm=fs4NDS9OXQBKSO8MGGwXQogJ51kTkLVJUR55uK2hxbM-1789720342.7724204-1.0.1.1-oJ0bzfboK94inhk8IXhftNDooVKzRRu2Ddy5POGKj.jGXhbQveUz6f0l77kc9crS7.KjN.FmJ.Ln4GUCiYLw1.o5NJY2zHXaZUQS9J8i0rySN7m_HTs86yrO4ms_i2ld; HttpOnly; SameSite=None; Secure; Path=/; Domain=packyapi.ai; Expires=Fri, 18 Sep 2026 09:02:25 GMT",
+  "Vary": "Origin,Access-Control-Request-Method,Access-Control-Request-Headers, Accept-Encoding",
+  "Via": "1.1 Caddy",
+  "X-Dashscope-Call-Gateway": "true",
+  "X-Dashscope-Finished": "true",
+  "X-Dashscope-Timeout": "3600",
+  "X-Envoy-Upstream-Service-Time": "439",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180832226396230818268d9d6VWygSZxS",
+  "X-Request-Id": "4ac11c80-41e0-99d4-99b6-9d20fac1356e",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"1 + 1\",\"role\":\"assistant\"}}],\"created\":1789720344,\"id\":\"chatcmpl-4ac11c80-41e0-99d4-99b6-9d20fac1356e\",\"model\":\"qwen3.8-flash\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":4,\"prompt_tokens\":29,\"prompt_tokens_details\":{\"cached_tokens\":0,\"text_tokens\":29},\"total_tokens\":33}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "1 + 1",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720344,
+  "id": "chatcmpl-4ac11c80-41e0-99d4-99b6-9d20fac1356e",
+  "model": "qwen3.8-flash",
+  "object": "chat.completion",
+  "usage": {
+   "completion_tokens": 4,
+   "prompt_tokens": 29,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "text_tokens": 29
+   },
+   "total_tokens": 33
+  }
+ },
+ "elapsed": 2.517
+}

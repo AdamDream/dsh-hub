@@ -1,0 +1,48 @@
+{
+ "tag": "E4b_ds41-flash_8192",
+ "model": "deepseek-v4.1-flash",
+ "path": "/chat/completions",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "max_tokens": 8192,
+  "temperature": 0,
+  "model": "deepseek-v4.1-flash"
+ },
+ "status": 200,
+ "raw": "{\"id\":\"3e25bef2-f876-45f5-a14f-040e8ea1a946\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720776,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"Hi! How can I help you today?\",\"reasoning_content\":\"We need answer to \\\"hi\\\". Just greet. Need maybe \\\"Hi! How can I help you today?\\\" Ensure no extra.\"},\"finish_reason\":\"stop\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":31,\"completion_tokens\":36,\"total_tokens\":67,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":26}}}",
+ "json": {
+  "id": "3e25bef2-f876-45f5-a14f-040e8ea1a946",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720776,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "Hi! How can I help you today?",
+     "reasoning_content": "We need answer to \"hi\". Just greet. Need maybe \"Hi! How can I help you today?\" Ensure no extra."
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 31,
+   "completion_tokens": 36,
+   "total_tokens": 67,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 26
+   }
+  }
+ },
+ "elapsed": 1.491
+}

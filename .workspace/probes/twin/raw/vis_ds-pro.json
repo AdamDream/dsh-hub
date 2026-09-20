@@ -1,0 +1,83 @@
+{
+ "tag": "vis_ds-pro",
+ "model": "deepseek-v4-pro",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "text",
+      "text": "这张图片是什么颜色？只回答颜色。"
+     },
+     {
+      "type": "image_url",
+      "image_url": {
+       "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFAAH/q842iAAAAAElFTkSuQmCC"
+      }
+     }
+    ]
+   }
+  ],
+  "max_tokens": 60,
+  "temperature": 0,
+  "model": "deepseek-v4-pro"
+ },
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Credentials": "true",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf027d8882ce67-SIN",
+  "Content-Length": "851",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:34:11 GMT",
+  "Server": "cloudflare",
+  "Set-Cookie": "__cf_bm=BMAz6Lj2IJeXj9SPzdgPSr1OwwFMdvGP55WkQEVfbKI-1789720447.6034281-1.0.1.1-99Yf.5k4Yp6fyimecNAFD_xxQ5kKYJeLcZWt8_h_dxJCa7ykdvxyXOooiBrkuIP.7TEM7AZbokefx96UXnd6Mh.9rtXbk2I_eOo0s7kOBMk9sjBiMdFSKYzru9s7C4dh; HttpOnly; SameSite=None; Secure; Path=/; Domain=packyapi.ai; Expires=Fri, 18 Sep 2026 09:04:11 GMT",
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+  "Vary": "origin, access-control-request-method, access-control-request-headers",
+  "Via": "1.1 Caddy",
+  "X-Amz-Cf-Id": "U1vA7EnDqt7jU6HLY03NIxtRKRtM7GorV2XhjX8SRSvE14mnYe99UQ==",
+  "X-Amz-Cf-Pop": "HIO52-P4",
+  "X-Cache": "Miss from cloudfront",
+  "X-Content-Type-Options": "nosniff",
+  "X-Ds-Trace-Id": "cb0e49d65662828d114eaaf2dd4870a7",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180834051277221628268d9d62NSH9xki",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"10d56ce1-200a-4c1a-88d9-15c62fbbfd65\",\"object\":\"chat.completion\",\"created\":1789720447,\"model\":\"deepseek-v4-pro\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"我们需要回答用户中文问题：“这张图片是什么颜色？只回答颜色。” 但图片是 unsupported image，我们看不到。需要判断能否从上下文中得知？用户上传了一张图片但标记为[Unsupported Image]。作为AI无法查看。需要只回答颜色。也许应该诚实说明\"},\"logprobs\":null,\"finish_reason\":\"length\"}],\"usage\":{\"prompt_tokens\":97,\"completion_tokens\":60,\"total_tokens\":157,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":60},\"prompt_cache_hit_tokens\":0,\"prompt_cache_miss_tokens\":97},\"system_fingerprint\":\"a307abda487cd1b463329ccb945ce396\"}",
+ "json": {
+  "id": "10d56ce1-200a-4c1a-88d9-15c62fbbfd65",
+  "object": "chat.completion",
+  "created": 1789720447,
+  "model": "deepseek-v4-pro",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "我们需要回答用户中文问题：“这张图片是什么颜色？只回答颜色。” 但图片是 unsupported image，我们看不到。需要判断能否从上下文中得知？用户上传了一张图片但标记为[Unsupported Image]。作为AI无法查看。需要只回答颜色。也许应该诚实说明"
+    },
+    "logprobs": null,
+    "finish_reason": "length"
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 97,
+   "completion_tokens": 60,
+   "total_tokens": 157,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 60
+   },
+   "prompt_cache_hit_tokens": 0,
+   "prompt_cache_miss_tokens": 97
+  },
+  "system_fingerprint": "a307abda487cd1b463329ccb945ce396"
+ },
+ "elapsed": 6.037
+}

@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_reason_r0",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "一个班有 40 名学生，其中 25 人喜欢数学，20 人喜欢物理，8 人两者都喜欢。问两者都不喜欢的有多少人？请给出计算过程。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720423.54141,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf01e77b206042-SIN",
+  "Content-Length": "808",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:47 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=Ex9Tzhn5rm79JUorY%2F5f9XLwHym6KyhZppl8uWSbJNtO%2BebJavKDogtNp62hLLr1a3K1fhEmWXXy6dslRYrUw7csqmn9D1A0hSsr7CmBVXyjNUmll1IdICL5o86UsKNk\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180833435648974298268d9d63RBFU2mi",
+  "X-Request-Id": "84bf9e94-3c86-46a6-82c6-9b3d6a55ba73",
+  "X-Trace-Id": "84bf9e943c8646a682c69b3d6a55ba73",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"喜欢数学或物理的人数：\\n\\n25 + 20 - 8 = 37（人）\\n\\n两个都不喜欢的人数：\\n\\n40 - 37 = 3（人）\\n\\n所以，两者都不喜欢的有 **3人**。\",\"reasoning_content\":\"We need answer in Chinese. Need solve. Need be careful: 40 students, 25 like math, 20 like physics, 8 both. Neither = total - union = 40 - (25+20-8)=40-37=3. Need give calculation. Maybe mention inclusion-exclusion. final concise.\",\"role\":\"assistant\"}}],\"created\":1789720426,\"id\":\"84bf9e94-3c86-46a6-82c6-9b3d6a55ba73\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":123,\"completion_tokens\":112,\"total_tokens\":235,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":66}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "喜欢数学或物理的人数：\n\n25 + 20 - 8 = 37（人）\n\n两个都不喜欢的人数：\n\n40 - 37 = 3（人）\n\n所以，两者都不喜欢的有 **3人**。",
+     "reasoning_content": "We need answer in Chinese. Need solve. Need be careful: 40 students, 25 like math, 20 like physics, 8 both. Neither = total - union = 40 - (25+20-8)=40-37=3. Need give calculation. Maybe mention inclusion-exclusion. final concise.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720426,
+  "id": "84bf9e94-3c86-46a6-82c6-9b3d6a55ba73",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 123,
+   "completion_tokens": 112,
+   "total_tokens": 235,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 66
+   }
+  }
+ },
+ "elapsed": 4.265
+}

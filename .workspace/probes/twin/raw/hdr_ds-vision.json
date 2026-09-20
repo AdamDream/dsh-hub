@@ -1,0 +1,66 @@
+{
+ "tag": "hdr_ds-vision",
+ "model": "deepseek-v4-flash-vision-exp",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "max_tokens": 4,
+  "model": "deepseek-v4-flash-vision-exp"
+ },
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf032d8f766042-SIN",
+  "Content-Length": "458",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:34:36 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=Pov2nL5RYiaYT39OAF6obkPB7J0xeM6Wm2YA8ls7wvmVFjGE%2F5wdtNET%2BZ38emTQ9BlPuj4IWKRQTKFqbYDmyeaQefhEktpS1WpejWUu%2FEHQhMPZ1vcaicW1ARYByl%2FP\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180834357278485378268d9d6K9ovPtOn",
+  "X-Request-Id": "45c104f2-7f41-4076-8010-0b40e5a96ae4",
+  "X-Trace-Id": "45c104f27f41407680100b40e5a96ae4",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"45c104f2-7f41-4076-8010-0b40e5a96ae4\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-v4-flash-vision-exp\",\"created\":1789720476,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We need answer simple\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":31,\"completion_tokens\":4,\"total_tokens\":35,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":4}}}",
+ "json": {
+  "id": "45c104f2-7f41-4076-8010-0b40e5a96ae4",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-v4-flash-vision-exp",
+  "created": 1789720476,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We need answer simple"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 31,
+   "completion_tokens": 4,
+   "total_tokens": 35,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 4
+   }
+  }
+ },
+ "elapsed": 1.299
+}

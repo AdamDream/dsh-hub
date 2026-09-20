@@ -1,0 +1,68 @@
+{
+ "tag": "tok_ds-pro_hash_like",
+ "model": "deepseek-v4-pro",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  ],
+  "max_tokens": 1,
+  "temperature": 0,
+  "model": "deepseek-v4-pro"
+ },
+ "t0": 1789720431.0531929,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf02166b106042-SIN",
+  "Content-Length": "425",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:52 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=s9PxWDHHs31DWTqdXZT5unlHmVlkGhA%2B3W1xTU9JaH8rac0C0UTJpc8WZUZrFVBJHez38At3WLFGyXNdeS9uWb8TVsfTzyeAmj4tkG40oeMbTk6QNvubSTV7xzob9%2BDC\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "20260918083351728192078268d9d6WrpLfDQd",
+  "X-Request-Id": "a9ae7e8b-dd1b-4d1d-a03a-aacb79f59fd5",
+  "X-Trace-Id": "a9ae7e8bdd1b4d1da03aaacb79f59fd5",
+  "Connection": "close"
+ },
+ "raw": "{\"id\":\"a9ae7e8b-dd1b-4d1d-a03a-aacb79f59fd5\",\"object\":\"chat.completion\",\"model\":\"deepseek/deepseek-flash\",\"created\":1789720431,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\"We\"},\"finish_reason\":\"length\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":65,\"completion_tokens\":1,\"total_tokens\":66,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":1}}}",
+ "json": {
+  "id": "a9ae7e8b-dd1b-4d1d-a03a-aacb79f59fd5",
+  "object": "chat.completion",
+  "model": "deepseek/deepseek-flash",
+  "created": 1789720431,
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "",
+     "reasoning_content": "We"
+    },
+    "finish_reason": "length",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 65,
+   "completion_tokens": 1,
+   "total_tokens": 66,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1
+   }
+  }
+ },
+ "elapsed": 1.261
+}

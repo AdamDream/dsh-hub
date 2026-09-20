@@ -1,0 +1,68 @@
+{
+ "tag": "par_ds-flash_n2",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "hi"
+   }
+  ],
+  "temperature": 0,
+  "n": 2,
+  "max_tokens": 8,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720378.2861836,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf00ccaab96042-SIN",
+  "Content-Length": "438",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:33:01 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=wPwGNWSS4MX8sm3ytFuroDZlCH%2Fyah08eyJ%2FyLI4Aq521yyACZ4Ym1nhNawYLd8BwNfV%2F1SHCIf%2Fxgp%2BBOuJ8JAgvl9kvc883o%2F%2Fr0ECf41tMuknae8DgtLzpUhvYkQO\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "202609180832583105186748268d9d645U5gIyb",
+  "X-Request-Id": "ffd79e0d-aa6c-41a8-bbd6-6a2d73eee823",
+  "X-Trace-Id": "ffd79e0daa6c41a8bbd66a2d73eee823",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"length\",\"index\":0,\"message\":{\"content\":\"\",\"reasoning_content\":\"We need answer. Need be careful.\",\"role\":\"assistant\"}}],\"created\":1789720380,\"id\":\"ffd79e0d-aa6c-41a8-bbd6-6a2d73eee823\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":84,\"completion_tokens\":8,\"total_tokens\":92,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":8}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "length",
+    "index": 0,
+    "message": {
+     "content": "",
+     "reasoning_content": "We need answer. Need be careful.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720380,
+  "id": "ffd79e0d-aa6c-41a8-bbd6-6a2d73eee823",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 84,
+   "completion_tokens": 8,
+   "total_tokens": 92,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 8
+   }
+  }
+ },
+ "elapsed": 3.074
+}

@@ -1,0 +1,67 @@
+{
+ "tag": "det_ds-flash_list_r0",
+ "model": "deepseek-v4-flash",
+ "request": {
+  "messages": [
+   {
+    "role": "user",
+    "content": "列举三种常见的负载均衡算法，每种一句话说明。"
+   }
+  ],
+  "temperature": 0,
+  "max_tokens": 400,
+  "model": "deepseek-v4-flash"
+ },
+ "t0": 1789720450.0572782,
+ "status": 200,
+ "headers": {
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Request-ID",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Alt-Svc": "h3=\":443\"; ma=2592000",
+  "Cf-Cache-Status": "DYNAMIC",
+  "Cf-Ray": "a3cf028d3c4f6042-SIN",
+  "Content-Length": "1137",
+  "Content-Type": "application/json",
+  "Date": "Fri, 18 Sep 2026 08:34:13 GMT",
+  "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=f9cKOJIB2vrccdrY%2BKNVuTp6bQ%2Bdt6%2FnMyI3fPD3KqvVGyssm2ewUE%2F2H7bJE15nH3p72p1xtDl9UkcbaN1YdVVFL%2FWWpVFHWkL0ba%2FxFukrLnv4y6l47oYE%2FWhHHh76\"}]}",
+  "Server": "cloudflare",
+  "Via": "1.1 Caddy",
+  "X-New-Api-Version": "v1.0.0-rc.11",
+  "X-Oneapi-Request-Id": "20260918083410785467418268d9d6zWLf2qh4",
+  "X-Request-Id": "fdd08f64-5074-4247-8537-5f9b5119d5a1",
+  "X-Trace-Id": "fdd08f645074424785375f9b5119d5a1",
+  "Connection": "close"
+ },
+ "raw": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"1. **轮询（Round Robin）**：将请求依次按顺序分配给每台后端服务器，循环往复，适合服务器配置相近的场景。  \\n2. **最少连接（Least Connections）**：动态将新请求分配给当前活跃连接数最少的服务器，适合长连接或负载不均的场景。  \\n3. **IP哈希（IP Hash）**：根据客户端IP地址计算哈希值，将同一IP的请求始终转发到同一台服务器，适用于需要会话保持的场景。\",\"reasoning_content\":\"We need answer in Chinese. Need list three common load balancing algorithms, one sentence each. Algorithms: round robin, least connections, IP hash. Maybe weighted round robin? \\\"三种常见\\\" Need concise. Ensure \\\"每种一句话说明\\\". Let's craft.\",\"role\":\"assistant\"}}],\"created\":1789720452,\"id\":\"fdd08f64-5074-4247-8537-5f9b5119d5a1\",\"model\":\"deepseek-v4-flash-0731\",\"object\":\"chat.completion\",\"usage\":{\"prompt_tokens\":94,\"completion_tokens\":156,\"total_tokens\":250,\"prompt_tokens_details\":{\"cached_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":53}}}",
+ "json": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "message": {
+     "content": "1. **轮询（Round Robin）**：将请求依次按顺序分配给每台后端服务器，循环往复，适合服务器配置相近的场景。  \n2. **最少连接（Least Connections）**：动态将新请求分配给当前活跃连接数最少的服务器，适合长连接或负载不均的场景。  \n3. **IP哈希（IP Hash）**：根据客户端IP地址计算哈希值，将同一IP的请求始终转发到同一台服务器，适用于需要会话保持的场景。",
+     "reasoning_content": "We need answer in Chinese. Need list three common load balancing algorithms, one sentence each. Algorithms: round robin, least connections, IP hash. Maybe weighted round robin? \"三种常见\" Need concise. Ensure \"每种一句话说明\". Let's craft.",
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1789720452,
+  "id": "fdd08f64-5074-4247-8537-5f9b5119d5a1",
+  "model": "deepseek-v4-flash-0731",
+  "object": "chat.completion",
+  "usage": {
+   "prompt_tokens": 94,
+   "completion_tokens": 156,
+   "total_tokens": 250,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 53
+   }
+  }
+ },
+ "elapsed": 3.944
+}
