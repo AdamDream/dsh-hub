@@ -15,7 +15,7 @@
 |---|---|
 | `patches/workspace-enhancement-perf.sh` | 三段式补丁脚本：`--dry-run`（默认）/ `--apply` / `--rollback` / `--help`；幂等、锚点唯一性校验、hash 漂移拒绝、备份落工作区 |
 | `patched/client.js` | 补丁后交付副本（267026 字节 / 5453 行；sha256 `7df7a655…`） |
-| `patched/client.js.diff` | 交付副本对应的 `diff -u`（2 hunk / 10 删 21 增） |
+| `patched/workspace-enhancement.client.js.diff` | 交付副本对应的 `diff -u`（2 hunk / 10 删 21 增） |
 | `patches/baseline.sha256` | 补丁前/后基线 hash 与锚点记录（权威值是脚本内常量） |
 | `tools/make-patched.mjs` | 精确双锚点替换器（5 条前置断言 + 4 条后置断言；`--dry-run` 与 `--apply` 共用同一变换） |
 | `tools/equiv-c2.mjs` | 等价性 + 记忆化契约 + 真实 bundle 行为测试（27 项断言） |

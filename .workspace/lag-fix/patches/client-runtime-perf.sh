@@ -44,7 +44,7 @@
 #   patched/client-runtime.client.js              全量改后副本（本单元 C1 独占）
 #   patched/client-runtime.client-only-<UNITS>.js --only 运行的子集副本
 #   注意：patched/workspace-enhancement.client.js 属于单元 C2（dsh-workspace-enhancement），
-#         patched/client.js.diff 亦属于 C2（其 diff 头指向 dsh-workspace-enhancement/lib/client.js）
+#         patched/workspace-enhancement.client.js.diff 亦属于 C2（其 diff 头指向 dsh-workspace-enhancement/lib/client.js）
 # 落地方式：**原地替换 + 备份 + 回滚**（本部署无源码重建能力：只有 tsdown 产物、无 src/、无 bundler）
 #
 # 环境变量覆盖：

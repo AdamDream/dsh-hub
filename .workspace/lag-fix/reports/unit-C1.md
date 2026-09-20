@@ -198,7 +198,7 @@
 | `patched/client-runtime.client.js` | **C1（本单元）** | 全量改后副本，sha1 `f7a0d8ab55b39e5da65a346b64982ff9767df3a9` |
 | `patched/client-runtime.client-only-P1-P2.js` | **C1（本单元）** | 仅 P1+P2 子集副本，sha1 `867207a9f4956805f3bf56d28dba77a0a387c54c` |
 | `patched/workspace-enhancement.client.js` | C2 | 不属于本单元，未触碰 |
-| `patched/client.js.diff` | **C2**（已核实：其 diff 头指向 `dsh-workspace-enhancement/lib/client.js`，时间戳 15:01） | 不属于本单元，未触碰 |
+| `patched/workspace-enhancement.client.js.diff` | **C2**（已核实：其 diff 头指向 `dsh-workspace-enhancement/lib/client.js`，时间戳 15:01） | 不属于本单元，未触碰 |
 
 脚本里由 `PATCHED_NAME`（默认 `client-runtime.client.js`）统一控制；`--only` 运行自动加
 `-only-<UNITS>` 后缀，因此**子集运行不会覆盖全量副本**。可用 `C1_PATCHED_NAME` 覆盖。
@@ -227,7 +227,7 @@
 
 **已确认不属于本单元、我全程未触碰**：
 - `patched/workspace-enhancement.client.js`（C2；sha1 `b295bb00…`）
-- `patched/client.js.diff`（**C2**：其 diff 头指向 `dsh-workspace-enhancement/lib/client.js`，时间戳 15:01 早于本单元任何产物）
+- `patched/workspace-enhancement.client.js.diff`（**C2**：其 diff 头指向 `dsh-workspace-enhancement/lib/client.js`，时间戳 15:01 早于本单元任何产物）
 - `reports/unit-A.md` / `unit-C2.md` 里出现的 `tmp/patched/client.js` 是 A 档自己的临时路径（在 `tmp/` 下），与本单元的 `patched/` 不同层级，不构成写入冲突
 
 **与并行单元的命名空间对照**（每档已各自隔离，互不覆盖）：

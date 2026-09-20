@@ -25,6 +25,6 @@ RESID=$(grep -rnE "(^|[^a-zA-Z0-9/._-])patched/client\.js([^a-zA-Z0-9._-]|$)" pa
 if [ -n "$RESID" ]; then say "旧名残留" "FAIL"; echo "$RESID"; FAIL=1; else say "旧名残留（写入引用）" "0 命中 PASS"; fi
 [ -f backup/C1/20260920-153800/client-runtime.client.js ] && say "独占备份根 backup/C1/ 就绪" "PASS" || { say "独占备份根" "FAIL"; FAIL=1; }
 [ -f patched/workspace-enhancement.client.js ] && say "C2 产物仍在（未触碰）" "PASS" || say "C2 产物" "NOTE"
-[ -f patched/client.js.diff ] && say "C2 的 client.js.diff 仍在（未触碰）" "PASS" || say "C2 diff" "NOTE"
+[ -f patched/workspace-enhancement.client.js.diff ] && say "C2 的 client.js.diff 仍在（未触碰）" "PASS" || say "C2 diff" "NOTE"
 printf '\n结论：%s\n' "$([ $FAIL -eq 0 ] && echo '全部通过' || echo '存在失败项')"
 exit $FAIL
