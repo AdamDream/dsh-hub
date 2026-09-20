@@ -126,6 +126,7 @@ PY
 hr
 say "===== 4) C1 可控基准（与负载无关）====="
 run "bench-c1" timeout 300 node "$LAG/tools/bench-c1.mjs" --rounds 30 --out "$LAG/reports/bench-c1.json" || true
+run "test-c1-comparators（P2 反向测试：该失效时必须失效）" timeout 200 node "$LAG/tools/test-c1-comparators.mjs" || true
 grep -E "2361|反向印证|补丁后同一" "$LAG/reports/bench-c1.json" >/dev/null 2>&1 || true
 
 # ── 4c) 用量卡片门控行为复验（A 线；约 2.5 分钟）─────────────────────────
