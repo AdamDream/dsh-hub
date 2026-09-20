@@ -59,6 +59,15 @@ for ep in heatmap byDay byModel byProject summary; do
 done
 
 echo
+echo "===== 4a) C1 可控基准（与负载无关；从真实文件抽码）====="
+if timeout 300 node tools/bench-c1.mjs --rounds 30 --out reports/bench-c1.json > /tmp/bench-c1.out 2>&1; then
+  grep -E "^(     N|   289|  2361)|反向印证|⇒|补丁后同一" /tmp/bench-c1.out | sed 's/^/  /'
+  pass "bench-c1 完成（N=2361 稳态：见上）"
+else
+  fail "bench-c1 运行失败（详见 /tmp/bench-c1.out）"
+fi
+
+echo
 echo "===== 4b) 正式门槛测量（固定条件 + 5 次重复 + 区间统计）====="
 echo "  运行： timeout 900 node probes/threshold-run.mjs --reps 5 --window 20 --tag post-restart --out reports/threshold-post-restart.json"
 echo "  判定依据 = 本相区间 vs 基线区间的对照（单次点值不可用）；重启前只有「静默态参考」："
