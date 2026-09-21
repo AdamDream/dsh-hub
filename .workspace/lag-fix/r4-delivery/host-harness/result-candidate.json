@@ -1,0 +1,71 @@
+{
+  "target": "/home/CNS2026495165/dsh/.workspace/lag-fix/r4-delivery/candidate/index.js",
+  "results": [
+    {
+      "name": "1 正常路径：db 已发布",
+      "ok": true,
+      "detail": "db=handle"
+    },
+    {
+      "name": "1 正常路径：恰好一个存活 45s timer",
+      "ok": true,
+      "detail": "live=[45000] created=1"
+    },
+    {
+      "name": "1 正常路径：首扫执行一次",
+      "ok": true,
+      "detail": "foldCalls=2(dsh+cc) schema=1"
+    },
+    {
+      "name": "2 卸载于 open 期间：late DB 被关闭",
+      "ok": true,
+      "detail": "opened=1 closed=1"
+    },
+    {
+      "name": "2 卸载于 open 期间：db 未被发布",
+      "ok": true,
+      "detail": "db=null"
+    },
+    {
+      "name": "2 卸载于 open 期间：无存活 timer",
+      "ok": true,
+      "detail": "live=[] created=0"
+    },
+    {
+      "name": "2 卸载于 open 期间：未执行首扫",
+      "ok": true,
+      "detail": "foldCalls=0"
+    },
+    {
+      "name": "3 卸载于首扫期间：无存活 timer",
+      "ok": true,
+      "detail": "live=[] created=1 cleared=1"
+    },
+    {
+      "name": "3 卸载于首扫期间：db 已关闭并置空",
+      "ok": true,
+      "detail": "closed=1 db=null"
+    },
+    {
+      "name": "4 schema 失败：db 未被发布（RPC 拿不到半初始化连接）",
+      "ok": true,
+      "detail": "db=null"
+    },
+    {
+      "name": "4 schema 失败：打开的连接被关闭（无泄漏）",
+      "ok": true,
+      "detail": "opened=1 closed=1"
+    },
+    {
+      "name": "4 schema 失败：未安装 timer、未首扫",
+      "ok": true,
+      "detail": "live=0 created=0 foldCalls=0"
+    },
+    {
+      "name": "5 dispose 后 ingest 不再执行",
+      "ok": true,
+      "detail": "before=2 after=2"
+    }
+  ],
+  "verdict": "PASS"
+}

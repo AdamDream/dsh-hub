@@ -228,6 +228,7 @@ sequenceDiagram
 | D9 | **`session-board` 包的实际部署位置未确证**：`@deepseek-ai/dsh-session-board` 未出现在 `~/.dsh/profiles/node_modules/@local/` 列表中 | **未知** | `ls ~/.dsh/profiles/node_modules/@local/`（本轮取证未见该包） |
 | D10 | **`install — models 段不完整的历史教训已修复但机制仍脆弱**：adam 曾 45/50 条目缺 `contextWindow` → 回落 262144 触发误判超窗；现按保守档补齐，但**新增模型若漏写 `contextWindow` 会再次踩坑** | 已修复（机制性风险仍在） | `acceptance-exec.md` §3.6；`dsh-llm-pi-ai/lib/index.js:849`（`DEFAULT_CONTEXT_WINDOW = 262144`） |
 | D11 | **btw vitest 存在负载敏感 flake**（已加固为首跑 1 failed / 隔离 10/10、全量复跑 3/3 全绿）——不得写成"测试全绿"或"存在回归" | 已加固 | `acceptance-exec.md` §3.2；`dsh-btw/tests/host-opening.spec.ts:145` |
+| D12 | **设置页全链路卡顿尚未证实消除**：P1/P2/C2 只覆盖局部 runtime/插件成本；session churn→projection/list.set→下游渲染与 usage 同步 SQLite/ingest 仍是两个独立候选。**已修** usage 旧响应覆盖（client，热面，真实浏览器 before/after 已验证）与宿主 bootstrap 生命周期（host，冷面，待重启生效）。**被推翻**：`SettingsRoot` selector 早已返回 boolean（`useSyncExternalStoreWithSelector` 比较选择结果）、`SessionMaybeProvider` 订阅稳定 provideInfo ⇒「无 memo 即每事件重渲染」不成立；C2 生产已有 pendingScan 合并 + 300ms 间隔。**口径更正**：ingest 478–846ms 是独立进程 parser 基准，不是宿主 tick 实测 | **部分修复**（R4 已落地；memo/C2 待根因重定） | `.workspace/lag-fix/reports/settings-jank-revise-exec.md`；`settings-jank-audit-synthesis.md`；`settings-jank-revise-audit.md`；`.workspace/lag-fix/ingest-gate/audit.md` |
 
 ---
 

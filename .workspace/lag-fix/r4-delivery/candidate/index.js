@@ -36,8 +36,36 @@ const inject = ["connection", "webServer"];
 /** Ingest cadence: 30–60s window → 45s, constant (AUDIT U09 step 3). */
 const INGEST_INTERVAL_MS = 45_000;
 
-/** Declarative config surface — empty by design (no configuration items). */
-const Config = z.object({}).default({});
+/**
+ * Declarative config surface (P0-b settings 行为开关试点). Values hot-reload:
+ * editing `~/.dsh/settings.yaml` `dsh-usage:` section republishes and the
+ * client card re-renders without a restart. Keys are pure behavior switches;
+ * defaults equal the pre-P0-b behavior (absent section = defaults = 现状).
+ * Schema grows only-additively (no key removal) so old documents stay valid.
+ */
+const Config = z
+	.object({
+		ui: z
+			.object({
+				// 三图自绘跟随鼠标 tooltip（面积/柱状/热力图）。false = 回到
+				// 无自绘浮层（热力图仍保留原生 <title> 兜底）。
+				tooltip: z.boolean().default(true),
+			})
+			.default({}),
+		heatmap: z
+			.object({
+				// 峰值日单元格的 2px 环（--du-heat-peak-stroke）。
+				peakRing: z.boolean().default(true),
+				// 月份标签行（覆盖列跨度居中，仅在有数据月份显示）。
+				monthLabels: z.boolean().default(true),
+				// 图例说明行（"单位 tokens/日 · 灰格 = 无数据 · 峰值…"）。
+				legendNote: z.boolean().default(true),
+				// 热力图强度分桶数（1..6，默认 6 = FILLS 满档）。
+				levels: z.number().min(1).max(6).default(6),
+			})
+			.default({}),
+	})
+	.default({});
 
 /** Defensive logger with the `dsh-usage` prefix (AUDIT U09 step 6). */
 function createLogger(ctx) {
@@ -64,10 +92,10 @@ function createLogger(ctx) {
 export function apply(ctx) {
 	const log = createLogger(ctx);
 
-	// 1. Settings namespace (B8) — empty schema; the Plugins tab pairs this
-	//    namespace with the client card keyed `dsh-usage`.
+	// 1. Settings namespace (B8 + P0-b) — behavior switches with defaults; the
+	//    Plugins tab pairs this namespace with the client card keyed `dsh-usage`.
 	ctx.inject(["settings"], (settingsCtx) => {
-		settingsCtx.settings.register("dsh-usage", z.object({}).default({}));
+		settingsCtx.settings.register("dsh-usage", Config);
 	});
 
 	let db = null;
@@ -76,15 +104,17 @@ export function apply(ctx) {
 	let firstScanAt = null;
 	let lastIngest = null;
 	let disposeTimer = null;
+	/* dsh-perf-fix R4 v1: 生命周期代次。bootstrap 的每个 await 之后都必须复查，
+	   否则在 await 期间被卸载时仍会打开 DB、完成首扫并安装 timer。 */
 	let disposed = false;
 	let activationGeneration = 0;
-	let ingestSummary = { scannedDsh: 0, scannedCc: 0, newEventsDsh: 0, newEventsCc: 0, failedDsh: 0, failedCc: 0 };
 	const isActive = (generation) => !disposed && generation === activationGeneration;
+	let ingestSummary = { scannedDsh: 0, scannedCc: 0, newEventsDsh: 0, newEventsCc: 0, failedDsh: 0, failedCc: 0 };
 
 	/** Run one ingest pass over both sources (best-effort, warn-only). */
 	const runIngest = async () => {
-		// dispose 之后不得再启动新 ingest（timer 已清，但在飞行中的手动 refresh
-		// 或已排队的 tick 仍可能落到这里）。
+		// dispose 之后不得再启动新 ingest（timer 已清，但飞行中的手动 refresh
+		// 或已排队 tick 仍可能落到这里）。
 		if (disposed || db === null) return;
 		try {
 			const dshResult = foldDshSource(db, undefined, {
@@ -156,9 +186,8 @@ export function apply(ctx) {
 					try { openedDb?.close(); } catch { /* best effort */ }
 					return;
 				}
-				// 只在 schema 成功且仍 active 之后才把连接发布到 `db`：否则
-				// ensureSchema 抛错时 RPC getter 会拿到一个初始化未完成的连接，
-				// 而 catch 分支又因为 `openedDb === db` 而跳过关闭 → 连接泄漏。
+				// 只在 schema 成功且仍 active 之后才发布 db：否则 ensureSchema 抛错时
+				// RPC getter 会拿到未初始化完成的连接，且旧代码会跳过 close → 连接泄漏。
 				ensureSchema(openedDb);
 				if (!isActive(bootstrapGeneration)) {
 					try { openedDb.close(); } catch { /* best effort */ }
@@ -195,6 +224,7 @@ export function apply(ctx) {
 	//    fiber; it reads the mutable timer/db references at dispose time.
 	ctx.effect(
 		() => () => {
+			/* dsh-perf-fix R4 v1: 先失效代次再清理，late timer 不会被留下。 */
 			disposed = true;
 			activationGeneration += 1;
 			try {

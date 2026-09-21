@@ -1,0 +1,46 @@
+{
+  "label": "before",
+  "at": "2026-09-21T06:24:24.306Z",
+  "timeline": [
+    {
+      "tMs": 4,
+      "value": null
+    },
+    {
+      "tMs": 636,
+      "value": "222222"
+    },
+    {
+      "tMs": 4878,
+      "value": "111111"
+    }
+  ],
+  "summaryBatches": [
+    {
+      "index": 1,
+      "sentinel": 111111,
+      "payload": {
+        "from": 1789401600000,
+        "to": 1790006399999,
+        "dataSources": "all"
+      },
+      "at": 1789971873103
+    },
+    {
+      "index": 2,
+      "sentinel": 222222,
+      "payload": {
+        "from": 1787414400000,
+        "to": 1790006399999,
+        "dataSources": "all"
+      },
+      "at": 1789971874318
+    }
+  ],
+  "errors": [],
+  "verdict": "FAIL_STALE_OVERWRITE",
+  "summaryRequests": 2,
+  "sawSentinelA": true,
+  "sawSentinelB": true,
+  "finalValue": "111111"
+}

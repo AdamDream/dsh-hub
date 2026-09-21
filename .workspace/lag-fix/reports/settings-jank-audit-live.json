@@ -1,0 +1,3309 @@
+{
+  "meta": {
+    "url": "http://127.0.0.1:3080",
+    "startedAt": "2026-09-21T02:44:09.384Z",
+    "viewport": "1440x900",
+    "headless": true,
+    "repeatPolicy": "two short repeats per stage; 5s stay repeated twice",
+    "note": "Active streaming load is reported via websocket/request observations and not mixed into idle verdict."
+  },
+  "settingsLoad": {
+    "clicked": "button:has-text(\"设置\")",
+    "opened": true,
+    "url": "http://127.0.0.1:3080/",
+    "bodyPrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n1分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/grill-me # 交接提示词 —— 直\n2天\n展开其余 1 个会话\nopenarm\n偏好库 (taste)\n设置\n设置\n通用设置\n模型\n插件\nAgent 预设\n远程工作区\n分布式控制 · dsh-ssh-gui\nvision-adam 识图设置\n子代理模型\n打开配置文件\n关闭\nAgent 预设\n对此后新建的会话生效。运行中的会话保持它开始时的预设。\n标准模式（子代理 deepseek-v4.1-flash）\n权限\n选择新会话的默认权限模式\nWorkspace Write\n语言\n中文\n外观\n浅色\n深色\n跟随系统\n繁忙时 Enter 键行为\n仅在智能体运行时生效；Cmd/Ctrl+Enter 使用另一行为\n排队发送\n壁纸\n配置目标\n全局默认\n首页\n会话页\n设置页\n选择图片\n移除壁纸\n应用\n暗色遮罩\n0%\n透明度\n88%\n模糊\n0px\n壁纸配置（全局默认与各页覆盖）保存在 ~/.dsh/settings.yaml 的 wallpaper 节，对所有浏览器一致；图片文件保存在 ~/.dsh/wallpapers/。遮罩与透明度仅在有壁纸时生效。\n探索未至之境\n预览版\ndsh\n标准模式（子代理 deepseek-v4.1-flash）\nWorkspace Write\nglm-5.3\n详情\n点击消息流中的工具行查看详情",
+    "elapsedMs": 9615
+  },
+  "phases": [
+    {
+      "label": "home-baseline-r1",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "title": "DeepSeek Harness",
+        "visiblePrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n1分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/gr"
+      },
+      "frames": {
+        "n": 106,
+        "p50": 16.7,
+        "p99": 66.6,
+        "max": 116.6,
+        "over50": 3
+      },
+      "longtasks": {
+        "n": 3,
+        "totalMs": 196,
+        "maxMs": 85,
+        "entries": [
+          {
+            "duration": 85,
+            "start": 45.29999999701977,
+            "name": "self"
+          },
+          {
+            "duration": 51,
+            "start": 132.09999999403954,
+            "name": "self"
+          },
+          {
+            "duration": 60,
+            "start": 257.8999999910593,
+            "name": "self"
+          }
+        ]
+      },
+      "cdp": {
+        "ScriptDuration": 0.196,
+        "TaskDuration": 0.568,
+        "RecalcStyleDuration": 0.046,
+        "LayoutDuration": 0.044,
+        "Nodes": 818,
+        "JSEventListeners": 238
+      },
+      "dom_nodes": 632,
+      "ws": [
+        {
+          "url": "ws://127.0.0.1:3080/api/events.mux",
+          "frames": 58,
+          "bytes": 0,
+          "closed": false
+        },
+        {
+          "url": "ws://127.0.0.1:3080/api/events.host",
+          "frames": 2,
+          "bytes": 0,
+          "closed": false
+        }
+      ],
+      "requests": [],
+      "buttons": [
+        {
+          "text": "新建会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "收起侧边栏",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "搜索会话",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "视图选项",
+          "aria": "视图选项"
+        },
+        {
+          "text": "添加工作区",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "工作区“触觉产品资料”的操作",
+          "aria": "工作区“触觉产品资料”的操作"
+        },
+        {
+          "text": "在“触觉产品资料”中新建会话",
+          "aria": "在“触觉产品资料”中新建会话"
+        },
+        {
+          "text": "工作区“面试”的操作",
+          "aria": "工作区“面试”的操作"
+        },
+        {
+          "text": "在“面试”中新建会话",
+          "aria": "在“面试”中新建会话"
+        },
+        {
+          "text": "工作区“MCU”的操作",
+          "aria": "工作区“MCU”的操作"
+        },
+        {
+          "text": "在“MCU”中新建会话",
+          "aria": "在“MCU”中新建会话"
+        },
+        {
+          "text": "工作区“作业”的操作",
+          "aria": "工作区“作业”的操作"
+        },
+        {
+          "text": "在“作业”中新建会话",
+          "aria": "在“作业”中新建会话"
+        },
+        {
+          "text": "工作区“math”的操作",
+          "aria": "工作区“math”的操作"
+        },
+        {
+          "text": "在“math”中新建会话",
+          "aria": "在“math”中新建会话"
+        },
+        {
+          "text": "工作区“university”的操作",
+          "aria": "工作区“university”的操作"
+        },
+        {
+          "text": "在“university”中新建会话",
+          "aria": "在“university”中新建会话"
+        },
+        {
+          "text": "工作区“Dexterous_Hand_23Dof”的操作",
+          "aria": "工作区“Dexterous_Hand_23Dof”的操作"
+        },
+        {
+          "text": "在“Dexterous_Hand_23Dof”中新建会话",
+          "aria": "在“Dexterous_Hand_23Dof”中新建会话"
+        },
+        {
+          "text": "工作区“robocon”的操作",
+          "aria": "工作区“robocon”的操作"
+        },
+        {
+          "text": "在“robocon”中新建会话",
+          "aria": "在“robocon”中新建会话"
+        },
+        {
+          "text": "工作区“RS”的操作",
+          "aria": "工作区“RS”的操作"
+        },
+        {
+          "text": "在“RS”中新建会话",
+          "aria": "在“RS”中新建会话"
+        },
+        {
+          "text": "工作区“dsh”的操作",
+          "aria": "工作区“dsh”的操作"
+        },
+        {
+          "text": "在“dsh”中新建会话",
+          "aria": "在“dsh”中新建会话"
+        },
+        {
+          "text": "会话“DeepSeek模型渠道不存在报错排查”的操作",
+          "aria": "会话“DeepSeek模型渠道不存在报错排查”的操作"
+        },
+        {
+          "text": "会话“会话删除更新误删全部会话”的操作",
+          "aria": "会话“会话删除更新误删全部会话”的操作"
+        },
+        {
+          "text": "会话“测试 Adam 网关 DeepSeek 模型”的操作",
+          "aria": "会话“测试 Adam 网关 DeepSeek 模型”的操作"
+        },
+        {
+          "text": "会话“/grill-me # 交接提示词 —— 直”的操作",
+          "aria": "会话“/grill-me # 交接提示词 —— 直”的操作"
+        },
+        {
+          "text": "展开其余 1 个会话",
+          "aria": null
+        },
+        {
+          "text": "工作区“openarm”的操作",
+          "aria": "工作区“openarm”的操作"
+        },
+        {
+          "text": "在“openarm”中新建会话",
+          "aria": "在“openarm”中新建会话"
+        },
+        {
+          "text": "偏好库 (taste)",
+          "aria": "偏好库 (taste)"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "dsh",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "命令",
+          "aria": "命令"
+        },
+        {
+          "text": "Workspace Write",
+          "aria": "访问模式，当前：Workspace Write"
+        },
+        {
+          "text": "glm-5.3",
+          "aria": "选择模型，当前 glm-5.3"
+        },
+        {
+          "text": "发送消息",
+          "aria": "发送消息"
+        },
+        {
+          "text": "关闭详情",
+          "aria": "关闭详情"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "label": "home-baseline-r2",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "title": "DeepSeek Harness",
+        "visiblePrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n1分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/gr"
+      },
+      "frames": {
+        "n": 115,
+        "p50": 16.7,
+        "p99": 16.8,
+        "max": 83.3,
+        "over50": 1
+      },
+      "longtasks": {
+        "n": 0,
+        "totalMs": 0,
+        "maxMs": 0,
+        "entries": []
+      },
+      "cdp": {
+        "ScriptDuration": 0.257,
+        "TaskDuration": 0.72,
+        "RecalcStyleDuration": 0.111,
+        "LayoutDuration": 0.044,
+        "Nodes": 818,
+        "JSEventListeners": 238
+      },
+      "dom_nodes": 632,
+      "ws": [
+        {
+          "url": "ws://127.0.0.1:3080/api/events.mux",
+          "frames": 80,
+          "bytes": 0,
+          "closed": false
+        },
+        {
+          "url": "ws://127.0.0.1:3080/api/events.host",
+          "frames": 2,
+          "bytes": 0,
+          "closed": false
+        }
+      ],
+      "requests": [],
+      "buttons": [
+        {
+          "text": "新建会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "收起侧边栏",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "搜索会话",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "视图选项",
+          "aria": "视图选项"
+        },
+        {
+          "text": "添加工作区",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "工作区“触觉产品资料”的操作",
+          "aria": "工作区“触觉产品资料”的操作"
+        },
+        {
+          "text": "在“触觉产品资料”中新建会话",
+          "aria": "在“触觉产品资料”中新建会话"
+        },
+        {
+          "text": "工作区“面试”的操作",
+          "aria": "工作区“面试”的操作"
+        },
+        {
+          "text": "在“面试”中新建会话",
+          "aria": "在“面试”中新建会话"
+        },
+        {
+          "text": "工作区“MCU”的操作",
+          "aria": "工作区“MCU”的操作"
+        },
+        {
+          "text": "在“MCU”中新建会话",
+          "aria": "在“MCU”中新建会话"
+        },
+        {
+          "text": "工作区“作业”的操作",
+          "aria": "工作区“作业”的操作"
+        },
+        {
+          "text": "在“作业”中新建会话",
+          "aria": "在“作业”中新建会话"
+        },
+        {
+          "text": "工作区“math”的操作",
+          "aria": "工作区“math”的操作"
+        },
+        {
+          "text": "在“math”中新建会话",
+          "aria": "在“math”中新建会话"
+        },
+        {
+          "text": "工作区“university”的操作",
+          "aria": "工作区“university”的操作"
+        },
+        {
+          "text": "在“university”中新建会话",
+          "aria": "在“university”中新建会话"
+        },
+        {
+          "text": "工作区“Dexterous_Hand_23Dof”的操作",
+          "aria": "工作区“Dexterous_Hand_23Dof”的操作"
+        },
+        {
+          "text": "在“Dexterous_Hand_23Dof”中新建会话",
+          "aria": "在“Dexterous_Hand_23Dof”中新建会话"
+        },
+        {
+          "text": "工作区“robocon”的操作",
+          "aria": "工作区“robocon”的操作"
+        },
+        {
+          "text": "在“robocon”中新建会话",
+          "aria": "在“robocon”中新建会话"
+        },
+        {
+          "text": "工作区“RS”的操作",
+          "aria": "工作区“RS”的操作"
+        },
+        {
+          "text": "在“RS”中新建会话",
+          "aria": "在“RS”中新建会话"
+        },
+        {
+          "text": "工作区“dsh”的操作",
+          "aria": "工作区“dsh”的操作"
+        },
+        {
+          "text": "在“dsh”中新建会话",
+          "aria": "在“dsh”中新建会话"
+        },
+        {
+          "text": "会话“DeepSeek模型渠道不存在报错排查”的操作",
+          "aria": "会话“DeepSeek模型渠道不存在报错排查”的操作"
+        },
+        {
+          "text": "会话“会话删除更新误删全部会话”的操作",
+          "aria": "会话“会话删除更新误删全部会话”的操作"
+        },
+        {
+          "text": "会话“测试 Adam 网关 DeepSeek 模型”的操作",
+          "aria": "会话“测试 Adam 网关 DeepSeek 模型”的操作"
+        },
+        {
+          "text": "会话“/grill-me # 交接提示词 —— 直”的操作",
+          "aria": "会话“/grill-me # 交接提示词 —— 直”的操作"
+        },
+        {
+          "text": "展开其余 1 个会话",
+          "aria": null
+        },
+        {
+          "text": "工作区“openarm”的操作",
+          "aria": "工作区“openarm”的操作"
+        },
+        {
+          "text": "在“openarm”中新建会话",
+          "aria": "在“openarm”中新建会话"
+        },
+        {
+          "text": "偏好库 (taste)",
+          "aria": "偏好库 (taste)"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "dsh",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "命令",
+          "aria": "命令"
+        },
+        {
+          "text": "Workspace Write",
+          "aria": "访问模式，当前：Workspace Write"
+        },
+        {
+          "text": "glm-5.3",
+          "aria": "选择模型，当前 glm-5.3"
+        },
+        {
+          "text": "发送消息",
+          "aria": "发送消息"
+        },
+        {
+          "text": "关闭详情",
+          "aria": "关闭详情"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "label": "settings-open-r1",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "title": "DeepSeek Harness",
+        "visiblePrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n1分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/gr"
+      },
+      "frames": {
+        "n": 508,
+        "p50": 16.7,
+        "p99": 16.8,
+        "max": 49.9,
+        "over50": 0
+      },
+      "longtasks": {
+        "n": 0,
+        "totalMs": 0,
+        "maxMs": 0,
+        "entries": []
+      },
+      "cdp": {
+        "ScriptDuration": 0.334,
+        "TaskDuration": 1.055,
+        "RecalcStyleDuration": 0.232,
+        "LayoutDuration": 0.049,
+        "Nodes": 1057,
+        "JSEventListeners": 259
+      },
+      "dom_nodes": 803,
+      "ws": [
+        {
+          "url": "ws://127.0.0.1:3080/api/events.mux",
+          "frames": 279,
+          "bytes": 0,
+          "closed": false
+        },
+        {
+          "url": "ws://127.0.0.1:3080/api/events.host",
+          "frames": 2,
+          "bytes": 0,
+          "closed": false
+        }
+      ],
+      "requests": [],
+      "buttons": [
+        {
+          "text": "新建会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "收起侧边栏",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "搜索会话",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "视图选项",
+          "aria": "视图选项"
+        },
+        {
+          "text": "添加工作区",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "工作区“触觉产品资料”的操作",
+          "aria": "工作区“触觉产品资料”的操作"
+        },
+        {
+          "text": "在“触觉产品资料”中新建会话",
+          "aria": "在“触觉产品资料”中新建会话"
+        },
+        {
+          "text": "工作区“面试”的操作",
+          "aria": "工作区“面试”的操作"
+        },
+        {
+          "text": "在“面试”中新建会话",
+          "aria": "在“面试”中新建会话"
+        },
+        {
+          "text": "工作区“MCU”的操作",
+          "aria": "工作区“MCU”的操作"
+        },
+        {
+          "text": "在“MCU”中新建会话",
+          "aria": "在“MCU”中新建会话"
+        },
+        {
+          "text": "工作区“作业”的操作",
+          "aria": "工作区“作业”的操作"
+        },
+        {
+          "text": "在“作业”中新建会话",
+          "aria": "在“作业”中新建会话"
+        },
+        {
+          "text": "工作区“math”的操作",
+          "aria": "工作区“math”的操作"
+        },
+        {
+          "text": "在“math”中新建会话",
+          "aria": "在“math”中新建会话"
+        },
+        {
+          "text": "工作区“university”的操作",
+          "aria": "工作区“university”的操作"
+        },
+        {
+          "text": "在“university”中新建会话",
+          "aria": "在“university”中新建会话"
+        },
+        {
+          "text": "工作区“Dexterous_Hand_23Dof”的操作",
+          "aria": "工作区“Dexterous_Hand_23Dof”的操作"
+        },
+        {
+          "text": "在“Dexterous_Hand_23Dof”中新建会话",
+          "aria": "在“Dexterous_Hand_23Dof”中新建会话"
+        },
+        {
+          "text": "工作区“robocon”的操作",
+          "aria": "工作区“robocon”的操作"
+        },
+        {
+          "text": "在“robocon”中新建会话",
+          "aria": "在“robocon”中新建会话"
+        },
+        {
+          "text": "工作区“RS”的操作",
+          "aria": "工作区“RS”的操作"
+        },
+        {
+          "text": "在“RS”中新建会话",
+          "aria": "在“RS”中新建会话"
+        },
+        {
+          "text": "工作区“dsh”的操作",
+          "aria": "工作区“dsh”的操作"
+        },
+        {
+          "text": "在“dsh”中新建会话",
+          "aria": "在“dsh”中新建会话"
+        },
+        {
+          "text": "会话“DeepSeek模型渠道不存在报错排查”的操作",
+          "aria": "会话“DeepSeek模型渠道不存在报错排查”的操作"
+        },
+        {
+          "text": "会话“会话删除更新误删全部会话”的操作",
+          "aria": "会话“会话删除更新误删全部会话”的操作"
+        },
+        {
+          "text": "会话“测试 Adam 网关 DeepSeek 模型”的操作",
+          "aria": "会话“测试 Adam 网关 DeepSeek 模型”的操作"
+        },
+        {
+          "text": "会话“/grill-me # 交接提示词 —— 直”的操作",
+          "aria": "会话“/grill-me # 交接提示词 —— 直”的操作"
+        },
+        {
+          "text": "展开其余 1 个会话",
+          "aria": null
+        },
+        {
+          "text": "工作区“openarm”的操作",
+          "aria": "工作区“openarm”的操作"
+        },
+        {
+          "text": "在“openarm”中新建会话",
+          "aria": "在“openarm”中新建会话"
+        },
+        {
+          "text": "偏好库 (taste)",
+          "aria": "偏好库 (taste)"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "通用设置",
+          "aria": null
+        },
+        {
+          "text": "模型",
+          "aria": null
+        },
+        {
+          "text": "插件",
+          "aria": null
+        },
+        {
+          "text": "Agent 预设",
+          "aria": null
+        },
+        {
+          "text": "远程工作区",
+          "aria": null
+        },
+        {
+          "text": "分布式控制 · dsh-ssh-gui",
+          "aria": null
+        },
+        {
+          "text": "vision-adam 识图设置",
+          "aria": null
+        },
+        {
+          "text": "子代理模型",
+          "aria": null
+        },
+        {
+          "text": "打开配置文件",
+          "aria": null
+        },
+        {
+          "text": "关闭",
+          "aria": null
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "Workspace Write",
+          "aria": null
+        },
+        {
+          "text": "中文",
+          "aria": null
+        },
+        {
+          "text": "浅色",
+          "aria": null
+        },
+        {
+          "text": "深色",
+          "aria": null
+        },
+        {
+          "text": "跟随系统",
+          "aria": null
+        },
+        {
+          "text": "排队发送",
+          "aria": null
+        },
+        {
+          "text": "选择图片",
+          "aria": null
+        },
+        {
+          "text": "移除壁纸",
+          "aria": null
+        },
+        {
+          "text": "应用",
+          "aria": null
+        },
+        {
+          "text": "dsh",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "命令",
+          "aria": "命令"
+        },
+        {
+          "text": "Workspace Write",
+          "aria": "访问模式，当前：Workspace Write"
+        },
+        {
+          "text": "glm-5.3",
+          "aria": "选择模型，当前 glm-5.3"
+        },
+        {
+          "text": "发送消息",
+          "aria": "发送消息"
+        },
+        {
+          "text": "关闭详情",
+          "aria": "关闭详情"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "label": "settings-open-r2",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "title": "DeepSeek Harness",
+        "visiblePrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n1分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/gr"
+      },
+      "frames": {
+        "n": 180,
+        "p50": 16.7,
+        "p99": 16.8,
+        "max": 16.8,
+        "over50": 0
+      },
+      "longtasks": {
+        "n": 0,
+        "totalMs": 0,
+        "maxMs": 0,
+        "entries": []
+      },
+      "cdp": {
+        "ScriptDuration": 0.34,
+        "TaskDuration": 1.105,
+        "RecalcStyleDuration": 0.248,
+        "LayoutDuration": 0.049,
+        "Nodes": 1057,
+        "JSEventListeners": 259
+      },
+      "dom_nodes": 803,
+      "ws": [
+        {
+          "url": "ws://127.0.0.1:3080/api/events.mux",
+          "frames": 381,
+          "bytes": 0,
+          "closed": false
+        },
+        {
+          "url": "ws://127.0.0.1:3080/api/events.host",
+          "frames": 2,
+          "bytes": 0,
+          "closed": false
+        }
+      ],
+      "requests": [],
+      "buttons": [
+        {
+          "text": "新建会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "收起侧边栏",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "搜索会话",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "视图选项",
+          "aria": "视图选项"
+        },
+        {
+          "text": "添加工作区",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "工作区“触觉产品资料”的操作",
+          "aria": "工作区“触觉产品资料”的操作"
+        },
+        {
+          "text": "在“触觉产品资料”中新建会话",
+          "aria": "在“触觉产品资料”中新建会话"
+        },
+        {
+          "text": "工作区“面试”的操作",
+          "aria": "工作区“面试”的操作"
+        },
+        {
+          "text": "在“面试”中新建会话",
+          "aria": "在“面试”中新建会话"
+        },
+        {
+          "text": "工作区“MCU”的操作",
+          "aria": "工作区“MCU”的操作"
+        },
+        {
+          "text": "在“MCU”中新建会话",
+          "aria": "在“MCU”中新建会话"
+        },
+        {
+          "text": "工作区“作业”的操作",
+          "aria": "工作区“作业”的操作"
+        },
+        {
+          "text": "在“作业”中新建会话",
+          "aria": "在“作业”中新建会话"
+        },
+        {
+          "text": "工作区“math”的操作",
+          "aria": "工作区“math”的操作"
+        },
+        {
+          "text": "在“math”中新建会话",
+          "aria": "在“math”中新建会话"
+        },
+        {
+          "text": "工作区“university”的操作",
+          "aria": "工作区“university”的操作"
+        },
+        {
+          "text": "在“university”中新建会话",
+          "aria": "在“university”中新建会话"
+        },
+        {
+          "text": "工作区“Dexterous_Hand_23Dof”的操作",
+          "aria": "工作区“Dexterous_Hand_23Dof”的操作"
+        },
+        {
+          "text": "在“Dexterous_Hand_23Dof”中新建会话",
+          "aria": "在“Dexterous_Hand_23Dof”中新建会话"
+        },
+        {
+          "text": "工作区“robocon”的操作",
+          "aria": "工作区“robocon”的操作"
+        },
+        {
+          "text": "在“robocon”中新建会话",
+          "aria": "在“robocon”中新建会话"
+        },
+        {
+          "text": "工作区“RS”的操作",
+          "aria": "工作区“RS”的操作"
+        },
+        {
+          "text": "在“RS”中新建会话",
+          "aria": "在“RS”中新建会话"
+        },
+        {
+          "text": "工作区“dsh”的操作",
+          "aria": "工作区“dsh”的操作"
+        },
+        {
+          "text": "在“dsh”中新建会话",
+          "aria": "在“dsh”中新建会话"
+        },
+        {
+          "text": "会话“DeepSeek模型渠道不存在报错排查”的操作",
+          "aria": "会话“DeepSeek模型渠道不存在报错排查”的操作"
+        },
+        {
+          "text": "会话“会话删除更新误删全部会话”的操作",
+          "aria": "会话“会话删除更新误删全部会话”的操作"
+        },
+        {
+          "text": "会话“测试 Adam 网关 DeepSeek 模型”的操作",
+          "aria": "会话“测试 Adam 网关 DeepSeek 模型”的操作"
+        },
+        {
+          "text": "会话“/grill-me # 交接提示词 —— 直”的操作",
+          "aria": "会话“/grill-me # 交接提示词 —— 直”的操作"
+        },
+        {
+          "text": "展开其余 1 个会话",
+          "aria": null
+        },
+        {
+          "text": "工作区“openarm”的操作",
+          "aria": "工作区“openarm”的操作"
+        },
+        {
+          "text": "在“openarm”中新建会话",
+          "aria": "在“openarm”中新建会话"
+        },
+        {
+          "text": "偏好库 (taste)",
+          "aria": "偏好库 (taste)"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "通用设置",
+          "aria": null
+        },
+        {
+          "text": "模型",
+          "aria": null
+        },
+        {
+          "text": "插件",
+          "aria": null
+        },
+        {
+          "text": "Agent 预设",
+          "aria": null
+        },
+        {
+          "text": "远程工作区",
+          "aria": null
+        },
+        {
+          "text": "分布式控制 · dsh-ssh-gui",
+          "aria": null
+        },
+        {
+          "text": "vision-adam 识图设置",
+          "aria": null
+        },
+        {
+          "text": "子代理模型",
+          "aria": null
+        },
+        {
+          "text": "打开配置文件",
+          "aria": null
+        },
+        {
+          "text": "关闭",
+          "aria": null
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "Workspace Write",
+          "aria": null
+        },
+        {
+          "text": "中文",
+          "aria": null
+        },
+        {
+          "text": "浅色",
+          "aria": null
+        },
+        {
+          "text": "深色",
+          "aria": null
+        },
+        {
+          "text": "跟随系统",
+          "aria": null
+        },
+        {
+          "text": "排队发送",
+          "aria": null
+        },
+        {
+          "text": "选择图片",
+          "aria": null
+        },
+        {
+          "text": "移除壁纸",
+          "aria": null
+        },
+        {
+          "text": "应用",
+          "aria": null
+        },
+        {
+          "text": "dsh",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "命令",
+          "aria": "命令"
+        },
+        {
+          "text": "Workspace Write",
+          "aria": "访问模式，当前：Workspace Write"
+        },
+        {
+          "text": "glm-5.3",
+          "aria": "选择模型，当前 glm-5.3"
+        },
+        {
+          "text": "发送消息",
+          "aria": "发送消息"
+        },
+        {
+          "text": "关闭详情",
+          "aria": "关闭详情"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "label": "tab-插件-r1",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "title": "DeepSeek Harness",
+        "visiblePrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n2分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/gr"
+      },
+      "frames": {
+        "n": 133,
+        "p50": 16.7,
+        "p99": 16.8,
+        "max": 33.4,
+        "over50": 0
+      },
+      "longtasks": {
+        "n": 0,
+        "totalMs": 0,
+        "maxMs": 0,
+        "entries": []
+      },
+      "cdp": {
+        "ScriptDuration": 0.362,
+        "TaskDuration": 1.215,
+        "RecalcStyleDuration": 0.268,
+        "LayoutDuration": 0.065,
+        "Nodes": 1454,
+        "JSEventListeners": 259
+      },
+      "dom_nodes": 1034,
+      "ws": [
+        {
+          "url": "ws://127.0.0.1:3080/api/events.mux",
+          "frames": 450,
+          "bytes": 0,
+          "closed": false
+        },
+        {
+          "url": "ws://127.0.0.1:3080/api/events.host",
+          "frames": 2,
+          "bytes": 0,
+          "closed": false
+        }
+      ],
+      "requests": [],
+      "buttons": [
+        {
+          "text": "新建会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "收起侧边栏",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "搜索会话",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "视图选项",
+          "aria": "视图选项"
+        },
+        {
+          "text": "添加工作区",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "工作区“触觉产品资料”的操作",
+          "aria": "工作区“触觉产品资料”的操作"
+        },
+        {
+          "text": "在“触觉产品资料”中新建会话",
+          "aria": "在“触觉产品资料”中新建会话"
+        },
+        {
+          "text": "工作区“面试”的操作",
+          "aria": "工作区“面试”的操作"
+        },
+        {
+          "text": "在“面试”中新建会话",
+          "aria": "在“面试”中新建会话"
+        },
+        {
+          "text": "工作区“MCU”的操作",
+          "aria": "工作区“MCU”的操作"
+        },
+        {
+          "text": "在“MCU”中新建会话",
+          "aria": "在“MCU”中新建会话"
+        },
+        {
+          "text": "工作区“作业”的操作",
+          "aria": "工作区“作业”的操作"
+        },
+        {
+          "text": "在“作业”中新建会话",
+          "aria": "在“作业”中新建会话"
+        },
+        {
+          "text": "工作区“math”的操作",
+          "aria": "工作区“math”的操作"
+        },
+        {
+          "text": "在“math”中新建会话",
+          "aria": "在“math”中新建会话"
+        },
+        {
+          "text": "工作区“university”的操作",
+          "aria": "工作区“university”的操作"
+        },
+        {
+          "text": "在“university”中新建会话",
+          "aria": "在“university”中新建会话"
+        },
+        {
+          "text": "工作区“Dexterous_Hand_23Dof”的操作",
+          "aria": "工作区“Dexterous_Hand_23Dof”的操作"
+        },
+        {
+          "text": "在“Dexterous_Hand_23Dof”中新建会话",
+          "aria": "在“Dexterous_Hand_23Dof”中新建会话"
+        },
+        {
+          "text": "工作区“robocon”的操作",
+          "aria": "工作区“robocon”的操作"
+        },
+        {
+          "text": "在“robocon”中新建会话",
+          "aria": "在“robocon”中新建会话"
+        },
+        {
+          "text": "工作区“RS”的操作",
+          "aria": "工作区“RS”的操作"
+        },
+        {
+          "text": "在“RS”中新建会话",
+          "aria": "在“RS”中新建会话"
+        },
+        {
+          "text": "工作区“dsh”的操作",
+          "aria": "工作区“dsh”的操作"
+        },
+        {
+          "text": "在“dsh”中新建会话",
+          "aria": "在“dsh”中新建会话"
+        },
+        {
+          "text": "会话“DeepSeek模型渠道不存在报错排查”的操作",
+          "aria": "会话“DeepSeek模型渠道不存在报错排查”的操作"
+        },
+        {
+          "text": "会话“会话删除更新误删全部会话”的操作",
+          "aria": "会话“会话删除更新误删全部会话”的操作"
+        },
+        {
+          "text": "会话“测试 Adam 网关 DeepSeek 模型”的操作",
+          "aria": "会话“测试 Adam 网关 DeepSeek 模型”的操作"
+        },
+        {
+          "text": "会话“/grill-me # 交接提示词 —— 直”的操作",
+          "aria": "会话“/grill-me # 交接提示词 —— 直”的操作"
+        },
+        {
+          "text": "展开其余 1 个会话",
+          "aria": null
+        },
+        {
+          "text": "工作区“openarm”的操作",
+          "aria": "工作区“openarm”的操作"
+        },
+        {
+          "text": "在“openarm”中新建会话",
+          "aria": "在“openarm”中新建会话"
+        },
+        {
+          "text": "偏好库 (taste)",
+          "aria": "偏好库 (taste)"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "通用设置",
+          "aria": null
+        },
+        {
+          "text": "模型",
+          "aria": null
+        },
+        {
+          "text": "插件",
+          "aria": null
+        },
+        {
+          "text": "Agent 预设",
+          "aria": null
+        },
+        {
+          "text": "远程工作区",
+          "aria": null
+        },
+        {
+          "text": "分布式控制 · dsh-ssh-gui",
+          "aria": null
+        },
+        {
+          "text": "vision-adam 识图设置",
+          "aria": null
+        },
+        {
+          "text": "子代理模型",
+          "aria": null
+        },
+        {
+          "text": "打开配置文件",
+          "aria": null
+        },
+        {
+          "text": "关闭",
+          "aria": null
+        },
+        {
+          "text": "插件配置",
+          "aria": null
+        },
+        {
+          "text": "插件列表",
+          "aria": null
+        },
+        {
+          "text": "终端\n限制 agent 运行的每一条命令。",
+          "aria": "展开设置: 终端"
+        },
+        {
+          "text": "Agent 循环\nAgent 如何派发工具调用。",
+          "aria": "展开设置: Agent 循环"
+        },
+        {
+          "text": "网页搜索\nDeepSeek 搜索提供方。",
+          "aria": "展开设置: 网页搜索"
+        },
+        {
+          "text": "手动刷新",
+          "aria": null
+        },
+        {
+          "text": "按模型",
+          "aria": null
+        },
+        {
+          "text": "按项目",
+          "aria": null
+        },
+        {
+          "text": "按日",
+          "aria": null
+        },
+        {
+          "text": "会话明细",
+          "aria": null
+        },
+        {
+          "text": "dsh",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "命令",
+          "aria": "命令"
+        },
+        {
+          "text": "Workspace Write",
+          "aria": "访问模式，当前：Workspace Write"
+        },
+        {
+          "text": "glm-5.3",
+          "aria": "选择模型，当前 glm-5.3"
+        },
+        {
+          "text": "发送消息",
+          "aria": "发送消息"
+        },
+        {
+          "text": "关闭详情",
+          "aria": "关闭详情"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "label": "tab-插件-r2",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "title": "DeepSeek Harness",
+        "visiblePrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n2分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/gr"
+      },
+      "frames": {
+        "n": 131,
+        "p50": 16.7,
+        "p99": 16.8,
+        "max": 16.8,
+        "over50": 0
+      },
+      "longtasks": {
+        "n": 0,
+        "totalMs": 0,
+        "maxMs": 0,
+        "entries": []
+      },
+      "cdp": {
+        "ScriptDuration": 0.367,
+        "TaskDuration": 1.257,
+        "RecalcStyleDuration": 0.28,
+        "LayoutDuration": 0.065,
+        "Nodes": 1454,
+        "JSEventListeners": 259
+      },
+      "dom_nodes": 1034,
+      "ws": [
+        {
+          "url": "ws://127.0.0.1:3080/api/events.mux",
+          "frames": 570,
+          "bytes": 0,
+          "closed": false
+        },
+        {
+          "url": "ws://127.0.0.1:3080/api/events.host",
+          "frames": 2,
+          "bytes": 0,
+          "closed": false
+        }
+      ],
+      "requests": [],
+      "buttons": [
+        {
+          "text": "新建会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "收起侧边栏",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "搜索会话",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "视图选项",
+          "aria": "视图选项"
+        },
+        {
+          "text": "添加工作区",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "工作区“触觉产品资料”的操作",
+          "aria": "工作区“触觉产品资料”的操作"
+        },
+        {
+          "text": "在“触觉产品资料”中新建会话",
+          "aria": "在“触觉产品资料”中新建会话"
+        },
+        {
+          "text": "工作区“面试”的操作",
+          "aria": "工作区“面试”的操作"
+        },
+        {
+          "text": "在“面试”中新建会话",
+          "aria": "在“面试”中新建会话"
+        },
+        {
+          "text": "工作区“MCU”的操作",
+          "aria": "工作区“MCU”的操作"
+        },
+        {
+          "text": "在“MCU”中新建会话",
+          "aria": "在“MCU”中新建会话"
+        },
+        {
+          "text": "工作区“作业”的操作",
+          "aria": "工作区“作业”的操作"
+        },
+        {
+          "text": "在“作业”中新建会话",
+          "aria": "在“作业”中新建会话"
+        },
+        {
+          "text": "工作区“math”的操作",
+          "aria": "工作区“math”的操作"
+        },
+        {
+          "text": "在“math”中新建会话",
+          "aria": "在“math”中新建会话"
+        },
+        {
+          "text": "工作区“university”的操作",
+          "aria": "工作区“university”的操作"
+        },
+        {
+          "text": "在“university”中新建会话",
+          "aria": "在“university”中新建会话"
+        },
+        {
+          "text": "工作区“Dexterous_Hand_23Dof”的操作",
+          "aria": "工作区“Dexterous_Hand_23Dof”的操作"
+        },
+        {
+          "text": "在“Dexterous_Hand_23Dof”中新建会话",
+          "aria": "在“Dexterous_Hand_23Dof”中新建会话"
+        },
+        {
+          "text": "工作区“robocon”的操作",
+          "aria": "工作区“robocon”的操作"
+        },
+        {
+          "text": "在“robocon”中新建会话",
+          "aria": "在“robocon”中新建会话"
+        },
+        {
+          "text": "工作区“RS”的操作",
+          "aria": "工作区“RS”的操作"
+        },
+        {
+          "text": "在“RS”中新建会话",
+          "aria": "在“RS”中新建会话"
+        },
+        {
+          "text": "工作区“dsh”的操作",
+          "aria": "工作区“dsh”的操作"
+        },
+        {
+          "text": "在“dsh”中新建会话",
+          "aria": "在“dsh”中新建会话"
+        },
+        {
+          "text": "会话“DeepSeek模型渠道不存在报错排查”的操作",
+          "aria": "会话“DeepSeek模型渠道不存在报错排查”的操作"
+        },
+        {
+          "text": "会话“会话删除更新误删全部会话”的操作",
+          "aria": "会话“会话删除更新误删全部会话”的操作"
+        },
+        {
+          "text": "会话“测试 Adam 网关 DeepSeek 模型”的操作",
+          "aria": "会话“测试 Adam 网关 DeepSeek 模型”的操作"
+        },
+        {
+          "text": "会话“/grill-me # 交接提示词 —— 直”的操作",
+          "aria": "会话“/grill-me # 交接提示词 —— 直”的操作"
+        },
+        {
+          "text": "展开其余 1 个会话",
+          "aria": null
+        },
+        {
+          "text": "工作区“openarm”的操作",
+          "aria": "工作区“openarm”的操作"
+        },
+        {
+          "text": "在“openarm”中新建会话",
+          "aria": "在“openarm”中新建会话"
+        },
+        {
+          "text": "偏好库 (taste)",
+          "aria": "偏好库 (taste)"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "通用设置",
+          "aria": null
+        },
+        {
+          "text": "模型",
+          "aria": null
+        },
+        {
+          "text": "插件",
+          "aria": null
+        },
+        {
+          "text": "Agent 预设",
+          "aria": null
+        },
+        {
+          "text": "远程工作区",
+          "aria": null
+        },
+        {
+          "text": "分布式控制 · dsh-ssh-gui",
+          "aria": null
+        },
+        {
+          "text": "vision-adam 识图设置",
+          "aria": null
+        },
+        {
+          "text": "子代理模型",
+          "aria": null
+        },
+        {
+          "text": "打开配置文件",
+          "aria": null
+        },
+        {
+          "text": "关闭",
+          "aria": null
+        },
+        {
+          "text": "插件配置",
+          "aria": null
+        },
+        {
+          "text": "插件列表",
+          "aria": null
+        },
+        {
+          "text": "终端\n限制 agent 运行的每一条命令。",
+          "aria": "展开设置: 终端"
+        },
+        {
+          "text": "Agent 循环\nAgent 如何派发工具调用。",
+          "aria": "展开设置: Agent 循环"
+        },
+        {
+          "text": "网页搜索\nDeepSeek 搜索提供方。",
+          "aria": "展开设置: 网页搜索"
+        },
+        {
+          "text": "手动刷新",
+          "aria": null
+        },
+        {
+          "text": "按模型",
+          "aria": null
+        },
+        {
+          "text": "按项目",
+          "aria": null
+        },
+        {
+          "text": "按日",
+          "aria": null
+        },
+        {
+          "text": "会话明细",
+          "aria": null
+        },
+        {
+          "text": "dsh",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "命令",
+          "aria": "命令"
+        },
+        {
+          "text": "Workspace Write",
+          "aria": "访问模式，当前：Workspace Write"
+        },
+        {
+          "text": "glm-5.3",
+          "aria": "选择模型，当前 glm-5.3"
+        },
+        {
+          "text": "发送消息",
+          "aria": "发送消息"
+        },
+        {
+          "text": "关闭详情",
+          "aria": "关闭详情"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "label": "tab-通用-NOT-FOUND",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "bodyPrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n2分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/grill-me # 交接提示词 —— 直\n2天\n展开其余 1 个会话\nopenarm\n偏好库 (taste)\n设置\n设置\n通用设置\n模型\n插件\nAgent 预设\n远程工作区\n分布式控制 · dsh-ssh-gui\nvision-adam 识图设置\n子代理模型\n打开配置文件\n关闭\n插件\n\n配置和查看本部署已安装的插件。\n\n插件配置\n插件列表\n终端\n限制 agent 运行的每一条命令。\nAgent 循环\nAgent 如何派发工具调用。\n网页搜索\nDeepSeek 搜索提供方。\nToken 用量 · dsh-usage\ndsh + Claude Code 双源统"
+      },
+      "frames": null,
+      "timeoutMs": 4000
+    },
+    {
+      "label": "tab-模型-r1",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "title": "DeepSeek Harness",
+        "visiblePrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n2分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/gr"
+      },
+      "frames": {
+        "n": 131,
+        "p50": 16.7,
+        "p99": 16.8,
+        "max": 50.1,
+        "over50": 1
+      },
+      "longtasks": {
+        "n": 0,
+        "totalMs": 0,
+        "maxMs": 0,
+        "entries": []
+      },
+      "cdp": {
+        "ScriptDuration": 0.428,
+        "TaskDuration": 1.435,
+        "RecalcStyleDuration": 0.345,
+        "LayoutDuration": 0.067,
+        "Nodes": 963,
+        "JSEventListeners": 247
+      },
+      "dom_nodes": 755,
+      "ws": [
+        {
+          "url": "ws://127.0.0.1:3080/api/events.mux",
+          "frames": 662,
+          "bytes": 0,
+          "closed": false
+        },
+        {
+          "url": "ws://127.0.0.1:3080/api/events.host",
+          "frames": 2,
+          "bytes": 0,
+          "closed": false
+        }
+      ],
+      "requests": [],
+      "buttons": [
+        {
+          "text": "新建会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "收起侧边栏",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "搜索会话",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "视图选项",
+          "aria": "视图选项"
+        },
+        {
+          "text": "添加工作区",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "工作区“触觉产品资料”的操作",
+          "aria": "工作区“触觉产品资料”的操作"
+        },
+        {
+          "text": "在“触觉产品资料”中新建会话",
+          "aria": "在“触觉产品资料”中新建会话"
+        },
+        {
+          "text": "工作区“面试”的操作",
+          "aria": "工作区“面试”的操作"
+        },
+        {
+          "text": "在“面试”中新建会话",
+          "aria": "在“面试”中新建会话"
+        },
+        {
+          "text": "工作区“MCU”的操作",
+          "aria": "工作区“MCU”的操作"
+        },
+        {
+          "text": "在“MCU”中新建会话",
+          "aria": "在“MCU”中新建会话"
+        },
+        {
+          "text": "工作区“作业”的操作",
+          "aria": "工作区“作业”的操作"
+        },
+        {
+          "text": "在“作业”中新建会话",
+          "aria": "在“作业”中新建会话"
+        },
+        {
+          "text": "工作区“math”的操作",
+          "aria": "工作区“math”的操作"
+        },
+        {
+          "text": "在“math”中新建会话",
+          "aria": "在“math”中新建会话"
+        },
+        {
+          "text": "工作区“university”的操作",
+          "aria": "工作区“university”的操作"
+        },
+        {
+          "text": "在“university”中新建会话",
+          "aria": "在“university”中新建会话"
+        },
+        {
+          "text": "工作区“Dexterous_Hand_23Dof”的操作",
+          "aria": "工作区“Dexterous_Hand_23Dof”的操作"
+        },
+        {
+          "text": "在“Dexterous_Hand_23Dof”中新建会话",
+          "aria": "在“Dexterous_Hand_23Dof”中新建会话"
+        },
+        {
+          "text": "工作区“robocon”的操作",
+          "aria": "工作区“robocon”的操作"
+        },
+        {
+          "text": "在“robocon”中新建会话",
+          "aria": "在“robocon”中新建会话"
+        },
+        {
+          "text": "工作区“RS”的操作",
+          "aria": "工作区“RS”的操作"
+        },
+        {
+          "text": "在“RS”中新建会话",
+          "aria": "在“RS”中新建会话"
+        },
+        {
+          "text": "工作区“dsh”的操作",
+          "aria": "工作区“dsh”的操作"
+        },
+        {
+          "text": "在“dsh”中新建会话",
+          "aria": "在“dsh”中新建会话"
+        },
+        {
+          "text": "会话“DeepSeek模型渠道不存在报错排查”的操作",
+          "aria": "会话“DeepSeek模型渠道不存在报错排查”的操作"
+        },
+        {
+          "text": "会话“会话删除更新误删全部会话”的操作",
+          "aria": "会话“会话删除更新误删全部会话”的操作"
+        },
+        {
+          "text": "会话“测试 Adam 网关 DeepSeek 模型”的操作",
+          "aria": "会话“测试 Adam 网关 DeepSeek 模型”的操作"
+        },
+        {
+          "text": "会话“/grill-me # 交接提示词 —— 直”的操作",
+          "aria": "会话“/grill-me # 交接提示词 —— 直”的操作"
+        },
+        {
+          "text": "展开其余 1 个会话",
+          "aria": null
+        },
+        {
+          "text": "工作区“openarm”的操作",
+          "aria": "工作区“openarm”的操作"
+        },
+        {
+          "text": "在“openarm”中新建会话",
+          "aria": "在“openarm”中新建会话"
+        },
+        {
+          "text": "偏好库 (taste)",
+          "aria": "偏好库 (taste)"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "通用设置",
+          "aria": null
+        },
+        {
+          "text": "模型",
+          "aria": null
+        },
+        {
+          "text": "插件",
+          "aria": null
+        },
+        {
+          "text": "Agent 预设",
+          "aria": null
+        },
+        {
+          "text": "远程工作区",
+          "aria": null
+        },
+        {
+          "text": "分布式控制 · dsh-ssh-gui",
+          "aria": null
+        },
+        {
+          "text": "vision-adam 识图设置",
+          "aria": null
+        },
+        {
+          "text": "子代理模型",
+          "aria": null
+        },
+        {
+          "text": "打开配置文件",
+          "aria": null
+        },
+        {
+          "text": "关闭",
+          "aria": null
+        },
+        {
+          "text": "编辑",
+          "aria": "编辑 DeepSeek (deepseek-official)"
+        },
+        {
+          "text": "编辑",
+          "aria": "编辑 opencode-go"
+        },
+        {
+          "text": "删除",
+          "aria": "删除 opencode-go"
+        },
+        {
+          "text": "编辑",
+          "aria": "编辑 adam"
+        },
+        {
+          "text": "删除",
+          "aria": "删除 adam"
+        },
+        {
+          "text": "添加提供方",
+          "aria": null
+        },
+        {
+          "text": "添加自定义提供方",
+          "aria": null
+        },
+        {
+          "text": "dsh",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "命令",
+          "aria": "命令"
+        },
+        {
+          "text": "Workspace Write",
+          "aria": "访问模式，当前：Workspace Write"
+        },
+        {
+          "text": "glm-5.3",
+          "aria": "选择模型，当前 glm-5.3"
+        },
+        {
+          "text": "发送消息",
+          "aria": "发送消息"
+        },
+        {
+          "text": "关闭详情",
+          "aria": "关闭详情"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "label": "tab-模型-r2",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "title": "DeepSeek Harness",
+        "visiblePrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n2分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/gr"
+      },
+      "frames": {
+        "n": 126,
+        "p50": 16.7,
+        "p99": 16.8,
+        "max": 83.3,
+        "over50": 1
+      },
+      "longtasks": {
+        "n": 0,
+        "totalMs": 0,
+        "maxMs": 0,
+        "entries": []
+      },
+      "cdp": {
+        "ScriptDuration": 0.488,
+        "TaskDuration": 1.604,
+        "RecalcStyleDuration": 0.42,
+        "LayoutDuration": 0.067,
+        "Nodes": 963,
+        "JSEventListeners": 247
+      },
+      "dom_nodes": 755,
+      "ws": [
+        {
+          "url": "ws://127.0.0.1:3080/api/events.mux",
+          "frames": 682,
+          "bytes": 0,
+          "closed": false
+        },
+        {
+          "url": "ws://127.0.0.1:3080/api/events.host",
+          "frames": 2,
+          "bytes": 0,
+          "closed": false
+        }
+      ],
+      "requests": [],
+      "buttons": [
+        {
+          "text": "新建会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "收起侧边栏",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "搜索会话",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "视图选项",
+          "aria": "视图选项"
+        },
+        {
+          "text": "添加工作区",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "工作区“触觉产品资料”的操作",
+          "aria": "工作区“触觉产品资料”的操作"
+        },
+        {
+          "text": "在“触觉产品资料”中新建会话",
+          "aria": "在“触觉产品资料”中新建会话"
+        },
+        {
+          "text": "工作区“面试”的操作",
+          "aria": "工作区“面试”的操作"
+        },
+        {
+          "text": "在“面试”中新建会话",
+          "aria": "在“面试”中新建会话"
+        },
+        {
+          "text": "工作区“MCU”的操作",
+          "aria": "工作区“MCU”的操作"
+        },
+        {
+          "text": "在“MCU”中新建会话",
+          "aria": "在“MCU”中新建会话"
+        },
+        {
+          "text": "工作区“作业”的操作",
+          "aria": "工作区“作业”的操作"
+        },
+        {
+          "text": "在“作业”中新建会话",
+          "aria": "在“作业”中新建会话"
+        },
+        {
+          "text": "工作区“math”的操作",
+          "aria": "工作区“math”的操作"
+        },
+        {
+          "text": "在“math”中新建会话",
+          "aria": "在“math”中新建会话"
+        },
+        {
+          "text": "工作区“university”的操作",
+          "aria": "工作区“university”的操作"
+        },
+        {
+          "text": "在“university”中新建会话",
+          "aria": "在“university”中新建会话"
+        },
+        {
+          "text": "工作区“Dexterous_Hand_23Dof”的操作",
+          "aria": "工作区“Dexterous_Hand_23Dof”的操作"
+        },
+        {
+          "text": "在“Dexterous_Hand_23Dof”中新建会话",
+          "aria": "在“Dexterous_Hand_23Dof”中新建会话"
+        },
+        {
+          "text": "工作区“robocon”的操作",
+          "aria": "工作区“robocon”的操作"
+        },
+        {
+          "text": "在“robocon”中新建会话",
+          "aria": "在“robocon”中新建会话"
+        },
+        {
+          "text": "工作区“RS”的操作",
+          "aria": "工作区“RS”的操作"
+        },
+        {
+          "text": "在“RS”中新建会话",
+          "aria": "在“RS”中新建会话"
+        },
+        {
+          "text": "工作区“dsh”的操作",
+          "aria": "工作区“dsh”的操作"
+        },
+        {
+          "text": "在“dsh”中新建会话",
+          "aria": "在“dsh”中新建会话"
+        },
+        {
+          "text": "会话“DeepSeek模型渠道不存在报错排查”的操作",
+          "aria": "会话“DeepSeek模型渠道不存在报错排查”的操作"
+        },
+        {
+          "text": "会话“会话删除更新误删全部会话”的操作",
+          "aria": "会话“会话删除更新误删全部会话”的操作"
+        },
+        {
+          "text": "会话“测试 Adam 网关 DeepSeek 模型”的操作",
+          "aria": "会话“测试 Adam 网关 DeepSeek 模型”的操作"
+        },
+        {
+          "text": "会话“/grill-me # 交接提示词 —— 直”的操作",
+          "aria": "会话“/grill-me # 交接提示词 —— 直”的操作"
+        },
+        {
+          "text": "展开其余 1 个会话",
+          "aria": null
+        },
+        {
+          "text": "工作区“openarm”的操作",
+          "aria": "工作区“openarm”的操作"
+        },
+        {
+          "text": "在“openarm”中新建会话",
+          "aria": "在“openarm”中新建会话"
+        },
+        {
+          "text": "偏好库 (taste)",
+          "aria": "偏好库 (taste)"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "通用设置",
+          "aria": null
+        },
+        {
+          "text": "模型",
+          "aria": null
+        },
+        {
+          "text": "插件",
+          "aria": null
+        },
+        {
+          "text": "Agent 预设",
+          "aria": null
+        },
+        {
+          "text": "远程工作区",
+          "aria": null
+        },
+        {
+          "text": "分布式控制 · dsh-ssh-gui",
+          "aria": null
+        },
+        {
+          "text": "vision-adam 识图设置",
+          "aria": null
+        },
+        {
+          "text": "子代理模型",
+          "aria": null
+        },
+        {
+          "text": "打开配置文件",
+          "aria": null
+        },
+        {
+          "text": "关闭",
+          "aria": null
+        },
+        {
+          "text": "编辑",
+          "aria": "编辑 DeepSeek (deepseek-official)"
+        },
+        {
+          "text": "编辑",
+          "aria": "编辑 opencode-go"
+        },
+        {
+          "text": "删除",
+          "aria": "删除 opencode-go"
+        },
+        {
+          "text": "编辑",
+          "aria": "编辑 adam"
+        },
+        {
+          "text": "删除",
+          "aria": "删除 adam"
+        },
+        {
+          "text": "添加提供方",
+          "aria": null
+        },
+        {
+          "text": "添加自定义提供方",
+          "aria": null
+        },
+        {
+          "text": "dsh",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "命令",
+          "aria": "命令"
+        },
+        {
+          "text": "Workspace Write",
+          "aria": "访问模式，当前：Workspace Write"
+        },
+        {
+          "text": "glm-5.3",
+          "aria": "选择模型，当前 glm-5.3"
+        },
+        {
+          "text": "发送消息",
+          "aria": "发送消息"
+        },
+        {
+          "text": "关闭详情",
+          "aria": "关闭详情"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "label": "tab-远程-NOT-FOUND",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "bodyPrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n2分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/grill-me # 交接提示词 —— 直\n2天\n展开其余 1 个会话\nopenarm\n偏好库 (taste)\n设置\n设置\n通用设置\n模型\n插件\nAgent 预设\n远程工作区\n分布式控制 · dsh-ssh-gui\nvision-adam 识图设置\n子代理模型\n打开配置文件\n关闭\n模型\n\n填入各提供方的 API 密钥即可使用其模型。\n\nDeepSeek\n编辑\nopencode-go\n编辑\n删除\nadam\n自定义\n编辑\n删除\n添加提供方\n添加自定义提供方\n探索未至之境\n预览版\ndsh\n标准模式（子代理 deepseek-v4.1-flash）\nWorkspac"
+      },
+      "frames": null,
+      "timeoutMs": 4000
+    },
+    {
+      "label": "tab-子代理-r1",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "title": "DeepSeek Harness",
+        "visiblePrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n2分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/gr"
+      },
+      "frames": {
+        "n": 124,
+        "p50": 16.7,
+        "p99": 50,
+        "max": 99.9,
+        "over50": 2
+      },
+      "longtasks": {
+        "n": 0,
+        "totalMs": 0,
+        "maxMs": 0,
+        "entries": []
+      },
+      "cdp": {
+        "ScriptDuration": 0.586,
+        "TaskDuration": 1.879,
+        "RecalcStyleDuration": 0.544,
+        "LayoutDuration": 0.07,
+        "Nodes": 1156,
+        "JSEventListeners": 244
+      },
+      "dom_nodes": 787,
+      "ws": [
+        {
+          "url": "ws://127.0.0.1:3080/api/events.mux",
+          "frames": 726,
+          "bytes": 0,
+          "closed": false
+        },
+        {
+          "url": "ws://127.0.0.1:3080/api/events.host",
+          "frames": 2,
+          "bytes": 0,
+          "closed": false
+        }
+      ],
+      "requests": [],
+      "buttons": [
+        {
+          "text": "新建会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "收起侧边栏",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "搜索会话",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "视图选项",
+          "aria": "视图选项"
+        },
+        {
+          "text": "添加工作区",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "工作区“触觉产品资料”的操作",
+          "aria": "工作区“触觉产品资料”的操作"
+        },
+        {
+          "text": "在“触觉产品资料”中新建会话",
+          "aria": "在“触觉产品资料”中新建会话"
+        },
+        {
+          "text": "工作区“面试”的操作",
+          "aria": "工作区“面试”的操作"
+        },
+        {
+          "text": "在“面试”中新建会话",
+          "aria": "在“面试”中新建会话"
+        },
+        {
+          "text": "工作区“MCU”的操作",
+          "aria": "工作区“MCU”的操作"
+        },
+        {
+          "text": "在“MCU”中新建会话",
+          "aria": "在“MCU”中新建会话"
+        },
+        {
+          "text": "工作区“作业”的操作",
+          "aria": "工作区“作业”的操作"
+        },
+        {
+          "text": "在“作业”中新建会话",
+          "aria": "在“作业”中新建会话"
+        },
+        {
+          "text": "工作区“math”的操作",
+          "aria": "工作区“math”的操作"
+        },
+        {
+          "text": "在“math”中新建会话",
+          "aria": "在“math”中新建会话"
+        },
+        {
+          "text": "工作区“university”的操作",
+          "aria": "工作区“university”的操作"
+        },
+        {
+          "text": "在“university”中新建会话",
+          "aria": "在“university”中新建会话"
+        },
+        {
+          "text": "工作区“Dexterous_Hand_23Dof”的操作",
+          "aria": "工作区“Dexterous_Hand_23Dof”的操作"
+        },
+        {
+          "text": "在“Dexterous_Hand_23Dof”中新建会话",
+          "aria": "在“Dexterous_Hand_23Dof”中新建会话"
+        },
+        {
+          "text": "工作区“robocon”的操作",
+          "aria": "工作区“robocon”的操作"
+        },
+        {
+          "text": "在“robocon”中新建会话",
+          "aria": "在“robocon”中新建会话"
+        },
+        {
+          "text": "工作区“RS”的操作",
+          "aria": "工作区“RS”的操作"
+        },
+        {
+          "text": "在“RS”中新建会话",
+          "aria": "在“RS”中新建会话"
+        },
+        {
+          "text": "工作区“dsh”的操作",
+          "aria": "工作区“dsh”的操作"
+        },
+        {
+          "text": "在“dsh”中新建会话",
+          "aria": "在“dsh”中新建会话"
+        },
+        {
+          "text": "会话“DeepSeek模型渠道不存在报错排查”的操作",
+          "aria": "会话“DeepSeek模型渠道不存在报错排查”的操作"
+        },
+        {
+          "text": "会话“会话删除更新误删全部会话”的操作",
+          "aria": "会话“会话删除更新误删全部会话”的操作"
+        },
+        {
+          "text": "会话“测试 Adam 网关 DeepSeek 模型”的操作",
+          "aria": "会话“测试 Adam 网关 DeepSeek 模型”的操作"
+        },
+        {
+          "text": "会话“/grill-me # 交接提示词 —— 直”的操作",
+          "aria": "会话“/grill-me # 交接提示词 —— 直”的操作"
+        },
+        {
+          "text": "展开其余 1 个会话",
+          "aria": null
+        },
+        {
+          "text": "工作区“openarm”的操作",
+          "aria": "工作区“openarm”的操作"
+        },
+        {
+          "text": "在“openarm”中新建会话",
+          "aria": "在“openarm”中新建会话"
+        },
+        {
+          "text": "偏好库 (taste)",
+          "aria": "偏好库 (taste)"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "通用设置",
+          "aria": null
+        },
+        {
+          "text": "模型",
+          "aria": null
+        },
+        {
+          "text": "插件",
+          "aria": null
+        },
+        {
+          "text": "Agent 预设",
+          "aria": null
+        },
+        {
+          "text": "远程工作区",
+          "aria": null
+        },
+        {
+          "text": "分布式控制 · dsh-ssh-gui",
+          "aria": null
+        },
+        {
+          "text": "vision-adam 识图设置",
+          "aria": null
+        },
+        {
+          "text": "子代理模型",
+          "aria": null
+        },
+        {
+          "text": "打开配置文件",
+          "aria": null
+        },
+        {
+          "text": "关闭",
+          "aria": null
+        },
+        {
+          "text": "保存到 settings.yaml",
+          "aria": null
+        },
+        {
+          "text": "恢复默认",
+          "aria": null
+        },
+        {
+          "text": "dsh",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "命令",
+          "aria": "命令"
+        },
+        {
+          "text": "Workspace Write",
+          "aria": "访问模式，当前：Workspace Write"
+        },
+        {
+          "text": "glm-5.3",
+          "aria": "选择模型，当前 glm-5.3"
+        },
+        {
+          "text": "发送消息",
+          "aria": "发送消息"
+        },
+        {
+          "text": "关闭详情",
+          "aria": "关闭详情"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "label": "tab-子代理-r2",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "title": "DeepSeek Harness",
+        "visiblePrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n2分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/gr"
+      },
+      "frames": {
+        "n": 131,
+        "p50": 16.7,
+        "p99": 16.8,
+        "max": 16.8,
+        "over50": 0
+      },
+      "longtasks": {
+        "n": 0,
+        "totalMs": 0,
+        "maxMs": 0,
+        "entries": []
+      },
+      "cdp": {
+        "ScriptDuration": 0.593,
+        "TaskDuration": 1.92,
+        "RecalcStyleDuration": 0.559,
+        "LayoutDuration": 0.07,
+        "Nodes": 1156,
+        "JSEventListeners": 244
+      },
+      "dom_nodes": 787,
+      "ws": [
+        {
+          "url": "ws://127.0.0.1:3080/api/events.mux",
+          "frames": 742,
+          "bytes": 0,
+          "closed": false
+        },
+        {
+          "url": "ws://127.0.0.1:3080/api/events.host",
+          "frames": 2,
+          "bytes": 0,
+          "closed": false
+        }
+      ],
+      "requests": [],
+      "buttons": [
+        {
+          "text": "新建会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "收起侧边栏",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "搜索会话",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "视图选项",
+          "aria": "视图选项"
+        },
+        {
+          "text": "添加工作区",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "工作区“触觉产品资料”的操作",
+          "aria": "工作区“触觉产品资料”的操作"
+        },
+        {
+          "text": "在“触觉产品资料”中新建会话",
+          "aria": "在“触觉产品资料”中新建会话"
+        },
+        {
+          "text": "工作区“面试”的操作",
+          "aria": "工作区“面试”的操作"
+        },
+        {
+          "text": "在“面试”中新建会话",
+          "aria": "在“面试”中新建会话"
+        },
+        {
+          "text": "工作区“MCU”的操作",
+          "aria": "工作区“MCU”的操作"
+        },
+        {
+          "text": "在“MCU”中新建会话",
+          "aria": "在“MCU”中新建会话"
+        },
+        {
+          "text": "工作区“作业”的操作",
+          "aria": "工作区“作业”的操作"
+        },
+        {
+          "text": "在“作业”中新建会话",
+          "aria": "在“作业”中新建会话"
+        },
+        {
+          "text": "工作区“math”的操作",
+          "aria": "工作区“math”的操作"
+        },
+        {
+          "text": "在“math”中新建会话",
+          "aria": "在“math”中新建会话"
+        },
+        {
+          "text": "工作区“university”的操作",
+          "aria": "工作区“university”的操作"
+        },
+        {
+          "text": "在“university”中新建会话",
+          "aria": "在“university”中新建会话"
+        },
+        {
+          "text": "工作区“Dexterous_Hand_23Dof”的操作",
+          "aria": "工作区“Dexterous_Hand_23Dof”的操作"
+        },
+        {
+          "text": "在“Dexterous_Hand_23Dof”中新建会话",
+          "aria": "在“Dexterous_Hand_23Dof”中新建会话"
+        },
+        {
+          "text": "工作区“robocon”的操作",
+          "aria": "工作区“robocon”的操作"
+        },
+        {
+          "text": "在“robocon”中新建会话",
+          "aria": "在“robocon”中新建会话"
+        },
+        {
+          "text": "工作区“RS”的操作",
+          "aria": "工作区“RS”的操作"
+        },
+        {
+          "text": "在“RS”中新建会话",
+          "aria": "在“RS”中新建会话"
+        },
+        {
+          "text": "工作区“dsh”的操作",
+          "aria": "工作区“dsh”的操作"
+        },
+        {
+          "text": "在“dsh”中新建会话",
+          "aria": "在“dsh”中新建会话"
+        },
+        {
+          "text": "会话“DeepSeek模型渠道不存在报错排查”的操作",
+          "aria": "会话“DeepSeek模型渠道不存在报错排查”的操作"
+        },
+        {
+          "text": "会话“会话删除更新误删全部会话”的操作",
+          "aria": "会话“会话删除更新误删全部会话”的操作"
+        },
+        {
+          "text": "会话“测试 Adam 网关 DeepSeek 模型”的操作",
+          "aria": "会话“测试 Adam 网关 DeepSeek 模型”的操作"
+        },
+        {
+          "text": "会话“/grill-me # 交接提示词 —— 直”的操作",
+          "aria": "会话“/grill-me # 交接提示词 —— 直”的操作"
+        },
+        {
+          "text": "展开其余 1 个会话",
+          "aria": null
+        },
+        {
+          "text": "工作区“openarm”的操作",
+          "aria": "工作区“openarm”的操作"
+        },
+        {
+          "text": "在“openarm”中新建会话",
+          "aria": "在“openarm”中新建会话"
+        },
+        {
+          "text": "偏好库 (taste)",
+          "aria": "偏好库 (taste)"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "通用设置",
+          "aria": null
+        },
+        {
+          "text": "模型",
+          "aria": null
+        },
+        {
+          "text": "插件",
+          "aria": null
+        },
+        {
+          "text": "Agent 预设",
+          "aria": null
+        },
+        {
+          "text": "远程工作区",
+          "aria": null
+        },
+        {
+          "text": "分布式控制 · dsh-ssh-gui",
+          "aria": null
+        },
+        {
+          "text": "vision-adam 识图设置",
+          "aria": null
+        },
+        {
+          "text": "子代理模型",
+          "aria": null
+        },
+        {
+          "text": "打开配置文件",
+          "aria": null
+        },
+        {
+          "text": "关闭",
+          "aria": null
+        },
+        {
+          "text": "保存到 settings.yaml",
+          "aria": null
+        },
+        {
+          "text": "恢复默认",
+          "aria": null
+        },
+        {
+          "text": "dsh",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "命令",
+          "aria": "命令"
+        },
+        {
+          "text": "Workspace Write",
+          "aria": "访问模式，当前：Workspace Write"
+        },
+        {
+          "text": "glm-5.3",
+          "aria": "选择模型，当前 glm-5.3"
+        },
+        {
+          "text": "发送消息",
+          "aria": "发送消息"
+        },
+        {
+          "text": "关闭详情",
+          "aria": "关闭详情"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "label": "settings-stay-window-r1",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "title": "DeepSeek Harness",
+        "visiblePrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n2分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/gr"
+      },
+      "frames": {
+        "n": 300,
+        "p50": 16.7,
+        "p99": 16.8,
+        "max": 16.8,
+        "over50": 0
+      },
+      "longtasks": {
+        "n": 0,
+        "totalMs": 0,
+        "maxMs": 0,
+        "entries": []
+      },
+      "cdp": {
+        "ScriptDuration": 0.599,
+        "TaskDuration": 1.977,
+        "RecalcStyleDuration": 0.578,
+        "LayoutDuration": 0.07,
+        "Nodes": 1156,
+        "JSEventListeners": 244
+      },
+      "dom_nodes": 787,
+      "ws": [
+        {
+          "url": "ws://127.0.0.1:3080/api/events.mux",
+          "frames": 801,
+          "bytes": 0,
+          "closed": false
+        },
+        {
+          "url": "ws://127.0.0.1:3080/api/events.host",
+          "frames": 2,
+          "bytes": 0,
+          "closed": false
+        }
+      ],
+      "requests": [],
+      "buttons": [
+        {
+          "text": "新建会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "收起侧边栏",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "搜索会话",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "视图选项",
+          "aria": "视图选项"
+        },
+        {
+          "text": "添加工作区",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "工作区“触觉产品资料”的操作",
+          "aria": "工作区“触觉产品资料”的操作"
+        },
+        {
+          "text": "在“触觉产品资料”中新建会话",
+          "aria": "在“触觉产品资料”中新建会话"
+        },
+        {
+          "text": "工作区“面试”的操作",
+          "aria": "工作区“面试”的操作"
+        },
+        {
+          "text": "在“面试”中新建会话",
+          "aria": "在“面试”中新建会话"
+        },
+        {
+          "text": "工作区“MCU”的操作",
+          "aria": "工作区“MCU”的操作"
+        },
+        {
+          "text": "在“MCU”中新建会话",
+          "aria": "在“MCU”中新建会话"
+        },
+        {
+          "text": "工作区“作业”的操作",
+          "aria": "工作区“作业”的操作"
+        },
+        {
+          "text": "在“作业”中新建会话",
+          "aria": "在“作业”中新建会话"
+        },
+        {
+          "text": "工作区“math”的操作",
+          "aria": "工作区“math”的操作"
+        },
+        {
+          "text": "在“math”中新建会话",
+          "aria": "在“math”中新建会话"
+        },
+        {
+          "text": "工作区“university”的操作",
+          "aria": "工作区“university”的操作"
+        },
+        {
+          "text": "在“university”中新建会话",
+          "aria": "在“university”中新建会话"
+        },
+        {
+          "text": "工作区“Dexterous_Hand_23Dof”的操作",
+          "aria": "工作区“Dexterous_Hand_23Dof”的操作"
+        },
+        {
+          "text": "在“Dexterous_Hand_23Dof”中新建会话",
+          "aria": "在“Dexterous_Hand_23Dof”中新建会话"
+        },
+        {
+          "text": "工作区“robocon”的操作",
+          "aria": "工作区“robocon”的操作"
+        },
+        {
+          "text": "在“robocon”中新建会话",
+          "aria": "在“robocon”中新建会话"
+        },
+        {
+          "text": "工作区“RS”的操作",
+          "aria": "工作区“RS”的操作"
+        },
+        {
+          "text": "在“RS”中新建会话",
+          "aria": "在“RS”中新建会话"
+        },
+        {
+          "text": "工作区“dsh”的操作",
+          "aria": "工作区“dsh”的操作"
+        },
+        {
+          "text": "在“dsh”中新建会话",
+          "aria": "在“dsh”中新建会话"
+        },
+        {
+          "text": "会话“DeepSeek模型渠道不存在报错排查”的操作",
+          "aria": "会话“DeepSeek模型渠道不存在报错排查”的操作"
+        },
+        {
+          "text": "会话“会话删除更新误删全部会话”的操作",
+          "aria": "会话“会话删除更新误删全部会话”的操作"
+        },
+        {
+          "text": "会话“测试 Adam 网关 DeepSeek 模型”的操作",
+          "aria": "会话“测试 Adam 网关 DeepSeek 模型”的操作"
+        },
+        {
+          "text": "会话“/grill-me # 交接提示词 —— 直”的操作",
+          "aria": "会话“/grill-me # 交接提示词 —— 直”的操作"
+        },
+        {
+          "text": "展开其余 1 个会话",
+          "aria": null
+        },
+        {
+          "text": "工作区“openarm”的操作",
+          "aria": "工作区“openarm”的操作"
+        },
+        {
+          "text": "在“openarm”中新建会话",
+          "aria": "在“openarm”中新建会话"
+        },
+        {
+          "text": "偏好库 (taste)",
+          "aria": "偏好库 (taste)"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "通用设置",
+          "aria": null
+        },
+        {
+          "text": "模型",
+          "aria": null
+        },
+        {
+          "text": "插件",
+          "aria": null
+        },
+        {
+          "text": "Agent 预设",
+          "aria": null
+        },
+        {
+          "text": "远程工作区",
+          "aria": null
+        },
+        {
+          "text": "分布式控制 · dsh-ssh-gui",
+          "aria": null
+        },
+        {
+          "text": "vision-adam 识图设置",
+          "aria": null
+        },
+        {
+          "text": "子代理模型",
+          "aria": null
+        },
+        {
+          "text": "打开配置文件",
+          "aria": null
+        },
+        {
+          "text": "关闭",
+          "aria": null
+        },
+        {
+          "text": "保存到 settings.yaml",
+          "aria": null
+        },
+        {
+          "text": "恢复默认",
+          "aria": null
+        },
+        {
+          "text": "dsh",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "命令",
+          "aria": "命令"
+        },
+        {
+          "text": "Workspace Write",
+          "aria": "访问模式，当前：Workspace Write"
+        },
+        {
+          "text": "glm-5.3",
+          "aria": "选择模型，当前 glm-5.3"
+        },
+        {
+          "text": "发送消息",
+          "aria": "发送消息"
+        },
+        {
+          "text": "关闭详情",
+          "aria": "关闭详情"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "label": "settings-stay-window-r2",
+      "loaded": {
+        "url": "http://127.0.0.1:3080/",
+        "title": "DeepSeek Harness",
+        "visiblePrefix": "新会话\n工作区\n🗀\n分布式节点\n0 个\n暂无节点——在设置页「分布式控制 · dsh-ssh-gui」添加\n触觉产品资料\n面试\nMCU\n作业\nmath\nuniversity\nDexterous_Hand_23Dof\nrobocon\nRS\ndsh\n新会话\n进行中\nDeepSeek模型渠道不存在报错排查\n2分钟\n进行中\n11 个子代理运行中\n会话删除更新误删全部会话\n11分钟\n测试 Adam 网关 DeepSeek 模型\n17小时\n/gr"
+      },
+      "frames": {
+        "n": 297,
+        "p50": 16.7,
+        "p99": 16.8,
+        "max": 33.3,
+        "over50": 0
+      },
+      "longtasks": {
+        "n": 0,
+        "totalMs": 0,
+        "maxMs": 0,
+        "entries": []
+      },
+      "cdp": {
+        "ScriptDuration": 0.653,
+        "TaskDuration": 2.174,
+        "RecalcStyleDuration": 0.657,
+        "LayoutDuration": 0.07,
+        "Nodes": 1156,
+        "JSEventListeners": 244
+      },
+      "dom_nodes": 787,
+      "ws": [
+        {
+          "url": "ws://127.0.0.1:3080/api/events.mux",
+          "frames": 893,
+          "bytes": 0,
+          "closed": false
+        },
+        {
+          "url": "ws://127.0.0.1:3080/api/events.host",
+          "frames": 2,
+          "bytes": 0,
+          "closed": false
+        }
+      ],
+      "requests": [],
+      "buttons": [
+        {
+          "text": "新建会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "收起侧边栏",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "搜索会话",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "视图选项",
+          "aria": "视图选项"
+        },
+        {
+          "text": "添加工作区",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "工作区“触觉产品资料”的操作",
+          "aria": "工作区“触觉产品资料”的操作"
+        },
+        {
+          "text": "在“触觉产品资料”中新建会话",
+          "aria": "在“触觉产品资料”中新建会话"
+        },
+        {
+          "text": "工作区“面试”的操作",
+          "aria": "工作区“面试”的操作"
+        },
+        {
+          "text": "在“面试”中新建会话",
+          "aria": "在“面试”中新建会话"
+        },
+        {
+          "text": "工作区“MCU”的操作",
+          "aria": "工作区“MCU”的操作"
+        },
+        {
+          "text": "在“MCU”中新建会话",
+          "aria": "在“MCU”中新建会话"
+        },
+        {
+          "text": "工作区“作业”的操作",
+          "aria": "工作区“作业”的操作"
+        },
+        {
+          "text": "在“作业”中新建会话",
+          "aria": "在“作业”中新建会话"
+        },
+        {
+          "text": "工作区“math”的操作",
+          "aria": "工作区“math”的操作"
+        },
+        {
+          "text": "在“math”中新建会话",
+          "aria": "在“math”中新建会话"
+        },
+        {
+          "text": "工作区“university”的操作",
+          "aria": "工作区“university”的操作"
+        },
+        {
+          "text": "在“university”中新建会话",
+          "aria": "在“university”中新建会话"
+        },
+        {
+          "text": "工作区“Dexterous_Hand_23Dof”的操作",
+          "aria": "工作区“Dexterous_Hand_23Dof”的操作"
+        },
+        {
+          "text": "在“Dexterous_Hand_23Dof”中新建会话",
+          "aria": "在“Dexterous_Hand_23Dof”中新建会话"
+        },
+        {
+          "text": "工作区“robocon”的操作",
+          "aria": "工作区“robocon”的操作"
+        },
+        {
+          "text": "在“robocon”中新建会话",
+          "aria": "在“robocon”中新建会话"
+        },
+        {
+          "text": "工作区“RS”的操作",
+          "aria": "工作区“RS”的操作"
+        },
+        {
+          "text": "在“RS”中新建会话",
+          "aria": "在“RS”中新建会话"
+        },
+        {
+          "text": "工作区“dsh”的操作",
+          "aria": "工作区“dsh”的操作"
+        },
+        {
+          "text": "在“dsh”中新建会话",
+          "aria": "在“dsh”中新建会话"
+        },
+        {
+          "text": "会话“DeepSeek模型渠道不存在报错排查”的操作",
+          "aria": "会话“DeepSeek模型渠道不存在报错排查”的操作"
+        },
+        {
+          "text": "会话“会话删除更新误删全部会话”的操作",
+          "aria": "会话“会话删除更新误删全部会话”的操作"
+        },
+        {
+          "text": "会话“测试 Adam 网关 DeepSeek 模型”的操作",
+          "aria": "会话“测试 Adam 网关 DeepSeek 模型”的操作"
+        },
+        {
+          "text": "会话“/grill-me # 交接提示词 —— 直”的操作",
+          "aria": "会话“/grill-me # 交接提示词 —— 直”的操作"
+        },
+        {
+          "text": "展开其余 1 个会话",
+          "aria": null
+        },
+        {
+          "text": "工作区“openarm”的操作",
+          "aria": "工作区“openarm”的操作"
+        },
+        {
+          "text": "在“openarm”中新建会话",
+          "aria": "在“openarm”中新建会话"
+        },
+        {
+          "text": "偏好库 (taste)",
+          "aria": "偏好库 (taste)"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "通用设置",
+          "aria": null
+        },
+        {
+          "text": "模型",
+          "aria": null
+        },
+        {
+          "text": "插件",
+          "aria": null
+        },
+        {
+          "text": "Agent 预设",
+          "aria": null
+        },
+        {
+          "text": "远程工作区",
+          "aria": null
+        },
+        {
+          "text": "分布式控制 · dsh-ssh-gui",
+          "aria": null
+        },
+        {
+          "text": "vision-adam 识图设置",
+          "aria": null
+        },
+        {
+          "text": "子代理模型",
+          "aria": null
+        },
+        {
+          "text": "打开配置文件",
+          "aria": null
+        },
+        {
+          "text": "关闭",
+          "aria": null
+        },
+        {
+          "text": "保存到 settings.yaml",
+          "aria": null
+        },
+        {
+          "text": "恢复默认",
+          "aria": null
+        },
+        {
+          "text": "dsh",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式（子代理 deepseek-v4.1-flash）",
+          "aria": null
+        },
+        {
+          "text": "命令",
+          "aria": "命令"
+        },
+        {
+          "text": "Workspace Write",
+          "aria": "访问模式，当前：Workspace Write"
+        },
+        {
+          "text": "glm-5.3",
+          "aria": "选择模型，当前 glm-5.3"
+        },
+        {
+          "text": "发送消息",
+          "aria": "发送消息"
+        },
+        {
+          "text": "关闭详情",
+          "aria": "关闭详情"
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "allWebSockets": [
+    {
+      "url": "ws://127.0.0.1:3080/api/events.mux",
+      "frames": 893,
+      "bytes": 0,
+      "closed": false
+    },
+    {
+      "url": "ws://127.0.0.1:3080/api/events.host",
+      "frames": 2,
+      "bytes": 0,
+      "closed": false
+    }
+  ],
+  "remainingRequests": [],
+  "errors": []
+}

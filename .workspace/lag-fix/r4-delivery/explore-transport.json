@@ -1,0 +1,198 @@
+{
+  "at": "2026-09-21T06:23:47.772Z",
+  "requests": [
+    {
+      "method": "GET",
+      "url": "/plugins/@local/dsh-usage/client.js?rev=cc6c7fb56693",
+      "post": ""
+    },
+    {
+      "method": "POST",
+      "url": "/usage/summary",
+      "post": "{\"type\":\"client-request\",\"rpcId\":\"1e091eca-9f5b-4c86-8bb7-f85a4a1a3285\",\"method\":\"summary\",\"payload\":{\"from\":1789401600000,\"to\":1790006399999,\"dataSources\":\"all\"}}"
+    },
+    {
+      "method": "POST",
+      "url": "/usage/timeseries",
+      "post": "{\"type\":\"client-request\",\"rpcId\":\"a77afb2c-ed8c-4fb9-9695-2b85b4aeb759\",\"method\":\"timeseries\",\"payload\":{\"granularity\":\"day\",\"from\":1789401600000,\"to\":1790006399999,\"dataSources\":\"all\"}}"
+    },
+    {
+      "method": "POST",
+      "url": "/usage/heatmap",
+      "post": "{\"type\":\"client-request\",\"rpcId\":\"7f472e18-97f0-43b9-9e85-5a6fadb14d8c\",\"method\":\"heatmap\",\"payload\":{\"year\":2026,\"dataSources\":\"all\"}}"
+    },
+    {
+      "method": "POST",
+      "url": "/usage/byModel",
+      "post": "{\"type\":\"client-request\",\"rpcId\":\"3aef802d-301f-4606-a47c-f5da1702eddf\",\"method\":\"byModel\",\"payload\":{\"from\":1789401600000,\"to\":1790006399999,\"dataSources\":\"all\"}}"
+    },
+    {
+      "method": "POST",
+      "url": "/usage/byProject",
+      "post": "{\"type\":\"client-request\",\"rpcId\":\"65c381e6-1d03-459d-a2ed-2e70ab339360\",\"method\":\"byProject\",\"payload\":{\"from\":1789401600000,\"to\":1790006399999,\"dataSources\":\"all\"}}"
+    },
+    {
+      "method": "POST",
+      "url": "/usage/byDay",
+      "post": "{\"type\":\"client-request\",\"rpcId\":\"4c37efae-dfc7-4c14-8ec2-48a571ab351e\",\"method\":\"byDay\",\"payload\":{\"from\":1789401600000,\"to\":1790006399999,\"dataSources\":\"all\"}}"
+    },
+    {
+      "method": "POST",
+      "url": "/usage/timeseries",
+      "post": "{\"type\":\"client-request\",\"rpcId\":\"2a80965b-0365-4841-8893-f3504d5c385e\",\"method\":\"timeseries\",\"payload\":{\"granularity\":\"hour\",\"from\":1789934400000,\"to\":1790020800000,\"dataSources\":\"all\"}}"
+    },
+    {
+      "method": "POST",
+      "url": "/usage/sessions",
+      "post": "{\"type\":\"client-request\",\"rpcId\":\"d1723b1a-1c89-40f7-a03d-b539c07fbc50\",\"method\":\"sessions\",\"payload\":{\"from\":1789401600000,\"to\":1790006399999,\"dataSources\":\"all\",\"limit\":200}}"
+    },
+    {
+      "method": "POST",
+      "url": "/usage/status",
+      "post": "{\"type\":\"client-request\",\"rpcId\":\"a5999648-1d8d-45c8-89d1-d452bdd670cb\",\"method\":\"status\",\"payload\":{}}"
+    }
+  ],
+  "ws": [
+    {
+      "url": "ws://127.0.0.1:3080/api/events.mux"
+    },
+    {
+      "url": "ws://127.0.0.1:3080/api/events.host"
+    },
+    {
+      "recv": "{\"type\":\"server-request\",\"rpcId\":\"390110f8-d2e4-42ac-a8ef-5de8224fa484\",\"method\":\"session/queue\",\"payload\":{\"type\":\"session/queue\",\"sessionId\":\"4f713ba6-5889-48ae-8f8c-d25eed086222\",\"items\":[{\"id\":\"61"
+    },
+    {
+      "recv": "{\"type\":\"server-request\",\"rpcId\":\"3cb8495c-b043-4ec9-92e0-d2069c1b2fe8\",\"method\":\"session/event\",\"payload\":{\"type\":\"session/event\",\"sessionId\":\"5eee17ef-551d-4132-b9cc-987c6f10d513\",\"event\":{\"type\":\"a"
+    },
+    {
+      "recv": "{\"type\":\"server-request\",\"rpcId\":\"669415e1-95ea-4181-8fc5-a2402c70ffa3\",\"method\":\"session/event\",\"payload\":{\"type\":\"session/event\",\"sessionId\":\"6e52ae14-65a0-4313-a963-83a3e7eb0b49\",\"event\":{\"type\":\"a"
+    },
+    {
+      "recv": "{\"type\":\"server-request\",\"rpcId\":\"8d98545d-8390-4306-852a-f8e7e745df89\",\"method\":\"session/event\",\"payload\":{\"type\":\"session/event\",\"sessionId\":\"4794188e-bfe0-43ec-b683-206ce38af789\",\"event\":{\"type\":\"a"
+    },
+    {
+      "recv": "{\"type\":\"server-request\",\"rpcId\":\"0b668952-2e37-43b9-a70b-95edea101cf8\",\"method\":\"session/event\",\"payload\":{\"type\":\"session/event\",\"sessionId\":\"75c869a0-8435-4801-9c4d-565753f86cb3\",\"event\":{\"type\":\"a"
+    },
+    {
+      "recv": "{\"type\":\"server-request\",\"rpcId\":\"06147d3f-90f8-4d7e-8bb7-c5267b371509\",\"method\":\"session/event\",\"payload\":{\"type\":\"session/event\",\"sessionId\":\"6e52ae14-65a0-4313-a963-83a3e7eb0b49\",\"event\":{\"type\":\"a"
+    }
+  ],
+  "card": {
+    "statCount": 7,
+    "stats": [
+      {
+        "label": "请求数",
+        "value": "23680"
+      },
+      {
+        "label": "输入(未缓存)",
+        "value": "95.79m"
+      },
+      {
+        "label": "输出",
+        "value": "23.13m"
+      },
+      {
+        "label": "缓存读",
+        "value": "4.41b"
+      },
+      {
+        "label": "缓存写",
+        "value": "0"
+      },
+      {
+        "label": "命中率",
+        "value": "98%"
+      },
+      {
+        "label": "覆盖会话",
+        "value": "401"
+      }
+    ],
+    "selects": [
+      {
+        "value": "all",
+        "options": [
+          "全部来源",
+          "dsh",
+          "cc"
+        ]
+      },
+      {
+        "value": "7",
+        "options": [
+          "近 7 天",
+          "近 30 天",
+          "近 90 天",
+          "自选"
+        ]
+      },
+      {
+        "value": "60",
+        "options": [
+          "不轮询",
+          "5s 刷新",
+          "30s 刷新",
+          "60s 刷新"
+        ]
+      },
+      {
+        "value": "hour",
+        "options": [
+          "24h 逐小时",
+          "按日"
+        ]
+      },
+      {
+        "value": "total",
+        "options": [
+          "总 tokens",
+          "输入(未缓存)",
+          "输出",
+          "缓存读",
+          "缓存写"
+        ]
+      },
+      {
+        "value": "area",
+        "options": [
+          "面积图",
+          "柱状图"
+        ]
+      }
+    ],
+    "nodes": 284
+  },
+  "stats": [
+    {
+      "label": "请求数",
+      "value": "23680"
+    },
+    {
+      "label": "输入(未缓存)",
+      "value": "95.79m"
+    },
+    {
+      "label": "输出",
+      "value": "23.13m"
+    },
+    {
+      "label": "缓存读",
+      "value": "4.41b"
+    },
+    {
+      "label": "缓存写",
+      "value": "0"
+    },
+    {
+      "label": "命中率",
+      "value": "98%"
+    },
+    {
+      "label": "覆盖会话",
+      "value": "401"
+    }
+  ],
+  "errors": []
+}
