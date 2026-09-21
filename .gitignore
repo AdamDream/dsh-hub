@@ -68,3 +68,12 @@ __pycache__/
 # 派生副本（非本仓库作者产物）：官方/第三方 bundle 的快照，可由部署件重新取得
 .workspace/lag-fix/**/raw/plugins/
 .workspace/lag-fix/**/served-client.js
+
+# 重型逐窗 raw dump（2026-09-21 用户裁决：不入库，保留本地）
+# 依据：这些是可脚本重生的中间产物；结论与重生命令已写入各自 audit.md / report.md。
+# 注：权威独占批 campaign-cpuX.json 体积 <1MB，已入库。
+.workspace/lag-fix/research-v2/cpu-profile/out/campaign-cpu[1-4].json
+.workspace/lag-fix/research-v2/cpu-profile/out/campaign-cpuL.json
+.workspace/lag-fix/research-v2/model-tab/raw/phase-main.json
+.workspace/lag-fix/research-v2/react-commit/raw/commitlog-*.json
+.workspace/lag-fix/research-v2/root-subscriptions/raw/dump-*.json
