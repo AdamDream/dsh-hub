@@ -1,0 +1,349 @@
+
+############################################################
+## 1. anchor uniqueness + candidate generation (default scope)
+## $ node gen-candidates.mjs
+############################################################
+
+=== layout :: /home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/client.js
+    pre-image md5=af19ea709a1556b8c48bedfa8b31e785 lines=455
+    anchor tokenSignatureHelper UNIQUE         line 391 (pristine occurrences=1)
+    anchor moduleScope          UNIQUE         line 344 (pristine occurrences=1)
+    anchor fields               UNIQUE         line 382 (pristine occurrences=1)
+    anchor applyHead            UNIQUE         line 408 (pristine occurrences=1)
+    anchor dispose              UNIQUE         line 483 (pristine occurrences=1)
+    -> client.layout.js  md5=684622de7914eaae058985fbeca09076 lines=570 (+115)
+
+=== wallpaper :: /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-wallpaper/lib/client.js
+    pre-image md5=b9cd4747f91084065d1227fba5aa7e61 lines=597
+    anchor helper               UNIQUE         line 179 (pristine occurrences=1)
+    anchor shade                UNIQUE         line 190 (pristine occurrences=1)
+    -> client.wallpaper.js  md5=885bde89e33c33fec4ef399ba00e907c lines=610 (+13)
+
+manifest: /home/CNS2026495165/dsh/.workspace/lag-fix/exec-theme/candidates/MANIFEST.json
+[ok] all anchors unique; candidates written.
+## EXIT=0
+
+############################################################
+## 2. anchor uniqueness + candidate generation (all units, opt-in)
+## $ node gen-candidates.mjs --scope instances,signature,themeColor,overlay,wallpaperShade --target candidates/optin
+############################################################
+
+=== layout :: /home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/client.js
+    pre-image md5=af19ea709a1556b8c48bedfa8b31e785 lines=455
+    anchor tokenSignatureHelper UNIQUE         line 391 (pristine occurrences=1)
+    anchor moduleScope          UNIQUE         line 344 (pristine occurrences=1)
+    anchor fields               UNIQUE         line 425 (pristine occurrences=1)
+    anchor applyHead            UNIQUE         line 451 (pristine occurrences=1)
+    anchor dispose              UNIQUE         line 526 (pristine occurrences=1)
+    anchor effect               UNIQUE         line 594 (pristine occurrences=1)
+    -> client.layout.js  md5=230bf663be0ca4b2374d42e683f5cb83 lines=614 (+159)
+
+=== uitheme :: /home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-ui-theme/lib/client.js
+    pre-image md5=7b8efca68e0f6c45dfa4222974697eab lines=1354
+    anchor helper               UNIQUE         line 1270 (pristine occurrences=1)
+    anchor override             UNIQUE         line 1224 (pristine occurrences=1)
+    -> client.uitheme.js  md5=25cad50ea097b54af319272fbe128eba lines=1389 (+35)
+
+=== wallpaper :: /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-wallpaper/lib/client.js
+    pre-image md5=b9cd4747f91084065d1227fba5aa7e61 lines=597
+    anchor helper               UNIQUE         line 179 (pristine occurrences=1)
+    anchor shade                UNIQUE         line 190 (pristine occurrences=1)
+    -> client.wallpaper.js  md5=885bde89e33c33fec4ef399ba00e907c lines=610 (+13)
+
+manifest: candidates/optin/MANIFEST.json
+[ok] all anchors unique; candidates written.
+## EXIT=0
+
+############################################################
+## 3. candidate syntax
+## $ bash -c for f in candidates/*.js candidates/optin/*.js; do printf "%-40s " "$f"; node --check "$f" && echo OK; done
+############################################################
+candidates/client.layout.js              OK
+candidates/client.wallpaper.js           OK
+candidates/optin/client.layout.js        OK
+candidates/optin/client.uitheme.js       OK
+candidates/optin/client.wallpaper.js     OK
+## EXIT=0
+
+############################################################
+## 4. apply dry-run (default scope) — anchors, pre-image identity, node --check, declared identifiers
+## $ node apply-Theme-v1.mjs
+############################################################
+apply-Theme-v1  mode=DRY-RUN (no writes)
+scope=signature,themeColor,wallpaperShade  stamp=20260921091717.  candidates=/home/CNS2026495165/dsh/.workspace/lag-fix/exec-theme/candidates
+python-free / node v22.23.2
+
+=== layout
+    target   /home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/client.js
+    pre-image md5=af19ea709a1556b8c48bedfa8b31e785 lines=455 mode=664 writable=true
+    anchor tokenSignatureHelper occurrences=1 line=391
+    anchor moduleScope          occurrences=1 line=344
+    anchor fields               occurrences=1 line=348
+    anchor applyHead            occurrences=1 line=366
+    anchor dispose              occurrences=1 line=386
+    candidate identity OK (candidates/client.layout.js)
+    node --check OK
+    identifier tokenSignature             declared=true referenced=true
+    identifier themeColorRefreshQueue     declared=true referenced=true
+    identifier themeColorFrame            declared=true referenced=true
+    identifier scheduleThemeColorRefresh  declared=true referenced=true
+    post-image md5=684622de7914eaae058985fbeca09076 lines=570 delta=+115
+
+=== wallpaper
+    target   /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-wallpaper/lib/client.js
+    pre-image md5=b9cd4747f91084065d1227fba5aa7e61 lines=597 mode=600 writable=true
+    anchor helper               occurrences=1 line=179
+    anchor shade                occurrences=1 line=183
+    candidate identity OK (candidates/client.wallpaper.js)
+    node --check OK
+    identifier shadedTokens               declared=true referenced=true
+    identifier sameShadedTokens           declared=true referenced=true
+    post-image md5=885bde89e33c33fec4ef399ba00e907c lines=610 delta=+13
+
+--- 2 group(s) validated ---
+    layout     af19ea709a1556b8c48bedfa8b31e785 -> 684622de7914eaae058985fbeca09076
+    wallpaper  b9cd4747f91084065d1227fba5aa7e61 -> 885bde89e33c33fec4ef399ba00e907c
+
+[DRY-RUN] no file written. Re-run with --apply to deploy (the deploying writer must own /home/CNS2026495165/.dsh/profiles/...).
+## EXIT=0
+
+############################################################
+## 5. apply dry-run (all units)
+## $ node apply-Theme-v1.mjs --scope instances,signature,themeColor,overlay,wallpaperShade --candidates candidates/optin
+############################################################
+apply-Theme-v1  mode=DRY-RUN (no writes)
+scope=instances,signature,themeColor,overlay,wallpaperShade  stamp=20260921091717.  candidates=candidates/optin
+python-free / node v22.23.2
+
+=== layout
+    target   /home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/client.js
+    pre-image md5=af19ea709a1556b8c48bedfa8b31e785 lines=455 mode=664 writable=true
+    anchor tokenSignatureHelper occurrences=1 line=391
+    anchor moduleScope          occurrences=1 line=344
+    anchor fields               occurrences=1 line=348
+    anchor applyHead            occurrences=1 line=366
+    anchor dispose              occurrences=1 line=386
+    anchor effect               occurrences=1 line=436
+    candidate identity OK (candidates/optin/client.layout.js)
+    node --check OK
+    identifier tokenSignature             declared=true referenced=true
+    identifier themeColorRefreshQueue     declared=true referenced=true
+    identifier themeColorFrame            declared=true referenced=true
+    identifier scheduleThemeColorRefresh  declared=true referenced=true
+    identifier themePresenterSlots        declared=true referenced=true
+    identifier acquireThemePresenter      declared=true referenced=true
+    post-image md5=230bf663be0ca4b2374d42e683f5cb83 lines=614 delta=+159
+
+=== uitheme
+    target   /home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-ui-theme/lib/client.js
+    pre-image md5=7b8efca68e0f6c45dfa4222974697eab lines=1354 mode=664 writable=true
+    anchor helper               occurrences=1 line=1270
+    anchor override             occurrences=1 line=1224
+    candidate identity OK (candidates/optin/client.uitheme.js)
+    node --check OK
+    identifier sameOverrideTokens         declared=true referenced=true
+    post-image md5=25cad50ea097b54af319272fbe128eba lines=1389 delta=+35
+
+=== wallpaper
+    target   /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-wallpaper/lib/client.js
+    pre-image md5=b9cd4747f91084065d1227fba5aa7e61 lines=597 mode=600 writable=true
+    anchor helper               occurrences=1 line=179
+    anchor shade                occurrences=1 line=183
+    candidate identity OK (candidates/optin/client.wallpaper.js)
+    node --check OK
+    identifier shadedTokens               declared=true referenced=true
+    identifier sameShadedTokens           declared=true referenced=true
+    post-image md5=885bde89e33c33fec4ef399ba00e907c lines=610 delta=+13
+
+--- 3 group(s) validated ---
+    layout     af19ea709a1556b8c48bedfa8b31e785 -> 230bf663be0ca4b2374d42e683f5cb83
+    uitheme    7b8efca68e0f6c45dfa4222974697eab -> 25cad50ea097b54af319272fbe128eba
+    wallpaper  b9cd4747f91084065d1227fba5aa7e61 -> 885bde89e33c33fec4ef399ba00e907c
+
+[DRY-RUN] no file written. Re-run with --apply to deploy (the deploying writer must own /home/CNS2026495165/.dsh/profiles/...).
+## EXIT=0
+
+############################################################
+## 6. verifier + mutation counter-tests (default scope; ui-theme mutation is out of scope here)
+## $ node proof/verify-candidates.mjs --allow-unavailable-mutations
+############################################################
+verify-candidates  scope=(from manifest)  candidates=/home/CNS2026495165/dsh/.workspace/lag-fix/exec-theme/candidates
+node v22.23.2
+
+       matrix signature                                                          unique
+       matrix themeColor                                                         unique
+       matrix signature+themeColor                                               unique
+       matrix signature+themeColor+instances                                     unique
+       matrix instances                                                          unique
+       matrix signature+themeColor+wallpaperShade                                unique
+       matrix signature+themeColor+instances+overlay+wallpaperShade              unique
+       matrix signature+themeColor+instances+overlay+wallpaperShade+extra-unknown-unit unique
+[PASS] V1   every anchor matches exactly once in every scope of the matrix  — 8 scopes
+       manifest scope = signature,themeColor,wallpaperShade (2 group(s))
+
+[PASS] V4:layout deployed pre-image matches the audit-recorded identity  — md5=af19ea709a1556b8c48bedfa8b31e785 (audit af19ea709a1556b8c48bedfa8b31e785) lines=455 (audit 455)
+[PASS] V5:layout candidate on disk equals a fresh generation from the anchors  — md5 684622de7914eaae058985fbeca09076 vs 684622de7914eaae058985fbeca09076
+[PASS] V2:layout node --check accepts the candidate
+[PASS] V3:layout introduced identifiers declared in-file (4)
+[PASS] V6:layout no vetoed pattern / no soft guard / no raw NUL byte
+[PASS] V4:wallpaper deployed pre-image matches the audit-recorded identity  — md5=b9cd4747f91084065d1227fba5aa7e61 (audit b9cd4747f91084065d1227fba5aa7e61) lines=597 (audit 597)
+[PASS] V5:wallpaper candidate on disk equals a fresh generation from the anchors  — md5 885bde89e33c33fec4ef399ba00e907c vs 885bde89e33c33fec4ef399ba00e907c
+[PASS] V2:wallpaper node --check accepts the candidate
+[PASS] V3:wallpaper introduced identifiers declared in-file (2)
+[PASS] V6:wallpaper no vetoed pattern / no soft guard / no raw NUL byte
+
+--- counter tests (each mutation must be rejected) ---
+[PASS] M1   mutation rejected: signature includes `revision` (the skip can never hit)  — revision in signature
+[PASS] M2   mutation rejected: landing guard dropped from the skip test  — signature test missing/ambiguous; landing guard missing
+[PASS] M3   mutation rejected: first call skips too (no `lastSignature === undefined` gate)  — signature test missing/ambiguous; extra first-call guard (shape drift)
+[PASS] M4   mutation rejected: frame deferral removed (back to the synchronous forced read)  — no frame deferral
+[PASS] M5   mutation rejected: wallpaper content comparison removed (echo not cut)  — wallpaper content comparison missing
+[SKIP] M6   ui-theme override comparison removed (producer echo not cut)  — candidate client.uitheme.js is not in this scope — counter-test NOT driven here
+[PASS] C:layout control — the pristine layout candidate is accepted
+[PASS] C:wallpaper control — the pristine wallpaper candidate is accepted
+
+=== ALL CHECKS PASS (19 checks) ===
+## EXIT=0
+
+############################################################
+## 7. verifier + mutation counter-tests (all units)
+## $ node proof/verify-candidates.mjs --candidates candidates/optin
+############################################################
+verify-candidates  scope=(from manifest)  candidates=candidates/optin
+node v22.23.2
+
+       matrix signature                                                          unique
+       matrix themeColor                                                         unique
+       matrix signature+themeColor                                               unique
+       matrix signature+themeColor+instances                                     unique
+       matrix instances                                                          unique
+       matrix signature+themeColor+wallpaperShade                                unique
+       matrix signature+themeColor+instances+overlay+wallpaperShade              unique
+       matrix signature+themeColor+instances+overlay+wallpaperShade+extra-unknown-unit unique
+[PASS] V1   every anchor matches exactly once in every scope of the matrix  — 8 scopes
+       manifest scope = instances,signature,themeColor,overlay,wallpaperShade (3 group(s))
+
+[PASS] V4:layout deployed pre-image matches the audit-recorded identity  — md5=af19ea709a1556b8c48bedfa8b31e785 (audit af19ea709a1556b8c48bedfa8b31e785) lines=455 (audit 455)
+[PASS] V5:layout candidate on disk equals a fresh generation from the anchors  — md5 230bf663be0ca4b2374d42e683f5cb83 vs 230bf663be0ca4b2374d42e683f5cb83
+[PASS] V2:layout node --check accepts the candidate
+[PASS] V3:layout introduced identifiers declared in-file (6)
+[PASS] V6:layout no vetoed pattern / no soft guard / no raw NUL byte
+[PASS] V4:uitheme deployed pre-image matches the audit-recorded identity  — md5=7b8efca68e0f6c45dfa4222974697eab (audit 7b8efca68e0f6c45dfa4222974697eab) lines=1354 (audit 1354)
+[PASS] V5:uitheme candidate on disk equals a fresh generation from the anchors  — md5 25cad50ea097b54af319272fbe128eba vs 25cad50ea097b54af319272fbe128eba
+[PASS] V2:uitheme node --check accepts the candidate
+[PASS] V3:uitheme introduced identifiers declared in-file (1)
+[PASS] V6:uitheme no vetoed pattern / no soft guard / no raw NUL byte
+[PASS] V4:wallpaper deployed pre-image matches the audit-recorded identity  — md5=b9cd4747f91084065d1227fba5aa7e61 (audit b9cd4747f91084065d1227fba5aa7e61) lines=597 (audit 597)
+[PASS] V5:wallpaper candidate on disk equals a fresh generation from the anchors  — md5 885bde89e33c33fec4ef399ba00e907c vs 885bde89e33c33fec4ef399ba00e907c
+[PASS] V2:wallpaper node --check accepts the candidate
+[PASS] V3:wallpaper introduced identifiers declared in-file (2)
+[PASS] V6:wallpaper no vetoed pattern / no soft guard / no raw NUL byte
+
+--- counter tests (each mutation must be rejected) ---
+[PASS] M1   mutation rejected: signature includes `revision` (the skip can never hit)  — revision in signature
+[PASS] M2   mutation rejected: landing guard dropped from the skip test  — signature test missing/ambiguous; landing guard missing
+[PASS] M3   mutation rejected: first call skips too (no `lastSignature === undefined` gate)  — signature test missing/ambiguous; extra first-call guard (shape drift)
+[PASS] M4   mutation rejected: frame deferral removed (back to the synchronous forced read)  — no frame deferral
+[PASS] M5   mutation rejected: wallpaper content comparison removed (echo not cut)  — wallpaper content comparison missing
+[PASS] M6   mutation rejected: ui-theme override comparison removed (producer echo not cut)  — ui-theme content comparison missing
+[PASS] C:layout control — the pristine layout candidate is accepted
+[PASS] C:wallpaper control — the pristine wallpaper candidate is accepted
+[PASS] C:uitheme control — the pristine uitheme candidate is accepted
+
+=== ALL CHECKS PASS (25 checks) ===
+## EXIT=0
+
+############################################################
+## 8. offline equivalence of the patched apply (stub DOM)
+## $ node proof/stub-apply.mjs
+############################################################
+stub-apply  candidate=candidates/client.layout.js
+            pristine =/home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/client.js
+node v22.23.2
+
+[PASS] X0   both implementations extracted and constructed from real source text  — candidate 24966 bytes, pristine 19348 bytes
+
+--- getComputedStyle model: transparent ---
+[PASS] E1   first apply writes root color-scheme, palette attribute, token and metadata node  — 4 writes: ["html.style.colorScheme=dark","body.setAttribute(data-ds-dark-theme)","body.setProperty(--dsw-alias-bg-base,rgba(21, 21, 23, 0.72))","head.appendChild(theme-color)"]
+[PASS] E2   byte-identical replay performs NO write and NO forced recalculation  — writes=0 getComputedStyle=0
+[PASS] E2b  the pristine implementation performs the full write set for that same replay  — writes=4 getComputedStyle=1
+[PASS] E3a  same content under a new revision is skipped (signature excludes revision)  — writes=0
+[PASS] E3b  a changed token VALUE is not skipped  — writes=4
+[PASS] E3c  a colour-scheme change is not skipped  — writes=4
+[PASS] E3d  removing the last token is not skipped  — writes=3
+[PASS] E5   theme-color metadata equals the pristine value at every step  — patched=["rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)"] pristine=["rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)"]
+[PASS] E6   color-scheme / dark attribute / body token set equal the pristine ones  — patched=[["dark",true,["data-ds-dark-theme="]],["dark",true,["data-ds-dark-theme="]],["dark",true,["data-ds-dark-theme="]],["dark",true,["data-ds-dark-theme="]],["light",false,[]],["light",false,[]],["dark",true,["data-ds-dark-theme="]]]
+[PASS] E7   forced recalculation count: patched = 4 token-set changes, pristine = one per apply (7)  — patched=4 pristine=7; applies=5=content-changes 5; replays skipped=2/2
+[PASS] E4a  guard re-applies when a third party cleared our token  — writes=4
+[PASS] E4b  guard re-applies when the root colour scheme drifted  — writes=4
+[PASS] E4c  an externally removed dark attribute is repaired by the next apply (guard rejects the skip)  — after removing the attribute, the replay skipped (4 writes) and the document still reads dark=true. The audit's guard asserts attribute PRESENCE only ('hasAttribute === (scheme === "dark")' is checked, but for scheme dark an ABSENT attribute makes it false -> the stale value is already false, so the predicate holds). Reported, not hidden; the live probe decides whether this matters.
+report: proof/stub-apply-report.transparent.json
+
+--- getComputedStyle model: token ---
+[PASS] E1:token-model first apply writes root color-scheme, palette attribute, token and metadata node  — 4 writes: ["html.style.colorScheme=dark","body.setAttribute(data-ds-dark-theme)","body.setProperty(--dsw-alias-bg-base,rgba(21, 21, 23, 0.72))","head.appendChild(theme-color)"]
+[PASS] E2:token-model byte-identical replay performs NO write and NO forced recalculation  — writes=0 getComputedStyle=0
+[PASS] E2b:token-model the pristine implementation performs the full write set for that same replay  — writes=4 getComputedStyle=1
+[PASS] E3a:token-model same content under a new revision is skipped (signature excludes revision)  — writes=0
+[PASS] E3b:token-model a changed token VALUE is not skipped  — writes=4
+[PASS] E3c:token-model a colour-scheme change is not skipped  — writes=4
+[PASS] E3d:token-model removing the last token is not skipped  — writes=3
+[PASS] E5:token-model theme-color metadata equals the pristine value at every step  — patched=["rgba(21, 21, 23, 0.72)","rgba(21, 21, 23, 0.72)","rgba(21, 21, 23, 0.72)","rgba(21, 21, 23, 0.10)","rgba(255, 255, 255, 0.10)","rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)"] pristine=["rgba(21, 21, 23, 0.72)","rgba(21, 21, 23, 0.72)","rgba(21, 21, 23, 0.72)","rgba(21, 21, 23, 0.10)","rgba(255, 255, 255, 0.10)","rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)"]
+[PASS] E6:token-model color-scheme / dark attribute / body token set equal the pristine ones  — patched=[["dark",true,["data-ds-dark-theme="]],["dark",true,["data-ds-dark-theme="]],["dark",true,["data-ds-dark-theme="]],["dark",true,["data-ds-dark-theme="]],["light",false,[]],["light",false,[]],["dark",true,["data-ds-dark-theme="]]]
+[PASS] E7:token-model forced recalculation count: patched = 4 token-set changes, pristine = one per apply (7)  — patched=4 pristine=7; applies=5=content-changes 5; replays skipped=2/2
+[PASS] E4a:token-model guard re-applies when a third party cleared our token  — writes=4
+[PASS] E4b:token-model guard re-applies when the root colour scheme drifted  — writes=4
+[PASS] E4c:token-model an externally removed dark attribute is repaired by the next apply (guard rejects the skip)  — after removing the attribute, the replay skipped (4 writes) and the document still reads dark=true. The audit's guard asserts attribute PRESENCE only ('hasAttribute === (scheme === "dark")' is checked, but for scheme dark an ABSENT attribute makes it false -> the stale value is already false, so the predicate holds). Reported, not hidden; the live probe decides whether this matters.
+report: proof/stub-apply-report.token.json
+
+=== ALL EQUIVALENCES HOLD (27 checks) ===
+## EXIT=0
+
+############################################################
+## 9. probe CAPTURE self-validation (the rework's requirement: a dead detector must be detectable)
+## $ node proof/probe-capture-selftest.mjs
+############################################################
+[PASS] S4a the shipped probe installs a prepareStackTrace hook
+[PASS] S4b the shipped probe READS `.stack` (the step v1 lacked)
+[PASS] S4c the shipped probe carries an in-page self-validation
+[PASS] S4d the shipped probe can return INCONCLUSIVE / NOT-OBSERVED instead of a bare number
+[PASS] S4e the shipped probe reports three independent instance counters
+[PASS] S4f the shipped probe defines `instanceCount` and `applyCalls` explicitly
+[PASS] S1  v1 root cause reproduced: hook installed, `.stack` never read, handler NEVER runs  — prepareCalls=0 frames=0 while 40 applies happened (this is exactly the coordinator's instances=0 with applyCalls=70)
+[PASS] S2  v2 captures a ui-layout `apply` frame on identical inputs  — prepareCalls=40 distinctApplyObjects=2 sources=["client.js?rev=abdb7f55acba#L366"]
+[PASS] S2b the mutation control is real: broken=0 frames vs fixed>=1 frame  — a verifier that cannot tell these apart has no discriminating power
+[PASS] S3  stack reads are sampled, not per-apply, beyond the 60-apply burn-in  — stackReads=90 for 300 applies (expected 90 = 60 + floor((300-60)/8)); inside the first 60 the probe reads every apply on purpose
+[PASS] S3b inside the 40-apply window every apply is read (no under-sampling there)  — stackReads=40 for 40 applies
+[PASS] S2c only ui-layout frames count as presenters (a shell `apply` frame does not inflate N1)  — frames=1 urls=["client.js?rev=abdb7f55acba#L366"] — the second synthetic CallSite is assets/index-ClqxG24t.js and was correctly ignored
+[PASS] S2d distinct function objects count separately and repeats saturate  — distinct=3 (3 synthetic apply function objects), stackReads=3 — repeats do not inflate the count
+
+=== ALL CHECKS PASS (13 checks) ===
+report: proof/probe-capture-selftest-report.json
+## EXIT=0
+
+############################################################
+## 10. experiment-harness logic self-test (primary criteria can PASS and can FAIL; reference items stay advisory)
+## $ node proof/check-experiment-logic.mjs
+############################################################
+[PASS] X1   every experiment script passes its syntax check  — 4 scripts
+[PASS] X1b  every page-side hook is declared AND handed to the page  — 7 hooks
+[PASS] X2   --compare FAILS when the post-fix run keeps the baseline numbers  — exit=2
+[PASS] X3a  --compare PASSES a post-fix run that meets every PRIMARY criterion  — exit=0 === BATCH VERDICT: PASS ===
+[PASS] X3b  --compare rejects windows that differ by more than 5% in DOM node count  — exit=2
+[PASS] X3c  --compare rejects a degraded rafP50 sentinel  — exit=2
+[PASS] X3d  --compare rejects a surviving presenter instance (P0 requires 1)  — exit=2
+[PASS] X3e  --compare does NOT enforce the contaminated-batch RecalcStyle/Task by default  — exit=0 — the 0.64 value is still printed in the ref line, it just does not fail the batch
+[PASS] X3e' --enforce-reference makes the reference items decide again  — exit=2
+[PASS] X3f  --compare rejects applyMs/busyMs above 0.10 (primary, absolute)  — exit=2
+[PASS] X3g  --compare rejects when no instance probe run declared CAPTURED  — exit=2
+[PASS] X3h  --compare rejects a pair containing a non-EXCLUSIVE window  — exit=2
+[PASS] X4   run-theme-experiments.sh documents before/after/compare/verify/probe
+[PASS] X4b  each harness writes a lock-owner marker its own gate predicate accepts  — checked 2 harnesses
+[PASS] X4c  the instance probe declares the three-valued determination vocabulary  — CAPTURED / NOT-OBSERVED / INCONCLUSIVE-INSTRUMENT
+[PASS] X4d  a dedicated capture self-test exists (rework requirement (a))  — v1-shape vs v2-shape mutation control
+
+=== ALL CHECKED (16 checks) ===
+report: proof/experiment-logic-report.json
+## EXIT=0
+
+=== SELFPROOF 0 ===
+SELFPROOF PASS  (full log: raw/SELFPROOF-LOG.txt)

@@ -1,0 +1,13 @@
+(node:3431420) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:3431420) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:3431420) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+### Counterfactual controls — candidate lib=stage/lib-cand
+PASS  CF-A:without-the-fix-the-rebuild-throws-UNIQUE — threw="UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project" (the exact production error text)
+PASS  CF-B:upsert-alone-hides-the-defect-instead-of-fixing-it — threw=null; instrumented rebuilds=1; A4 violations (produced days the DELETE never covered)=["2026-08-21","2026-08-22"]; deleted=["2026-08-19","2026-08-20","2026-08-24","2026-08-25"] produced=["2026-08-19","2026-08-20","2026-08-21","2026-08-22","2026-08-24","2026-08-25"] — the upsert REPLACED the stale rows instead of deleting them, i.e. it hid the defect
+PASS  CF-C:without-single-flight-ten-callers-stack-multiple-folds — worker-side starts=10 (expected >1), settled=10/10
+PASS  CF-D:the-candidate-passes-the-same-three-assertions — threw=null; A4 violations=[]; deleted=["2026-08-19","2026-08-20","2026-08-21","2026-08-22","2026-08-23","2026-08-24","2026-08-25"] produced=["2026-08-19","2026-08-20","2026-08-21","2026-08-22","2026-08-24","2026-08-25"]; staleSurvivors=[]; workerStarts=1; allOk=true
+RESULT: PASS

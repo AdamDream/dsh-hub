@@ -1,0 +1,80 @@
+dsh-perf-fix Ingest-v1 — anchor patch
+  mode    : APPLY (writes)
+  root    : /home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/verify-cand
+  pre-image: /home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/verify-cand-pre
+
+── db.js  [patch]  sha(before)=77ab2e8ec489024f sha(after)=ecb86c2357314c2c
+   [ok]   D1-openUsageDb-pragmas — anchor unique ✓
+   [ok]   D2-rebuildDaily-range-and-span — anchor unique ✓
+   [ok]   D3-placeholders-moved-to-span — anchor unique ✓
+   [ok]   D3b-delete-uses-span — anchor unique ✓
+   [ok]   D4-insert-upsert — anchor unique ✓
+   [ok]   D5-export-invalidate — anchor unique ✓
+   [ok]   decl:export function invalidateMaxDailyDayCache — present
+   [ok]   decl:const spanDays = [] — present
+   [ok]   decl:const placeholders = spanDays.map(() => "?") — present
+   [ok]   decl:PRAGMA busy_timeout = 5000 — present
+   [ok]   decl:PRAGMA temp_store = 2 — present
+   [ok]   decl:ON CONFLICT(day, data_source, model, project — present
+   [ok]   node --check <file>
+   [ok]   node --check <esm .mjs copy>
+
+── index.js  [patch]  sha(before)=743469a5aaa22e0e sha(after)=ce85f4bdf2bfb0d9
+   [ok]   I1-import-runner — anchor unique ✓
+   [ok]   I2-switch-constants — anchor unique ✓
+   [ok]   I3-runner-variable — anchor unique ✓
+   [ok]   I4-runIngest-split — anchor unique ✓
+   [ok]   I5-runIngest-dispatch — anchor unique ✓
+   [ok]   I6-register-rpc — anchor unique ✓
+   [ok]   I7-create-runner — anchor unique ✓
+   [ok]   I8-timer-block — anchor unique ✓
+   [ok]   I9-dispose-runner — anchor unique ✓
+   [ok]   decl:import { createIngestRunner } from "./ingest — present
+   [ok]   decl:const INGEST_VIA_WORKER = true; — present
+   [ok]   decl:const INGEST_TIMER_ENABLED = false; — present
+   [ok]   decl:let runner = null; — present
+   [ok]   decl:const runIngestSync = async () => — present
+   [ok]   decl:const runIngestWorker = async () => — present
+   [ok]   decl:waitIdle: () => (runner === null ? runIngest — present
+   [ok]   decl:ctx.inject(["timer"], (timerCtx) => { — present
+   [ok]   decl:void runner?.dispose(); — present
+   [ok]   import:index.js←./ingest-runner.js:createIngestRunner — exported ✓
+   [ok]   node --check <file>
+   [ok]   node --check <esm .mjs copy>
+
+── rpc.js  [patch]  sha(before)=3c91ac22f4863b0e sha(after)=6a3e774181d262de
+   [ok]   R1-deps-waitIdle — anchor unique ✓
+   [ok]   R2-refresh-dedupe — anchor unique ✓
+   [ok]   decl:const { ingest, statusProvider, waitIdle } = — present
+   [ok]   decl:if (typeof waitIdle === "function") await wa — present
+   [ok]   node --check <file>
+   [ok]   node --check <esm .mjs copy>
+
+── ingest-worker.js  [create]  sha(before)=— sha(after)=15ac65f7d6c009d3
+   [ok]   new-file — absent
+   [ok]   decl:import { openUsageDb } from "./db.js"; — present
+   [ok]   decl:import { foldDshSource } from "./ingest-dsh. — present
+   [ok]   decl:import { foldCcSource } from "./ingest-cc.js — present
+   [ok]   forbid:resolveDbPath — absent
+   [ok]   import:ingest-worker.js←./db.js:openUsageDb — exported ✓
+   [ok]   import:ingest-worker.js←./ingest-dsh.js:foldDshSource — exported ✓
+   [ok]   import:ingest-worker.js←./ingest-cc.js:foldCcSource — exported ✓
+   [ok]   node --check <file>
+   [ok]   node --check <esm .mjs copy>
+
+── ingest-runner.js  [create]  sha(before)=— sha(after)=92acb9bc014fa110
+   [ok]   new-file — absent
+   [ok]   decl:import { Worker } from "node:worker_threads" — present
+   [ok]   decl:import { invalidateMaxDailyDayCache } from " — present
+   [ok]   decl:export function createIngestRunner(options = — present
+   [ok]   import:ingest-runner.js←./db.js:invalidateMaxDailyDayCache — exported ✓
+   [ok]   node --check <file>
+   [ok]   node --check <esm .mjs copy>
+
+
+WROTE db.js (patched) pre-image=db.js
+WROTE index.js (patched) pre-image=index.js
+WROTE rpc.js (patched) pre-image=rpc.js
+WROTE ingest-worker.js (create) pre-image=ingest-worker.js.ABSENT
+WROTE ingest-runner.js (create) pre-image=ingest-runner.js.ABSENT
+pre-image dir: /home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/verify-cand-pre

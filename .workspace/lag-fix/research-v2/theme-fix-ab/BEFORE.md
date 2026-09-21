@@ -38,3 +38,32 @@
 ## 三、修复后（待采）
 
 落主题批（热面）后，用**完全相同的命令**但 `--stamp after-theme` 重跑，按 §二 判据比对。
+
+---
+
+## 四、单元 (0)「实例去重」的开闸探针：**结论无效（协调者核实）**
+
+执行档交付的 `exec-theme/experiments/probe-instances.mjs` 在两个场景下均输出 `instances=0 / urls={}` 与
+`VERDICT: single presenter — unit (0) has nothing to remove in this window`。**但同一窗口 `data.applyCalls = 70 / 31`**，
+且 **`data.sample` 为空**（栈扫描一帧都没记录）。
+
+⇒ **"instances=0" 是探测器失效，不是"单实例"**：`Error.prepareStackTrace` 路径未能捕获任何 `apply` 帧。
+⇒ 与执行档此前用 profile `bundles[].fns` 数出的「line 366 函数对象 **4/4**（home-idle）、**6**（settings-open / models-tab）」**直接矛盾**。
+⇒ **裁决**：单元 (0) 仍**未定性**，退回返工（要求：器械自证 + 第二种独立口径复核 + 明确 `instanceCount` 与 `applyCalls` 的口径差异）；
+**不得**用空样本关闭该单元，也**不得**据此宣称"单 presenter"。
+
+### 4.1 探针顺带产出的一条可用事实（并推翻该档一处静态结论）
+`body background rules` 实测**存在** `body{background: var(--dsw-alias-bg-base, #fff)}`，
+且四值相等：`computedBodyBackgroundColor == inlineTokenBgBase == computedBodyBgBaseToken == themeColorMetaContent`
+（本次均为 `rgba(255, 255, 255, 0.88)`）。
+⇒ 该档"**没有任何规则给 body 设 background**"的静态结论**是错的**（它据此否决 ii-a）。
+⇒ 但 `(ii-b)` 仍应保留：它读的是**计算值本身**，在 token 未定义/被第三方覆盖时同样保值；`(ii-a)` 依赖"token 存在且等于计算值"这一前提。
+
+## 五、协调者对执行档三处偏离的裁决
+
+| 偏离 | 裁决 | 理由 |
+|---|---|---|
+| `(ii-b)` 取代审计首推的 `(ii-a)` | **接受** | 真实理由是**无条件保值**（不是该档给出的"无 body background 规则"——那句已被 §4.1 推翻） |
+| 守卫 `appliedTokens` → `lastTokens` | **接受** | 原守卫因 `:373` 先清空而**恒真**（等价无守卫），属真实缺陷修正 |
+| 阈值逐字抄自审计 §4 | **部分接受** | 相对降幅类判据为主；`recalcOverTask ≤0.15`、`applyMs/busyMs ≤0.10` 等**绝对值取自受污染批**（独占实测 31–35%）⇒ 仅作参考并在报告标注来源 |
+

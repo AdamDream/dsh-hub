@@ -1,0 +1,7 @@
+
+### B2 timer-switch shape (real cordis 4.0.2 + cordis-plugin-timer 1.1.4)
+PASS  B2a:switch-OFF-installs-nothing-and-throws-nothing — {"enabled":false,"injectCalls":0,"installed":false,"hasSetIntervalInInject":null,"ticks":0,"bootstrapError":null,"legacyProbeThrew":"cannot get property \"timer\" without inject"}
+PASS  B2b:switch-ON-installs-after-a-long-synchronous-occupation — {"enabled":true,"injectCalls":1,"installed":true,"hasSetIntervalInInject":"function","ticks":13,"bootstrapError":null,"legacyProbeThrew":"cannot get property \"timer\" without inject"}
+PASS  B2c:switch-ON-interval-actually-fires — 13 tick(s) of a 250ms interval within ~2s after a 1500ms synchronous spin
+PASS  B2d:the-legacy-typeof-probe-is-what-threw — reading ctx.setInterval with the current inject list threw: "cannot get property \"timer\" without inject"
+RESULT: PASS

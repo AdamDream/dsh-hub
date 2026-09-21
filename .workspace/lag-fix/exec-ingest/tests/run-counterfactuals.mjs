@@ -124,13 +124,16 @@ const evidence = {};
 {
 	const libDir = variantLib("fixBonly", (file, source) => {
 		if (file !== "db.js") return source;
-		const anchor = "`).run(lo, hiExclusive);";
+		// Exactly the production 修法 B text, i.e. the clause must land INSIDE the
+		// SQL template literal (before its closing backtick).
+		const anchor = "GROUP BY day, data_source, COALESCE(model, '(unknown)'), COALESCE(project, '(unknown)')`).run(lo, hiExclusive);";
 		if (!source.includes(anchor)) throw new Error("CF-B anchor missing");
 		const upsert =
-			"`)\nON CONFLICT(day, data_source, model, project) DO UPDATE SET\n" +
+			"GROUP BY day, data_source, COALESCE(model, '(unknown)'), COALESCE(project, '(unknown)')\n" +
+			"ON CONFLICT(day, data_source, model, project) DO UPDATE SET\n" +
 			"  requests = excluded.requests,\n  input_tokens = excluded.input_tokens,\n" +
 			"  output_tokens = excluded.output_tokens,\n  cache_read_tokens = excluded.cache_read_tokens,\n" +
-			"  cache_write_tokens = excluded.cache_write_tokens`.run(lo, hiExclusive);";
+			"  cache_write_tokens = excluded.cache_write_tokens`).run(lo, hiExclusive);";
 		const withUpsert = source.replace(anchor, upsert);
 		// …and be explicit: no interval alignment in this variant
 		if (withUpsert.includes("spanDays")) throw new Error("CF-B must not carry fix A");

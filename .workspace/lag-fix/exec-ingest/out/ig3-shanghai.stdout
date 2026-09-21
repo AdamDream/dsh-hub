@@ -1,0 +1,10 @@
+
+### U-IG3 acceptance — TZ=Asia/Shanghai lib=stage/lib-cand
+PASS  A1a:non-contiguous-rebuild-does-not-throw — no UNIQUE failure
+PASS  A2a:daily-converges-to-events(JS aggregation) — keys expected=12 actual=12 mismatched=0 orphan=0
+PASS  A2b:no-stale-row-survives — 0 row(s) still carry the pre-seeded 999 marker
+PASS  A2c:equals-full-recompute — row-for-row identical to a full recompute
+PASS  A5:three-consecutive-rebuilds-stable — 3 runs, 1 distinct result(s)
+PASS  A4:produced-day-set-is-a-subset-of-the-DELETE-set — 2 instrumented rebuild(s); DELETE set=["2026-08-19","2026-08-20","2026-08-21","2026-08-22","2026-08-23","2026-08-24","2026-08-25"]; GROUP BY produced=["2026-08-19","2026-08-20","2026-08-21","2026-08-22","2026-08-24","2026-08-25"]; produced∖deleted=[]
+PASS  A3:endpoints-same-with-and-without-the-daily-rebuild — 8 endpoints, events=12, daily rows after rebuild=12; byte-identical=true
+RESULT: PASS

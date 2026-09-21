@@ -1,0 +1,15 @@
+(node:3430504) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:3430504) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:3430504) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+### G4 worker lifecycle — lib=stage/lib-cand
+PASS  G4a:one-pass-one-thread — ok=true threads 7→8 (threadId=1)
+PASS  G4b:dispose-leaves-no-worker-thread — threads back to 7 (baseline 7) after 0ms
+PASS  G4c:run-after-dispose-is-a-no-op-and-spawns-nothing — result={"ok":false,"reason":"disposed"} threads=7
+PASS  G4d:crash-settles-and-next-run-rebuilds — first={"ok":false,"reason":"worker-exit"} second.ok=true workerSpawns=2 threads=7
+PASS  G4e:stall-watchdog-terminates-then-rebuilds-without-retry — stalled after 402ms → {"ok":false,"reason":"stalled"}; rebuild ok=true; stalls=1 runs=2 workerSpawns=2; threads=7
+PASS  G4f:watchdog-keys-on-progress-not-total-duration — ok=true stalls=0 timeouts=0
+RESULT: PASS

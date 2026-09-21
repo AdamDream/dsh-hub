@@ -3,18 +3,21 @@
  * proof/check-experiment-logic.mjs — exercise the experiment harnesses WITHOUT a browser.
  *
  *   X1   every experiment script passes its syntax check;
- *   X1b  every page-side hook is declared AND serialised with toString() into the page (a body
- *        that failed to parse would throw at that call, and each harness logs `patched` back);
+ *   X1b  every page-side hook is declared AND handed to the page;
  *   X2   `theme-ab.mjs --compare` REJECTS a post-fix run that keeps the baseline numbers —
  *        the verdict logic must be able to fail, or a PASS means nothing;
- *   X3a  `--compare` ACCEPTS a synthetic post-fix run that meets every §4 threshold;
- *   X3b  `--compare` rejects windows that differ by more than 5% in DOM node count;
- *   X3c  `--compare` rejects a degraded `rafP50` (the "did not break" sentinel);
- *   X3d  `--compare` rejects a surviving presenter instance (P0 requires exactly 1);
- *   X3e  `--compare` rejects `RecalcStyle/Task` above 0.15;
- *   X3f  `--compare` rejects `applyMs/busyMs` above 0.10;
- *   X4   the runner documents its subcommands and each harness writes a lock-owner marker its
- *        own gate predicate accepts.
+ *   X3a  ACCEPTS a synthetic post-fix run that meets every PRIMARY criterion;
+ *   X3b  rejects windows differing by more than 5% in DOM node count;
+ *   X3c  rejects a degraded `rafP50` (the "nothing broke" sentinel);
+ *   X3d  rejects a surviving presenter instance (P0 requires 1);
+ *   X3e  does NOT enforce the contaminated-batch RecalcStyle/Task by default, and X3e' DOES
+ *        enforce it with --enforce-reference (the coordinator's provenance ruling);
+ *   X3f  rejects `applyMs/busyMs` above 0.10 (a primary, absolute guard);
+ *   X3g  rejects an instance probe that did not declare CAPTURED;
+ *   X3h  rejects a pair containing a non-EXCLUSIVE window;
+ *   X4   the runner documents its subcommands, each harness writes a lock-owner marker its own
+ *        gate predicate accepts, the probe declares the three-valued determination vocabulary,
+ *        and a dedicated capture self-test exists.
  *
  * Usage: node proof/check-experiment-logic.mjs
  * Exit: 0 all PASS.
@@ -52,7 +55,7 @@ check("X1", "every experiment script passes its syntax check", problems.length =
 
 const HOOKS = [
 	["experiments/theme-ab.mjs", ["INIT", "RESET", "COLLECT"]],
-	["experiments/probe-instances.mjs", ["PROBE", "COLLECT"]],
+	["experiments/probe-instances.mjs", ["PROBE", "SELFVAL", "COLLECT"]],
 	["experiments/verify-functional.mjs", ["DUMP"]]
 ];
 const hookProblems = [];
@@ -62,13 +65,14 @@ for (const [file, names] of HOOKS) {
 	for (const name of names) {
 		hookCount += 1;
 		if (!new RegExp("^const " + name + " = \\(", "m").test(text)) hookProblems.push(`${file}:${name} not declared`);
-		if (!text.includes(`${name}.toString()`)) hookProblems.push(`${file}:${name} not serialised into the page`);
+		const serialised = text.includes(`${name}.toString()`) || new RegExp("addInitScript\\(" + name + "[,)]").test(text);
+		if (!serialised) hookProblems.push(`${file}:${name} not handed to the page`);
 	}
 }
-check("X1b", "every page-side hook is declared AND serialised with toString() into the page", hookProblems.length === 0, hookProblems.join("; ") || `${hookCount} hooks`);
+check("X1b", "every page-side hook is declared AND handed to the page", hookProblems.length === 0, hookProblems.join("; ") || `${hookCount} hooks`);
 
 // ---------------------------------------------------------------------------
-// synthetic window records
+// synthetic window records (shape of cpuL's long-session window)
 // ---------------------------------------------------------------------------
 const win = (o) => ({
 	variant: o.variant ?? "A",
@@ -91,7 +95,7 @@ const win = (o) => ({
 	longtasks: { n: o.ltN ?? 0, maxMs: 60 },
 	ws: { total: 0, byType: {} },
 	pageErrors: [],
-	concurrency: { gateOutcome: "EXCLUSIVE", gateWaitedMs: 100, censusStart: { foreignCount: 0 }, censusEnd: { foreignCount: 0 }, foreignSeenDuringGate: [], exclusiveThroughout: true },
+	concurrency: { gateOutcome: o.gate ?? "EXCLUSIVE", gateWaitedMs: 100, censusStart: { foreignCount: 0 }, censusEnd: { foreignCount: 0 }, foreignSeenDuringGate: [], exclusiveThroughout: (o.gate ?? "EXCLUSIVE") === "EXCLUSIVE" },
 	integrity: { rafOk: true, rafRateSane: true, unitOk: true }
 });
 const finish = (w) => {
@@ -100,18 +104,17 @@ const finish = (w) => {
 	w.reconcileRatio = w.profile.busyMs / (w.cdp.ScriptDuration + w.cdp.RecalcStyleDuration);
 	return w;
 };
-/* Numbers model cpuL's long-session window (nodes 3723, applyMs/s ~349, apply/busy 0.65).
- * The post-fix numbers follow the audit's expectation: apply keeps only its residual writes
- * while the forced recalculation moves to a coalesced per-frame read, so applyMs/busyMs falls
- * far below 0.10 while total busy time keeps the residual the audit predicts (65-100 ms/s). */
 const baselineWindow = (scenario, nodes) => finish(win({
 	scenario, nodes, label: `before-${scenario}`,
-	applyPerS: 16, apply: 2800, busy: 3200, script: 900, task: 4800, recalc: 2900,
+	/* busy = 0.9 * (script + recalc) keeps reconcileRatio in the 0.9-1.1 sanity band, so the
+	 * criterion under test is the one that decides each case. */
+	applyPerS: 16, apply: 2800, busy: 3420, script: 900, task: 4800, recalc: 2900,
 	rafPerS: 40, rafP50: 16.7, rafP99: 133, rafOver50: 34
 }));
 const fixedWindow = (scenario, nodes, over = {}) => finish(win({
-	scenario, nodes, label: `after-${scenario}`, instances: 1,
-	applyPerS: over.applyPerS ?? 2, apply: over.apply ?? 40, busy: over.busy ?? 500, script: over.script ?? 300,
+	...over,
+	scenario, nodes, label: `after-${scenario}`, instances: over.instances ?? 1,
+	applyPerS: over.applyPerS ?? 2, apply: over.apply ?? 60, busy: over.busy ?? 450, script: over.script ?? 300,
 	task: over.task ?? 1400, recalc: over.recalc ?? 200, rafPerS: over.rafPerS ?? 58, rafP50: over.rafP50 ?? 16.7,
 	rafP99: over.rafP99 ?? 22, rafOver50: over.rafOver50 ?? 1
 }));
@@ -123,14 +126,15 @@ const writePair = (name, beforeWindows, afterWindows) => {
 	fs.writeFileSync(a, JSON.stringify({ label: "after", windows: afterWindows }, null, 2));
 	return [b, a];
 };
-const runCompare = (files) => {
+const runCompareWith = (files, extra = []) => {
 	try {
-		const out = execFileSync(process.execPath, [path.join(HERE, "experiments", "theme-ab.mjs"), "--compare", ...files, "--label", "selftest"], { stdio: "pipe" }).toString();
+		const out = execFileSync(process.execPath, [path.join(HERE, "experiments", "theme-ab.mjs"), "--compare", ...files, "--label", "selftest", ...extra], { stdio: "pipe" }).toString();
 		return { code: 0, out };
 	} catch (error) {
 		return { code: error.status, out: String(error.stdout || "") + String(error.stderr || "") };
 	}
 };
+const runCompare = (files) => runCompareWith(files);
 
 {
 	const [b, a] = writePair("same", [baselineWindow("long", 3723)], [baselineWindow("long", 3723)]);
@@ -140,7 +144,7 @@ const runCompare = (files) => {
 {
 	const [b, a] = writePair("fixed", [baselineWindow("long", 3723), baselineWindow("long", 3723)], [fixedWindow("long", 3723), fixedWindow("long", 3723)]);
 	const r = runCompare([b, a]);
-	check("X3a", "--compare PASSES a post-fix run that meets every §4 threshold", r.code === 0 && /BATCH VERDICT: PASS/.test(r.out), `exit=${r.code} ${(r.out.split("\n").find((l) => /BATCH VERDICT/.test(l)) || "").trim()}`);
+	check("X3a", "--compare PASSES a post-fix run that meets every PRIMARY criterion", r.code === 0 && /BATCH VERDICT: PASS/.test(r.out), `exit=${r.code} ${(r.out.split("\n").find((l) => /BATCH VERDICT/.test(l)) || "").trim()}`);
 }
 {
 	const [b, a] = writePair("nodes", [baselineWindow("long", 3723)], [fixedWindow("long", 4200)]);
@@ -161,18 +165,41 @@ const runCompare = (files) => {
 	check("X3d", "--compare rejects a surviving presenter instance (P0 requires 1)", r.code === 2 && /concurrent presenter instances/.test(r.out), `exit=${r.code}`);
 }
 {
-	const [b, a] = writePair("recalc", [baselineWindow("long", 3723)], [fixedWindow("long", 3723, { recalc: 900, task: 1400 })]);
+	/* Coordinator ruling: RecalcStyle/Task came from the CONTAMINATED cpuL batch, so it must be
+	 * reported but must NOT decide the verdict unless reference enforcement is requested. */
+	const [b, a] = writePair("recalc", [baselineWindow("long", 3723)], [fixedWindow("long", 3723, { apply: 40, busy: 1080, recalc: 900, task: 1400 })]);
 	const r = runCompare([b, a]);
-	check("X3e", "--compare rejects RecalcStyle/Task above 0.15", r.code === 2 && /RecalcStyle\/Task/.test(r.out), `exit=${r.code}`);
+	check("X3e", "--compare does NOT enforce the contaminated-batch RecalcStyle/Task by default",
+		r.code === 0 && /BATCH VERDICT: PASS/.test(r.out) && /contaminated baseline, not enforced/.test(r.out),
+		`exit=${r.code} — the 0.64 value is still printed in the ref line, it just does not fail the batch`);
+	const r2 = runCompareWith([b, a], ["--enforce-reference"]);
+	check("X3e'", "--enforce-reference makes the reference items decide again", r2.code === 2 && /RecalcStyle\/Task/.test(r2.out), `exit=${r2.code}`);
 }
 {
-	const [b, a] = writePair("applybusy", [baselineWindow("long", 3723)], [fixedWindow("long", 3723, { apply: 600, busy: 900 })]);
+	const [b, a] = writePair("applybusy", [baselineWindow("long", 3723)], [fixedWindow("long", 3723, { apply: 600, busy: 900, script: 300, recalc: 300, task: 1400 })]);
 	const r = runCompare([b, a]);
-	check("X3f", "--compare rejects applyMs/busyMs above 0.10", r.code === 2 && /applyMs\/busyMs/.test(r.out), `exit=${r.code}`);
+	check("X3f", "--compare rejects applyMs/busyMs above 0.10 (primary, absolute)", r.code === 2 && /applyMs\/busyMs/.test(r.out), `exit=${r.code}`);
+}
+{
+	/* A probe whose detector failed must not be usable as instance evidence. */
+	const probePath = path.join(HERE, "raw", "instances-after.json");
+	const had = fs.existsSync(probePath);
+	const backup = had ? fs.readFileSync(probePath) : null;
+	fs.writeFileSync(probePath, JSON.stringify({ probeVersion: 2, scenario: "long", determination: "INCONCLUSIVE-INSTRUMENT", agreement: { N1_stackFunctionObjects: 0, N2_metaNodesInHead: 0, N3_maxBurstSize: 0, allThreeEqual: true } }, null, 2));
+	const [b, a] = writePair("probe", [baselineWindow("long", 3723)], [fixedWindow("long", 3723, {})]);
+	const r = runCompare([b, a]);
+	check("X3g", "--compare rejects when no instance probe run declared CAPTURED", r.code === 2 && /no instance probe run declared CAPTURED/.test(r.out), `exit=${r.code}`);
+	if (had) fs.writeFileSync(probePath, backup);
+	else fs.rmSync(probePath);
+}
+{
+	const [b, a] = writePair("gate", [baselineWindow("long", 3723)], [fixedWindow("long", 3723, { gate: "CONTENDED" })]);
+	const r = runCompare([b, a]);
+	check("X3h", "--compare rejects a pair containing a non-EXCLUSIVE window", r.code === 2 && /not EXCLUSIVE/.test(r.out), `exit=${r.code}`);
 }
 
 // ---------------------------------------------------------------------------
-// X4 — runner subcommands and lock-owner markers
+// X4 — runner subcommands, lock-owner markers, probe vocabulary, capture self-test
 // ---------------------------------------------------------------------------
 {
 	const text = fs.readFileSync(path.join(HERE, "experiments", "run-theme-experiments.sh"), "utf8");
@@ -186,6 +213,11 @@ const runCompare = (files) => {
 		if (!/lockHeldByMyLine:\s*!!\(lockOwner && \/exec-theme\//.test(src)) bad.push(`${f}: gate predicate does not accept its own marker`);
 	}
 	check("X4b", "each harness writes a lock-owner marker its own gate predicate accepts", bad.length === 0, bad.join("; ") || `checked ${writers.length} harnesses`);
+	const probe = fs.readFileSync(path.join(HERE, "experiments", "probe-instances.mjs"), "utf8");
+	const vocab = ["CAPTURED", "NOT-OBSERVED", "INCONCLUSIVE-INSTRUMENT"].every((v) => probe.includes(v));
+	check("X4c", "the instance probe declares the three-valued determination vocabulary", vocab, vocab ? "CAPTURED / NOT-OBSERVED / INCONCLUSIVE-INSTRUMENT" : "a value is missing");
+	const selfTest = fs.readFileSync(path.join(HERE, "proof", "probe-capture-selftest.mjs"), "utf8");
+	check("X4d", "a dedicated capture self-test exists (rework requirement (a))", selfTest.includes("runBrokenVariant") && selfTest.includes("runFixedVariant"), "v1-shape vs v2-shape mutation control");
 }
 
 const outPath = path.join(HERE, "proof", "experiment-logic-report.json");

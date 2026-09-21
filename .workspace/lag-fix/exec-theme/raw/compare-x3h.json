@@ -1,0 +1,193 @@
+{
+  "generatedAt": "2026-09-21T09:15:16.392Z",
+  "before": "raw/tmp/synth-gate-before.json",
+  "after": "raw/tmp/synth-gate-after.json",
+  "enforceReference": false,
+  "instanceProbe": null,
+  "thresholdsPrimary": {
+    "_what": "the PASS/FAIL criteria: relative drops measured in the SAME conditions (machine, scenario, window length), plus the absolute guards that do NOT depend on the contaminated batch.",
+    "p0_instances": {
+      "mustEqual": 1,
+      "enforce": true,
+      "note": "every scenario, every window; >1 is FAIL. Judged from experiments/probe-instances.mjs, which may only be believed when its `determination` is CAPTURED (a dead detector previously produced instances=0)."
+    },
+    "p0_applyPerS": {
+      "dropMin": 0.5,
+      "maxAbsolute": 5,
+      "enforce": true,
+      "note": "both: relative drop versus the same-condition BEFORE run, and an absolute ceiling that does not come from the contaminated batch"
+    },
+    "p0_bodyStyleWrites": {
+      "dropMin": 0.5,
+      "enforce": true,
+      "note": "capture6.mjs bodyStyleWrites per-window delta"
+    },
+    "p0_themeChangePerS": {
+      "dropMin": 0.5,
+      "enforce": true,
+      "note": "derived as applyPerS / liveInstanceCount; only meaningful once p0_instances is verified"
+    },
+    "p1_applyMsPerS": {
+      "dropMin": 0.7,
+      "enforce": true,
+      "note": "settings scenarios, same-window comparison"
+    },
+    "p1_rafOver50": {
+      "dropMin": 0.5,
+      "enforce": true,
+      "note": "relative drop of long frames per 2 windows versus the same-condition BEFORE run"
+    },
+    "p1_rafP50": {
+      "sentinelMin": 16.6,
+      "sentinelMax": 16.8,
+      "enforce": true,
+      "note": "SENTINEL. The baseline is 16.7 ms everywhere; a WORSE p50 is a FAIL even if p99 improves. Absolute on purpose: this is the 'nothing broke' gate, not a 'got better' gate."
+    },
+    "p1_nodes": {
+      "maxRelativeDelta": 0.05,
+      "enforce": true,
+      "note": "a >5% DOM-node difference makes the windows incomparable => INCONCLUSIVE"
+    },
+    "p1_reconcileRatio": {
+      "min": 0.9,
+      "max": 1.1,
+      "enforce": true,
+      "note": "instrument sanity, not a performance threshold"
+    }
+  },
+  "thresholdsReference": {
+    "_what": "reported for context and NOT enforced unless the comparison is run with --enforce-reference. Each entry records where its number came from.",
+    "recalcOverTask": {
+      "max": 0.15,
+      "provenance": "audit §4.2, derived from the CONTAMINATED cpuL batch ('from 60.0%'). The coordinator's clean measurement already sits at 31-35%, so the 60%->15% framing does not apply to a clean BEFORE/AFTER pair.",
+      "enforce": false
+    },
+    "applyShareOfBusy": {
+      "max": 0.1,
+      "provenance": "audit §4.2, derived from the CONTAMINATED cpuL batch ('from 0.50-0.80').",
+      "enforce": false
+    },
+    "taskMsPerS": {
+      "dropMin": 0.4,
+      "provenance": "audit §4.2; relative, but the task denominator carries unrelated work, so it stays advisory until the M-B/M-C separation lands.",
+      "enforce": false
+    },
+    "rafPerS": {
+      "min": 55,
+      "provenance": "audit §4.2 baseline 35.6-49/s, itself a contended-machine number (a clean page runs ~60/s). Absolute and baseline-derived.",
+      "enforce": false
+    },
+    "rafP99": {
+      "max": 33,
+      "provenance": "audit §4.2 baseline 50-133 ms, from the contaminated batch.",
+      "enforce": false
+    },
+    "longTasks": {
+      "note": "audit §4.2 sets no hard threshold because the baseline swings 0-18; reported only."
+    }
+  },
+  "rows": [
+    {
+      "scenario": "long",
+      "windows": {
+        "before": 1,
+        "after": 1
+      },
+      "gateExclusive": true,
+      "nodes": {
+        "before": 3723,
+        "after": 3723,
+        "sameScale": true
+      },
+      "instances": {
+        "before": 2,
+        "after": 1
+      },
+      "applyPerS": {
+        "before": 16,
+        "after": 2,
+        "drop": 0.875
+      },
+      "applyMsPerS": {
+        "before": 350,
+        "after": 7.5,
+        "drop": 0.979
+      },
+      "busyMsPerS": {
+        "before": 427.5,
+        "after": 150,
+        "drop": 0.649
+      },
+      "taskMsPerS": {
+        "before": 600,
+        "after": 175,
+        "drop": 0.708
+      },
+      "recalcOverTask": {
+        "before": 0.604,
+        "after": 0.143
+      },
+      "applyOverBusy": {
+        "before": 0.819,
+        "after": 0.05
+      },
+      "rafOver50": {
+        "before": 34,
+        "after": 1,
+        "drop": 0.971
+      },
+      "rafPerS": {
+        "before": 40,
+        "after": 58
+      },
+      "rafP50": {
+        "before": 16.7,
+        "after": 16.7
+      },
+      "rafP99": {
+        "before": 133,
+        "after": 22
+      },
+      "reconcileRatio": {
+        "before": 0.9,
+        "after": 2.4
+      },
+      "verdict": "FAIL",
+      "failures": [
+        "reconcileRatio 2.4 outside 0.9-1.1 (instrument is not trustworthy)"
+      ]
+    }
+  ],
+  "referenceRows": [
+    {
+      "scenario": "long",
+      "values": {
+        "recalcOverTask": {
+          "before": 0.604,
+          "after": 0.143
+        },
+        "applyOverBusy": {
+          "before": 0.819,
+          "after": 0.05
+        },
+        "rafPerS": {
+          "before": 40,
+          "after": 58
+        },
+        "rafP99": {
+          "before": 133,
+          "after": 22
+        },
+        "taskMsPerS": {
+          "before": 600,
+          "after": 175,
+          "drop": 0.708
+        }
+      },
+      "provenance": "cpuL (contaminated batch)",
+      "enforced": false,
+      "failures": []
+    }
+  ],
+  "verdict": "FAIL"
+}

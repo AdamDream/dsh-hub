@@ -1,0 +1,484 @@
+{
+  "generatedAt": "2026-09-21T09:26:57.501Z",
+  "variant": "C",
+  "label": "after-C2",
+  "winMs": 8000,
+  "scenarios": [
+    "home",
+    "long",
+    "settings"
+  ],
+  "windows": [
+    {
+      "variant": "C",
+      "label": "after-C2-home",
+      "scenario": "home-idle",
+      "wallSec": 8.001,
+      "nodes": 605,
+      "applyCount": 0,
+      "applyPerS": 0,
+      "bodySetProperty": 0,
+      "bodyRemoveProperty": 0,
+      "instances": 0,
+      "instanceUrls": {},
+      "blockedComputedStyle": 0,
+      "probe": {
+        "computedBodyBackground": "rgb(255, 255, 255)",
+        "tokenBgBase": "",
+        "themeColorMetaContent": "rgb(255, 255, 255)",
+        "themeColorMetaCount": 1,
+        "rootColorScheme": "light",
+        "bodyDarkAttribute": false,
+        "bodyStyleAttr": "",
+        "bodyPropCount": 0,
+        "nodes": 605
+      },
+      "cdp": {
+        "ScriptDuration": 156.647,
+        "ScriptMsPerS": 19.578,
+        "TaskDuration": 386.932,
+        "TaskMsPerS": 48.36,
+        "RecalcStyleDuration": 17.124,
+        "RecalcMsPerS": 2.14,
+        "LayoutDuration": 0,
+        "RecalcStyleCount": 483000
+      },
+      "profile": {
+        "msPerSample": 1.072,
+        "samples": 7605,
+        "wallMs": 8154.352,
+        "busyMs": 154.378,
+        "busyMsPerS": 18.932,
+        "applyMs": 0,
+        "applyMsPerS": 0,
+        "applyRowCount": 0,
+        "applyRows": [],
+        "top": [
+          {
+            "fn": "(idle)",
+            "url": "",
+            "line": 0,
+            "selfMs": 7917.839
+          },
+          {
+            "fn": "(program)",
+            "url": "",
+            "line": 0,
+            "selfMs": 63.257
+          },
+          {
+            "fn": "(garbage collector)",
+            "url": "",
+            "line": 0,
+            "selfMs": 18.227
+          },
+          {
+            "fn": "buildListSnapshot",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 8553,
+            "selfMs": 7.505
+          },
+          {
+            "fn": "flattenLineage",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 5603,
+            "selfMs": 7.505
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 8554,
+            "selfMs": 6.433
+          },
+          {
+            "fn": "walk",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 5615,
+            "selfMs": 5.361
+          },
+          {
+            "fn": "nextSessionOrderAccount",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+            "line": 1103,
+            "selfMs": 5.361
+          }
+        ]
+      },
+      "raf": {
+        "count": 484,
+        "perS": 60.492,
+        "intervals": {
+          "n": 483,
+          "p50": 16.7,
+          "p95": 16.7,
+          "p99": 16.8,
+          "max": 133.2,
+          "over50": 1
+        }
+      },
+      "longtasks": {
+        "n": 0,
+        "maxMs": null
+      },
+      "ws": {
+        "total": 117,
+        "byType": {
+          "session/projection": 88,
+          "session/event": 29
+        }
+      },
+      "pageErrors": [],
+      "concurrency": {
+        "gateOutcome": "EXCLUSIVE",
+        "gateWaitedMs": 8232,
+        "censusStart": {
+          "at": "2026-09-21T09:26:23.016Z",
+          "instances": 1,
+          "mineCount": 1,
+          "foreignCount": 0,
+          "foreign": [],
+          "lockOwner": "agent: exec-theme (theme batch, subagent) line: M-A/M-B/M-C/M-D causal separation + P0 instance check",
+          "lockHeldByMyLine": true,
+          "lockDirPresent": true
+        },
+        "censusEnd": {
+          "at": "2026-09-21T09:26:31.202Z",
+          "instances": 1,
+          "mineCount": 1,
+          "foreignCount": 0,
+          "foreign": [],
+          "lockOwner": "agent: exec-theme (theme batch, subagent) line: M-A/M-B/M-C/M-D causal separation + P0 instance check",
+          "lockHeldByMyLine": true,
+          "lockDirPresent": true
+        },
+        "foreignSeenDuringGate": [],
+        "exclusiveThroughout": true
+      },
+      "integrity": {
+        "rafOk": true,
+        "rafRateSane": true,
+        "unitOk": true
+      },
+      "recalcOverTask": 0.044,
+      "applyShareOfBusy": 0,
+      "reconcileRatio": 0.888
+    },
+    {
+      "variant": "C",
+      "label": "after-C2-long",
+      "scenario": "long-session-idle",
+      "wallSec": 7.999,
+      "nodes": 2851,
+      "applyCount": 0,
+      "applyPerS": 0,
+      "bodySetProperty": 0,
+      "bodyRemoveProperty": 0,
+      "instances": 0,
+      "instanceUrls": {},
+      "blockedComputedStyle": 0,
+      "probe": {
+        "computedBodyBackground": "rgb(255, 255, 255)",
+        "tokenBgBase": "",
+        "themeColorMetaContent": "rgb(255, 255, 255)",
+        "themeColorMetaCount": 1,
+        "rootColorScheme": "light",
+        "bodyDarkAttribute": false,
+        "bodyStyleAttr": "",
+        "bodyPropCount": 0,
+        "nodes": 2851
+      },
+      "cdp": {
+        "ScriptDuration": 229.755,
+        "ScriptMsPerS": 28.723,
+        "TaskDuration": 1524.388,
+        "TaskMsPerS": 190.572,
+        "RecalcStyleDuration": 57.26,
+        "RecalcMsPerS": 7.158,
+        "LayoutDuration": 251.425,
+        "RecalcStyleCount": 482000
+      },
+      "profile": {
+        "msPerSample": 1.062,
+        "samples": 7605,
+        "wallMs": 8075.287,
+        "busyMs": 228.318,
+        "busyMsPerS": 28.274,
+        "applyMs": 0,
+        "applyMsPerS": 0,
+        "applyRowCount": 0,
+        "applyRows": [],
+        "top": [
+          {
+            "fn": "(idle)",
+            "url": "",
+            "line": 0,
+            "selfMs": 6618.213
+          },
+          {
+            "fn": "(program)",
+            "url": "",
+            "line": 0,
+            "selfMs": 1198.775
+          },
+          {
+            "fn": "(garbage collector)",
+            "url": "",
+            "line": 0,
+            "selfMs": 29.73
+          },
+          {
+            "fn": "nextSessionOrderAccount",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+            "line": 1103,
+            "selfMs": 8.494
+          },
+          {
+            "fn": "buildListSnapshot",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 8553,
+            "selfMs": 7.433
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 8554,
+            "selfMs": 7.433
+          },
+          {
+            "fn": "onChange",
+            "url": "http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b",
+            "line": 4413,
+            "selfMs": 5.309
+          },
+          {
+            "fn": "walk",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 5615,
+            "selfMs": 4.247
+          }
+        ]
+      },
+      "raf": {
+        "count": 483,
+        "perS": 60.383,
+        "intervals": {
+          "n": 482,
+          "p50": 16.7,
+          "p95": 16.8,
+          "p99": 16.8,
+          "max": 66.7,
+          "over50": 1
+        }
+      },
+      "longtasks": {
+        "n": 0,
+        "maxMs": null
+      },
+      "ws": {
+        "total": 135,
+        "byType": {
+          "session/projection": 102,
+          "session/event": 33
+        }
+      },
+      "pageErrors": [],
+      "concurrency": {
+        "gateOutcome": "EXCLUSIVE",
+        "gateWaitedMs": 8162,
+        "censusStart": {
+          "at": "2026-09-21T09:26:38.618Z",
+          "instances": 1,
+          "mineCount": 1,
+          "foreignCount": 0,
+          "foreign": [],
+          "lockOwner": "agent: exec-theme (theme batch, subagent) line: M-A/M-B/M-C/M-D causal separation + P0 instance check",
+          "lockHeldByMyLine": true,
+          "lockDirPresent": true
+        },
+        "censusEnd": {
+          "at": "2026-09-21T09:26:46.726Z",
+          "instances": 1,
+          "mineCount": 1,
+          "foreignCount": 0,
+          "foreign": [],
+          "lockOwner": "agent: exec-theme (theme batch, subagent) line: M-A/M-B/M-C/M-D causal separation + P0 instance check",
+          "lockHeldByMyLine": true,
+          "lockDirPresent": true
+        },
+        "foreignSeenDuringGate": [],
+        "exclusiveThroughout": true
+      },
+      "integrity": {
+        "rafOk": true,
+        "rafRateSane": true,
+        "unitOk": true
+      },
+      "recalcOverTask": 0.038,
+      "applyShareOfBusy": 0,
+      "reconcileRatio": 0.795
+    },
+    {
+      "variant": "C",
+      "label": "after-C2-settings",
+      "scenario": "settings-dwell",
+      "wallSec": 8,
+      "nodes": 3022,
+      "applyCount": 0,
+      "applyPerS": 0,
+      "bodySetProperty": 0,
+      "bodyRemoveProperty": 0,
+      "instances": 0,
+      "instanceUrls": {},
+      "blockedComputedStyle": 0,
+      "probe": {
+        "computedBodyBackground": "rgb(255, 255, 255)",
+        "tokenBgBase": "",
+        "themeColorMetaContent": "rgb(255, 255, 255)",
+        "themeColorMetaCount": 1,
+        "rootColorScheme": "light",
+        "bodyDarkAttribute": false,
+        "bodyStyleAttr": "",
+        "bodyPropCount": 0,
+        "nodes": 3022
+      },
+      "cdp": {
+        "ScriptDuration": 354.718,
+        "ScriptMsPerS": 44.34,
+        "TaskDuration": 2154.291,
+        "TaskMsPerS": 269.286,
+        "RecalcStyleDuration": 128.485,
+        "RecalcMsPerS": 16.061,
+        "LayoutDuration": 354.445,
+        "RecalcStyleCount": 482000
+      },
+      "profile": {
+        "msPerSample": 1.061,
+        "samples": 7600,
+        "wallMs": 8061.469,
+        "busyMs": 354.284,
+        "busyMsPerS": 43.948,
+        "applyMs": 0,
+        "applyMsPerS": 0,
+        "applyRowCount": 0,
+        "applyRows": [],
+        "top": [
+          {
+            "fn": "(idle)",
+            "url": "",
+            "line": 0,
+            "selfMs": 5948.707
+          },
+          {
+            "fn": "(program)",
+            "url": "",
+            "line": 0,
+            "selfMs": 1718.115
+          },
+          {
+            "fn": "(garbage collector)",
+            "url": "",
+            "line": 0,
+            "selfMs": 39.241
+          },
+          {
+            "fn": "buildListSnapshot",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 8553,
+            "selfMs": 14.848
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 8554,
+            "selfMs": 10.606
+          },
+          {
+            "fn": "mi",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 56,
+            "selfMs": 9.545
+          },
+          {
+            "fn": "Xo",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 54,
+            "selfMs": 9.545
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 8972,
+            "selfMs": 9.545
+          }
+        ]
+      },
+      "raf": {
+        "count": 485,
+        "perS": 60.625,
+        "intervals": {
+          "n": 484,
+          "p50": 16.7,
+          "p95": 16.7,
+          "p99": 16.8,
+          "max": 50,
+          "over50": 0
+        }
+      },
+      "longtasks": {
+        "n": 0,
+        "maxMs": null
+      },
+      "ws": {
+        "total": 178,
+        "byType": {
+          "session/projection": 132,
+          "session/event": 45,
+          "session/queue": 1
+        }
+      },
+      "pageErrors": [],
+      "concurrency": {
+        "gateOutcome": "EXCLUSIVE",
+        "gateWaitedMs": 8200,
+        "censusStart": {
+          "at": "2026-09-21T09:26:49.388Z",
+          "instances": 1,
+          "mineCount": 1,
+          "foreignCount": 0,
+          "foreign": [],
+          "lockOwner": "agent: exec-theme (theme batch, subagent) line: M-A/M-B/M-C/M-D causal separation + P0 instance check",
+          "lockHeldByMyLine": true,
+          "lockDirPresent": true
+        },
+        "censusEnd": {
+          "at": "2026-09-21T09:26:57.487Z",
+          "instances": 1,
+          "mineCount": 1,
+          "foreignCount": 0,
+          "foreign": [],
+          "lockOwner": "agent: exec-theme (theme batch, subagent) line: M-A/M-B/M-C/M-D causal separation + P0 instance check",
+          "lockHeldByMyLine": true,
+          "lockDirPresent": true
+        },
+        "foreignSeenDuringGate": [],
+        "exclusiveThroughout": true
+      },
+      "integrity": {
+        "rafOk": true,
+        "rafRateSane": true,
+        "unitOk": true
+      },
+      "recalcOverTask": 0.06,
+      "applyShareOfBusy": 0,
+      "reconcileRatio": 0.733
+    }
+  ],
+  "acceptedWindows": 3,
+  "discipline": "read-only; single browser; single page; no save/apply/delete/refresh; page-API instrumentation only",
+  "notes": [
+    "applyCount = body.style.removeProperty calls (one per apply, because the retraction set holds one token)",
+    "instances = distinct `apply` function objects observed through Error.prepareStackTrace CallSite.getFunction()",
+    "K-C (variant B) replaces window.getComputedStyle for document.body only; functional checks must run without it",
+    "variant C makes body style writes no-ops, so it must not be used for functional judgements"
+  ]
+}

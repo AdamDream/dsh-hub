@@ -1,0 +1,221 @@
+{
+  "generatedAt": "2026-09-21T09:15:44.542Z",
+  "label": "before-home",
+  "scenario": "home",
+  "winMs": 8000,
+  "probeVersion": 2,
+  "definitions": {
+    "instanceCount": "distinct LIVE ThemePresenter objects. Cross-checked by N1 (distinct `apply` function objects on the stack), N2 (distinct theme-color meta nodes in <head>; layout :354-355 makes one per presenter and :379 appends it) and N3 (largest burst of body.style.removeProperty calls inside one dispatch; each presenter retracts its own one-token set).",
+    "applyCalls": "total body.style.removeProperty calls on document.body.style in the window; one per presenter per publish because N_old = 1, so applyCalls = publishes × livePresenters. applyCalls=70 with a zero instance count is impossible for a working detector — it means the instance channel was dead (that was v1's failure).",
+    "burst": "a run of removeProperty calls separated by gaps <= 40 ms; one publish dispatch is one burst.",
+    "captureRateNote": "sampledApplies = number of stack reads issued (first 60 applies, then every 8th). N1 is the number of DISTINCT function objects among those reads; once a presenter has been seen, further reads of it add no new object, so N1 saturates at the true count while sampledApplies keeps growing."
+  },
+  "concurrency": {
+    "gateOutcome": "EXCLUSIVE",
+    "censusStart": {
+      "at": "2026-09-21T09:15:27.088Z",
+      "instances": 0,
+      "mineCount": 0,
+      "foreignCount": 0,
+      "foreign": [],
+      "lockOwner": "agent: exec-theme (theme batch, subagent) line: P0 instance-count probe v2 (self-validating, three independent channels)",
+      "lockHeldByMyLine": true
+    },
+    "censusEnd": {
+      "at": "2026-09-21T09:15:44.531Z",
+      "instances": 1,
+      "mineCount": 1,
+      "foreignCount": 0,
+      "foreign": [],
+      "lockOwner": "agent: exec-theme (theme batch, subagent) line: P0 instance-count probe v2 (self-validating, three independent channels)",
+      "lockHeldByMyLine": true
+    },
+    "lockReleased": true
+  },
+  "instrument": {
+    "preflight": {
+      "ok": false,
+      "readsDelta": 1,
+      "prepareDelta": 1,
+      "svDelta": 0,
+      "bodyPatched": true,
+      "prevHadPrepare": false,
+      "handlerReplaced": 0,
+      "stackReads": 20,
+      "prepareCalls": 20
+    },
+    "postflight": {
+      "ok": false,
+      "readsDelta": 1,
+      "prepareDelta": 1,
+      "svDelta": 0,
+      "bodyPatched": true,
+      "prevHadPrepare": false,
+      "handlerReplaced": 0,
+      "stackReads": 36,
+      "prepareCalls": 36
+    },
+    "stackReads": 35,
+    "prepareCalls": 35,
+    "handlerReplaced": 0,
+    "prevHadPrepare": false,
+    "sampledApplies": 35,
+    "captureRate": 1
+  },
+  "channelValidity": {
+    "observedApplication": false,
+    "stackChannelValid": false,
+    "cordisWrapped": false,
+    "reasons": [
+      "observed application is too small to be evidence: applyCalls=15 (<10) or bursts=2 (<3)",
+      "the stack channel failed self-validation (a synthetic `apply` frame was not captured)",
+      "cordis channel not wired: window.__ModuleLoader__.__loader is not exposed"
+    ]
+  },
+  "determination": "NOT-OBSERVED",
+  "interpretation": "The window contained almost no apply work (applyCalls=15, bursts=2), so it says NOTHING about the presenter count. This is NOT \"single presenter\".",
+  "agreement": {
+    "N1_stackFunctionObjects": 1,
+    "N2_metaNodesInHead": 1,
+    "N3_maxBurstSize": 8,
+    "N4_profileApplyRows": 4,
+    "stackEqualsDom": true,
+    "stackEqualsBurst": false,
+    "N4_atLeastN1": true,
+    "allThreeEqual": false
+  },
+  "channels": {
+    "N1_stack": {
+      "instances": 1,
+      "sources": {
+        "client.js?rev=abdb7f55acba#L372": 15
+      },
+      "frameHits": {
+        "client.js?rev=abdb7f55acba#L372": 15
+      }
+    },
+    "N2_dom": {
+      "created": 1,
+      "inHead": 1,
+      "anywhere": 1,
+      "detail": [
+        {
+          "uid": 1,
+          "content": "rgba(255, 255, 255, 0.88)",
+          "connected": true,
+          "parent": "HEAD"
+        }
+      ]
+    },
+    "N3_bursts": {
+      "maxBurstSize": 8,
+      "burstSizes": [
+        7,
+        8
+      ],
+      "bursts": 2
+    },
+    "N4_profile": {
+      "applyRowsAtBundleLine": 4,
+      "distinctUrls": [
+        "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba"
+      ],
+      "rows": [
+        {
+          "fn": "apply",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 11.771
+        },
+        {
+          "fn": "apply",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 9.631
+        },
+        {
+          "fn": "apply",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 9.631
+        },
+        {
+          "fn": "apply",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 9.631
+        }
+      ]
+    },
+    "cordis": {
+      "available": false,
+      "wrapped": false,
+      "note": null,
+      "notWrappedReason": "window.__ModuleLoader__.__loader is not exposed",
+      "invocations": 0,
+      "contexts": 0,
+      "seenContexts": [],
+      "arity": null
+    }
+  },
+  "valueEvidence": {
+    "computedBodyBackgroundColor": "rgba(255, 255, 255, 0.88)",
+    "bodyBackgroundRules": [
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "var(--dsw-alias-bg-base, #fff)",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      }
+    ],
+    "inlineTokenBgBase": "rgba(255, 255, 255, 0.88)",
+    "computedTokenBgBase": "rgba(255, 255, 255, 0.88)",
+    "themeColorMetaContent": "rgba(255, 255, 255, 0.88)",
+    "themeColorMetaCount": 1,
+    "rootColorScheme": "light",
+    "bodyDarkAttribute": false,
+    "bodyStyleAttr": "--dsw-alias-bg-base: rgba(255, 255, 255, 0.88);",
+    "bodyPropCount": 1,
+    "nodes": 619
+  },
+  "pageErrors": []
+}

@@ -1,0 +1,16 @@
+(node:3430125) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:3430125) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+### Wiring assertions — lib=stage/lib-cand
+PASS  W1:timer-switch-defaults-OFF — false
+PASS  W2:throwing-probe-removed-and-inject-used — typeof-probe present=false; ctx.inject(["timer"]) present=true
+PASS  W3:rpc-waitIdle-only-on-refresh — 4 mention(s) of waitIdle in rpc.js, all BEFORE the status branch=true, AFTER the status branch (barrier leak)=0, refresh awaits waitIdle first=true
+PASS  W4:runner-created-after-dbPath-and-disposed — createIngestRunner@11916 > dbPath=@11621; dispose=true
+PASS  W5a:refresh-awaits-waitIdle-and-not-ingest — reply.ok=true waitIdle=1 ingest=0 channel=/usage authority={"authority":"loopback"}
+PASS  W5b:refresh-falls-back-to-ingest-without-waitIdle — ingest calls +1
+PASS  W6:ten-concurrent-refresh-trigger-ONE-fold — 10 responses all ok=true; worker-side starts=1; runner runs=1
+PASS  W7:status-never-waits — status responded in 0ms, waitIdle calls=0
+PASS  W8:data-endpoint-not-behind-a-barrier — summary answered {"code":"db-unavailable","message":"usage: database not ready (first ingest pending)","details":{}} in 0ms with waitIdle calls=0
+RESULT: PASS

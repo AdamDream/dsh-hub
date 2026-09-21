@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-21T09:02:04.406Z",
+  "generatedAt": "2026-09-21T09:17:17.632Z",
   "results": [
     {
       "id": "X1",
@@ -9,9 +9,9 @@
     },
     {
       "id": "X1b",
-      "name": "every page-side hook is declared AND serialised with toString() into the page",
-      "verdict": "FAIL",
-      "detail": "experiments/theme-ab.mjs:INIT not serialised into the page; experiments/probe-instances.mjs:PROBE not serialised into the page"
+      "name": "every page-side hook is declared AND handed to the page",
+      "verdict": "PASS",
+      "detail": "7 hooks"
     },
     {
       "id": "X2",
@@ -21,9 +21,9 @@
     },
     {
       "id": "X3a",
-      "name": "--compare PASSES a post-fix run that meets every §4 threshold",
-      "verdict": "FAIL",
-      "detail": "exit=2 === BATCH VERDICT: FAIL ==="
+      "name": "--compare PASSES a post-fix run that meets every PRIMARY criterion",
+      "verdict": "PASS",
+      "detail": "exit=0 === BATCH VERDICT: PASS ==="
     },
     {
       "id": "X3b",
@@ -45,13 +45,31 @@
     },
     {
       "id": "X3e",
-      "name": "--compare rejects RecalcStyle/Task above 0.15",
+      "name": "--compare does NOT enforce the contaminated-batch RecalcStyle/Task by default",
+      "verdict": "PASS",
+      "detail": "exit=0 — the 0.64 value is still printed in the ref line, it just does not fail the batch"
+    },
+    {
+      "id": "X3e'",
+      "name": "--enforce-reference makes the reference items decide again",
       "verdict": "PASS",
       "detail": "exit=2"
     },
     {
       "id": "X3f",
-      "name": "--compare rejects applyMs/busyMs above 0.10",
+      "name": "--compare rejects applyMs/busyMs above 0.10 (primary, absolute)",
+      "verdict": "PASS",
+      "detail": "exit=2"
+    },
+    {
+      "id": "X3g",
+      "name": "--compare rejects when no instance probe run declared CAPTURED",
+      "verdict": "PASS",
+      "detail": "exit=2"
+    },
+    {
+      "id": "X3h",
+      "name": "--compare rejects a pair containing a non-EXCLUSIVE window",
       "verdict": "PASS",
       "detail": "exit=2"
     },
@@ -66,8 +84,20 @@
       "name": "each harness writes a lock-owner marker its own gate predicate accepts",
       "verdict": "PASS",
       "detail": "checked 2 harnesses"
+    },
+    {
+      "id": "X4c",
+      "name": "the instance probe declares the three-valued determination vocabulary",
+      "verdict": "PASS",
+      "detail": "CAPTURED / NOT-OBSERVED / INCONCLUSIVE-INSTRUMENT"
+    },
+    {
+      "id": "X4d",
+      "name": "a dedicated capture self-test exists (rework requirement (a))",
+      "verdict": "PASS",
+      "detail": "v1-shape vs v2-shape mutation control"
     }
   ],
-  "failed": 2,
-  "verdict": "FAIL"
+  "failed": 0,
+  "verdict": "PASS"
 }

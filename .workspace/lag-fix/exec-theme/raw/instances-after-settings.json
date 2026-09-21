@@ -1,0 +1,187 @@
+{
+  "generatedAt": "2026-09-21T09:29:22.946Z",
+  "label": "after-settings",
+  "scenario": "settings",
+  "winMs": 8000,
+  "probeVersion": 2,
+  "definitions": {
+    "instanceCount": "distinct LIVE ThemePresenter objects. Cross-checked by N1 (distinct `apply` function objects on the stack), N2 (distinct theme-color meta nodes in <head>; layout :354-355 makes one per presenter and :379 appends it) and N3 (largest burst of body.style.removeProperty calls inside one dispatch; each presenter retracts its own one-token set).",
+    "applyCalls": "total body.style.removeProperty calls on document.body.style in the window; one per presenter per publish because N_old = 1, so applyCalls = publishes × livePresenters. applyCalls=70 with a zero instance count is impossible for a working detector — it means the instance channel was dead (that was v1's failure).",
+    "burst": "a run of removeProperty calls separated by gaps <= 40 ms; one publish dispatch is one burst.",
+    "captureRateNote": "sampledApplies = number of stack reads issued (first 60 applies, then every 8th). N1 is the number of DISTINCT function objects among those reads; once a presenter has been seen, further reads of it add no new object, so N1 saturates at the true count while sampledApplies keeps growing."
+  },
+  "concurrency": {
+    "gateOutcome": "EXCLUSIVE",
+    "censusStart": {
+      "at": "2026-09-21T09:28:57.791Z",
+      "instances": 0,
+      "mineCount": 0,
+      "foreignCount": 0,
+      "foreign": [],
+      "lockOwner": "agent: exec-theme (theme batch, subagent) line: P0 instance-count probe v2 (self-validating, three independent channels)",
+      "lockHeldByMyLine": true
+    },
+    "censusEnd": {
+      "at": "2026-09-21T09:29:22.930Z",
+      "instances": 1,
+      "mineCount": 1,
+      "foreignCount": 0,
+      "foreign": [],
+      "lockOwner": "agent: exec-theme (theme batch, subagent) line: P0 instance-count probe v2 (self-validating, three independent channels)",
+      "lockHeldByMyLine": true
+    },
+    "lockReleased": true
+  },
+  "instrument": {
+    "preflight": {
+      "ok": false,
+      "readsDelta": 1,
+      "prepareDelta": 1,
+      "svDelta": 0,
+      "bodyPatched": true,
+      "prevHadPrepare": false,
+      "handlerReplaced": 0,
+      "stackReads": 1,
+      "prepareCalls": 1
+    },
+    "postflight": {
+      "ok": false,
+      "readsDelta": 1,
+      "prepareDelta": 1,
+      "svDelta": 0,
+      "bodyPatched": true,
+      "prevHadPrepare": false,
+      "handlerReplaced": 0,
+      "stackReads": 2,
+      "prepareCalls": 2
+    },
+    "stackReads": 1,
+    "prepareCalls": 1,
+    "handlerReplaced": 0,
+    "prevHadPrepare": false,
+    "sampledApplies": 1,
+    "captureRate": 0
+  },
+  "channelValidity": {
+    "observedApplication": false,
+    "stackChannelValid": false,
+    "cordisWrapped": false,
+    "reasons": [
+      "observed application is too small to be evidence: applyCalls=0 (<10) or bursts=0 (<3)",
+      "the stack channel failed self-validation (a synthetic `apply` frame was not captured)",
+      "cordis channel not wired: window.__ModuleLoader__.__loader is not exposed"
+    ]
+  },
+  "determination": "NOT-OBSERVED",
+  "interpretation": "The window contained almost no apply work (applyCalls=0, bursts=0), so it says NOTHING about the presenter count. This is NOT \"single presenter\".",
+  "agreement": {
+    "N1_stackFunctionObjects": 0,
+    "N2_metaNodesInHead": 1,
+    "N3_maxBurstSize": 0,
+    "N4_profileApplyRows": 0,
+    "stackEqualsDom": false,
+    "stackEqualsBurst": true,
+    "N4_atLeastN1": true,
+    "allThreeEqual": false
+  },
+  "channels": {
+    "N1_stack": {
+      "instances": 0,
+      "sources": {},
+      "frameHits": {}
+    },
+    "N2_dom": {
+      "created": 1,
+      "inHead": 1,
+      "anywhere": 1,
+      "detail": [
+        {
+          "uid": 1,
+          "content": "rgba(255, 255, 255, 0.88)",
+          "connected": true,
+          "parent": "HEAD"
+        }
+      ]
+    },
+    "N3_bursts": {
+      "maxBurstSize": 0,
+      "burstSizes": [],
+      "bursts": 0
+    },
+    "N4_profile": {
+      "applyRowsAtBundleLine": 0,
+      "distinctUrls": [],
+      "rows": []
+    },
+    "cordis": {
+      "available": false,
+      "wrapped": false,
+      "note": null,
+      "notWrappedReason": "window.__ModuleLoader__.__loader is not exposed",
+      "invocations": 0,
+      "contexts": 0,
+      "seenContexts": [],
+      "arity": null
+    }
+  },
+  "valueEvidence": {
+    "computedBodyBackgroundColor": "rgba(255, 255, 255, 0.88)",
+    "bodyBackgroundRules": [
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "var(--dsw-alias-bg-base, #fff)",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      },
+      {
+        "selector": "body",
+        "background": "",
+        "backgroundColor": ""
+      }
+    ],
+    "inlineTokenBgBase": "rgba(255, 255, 255, 0.88)",
+    "computedTokenBgBase": "rgba(255, 255, 255, 0.88)",
+    "themeColorMetaContent": "rgba(255, 255, 255, 0.88)",
+    "themeColorMetaCount": 1,
+    "rootColorScheme": "light",
+    "bodyDarkAttribute": false,
+    "bodyStyleAttr": "--dsw-alias-bg-base: rgba(255, 255, 255, 0.88);",
+    "bodyPropCount": 1,
+    "nodes": 3022
+  },
+  "pageErrors": []
+}

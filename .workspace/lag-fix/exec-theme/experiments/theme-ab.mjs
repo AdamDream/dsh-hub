@@ -285,15 +285,58 @@ const COLLECT = () => {
 // main
 // ---------------------------------------------------------------------------
 if (has("compare")) {
+	/* ---------------------------------------------------------------------------
+	 * Verdict logic, per the coordinator's ruling:
+	 *   PRIMARY  = relative drops measured in the same conditions (machine, scenario,
+	 *              window length) plus the absolute guards that do not depend on the
+	 *              contaminated cpuL batch (apply/s ceiling, rafP50 sentinel, node scale,
+	 *              reconcile ratio);
+	 *   REFERENCE = absolute values taken from that contaminated batch. Reported, and only
+	 *              enforced with --enforce-reference.
+	 * ------------------------------------------------------------------------- */
 	const files = argv.slice(argv.indexOf("--compare") + 1).filter((a) => !a.startsWith("--"));
 	if (files.length < 2) {
 		console.error("--compare needs two result files: --compare BEFORE.json AFTER.json");
 		process.exit(2);
 	}
+	const ENFORCE_REFERENCE = argv.includes("--enforce-reference");
 	const before = JSON.parse(fs.readFileSync(path.resolve(files[0]), "utf8"));
 	const after = JSON.parse(fs.readFileSync(path.resolve(files[1]), "utf8"));
 	const thresholds = JSON.parse(fs.readFileSync(path.join(HERE, "experiments", "thresholds.json"), "utf8"));
+	const primary = thresholds.primary;
+	const reference = thresholds.reference;
+	/* The instance count must come from a probe run that declared itself CAPTURED. */
+	const instanceProbe = (() => {
+		/* v2 probe results only: a v1 result (no `determination`) is a dead-detector artefact and
+		 * must never be read as instance evidence. Both BEFORE and AFTER are reported so a
+		 * regression (1 -> 2) cannot hide behind the more favourable file. */
+		const found = {};
+		for (const name of ["instances-before.json", "instances-after.json", "instances-check-home.json", "instances-check-settings.json", "instances-home.json", "instances-settings.json"]) {
+			const f = path.join(RAW, name);
+			if (!fs.existsSync(f)) continue;
+			try {
+				const d = JSON.parse(fs.readFileSync(f, "utf8"));
+				if (d.probeVersion >= 2) found[name] = {
+					file: name,
+					determination: d.determination,
+					scenario: d.scenario,
+					n1: d.agreement ? d.agreement.N1_stackFunctionObjects : null,
+					n2: d.agreement ? d.agreement.N2_metaNodesInHead : null,
+					n3: d.agreement ? d.agreement.N3_maxBurstSize : null,
+					allThreeEqual: d.agreement ? d.agreement.allThreeEqual : null
+				};
+			} catch { }
+		}
+		const keys = Object.keys(found);
+		if (keys.length === 0) return null;
+		const clear = keys.filter((k) => found[k].determination === "CAPTURED");
+		const blockers = keys.filter((k) => found[k].determination !== "CAPTURED");
+		const maxInstances = Math.max(...clear.map((k) => found[k].n1 ?? 0), 0);
+		return { files: found, capturedCount: clear.length, blockers, maxInstancesAcrossCapturedRuns: maxInstances };
+	})();
+
 	const rows = [];
+	const referenceRows = [];
 	let verdict = "PASS";
 	const scen = [...new Set([...before.windows.map((w) => w.scenario), ...after.windows.map((w) => w.scenario)])];
 	for (const s of scen) {
@@ -301,60 +344,110 @@ if (has("compare")) {
 		const a = after.windows.filter((w) => w.scenario === s);
 		if (!b.length || !a.length) continue;
 		const avg = (list, f) => list.reduce((x, w) => x + (f(w) ?? 0), 0) / list.length;
-		const rb = (x, y) => (y === 0 ? null : r3(x / y));
+		const r3v = (x) => (x == null || !Number.isFinite(x) ? null : Math.round(x * 1000) / 1000);
+		const drop = (bef, aft) => (bef === 0 || bef == null ? null : r3v((bef - aft) / bef));
 		const bNodes = avg(b, (w) => w.nodes);
 		const aNodes = avg(a, (w) => w.nodes);
-		const sameScale = bNodes === 0 ? false : Math.abs(aNodes - bNodes) / bNodes <= 0.05;
+		const sameScale = bNodes > 0 && Math.abs(aNodes - bNodes) / bNodes <= primary.p1_nodes.maxRelativeDelta;
+		const excl = [...b, ...a].every((w) => w.concurrency.gateOutcome === "EXCLUSIVE");
 		const row = {
 			scenario: s,
 			windows: { before: b.length, after: a.length },
-			nodes: { before: r3(bNodes), after: r3(aNodes), sameScale },
-			applyPerS: { before: r3(avg(b, (w) => w.applyPerS)), after: r3(avg(a, (w) => w.applyPerS)) },
-			applyMsPerS: { before: r3(avg(b, (w) => w.applyMsPerS)), after: r3(avg(a, (w) => w.applyMsPerS)) },
-			busyMsPerS: { before: r3(avg(b, (w) => w.busyMsPerS)), after: r3(avg(a, (w) => w.busyMsPerS)) },
-			recalcOverTask: { before: r3(avg(b, (w) => w.recalcOverTask)), after: r3(avg(a, (w) => w.recalcOverTask)) },
-			applyOverBusy: { before: r3(avg(b, (w) => w.applyShareOfBusy)), after: r3(avg(a, (w) => w.applyShareOfBusy)) },
-			rafOver50: { before: avg(b, (w) => w.rafOver50), after: avg(a, (w) => w.rafOver50) },
-			rafP50: { before: r3(avg(b, (w) => w.rafP50)), after: r3(avg(a, (w) => w.rafP50)) },
-			rafP99: { before: r3(avg(b, (w) => w.rafP99)), after: r3(avg(a, (w) => w.rafP99)) },
-			instances: { before: avg(b, (w) => w.instances), after: avg(a, (w) => w.instances) }
+			gateExclusive: excl,
+			nodes: { before: r3v(bNodes), after: r3v(aNodes), sameScale },
+			instances: { before: avg(b, (w) => w.instances), after: avg(a, (w) => w.instances) },
+			applyPerS: { before: r3v(avg(b, (w) => w.applyPerS)), after: r3v(avg(a, (w) => w.applyPerS)), drop: null },
+			applyMsPerS: { before: r3v(avg(b, (w) => w.profile.applyMsPerS)), after: r3v(avg(a, (w) => w.profile.applyMsPerS)), drop: null },
+			busyMsPerS: { before: r3v(avg(b, (w) => w.profile.busyMsPerS)), after: r3v(avg(a, (w) => w.profile.busyMsPerS)), drop: null },
+			taskMsPerS: { before: r3v(avg(b, (w) => w.cdp.TaskMsPerS)), after: r3v(avg(a, (w) => w.cdp.TaskMsPerS)), drop: null },
+			recalcOverTask: { before: r3v(avg(b, (w) => w.recalcOverTask)), after: r3v(avg(a, (w) => w.recalcOverTask)) },
+			applyOverBusy: { before: r3v(avg(b, (w) => w.applyShareOfBusy)), after: r3v(avg(a, (w) => w.applyShareOfBusy)) },
+			rafOver50: { before: avg(b, (w) => w.raf.intervals.over50), after: avg(a, (w) => w.raf.intervals.over50), drop: null },
+			rafPerS: { before: r3v(avg(b, (w) => w.raf.perS)), after: r3v(avg(a, (w) => w.raf.perS)) },
+			rafP50: { before: r3v(avg(b, (w) => w.raf.intervals.p50)), after: r3v(avg(a, (w) => w.raf.intervals.p50)) },
+			rafP99: { before: r3v(avg(b, (w) => w.raf.intervals.p99)), after: r3v(avg(a, (w) => w.raf.intervals.p99)) },
+			reconcileRatio: { before: r3v(avg(b, (w) => w.reconcileRatio)), after: r3v(avg(a, (w) => w.reconcileRatio)) }
 		};
+		row.applyPerS.drop = drop(row.applyPerS.before, row.applyPerS.after);
+		row.applyMsPerS.drop = drop(row.applyMsPerS.before, row.applyMsPerS.after);
+		row.busyMsPerS.drop = drop(row.busyMsPerS.before, row.busyMsPerS.after);
+		row.taskMsPerS.drop = drop(row.taskMsPerS.before, row.taskMsPerS.after);
+		row.rafOver50.drop = drop(row.rafOver50.before, row.rafOver50.after);
+
 		const fails = [];
-		if (!sameScale) fails.push("DOM node count differs by more than 5% — windows are not comparable (INCONCLUSIVE)");
-		if (row.instances.after !== 1) fails.push(`P0: concurrent presenter instances = ${row.instances.after} (must be 1)`);
-		const applyDrop = rb(row.applyMsPerS.before - row.applyMsPerS.after, row.applyMsPerS.before);
-		if (applyDrop !== null && applyDrop < thresholds.p1.applyMsPerS.dropMin) fails.push(`applyMsPerS drop ${applyDrop} < ${thresholds.p1.applyMsPerS.dropMin}`);
-		if (!(row.recalcOverTask.after <= thresholds.p1.recalcOverTask.max)) fails.push(`RecalcStyle/Task ${row.recalcOverTask.after} > ${thresholds.p1.recalcOverTask.max}`);
-		if (!(row.applyOverBusy.after <= thresholds.p1.applyShareOfBusy.max)) fails.push(`applyMs/busyMs ${row.applyOverBusy.after} > ${thresholds.p1.applyShareOfBusy.max}`);
-		if (!(row.rafP50.after <= thresholds.p1.rafP50.sentinelMax && row.rafP50.after >= thresholds.p1.rafP50.sentinelMin)) fails.push(`rafP50 ${row.rafP50.after} outside the ${thresholds.p1.rafP50.sentinelMin}-${thresholds.p1.rafP50.sentinelMax} sentinel band (the fix introduced or masked frame trouble)`);
-		if (!(row.rafP99.after <= thresholds.p1.rafP99.max)) fails.push(`rafP99 ${row.rafP99.after} > ${thresholds.p1.rafP99.max}`);
-		if (!(row.rafOver50.after <= thresholds.p1.rafOver50.maxPer2Windows)) fails.push(`rafOver50 ${row.rafOver50.after} > ${thresholds.p1.rafOver50.maxPer2Windows}`);
-		if (!(row.applyPerS.after <= thresholds.p0.applyPerS.maxAbsolute)) fails.push(`apply/s ${row.applyPerS.after} > ${thresholds.p0.applyPerS.maxAbsolute}`);
-		if (applyDrop !== null && applyDrop < thresholds.p0.applyPerS.dropMin) fails.push(`apply/s drop ${applyDrop} < ${thresholds.p0.applyPerS.dropMin}`);
+		if (!excl) fails.push("a window in this pair was not EXCLUSIVE (gateOutcome != EXCLUSIVE) => INCONCLUSIVE");
+		if (!sameScale) fails.push(`DOM node count differs by more than ${primary.p1_nodes.maxRelativeDelta * 100}% (${row.nodes.before} -> ${row.nodes.after}) => windows are not comparable (INCONCLUSIVE)`);
+		/* P0 */
+		if (row.instances.after > primary.p0_instances.mustEqual) fails.push(`P0: concurrent presenter instances = ${row.instances.after} (must be ${primary.p0_instances.mustEqual})`);
+		if (row.applyPerS.drop !== null && row.applyPerS.drop < primary.p0_applyPerS.dropMin) fails.push(`P0: apply/s drop ${row.applyPerS.drop} < ${primary.p0_applyPerS.dropMin}`);
+		if (!(row.applyPerS.after <= primary.p0_applyPerS.maxAbsolute)) fails.push(`P0: apply/s ${row.applyPerS.after} > ${primary.p0_applyPerS.maxAbsolute} (absolute)`);
+		if (row.applyMsPerS.drop !== null && row.applyMsPerS.drop < primary.p1_applyMsPerS.dropMin) fails.push(`P1: applyMs/s drop ${row.applyMsPerS.drop} < ${primary.p1_applyMsPerS.dropMin}`);
+		if (row.rafOver50.drop !== null && row.rafOver50.drop < primary.p1_rafOver50.dropMin) fails.push(`P1: rafOver50 drop ${row.rafOver50.drop} < ${primary.p1_rafOver50.dropMin}`);
+		/* rafP50 sentinel: absolute on purpose - the "nothing broke" gate */
+		if (!(row.rafP50.after <= primary.p1_rafP50.sentinelMax && row.rafP50.after >= primary.p1_rafP50.sentinelMin)) fails.push(`rafP50 ${row.rafP50.after} outside the ${primary.p1_rafP50.sentinelMin}-${primary.p1_rafP50.sentinelMax} sentinel band (the fix introduced or masked frame trouble)`);
+		if (!(row.reconcileRatio.after >= primary.p1_reconcileRatio.min && row.reconcileRatio.after <= primary.p1_reconcileRatio.max)) fails.push(`reconcileRatio ${row.reconcileRatio.after} outside ${primary.p1_reconcileRatio.min}-${primary.p1_reconcileRatio.max} (instrument is not trustworthy)`);
+		/* Instance count from a self-validated probe, when one exists */
+		if (instanceProbe) {
+			if (instanceProbe.capturedCount === 0) fails.push(`P0: no instance probe run declared CAPTURED (${instanceProbe.blockers.map((k) => `${k}=${instanceProbe.files[k].determination}`).join(", ")}) - the instance number is not evidence`);
+			else if (instanceProbe.maxInstancesAcrossCapturedRuns > primary.p0_instances.mustEqual) fails.push(`P0: a self-validated instance probe counted ${instanceProbe.maxInstancesAcrossCapturedRuns} presenters (must be ${primary.p0_instances.mustEqual})`);
+			if (instanceProbe.blockers.length > 0 && instanceProbe.capturedCount > 0) console.log(`    note: ${instanceProbe.blockers.length} probe file(s) not CAPTURED and therefore ignored: ${instanceProbe.blockers.join(", ")}`);
+		}
+
 		row.verdict = fails.length === 0 ? "PASS" : "FAIL";
 		row.failures = fails;
 		if (fails.length) verdict = "FAIL";
 		rows.push(row);
+
+		/* REFERENCE items - reported, enforced only on request. */
+		const refFails = [];
+		if ((ENFORCE_REFERENCE || reference.recalcOverTask.enforce) && !(row.recalcOverTask.after <= reference.recalcOverTask.max)) refFails.push(`RecalcStyle/Task ${row.recalcOverTask.after} > ${reference.recalcOverTask.max}`);
+		if ((ENFORCE_REFERENCE || reference.applyShareOfBusy.enforce) && !(row.applyOverBusy.after <= reference.applyShareOfBusy.max)) refFails.push(`applyMs/busyMs ${row.applyOverBusy.after} > ${reference.applyShareOfBusy.max}`);
+		if ((ENFORCE_REFERENCE || reference.rafPerS.enforce) && !(row.rafPerS.after >= reference.rafPerS.min)) refFails.push(`raf/s ${row.rafPerS.after} < ${reference.rafPerS.min}`);
+		if ((ENFORCE_REFERENCE || reference.rafP99.enforce) && !(row.rafP99.after <= reference.rafP99.max)) refFails.push(`rafP99 ${row.rafP99.after} > ${reference.rafP99.max}`);
+		if ((ENFORCE_REFERENCE || reference.taskMsPerS.enforce) && row.taskMsPerS.drop !== null && row.taskMsPerS.drop < reference.taskMsPerS.dropMin) refFails.push(`Task/s drop ${row.taskMsPerS.drop} < ${reference.taskMsPerS.dropMin}`);
+		referenceRows.push({ scenario: s, values: { recalcOverTask: row.recalcOverTask, applyOverBusy: row.applyOverBusy, rafPerS: row.rafPerS, rafP99: row.rafP99, taskMsPerS: row.taskMsPerS }, provenance: "cpuL (contaminated batch)", enforced: ENFORCE_REFERENCE, failures: refFails });
+		if (refFails.length) verdict = "FAIL";
 	}
-	const out = { generatedAt: new Date().toISOString(), before: files[0], after: files[1], thresholds, rows, verdict };
+
+	const out = {
+		generatedAt: new Date().toISOString(),
+		before: files[0],
+		after: files[1],
+		enforceReference: ENFORCE_REFERENCE,
+		instanceProbe,
+		thresholdsPrimary: primary,
+		thresholdsReference: reference,
+		rows,
+		referenceRows,
+		verdict
+	};
 	fs.writeFileSync(path.join(RAW, `compare-${LABEL}.json`), JSON.stringify(out, null, 2) + "\n");
 	for (const row of rows) {
-		console.log(`\n=== ${row.scenario}  ${row.verdict}`);
+		console.log(`\n=== ${row.scenario}  ${row.verdict}${row.gateExclusive ? "" : "  [GATE NOT EXCLUSIVE]"}`);
 		console.log(`    nodes ${row.nodes.before} -> ${row.nodes.after} (sameScale=${row.nodes.sameScale})`);
 		console.log(`    instances ${row.instances.before} -> ${row.instances.after}`);
-		console.log(`    apply/s ${row.applyPerS.before} -> ${row.applyPerS.after}`);
-		console.log(`    applyMs/s ${row.applyMsPerS.before} -> ${row.applyMsPerS.after}`);
-		console.log(`    busyMs/s ${row.busyMsPerS.before} -> ${row.busyMsPerS.after}`);
-		console.log(`    RecalcStyle/Task ${row.recalcOverTask.before} -> ${row.recalcOverTask.after}`);
-		console.log(`    applyMs/busyMs ${row.applyOverBusy.before} -> ${row.applyOverBusy.after}`);
-		console.log(`    rafP50 ${row.rafP50.before} -> ${row.rafP50.after} (sentinel)`);
-		console.log(`    rafP99 ${row.rafP99.before} -> ${row.rafP99.after}`);
-		console.log(`    rafOver50 ${row.rafOver50.before} -> ${row.rafOver50.after}`);
+		console.log(`    PRIMARY apply/s ${row.applyPerS.before} -> ${row.applyPerS.after}  drop=${row.applyPerS.drop}`);
+		console.log(`    PRIMARY applyMs/s ${row.applyMsPerS.before} -> ${row.applyMsPerS.after}  drop=${row.applyMsPerS.drop}`);
+		console.log(`    PRIMARY rafOver50 ${row.rafOver50.before} -> ${row.rafOver50.after}  drop=${row.rafOver50.drop}`);
+		console.log(`    SENTINEL rafP50 ${row.rafP50.before} -> ${row.rafP50.after}`);
+		console.log(`    PRIMARY reconcileRatio ${row.reconcileRatio.before} -> ${row.reconcileRatio.after}`);
+		console.log(`    ref (contaminated baseline, ${ENFORCE_REFERENCE ? "ENFORCED" : "not enforced"}): RecalcStyle/Task ${row.recalcOverTask.before} -> ${row.recalcOverTask.after}; applyMs/busyMs ${row.applyOverBusy.before} -> ${row.applyOverBusy.after}; raf/s ${row.rafPerS.before} -> ${row.rafPerS.after}; rafP99 ${row.rafP99.before} -> ${row.rafP99.after}`);
 		for (const f of row.failures) console.log(`    FAIL: ${f}`);
 	}
+	for (const r of referenceRows) if (r.failures.length) console.log(`\n    REFERENCE FAIL (${r.scenario}, enforced): ${r.failures.join("; ")}`);
 	console.log(`\n=== BATCH VERDICT: ${verdict} ===`);
+	console.log(`    primary criteria: relative drops + absolute guards (apply/s ceiling, rafP50 sentinel, node scale, reconcile ratio)`);
+	console.log(`    reference criteria from the CONTAMINATED cpuL batch: ${ENFORCE_REFERENCE ? "enforced" : "reported only (pass --enforce-reference to enforce)"}`);
+	if (instanceProbe) {
+		for (const k of Object.keys(instanceProbe.files)) {
+			const p = instanceProbe.files[k];
+			console.log(`    instance probe ${p.file}: determination=${p.determination} scenario=${p.scenario} N1=${p.n1} N2=${p.n2} N3=${p.n3} allThreeEqual=${p.allThreeEqual}`);
+		}
+	}
+	else console.log("    instance probe: none found in raw/ (unit (0) must not be judged from this comparison alone)");
 	process.exit(verdict === "PASS" ? 0 : 2);
 }
+
 
 const { chromium } = await import(LAUNCH);
 fs.mkdirSync(RAW, { recursive: true });

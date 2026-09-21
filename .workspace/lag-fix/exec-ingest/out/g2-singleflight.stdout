@@ -1,0 +1,14 @@
+(node:3430219) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:3430219) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+### G2 single-flight — lib=stage/lib-cand
+tap log: ["worker-spawn pid=3430219 threadId=?","start id=1","start id=2","start id=3"]
+PASS  G2a:ten-concurrent-callers-share-one-promise — 10 concurrent run() calls produced 1 distinct promise object(s)
+PASS  G2b:all-ten-settle-with-the-same-successful-result — 10/10 identical result object(s), ok=true
+PASS  G2c:runner-performed-ONE-pass — runs=1 workerSpawns=1
+PASS  G2d:worker-side-start-count-is-ONE — tap log after wave 1: 1 start message(s), spawns=1
+PASS  G2e:joiners-inside-an-in-flight-pass-stack-nothing — two concurrent callers shared one promise=true; runs=2; starts=2
+PASS  G2f:slot-released-after-settle — sequential call after settle: ok=true runs=3 starts=3
+RESULT: PASS

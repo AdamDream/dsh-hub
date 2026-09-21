@@ -37,18 +37,28 @@ const argOf = (name, fallback) => {
 	const i = argv.indexOf("--" + name);
 	return i >= 0 ? argv[i + 1] : fallback;
 };
+const hasFlag = (name) => argv.includes("--" + name);
 const SCOPE_ARG = argOf("scope", null);
 const CAND = argOf("candidates", path.join(HERE, "candidates"));
+const ALLOW_SKIP = hasFlag("allow-unavailable-mutations");
 const md5 = (v) => crypto.createHash("md5").update(v).digest("hex");
 const wcLines = (t) => (t.match(/\n/g) || []).length;
 
 const NUL = String.fromCharCode(0);
 const results = [];
 let failed = 0;
+let skipped = 0;
 const check = (id, name, ok, detail) => {
 	results.push({ id, name, verdict: ok ? "PASS" : "FAIL", detail });
 	if (!ok) failed += 1;
 	console.log(`[${ok ? "PASS" : "FAIL"}] ${id.padEnd(4)} ${name}${detail ? `  — ${detail}` : ""}`);
+};
+/** A mutation whose candidate is absent from this scope is SKIPPED, never silently passed: the
+ * counter-test is only evidence when it actually ran (see the all-units run). */
+const skip = (id, name, detail) => {
+	results.push({ id, name, verdict: "SKIP", detail });
+	skipped += 1;
+	console.log(`[SKIP] ${id.padEnd(4)} ${name}  — ${detail}`);
 };
 
 console.log(`verify-candidates  scope=${SCOPE_ARG ?? "(from manifest)"}  candidates=${CAND}`);
@@ -264,7 +274,9 @@ const mutationsRaw = [];
 for (const mutation of mutations) {
 	const source = readIf(mutation.file);
 	if (source === null) {
-		check(mutation.id, mutation.name, false, `candidate ${path.basename(mutation.file)} not generated (scope off) — mutation NOT driven`);
+		const why = `candidate ${path.basename(mutation.file)} is not in this scope — counter-test NOT driven here`;
+		if (ALLOW_SKIP) skip(mutation.id, mutation.name, why);
+		else check(mutation.id, mutation.name, false, why);
 		continue;
 	}
 	let mutated = null;

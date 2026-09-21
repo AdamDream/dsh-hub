@@ -125,4 +125,9 @@
 6. 跨线时间比较**先换算本地时区**（部分 harness 记 UTC）。
 7. **历史绝对值换算**：独占 vs 受污染实测膨胀 **Script 4.5–10.3×、apply 9.6–20.5×、Task 3.2–8.3×、Recalc 5.6–9.3×**；
    `Layout` 在受污染批被测成 ≈0 ⇒ **该指标只有独占批可用**。引用历史"script 80–190 ms/s"须先除以 3–10。
+8. ⚠️ **仪器陷阱（exec-ingest 实测复现，全队适用）**：`perf_hooks.monitorEventLoopDelay` **会丢弃 `reset()` 之后的第一个样本** ——
+   `enable → settle → reset → block` 对 **3 s / 20 s** 的阻塞只报 **10.31 / 10.16 ms**；改成 `enable → settle → block` 才报 **3 003 / 20 015 ms**。
+   ⇒ **任何"主线程阻塞/事件循环延迟"测量都必须避开在阻塞前 `reset()`**（保留样本或改用独立心跳确认）。
+   证据：`exec-ingest/tools/probe-eld-reset.mjs` + `out/eld-reset-trap.txt`。
+
 

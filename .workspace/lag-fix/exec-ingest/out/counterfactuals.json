@@ -1,0 +1,136 @@
+{
+  "suite": "counterfactual-controls",
+  "lib": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/stage/lib-cand",
+  "rows": [
+    {
+      "id": "CF-A:without-the-fix-the-rebuild-throws-UNIQUE",
+      "ok": true,
+      "detail": "threw=\"UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project\" (the exact production error text)"
+    },
+    {
+      "id": "CF-B:upsert-alone-hides-the-defect-instead-of-fixing-it",
+      "ok": true,
+      "detail": "threw=null; instrumented rebuilds=1; A4 violations (produced days the DELETE never covered)=[\"2026-08-21\",\"2026-08-22\"]; deleted=[\"2026-08-19\",\"2026-08-20\",\"2026-08-24\",\"2026-08-25\"] produced=[\"2026-08-19\",\"2026-08-20\",\"2026-08-21\",\"2026-08-22\",\"2026-08-24\",\"2026-08-25\"] — the upsert REPLACED the stale rows instead of deleting them, i.e. it hid the defect"
+    },
+    {
+      "id": "CF-C:without-single-flight-ten-callers-stack-multiple-folds",
+      "ok": true,
+      "detail": "worker-side starts=10 (expected >1), settled=10/10"
+    },
+    {
+      "id": "CF-D:the-candidate-passes-the-same-three-assertions",
+      "ok": true,
+      "detail": "threw=null; A4 violations=[]; deleted=[\"2026-08-19\",\"2026-08-20\",\"2026-08-21\",\"2026-08-22\",\"2026-08-23\",\"2026-08-24\",\"2026-08-25\"] produced=[\"2026-08-19\",\"2026-08-20\",\"2026-08-21\",\"2026-08-22\",\"2026-08-24\",\"2026-08-25\"]; staleSurvivors=[]; workerStarts=1; allOk=true"
+    }
+  ],
+  "evidence": {
+    "cfA": {
+      "threw": "UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project",
+      "probeCalls": 0,
+      "lastProbe": null,
+      "a4Violations": [],
+      "a4Violation": false,
+      "staleSurvivors": [
+        "2026-08-19",
+        "2026-08-20",
+        "2026-08-21",
+        "2026-08-22",
+        "2026-08-24",
+        "2026-08-25"
+      ]
+    },
+    "cfB": {
+      "threw": null,
+      "probeCalls": 1,
+      "lastProbe": {
+        "deleted": [
+          "2026-08-19",
+          "2026-08-20",
+          "2026-08-24",
+          "2026-08-25"
+        ],
+        "produced": [
+          "2026-08-19",
+          "2026-08-20",
+          "2026-08-21",
+          "2026-08-22",
+          "2026-08-24",
+          "2026-08-25"
+        ]
+      },
+      "a4Violations": [
+        "2026-08-21",
+        "2026-08-22"
+      ],
+      "a4Violation": true,
+      "staleSurvivors": []
+    },
+    "cfC": {
+      "starts": 10,
+      "settledCount": 10,
+      "deadlineHit": false,
+      "stats": {
+        "runs": 10,
+        "ok": 1,
+        "failed": 9,
+        "stalls": 9,
+        "timeouts": 0,
+        "workerSpawns": 1,
+        "invalidations": 10,
+        "workerAlive": false,
+        "workerThreadId": -1,
+        "pendingId": null,
+        "inFlight": false,
+        "disposed": true,
+        "stallMs": 5000,
+        "hardTimeoutMs": 900000
+      }
+    },
+    "cfD": {
+      "scenario": {
+        "threw": null,
+        "probeCalls": 1,
+        "lastProbe": {
+          "deleted": [
+            "2026-08-19",
+            "2026-08-20",
+            "2026-08-21",
+            "2026-08-22",
+            "2026-08-23",
+            "2026-08-24",
+            "2026-08-25"
+          ],
+          "produced": [
+            "2026-08-19",
+            "2026-08-20",
+            "2026-08-21",
+            "2026-08-22",
+            "2026-08-24",
+            "2026-08-25"
+          ]
+        },
+        "a4Violations": [],
+        "a4Violation": false,
+        "staleSurvivors": []
+      },
+      "starts": 1,
+      "stats": {
+        "runs": 1,
+        "ok": 1,
+        "failed": 0,
+        "stalls": 0,
+        "timeouts": 0,
+        "workerSpawns": 1,
+        "invalidations": 1,
+        "workerAlive": true,
+        "workerThreadId": 2,
+        "pendingId": null,
+        "inFlight": false,
+        "disposed": false,
+        "stallMs": 120000,
+        "hardTimeoutMs": 900000
+      }
+    }
+  },
+  "pass": true
+}

@@ -1,0 +1,105 @@
+{
+  "generatedAt": "2026-09-21T09:17:17.393Z",
+  "probeFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-theme/experiments/probe-instances.mjs",
+  "simulation": {
+    "applies": 40,
+    "callsites": [
+      {
+        "name": "apply",
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+        "line": 366
+      },
+      {
+        "name": "apply",
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+        "line": 366
+      },
+      {
+        "name": "dispatch",
+        "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "line": 11
+      },
+      {
+        "name": "apply",
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+        "line": 366
+      }
+    ]
+  },
+  "results": [
+    {
+      "id": "S4a",
+      "name": "the shipped probe installs a prepareStackTrace hook",
+      "verdict": "PASS"
+    },
+    {
+      "id": "S4b",
+      "name": "the shipped probe READS `.stack` (the step v1 lacked)",
+      "verdict": "PASS"
+    },
+    {
+      "id": "S4c",
+      "name": "the shipped probe carries an in-page self-validation",
+      "verdict": "PASS"
+    },
+    {
+      "id": "S4d",
+      "name": "the shipped probe can return INCONCLUSIVE / NOT-OBSERVED instead of a bare number",
+      "verdict": "PASS"
+    },
+    {
+      "id": "S4e",
+      "name": "the shipped probe reports three independent instance counters",
+      "verdict": "PASS"
+    },
+    {
+      "id": "S4f",
+      "name": "the shipped probe defines `instanceCount` and `applyCalls` explicitly",
+      "verdict": "PASS"
+    },
+    {
+      "id": "S1",
+      "name": "v1 root cause reproduced: hook installed, `.stack` never read, handler NEVER runs",
+      "verdict": "PASS",
+      "detail": "prepareCalls=0 frames=0 while 40 applies happened (this is exactly the coordinator's instances=0 with applyCalls=70)"
+    },
+    {
+      "id": "S2",
+      "name": "v2 captures a ui-layout `apply` frame on identical inputs",
+      "verdict": "PASS",
+      "detail": "prepareCalls=40 distinctApplyObjects=2 sources=[\"client.js?rev=abdb7f55acba#L366\"]"
+    },
+    {
+      "id": "S2b",
+      "name": "the mutation control is real: broken=0 frames vs fixed>=1 frame",
+      "verdict": "PASS",
+      "detail": "a verifier that cannot tell these apart has no discriminating power"
+    },
+    {
+      "id": "S3",
+      "name": "stack reads are sampled, not per-apply, beyond the 60-apply burn-in",
+      "verdict": "PASS",
+      "detail": "stackReads=90 for 300 applies (expected 90 = 60 + floor((300-60)/8)); inside the first 60 the probe reads every apply on purpose"
+    },
+    {
+      "id": "S3b",
+      "name": "inside the 40-apply window every apply is read (no under-sampling there)",
+      "verdict": "PASS",
+      "detail": "stackReads=40 for 40 applies"
+    },
+    {
+      "id": "S2c",
+      "name": "only ui-layout frames count as presenters (a shell `apply` frame does not inflate N1)",
+      "verdict": "PASS",
+      "detail": "frames=1 urls=[\"client.js?rev=abdb7f55acba#L366\"] — the second synthetic CallSite is assets/index-ClqxG24t.js and was correctly ignored"
+    },
+    {
+      "id": "S2d",
+      "name": "distinct function objects count separately and repeats saturate",
+      "verdict": "PASS",
+      "detail": "distinct=3 (3 synthetic apply function objects), stackReads=3 — repeats do not inflate the count"
+    }
+  ],
+  "failed": 0,
+  "verdict": "PASS"
+}

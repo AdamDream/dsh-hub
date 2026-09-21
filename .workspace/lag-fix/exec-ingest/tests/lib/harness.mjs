@@ -178,7 +178,7 @@ export function injectIg3Probe(file, source) {
 		"\t\ttry {\n" +
 		'\t\t\tdb.exec("CREATE TABLE IF NOT EXISTS __ig3_probe (id INTEGER PRIMARY KEY AUTOINCREMENT, deleted TEXT NOT NULL, produced TEXT NOT NULL)");\n' +
 		"\t\t\tconst producedProbe = db.prepare(\"SELECT DISTINCT strftime('%Y-%m-%d', ts / 1000, 'unixepoch', 'localtime') AS day FROM usage_events WHERE ts >= ? AND ts < ? ORDER BY day\").all(lo, hiExclusive).map((row) => row.day);\n" +
-		'\t\t\tdb.prepare("INSERT INTO __ig3_probe (deleted, produced) VALUES (?, ?)").run(JSON.stringify(spanDays ?? days), JSON.stringify(producedProbe));\n' +
+		'\t\t\tdb.prepare("INSERT INTO __ig3_probe (deleted, produced) VALUES (?, ?)").run(JSON.stringify(typeof spanDays === "undefined" ? days : spanDays), JSON.stringify(producedProbe));\n' +
 		"\t\t} catch {\n" +
 		"\t\t\t/* probe only */\n" +
 		"\t\t}\n" +

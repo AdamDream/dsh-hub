@@ -1,0 +1,173 @@
+
+### E1 equivalence — TZ=UTC lib=stage/lib-cand (lib-cand-UTC)
+PASS  face:return_dshFirst — byte-identical
+PASS  face:return_ccFirst — byte-identical
+PASS  face:return_dshSecond — byte-identical
+PASS  face:return_ccSecond — byte-identical
+PASS  face:return_dshAppend — byte-identical
+PASS  face:return_ccAppend — byte-identical
+PASS  face:return_dshClean — byte-identical
+PASS  face:return_ccClean — byte-identical
+PASS  face:db_usage_events — byte-identical
+PASS  face:db_usage_daily — byte-identical
+PASS  face:db_sync_state — byte-identical
+PASS  worker:results-ok — {"first":true,"second":true,"append":true,"clean":true}
+PASS  worker:persistent-worker-reused — runs=3 workerSpawns=1 (one persistent worker reused across passes)
+PASS  append:exercised — cc append pass scanned=1 newEvents=0 failed=1 (expected newEvents=0; the pre-fix ingest-cc.js cursor off-by-one loses the appended record — both paths lose it IDENTICALLY, which is what the faces above prove)
+PASS  fixture:non-vacuous — events=6 daily=5 sync=5
+counts: sync events=6 daily=5 sync=5 | worker events=6 daily=5 sync=5
+RESULT: PASS
+
+### E1 equivalence — TZ=UTC lib=stage/lib-origdb (lib-origdb-UTC)
+PASS  face:return_dshFirst — byte-identical
+PASS  face:return_ccFirst — byte-identical
+PASS  face:return_dshSecond — byte-identical
+PASS  face:return_ccSecond — byte-identical
+PASS  face:return_dshAppend — byte-identical
+PASS  face:return_ccAppend — byte-identical
+PASS  face:return_dshClean — byte-identical
+PASS  face:return_ccClean — byte-identical
+PASS  face:db_usage_events — byte-identical
+PASS  face:db_usage_daily — byte-identical
+PASS  face:db_sync_state — byte-identical
+PASS  worker:results-ok — {"first":true,"second":true,"append":true,"clean":true}
+PASS  worker:persistent-worker-reused — runs=3 workerSpawns=1 (one persistent worker reused across passes)
+PASS  append:exercised — cc append pass scanned=1 newEvents=0 failed=1 (expected newEvents=0; the pre-fix ingest-cc.js cursor off-by-one loses the appended record — both paths lose it IDENTICALLY, which is what the faces above prove)
+PASS  fixture:non-vacuous — events=6 daily=5 sync=5
+counts: sync events=6 daily=5 sync=5 | worker events=6 daily=5 sync=5
+RESULT: PASS
+
+### E1 equivalence — TZ=UTC lib=stage/lib-cand-ccfix (lib-cand-ccfix-UTC)
+PASS  face:return_dshFirst — byte-identical
+PASS  face:return_ccFirst — byte-identical
+PASS  face:return_dshSecond — byte-identical
+PASS  face:return_ccSecond — byte-identical
+PASS  face:return_dshAppend — byte-identical
+PASS  face:return_ccAppend — byte-identical
+PASS  face:return_dshClean — byte-identical
+PASS  face:return_ccClean — byte-identical
+PASS  face:db_usage_events — byte-identical
+PASS  face:db_usage_daily — byte-identical
+PASS  face:db_sync_state — byte-identical
+PASS  worker:results-ok — {"first":true,"second":true,"append":true,"clean":true}
+PASS  worker:persistent-worker-reused — runs=3 workerSpawns=1 (one persistent worker reused across passes)
+PASS  append:exercised — cc append pass scanned=1 newEvents=1 failed=0 (expected newEvents=1; the pre-fix ingest-cc.js cursor off-by-one loses the appended record — both paths lose it IDENTICALLY, which is what the faces above prove)
+PASS  fixture:non-vacuous — events=7 daily=5 sync=5
+counts: sync events=7 daily=5 sync=5 | worker events=7 daily=5 sync=5
+RESULT: PASS
+
+### E1 equivalence — TZ=Asia/Shanghai lib=stage/lib-cand (lib-cand-Asia-Shanghai)
+PASS  face:return_dshFirst — byte-identical
+PASS  face:return_ccFirst — byte-identical
+PASS  face:return_dshSecond — byte-identical
+PASS  face:return_ccSecond — byte-identical
+PASS  face:return_dshAppend — byte-identical
+PASS  face:return_ccAppend — byte-identical
+PASS  face:return_dshClean — byte-identical
+PASS  face:return_ccClean — byte-identical
+PASS  face:db_usage_events — byte-identical
+PASS  face:db_usage_daily — byte-identical
+PASS  face:db_sync_state — byte-identical
+PASS  worker:results-ok — {"first":true,"second":true,"append":true,"clean":true}
+PASS  worker:persistent-worker-reused — runs=3 workerSpawns=1 (one persistent worker reused across passes)
+PASS  append:exercised — cc append pass scanned=1 newEvents=0 failed=1 (expected newEvents=0; the pre-fix ingest-cc.js cursor off-by-one loses the appended record — both paths lose it IDENTICALLY, which is what the faces above prove)
+PASS  fixture:non-vacuous — events=6 daily=5 sync=5
+counts: sync events=6 daily=5 sync=5 | worker events=6 daily=5 sync=5
+RESULT: PASS
+
+### E1 equivalence — TZ=Asia/Shanghai lib=stage/lib-origdb (lib-origdb-Asia-Shanghai)
+PASS  face:return_dshFirst — byte-identical
+PASS  face:return_ccFirst — byte-identical
+PASS  face:return_dshSecond — byte-identical
+PASS  face:return_ccSecond — byte-identical
+PASS  face:return_dshAppend — byte-identical
+PASS  face:return_ccAppend — byte-identical
+PASS  face:return_dshClean — byte-identical
+PASS  face:return_ccClean — byte-identical
+PASS  face:db_usage_events — byte-identical
+PASS  face:db_usage_daily — byte-identical
+PASS  face:db_sync_state — byte-identical
+PASS  worker:results-ok — {"first":true,"second":true,"append":true,"clean":true}
+PASS  worker:persistent-worker-reused — runs=3 workerSpawns=1 (one persistent worker reused across passes)
+PASS  append:exercised — cc append pass scanned=1 newEvents=0 failed=1 (expected newEvents=0; the pre-fix ingest-cc.js cursor off-by-one loses the appended record — both paths lose it IDENTICALLY, which is what the faces above prove)
+PASS  fixture:non-vacuous — events=6 daily=5 sync=5
+counts: sync events=6 daily=5 sync=5 | worker events=6 daily=5 sync=5
+RESULT: PASS
+
+### E1 equivalence — TZ=Asia/Shanghai lib=stage/lib-cand-ccfix (lib-cand-ccfix-Asia-Shanghai)
+PASS  face:return_dshFirst — byte-identical
+PASS  face:return_ccFirst — byte-identical
+PASS  face:return_dshSecond — byte-identical
+PASS  face:return_ccSecond — byte-identical
+PASS  face:return_dshAppend — byte-identical
+PASS  face:return_ccAppend — byte-identical
+PASS  face:return_dshClean — byte-identical
+PASS  face:return_ccClean — byte-identical
+PASS  face:db_usage_events — byte-identical
+PASS  face:db_usage_daily — byte-identical
+PASS  face:db_sync_state — byte-identical
+PASS  worker:results-ok — {"first":true,"second":true,"append":true,"clean":true}
+PASS  worker:persistent-worker-reused — runs=3 workerSpawns=1 (one persistent worker reused across passes)
+PASS  append:exercised — cc append pass scanned=1 newEvents=1 failed=0 (expected newEvents=1; the pre-fix ingest-cc.js cursor off-by-one loses the appended record — both paths lose it IDENTICALLY, which is what the faces above prove)
+PASS  fixture:non-vacuous — events=7 daily=5 sync=5
+counts: sync events=7 daily=5 sync=5 | worker events=7 daily=5 sync=5
+RESULT: PASS
+
+### E1 equivalence — TZ=America/New_York lib=stage/lib-cand (lib-cand-America-New_York)
+PASS  face:return_dshFirst — byte-identical
+PASS  face:return_ccFirst — byte-identical
+PASS  face:return_dshSecond — byte-identical
+PASS  face:return_ccSecond — byte-identical
+PASS  face:return_dshAppend — byte-identical
+PASS  face:return_ccAppend — byte-identical
+PASS  face:return_dshClean — byte-identical
+PASS  face:return_ccClean — byte-identical
+PASS  face:db_usage_events — byte-identical
+PASS  face:db_usage_daily — byte-identical
+PASS  face:db_sync_state — byte-identical
+PASS  worker:results-ok — {"first":true,"second":true,"append":true,"clean":true}
+PASS  worker:persistent-worker-reused — runs=3 workerSpawns=1 (one persistent worker reused across passes)
+PASS  append:exercised — cc append pass scanned=1 newEvents=0 failed=1 (expected newEvents=0; the pre-fix ingest-cc.js cursor off-by-one loses the appended record — both paths lose it IDENTICALLY, which is what the faces above prove)
+PASS  fixture:non-vacuous — events=6 daily=5 sync=5
+counts: sync events=6 daily=5 sync=5 | worker events=6 daily=5 sync=5
+RESULT: PASS
+
+### E1 equivalence — TZ=America/New_York lib=stage/lib-origdb (lib-origdb-America-New_York)
+PASS  face:return_dshFirst — byte-identical
+PASS  face:return_ccFirst — byte-identical
+PASS  face:return_dshSecond — byte-identical
+PASS  face:return_ccSecond — byte-identical
+PASS  face:return_dshAppend — byte-identical
+PASS  face:return_ccAppend — byte-identical
+PASS  face:return_dshClean — byte-identical
+PASS  face:return_ccClean — byte-identical
+PASS  face:db_usage_events — byte-identical
+PASS  face:db_usage_daily — byte-identical
+PASS  face:db_sync_state — byte-identical
+PASS  worker:results-ok — {"first":true,"second":true,"append":true,"clean":true}
+PASS  worker:persistent-worker-reused — runs=3 workerSpawns=1 (one persistent worker reused across passes)
+PASS  append:exercised — cc append pass scanned=1 newEvents=0 failed=1 (expected newEvents=0; the pre-fix ingest-cc.js cursor off-by-one loses the appended record — both paths lose it IDENTICALLY, which is what the faces above prove)
+PASS  fixture:non-vacuous — events=6 daily=5 sync=5
+counts: sync events=6 daily=5 sync=5 | worker events=6 daily=5 sync=5
+RESULT: PASS
+
+### E1 equivalence — TZ=America/New_York lib=stage/lib-cand-ccfix (lib-cand-ccfix-America-New_York)
+PASS  face:return_dshFirst — byte-identical
+PASS  face:return_ccFirst — byte-identical
+PASS  face:return_dshSecond — byte-identical
+PASS  face:return_ccSecond — byte-identical
+PASS  face:return_dshAppend — byte-identical
+PASS  face:return_ccAppend — byte-identical
+PASS  face:return_dshClean — byte-identical
+PASS  face:return_ccClean — byte-identical
+PASS  face:db_usage_events — byte-identical
+PASS  face:db_usage_daily — byte-identical
+PASS  face:db_sync_state — byte-identical
+PASS  worker:results-ok — {"first":true,"second":true,"append":true,"clean":true}
+PASS  worker:persistent-worker-reused — runs=3 workerSpawns=1 (one persistent worker reused across passes)
+PASS  append:exercised — cc append pass scanned=1 newEvents=1 failed=0 (expected newEvents=1; the pre-fix ingest-cc.js cursor off-by-one loses the appended record — both paths lose it IDENTICALLY, which is what the faces above prove)
+PASS  fixture:non-vacuous — events=7 daily=5 sync=5
+counts: sync events=7 daily=5 sync=5 | worker events=7 daily=5 sync=5
+RESULT: PASS
+==============================
+E1 SUITE EXIT: 0

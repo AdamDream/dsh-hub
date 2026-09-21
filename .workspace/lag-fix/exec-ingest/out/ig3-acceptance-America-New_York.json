@@ -1,0 +1,156 @@
+{
+  "suite": "U-IG3-acceptance-A1-A5",
+  "tz": "America/New_York",
+  "lib": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/stage/lib-cand",
+  "realRoot": null,
+  "rows": [
+    {
+      "id": "A1a:non-contiguous-rebuild-does-not-throw",
+      "ok": true,
+      "detail": "no UNIQUE failure"
+    },
+    {
+      "id": "A2a:daily-converges-to-events(JS aggregation)",
+      "ok": true,
+      "detail": "keys expected=12 actual=12 mismatched=0 orphan=0"
+    },
+    {
+      "id": "A2b:no-stale-row-survives",
+      "ok": true,
+      "detail": "0 row(s) still carry the pre-seeded 999 marker"
+    },
+    {
+      "id": "A2c:equals-full-recompute",
+      "ok": true,
+      "detail": "row-for-row identical to a full recompute"
+    },
+    {
+      "id": "A5:three-consecutive-rebuilds-stable",
+      "ok": true,
+      "detail": "3 runs, 1 distinct result(s)"
+    },
+    {
+      "id": "A4:produced-day-set-is-a-subset-of-the-DELETE-set",
+      "ok": true,
+      "detail": "2 instrumented rebuild(s); DELETE set=[\"2026-08-19\",\"2026-08-20\",\"2026-08-21\",\"2026-08-22\",\"2026-08-23\",\"2026-08-24\",\"2026-08-25\"]; GROUP BY produced=[\"2026-08-19\",\"2026-08-20\",\"2026-08-21\",\"2026-08-22\",\"2026-08-24\",\"2026-08-25\"]; produced∖deleted=[]"
+    },
+    {
+      "id": "A3:endpoints-same-with-and-without-the-daily-rebuild",
+      "ok": true,
+      "detail": "8 endpoints, events=12, daily rows after rebuild=12; byte-identical=true"
+    }
+  ],
+  "evidence": {
+    "tz": "America/New_York",
+    "lib": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/stage/lib-cand",
+    "fixRun": {
+      "error": null,
+      "dailyAfter": [
+        {
+          "day": "2026-08-19",
+          "model": "m-1",
+          "requests": 1
+        },
+        {
+          "day": "2026-08-19",
+          "model": "m-2",
+          "requests": 1
+        },
+        {
+          "day": "2026-08-20",
+          "model": "m-1",
+          "requests": 1
+        },
+        {
+          "day": "2026-08-20",
+          "model": "m-2",
+          "requests": 1
+        },
+        {
+          "day": "2026-08-21",
+          "model": "m-1",
+          "requests": 1
+        },
+        {
+          "day": "2026-08-21",
+          "model": "m-2",
+          "requests": 1
+        },
+        {
+          "day": "2026-08-22",
+          "model": "m-1",
+          "requests": 1
+        },
+        {
+          "day": "2026-08-22",
+          "model": "m-2",
+          "requests": 1
+        },
+        {
+          "day": "2026-08-24",
+          "model": "m-1",
+          "requests": 1
+        },
+        {
+          "day": "2026-08-24",
+          "model": "m-2",
+          "requests": 1
+        },
+        {
+          "day": "2026-08-25",
+          "model": "m-1",
+          "requests": 1
+        },
+        {
+          "day": "2026-08-25",
+          "model": "m-2",
+          "requests": 1
+        }
+      ]
+    },
+    "convergence": {
+      "expectedKeys": 12,
+      "actualKeys": 12,
+      "mismatched": [],
+      "orphan": []
+    },
+    "a4": {
+      "calls": 2,
+      "deleted": [
+        "2026-08-19",
+        "2026-08-20",
+        "2026-08-21",
+        "2026-08-22",
+        "2026-08-23",
+        "2026-08-24",
+        "2026-08-25"
+      ],
+      "produced": [
+        "2026-08-19",
+        "2026-08-20",
+        "2026-08-21",
+        "2026-08-22",
+        "2026-08-24",
+        "2026-08-25"
+      ],
+      "violations": []
+    },
+    "endpoints": {
+      "endpointError": null,
+      "events": 12,
+      "dailyRows": 12,
+      "equal": true,
+      "differing": [],
+      "summaryValues": {
+        "requests": 12,
+        "input_tokens": 180,
+        "output_tokens": 360,
+        "cache_read_tokens": 12,
+        "cache_write_tokens": 24,
+        "hit_rate": 0.0625,
+        "sessions": 12
+      }
+    }
+  },
+  "pass": true
+}

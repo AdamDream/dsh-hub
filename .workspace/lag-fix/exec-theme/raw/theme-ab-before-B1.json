@@ -1,0 +1,529 @@
+{
+  "generatedAt": "2026-09-21T09:11:17.283Z",
+  "variant": "B",
+  "label": "before-B1",
+  "winMs": 8000,
+  "scenarios": [
+    "home",
+    "long",
+    "settings"
+  ],
+  "windows": [
+    {
+      "variant": "B",
+      "label": "before-B1-home",
+      "scenario": "home-idle",
+      "wallSec": 8,
+      "nodes": 619,
+      "applyCount": 67,
+      "applyPerS": 8.375,
+      "bodySetProperty": 67,
+      "bodyRemoveProperty": 67,
+      "instances": 0,
+      "instanceUrls": {},
+      "blockedComputedStyle": 135,
+      "probe": {
+        "computedBodyBackground": "rgb(0, 0, 0)",
+        "tokenBgBase": "rgba(255, 255, 255, 0.88)",
+        "themeColorMetaContent": "rgb(0, 0, 0)",
+        "themeColorMetaCount": 1,
+        "rootColorScheme": "light",
+        "bodyDarkAttribute": false,
+        "bodyStyleAttr": "--dsw-alias-bg-base: rgba(255, 255, 255, 0.88);",
+        "bodyPropCount": 1,
+        "nodes": 619
+      },
+      "cdp": {
+        "ScriptDuration": 168.067,
+        "ScriptMsPerS": 21.008,
+        "TaskDuration": 396.027,
+        "TaskMsPerS": 49.503,
+        "RecalcStyleDuration": 3.324,
+        "RecalcMsPerS": 0.416,
+        "LayoutDuration": 0,
+        "RecalcStyleCount": 12000
+      },
+      "profile": {
+        "msPerSample": 1.071,
+        "samples": 7609,
+        "wallMs": 8150.641,
+        "busyMs": 177.788,
+        "busyMsPerS": 21.813,
+        "applyMs": 5.355,
+        "applyMsPerS": 0.657,
+        "applyRowCount": 3,
+        "applyRows": [
+          {
+            "fn": "apply",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+            "line": 366,
+            "selfMs": 2.142
+          },
+          {
+            "fn": "apply",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+            "line": 366,
+            "selfMs": 2.142
+          },
+          {
+            "fn": "apply",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+            "line": 366,
+            "selfMs": 1.071
+          }
+        ],
+        "top": [
+          {
+            "fn": "(idle)",
+            "url": "",
+            "line": 0,
+            "selfMs": 7884.366
+          },
+          {
+            "fn": "(program)",
+            "url": "",
+            "line": 0,
+            "selfMs": 77.119
+          },
+          {
+            "fn": "(garbage collector)",
+            "url": "",
+            "line": 0,
+            "selfMs": 10.711
+          },
+          {
+            "fn": "buildListSnapshot",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 8553,
+            "selfMs": 7.498
+          },
+          {
+            "fn": "projectList",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 9272,
+            "selfMs": 7.498
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "",
+            "line": 101,
+            "selfMs": 5.355
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 8554,
+            "selfMs": 5.355
+          },
+          {
+            "fn": "installRowBadges.sessions",
+            "url": "http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b",
+            "line": 5426,
+            "selfMs": 5.355
+          }
+        ]
+      },
+      "raf": {
+        "count": 483,
+        "perS": 60.375,
+        "intervals": {
+          "n": 482,
+          "p50": 16.7,
+          "p95": 16.7,
+          "p99": 16.8,
+          "max": 133.3,
+          "over50": 1
+        }
+      },
+      "longtasks": {
+        "n": 0,
+        "maxMs": null
+      },
+      "ws": {
+        "total": 655,
+        "byType": {
+          "session/event": 588,
+          "session/projection": 66,
+          "approval/requested": 1
+        }
+      },
+      "pageErrors": [],
+      "concurrency": {
+        "gateOutcome": "EXCLUSIVE",
+        "gateWaitedMs": 8237,
+        "censusStart": {
+          "at": "2026-09-21T09:10:42.804Z",
+          "instances": 1,
+          "mineCount": 1,
+          "foreignCount": 0,
+          "foreign": [],
+          "lockOwner": "agent: exec-theme (theme batch, subagent) line: M-A/M-B/M-C/M-D causal separation + P0 instance check",
+          "lockHeldByMyLine": true,
+          "lockDirPresent": true
+        },
+        "censusEnd": {
+          "at": "2026-09-21T09:10:50.991Z",
+          "instances": 1,
+          "mineCount": 1,
+          "foreignCount": 0,
+          "foreign": [],
+          "lockOwner": "agent: exec-theme (theme batch, subagent) line: M-A/M-B/M-C/M-D causal separation + P0 instance check",
+          "lockHeldByMyLine": true,
+          "lockDirPresent": true
+        },
+        "foreignSeenDuringGate": [],
+        "exclusiveThroughout": true
+      },
+      "integrity": {
+        "rafOk": true,
+        "rafRateSane": true,
+        "unitOk": true
+      },
+      "recalcOverTask": 0.008,
+      "applyShareOfBusy": 0.03,
+      "reconcileRatio": 1.037
+    },
+    {
+      "variant": "B",
+      "label": "before-B1-long",
+      "scenario": "long-session-idle",
+      "wallSec": 8.001,
+      "nodes": 2888,
+      "applyCount": 60,
+      "applyPerS": 7.499,
+      "bodySetProperty": 60,
+      "bodyRemoveProperty": 60,
+      "instances": 0,
+      "instanceUrls": {},
+      "blockedComputedStyle": 121,
+      "probe": {
+        "computedBodyBackground": "rgb(0, 0, 0)",
+        "tokenBgBase": "rgba(255, 255, 255, 0.88)",
+        "themeColorMetaContent": "rgb(0, 0, 0)",
+        "themeColorMetaCount": 1,
+        "rootColorScheme": "light",
+        "bodyDarkAttribute": false,
+        "bodyStyleAttr": "--dsw-alias-bg-base: rgba(255, 255, 255, 0.88);",
+        "bodyPropCount": 1,
+        "nodes": 2888
+      },
+      "cdp": {
+        "ScriptDuration": 199.819,
+        "ScriptMsPerS": 24.974,
+        "TaskDuration": 1747.432,
+        "TaskMsPerS": 218.402,
+        "RecalcStyleDuration": 91.457,
+        "RecalcMsPerS": 11.431,
+        "LayoutDuration": 305.35,
+        "RecalcStyleCount": 492000
+      },
+      "profile": {
+        "msPerSample": 1.064,
+        "samples": 7601,
+        "wallMs": 8087.738,
+        "busyMs": 185.134,
+        "busyMsPerS": 22.891,
+        "applyMs": 4.256,
+        "applyMsPerS": 0.526,
+        "applyRowCount": 3,
+        "applyRows": [
+          {
+            "fn": "apply",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+            "line": 366,
+            "selfMs": 2.128
+          },
+          {
+            "fn": "apply",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+            "line": 366,
+            "selfMs": 1.064
+          },
+          {
+            "fn": "apply",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+            "line": 366,
+            "selfMs": 1.064
+          }
+        ],
+        "top": [
+          {
+            "fn": "(idle)",
+            "url": "",
+            "line": 0,
+            "selfMs": 6416.452
+          },
+          {
+            "fn": "(program)",
+            "url": "",
+            "line": 0,
+            "selfMs": 1475.646
+          },
+          {
+            "fn": "(garbage collector)",
+            "url": "",
+            "line": 0,
+            "selfMs": 9.575
+          },
+          {
+            "fn": "Xo",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 54,
+            "selfMs": 7.447
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 8554,
+            "selfMs": 7.447
+          },
+          {
+            "fn": "J3",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 56,
+            "selfMs": 5.32
+          },
+          {
+            "fn": "nextSessionOrderAccount",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+            "line": 1103,
+            "selfMs": 5.32
+          },
+          {
+            "fn": "buildListSnapshot",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 8553,
+            "selfMs": 5.32
+          }
+        ]
+      },
+      "raf": {
+        "count": 484,
+        "perS": 60.492,
+        "intervals": {
+          "n": 483,
+          "p50": 16.7,
+          "p95": 16.8,
+          "p99": 16.8,
+          "max": 66.7,
+          "over50": 1
+        }
+      },
+      "longtasks": {
+        "n": 0,
+        "maxMs": null
+      },
+      "ws": {
+        "total": 80,
+        "byType": {
+          "session/projection": 60,
+          "session/event": 20
+        }
+      },
+      "pageErrors": [],
+      "concurrency": {
+        "gateOutcome": "EXCLUSIVE",
+        "gateWaitedMs": 8175,
+        "censusStart": {
+          "at": "2026-09-21T09:10:58.400Z",
+          "instances": 1,
+          "mineCount": 1,
+          "foreignCount": 0,
+          "foreign": [],
+          "lockOwner": "agent: exec-theme (theme batch, subagent) line: M-A/M-B/M-C/M-D causal separation + P0 instance check",
+          "lockHeldByMyLine": true,
+          "lockDirPresent": true
+        },
+        "censusEnd": {
+          "at": "2026-09-21T09:11:06.529Z",
+          "instances": 1,
+          "mineCount": 1,
+          "foreignCount": 0,
+          "foreign": [],
+          "lockOwner": "agent: exec-theme (theme batch, subagent) line: M-A/M-B/M-C/M-D causal separation + P0 instance check",
+          "lockHeldByMyLine": true,
+          "lockDirPresent": true
+        },
+        "foreignSeenDuringGate": [],
+        "exclusiveThroughout": true
+      },
+      "integrity": {
+        "rafOk": true,
+        "rafRateSane": true,
+        "unitOk": true
+      },
+      "recalcOverTask": 0.052,
+      "applyShareOfBusy": 0.023,
+      "reconcileRatio": 0.636
+    },
+    {
+      "variant": "B",
+      "label": "before-B1-settings",
+      "scenario": "settings-dwell",
+      "wallSec": 8,
+      "nodes": 3059,
+      "applyCount": 30,
+      "applyPerS": 3.75,
+      "bodySetProperty": 30,
+      "bodyRemoveProperty": 30,
+      "instances": 0,
+      "instanceUrls": {},
+      "blockedComputedStyle": 61,
+      "probe": {
+        "computedBodyBackground": "rgb(0, 0, 0)",
+        "tokenBgBase": "rgba(255, 255, 255, 0.88)",
+        "themeColorMetaContent": "rgb(0, 0, 0)",
+        "themeColorMetaCount": 1,
+        "rootColorScheme": "light",
+        "bodyDarkAttribute": false,
+        "bodyStyleAttr": "--dsw-alias-bg-base: rgba(255, 255, 255, 0.88);",
+        "bodyPropCount": 1,
+        "nodes": 3059
+      },
+      "cdp": {
+        "ScriptDuration": 120.029,
+        "ScriptMsPerS": 15.004,
+        "TaskDuration": 1852.975,
+        "TaskMsPerS": 231.622,
+        "RecalcStyleDuration": 128.295,
+        "RecalcMsPerS": 16.037,
+        "LayoutDuration": 372.337,
+        "RecalcStyleCount": 467000
+      },
+      "profile": {
+        "msPerSample": 1.062,
+        "samples": 7597,
+        "wallMs": 8067.493,
+        "busyMs": 116.816,
+        "busyMsPerS": 14.48,
+        "applyMs": 2.124,
+        "applyMsPerS": 0.263,
+        "applyRowCount": 1,
+        "applyRows": [
+          {
+            "fn": "apply",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+            "line": 366,
+            "selfMs": 2.124
+          }
+        ],
+        "top": [
+          {
+            "fn": "(idle)",
+            "url": "",
+            "line": 0,
+            "selfMs": 6253.344
+          },
+          {
+            "fn": "(program)",
+            "url": "",
+            "line": 0,
+            "selfMs": 1693.68
+          },
+          {
+            "fn": "projectList",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 9272,
+            "selfMs": 6.371
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 53,
+            "selfMs": 5.309
+          },
+          {
+            "fn": "buildListSnapshot",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 8553,
+            "selfMs": 5.309
+          },
+          {
+            "fn": "s",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 54,
+            "selfMs": 4.247
+          },
+          {
+            "fn": "walk",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 5615,
+            "selfMs": 3.186
+          },
+          {
+            "fn": "nextSessionOrderAccount",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+            "line": 1103,
+            "selfMs": 3.186
+          }
+        ]
+      },
+      "raf": {
+        "count": 464,
+        "perS": 58,
+        "intervals": {
+          "n": 463,
+          "p50": 16.7,
+          "p95": 16.8,
+          "p99": 33.4,
+          "max": 66.7,
+          "over50": 3
+        }
+      },
+      "longtasks": {
+        "n": 0,
+        "maxMs": null
+      },
+      "ws": {
+        "total": 40,
+        "byType": {
+          "session/projection": 30,
+          "session/event": 10
+        }
+      },
+      "pageErrors": [],
+      "concurrency": {
+        "gateOutcome": "EXCLUSIVE",
+        "gateWaitedMs": 8158,
+        "censusStart": {
+          "at": "2026-09-21T09:11:09.154Z",
+          "instances": 1,
+          "mineCount": 1,
+          "foreignCount": 0,
+          "foreign": [],
+          "lockOwner": "agent: exec-theme (theme batch, subagent) line: M-A/M-B/M-C/M-D causal separation + P0 instance check",
+          "lockHeldByMyLine": true,
+          "lockDirPresent": true
+        },
+        "censusEnd": {
+          "at": "2026-09-21T09:11:17.264Z",
+          "instances": 1,
+          "mineCount": 1,
+          "foreignCount": 0,
+          "foreign": [],
+          "lockOwner": "agent: exec-theme (theme batch, subagent) line: M-A/M-B/M-C/M-D causal separation + P0 instance check",
+          "lockHeldByMyLine": true,
+          "lockDirPresent": true
+        },
+        "foreignSeenDuringGate": [],
+        "exclusiveThroughout": true
+      },
+      "integrity": {
+        "rafOk": true,
+        "rafRateSane": true,
+        "unitOk": true
+      },
+      "recalcOverTask": 0.069,
+      "applyShareOfBusy": 0.018,
+      "reconcileRatio": 0.47
+    }
+  ],
+  "acceptedWindows": 3,
+  "discipline": "read-only; single browser; single page; no save/apply/delete/refresh; page-API instrumentation only",
+  "notes": [
+    "applyCount = body.style.removeProperty calls (one per apply, because the retraction set holds one token)",
+    "instances = distinct `apply` function objects observed through Error.prepareStackTrace CallSite.getFunction()",
+    "K-C (variant B) replaces window.getComputedStyle for document.body only; functional checks must run without it",
+    "variant C makes body style writes no-ops, so it must not be used for functional judgements"
+  ]
+}

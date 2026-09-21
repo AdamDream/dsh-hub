@@ -1,0 +1,488 @@
+{
+  "root": "/home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-usage/lib",
+  "marker": "dsh-perf-fix Ingest-v1",
+  "written": [
+    {
+      "file": "db.js",
+      "action": "patched",
+      "preImage": "db.js"
+    },
+    {
+      "file": "index.js",
+      "action": "patched",
+      "preImage": "index.js"
+    },
+    {
+      "file": "rpc.js",
+      "action": "patched",
+      "preImage": "rpc.js"
+    },
+    {
+      "file": "ingest-worker.js",
+      "action": "create",
+      "preImage": "ingest-worker.js.ABSENT"
+    },
+    {
+      "file": "ingest-runner.js",
+      "action": "create",
+      "preImage": "ingest-runner.js.ABSENT"
+    }
+  ],
+  "summary": {
+    "mode": "apply",
+    "root": "/home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-usage/lib",
+    "marker": "dsh-perf-fix Ingest-v1",
+    "result": "WROTE",
+    "files": [
+      {
+        "file": "db.js",
+        "status": "patch",
+        "shaBefore": "77ab2e8ec489024f",
+        "shaAfter": "ecb86c2357314c2c",
+        "edits": [
+          {
+            "id": "D1-openUsageDb-pragmas",
+            "what": "U-IG1.5 busy_timeout=5000 + 加固 PRAGMA temp_store=2 (after journal_mode=WAL)",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "D2-rebuildDaily-range-and-span",
+            "what": "U-IG3 修法 A: DST-anchored range + the exact set of local days the INSERT covers (`spanDays`)",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "D3-placeholders-moved-to-span",
+            "what": "U-IG3 修法 A: the old top-of-function `placeholders` (built from `days`) is removed — it would both shadow the span set and trip a TDZ error, because `spanDays` is computed further down",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "D3b-delete-uses-span",
+            "what": "U-IG3 修法 A: declare `placeholders` from `spanDays` right at the DELETE and bind `spanDays`",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "D4-insert-upsert",
+            "what": "U-IG3 修法 B: INSERT … ON CONFLICT DO UPDATE (belt & braces over 修法 A)",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "D5-export-invalidate",
+            "what": "U-IG1.3: export `invalidateMaxDailyDayCache` so the HOST can clear its MAX(day) gate cache",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "decl:export function invalidateMaxDailyDayCache",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:const spanDays = []",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:const placeholders = spanDays.map(() => \"?\")",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:PRAGMA busy_timeout = 5000",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:PRAGMA temp_store = 2",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:ON CONFLICT(day, data_source, model, project",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          }
+        ],
+        "syntax": {
+          "checks": [
+            {
+              "mode": "node --check <file>",
+              "ok": true,
+              "detail": ""
+            },
+            {
+              "mode": "node --check <esm .mjs copy>",
+              "ok": true,
+              "detail": ""
+            }
+          ],
+          "ok": true
+        }
+      },
+      {
+        "file": "index.js",
+        "status": "patch",
+        "shaBefore": "743469a5aaa22e0e",
+        "shaAfter": "ce85f4bdf2bfb0d9",
+        "edits": [
+          {
+            "id": "I1-import-runner",
+            "what": "U-IG1.6: import the ingest runner",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "I2-switch-constants",
+            "what": "U-IG1.6/U-IG2: INGEST_VIA_WORKER (rollback switch) + INGEST_TIMER_ENABLED (DEFAULT OFF, gated on G1–G5)",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "I3-runner-variable",
+            "what": "U-IG1.6: the runner reference",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "I4-runIngest-split",
+            "what": "U-IG1.6: the old synchronous body becomes `runIngestSync` (rollback), the worker path becomes `runIngestWorker`, and `runIngest` dispatches between them",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "I5-runIngest-dispatch",
+            "what": "U-IG1.6: `runIngest` keeps the dispose/db guard and the await semantics for the first scan, the 45s tick and `/usage/refresh`",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "I6-register-rpc",
+            "what": "U-IG1.4: pass the refresh de-duplication seam (join-or-start single-flight); no data endpoint gets a barrier",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "I7-create-runner",
+            "what": "U-IG1.6: create the runner once the DB path is known; worker progress feeds `ingestSummary`",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "I8-timer-block",
+            "what": "U-IG2 fix shape + switch: install through `ctx.inject([\"timer\"], cb)`, never through a throwing `typeof ctx.setInterval` probe",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "I9-dispose-runner",
+            "what": "U-IG1.6 / gate G4: terminate the worker on plugin unload so a reload cannot leak a thread",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "decl:import { createIngestRunner } from \"./ingest",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:const INGEST_VIA_WORKER = true;",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:const INGEST_TIMER_ENABLED = false;",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:let runner = null;",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:const runIngestSync = async () =>",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:const runIngestWorker = async () =>",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:waitIdle: () => (runner === null ? runIngest",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:ctx.inject([\"timer\"], (timerCtx) => {",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:void runner?.dispose();",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "import:index.js←./ingest-runner.js:createIngestRunner",
+            "what": "imported name is exported by its source file",
+            "hits": 1,
+            "ok": true,
+            "detail": "exported ✓"
+          }
+        ],
+        "syntax": {
+          "checks": [
+            {
+              "mode": "node --check <file>",
+              "ok": true,
+              "detail": ""
+            },
+            {
+              "mode": "node --check <esm .mjs copy>",
+              "ok": true,
+              "detail": ""
+            }
+          ],
+          "ok": true
+        }
+      },
+      {
+        "file": "rpc.js",
+        "status": "patch",
+        "shaBefore": "3c91ac22f4863b0e",
+        "shaAfter": "6a3e774181d262de",
+        "edits": [
+          {
+            "id": "R1-deps-waitIdle",
+            "what": "U-IG1.4: accept the optional `waitIdle` seam",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "R2-refresh-dedupe",
+            "what": "U-IG1.4: refresh joins the in-flight pass instead of stacking a second fold (status + the 7 data endpoints are untouched)",
+            "hits": 1,
+            "ok": true,
+            "detail": "anchor unique ✓"
+          },
+          {
+            "id": "decl:const { ingest, statusProvider, waitIdle } =",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:if (typeof waitIdle === \"function\") await wa",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          }
+        ],
+        "syntax": {
+          "checks": [
+            {
+              "mode": "node --check <file>",
+              "ok": true,
+              "detail": ""
+            },
+            {
+              "mode": "node --check <esm .mjs copy>",
+              "ok": true,
+              "detail": ""
+            }
+          ],
+          "ok": true
+        }
+      },
+      {
+        "file": "ingest-worker.js",
+        "status": "create",
+        "shaBefore": null,
+        "shaAfter": "15ac65f7d6c009d3",
+        "edits": [
+          {
+            "id": "new-file",
+            "what": "create (was absent)",
+            "ok": true,
+            "detail": "absent"
+          },
+          {
+            "id": "decl:import { openUsageDb } from \"./db.js\";",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:import { foldDshSource } from \"./ingest-dsh.",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:import { foldCcSource } from \"./ingest-cc.js",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "forbid:resolveDbPath",
+            "what": "identifier must not appear in this file",
+            "hits": 0,
+            "ok": true,
+            "detail": "absent"
+          },
+          {
+            "id": "import:ingest-worker.js←./db.js:openUsageDb",
+            "what": "imported name is exported by its source file",
+            "hits": 1,
+            "ok": true,
+            "detail": "exported ✓"
+          },
+          {
+            "id": "import:ingest-worker.js←./ingest-dsh.js:foldDshSource",
+            "what": "imported name is exported by its source file",
+            "hits": 1,
+            "ok": true,
+            "detail": "exported ✓"
+          },
+          {
+            "id": "import:ingest-worker.js←./ingest-cc.js:foldCcSource",
+            "what": "imported name is exported by its source file",
+            "hits": 1,
+            "ok": true,
+            "detail": "exported ✓"
+          }
+        ],
+        "syntax": {
+          "checks": [
+            {
+              "mode": "node --check <file>",
+              "ok": true,
+              "detail": ""
+            },
+            {
+              "mode": "node --check <esm .mjs copy>",
+              "ok": true,
+              "detail": ""
+            }
+          ],
+          "ok": true
+        }
+      },
+      {
+        "file": "ingest-runner.js",
+        "status": "create",
+        "shaBefore": null,
+        "shaAfter": "92acb9bc014fa110",
+        "edits": [
+          {
+            "id": "new-file",
+            "what": "create (was absent)",
+            "ok": true,
+            "detail": "absent"
+          },
+          {
+            "id": "decl:import { Worker } from \"node:worker_threads\"",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:import { invalidateMaxDailyDayCache } from \"",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "decl:export function createIngestRunner(options =",
+            "what": "introduced identifier is declared in the same file",
+            "hits": 1,
+            "ok": true,
+            "detail": "present"
+          },
+          {
+            "id": "import:ingest-runner.js←./db.js:invalidateMaxDailyDayCache",
+            "what": "imported name is exported by its source file",
+            "hits": 1,
+            "ok": true,
+            "detail": "exported ✓"
+          }
+        ],
+        "syntax": {
+          "checks": [
+            {
+              "mode": "node --check <file>",
+              "ok": true,
+              "detail": ""
+            },
+            {
+              "mode": "node --check <esm .mjs copy>",
+              "ok": true,
+              "detail": ""
+            }
+          ],
+          "ok": true
+        }
+      }
+    ]
+  }
+}

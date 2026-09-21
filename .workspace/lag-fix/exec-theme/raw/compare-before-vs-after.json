@@ -1,0 +1,391 @@
+{
+  "generatedAt": "2026-09-21T09:29:31.005Z",
+  "before": "raw/theme-ab-before.json",
+  "after": "raw/theme-ab-after.json",
+  "enforceReference": false,
+  "instanceProbe": null,
+  "thresholdsPrimary": {
+    "_what": "the PASS/FAIL criteria: relative drops measured in the SAME conditions (machine, scenario, window length), plus the absolute guards that do NOT depend on the contaminated batch.",
+    "p0_instances": {
+      "mustEqual": 1,
+      "enforce": true,
+      "note": "every scenario, every window; >1 is FAIL. Judged from experiments/probe-instances.mjs, which may only be believed when its `determination` is CAPTURED (a dead detector previously produced instances=0)."
+    },
+    "p0_applyPerS": {
+      "dropMin": 0.5,
+      "maxAbsolute": 5,
+      "enforce": true,
+      "note": "both: relative drop versus the same-condition BEFORE run, and an absolute ceiling that does not come from the contaminated batch"
+    },
+    "p0_bodyStyleWrites": {
+      "dropMin": 0.5,
+      "enforce": true,
+      "note": "capture6.mjs bodyStyleWrites per-window delta"
+    },
+    "p0_themeChangePerS": {
+      "dropMin": 0.5,
+      "enforce": true,
+      "note": "derived as applyPerS / liveInstanceCount; only meaningful once p0_instances is verified"
+    },
+    "p1_applyMsPerS": {
+      "dropMin": 0.7,
+      "enforce": true,
+      "note": "settings scenarios, same-window comparison"
+    },
+    "p1_rafOver50": {
+      "dropMin": 0.5,
+      "enforce": true,
+      "note": "relative drop of long frames per 2 windows versus the same-condition BEFORE run"
+    },
+    "p1_rafP50": {
+      "sentinelMin": 16.6,
+      "sentinelMax": 16.8,
+      "enforce": true,
+      "note": "SENTINEL. The baseline is 16.7 ms everywhere; a WORSE p50 is a FAIL even if p99 improves. Absolute on purpose: this is the 'nothing broke' gate, not a 'got better' gate."
+    },
+    "p1_nodes": {
+      "maxRelativeDelta": 0.05,
+      "enforce": true,
+      "note": "a >5% DOM-node difference makes the windows incomparable => INCONCLUSIVE"
+    },
+    "p1_reconcileRatio": {
+      "min": 0.9,
+      "max": 1.1,
+      "enforce": true,
+      "note": "instrument sanity, not a performance threshold"
+    }
+  },
+  "thresholdsReference": {
+    "_what": "reported for context and NOT enforced unless the comparison is run with --enforce-reference. Each entry records where its number came from.",
+    "recalcOverTask": {
+      "max": 0.15,
+      "provenance": "audit §4.2, derived from the CONTAMINATED cpuL batch ('from 60.0%'). The coordinator's clean measurement already sits at 31-35%, so the 60%->15% framing does not apply to a clean BEFORE/AFTER pair.",
+      "enforce": false
+    },
+    "applyShareOfBusy": {
+      "max": 0.1,
+      "provenance": "audit §4.2, derived from the CONTAMINATED cpuL batch ('from 0.50-0.80').",
+      "enforce": false
+    },
+    "taskMsPerS": {
+      "dropMin": 0.4,
+      "provenance": "audit §4.2; relative, but the task denominator carries unrelated work, so it stays advisory until the M-B/M-C separation lands.",
+      "enforce": false
+    },
+    "rafPerS": {
+      "min": 55,
+      "provenance": "audit §4.2 baseline 35.6-49/s, itself a contended-machine number (a clean page runs ~60/s). Absolute and baseline-derived.",
+      "enforce": false
+    },
+    "rafP99": {
+      "max": 33,
+      "provenance": "audit §4.2 baseline 50-133 ms, from the contaminated batch.",
+      "enforce": false
+    },
+    "longTasks": {
+      "note": "audit §4.2 sets no hard threshold because the baseline swings 0-18; reported only."
+    }
+  },
+  "rows": [
+    {
+      "scenario": "home-idle",
+      "windows": {
+        "before": 8,
+        "after": 8
+      },
+      "gateExclusive": true,
+      "nodes": {
+        "before": 621.75,
+        "after": 605.125,
+        "sameScale": true
+      },
+      "instances": {
+        "before": 0,
+        "after": 0
+      },
+      "applyPerS": {
+        "before": 7.156,
+        "after": 0,
+        "drop": 1
+      },
+      "applyMsPerS": {
+        "before": 11.064,
+        "after": 0,
+        "drop": 1
+      },
+      "busyMsPerS": {
+        "before": 31.084,
+        "after": 27.655,
+        "drop": 0.11
+      },
+      "taskMsPerS": {
+        "before": 66.177,
+        "after": 59.518,
+        "drop": 0.101
+      },
+      "recalcOverTask": {
+        "before": 0.16,
+        "after": 0.049
+      },
+      "applyOverBusy": {
+        "before": 0.255,
+        "after": 0
+      },
+      "rafOver50": {
+        "before": 1.25,
+        "after": 1,
+        "drop": 0.2
+      },
+      "rafPerS": {
+        "before": 60.249,
+        "after": 60.484
+      },
+      "rafP50": {
+        "before": 16.7,
+        "after": 16.7
+      },
+      "rafP99": {
+        "before": 16.8,
+        "after": 16.8
+      },
+      "reconcileRatio": {
+        "before": 0.943,
+        "after": 0.9
+      },
+      "verdict": "FAIL",
+      "failures": [
+        "P1: rafOver50 drop 0.2 < 0.5"
+      ]
+    },
+    {
+      "scenario": "long-session-idle",
+      "windows": {
+        "before": 8,
+        "after": 8
+      },
+      "gateExclusive": true,
+      "nodes": {
+        "before": 2842.25,
+        "after": 2851,
+        "sameScale": true
+      },
+      "instances": {
+        "before": 0,
+        "after": 0
+      },
+      "applyPerS": {
+        "before": 6.516,
+        "after": 0,
+        "drop": 1
+      },
+      "applyMsPerS": {
+        "before": 56.119,
+        "after": 0,
+        "drop": 1
+      },
+      "busyMsPerS": {
+        "before": 87.584,
+        "after": 32.511,
+        "drop": 0.629
+      },
+      "taskMsPerS": {
+        "before": 264.459,
+        "after": 203.239,
+        "drop": 0.231
+      },
+      "recalcOverTask": {
+        "before": 0.235,
+        "after": 0.039
+      },
+      "applyOverBusy": {
+        "before": 0.295,
+        "after": 0
+      },
+      "rafOver50": {
+        "before": 5.875,
+        "after": 0.75,
+        "drop": 0.872
+      },
+      "rafPerS": {
+        "before": 57.062,
+        "after": 60.436
+      },
+      "rafP50": {
+        "before": 16.7,
+        "after": 16.7
+      },
+      "rafP99": {
+        "before": 50.075,
+        "after": 16.8
+      },
+      "reconcileRatio": {
+        "before": 0.647,
+        "after": 0.773
+      },
+      "verdict": "FAIL",
+      "failures": [
+        "reconcileRatio 0.773 outside 0.9-1.1 (instrument is not trustworthy)"
+      ]
+    },
+    {
+      "scenario": "settings-dwell",
+      "windows": {
+        "before": 8,
+        "after": 8
+      },
+      "gateExclusive": true,
+      "nodes": {
+        "before": 3022.375,
+        "after": 3022,
+        "sameScale": true
+      },
+      "instances": {
+        "before": 0,
+        "after": 0
+      },
+      "applyPerS": {
+        "before": 5.219,
+        "after": 0,
+        "drop": 1
+      },
+      "applyMsPerS": {
+        "before": 57.063,
+        "after": 0,
+        "drop": 1
+      },
+      "busyMsPerS": {
+        "before": 94.175,
+        "after": 43.106,
+        "drop": 0.542
+      },
+      "taskMsPerS": {
+        "before": 289.755,
+        "after": 277.629,
+        "drop": 0.042
+      },
+      "recalcOverTask": {
+        "before": 0.249,
+        "after": 0.062
+      },
+      "applyOverBusy": {
+        "before": 0.405,
+        "after": 0
+      },
+      "rafOver50": {
+        "before": 5.875,
+        "after": 0.75,
+        "drop": 0.872
+      },
+      "rafPerS": {
+        "before": 53.451,
+        "after": 60.374
+      },
+      "rafP50": {
+        "before": 16.7,
+        "after": 16.7
+      },
+      "rafP99": {
+        "before": 68.788,
+        "after": 16.8
+      },
+      "reconcileRatio": {
+        "before": 0.772,
+        "after": 0.701
+      },
+      "verdict": "FAIL",
+      "failures": [
+        "reconcileRatio 0.701 outside 0.9-1.1 (instrument is not trustworthy)"
+      ]
+    }
+  ],
+  "referenceRows": [
+    {
+      "scenario": "home-idle",
+      "values": {
+        "recalcOverTask": {
+          "before": 0.16,
+          "after": 0.049
+        },
+        "applyOverBusy": {
+          "before": 0.255,
+          "after": 0
+        },
+        "rafPerS": {
+          "before": 60.249,
+          "after": 60.484
+        },
+        "rafP99": {
+          "before": 16.8,
+          "after": 16.8
+        },
+        "taskMsPerS": {
+          "before": 66.177,
+          "after": 59.518,
+          "drop": 0.101
+        }
+      },
+      "provenance": "cpuL (contaminated batch)",
+      "enforced": false,
+      "failures": []
+    },
+    {
+      "scenario": "long-session-idle",
+      "values": {
+        "recalcOverTask": {
+          "before": 0.235,
+          "after": 0.039
+        },
+        "applyOverBusy": {
+          "before": 0.295,
+          "after": 0
+        },
+        "rafPerS": {
+          "before": 57.062,
+          "after": 60.436
+        },
+        "rafP99": {
+          "before": 50.075,
+          "after": 16.8
+        },
+        "taskMsPerS": {
+          "before": 264.459,
+          "after": 203.239,
+          "drop": 0.231
+        }
+      },
+      "provenance": "cpuL (contaminated batch)",
+      "enforced": false,
+      "failures": []
+    },
+    {
+      "scenario": "settings-dwell",
+      "values": {
+        "recalcOverTask": {
+          "before": 0.249,
+          "after": 0.062
+        },
+        "applyOverBusy": {
+          "before": 0.405,
+          "after": 0
+        },
+        "rafPerS": {
+          "before": 53.451,
+          "after": 60.374
+        },
+        "rafP99": {
+          "before": 68.788,
+          "after": 16.8
+        },
+        "taskMsPerS": {
+          "before": 289.755,
+          "after": 277.629,
+          "drop": 0.042
+        }
+      },
+      "provenance": "cpuL (contaminated batch)",
+      "enforced": false,
+      "failures": []
+    }
+  ],
+  "verdict": "FAIL"
+}
