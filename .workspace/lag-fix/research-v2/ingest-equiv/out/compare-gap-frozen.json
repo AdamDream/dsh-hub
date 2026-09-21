@@ -1,0 +1,1908 @@
+{
+  "label": "gap-frozen",
+  "tz": "UTC",
+  "gapMs": 800,
+  "timestamp": "2026-09-21T06:43:19.008Z",
+  "equivalence": {
+    "overall": true,
+    "checks": [
+      {
+        "name": "return.dshFirst",
+        "equal": true,
+        "baselineLen": 170,
+        "candidateLen": 170,
+        "firstDiff": null
+      },
+      {
+        "name": "return.ccFirst",
+        "equal": true,
+        "baselineLen": 44,
+        "candidateLen": 44,
+        "firstDiff": null
+      },
+      {
+        "name": "return.dshSecond",
+        "equal": true,
+        "baselineLen": 44,
+        "candidateLen": 44,
+        "firstDiff": null
+      },
+      {
+        "name": "return.ccSecond",
+        "equal": true,
+        "baselineLen": 44,
+        "candidateLen": 44,
+        "firstDiff": null
+      },
+      {
+        "name": "return.dshClean",
+        "equal": true,
+        "baselineLen": 44,
+        "candidateLen": 44,
+        "firstDiff": null
+      },
+      {
+        "name": "return.ccClean",
+        "equal": true,
+        "baselineLen": 44,
+        "candidateLen": 44,
+        "firstDiff": null
+      },
+      {
+        "name": "db.usage_events",
+        "equal": true,
+        "baselineLen": 1673,
+        "candidateLen": 1673,
+        "firstDiff": null
+      },
+      {
+        "name": "db.usage_daily",
+        "equal": true,
+        "baselineLen": 951,
+        "candidateLen": 951,
+        "firstDiff": null
+      },
+      {
+        "name": "db.sync_state",
+        "equal": true,
+        "baselineLen": 784,
+        "candidateLen": 784,
+        "firstDiff": null
+      }
+    ]
+  },
+  "baseline": {
+    "mode": "baseline",
+    "root": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_run/gap-frozen/base",
+    "dbPath": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_run/gap-frozen/base.db",
+    "endpointsAfterRebuild": {
+      "summary_all": {
+        "ms": 0.590659,
+        "value": {
+          "requests": 6,
+          "input_tokens": 143,
+          "output_tokens": 267,
+          "cache_read_tokens": 38,
+          "cache_write_tokens": 0,
+          "hit_rate": 0.20994475138121546,
+          "sessions": 3
+        }
+      },
+      "heatmap_2025": {
+        "ms": 0.472004,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "total": 425
+          }
+        ]
+      },
+      "heatmap_2026": {
+        "ms": 0.048632,
+        "value": [
+          {
+            "day": "2026-09-18",
+            "total": 23
+          }
+        ]
+      },
+      "byDay_all": {
+        "ms": 0.101602,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 5,
+            "input_tokens": 132,
+            "output_tokens": 255,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byModel_all": {
+        "ms": 0.057059,
+        "value": [
+          {
+            "model": "m-1",
+            "requests": 3,
+            "input_tokens": 24,
+            "output_tokens": 46,
+            "cache_read_tokens": 8,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-3",
+            "requests": 1,
+            "input_tokens": 8,
+            "output_tokens": 9,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-2",
+            "requests": 1,
+            "input_tokens": 100,
+            "output_tokens": 200,
+            "cache_read_tokens": 30,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "claude-sonnet-4",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byProject_all": {
+        "ms": 0.042751,
+        "value": [
+          {
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 5,
+            "input_tokens": 140,
+            "output_tokens": 263,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "project": "/home/CNS2026495165/dsh/dsh-usage",
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_day": {
+        "ms": 0.048773,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 5,
+            "input_tokens": 132,
+            "output_tokens": 255,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_hour": {
+        "ms": 0.027763,
+        "value": [
+          {
+            "day": "2025-08-24 01",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2025-08-24 02",
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18 10",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "sessions_all": {
+        "ms": 0.238482,
+        "value": [
+          {
+            "session_id": "ccsess1",
+            "data_source": "cc",
+            "ts": 1789725900000,
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0,
+            "model": "claude-sonnet-4",
+            "project": "/home/CNS2026495165/dsh"
+          },
+          {
+            "session_id": "sessB",
+            "data_source": "dsh",
+            "ts": 1756001000000,
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0,
+            "model": "m-1",
+            "project": "/home/CNS2026495165/dsh/dsh-usage"
+          },
+          {
+            "session_id": "sessA",
+            "data_source": "dsh",
+            "ts": 1756000200000,
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0,
+            "model": "m-3",
+            "project": "/home/CNS2026495165/dsh"
+          }
+        ]
+      },
+      "raw_count": {
+        "ms": 0.012444,
+        "value": {
+          "c": 6
+        }
+      },
+      "daily_maxday": {
+        "ms": 0.01068,
+        "value": {
+          "d": "2026-09-18"
+        }
+      },
+      "daily_rows": {
+        "ms": 0.006071,
+        "value": {
+          "c": 5
+        }
+      }
+    },
+    "result": {
+      "dshFirst": {
+        "scanned": 2,
+        "newEvents": 5,
+        "failedFiles": [
+          {
+            "error": "corrupt Zstandard session log: invalid frame magic at byte 0",
+            "file": "<ROOT>/dsh/sessions/sessC/session.jsonl.zstd"
+          }
+        ]
+      },
+      "ccFirst": {
+        "scanned": 2,
+        "newEvents": 1,
+        "failedFiles": []
+      },
+      "dshSecond": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "ccSecond": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "dshClean": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "ccClean": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      }
+    },
+    "final": {
+      "events": [
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "cc",
+          "dedup_key": "msg-1",
+          "id": 6,
+          "input_tokens": 11,
+          "is_subagent": 1,
+          "model": "claude-sonnet-4",
+          "output_tokens": 12,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "claude",
+          "session_id": "ccsess1",
+          "step": null,
+          "ts": 1789725900000,
+          "turn": null
+        },
+        {
+          "cache_read_tokens": 5,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t1:s1",
+          "id": 1,
+          "input_tokens": 10,
+          "is_subagent": 0,
+          "model": "m-1",
+          "output_tokens": 20,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "alpha",
+          "session_id": "sessA",
+          "step": 1,
+          "ts": 1756000000000,
+          "turn": 1
+        },
+        {
+          "cache_read_tokens": 3,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t1:s5",
+          "id": 2,
+          "input_tokens": 11,
+          "is_subagent": 0,
+          "model": "m-1",
+          "output_tokens": 22,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "alpha",
+          "session_id": "sessA",
+          "step": 5,
+          "ts": 1756000000104,
+          "turn": 1
+        },
+        {
+          "cache_read_tokens": 30,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t2:s1",
+          "id": 3,
+          "input_tokens": 100,
+          "is_subagent": 0,
+          "model": "m-2",
+          "output_tokens": 200,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "beta",
+          "session_id": "sessA",
+          "step": 1,
+          "ts": 1756000100000,
+          "turn": 2
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t2:s2",
+          "id": 4,
+          "input_tokens": 8,
+          "is_subagent": 0,
+          "model": "m-3",
+          "output_tokens": 9,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "gamma",
+          "session_id": "sessA",
+          "step": 2,
+          "ts": 1756000200000,
+          "turn": 2
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t1:s1",
+          "id": 5,
+          "input_tokens": 3,
+          "is_subagent": 0,
+          "model": "m-1",
+          "output_tokens": 4,
+          "project": "/home/CNS2026495165/dsh/dsh-usage",
+          "provider": "alpha",
+          "session_id": "sessB",
+          "step": 1,
+          "ts": 1756001000000,
+          "turn": 1
+        }
+      ],
+      "daily": [
+        {
+          "cache_read_tokens": 8,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 21,
+          "model": "m-1",
+          "output_tokens": 42,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 2
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 3,
+          "model": "m-1",
+          "output_tokens": 4,
+          "project": "/home/CNS2026495165/dsh/dsh-usage",
+          "requests": 1
+        },
+        {
+          "cache_read_tokens": 30,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 100,
+          "model": "m-2",
+          "output_tokens": 200,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 8,
+          "model": "m-3",
+          "output_tokens": 9,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "cc",
+          "day": "2026-09-18",
+          "input_tokens": 11,
+          "model": "claude-sonnet-4",
+          "output_tokens": 12,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1
+        }
+      ],
+      "sync": [
+        {
+          "fingerprint": null,
+          "last_offset": 917,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 916,
+          "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/ccsess1.jsonl"
+        },
+        {
+          "fingerprint": null,
+          "last_offset": 225,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 224,
+          "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/subagents/agent-x.jsonl"
+        },
+        {
+          "fingerprint": null,
+          "last_offset": 712,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 712,
+          "source": "dsh:<ROOT>/dsh/sessions/sessA/session.jsonl.zstd"
+        },
+        {
+          "fingerprint": "torn:211",
+          "last_offset": 211,
+          "last_seq": 1756001000000,
+          "mtime": 1789905600000,
+          "size": 268,
+          "source": "dsh:<ROOT>/dsh/sessions/sessB/session.jsonl.zstd"
+        },
+        {
+          "fingerprint": "1789905600000:31",
+          "last_offset": null,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 31,
+          "source": "dsh:<ROOT>/dsh/sessions/sessC/session.jsonl.zstd"
+        }
+      ]
+    },
+    "gapObservation": null
+  },
+  "candidate": {
+    "mode": "candidate",
+    "root": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_run/gap-frozen/cand",
+    "dbPath": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_run/gap-frozen/cand.db",
+    "endpointsAfterRebuild": {
+      "summary_all": {
+        "ms": 0.381563,
+        "value": {
+          "requests": 6,
+          "input_tokens": 143,
+          "output_tokens": 267,
+          "cache_read_tokens": 38,
+          "cache_write_tokens": 0,
+          "hit_rate": 0.20994475138121546,
+          "sessions": 3
+        }
+      },
+      "heatmap_2025": {
+        "ms": 0.366745,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "total": 425
+          }
+        ]
+      },
+      "heatmap_2026": {
+        "ms": 0.046248,
+        "value": [
+          {
+            "day": "2026-09-18",
+            "total": 23
+          }
+        ]
+      },
+      "byDay_all": {
+        "ms": 0.081274,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 5,
+            "input_tokens": 132,
+            "output_tokens": 255,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byModel_all": {
+        "ms": 0.059954,
+        "value": [
+          {
+            "model": "m-1",
+            "requests": 3,
+            "input_tokens": 24,
+            "output_tokens": 46,
+            "cache_read_tokens": 8,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-3",
+            "requests": 1,
+            "input_tokens": 8,
+            "output_tokens": 9,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-2",
+            "requests": 1,
+            "input_tokens": 100,
+            "output_tokens": 200,
+            "cache_read_tokens": 30,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "claude-sonnet-4",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byProject_all": {
+        "ms": 0.048973,
+        "value": [
+          {
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 5,
+            "input_tokens": 140,
+            "output_tokens": 263,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "project": "/home/CNS2026495165/dsh/dsh-usage",
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_day": {
+        "ms": 0.0531,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 5,
+            "input_tokens": 132,
+            "output_tokens": 255,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_hour": {
+        "ms": 0.030878,
+        "value": [
+          {
+            "day": "2025-08-24 01",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2025-08-24 02",
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18 10",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "sessions_all": {
+        "ms": 0.268268,
+        "value": [
+          {
+            "session_id": "ccsess1",
+            "data_source": "cc",
+            "ts": 1789725900000,
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0,
+            "model": "claude-sonnet-4",
+            "project": "/home/CNS2026495165/dsh"
+          },
+          {
+            "session_id": "sessB",
+            "data_source": "dsh",
+            "ts": 1756001000000,
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0,
+            "model": "m-1",
+            "project": "/home/CNS2026495165/dsh/dsh-usage"
+          },
+          {
+            "session_id": "sessA",
+            "data_source": "dsh",
+            "ts": 1756000200000,
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0,
+            "model": "m-3",
+            "project": "/home/CNS2026495165/dsh"
+          }
+        ]
+      },
+      "raw_count": {
+        "ms": 0.012343,
+        "value": {
+          "c": 6
+        }
+      },
+      "daily_maxday": {
+        "ms": 0.01057,
+        "value": {
+          "d": "2026-09-18"
+        }
+      },
+      "daily_rows": {
+        "ms": 0.04216,
+        "value": {
+          "c": 5
+        }
+      }
+    },
+    "result": {
+      "dshFirst": {
+        "scanned": 2,
+        "newEvents": 5,
+        "failedFiles": [
+          {
+            "error": "corrupt Zstandard session log: invalid frame magic at byte 0",
+            "file": "<ROOT>/dsh/sessions/sessC/session.jsonl.zstd"
+          }
+        ]
+      },
+      "ccFirst": {
+        "scanned": 2,
+        "newEvents": 1,
+        "failedFiles": []
+      },
+      "dshSecond": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "ccSecond": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "dshClean": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "ccClean": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      }
+    },
+    "final": {
+      "events": [
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "cc",
+          "dedup_key": "msg-1",
+          "id": 6,
+          "input_tokens": 11,
+          "is_subagent": 1,
+          "model": "claude-sonnet-4",
+          "output_tokens": 12,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "claude",
+          "session_id": "ccsess1",
+          "step": null,
+          "ts": 1789725900000,
+          "turn": null
+        },
+        {
+          "cache_read_tokens": 5,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t1:s1",
+          "id": 1,
+          "input_tokens": 10,
+          "is_subagent": 0,
+          "model": "m-1",
+          "output_tokens": 20,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "alpha",
+          "session_id": "sessA",
+          "step": 1,
+          "ts": 1756000000000,
+          "turn": 1
+        },
+        {
+          "cache_read_tokens": 3,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t1:s5",
+          "id": 2,
+          "input_tokens": 11,
+          "is_subagent": 0,
+          "model": "m-1",
+          "output_tokens": 22,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "alpha",
+          "session_id": "sessA",
+          "step": 5,
+          "ts": 1756000000104,
+          "turn": 1
+        },
+        {
+          "cache_read_tokens": 30,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t2:s1",
+          "id": 3,
+          "input_tokens": 100,
+          "is_subagent": 0,
+          "model": "m-2",
+          "output_tokens": 200,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "beta",
+          "session_id": "sessA",
+          "step": 1,
+          "ts": 1756000100000,
+          "turn": 2
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t2:s2",
+          "id": 4,
+          "input_tokens": 8,
+          "is_subagent": 0,
+          "model": "m-3",
+          "output_tokens": 9,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "gamma",
+          "session_id": "sessA",
+          "step": 2,
+          "ts": 1756000200000,
+          "turn": 2
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t1:s1",
+          "id": 5,
+          "input_tokens": 3,
+          "is_subagent": 0,
+          "model": "m-1",
+          "output_tokens": 4,
+          "project": "/home/CNS2026495165/dsh/dsh-usage",
+          "provider": "alpha",
+          "session_id": "sessB",
+          "step": 1,
+          "ts": 1756001000000,
+          "turn": 1
+        }
+      ],
+      "daily": [
+        {
+          "cache_read_tokens": 8,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 21,
+          "model": "m-1",
+          "output_tokens": 42,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 2
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 3,
+          "model": "m-1",
+          "output_tokens": 4,
+          "project": "/home/CNS2026495165/dsh/dsh-usage",
+          "requests": 1
+        },
+        {
+          "cache_read_tokens": 30,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 100,
+          "model": "m-2",
+          "output_tokens": 200,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 8,
+          "model": "m-3",
+          "output_tokens": 9,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "cc",
+          "day": "2026-09-18",
+          "input_tokens": 11,
+          "model": "claude-sonnet-4",
+          "output_tokens": 12,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1
+        }
+      ],
+      "sync": [
+        {
+          "fingerprint": null,
+          "last_offset": 917,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 916,
+          "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/ccsess1.jsonl"
+        },
+        {
+          "fingerprint": null,
+          "last_offset": 225,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 224,
+          "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/subagents/agent-x.jsonl"
+        },
+        {
+          "fingerprint": null,
+          "last_offset": 712,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 712,
+          "source": "dsh:<ROOT>/dsh/sessions/sessA/session.jsonl.zstd"
+        },
+        {
+          "fingerprint": "torn:211",
+          "last_offset": 211,
+          "last_seq": 1756001000000,
+          "mtime": 1789905600000,
+          "size": 268,
+          "source": "dsh:<ROOT>/dsh/sessions/sessB/session.jsonl.zstd"
+        },
+        {
+          "fingerprint": "1789905600000:31",
+          "last_offset": null,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 31,
+          "source": "dsh:<ROOT>/dsh/sessions/sessC/session.jsonl.zstd"
+        }
+      ]
+    },
+    "gapObservation": {
+      "commitIndex": 3,
+      "workerDbStateAfterCommit": {
+        "events": 5,
+        "eventsThatDay": 5
+      },
+      "note": "host read taken between the worker's events COMMIT and its daily rebuild",
+      "hostProbeWallMs": 28.034052,
+      "endpointsColdCache": {
+        "summary_all": {
+          "ms": 0.276093,
+          "value": {
+            "requests": 6,
+            "input_tokens": 143,
+            "output_tokens": 267,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0,
+            "hit_rate": 0.20994475138121546,
+            "sessions": 3
+          }
+        },
+        "heatmap_2025": {
+          "ms": 0.375792,
+          "value": [
+            {
+              "day": "2025-08-24",
+              "total": 425
+            }
+          ]
+        },
+        "heatmap_2026": {
+          "ms": 0.049293,
+          "value": [
+            {
+              "day": "2026-09-18",
+              "total": 23
+            }
+          ]
+        },
+        "byDay_all": {
+          "ms": 0.092956,
+          "value": [
+            {
+              "day": "2025-08-24",
+              "requests": 5,
+              "input_tokens": 132,
+              "output_tokens": 255,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0
+            },
+            {
+              "day": "2026-09-18",
+              "requests": 1,
+              "input_tokens": 11,
+              "output_tokens": 12,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "byModel_all": {
+          "ms": 0.067247,
+          "value": [
+            {
+              "model": "m-1",
+              "requests": 3,
+              "input_tokens": 24,
+              "output_tokens": 46,
+              "cache_read_tokens": 8,
+              "cache_write_tokens": 0
+            },
+            {
+              "model": "m-3",
+              "requests": 1,
+              "input_tokens": 8,
+              "output_tokens": 9,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            },
+            {
+              "model": "m-2",
+              "requests": 1,
+              "input_tokens": 100,
+              "output_tokens": 200,
+              "cache_read_tokens": 30,
+              "cache_write_tokens": 0
+            },
+            {
+              "model": "claude-sonnet-4",
+              "requests": 1,
+              "input_tokens": 11,
+              "output_tokens": 12,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "byProject_all": {
+          "ms": 0.052589,
+          "value": [
+            {
+              "project": "/home/CNS2026495165/dsh",
+              "requests": 5,
+              "input_tokens": 140,
+              "output_tokens": 263,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0
+            },
+            {
+              "project": "/home/CNS2026495165/dsh/dsh-usage",
+              "requests": 1,
+              "input_tokens": 3,
+              "output_tokens": 4,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "timeseries_day": {
+          "ms": 0.057839,
+          "value": [
+            {
+              "day": "2025-08-24",
+              "requests": 5,
+              "input_tokens": 132,
+              "output_tokens": 255,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0
+            },
+            {
+              "day": "2026-09-18",
+              "requests": 1,
+              "input_tokens": 11,
+              "output_tokens": 12,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "timeseries_hour": {
+          "ms": 0.029877,
+          "value": [
+            {
+              "day": "2025-08-24 01",
+              "requests": 4,
+              "input_tokens": 129,
+              "output_tokens": 251,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0
+            },
+            {
+              "day": "2025-08-24 02",
+              "requests": 1,
+              "input_tokens": 3,
+              "output_tokens": 4,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            },
+            {
+              "day": "2026-09-18 10",
+              "requests": 1,
+              "input_tokens": 11,
+              "output_tokens": 12,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "sessions_all": {
+          "ms": 0.273118,
+          "value": [
+            {
+              "session_id": "ccsess1",
+              "data_source": "cc",
+              "ts": 1789725900000,
+              "requests": 1,
+              "input_tokens": 11,
+              "output_tokens": 12,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0,
+              "model": "claude-sonnet-4",
+              "project": "/home/CNS2026495165/dsh"
+            },
+            {
+              "session_id": "sessB",
+              "data_source": "dsh",
+              "ts": 1756001000000,
+              "requests": 1,
+              "input_tokens": 3,
+              "output_tokens": 4,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0,
+              "model": "m-1",
+              "project": "/home/CNS2026495165/dsh/dsh-usage"
+            },
+            {
+              "session_id": "sessA",
+              "data_source": "dsh",
+              "ts": 1756000200000,
+              "requests": 4,
+              "input_tokens": 129,
+              "output_tokens": 251,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0,
+              "model": "m-3",
+              "project": "/home/CNS2026495165/dsh"
+            }
+          ]
+        },
+        "raw_count": {
+          "ms": 0.012894,
+          "value": {
+            "c": 6
+          }
+        },
+        "daily_maxday": {
+          "ms": 0.011582,
+          "value": {
+            "d": "2026-09-18"
+          }
+        },
+        "daily_rows": {
+          "ms": 0.008206,
+          "value": {
+            "c": 5
+          }
+        }
+      },
+      "frozenPreRebuildProbe": {
+        "summary_all": {
+          "ms": 0.325176,
+          "value": {
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0,
+            "hit_rate": 0.2275449101796407,
+            "sessions": 1
+          }
+        },
+        "heatmap_2025": {
+          "ms": 0.507521,
+          "value": [
+            {
+              "day": "2025-08-24",
+              "total": 418
+            }
+          ]
+        },
+        "heatmap_2026": {
+          "ms": 0.064382,
+          "value": []
+        },
+        "byDay_all": {
+          "ms": 0.088448,
+          "value": [
+            {
+              "day": "2025-08-24",
+              "requests": 4,
+              "input_tokens": 129,
+              "output_tokens": 251,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "byModel_all": {
+          "ms": 0.078108,
+          "value": [
+            {
+              "model": "m-1",
+              "requests": 2,
+              "input_tokens": 21,
+              "output_tokens": 42,
+              "cache_read_tokens": 8,
+              "cache_write_tokens": 0
+            },
+            {
+              "model": "m-3",
+              "requests": 1,
+              "input_tokens": 8,
+              "output_tokens": 9,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            },
+            {
+              "model": "m-2",
+              "requests": 1,
+              "input_tokens": 100,
+              "output_tokens": 200,
+              "cache_read_tokens": 30,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "byProject_all": {
+          "ms": 0.060445,
+          "value": [
+            {
+              "project": "/home/CNS2026495165/dsh",
+              "requests": 4,
+              "input_tokens": 129,
+              "output_tokens": 251,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "timeseries_day": {
+          "ms": 0.061687,
+          "value": [
+            {
+              "day": "2025-08-24",
+              "requests": 4,
+              "input_tokens": 129,
+              "output_tokens": 251,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "timeseries_hour": {
+          "ms": 0.047119,
+          "value": [
+            {
+              "day": "2025-08-24 01",
+              "requests": 4,
+              "input_tokens": 129,
+              "output_tokens": 251,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "sessions_all": {
+          "ms": 0.333652,
+          "value": [
+            {
+              "session_id": "sessA",
+              "data_source": "dsh",
+              "ts": 1756000200000,
+              "requests": 4,
+              "input_tokens": 129,
+              "output_tokens": 251,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0,
+              "model": "m-3",
+              "project": "/home/CNS2026495165/dsh"
+            }
+          ]
+        },
+        "raw_count": {
+          "ms": 0.027071,
+          "value": {
+            "c": 4
+          }
+        },
+        "daily_maxday": {
+          "ms": 0.022112,
+          "value": {
+            "d": null
+          }
+        },
+        "daily_rows": {
+          "ms": 0.016571,
+          "value": {
+            "c": 0
+          }
+        }
+      },
+      "frozenPreRebuildPath": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_run/gap-frozen/frozen-pre-rebuild.db",
+      "eventRows": 5,
+      "dailyRows": 3,
+      "eventsMinusDaily": 1,
+      "dailyRequestsSum": 4,
+      "daysInEvents": [
+        "2025-08-24"
+      ]
+    }
+  },
+  "invariants": {
+    "secondPassIdempotent": true,
+    "ccRowCount": 1,
+    "ccRows": [
+      {
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0,
+        "data_source": "cc",
+        "dedup_key": "msg-1",
+        "id": 6,
+        "input_tokens": 11,
+        "is_subagent": 1,
+        "model": "claude-sonnet-4",
+        "output_tokens": 12,
+        "project": "/home/CNS2026495165/dsh",
+        "provider": "claude",
+        "session_id": "ccsess1",
+        "step": null,
+        "ts": 1789725900000,
+        "turn": null
+      }
+    ],
+    "baselineSyncState": [
+      {
+        "fingerprint": null,
+        "last_offset": 917,
+        "last_seq": null,
+        "mtime": 1789905600000,
+        "size": 916,
+        "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/ccsess1.jsonl"
+      },
+      {
+        "fingerprint": null,
+        "last_offset": 225,
+        "last_seq": null,
+        "mtime": 1789905600000,
+        "size": 224,
+        "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/subagents/agent-x.jsonl"
+      },
+      {
+        "fingerprint": null,
+        "last_offset": 712,
+        "last_seq": null,
+        "mtime": 1789905600000,
+        "size": 712,
+        "source": "dsh:<ROOT>/dsh/sessions/sessA/session.jsonl.zstd"
+      },
+      {
+        "fingerprint": "torn:211",
+        "last_offset": 211,
+        "last_seq": 1756001000000,
+        "mtime": 1789905600000,
+        "size": 268,
+        "source": "dsh:<ROOT>/dsh/sessions/sessB/session.jsonl.zstd"
+      },
+      {
+        "fingerprint": "1789905600000:31",
+        "last_offset": null,
+        "last_seq": null,
+        "mtime": 1789905600000,
+        "size": 31,
+        "source": "dsh:<ROOT>/dsh/sessions/sessC/session.jsonl.zstd"
+      }
+    ]
+  },
+  "gapObservation": {
+    "commitIndex": 3,
+    "workerDbStateAfterCommit": {
+      "events": 5,
+      "eventsThatDay": 5
+    },
+    "note": "host read taken between the worker's events COMMIT and its daily rebuild",
+    "hostProbeWallMs": 28.034052,
+    "endpointsColdCache": {
+      "summary_all": {
+        "ms": 0.276093,
+        "value": {
+          "requests": 6,
+          "input_tokens": 143,
+          "output_tokens": 267,
+          "cache_read_tokens": 38,
+          "cache_write_tokens": 0,
+          "hit_rate": 0.20994475138121546,
+          "sessions": 3
+        }
+      },
+      "heatmap_2025": {
+        "ms": 0.375792,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "total": 425
+          }
+        ]
+      },
+      "heatmap_2026": {
+        "ms": 0.049293,
+        "value": [
+          {
+            "day": "2026-09-18",
+            "total": 23
+          }
+        ]
+      },
+      "byDay_all": {
+        "ms": 0.092956,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 5,
+            "input_tokens": 132,
+            "output_tokens": 255,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byModel_all": {
+        "ms": 0.067247,
+        "value": [
+          {
+            "model": "m-1",
+            "requests": 3,
+            "input_tokens": 24,
+            "output_tokens": 46,
+            "cache_read_tokens": 8,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-3",
+            "requests": 1,
+            "input_tokens": 8,
+            "output_tokens": 9,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-2",
+            "requests": 1,
+            "input_tokens": 100,
+            "output_tokens": 200,
+            "cache_read_tokens": 30,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "claude-sonnet-4",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byProject_all": {
+        "ms": 0.052589,
+        "value": [
+          {
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 5,
+            "input_tokens": 140,
+            "output_tokens": 263,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "project": "/home/CNS2026495165/dsh/dsh-usage",
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_day": {
+        "ms": 0.057839,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 5,
+            "input_tokens": 132,
+            "output_tokens": 255,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_hour": {
+        "ms": 0.029877,
+        "value": [
+          {
+            "day": "2025-08-24 01",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2025-08-24 02",
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18 10",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "sessions_all": {
+        "ms": 0.273118,
+        "value": [
+          {
+            "session_id": "ccsess1",
+            "data_source": "cc",
+            "ts": 1789725900000,
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0,
+            "model": "claude-sonnet-4",
+            "project": "/home/CNS2026495165/dsh"
+          },
+          {
+            "session_id": "sessB",
+            "data_source": "dsh",
+            "ts": 1756001000000,
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0,
+            "model": "m-1",
+            "project": "/home/CNS2026495165/dsh/dsh-usage"
+          },
+          {
+            "session_id": "sessA",
+            "data_source": "dsh",
+            "ts": 1756000200000,
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0,
+            "model": "m-3",
+            "project": "/home/CNS2026495165/dsh"
+          }
+        ]
+      },
+      "raw_count": {
+        "ms": 0.012894,
+        "value": {
+          "c": 6
+        }
+      },
+      "daily_maxday": {
+        "ms": 0.011582,
+        "value": {
+          "d": "2026-09-18"
+        }
+      },
+      "daily_rows": {
+        "ms": 0.008206,
+        "value": {
+          "c": 5
+        }
+      }
+    },
+    "frozenPreRebuildProbe": {
+      "summary_all": {
+        "ms": 0.325176,
+        "value": {
+          "requests": 4,
+          "input_tokens": 129,
+          "output_tokens": 251,
+          "cache_read_tokens": 38,
+          "cache_write_tokens": 0,
+          "hit_rate": 0.2275449101796407,
+          "sessions": 1
+        }
+      },
+      "heatmap_2025": {
+        "ms": 0.507521,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "total": 418
+          }
+        ]
+      },
+      "heatmap_2026": {
+        "ms": 0.064382,
+        "value": []
+      },
+      "byDay_all": {
+        "ms": 0.088448,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byModel_all": {
+        "ms": 0.078108,
+        "value": [
+          {
+            "model": "m-1",
+            "requests": 2,
+            "input_tokens": 21,
+            "output_tokens": 42,
+            "cache_read_tokens": 8,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-3",
+            "requests": 1,
+            "input_tokens": 8,
+            "output_tokens": 9,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-2",
+            "requests": 1,
+            "input_tokens": 100,
+            "output_tokens": 200,
+            "cache_read_tokens": 30,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byProject_all": {
+        "ms": 0.060445,
+        "value": [
+          {
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_day": {
+        "ms": 0.061687,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_hour": {
+        "ms": 0.047119,
+        "value": [
+          {
+            "day": "2025-08-24 01",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "sessions_all": {
+        "ms": 0.333652,
+        "value": [
+          {
+            "session_id": "sessA",
+            "data_source": "dsh",
+            "ts": 1756000200000,
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0,
+            "model": "m-3",
+            "project": "/home/CNS2026495165/dsh"
+          }
+        ]
+      },
+      "raw_count": {
+        "ms": 0.027071,
+        "value": {
+          "c": 4
+        }
+      },
+      "daily_maxday": {
+        "ms": 0.022112,
+        "value": {
+          "d": null
+        }
+      },
+      "daily_rows": {
+        "ms": 0.016571,
+        "value": {
+          "c": 0
+        }
+      }
+    },
+    "frozenPreRebuildPath": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_run/gap-frozen/frozen-pre-rebuild.db",
+    "eventRows": 5,
+    "dailyRows": 3,
+    "eventsMinusDaily": 1,
+    "dailyRequestsSum": 4,
+    "daysInEvents": [
+      "2025-08-24"
+    ]
+  },
+  "gapEndpointComparison": [
+    {
+      "endpoint": "summary_all",
+      "identicalDuringGap": true,
+      "duringMs": 0.276093,
+      "afterMs": 0.381563
+    },
+    {
+      "endpoint": "heatmap_2025",
+      "identicalDuringGap": true,
+      "duringMs": 0.375792,
+      "afterMs": 0.366745
+    },
+    {
+      "endpoint": "heatmap_2026",
+      "identicalDuringGap": true,
+      "duringMs": 0.049293,
+      "afterMs": 0.046248
+    },
+    {
+      "endpoint": "byDay_all",
+      "identicalDuringGap": true,
+      "duringMs": 0.092956,
+      "afterMs": 0.081274
+    },
+    {
+      "endpoint": "byModel_all",
+      "identicalDuringGap": true,
+      "duringMs": 0.067247,
+      "afterMs": 0.059954
+    },
+    {
+      "endpoint": "byProject_all",
+      "identicalDuringGap": true,
+      "duringMs": 0.052589,
+      "afterMs": 0.048973
+    },
+    {
+      "endpoint": "timeseries_day",
+      "identicalDuringGap": true,
+      "duringMs": 0.057839,
+      "afterMs": 0.0531
+    },
+    {
+      "endpoint": "timeseries_hour",
+      "identicalDuringGap": true,
+      "duringMs": 0.029877,
+      "afterMs": 0.030878
+    },
+    {
+      "endpoint": "sessions_all",
+      "identicalDuringGap": true,
+      "duringMs": 0.273118,
+      "afterMs": 0.268268
+    },
+    {
+      "endpoint": "raw_count",
+      "identicalDuringGap": true,
+      "duringMs": 0.012894,
+      "afterMs": 0.012343
+    },
+    {
+      "endpoint": "daily_maxday",
+      "identicalDuringGap": true,
+      "duringMs": 0.011582,
+      "afterMs": 0.01057
+    },
+    {
+      "endpoint": "daily_rows",
+      "identicalDuringGap": true,
+      "duringMs": 0.008206,
+      "afterMs": 0.04216
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "host": {
+    "path": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-host-apiproxy/lib/index.js",
+    "sha256": "1b9915f505996912c6f49b12b0c3f4a8261a74f26422f68f5d22cab2bc078a62"
+  },
+  "persistence": {
+    "path": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-persistence-jsonl/lib/index.js",
+    "sha256": "8b6ebc4509a3e969ab3ad6e0dfb553ae4861e5b101831afed23e593d148d97f3"
+  },
+  "extraction": {
+    "fromHeaderLineLine": 55,
+    "coldBlockLines": [
+      2246,
+      2250
+    ],
+    "comparatorSource": "b.updatedAt - a.updatedAt",
+    "subagentListMaxEvaluated": 200
+  },
+  "realHeaderMetaKeys": [
+    "version",
+    "id",
+    "createdAt",
+    "cwd",
+    "parentSession",
+    "origin",
+    "delegationDepth",
+    "agentPreset"
+  ],
+  "real_meta_has_updatedAt": false,
+  "comparator_returns_NaN": true,
+  "selection": {
+    "enumeration_ascending": {
+      "picked_count": 200,
+      "dropped_ids": [
+        "cold-201"
+      ],
+      "dropped_createdAt_rank": [
+        201
+      ],
+      "picked_max_createdAt_rank": 200
+    },
+    "enumeration_descending": {
+      "picked_count": 200,
+      "dropped_ids": [
+        "cold-001"
+      ],
+      "dropped_createdAt_rank": [
+        1
+      ]
+    },
+    "enumeration_permuted_stride7": {
+      "picked_count": 200,
+      "dropped_ids": [
+        "cold-195"
+      ],
+      "dropped_createdAt_rank": [
+        195
+      ]
+    }
+  },
+  "sort_key_holds_on_real_shape": false,
+  "degenerate_behaviour": "NaN comparator => ToNumber NaN treated as +0 by Array.prototype.sort => the sort is a no-op and the selection equals the enumeration order returned by persistence.list() (readdir order, unsorted)",
+  "selected_set_varies_with_enumeration_order": true,
+  "evidence": "executed"
+}

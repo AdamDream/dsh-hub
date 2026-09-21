@@ -1,0 +1,5427 @@
+{
+ "meta": {
+  "tag": "seq",
+  "startedAt": "2026-09-21T07:47:58.201Z",
+  "windowMs": 45000,
+  "states": [
+   "general",
+   "models",
+   "back-general",
+   "models-again"
+  ],
+  "target": "http://127.0.0.1:3080",
+  "hostPid": {
+   "pid": 1390362,
+   "cmdline": "npm exec @deepseek-ai/dsh web",
+   "starttimeTicks": 11
+  },
+  "hostPidExpected": 1390375,
+  "lockAtStart": "agent: tab-profile\nline: per-tab settings jank profile (.workspace/lag-fix/research-v2/tab-profile)\npurpose: --phase=all browser probe batch\nowner_pid: 2311184   # the probe process; preemption checks THIS\nhost_pid: 1390375   # monitored GUI host (node dsh web); never restarted, not the owner\nstarted_at: 2026-09-21T07:44:41.988+08:00\nstarted_epoch: 1789976681\ntoken: CNS202649516533-2311184-c9vng7qc\n",
+  "censusAtStart": {
+   "headlessShellProcs": 32,
+   "distinctUserDataDirs": [
+    "/tmp/playwright_chromiumdev_profile-25ZbPn",
+    "/tmp/playwright_chromiumdev_profile-xZcvuf",
+    "/tmp/playwright_chromiumdev_profile-u3o3X8",
+    "/tmp/playwright_chromiumdev_profile-o6MGdq",
+    "/tmp/playwright_chromiumdev_profile-DM35cD"
+   ],
+   "otherHarnessProcs": [
+    {
+     "pid": 1258240,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+    },
+    {
+     "pid": 1258241,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+    },
+    {
+     "pid": 2104196,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+    },
+    {
+     "pid": 2104259,
+     "cmd": "node scripts/capture3.mjs --scenarios all"
+    },
+    {
+     "pid": 2311182,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+    },
+    {
+     "pid": 2311183,
+     "cmd": "timeout 3300 node lib/tab-profile.mjs"
+    },
+    {
+     "pid": 2311184,
+     "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+    },
+    {
+     "pid": 2751628,
+     "cmd": "timeout 570 node probes/harden-measure.mjs"
+    },
+    {
+     "pid": 2751629,
+     "cmd": "node probes/harden-measure.mjs --window 15"
+    },
+    {
+     "pid": 2752543,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main2 --window 60000 --nolockwait > run-main2.out 2> run-main2.err; echo \"exit=$?\""
+    },
+    {
+     "pid": 2752544,
+     "cmd": "node measure-slot.mjs --tag main2"
+    },
+    {
+     "pid": 2755975,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && timeout 240 node scripts/probe-apply-ab.mjs 2>&1 | tail -40"
+    },
+    {
+     "pid": 2755982,
+     "cmd": "timeout 240 node scripts/probe-apply-ab.mjs"
+    },
+    {
+     "pid": 2755984,
+     "cmd": "node scripts/probe-apply-ab.mjs"
+    },
+    {
+     "pid": 2759669,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && node lib/verify.mjs --window=30000 --settle=8000 > raw/verify.stdout 2> raw/verify.stderr; echo EXIT=$?; tail -20 raw/verify.stderr"
+    },
+    {
+     "pid": 2759670,
+     "cmd": "node lib/verify.mjs --window=30000 --settle=8000"
+    },
+    {
+     "pid": 2764740,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && nohup timeout 600 node scripts/measure.mjs --window 45000 --tag seq --states general,models,back-general,models-again > raw/seq.log 2>&1 &\necho started; sleep 2; pgrep -af \"tag seq\" | head -3"
+    },
+    {
+     "pid": 2764741,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && nohup timeout 600 node scripts/measure.mjs --window 45000 --tag seq --states general,models,back-general,models-again > raw/seq.log 2>&1 &\necho started; sleep 2; pgrep -af \"tag seq\" | head -3"
+    },
+    {
+     "pid": 2764743,
+     "cmd": "timeout 600 node scripts/measure.mjs"
+    },
+    {
+     "pid": 2764744,
+     "cmd": "node scripts/measure.mjs --window 45000"
+    }
+   ],
+   "distinctBrowserInstances": 5
+  },
+  "node": "v22.23.2",
+  "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+  "initScriptSha256": "a0b447c35a61ec0b5bdda8edbcfa0ed8e06a0547594dec1334d6d41a3b0a8887"
+ },
+ "boot": {
+  "rev": "102e374d338e",
+  "entryCount": 50,
+  "entries": {
+   "@deepseek-ai/dsh-client-runtime": "a0fb4bb225d3",
+   "@deepseek-ai/dsh-client-locale": "2660ca3f6a00",
+   "@deepseek-ai/dsh-client-ui-renderer": "79b59d365f3b",
+   "@deepseek-ai/dsh-client-ui-sidebar": "7563cb4b02ca",
+   "@deepseek-ai/dsh-client-ui-settings-general": "f733efde3f2f"
+  }
+ },
+ "premise": {
+  "hookPresent": true,
+  "hookIsWrapped": false,
+  "hookCalls": {
+   "inject": 1,
+   "onCommitFiberRoot": 103,
+   "onPostCommitFiberRoot": 84,
+   "onCommitFiberUnmount": 16
+  },
+  "injected": [
+   {
+    "t": 23.4,
+    "id": 1,
+    "version": "18.3.1",
+    "pkg": "react-dom",
+    "bundleType": 0,
+    "reconcilerVersion": "18.3.1-next-f1338f8080-20240426",
+    "hasScheduleRoot": false
+   }
+  ],
+  "flags": {
+   "shimTrapActive": false,
+   "shimTrapAt": 4.9,
+   "shimTrapFires": 1,
+   "shimTrapFired": true,
+   "shimTrapFiredAt": 190.1,
+   "wrappedStores": true,
+   "wrappedAt": 364.6,
+   "shimTrapOffReason": "installed",
+   "shimTrapOffAt": 1690.6
+  },
+  "counts": {
+   "commits": 103,
+   "targetRenderId": 92,
+   "targetRenderPw": 92,
+   "targetMounted": 102
+  },
+  "storeNames": [
+   "sections",
+   "onboardingSteps"
+  ],
+  "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+  "bootRev": "102e374d338e",
+  "entryCount": 50,
+  "errors": []
+ },
+ "windows": [
+  {
+   "name": "general",
+   "requested": {
+    "panel": "open",
+    "section": "general",
+    "net": "active"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "panelAction": {
+    "alreadyOpen": false,
+    "panelNodes": 1
+   },
+   "sectionAction": {
+    "clicked": "通用设置",
+    "before": "通用设置",
+    "after": "通用设置"
+   },
+   "panelNodesAtStart": 1,
+   "activeSectionAtStart": "通用设置",
+   "startEpochMs": 1789976895980,
+   "startIso": "2026-09-21T07:48:15.980Z",
+   "sessionListAtStart": {
+    "ok": true,
+    "items": 297,
+    "topLevel": 104,
+    "subagents": 193,
+    "running": 9
+   },
+   "censusAtStart": {
+    "headlessShellProcs": 32,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-xZcvuf",
+     "/tmp/playwright_chromiumdev_profile-DM35cD",
+     "/tmp/playwright_chromiumdev_profile-kzZqLp",
+     "/tmp/playwright_chromiumdev_profile-foYGSm"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2751628,
+      "cmd": "timeout 570 node probes/harden-measure.mjs"
+     },
+     {
+      "pid": 2751629,
+      "cmd": "node probes/harden-measure.mjs --window 15"
+     },
+     {
+      "pid": 2759669,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && node lib/verify.mjs --window=30000 --settle=8000 > raw/verify.stdout 2> raw/verify.stderr; echo EXIT=$?; tail -20 raw/verify.stderr"
+     },
+     {
+      "pid": 2759670,
+      "cmd": "node lib/verify.mjs --window=30000 --settle=8000"
+     },
+     {
+      "pid": 2764741,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && nohup timeout 600 node scripts/measure.mjs --window 45000 --tag seq --states general,models,back-general,models-again > raw/seq.log 2>&1 &\necho started; sleep 2; pgrep -af \"tag seq\" | head -3"
+     },
+     {
+      "pid": 2764743,
+      "cmd": "timeout 600 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2764744,
+      "cmd": "node scripts/measure.mjs --window 45000"
+     },
+     {
+      "pid": 2766523,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && cat > /tmp/probe-slots.mjs <<'EOF'\nimport { chromium } from '/home/CNS2026495165/playwright_scratch/node_modules/playwright/index.mjs';\nimport fs from 'node:fs';\nconst b=await chromium.launch({headless:true,args:['--no-sandbox','--disable-background-timer-throttling','--disable-renderer-backgrounding']});\nconst c=await b.newContext({viewport:{width:1440,height:900}});\nconst p=await c.newPage();\nawait p.addInitScript(()=>{\n  window.__SL__={reads:[],probes:[],errs:[]};\n  const od=Object.prototype.__lookupGetter__?null:null; void od;\n  const desc=Object.getOwnPropertyDescriptor(Object.prototype,'getVersion');\n  Object.defineProperty(Object.prototype,'getVersion',{\n    configurable:true, enumerable:false,\n    get(){\n      try{\n        const stack=String(new Error().stack||'').split('\\n').slice(1,4).join(' | ');\n        const own=Object.getOwnPropertyNames(this).slice(0,12);\n        const hasCore=!!this._core;\n        const coreProto=this._core?Object.getOwnPropertyNames(Object.getPrototypeOf(this._core)).slice(0,12):null;\n        if(this!==window&&this!==Object.prototype){\n          window.__SL__.probes.push({t:Math.round(performance.now()),ctor:this.constructor&&this.constructor.name,own,hasCore,coreProto,stack});\n          if(hasCore&&typeof this._core.getVersion==='function'&&!this._core.__w){\n            const oc=this._core; const ogv=oc.getVersion.bind(oc);\n            Object.defineProperty(oc,'getVersion',{configurable:true,writable:true,value:function(k){\n              const v=ogv(k);\n              window.__SL__.reads.push({t:Math.round(performance.now()),key:k,version:v});\n              return v;\n            }});\n            oc.__w=true;\n          }\n        }\n      }catch(e){window.__SL__.errs.push(String(e&&e.message||e))}\n      return undefined;\n    },\n    set(v){ /* let it be shadowed per instance if something assigns */ try{Object.defineProperty(this,'getVersion',{configurable:true,writable:true,enumerable:false,value:v})}catch{} },\n  });\n  setTimeout(()=>{try{Object.defineProperty(Object.prototype,'getVersion',{configurable:true,enumerable:false,writable:true,value:undefined});delete Object.prototype.getVersion;}catch(e){window.__SL__.errs.push('cleanup '+e)}},30000);\n});\nawait p.goto('http://127.0.0.1:3080',{waitUntil:'domcontentloaded'});\nawait p.waitForTimeout(12000);\nawait p.locator('button[aria-haspopup=\"dialog\"]').first().click({timeout:8000});\nawait p.waitForTimeout(3000);\nconst tabs=p.locator('div[role=\"dialog\"][aria-modal=\"true\"] nav button');const n=await tabs.count();\nfor(let i=0;i<n;i++){const t=(await tabs.nth(i).innerText()).trim(); if(/模型|Models/i.test(t)){await tabs.nth(i).click({timeout:6000});break}}\nawait p.waitForTimeout(20000);\nconst out=await p.evaluate(()=>({probes:window.__SL__.probes.slice(0,12),nReads:window.__SL__.reads.length,reads:window.__SL__.reads.slice(0,15),keys:[...new Set(window.__SL__.reads.map(r=>r.key))],errs:window.__SL__.errs.slice(0,5)}));\nfs.writeFileSync('/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions/raw/probe-slots.json',JSON.stringify(out,null,1));\nconsole.log('probes',out.probes.length,'reads',out.nReads,'keys',JSON.stringify(out.keys),'errs',out.errs);\nconsole.log(JSON.stringify(out.probes.slice(0,4),null,1));\nconsole.log('reads sample',JSON.stringify(out.reads.slice(0,8)));\nawait b.close();\nEOF\ntimeout 200 node /tmp/probe-slots.mjs 2>&1 | tail -40"
+     },
+     {
+      "pid": 2766525,
+      "cmd": "timeout 200 node /tmp/probe-slots.mjs"
+     },
+     {
+      "pid": 2766527,
+      "cmd": "node /tmp/probe-slots.mjs"
+     }
+    ],
+    "distinctBrowserInstances": 5
+   },
+   "commitIndexStart": 150,
+   "endEpochMs": 1789976941246,
+   "endIso": "2026-09-21T07:49:01.246Z",
+   "elapsedMs": 45266,
+   "panelNodesAtEnd": 1,
+   "activeSectionAtEnd": "通用设置",
+   "sessionListAtEnd": {
+    "ok": true,
+    "items": 297,
+    "topLevel": 104,
+    "subagents": 193,
+    "running": 9
+   },
+   "censusAtEnd": {
+    "headlessShellProcs": 32,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-xZcvuf",
+     "/tmp/playwright_chromiumdev_profile-DM35cD",
+     "/tmp/playwright_chromiumdev_profile-kzZqLp",
+     "/tmp/playwright_chromiumdev_profile-wwveBa"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2751628,
+      "cmd": "timeout 570 node probes/harden-measure.mjs"
+     },
+     {
+      "pid": 2751629,
+      "cmd": "node probes/harden-measure.mjs --window 15"
+     },
+     {
+      "pid": 2759669,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && node lib/verify.mjs --window=30000 --settle=8000 > raw/verify.stdout 2> raw/verify.stderr; echo EXIT=$?; tail -20 raw/verify.stderr"
+     },
+     {
+      "pid": 2759670,
+      "cmd": "node lib/verify.mjs --window=30000 --settle=8000"
+     },
+     {
+      "pid": 2764741,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && nohup timeout 600 node scripts/measure.mjs --window 45000 --tag seq --states general,models,back-general,models-again > raw/seq.log 2>&1 &\necho started; sleep 2; pgrep -af \"tag seq\" | head -3"
+     },
+     {
+      "pid": 2764743,
+      "cmd": "timeout 600 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2764744,
+      "cmd": "node scripts/measure.mjs --window 45000"
+     },
+     {
+      "pid": 2769936,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && timeout 240 node scripts/probe-apply-ab2.mjs 2>&1 | tail -40"
+     },
+     {
+      "pid": 2769994,
+      "cmd": "timeout 240 node scripts/probe-apply-ab2.mjs"
+     },
+     {
+      "pid": 2769997,
+      "cmd": "node scripts/probe-apply-ab2.mjs"
+     },
+     {
+      "pid": 2772062,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main3 --window 60000 --nolockwait > run-main3.out 2> run-main3.err; echo \"exit=$?\""
+     },
+     {
+      "pid": 2772065,
+      "cmd": "node measure-slot.mjs --tag main3"
+     }
+    ],
+    "distinctBrowserInstances": 5
+   },
+   "commitIndexEnd": 440,
+   "instrumentation": {
+    "wrappedStores": true,
+    "shimTrapFired": true,
+    "shimTrapActive": false,
+    "storeNames": [
+     "sections",
+     "onboardingSteps"
+    ]
+   },
+   "slice": {
+    "nCommits": 290,
+    "nNotify": 0,
+    "nSel": 0,
+    "nSnap": 0,
+    "nSlotChange": 0
+   },
+   "summary": {
+    "name": "general",
+    "seconds": 45.266,
+    "panelNodesStart": 1,
+    "panelNodesEnd": 1,
+    "sectionStart": "通用设置",
+    "sectionEnd": "通用设置",
+    "commits": 290,
+    "commitsWithTarget": 290,
+    "targetRendered_pw": 290,
+    "targetRendered_id": 290,
+    "panelOpenCommits": 290,
+    "selfDrivenRenders": 0,
+    "parentDrivenRenders": 290,
+    "panelOpenSelfDriven": 0,
+    "panelOpenParentDriven": 290,
+    "selByStore": {},
+    "notifyByStore": {},
+    "snapByStore": {},
+    "localeRevHist": {},
+    "slotChangeByKey": {},
+    "slotVersions": {},
+    "slotVersionBumpsNearSelfRender": {},
+    "hookIdentityCounts": {
+     "sections:false": 290,
+     "onboardingSteps:false": 290,
+     "sessionsInner:true": 290,
+     "sessions:false": 290,
+     "completedOnboarding:undefined": 290
+    },
+    "selfRenderCause": {
+     "real": 0,
+     "identity": 0,
+     "other": 0,
+     "noAlt": 0
+    },
+    "selfRenderCauseSel": {
+     "real": 0,
+     "identity": 0,
+     "other": 0
+    },
+    "selfRenderSample": [],
+    "selfRenderCauseDetail": [],
+    "perSecRate": {
+     "commitPerSec": 6.406574470905316,
+     "selfRenderPerSec": 0
+    }
+   }
+  },
+  {
+   "name": "models",
+   "requested": {
+    "panel": "open",
+    "section": "models",
+    "net": "active"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "panelAction": {
+    "alreadyOpen": true
+   },
+   "sectionAction": {
+    "clicked": "模型",
+    "before": "通用设置",
+    "after": "模型"
+   },
+   "panelNodesAtStart": 1,
+   "activeSectionAtStart": "模型",
+   "startEpochMs": 1789976945411,
+   "startIso": "2026-09-21T07:49:05.411Z",
+   "sessionListAtStart": {
+    "ok": true,
+    "items": 297,
+    "topLevel": 104,
+    "subagents": 193,
+    "running": 9
+   },
+   "censusAtStart": {
+    "headlessShellProcs": 38,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-xZcvuf",
+     "/tmp/playwright_chromiumdev_profile-DM35cD",
+     "/tmp/playwright_chromiumdev_profile-kzZqLp",
+     "/tmp/playwright_chromiumdev_profile-wwveBa",
+     "/tmp/playwright_chromiumdev_profile-xy7Kpr"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2751628,
+      "cmd": "timeout 570 node probes/harden-measure.mjs"
+     },
+     {
+      "pid": 2751629,
+      "cmd": "node probes/harden-measure.mjs --window 15"
+     },
+     {
+      "pid": 2759669,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && node lib/verify.mjs --window=30000 --settle=8000 > raw/verify.stdout 2> raw/verify.stderr; echo EXIT=$?; tail -20 raw/verify.stderr"
+     },
+     {
+      "pid": 2759670,
+      "cmd": "node lib/verify.mjs --window=30000 --settle=8000"
+     },
+     {
+      "pid": 2764741,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && nohup timeout 600 node scripts/measure.mjs --window 45000 --tag seq --states general,models,back-general,models-again > raw/seq.log 2>&1 &\necho started; sleep 2; pgrep -af \"tag seq\" | head -3"
+     },
+     {
+      "pid": 2764743,
+      "cmd": "timeout 600 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2764744,
+      "cmd": "node scripts/measure.mjs --window 45000"
+     },
+     {
+      "pid": 2769936,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && timeout 240 node scripts/probe-apply-ab2.mjs 2>&1 | tail -40"
+     },
+     {
+      "pid": 2769994,
+      "cmd": "timeout 240 node scripts/probe-apply-ab2.mjs"
+     },
+     {
+      "pid": 2769997,
+      "cmd": "node scripts/probe-apply-ab2.mjs"
+     },
+     {
+      "pid": 2772062,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main3 --window 60000 --nolockwait > run-main3.out 2> run-main3.err; echo \"exit=$?\""
+     },
+     {
+      "pid": 2772065,
+      "cmd": "node measure-slot.mjs --tag main3"
+     }
+    ],
+    "distinctBrowserInstances": 6
+   },
+   "commitIndexStart": 475,
+   "endEpochMs": 1789976990728,
+   "endIso": "2026-09-21T07:49:50.728Z",
+   "elapsedMs": 45317,
+   "panelNodesAtEnd": 1,
+   "activeSectionAtEnd": "模型",
+   "sessionListAtEnd": {
+    "ok": true,
+    "items": 297,
+    "topLevel": 104,
+    "subagents": 193,
+    "running": 10
+   },
+   "censusAtEnd": {
+    "headlessShellProcs": 19,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-xZcvuf",
+     "/tmp/playwright_chromiumdev_profile-kzZqLp"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2759669,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && node lib/verify.mjs --window=30000 --settle=8000 > raw/verify.stdout 2> raw/verify.stderr; echo EXIT=$?; tail -20 raw/verify.stderr"
+     },
+     {
+      "pid": 2759670,
+      "cmd": "node lib/verify.mjs --window=30000 --settle=8000"
+     },
+     {
+      "pid": 2764741,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && nohup timeout 600 node scripts/measure.mjs --window 45000 --tag seq --states general,models,back-general,models-again > raw/seq.log 2>&1 &\necho started; sleep 2; pgrep -af \"tag seq\" | head -3"
+     },
+     {
+      "pid": 2764743,
+      "cmd": "timeout 600 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2764744,
+      "cmd": "node scripts/measure.mjs --window 45000"
+     },
+     {
+      "pid": 2777483,
+      "cmd": "bash -c sleep 6; cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main4 --window 60000 --nolockwait > run-main4.out 2> run-main4.err; echo \"exit=$?\""
+     },
+     {
+      "pid": 2777517,
+      "cmd": "node measure-slot.mjs --tag main4"
+     }
+    ],
+    "distinctBrowserInstances": 3
+   },
+   "commitIndexEnd": 734,
+   "instrumentation": {
+    "wrappedStores": true,
+    "shimTrapFired": true,
+    "shimTrapActive": false,
+    "storeNames": [
+     "sections",
+     "onboardingSteps"
+    ]
+   },
+   "slice": {
+    "nCommits": 259,
+    "nNotify": 0,
+    "nSel": 0,
+    "nSnap": 0,
+    "nSlotChange": 0
+   },
+   "summary": {
+    "name": "models",
+    "seconds": 45.317,
+    "panelNodesStart": 1,
+    "panelNodesEnd": 1,
+    "sectionStart": "模型",
+    "sectionEnd": "模型",
+    "commits": 259,
+    "commitsWithTarget": 259,
+    "targetRendered_pw": 142,
+    "targetRendered_id": 142,
+    "panelOpenCommits": 259,
+    "selfDrivenRenders": 142,
+    "parentDrivenRenders": 0,
+    "panelOpenSelfDriven": 142,
+    "panelOpenParentDriven": 0,
+    "selByStore": {},
+    "notifyByStore": {},
+    "snapByStore": {},
+    "localeRevHist": {},
+    "slotChangeByKey": {},
+    "slotVersions": {},
+    "slotVersionBumpsNearSelfRender": {},
+    "hookIdentityCounts": {
+     "sections:false": 259,
+     "onboardingSteps:false": 259,
+     "sessionsInner:true": 142,
+     "sessions:false": 259,
+     "completedOnboarding:undefined": 259,
+     "sessionsInner:false": 117
+    },
+    "selfRenderCause": {
+     "real": 142,
+     "identity": 0,
+     "other": 0,
+     "noAlt": 0
+    },
+    "selfRenderCauseSel": {
+     "real": 0,
+     "identity": 0,
+     "other": 0
+    },
+    "selfRenderSample": [
+     {
+      "i": 476,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 477,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 478,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 479,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 480,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 481,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 482,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 483,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 484,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 485,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 486,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 487,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 488,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 489,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 490,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 491,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 492,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 493,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 494,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 495,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 496,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 497,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 498,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 499,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 500,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     }
+    ],
+    "selfRenderCauseDetail": [
+     {
+      "i": 476,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 477,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 478,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 479,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 480,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 481,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 482,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 483,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 484,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 485,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 486,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 487,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 488,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 489,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 490,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 491,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 492,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 493,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 494,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 495,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 496,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 497,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 498,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 499,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 500,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 501,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 502,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 503,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 504,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 505,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 506,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 507,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 508,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 509,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 510,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 511,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 512,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 513,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 514,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 515,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 516,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 517,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 518,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 519,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 520,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 521,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 522,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 523,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 524,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 525,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 526,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 527,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 528,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 529,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 530,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 531,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 532,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 533,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 534,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 535,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 536,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 537,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 538,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 539,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 540,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 541,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 542,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 543,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 544,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 545,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 546,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 547,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 548,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 549,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 550,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 551,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 552,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 553,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 554,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 555,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 556,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 557,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 558,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 559,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 560,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 561,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 562,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 563,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 564,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 565,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 566,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 567,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 568,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 569,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 570,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 571,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 572,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 573,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 574,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 575,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 576,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 577,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 578,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 579,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 580,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 581,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 582,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 583,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 584,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 585,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 586,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 587,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 588,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 589,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 590,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 591,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 592,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 593,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 594,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 595,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 596,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 597,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 598,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 599,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 600,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 601,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 602,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 603,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 604,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 605,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 606,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 607,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 608,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 609,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 610,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 611,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 612,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 613,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 614,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 615,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 616,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 617,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     }
+    ],
+    "perSecRate": {
+     "commitPerSec": 5.715294481099808,
+     "selfRenderPerSec": 3.1334819162786594
+    }
+   }
+  },
+  {
+   "name": "back-general",
+   "requested": {
+    "panel": "open",
+    "section": "general",
+    "net": "active"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "panelAction": {
+    "alreadyOpen": true
+   },
+   "sectionAction": {
+    "clicked": "通用设置",
+    "before": "模型",
+    "after": "通用设置"
+   },
+   "panelNodesAtStart": 1,
+   "activeSectionAtStart": "通用设置",
+   "startEpochMs": 1789976995046,
+   "startIso": "2026-09-21T07:49:55.046Z",
+   "sessionListAtStart": {
+    "ok": true,
+    "items": 298,
+    "topLevel": 105,
+    "subagents": 193,
+    "running": 10
+   },
+   "censusAtStart": {
+    "headlessShellProcs": 25,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-xZcvuf",
+     "/tmp/playwright_chromiumdev_profile-kzZqLp",
+     "/tmp/playwright_chromiumdev_profile-UK7kgP"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2759669,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && node lib/verify.mjs --window=30000 --settle=8000 > raw/verify.stdout 2> raw/verify.stderr; echo EXIT=$?; tail -20 raw/verify.stderr"
+     },
+     {
+      "pid": 2759670,
+      "cmd": "node lib/verify.mjs --window=30000 --settle=8000"
+     },
+     {
+      "pid": 2764741,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && nohup timeout 600 node scripts/measure.mjs --window 45000 --tag seq --states general,models,back-general,models-again > raw/seq.log 2>&1 &\necho started; sleep 2; pgrep -af \"tag seq\" | head -3"
+     },
+     {
+      "pid": 2764743,
+      "cmd": "timeout 600 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2764744,
+      "cmd": "node scripts/measure.mjs --window 45000"
+     },
+     {
+      "pid": 2777483,
+      "cmd": "bash -c sleep 6; cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main4 --window 60000 --nolockwait > run-main4.out 2> run-main4.err; echo \"exit=$?\""
+     },
+     {
+      "pid": 2777517,
+      "cmd": "node measure-slot.mjs --tag main4"
+     },
+     {
+      "pid": 2780873,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/measure-hardening && echo \"start $(date '+%H:%M:%S')\"; timeout 585 node probes/harden-measure.mjs --window 15 --n 5 --warmup 10 --budget-ms 400000 --lock-wait-ms 310000 --label locked-baseline --out runs/baseline-live.json > runs/locked-baseline.log 2>&1; echo \"NODE_EXIT=$? at $(date '+%H:%M:%S')\"; python3 -c \"\nimport json\nd=json.load(open('runs/baseline-live.json'))\nl=d['framework'].get('lock') or {}\nprint('lock acquired:',l.get('acquired'),'waited_ms',l.get('waited_ms'))\nprint('exit',d['framework']['exit_code'],d['framework']['terminated_reason'],'windows',len(d['windows']))\nif l.get('owner'): print('blocked by:',l['owner'].get('agent'),'age_min',l.get('owner_age_min'),'alive',l.get('owner_pid_alive'))\n\""
+     },
+     {
+      "pid": 2780875,
+      "cmd": "timeout 585 node probes/harden-measure.mjs"
+     },
+     {
+      "pid": 2780876,
+      "cmd": "node probes/harden-measure.mjs --window 15"
+     }
+    ],
+    "distinctBrowserInstances": 4
+   },
+   "commitIndexStart": 771,
+   "endEpochMs": 1789977040309,
+   "endIso": "2026-09-21T07:50:40.309Z",
+   "elapsedMs": 45263,
+   "panelNodesAtEnd": 1,
+   "activeSectionAtEnd": "通用设置",
+   "sessionListAtEnd": {
+    "ok": true,
+    "items": 298,
+    "topLevel": 105,
+    "subagents": 193,
+    "running": 10
+   },
+   "censusAtEnd": {
+    "headlessShellProcs": 31,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-xZcvuf",
+     "/tmp/playwright_chromiumdev_profile-kzZqLp",
+     "/tmp/playwright_chromiumdev_profile-UK7kgP",
+     "/tmp/playwright_chromiumdev_profile-cFqaIS"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2764741,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && nohup timeout 600 node scripts/measure.mjs --window 45000 --tag seq --states general,models,back-general,models-again > raw/seq.log 2>&1 &\necho started; sleep 2; pgrep -af \"tag seq\" | head -3"
+     },
+     {
+      "pid": 2764743,
+      "cmd": "timeout 600 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2764744,
+      "cmd": "node scripts/measure.mjs --window 45000"
+     },
+     {
+      "pid": 2777483,
+      "cmd": "bash -c sleep 6; cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main4 --window 60000 --nolockwait > run-main4.out 2> run-main4.err; echo \"exit=$?\""
+     },
+     {
+      "pid": 2777517,
+      "cmd": "node measure-slot.mjs --tag main4"
+     },
+     {
+      "pid": 2780873,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/measure-hardening && echo \"start $(date '+%H:%M:%S')\"; timeout 585 node probes/harden-measure.mjs --window 15 --n 5 --warmup 10 --budget-ms 400000 --lock-wait-ms 310000 --label locked-baseline --out runs/baseline-live.json > runs/locked-baseline.log 2>&1; echo \"NODE_EXIT=$? at $(date '+%H:%M:%S')\"; python3 -c \"\nimport json\nd=json.load(open('runs/baseline-live.json'))\nl=d['framework'].get('lock') or {}\nprint('lock acquired:',l.get('acquired'),'waited_ms',l.get('waited_ms'))\nprint('exit',d['framework']['exit_code'],d['framework']['terminated_reason'],'windows',len(d['windows']))\nif l.get('owner'): print('blocked by:',l['owner'].get('agent'),'age_min',l.get('owner_age_min'),'alive',l.get('owner_pid_alive'))\n\""
+     },
+     {
+      "pid": 2780875,
+      "cmd": "timeout 585 node probes/harden-measure.mjs"
+     },
+     {
+      "pid": 2780876,
+      "cmd": "node probes/harden-measure.mjs --window 15"
+     },
+     {
+      "pid": 2785821,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node scripts/capture5.mjs --scenarios all --reps 4 --win 12000 --stamp cpu4 --coverage \"cov\" 2>&1"
+     },
+     {
+      "pid": 2785822,
+      "cmd": "node scripts/capture5.mjs --scenarios all"
+     }
+    ],
+    "distinctBrowserInstances": 5
+   },
+   "commitIndexEnd": 1038,
+   "instrumentation": {
+    "wrappedStores": true,
+    "shimTrapFired": true,
+    "shimTrapActive": false,
+    "storeNames": [
+     "sections",
+     "onboardingSteps"
+    ]
+   },
+   "slice": {
+    "nCommits": 267,
+    "nNotify": 0,
+    "nSel": 0,
+    "nSnap": 0,
+    "nSlotChange": 0
+   },
+   "summary": {
+    "name": "back-general",
+    "seconds": 45.263,
+    "panelNodesStart": 1,
+    "panelNodesEnd": 1,
+    "sectionStart": "通用设置",
+    "sectionEnd": "通用设置",
+    "commits": 267,
+    "commitsWithTarget": 267,
+    "targetRendered_pw": 0,
+    "targetRendered_id": 0,
+    "panelOpenCommits": 267,
+    "selfDrivenRenders": 0,
+    "parentDrivenRenders": 0,
+    "panelOpenSelfDriven": 0,
+    "panelOpenParentDriven": 0,
+    "selByStore": {},
+    "notifyByStore": {},
+    "snapByStore": {},
+    "localeRevHist": {},
+    "slotChangeByKey": {},
+    "slotVersions": {},
+    "slotVersionBumpsNearSelfRender": {},
+    "hookIdentityCounts": {
+     "sections:false": 267,
+     "onboardingSteps:false": 267,
+     "sessionsInner:false": 267,
+     "sessions:false": 267,
+     "completedOnboarding:undefined": 267
+    },
+    "selfRenderCause": {
+     "real": 0,
+     "identity": 0,
+     "other": 0,
+     "noAlt": 0
+    },
+    "selfRenderCauseSel": {
+     "real": 0,
+     "identity": 0,
+     "other": 0
+    },
+    "selfRenderSample": [],
+    "selfRenderCauseDetail": [],
+    "perSecRate": {
+     "commitPerSec": 5.89885778671321,
+     "selfRenderPerSec": 0
+    }
+   }
+  },
+  {
+   "name": "models-again",
+   "requested": {
+    "panel": "open",
+    "section": "models",
+    "net": "active"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "panelAction": {
+    "alreadyOpen": true
+   },
+   "sectionAction": {
+    "clicked": "模型",
+    "before": "通用设置",
+    "after": "模型"
+   },
+   "panelNodesAtStart": 1,
+   "activeSectionAtStart": "模型",
+   "startEpochMs": 1789977044746,
+   "startIso": "2026-09-21T07:50:44.746Z",
+   "sessionListAtStart": {
+    "ok": true,
+    "items": 298,
+    "topLevel": 105,
+    "subagents": 193,
+    "running": 10
+   },
+   "censusAtStart": {
+    "headlessShellProcs": 31,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-xZcvuf",
+     "/tmp/playwright_chromiumdev_profile-kzZqLp",
+     "/tmp/playwright_chromiumdev_profile-UK7kgP",
+     "/tmp/playwright_chromiumdev_profile-cFqaIS"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2764741,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && nohup timeout 600 node scripts/measure.mjs --window 45000 --tag seq --states general,models,back-general,models-again > raw/seq.log 2>&1 &\necho started; sleep 2; pgrep -af \"tag seq\" | head -3"
+     },
+     {
+      "pid": 2764743,
+      "cmd": "timeout 600 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2764744,
+      "cmd": "node scripts/measure.mjs --window 45000"
+     },
+     {
+      "pid": 2777483,
+      "cmd": "bash -c sleep 6; cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main4 --window 60000 --nolockwait > run-main4.out 2> run-main4.err; echo \"exit=$?\""
+     },
+     {
+      "pid": 2777517,
+      "cmd": "node measure-slot.mjs --tag main4"
+     },
+     {
+      "pid": 2780873,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/measure-hardening && echo \"start $(date '+%H:%M:%S')\"; timeout 585 node probes/harden-measure.mjs --window 15 --n 5 --warmup 10 --budget-ms 400000 --lock-wait-ms 310000 --label locked-baseline --out runs/baseline-live.json > runs/locked-baseline.log 2>&1; echo \"NODE_EXIT=$? at $(date '+%H:%M:%S')\"; python3 -c \"\nimport json\nd=json.load(open('runs/baseline-live.json'))\nl=d['framework'].get('lock') or {}\nprint('lock acquired:',l.get('acquired'),'waited_ms',l.get('waited_ms'))\nprint('exit',d['framework']['exit_code'],d['framework']['terminated_reason'],'windows',len(d['windows']))\nif l.get('owner'): print('blocked by:',l['owner'].get('agent'),'age_min',l.get('owner_age_min'),'alive',l.get('owner_pid_alive'))\n\""
+     },
+     {
+      "pid": 2780875,
+      "cmd": "timeout 585 node probes/harden-measure.mjs"
+     },
+     {
+      "pid": 2780876,
+      "cmd": "node probes/harden-measure.mjs --window 15"
+     },
+     {
+      "pid": 2785821,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node scripts/capture5.mjs --scenarios all --reps 4 --win 12000 --stamp cpu4 --coverage \"cov\" 2>&1"
+     },
+     {
+      "pid": 2785822,
+      "cmd": "node scripts/capture5.mjs --scenarios all"
+     }
+    ],
+    "distinctBrowserInstances": 5
+   },
+   "commitIndexStart": 1117,
+   "endEpochMs": 1789977090305,
+   "endIso": "2026-09-21T07:51:30.305Z",
+   "elapsedMs": 45559,
+   "panelNodesAtEnd": 1,
+   "activeSectionAtEnd": "模型",
+   "sessionListAtEnd": {
+    "ok": true,
+    "items": 298,
+    "topLevel": 105,
+    "subagents": 193,
+    "running": 9
+   },
+   "censusAtEnd": {
+    "headlessShellProcs": 31,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-xZcvuf",
+     "/tmp/playwright_chromiumdev_profile-kzZqLp",
+     "/tmp/playwright_chromiumdev_profile-UK7kgP",
+     "/tmp/playwright_chromiumdev_profile-cFqaIS"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2764741,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && nohup timeout 600 node scripts/measure.mjs --window 45000 --tag seq --states general,models,back-general,models-again > raw/seq.log 2>&1 &\necho started; sleep 2; pgrep -af \"tag seq\" | head -3"
+     },
+     {
+      "pid": 2764743,
+      "cmd": "timeout 600 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2764744,
+      "cmd": "node scripts/measure.mjs --window 45000"
+     },
+     {
+      "pid": 2777483,
+      "cmd": "bash -c sleep 6; cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main4 --window 60000 --nolockwait > run-main4.out 2> run-main4.err; echo \"exit=$?\""
+     },
+     {
+      "pid": 2777517,
+      "cmd": "node measure-slot.mjs --tag main4"
+     },
+     {
+      "pid": 2780873,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/measure-hardening && echo \"start $(date '+%H:%M:%S')\"; timeout 585 node probes/harden-measure.mjs --window 15 --n 5 --warmup 10 --budget-ms 400000 --lock-wait-ms 310000 --label locked-baseline --out runs/baseline-live.json > runs/locked-baseline.log 2>&1; echo \"NODE_EXIT=$? at $(date '+%H:%M:%S')\"; python3 -c \"\nimport json\nd=json.load(open('runs/baseline-live.json'))\nl=d['framework'].get('lock') or {}\nprint('lock acquired:',l.get('acquired'),'waited_ms',l.get('waited_ms'))\nprint('exit',d['framework']['exit_code'],d['framework']['terminated_reason'],'windows',len(d['windows']))\nif l.get('owner'): print('blocked by:',l['owner'].get('agent'),'age_min',l.get('owner_age_min'),'alive',l.get('owner_pid_alive'))\n\""
+     },
+     {
+      "pid": 2780875,
+      "cmd": "timeout 585 node probes/harden-measure.mjs"
+     },
+     {
+      "pid": 2780876,
+      "cmd": "node probes/harden-measure.mjs --window 15"
+     },
+     {
+      "pid": 2785821,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node scripts/capture5.mjs --scenarios all --reps 4 --win 12000 --stamp cpu4 --coverage \"cov\" 2>&1"
+     },
+     {
+      "pid": 2785822,
+      "cmd": "node scripts/capture5.mjs --scenarios all"
+     }
+    ],
+    "distinctBrowserInstances": 5
+   },
+   "commitIndexEnd": 1272,
+   "instrumentation": {
+    "wrappedStores": true,
+    "shimTrapFired": true,
+    "shimTrapActive": false,
+    "storeNames": [
+     "sections",
+     "onboardingSteps"
+    ]
+   },
+   "slice": {
+    "nCommits": 155,
+    "nNotify": 0,
+    "nSel": 0,
+    "nSnap": 0,
+    "nSlotChange": 0
+   },
+   "summary": {
+    "name": "models-again",
+    "seconds": 45.559,
+    "panelNodesStart": 1,
+    "panelNodesEnd": 1,
+    "sectionStart": "模型",
+    "sectionEnd": "模型",
+    "commits": 155,
+    "commitsWithTarget": 155,
+    "targetRendered_pw": 155,
+    "targetRendered_id": 155,
+    "panelOpenCommits": 155,
+    "selfDrivenRenders": 155,
+    "parentDrivenRenders": 0,
+    "panelOpenSelfDriven": 155,
+    "panelOpenParentDriven": 0,
+    "selByStore": {},
+    "notifyByStore": {},
+    "snapByStore": {},
+    "localeRevHist": {},
+    "slotChangeByKey": {},
+    "slotVersions": {},
+    "slotVersionBumpsNearSelfRender": {},
+    "hookIdentityCounts": {
+     "sections:false": 155,
+     "onboardingSteps:false": 155,
+     "sessionsInner:true": 155,
+     "sessions:false": 155,
+     "completedOnboarding:undefined": 155
+    },
+    "selfRenderCause": {
+     "real": 155,
+     "identity": 0,
+     "other": 0,
+     "noAlt": 0
+    },
+    "selfRenderCauseSel": {
+     "real": 0,
+     "identity": 0,
+     "other": 0
+    },
+    "selfRenderSample": [
+     {
+      "i": 1118,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1119,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1120,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1121,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1122,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1123,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1124,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1125,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1126,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1127,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1128,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1129,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1130,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1131,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1132,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1133,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1134,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1135,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1136,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1137,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1138,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1139,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1140,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1141,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1142,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     }
+    ],
+    "selfRenderCauseDetail": [
+     {
+      "i": 1118,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1119,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1120,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1121,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1122,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1123,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1124,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1125,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1126,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1127,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1128,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1129,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1130,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1131,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1132,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1133,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1134,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1135,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1136,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1137,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1138,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1139,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1140,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1141,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1142,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1143,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1144,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1145,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1146,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1147,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1148,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1149,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1150,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1151,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1152,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1153,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1154,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1155,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1156,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1157,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1158,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1159,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1160,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1161,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1162,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1163,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1164,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1165,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1166,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1167,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1168,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1169,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1170,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1171,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1172,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1173,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1174,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1175,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1176,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1177,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1178,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1179,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1180,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1181,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1182,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1183,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1184,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1185,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1186,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1187,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1188,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1189,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1190,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1191,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1192,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1193,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1194,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1195,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1196,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1197,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1198,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1199,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1200,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1201,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1202,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1203,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1204,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1205,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1206,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1207,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1208,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1209,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1210,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1211,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1212,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1213,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1214,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1215,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1216,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1217,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1218,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1219,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1220,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1221,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1222,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1223,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1224,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1225,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1226,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1227,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1228,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1229,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1230,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1231,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1232,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1233,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1234,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1235,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1236,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1237,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1238,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1239,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1240,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1241,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1242,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1243,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1244,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1245,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1246,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1247,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1248,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1249,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1250,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1251,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1252,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1253,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1254,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1255,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1256,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1257,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1258,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1259,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1260,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1261,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1262,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1263,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1264,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1265,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1266,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1267,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1268,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1269,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1270,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1271,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     },
+     {
+      "i": 1272,
+      "cls": "real",
+      "ch": {
+       "sections": false,
+       "onboardingSteps": false,
+       "sessionsInner": true,
+       "sessions": false
+      },
+      "hook0": true,
+      "notifiedSince": {}
+     }
+    ],
+    "perSecRate": {
+     "commitPerSec": 3.402181786255186,
+     "selfRenderPerSec": 3.402181786255186
+    }
+   }
+  }
+ ],
+ "consoleErrors": [],
+ "wsSockets": [],
+ "notes": []
+}

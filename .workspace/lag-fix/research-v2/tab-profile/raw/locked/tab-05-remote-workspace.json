@@ -1,0 +1,853 @@
+{
+ "id": "remote-workspace",
+ "label": "远程工作区",
+ "runs": [
+  {
+   "id": "remote-workspace",
+   "label": "远程工作区",
+   "repeat": 1,
+   "mode": "repeat",
+   "startedAt": "2026-09-21T07:49:32.776Z",
+   "nav": {
+    "status": "FOUND",
+    "index": 4,
+    "text": "远程工作区",
+    "total": 8,
+    "strategy": "exact"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "openMs": 13.6,
+   "openMsClean": 8.7,
+   "panels": {
+    "before": {
+     "nodes": 97,
+     "activeLabel": "通用设置",
+     "textHead": "打开配置文件关闭Agent 预设对此后新建的会话生效。运行中的会话保持它开始时的预设。标准模式（子代理 deepseek-v4.1-flash）权限选择新会话的默认权限模式Workspace Write语言中文外观浅色深色跟随系统繁忙时 Enter 键行为仅在智能体运行时生效；Cmd/Ctrl+Enter 使用另一行为"
+    },
+    "arm": {
+     "hasDialog": true,
+     "hasNav": true,
+     "hasContent": true,
+     "contentNodes": 97,
+     "textLen": 314
+    },
+    "after": {
+     "nodes": 61,
+     "activeLabel": "远程工作区",
+     "textHead": "打开配置文件关闭远程工作区（机器管理）维护多台 SSH 机器（密码 / 私钥 / 主机指纹信任 / 钥匙串）。路径在新建或选择工作区时选：「本机」走系统文件夹对话框；「远程」选一台机器在其远程目录中选择。已配置的机器还没有机器。在下方添加。添加机器主机名 / 别名 *识别 ssh 配置 ▾填写 ~/.ssh/config 里的别名可在失焦时自动补全用户名、端口、私钥与跳板端口 *用户名 *名称（可选）默认工作区（可选）认证方式私钥文件密",
+     "dialogNodes": 132
+    }
+   },
+   "windows": [
+    {
+     "label": "remote-workspace-r1-w1_10s",
+     "windowMs": 10001,
+     "seconds": 10.001,
+     "lock": {
+      "heldForWholeWindow": true,
+      "atStart": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true,
+       "ok": true
+      },
+      "atEnd": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true
+      }
+     },
+     "cdpRawStart": {
+      "at": 1789976973098,
+      "ScriptDuration": 5.511774,
+      "TaskDuration": 17.645306,
+      "RecalcStyleDuration": 7.521607,
+      "LayoutDuration": 0.097131,
+      "Nodes": 1255,
+      "JSEventListeners": 288,
+      "JSHeapUsedSize": 34424544,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789976983100,
+      "ScriptDuration": 5.736606,
+      "TaskDuration": 18.381144,
+      "RecalcStyleDuration": 7.814292,
+      "LayoutDuration": 0.097613,
+      "Nodes": 975,
+      "JSEventListeners": 253,
+      "JSHeapUsedSize": 29039732,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 576,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 33.3,
+      "max": 100,
+      "mean": 17.274,
+      "over50": 2,
+      "over16_7": 306
+     },
+     "domNodes": 741,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 1187,
+      "totalFramesSent": 0,
+      "recvBytes": 429082,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 1187,
+        "perSec": 118.688
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 1136,
+        "perSec": 113.589
+       },
+       "session/projection": {
+        "n": 50,
+        "perSec": 5
+       },
+       "host/remote-event": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 1119,
+        "perSec": 111.889
+       },
+       "event:tool/result": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/end": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/start": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:assistant/message": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:tool/call": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "remote:settings/document-updated": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:user/message": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 1136,
+        "perSec": 113.589
+       },
+       "mux:session/projection": {
+        "n": 50,
+        "perSec": 5
+       },
+       "host:host/remote-event": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      }
+     },
+     "http": {
+      "total": 10,
+      "usageSamples": []
+     },
+     "_rawTaken": 576,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 224.832,
+      "TaskDuration": 735.838,
+      "RecalcStyleDuration": 292.685,
+      "LayoutDuration": 0.482,
+      "Nodes": 975,
+      "NodesDelta": -280,
+      "JSEventListeners": 253,
+      "JSHeapUsedSize": 29039732,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "remote-workspace-r1-w2_20s",
+     "windowMs": 20000,
+     "seconds": 20,
+     "lock": {
+      "heldForWholeWindow": true,
+      "atStart": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true,
+       "ok": true
+      },
+      "atEnd": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true
+      }
+     },
+     "cdpRawStart": {
+      "at": 1789976983112,
+      "ScriptDuration": 5.736896,
+      "TaskDuration": 18.38504,
+      "RecalcStyleDuration": 7.814531,
+      "LayoutDuration": 0.097613,
+      "Nodes": 975,
+      "JSEventListeners": 253,
+      "JSHeapUsedSize": 29218616,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789977003189,
+      "ScriptDuration": 6.455644,
+      "TaskDuration": 20.484883,
+      "RecalcStyleDuration": 8.687869,
+      "LayoutDuration": 0.098503,
+      "Nodes": 975,
+      "JSEventListeners": 253,
+      "JSHeapUsedSize": 31514360,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 1122,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 50,
+      "max": 166.6,
+      "mean": 17.869,
+      "over50": 6,
+      "over16_7": 595
+     },
+     "domNodes": 741,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 1,
+      "totalMs": 178,
+      "maxMs": 178,
+      "entries": [
+       {
+        "start": 295680.2,
+        "duration": 178
+       }
+      ]
+     },
+     "ws": {
+      "totalFramesRecv": 1917,
+      "totalFramesSent": 0,
+      "recvBytes": 1042260,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 1917,
+        "perSec": 95.85
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 1759,
+        "perSec": 87.95
+       },
+       "session/projection": {
+        "n": 150,
+        "perSec": 7.5
+       },
+       "session/queue": {
+        "n": 3,
+        "perSec": 0.15
+       },
+       "host/session-status": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "host/session-added": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "session/subscribed": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "host/workspace-changed": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "session/jobs": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 1702,
+        "perSec": 85.1
+       },
+       "event:step/start": {
+        "n": 10,
+        "perSec": 0.5
+       },
+       "event:assistant/message": {
+        "n": 10,
+        "perSec": 0.5
+       },
+       "event:tool/call": {
+        "n": 10,
+        "perSec": 0.5
+       },
+       "event:tool/result": {
+        "n": 9,
+        "perSec": 0.45
+       },
+       "event:step/end": {
+        "n": 9,
+        "perSec": 0.45
+       },
+       "event:agent/inbox/spliced": {
+        "n": 3,
+        "perSec": 0.15
+       },
+       "event:user/message": {
+        "n": 3,
+        "perSec": 0.15
+       },
+       "event:turn/start": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "event:request/header": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "event:request/context": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 1759,
+        "perSec": 87.95
+       },
+       "mux:session/projection": {
+        "n": 150,
+        "perSec": 7.5
+       },
+       "mux:session/queue": {
+        "n": 3,
+        "perSec": 0.15
+       },
+       "host:host/session-status": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "host:host/session-added": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "mux:session/subscribed": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "host:host/workspace-changed": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "mux:session/jobs": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 1122,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 718.748,
+      "TaskDuration": 2099.843,
+      "RecalcStyleDuration": 873.338,
+      "LayoutDuration": 0.89,
+      "Nodes": 975,
+      "NodesDelta": 0,
+      "JSEventListeners": 253,
+      "JSHeapUsedSize": 31514360,
+      "Documents": 3,
+      "Frames": 3
+     }
+    }
+   ],
+   "http": {
+    "requests": [
+     {
+      "kind": "request",
+      "path": "/dsw/machines.list",
+      "method": "POST"
+     },
+     {
+      "kind": "response",
+      "path": "/dsw/machines.list",
+      "status": 200,
+      "wallMs": null
+     },
+     {
+      "kind": "request",
+      "path": "/api/llm.providers",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/api/session.models",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/api/settings.describe",
+      "method": "POST"
+     },
+     {
+      "kind": "response",
+      "path": "/api/llm.providers",
+      "status": 200,
+      "wallMs": null
+     },
+     {
+      "kind": "response",
+      "path": "/api/session.models",
+      "status": 200,
+      "wallMs": null
+     },
+     {
+      "kind": "response",
+      "path": "/api/settings.describe",
+      "status": 200,
+      "wallMs": null
+     },
+     {
+      "kind": "request",
+      "path": "/api/credentials.describe",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/api/credentials.describe",
+      "method": "POST"
+     },
+     {
+      "kind": "response",
+      "path": "/api/credentials.describe",
+      "status": 200,
+      "wallMs": null
+     },
+     {
+      "kind": "response",
+      "path": "/api/credentials.describe",
+      "status": 200,
+      "wallMs": null
+     }
+    ],
+    "usageSamples": []
+   },
+   "errors": [],
+   "parkedAt": {
+    "index": 0,
+    "label": "通用设置"
+   },
+   "openProbe": {
+    "firstMut": 269659.5,
+    "firstMutClean": 269659.5,
+    "firstText": 269664.40000000596,
+    "clickT0": 269650.799999997
+   },
+   "status": "PASS",
+   "wsSockets": [
+    "ws://127.0.0.1:3080/api/events.mux",
+    "ws://127.0.0.1:3080/api/events.host"
+   ]
+  },
+  {
+   "id": "remote-workspace",
+   "label": "远程工作区",
+   "repeat": 2,
+   "mode": "repeat",
+   "startedAt": "2026-09-21T07:50:03.344Z",
+   "nav": {
+    "status": "FOUND",
+    "index": 4,
+    "text": "远程工作区",
+    "total": 8,
+    "strategy": "exact"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "openMs": 10.1,
+   "openMsClean": 7.2,
+   "panels": {
+    "before": {
+     "nodes": 97,
+     "activeLabel": "通用设置",
+     "textHead": "打开配置文件关闭Agent 预设对此后新建的会话生效。运行中的会话保持它开始时的预设。标准模式（子代理 deepseek-v4.1-flash）权限选择新会话的默认权限模式Workspace Write语言中文外观浅色深色跟随系统繁忙时 Enter 键行为仅在智能体运行时生效；Cmd/Ctrl+Enter 使用另一行为"
+    },
+    "arm": {
+     "hasDialog": true,
+     "hasNav": true,
+     "hasContent": true,
+     "contentNodes": 97,
+     "textLen": 314
+    },
+    "after": {
+     "nodes": 61,
+     "activeLabel": "远程工作区",
+     "textHead": "打开配置文件关闭远程工作区（机器管理）维护多台 SSH 机器（密码 / 私钥 / 主机指纹信任 / 钥匙串）。路径在新建或选择工作区时选：「本机」走系统文件夹对话框；「远程」选一台机器在其远程目录中选择。已配置的机器还没有机器。在下方添加。添加机器主机名 / 别名 *识别 ssh 配置 ▾填写 ~/.ssh/config 里的别名可在失焦时自动补全用户名、端口、私钥与跳板端口 *用户名 *名称（可选）默认工作区（可选）认证方式私钥文件密",
+     "dialogNodes": 132
+    }
+   },
+   "windows": [
+    {
+     "label": "remote-workspace-r2-w1_10s",
+     "windowMs": 10000,
+     "seconds": 10,
+     "lock": {
+      "heldForWholeWindow": true,
+      "atStart": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true,
+       "ok": true
+      },
+      "atEnd": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true
+      }
+     },
+     "cdpRawStart": {
+      "at": 1789977004880,
+      "ScriptDuration": 6.468809,
+      "TaskDuration": 20.539987,
+      "RecalcStyleDuration": 8.702055,
+      "LayoutDuration": 0.103508,
+      "Nodes": 1221,
+      "JSEventListeners": 285,
+      "JSHeapUsedSize": 32449168,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789977014881,
+      "ScriptDuration": 6.827907,
+      "TaskDuration": 21.576834,
+      "RecalcStyleDuration": 9.154506,
+      "LayoutDuration": 0.103508,
+      "Nodes": 975,
+      "JSEventListeners": 253,
+      "JSHeapUsedSize": 28976696,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 565,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 33.4,
+      "max": 100,
+      "mean": 17.669,
+      "over50": 2,
+      "over16_7": 298
+     },
+     "domNodes": 741,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 521,
+      "totalFramesSent": 0,
+      "recvBytes": 440405,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 521,
+        "perSec": 52.1
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 438,
+        "perSec": 43.8
+       },
+       "session/projection": {
+        "n": 83,
+        "perSec": 8.3
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 409,
+        "perSec": 40.9
+       },
+       "event:assistant/message": {
+        "n": 7,
+        "perSec": 0.7
+       },
+       "event:tool/call": {
+        "n": 7,
+        "perSec": 0.7
+       },
+       "event:tool/result": {
+        "n": 5,
+        "perSec": 0.5
+       },
+       "event:step/end": {
+        "n": 5,
+        "perSec": 0.5
+       },
+       "event:step/start": {
+        "n": 5,
+        "perSec": 0.5
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 438,
+        "perSec": 43.8
+       },
+       "mux:session/projection": {
+        "n": 83,
+        "perSec": 8.3
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 565,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 359.098,
+      "TaskDuration": 1036.847,
+      "RecalcStyleDuration": 452.451,
+      "LayoutDuration": 0,
+      "Nodes": 975,
+      "NodesDelta": -246,
+      "JSEventListeners": 253,
+      "JSHeapUsedSize": 28976696,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "remote-workspace-r2-w2_20s",
+     "windowMs": 20000,
+     "seconds": 20,
+     "lock": {
+      "heldForWholeWindow": true,
+      "atStart": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true,
+       "ok": true
+      },
+      "atEnd": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true
+      }
+     },
+     "cdpRawStart": {
+      "at": 1789977014890,
+      "ScriptDuration": 6.827907,
+      "TaskDuration": 21.578295,
+      "RecalcStyleDuration": 9.154506,
+      "LayoutDuration": 0.103508,
+      "Nodes": 975,
+      "JSEventListeners": 253,
+      "JSHeapUsedSize": 29148104,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789977034890,
+      "ScriptDuration": 7.26085,
+      "TaskDuration": 22.983598,
+      "RecalcStyleDuration": 9.631748,
+      "LayoutDuration": 0.103508,
+      "Nodes": 975,
+      "JSEventListeners": 253,
+      "JSHeapUsedSize": 32376984,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 1164,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 33.4,
+      "max": 50.1,
+      "mean": 17.181,
+      "over50": 3,
+      "over16_7": 608
+     },
+     "domNodes": 741,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 6264,
+      "totalFramesSent": 0,
+      "recvBytes": 2164668,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 6264,
+        "perSec": 313.2
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 6187,
+        "perSec": 309.35
+       },
+       "session/projection": {
+        "n": 76,
+        "perSec": 3.8
+       },
+       "session/jobs": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 6162,
+        "perSec": 308.1
+       },
+       "event:tool/result": {
+        "n": 5,
+        "perSec": 0.25
+       },
+       "event:step/end": {
+        "n": 5,
+        "perSec": 0.25
+       },
+       "event:step/start": {
+        "n": 5,
+        "perSec": 0.25
+       },
+       "event:assistant/message": {
+        "n": 5,
+        "perSec": 0.25
+       },
+       "event:tool/call": {
+        "n": 5,
+        "perSec": 0.25
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 6187,
+        "perSec": 309.35
+       },
+       "mux:session/projection": {
+        "n": 76,
+        "perSec": 3.8
+       },
+       "mux:session/jobs": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 1164,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 432.943,
+      "TaskDuration": 1405.303,
+      "RecalcStyleDuration": 477.242,
+      "LayoutDuration": 0,
+      "Nodes": 975,
+      "NodesDelta": 0,
+      "JSEventListeners": 253,
+      "JSHeapUsedSize": 32376984,
+      "Documents": 3,
+      "Frames": 3
+     }
+    }
+   ],
+   "http": {
+    "requests": [
+     {
+      "kind": "request",
+      "path": "/dsw/machines.list",
+      "method": "POST"
+     },
+     {
+      "kind": "response",
+      "path": "/dsw/machines.list",
+      "status": 200,
+      "wallMs": null
+     }
+    ],
+    "usageSamples": []
+   },
+   "errors": [],
+   "parkedAt": {
+    "index": 0,
+    "label": "通用设置"
+   },
+   "openProbe": {
+    "firstMut": 301444.10000000894,
+    "firstMutClean": 301444.10000000894,
+    "firstText": 301447,
+    "clickT0": 301436.90000000596
+   },
+   "status": "PASS",
+   "wsSockets": [
+    "ws://127.0.0.1:3080/api/events.mux"
+   ]
+  }
+ ]
+}

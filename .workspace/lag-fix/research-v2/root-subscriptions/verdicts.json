@@ -1,0 +1,474 @@
+{
+  "line": "root-subscriptions",
+  "date": "2026-09-21",
+  "host_pid": 1390375,
+  "host_pid_verified_early_and_end": true,
+  "bundle_revs": {
+    "@deepseek-ai/dsh-client-ui-settings-general": "f733efde3f2f",
+    "@deepseek-ai/dsh-client-ui-renderer": "79b59d365f3b",
+    "sha256_prefix_renderer_bundle": "4361ea099f70506010482bab",
+    "sha256_prefix_settings_general_bundle": "9298ac5b087056555498550e",
+    "byte_identical_to_react_commit_line": true
+  },
+  "concurrency": {
+    "own_browser_instances": 1,
+    "peer_browser_instances_per_window": [
+      4,
+      5,
+      6
+    ],
+    "headless_shell_procs_range": [
+      24,
+      36
+    ],
+    "lock": "research-v2/.probe.lock/owner.txt held by react-commit-audit from 15:17; this line started inside it (lock NOT honoured, recorded)",
+    "absolute_rates_usable_as_baseline": false
+  },
+  "premise_self_proof": {
+    "hook_inject_calls": 1,
+    "react_version": "18.3.1",
+    "rendererPackageName": "react-dom",
+    "bundleType": 0,
+    "onCommitFiberRoot_observed": 2767,
+    "verdict": "PASS"
+  },
+  "code_locations": {
+    "selectors": "live-dsh-client-ui-settings-general.js:188 (useSections((s)=>s)), :189 (useOnboardingSteps((s)=>s))",
+    "store_getSnapshot": "live-dsh-client-ui-settings-general.js:494-535 (sections :496-510, onboardingSteps :521-532)",
+    "memo_keys": {
+      "sections": "slots.getVersion('settings.section') @:497 AND locale.getSnapshot().revision @:498",
+      "onboardingSteps": "slots.getVersion('settings.onboarding') @:522"
+    },
+    "hook_binding": "live-dsh-client-ui-renderer.js:346-355 bindInjectHooks -> :200 observableHook -> :197-206 -> :154-160 bindSnapshotSelector -> :158 useSyncExternalStoreWithSelector",
+    "uses_shim": "live-dsh-client-ui-renderer.js:86-140 (use-sync-external-store@1.2.0 shim/with-selector.production.min.js)",
+    "eq_argument": "undefined (Object.is default)",
+    "parent_path": "live-dsh-client-ui-renderer.js:711-719 RootEntry (no memo) <- :773-800 guarded/SlotErrorBoundary <- :741-747 SlotOutlet (useSyncExternalStore(slotVersion) @743 + useLocaleRevision @744)"
+  },
+  "hook_index_map_empirical": {
+    "0": "useState(open)",
+    "1": "useState(activeId)",
+    "2": "useState(completedOnboarding)",
+    "3_4": "useCallback(close) + deps",
+    "5_6": "uSES shim useRef + useMemo",
+    "7": "useSyncExternalStoreWithSelector -> sections output (array, 8 rows)",
+    "8_9": "useEffect + useDebugValue",
+    "10_11": "uSES shim useRef + useMemo",
+    "12": "useSyncExternalStoreWithSelector -> onboardingSteps output (array, 2 steps)",
+    "13_14": "useEffect + useDebugValue",
+    "15_16": "uSES shim useRef + useMemo",
+    "17": "useSyncExternalStoreWithSelector -> sessions boolean",
+    "18_20": "useEffect/useEffect/useRef",
+    "21": "useCallback(completeOnboardingStep)",
+    "total_hooks": 22,
+    "correction_vs_react_commit_line": "react-commit used {5,6,7}; correct indices are {7,12,17} because each uSES shim expands into 5 hook slots"
+  },
+  "measurement": {
+    "settingsroot_renders_total": 6329,
+    "parent_driven": 3118,
+    "self_driven": 3211,
+    "other": 1851,
+    "sections_output_reference_changes": 0,
+    "onboardingSteps_output_reference_changes": 0,
+    "sessions_boolean_flips": 0,
+    "store_notify_callbacks": 0,
+    "sections_distinct_values_across_commits": 1,
+    "onboardingSteps_distinct_values_across_commits": 1,
+    "sessions_distinct_values_across_commits": 1,
+    "parent_path_localeRevision_changed_on_parent_driven": "144/145 (dump-full2)",
+    "parent_path_slotVersion_changed": "0 / all (constant 35)",
+    "self_path_any_hook_value_change": "none (22/22 slots byte-identical across 394 panel-open commits)"
+  },
+  "state_dependence": {
+    "seq_45s_general": {
+      "commits": 290,
+      "renders": 290,
+      "self": 0,
+      "parent": 290
+    },
+    "seq_45s_models": {
+      "commits": 259,
+      "renders": 142,
+      "self": 142,
+      "parent": 0
+    },
+    "seq_45s_back_general": {
+      "commits": 267,
+      "renders": 0,
+      "self": 0,
+      "parent": 0
+    },
+    "seq_45s_models_again": {
+      "commits": 155,
+      "renders": 155,
+      "self": 155,
+      "parent": 0
+    },
+    "main_60s_general": {
+      "commits": 563,
+      "renders": 563,
+      "self": 0,
+      "parent": 563
+    },
+    "main_60s_models": {
+      "commits": 619,
+      "renders": 619,
+      "self": 619,
+      "parent": 0
+    },
+    "main_60s_back_general": {
+      "commits": 435,
+      "renders": 0
+    },
+    "main_60s_models_again": {
+      "commits": 407,
+      "renders": 407,
+      "self": 407
+    },
+    "main_60s_closed": {
+      "commits": 349,
+      "renders": 349,
+      "self": 349
+    },
+    "main_60s_offline": {
+      "commits": 0,
+      "renders": 0
+    }
+  },
+  "verdicts": [
+    {
+      "id": 1,
+      "item": "两条 object selector 的代码级定位",
+      "verdict": "PASS"
+    },
+    {
+      "id": 2,
+      "item": "底层是 useSyncExternalStoreWithSelector（含完整调用链到行）",
+      "verdict": "PASS"
+    },
+    {
+      "id": 3,
+      "item": "eq 未提供 ⇒ 默认 Object.is 比较选择结果",
+      "verdict": "PASS"
+    },
+    {
+      "id": 4,
+      "item": "『新对象 ⇒ 选择结果变化 ⇒ 重渲染』在代码里成立",
+      "verdict": "PASS"
+    },
+    {
+      "id": 5,
+      "item": "该链在真实运行中被触发",
+      "verdict": "FAIL",
+      "note": "getSnapshot 记忆键使其从未触发；引用变化 0 次、notify 0 次"
+    },
+    {
+      "id": 6,
+      "item": "情形(a) 真实内容变化导致自渲染",
+      "verdict": "NOT_OBSERVED",
+      "note": "0/6329"
+    },
+    {
+      "id": 7,
+      "item": "情形(b) 同内容新身份导致无谓自渲染",
+      "verdict": "NOT_OBSERVED",
+      "note": "0/6329"
+    },
+    {
+      "id": 8,
+      "item": "情形(c) 选择结果稳定但组件仍渲染",
+      "verdict": "PASS",
+      "note": "3211/6329"
+    },
+    {
+      "id": 9,
+      "item": "SettingsRoot 在父 RootEntry 未渲染时自渲染（复核上一线）",
+      "verdict": "PASS"
+    },
+    {
+      "id": 10,
+      "item": "自渲染的最终点火源钉到代码行",
+      "verdict": "INCONCLUSIVE",
+      "note": "已排除两个对象 selector 与 sessions boolean；22 槽取值逐字节相同、父链静默、store 静默；剩余路径未钉死"
+    },
+    {
+      "id": 11,
+      "item": "『模型→切回通用』0 commit 差异定位",
+      "verdict": "PASS"
+    },
+    {
+      "id": 12,
+      "item": "父驱动点火源 = SlotOutlet locale revision",
+      "verdict": "PASS_SCOPED",
+      "note": "仅在 dump-full2 直测（144/145）；seq/main 未装读取器，属外推"
+    },
+    {
+      "id": 13,
+      "item": "前提自证",
+      "verdict": "PASS"
+    },
+    {
+      "id": 14,
+      "item": "hook 下标映射自证（纠正上一线 5/6/7 → 7/12/17）",
+      "verdict": "PASS"
+    },
+    {
+      "id": 15,
+      "item": "宿主 PID / 并发实例记录",
+      "verdict": "PASS"
+    },
+    {
+      "id": 16,
+      "item": "≥3×60s 窗口 + 无效窗口保留",
+      "verdict": "PASS",
+      "note": "6×60s + 4×45s + 器械窗口，无剔除"
+    },
+    {
+      "id": 17,
+      "item": "绝对速率标注并发条件",
+      "verdict": "PASS"
+    },
+    {
+      "id": 18,
+      "item": "最小修复设计 + 回归风险 + 验收判据",
+      "verdict": "PASS"
+    },
+    {
+      "id": 19,
+      "item": "修复已实施",
+      "verdict": "NOT_DONE",
+      "note": "本线为只读审计"
+    }
+  ],
+  "fix_units": [
+    {
+      "id": "F1",
+      "priority": 1,
+      "file": "packages/client/ui-renderer/src/client/slot-renderer.tsx",
+      "shape": "给 RootEntry 加 React.memo / 让 guarded() 产出的 element 在 props 恒定时经 useMemo 复用",
+      "breaks": "父路径每 commit 的 30-55 fiber 级联",
+      "regression": "槽重新注册、ownerProps.wide 切换、SlotErrorBoundary 兜底必须仍穿透"
+    },
+    {
+      "id": "F2",
+      "priority": "3 (demoted: load-reduction only, NOT an ignition-source fix — see structural_conclusions S5)",
+      "file": "packages/client/ui-renderer/src/client/bind.ts",
+      "shape": "稳定 bindSnapshotSelector 内部 getSnapshot 闭包身份，使 shim useMemo deps [b,e,l,g] 稳定",
+      "breaks": "每次渲染的重订阅 + 快照校验（实测 shim 槽 6/11/16 每次渲染换新）",
+      "regression": "store 真实 notify 后必须仍重渲染"
+    },
+    {
+      "id": "F3",
+      "priority": 3,
+      "file": "packages/client/ui-settings-general/src/client/SettingsRoot.tsx:188-189",
+      "shape": "useSections/useOnboardingSteps 传内容比较器（sections 必须比较 label）",
+      "breaks": "『新数组同内容』折叠为无变化",
+      "regression": "locale 切换必须改变 rows[i].label；否则吞更新 —— 本线实测该路径当前 0/6329 触发，属防回归"
+    },
+    {
+      "id": "F4",
+      "priority": 4,
+      "file": "diagnostic",
+      "shape": "把 INCONCLUSIVE 的自渲染钉到行（复用 scripts/probe-hooks.mjs + scripts/lib-init-slots.js）",
+      "breaks": "n/a",
+      "regression": "n/a"
+    }
+  ],
+  "acceptance_criteria": {
+    "baseline_self_render_ratio_active_stream": 1.0,
+    "target_self_render_ratio": 0.0,
+    "definition": "自渲染 commit 数 / 总 commit 数，其中自渲染 = RootEntry 未执行而 SettingsRoot 执行",
+    "content_consistency": "自渲染次数必须等于 sections/onboarding 真实内容变化次数（允许 0）",
+    "must_not_regress": [
+      "settings.section 注册/注销后 rows 立即反映新行集合与顺序",
+      "语言切换后 rows[i].label 变为新语言（F3 最易吞）",
+      "settings.onboarding 变更后 onboardingSteps 反映新步序",
+      "槽重新注册（插件热载）/ ownerProps.wide 切换 / entry 抛错兜底三条路径仍生效"
+    ],
+    "caution": "『切回通用 = 0 渲染』是条件性静默，不得当作修复生效的证据；验收必须在会渲染的状态（models / 首次打开通用）下做"
+  },
+  "artifacts": {
+    "audit": "audit.md",
+    "main_windows": [
+      "raw/report-main.json",
+      "raw/dump-main.json"
+    ],
+    "state_dependence": [
+      "raw/report-seq.json",
+      "raw/dump-seq.json"
+    ],
+    "hook_index_proof": [
+      "raw/probe-hooks.json",
+      "scripts/probe-hooks.mjs"
+    ],
+    "identity_proof": [
+      "raw/probe-sessions.json",
+      "raw/probe-fiberhooks.json",
+      "raw/probe-rerender3.json",
+      "raw/probe-rerender4.json",
+      "raw/dump-full2.json"
+    ],
+    "live_bundles": [
+      "raw/live-dsh-client-ui-settings-general.js",
+      "raw/live-dsh-client-ui-renderer.js",
+      "raw/plugins/"
+    ],
+    "instrumentation": [
+      "scripts/lib-init-slots.js",
+      "scripts/measure.mjs"
+    ]
+  },
+  "data_integrity_notice": {
+    "source": "coordinator notice: peer line (tab-profile) ran `pkill -f playwright_chromiumdev_profile` during ~15:04-15:13 local, killing sibling Chromium instances, and leaked one browser process alive for 24 minutes",
+    "timestamp_convention": {
+      "harness_records": "UTC (new Date().toISOString())",
+      "host_timezone": "CST +08:00",
+      "note": "all local times in this file are host-local; reports elsewhere may mix conventions"
+    },
+    "overlap_with_incident": false,
+    "earliest_line_window_local": "2026-09-21 15:24:42 (+08:00)",
+    "incident_window_local": "~15:04-15:13 (+08:00)",
+    "margin_minutes": 11,
+    "checks": {
+      "pageerror_console_error_events": 0,
+      "browser_crash_or_disconnect_log_hits": 0,
+      "commit_index_continuity": "18/18 windows exact (end-start == dumped commit count); no hook-callback gap",
+      "commit_sequence_monotonic": "9/9 dumps true; no counter reset (no page reload / browser generation change)",
+      "instrumentation_errors": "9/9 dumps empty errors[]",
+      "panel_state_drift": "none (open 1->1, closed 0->0, active section stable)",
+      "run_completion": "both main and seq runs ended with normal DONE lines"
+    },
+    "windows_marked_invalid_due_to_incident": [],
+    "concurrency_instances_observed": {
+      "distinctBrowserInstances_per_window": [
+        4,
+        5,
+        6
+      ],
+      "headless_shell_procs_range": [
+        24,
+        36
+      ]
+    },
+    "load_transition_flag": {
+      "window": "report-seq.json / models",
+      "local_time": "15:49:05-15:49:50",
+      "observation": "distinct browser instances dropped 6 -> 3 mid-window (3 peer browsers exited)",
+      "impact_on_verdicts": "none (verdicts rest on same-frame identity comparison and zero/ratio statements, not absolute load)",
+      "impact_on_absolute_rates": "commit/s for this window MUST NOT be used"
+    },
+    "discipline_acknowledged": "this line never ran pkill/kill; only browser.close() on its own instance; future: record PID and report to coordinator, never clean up shared resources"
+  },
+  "measurement_halt": {
+    "ordered_by": "coordinator",
+    "effective": "immediately",
+    "new_browsers_started_after_halt": 0,
+    "line_residual_processes": 0,
+    "bypass_used": false,
+    "pkill_kill_used": false,
+    "note": "last run ended 15:55 local; only read-only analysis of existing data since"
+  },
+  "structural_conclusions": [
+    {
+      "id": "S1",
+      "claim": "两个 store 的 getSnapshot 带显式记忆键（sections = slots.getVersion('settings.section') + locale.revision；onboardingSteps = slots.getVersion('settings.onboarding')），未变化时返回同一数组引用",
+      "basis": "settings-general.js:496-509 / :521-531",
+      "status": "CONFIRMED"
+    },
+    {
+      "id": "S2",
+      "claim": "两个 selector 经 bindSnapshotSelector -> useSyncExternalStoreWithSelector，eq 未提供 ⇒ 默认 Object.is 比较选择结果；故『新对象』确会被透传成『选择结果变化』",
+      "basis": "renderer:158 + shim q=Object.is / void 0!==g",
+      "status": "CONFIRMED (mechanism)"
+    },
+    {
+      "id": "S3",
+      "claim": "S2 那条链在真实运行中未被触发：两条 store 引用变化 0 次、subscribe 回调 0 次",
+      "basis": "全部窗口实测",
+      "status": "CONFIRMED (refutation)"
+    },
+    {
+      "id": "S4",
+      "claim": "selector 输出身份不随每次通知变化：三个订阅槽 7/12/17 在 236 自驱动 + 144 父驱动 commit 上全部不变（唯一例外 sessions 槽 1 次挂载首帧）",
+      "basis": "dump-full2 判别因子表",
+      "status": "CONFIRMED"
+    },
+    {
+      "id": "S5",
+      "claim": "uSES shim 内部元组（槽 6/11/16）每次渲染都重建，但两条路径皆然 ⇒ 不是自渲染判别因子；因此稳定闭包(F2)不能解释也不能单独消除自渲染",
+      "basis": "dump-full2 判别因子表",
+      "status": "CONFIRMED (negative)"
+    },
+    {
+      "id": "S6",
+      "claim": "父驱动路径与 SlotOutlet 的 locale revision 订阅相关：144/145 父驱动 commit 上 changedVsAlt=true；槽版本恒 35、0 变化",
+      "basis": "dump-full2",
+      "status": "CONFIRMED (full2 only, extrapolated to other windows)"
+    },
+    {
+      "id": "S7",
+      "claim": "状态依赖的另一半（自驱动路径）与三个订阅均无关：back-general 267/435 commit 落 0 渲染、models 全量自渲染",
+      "basis": "2.4bis + §3",
+      "status": "CONFIRMED"
+    },
+    {
+      "id": "S8",
+      "claim": "放大器主路径 = 无 memo 的槽级联：SlotOutlet 渲染 ⇒ RootEntry -> SlotErrorBoundary -> SettingsRoot 逐级执行（每 commit 30-55 组件 fiber）",
+      "basis": "renderer:711-719/773-800/741-747 + 父链实测",
+      "status": "CONFIRMED (structural)"
+    },
+    {
+      "id": "S9",
+      "claim": "自渲染（父未渲染而 SettingsRoot 渲染）确实存在，3211 次",
+      "basis": "祖先链 pw 判别",
+      "status": "CONFIRMED"
+    }
+  ],
+  "absolute_quantities_status": {
+    "verdict": "INCONCLUSIVE_FOR_ALL_ABSOLUTE_VALUES",
+    "reason": "concurrency uncontrollable: 4-6 foreign browser instances at window boundaries, 24-36 headless_shell procs, plus one peer leaked process alive 24 min",
+    "marked_inconclusive": [
+      "commit/s",
+      "self-render/s",
+      "session frames/s",
+      "component fibers per commit (30-55) as absolute",
+      "commits per session frame as absolute",
+      "any absolute milliseconds (p99 frame, long tasks, dropped frames) - not collected by this line"
+    ],
+    "still_valid": [
+      "all zero/ratio/same-frame identity conclusions (S1-S9)",
+      "case counts (a)=0, (b)=0, (c)=3211 out of 6329",
+      "panel-root render : commit ratio = 1.000 (same-frame ratio; denominator itself is concurrency-tainted)"
+    ]
+  },
+  "clean_measurement_needed": {
+    "owner": "coordinator schedules serially; THIS LINE WILL NOT RUN IT",
+    "spec": {
+      "windows": "2 x 60s (state=models ; state=first-open-general)",
+      "exclusivity": "single browser instance, zero foreign Playwright processes",
+      "reuse": "scripts/lib-init-slots.js + scripts/measure.mjs (already self-proven)",
+      "discipline": "only open/close settings panel + switch settings nav tab"
+    },
+    "questions_to_answer": [
+      {
+        "q": "React commit layer",
+        "criterion": "read root.current.lanes / childLanes / f.pendingProps on self-render commits; non-empty lanes ⇒ trigger is an update merged from OUTSIDE this component; empty ⇒ trigger is the uSES path itself",
+        "extra_instrumentation": "~10 lines in the existing onCommitFiberRoot hook"
+      },
+      {
+        "q": "RootEntry execution criterion",
+        "criterion": "instrument RootEntry body via defineProperty interception of the jsx/createElement export (two attempts failed here) OR adjudicate whether the ancestors PerformedWork criterion is biased in this build",
+        "extra_instrumentation": "retry in clean env"
+      },
+      {
+        "q": "SlotOutlet slot version really constant?",
+        "criterion": "wrap ctx.slots service object with a Proxy (or read-only plugin-side injection) to obtain the getVersion() return sequence; verify number:35 constancy is not an observation artifact",
+        "extra_instrumentation": "private #core field made both the Object.prototype trap and the Object.entries face fail here"
+      }
+    ],
+    "do_not_repeat": [
+      "three selector identity semantics and the 'never triggered' result (S1-S5)",
+      "hook index map 7/12/17 (do NOT reuse the stale 5/6/7)",
+      "existence of the state dependence (S6/S7); only the slot-version sequence needs re-collection"
+    ]
+  }
+}

@@ -1,0 +1,92 @@
+{
+ "generatedAtLocal": "2026-09-21T16:03:17",
+ "hostPid": 1390375,
+ "hostAlive": true,
+ "method": {
+  "live": "scan /proc/*/cmdline for headless_shell; browser instances identified by --no-startup-window; our own processes identified by PPid == this census process, so this file reports only OTHER lines.",
+  "retroactive": "absolute process start = /proc/stat btime + /proc/<pid>/stat field 22 / 100 Hz; a process whose start precedes a batch end was alive during that batch.",
+  "limitation": "lower bound: exited processes leave no trace; per-window counts for the historical batches were NOT recorded live and cannot be reconstructed."
+ },
+ "live": {
+  "lock": {
+   "held": true,
+   "ownerAgent": "react-commit-audit (subagent, workspace .workspace/lag-fix/research-v2/react-commit)",
+   "ownerPid": null,
+   "startedAt": "2026-09-21T16:00:54+08:00",
+   "startedEpoch": 1789977654
+  },
+  "headlessShellProcessTotal": 24,
+  "browserInstanceTotal": 4,
+  "ourOwnProcCount": 0,
+  "foreignBrowserInstances": 4,
+  "foreignInstances": [
+   {
+    "pid": 2104881,
+    "startedLocal": "2026-09-21T15:16:01",
+    "userDataDir": "/tmp/playwright_chromiumdev_profile-25ZbPn"
+   },
+   {
+    "pid": 2984196,
+    "startedLocal": "2026-09-21T16:01:01",
+    "userDataDir": "/tmp/playwright_chromiumdev_profile-ZXEzQ4"
+   },
+   {
+    "pid": 2984787,
+    "startedLocal": "2026-09-21T16:01:08",
+    "userDataDir": "/tmp/playwright_chromiumdev_profile-1sHHEl"
+   },
+   {
+    "pid": 3033288,
+    "startedLocal": "2026-09-21T16:02:53",
+    "userDataDir": "/tmp/playwright_chromiumdev_profile-8GB8Pc"
+   }
+  ],
+  "lockViolatedNow": true
+ },
+ "retroactive": {
+  "unlocked": {
+   "batchWindow": [
+    "2026-09-21T14:55:00+08:00",
+    "2026-09-21T15:13:00+08:00"
+   ],
+   "foreignBrowserInstancesAliveAtSomePointDuringBatch_lowerBound": 0,
+   "foreignBrowserInstancesAliveFromBatchStart_lowerBound": 0,
+   "evidence": [],
+   "directObservationForeignAtLeast": 3,
+   "directObservation": "During this batch `ps` was used live and recorded >=3 concurrent headless Chromium instances on this host; tab-profile also leaked its own crashed-run browser from 15:04 until 15:28. Both are recorded in audit.md section 3.",
+   "caveat": "LOWER BOUND ONLY: processes that started and exited during the batch are invisible to /proc after the fact, so a lower bound of 0 does NOT prove exclusivity.",
+   "exclusiveCertified": false,
+   "exclusiveRefuted": false,
+   "status": "NOT EXCLUSIVE (refuted by direct observation during the batch; retrospectively invisible)"
+  },
+  "locked": {
+   "batchWindow": [
+    "2026-09-21T15:44:41+08:00",
+    "2026-09-21T15:55:16+08:00"
+   ],
+   "foreignBrowserInstancesAliveAtSomePointDuringBatch_lowerBound": 1,
+   "foreignBrowserInstancesAliveFromBatchStart_lowerBound": 1,
+   "evidence": [
+    {
+     "pid": 2104881,
+     "startedLocal": "2026-09-21T15:16:01",
+     "userDataDir": "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "aliveFromBatchStart": true,
+     "note": "started BEFORE the batch and is STILL alive -> it was alive for 100% of the batch"
+    }
+   ],
+   "directObservationForeignAtLeast": 1,
+   "directObservation": "The lock was HELD by tab-profile for 42/42 windows, yet >=1 foreign browser instance was alive for the whole window (proved by process start time below).",
+   "caveat": "LOWER BOUND ONLY: processes that started and exited during the batch are invisible to /proc after the fact, so a lower bound of 0 does NOT prove exclusivity.",
+   "exclusiveCertified": false,
+   "exclusiveRefuted": true,
+   "status": "NOT EXCLUSIVE (refuted): at least one foreign browser was alive during the batch"
+  }
+ },
+ "conclusion": {
+  "unlockedBatch": "NOT EXCLUSIVE (refuted by direct observation during the batch; retrospectively invisible)",
+  "lockedBatch": "NOT EXCLUSIVE (refuted): at least one foreign browser was alive during the batch",
+  "exclusiveCertifiedAnyBatch": false,
+  "headline": "No tab-profile batch was exclusive, including the one whose lock tab-profile actually held. Per the standing order no further browser was launched to retry: exclusivity was empirically unobtainable (the coordinator measured 0/5 exclusive windows and 18-31 foreign Playwright processes per window during another line's 1635s lock hold)."
+ }
+}

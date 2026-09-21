@@ -1,0 +1,608 @@
+{
+ "meta": {
+  "tag": "smoke4",
+  "startedAt": "2026-09-21T07:32:20.521Z",
+  "windowMs": 10000,
+  "states": [
+   "general"
+  ],
+  "target": "http://127.0.0.1:3080",
+  "hostPid": {
+   "pid": 1390362,
+   "cmdline": "npm exec @deepseek-ai/dsh web",
+   "starttimeTicks": 11
+  },
+  "hostPidExpected": 1390375,
+  "lockAtStart": "agent: react-commit-audit (subagent of DSH session, workspace .workspace/lag-fix/research-v2/react-commit)\nline: React commit counting / settings-subtree re-render measurement\nhost_pid: 1390375 (node dsh web, monitored, never restarted)\nstarted_at: 2026-09-21T15:17:26+08:00\nstarted_epoch: 1789975046\nexpected_release: within ~20 min\npurpose: re-collect the 8x60s window set + 4x60s state-dependence experiment under exclusive lock\n",
+  "censusAtStart": {
+   "headlessShellProcs": 24,
+   "distinctUserDataDirs": [
+    "/tmp/playwright_chromiumdev_profile-25ZbPn",
+    "/tmp/playwright_chromiumdev_profile-VknQTo",
+    "/tmp/playwright_chromiumdev_profile-mxVU9P",
+    "/tmp/playwright_chromiumdev_profile-RMH2Fo"
+   ],
+   "otherHarnessProcs": [
+    {
+     "pid": 1258240,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+    },
+    {
+     "pid": 1258241,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+    },
+    {
+     "pid": 2104196,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+    },
+    {
+     "pid": 2104259,
+     "cmd": "node scripts/capture3.mjs --scenarios all"
+    },
+    {
+     "pid": 2311182,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+    },
+    {
+     "pid": 2311183,
+     "cmd": "timeout 3300 node lib/tab-profile.mjs"
+    },
+    {
+     "pid": 2311184,
+     "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+    },
+    {
+     "pid": 2351242,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main --window 60000 > run-main.out 2> run-main.err; echo \"exit=$?\"; tail -5 run-main.err"
+    },
+    {
+     "pid": 2351243,
+     "cmd": "node measure-slot.mjs --tag main"
+    },
+    {
+     "pid": 2588673,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/react-commit && node scripts/measure.mjs --window 60000 --tag locked --plan lock --idle-budget 90000 2>&1 | tee raw/locked-run.log"
+    },
+    {
+     "pid": 2588674,
+     "cmd": "node scripts/measure.mjs --window 60000"
+    },
+    {
+     "pid": 2593840,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/measure-hardening && sleep 2 && timeout 560 node probes/harden-measure.mjs --window 15 --n 5 --warmup 10 --budget-ms 480000 --label run6-same-probe --out runs/run6-same-probe.json > runs/run6-same-probe.log 2>&1; echo \"NODE_EXIT=$?\"; python3 -c \"\nimport json;d=json.load(open('runs/run6-same-probe.json'))\nf=d['framework'];print('exit',f['exit_code'],f['terminated_reason'],'| gens',f.get('browser_generations'),'| recov',len(f.get('recovery_events') or []))\nprint('probe_sha256',d['provenance']['probe_sha256'][:16],'| bundle',d['provenance']['bundle']['combined_sha256'][:16])\nprint('env start',d['environment']['at_start']['loadavg'],'conc',d['environment']['at_start']['concurrent_browser_processes'])\nprint('env end  ',d['environment']['at_end']['loadavg'],'conc',d['environment']['at_end']['concurrent_browser_processes'])\nfor ph,s in d['scenarios'].items():\n    pw=s['per_window'];print(f\\\"{ph:15} n={s['windows_valid']}/{s['windows_total']} se/s med={pw['ws_session_event_rate_per_s']['median']} p99 med={pw['frame_p99_ms']['median']} o50 med={pw['frames_over_50ms_ratio']['median']} pooled_p99={s['pooled_frames']['p99']} -> {s['verdict'][:30]}\\\")\n\""
+    },
+    {
+     "pid": 2593854,
+     "cmd": "timeout 560 node probes/harden-measure.mjs"
+    },
+    {
+     "pid": 2593855,
+     "cmd": "node probes/harden-measure.mjs --window 15"
+    },
+    {
+     "pid": 2596026,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && timeout 240 node lib/probe.mjs --window=20000 --settle=6000 --cycles=1 --tag=smoke3 --heartbeat=10000 2>&1 | tail -15"
+    },
+    {
+     "pid": 2596027,
+     "cmd": "timeout 240 node lib/probe.mjs"
+    },
+    {
+     "pid": 2596029,
+     "cmd": "node lib/probe.mjs --window=20000 --settle=6000"
+    },
+    {
+     "pid": 2598372,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && python3 - <<'PY'\np='scripts/lib-init.js'\ns=open(p,encoding='utf-8').read()\nold = \"\"\"        push(SR.snapshot, { t: rt(now()), store: name, n: st.snapN, changed, kind: Array.isArray(v) ? 'array' : (v === null ? 'null' : typeof v), len: Array.isArray(v) ? v.length : null, id: null });\n        return v;\"\"\"\nnew = \"\"\"        push(SR.snapshot, {\n          t: rt(now()), store: name, n: st.snapN, changed,\n          kind: Array.isArray(v) ? 'array' : (v === null ? 'null' : typeof v),\n          len: Array.isArray(v) ? v.length : null,\n          commit: SR.counts.commits,\n          src: SR.counts.commits === 0 ? String(new Error().stack || '').split('\\\\n').slice(1, 8) : null,\n        });\n        return v;\"\"\"\nassert old in s\ns = s.replace(old, new, 1)\nold2 = \"\"\"        try { SR.subscribeRefs[name].push({ t: rt(now()), fn: 'ok' }); } catch { }\"\"\"\nnew2 = \"\"\"        try { SR.subscribeRefs[name].push({ t: rt(now()), fn: 'ok', stack: String(new Error().stack || '').split('\\\\n').slice(1, 6) }); } catch { }\"\"\"\nassert old2 in s\ns = s.replace(old2, new2, 1)\nopen(p,'w',encoding='utf-8').write(s)\nprint('ok')\nPY\nnode --check scripts/lib-init.js && echo SYNTAX_OK && timeout 180 node scripts/measure.mjs --window 10000 --tag smoke4 --states general 2>&1 | tail -5"
+    },
+    {
+     "pid": 2598381,
+     "cmd": "timeout 180 node scripts/measure.mjs"
+    },
+    {
+     "pid": 2598383,
+     "cmd": "node scripts/measure.mjs --window 10000"
+    }
+   ],
+   "distinctBrowserInstances": 4
+  },
+  "node": "v22.23.2",
+  "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+  "initScriptSha256": "befb61cf5337a8610e612821a81a722a24289fc8221f94c2ae37b48bb6ea9df8",
+  "endedAt": "2026-09-21T07:32:49.101Z",
+  "hostPidAtEnd": {
+   "pid": 1390362,
+   "cmdline": "npm exec @deepseek-ai/dsh web",
+   "starttimeTicks": 11
+  },
+  "censusAtEnd": {
+   "headlessShellProcs": 30,
+   "distinctUserDataDirs": [
+    "/tmp/playwright_chromiumdev_profile-25ZbPn",
+    "/tmp/playwright_chromiumdev_profile-VknQTo",
+    "/tmp/playwright_chromiumdev_profile-mxVU9P",
+    "/tmp/playwright_chromiumdev_profile-RMH2Fo",
+    "/tmp/playwright_chromiumdev_profile-WYGgKN"
+   ],
+   "otherHarnessProcs": [
+    {
+     "pid": 1258240,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+    },
+    {
+     "pid": 1258241,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+    },
+    {
+     "pid": 2104196,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+    },
+    {
+     "pid": 2104259,
+     "cmd": "node scripts/capture3.mjs --scenarios all"
+    },
+    {
+     "pid": 2311182,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+    },
+    {
+     "pid": 2311183,
+     "cmd": "timeout 3300 node lib/tab-profile.mjs"
+    },
+    {
+     "pid": 2311184,
+     "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+    },
+    {
+     "pid": 2351242,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main --window 60000 > run-main.out 2> run-main.err; echo \"exit=$?\"; tail -5 run-main.err"
+    },
+    {
+     "pid": 2351243,
+     "cmd": "node measure-slot.mjs --tag main"
+    },
+    {
+     "pid": 2588673,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/react-commit && node scripts/measure.mjs --window 60000 --tag locked --plan lock --idle-budget 90000 2>&1 | tee raw/locked-run.log"
+    },
+    {
+     "pid": 2588674,
+     "cmd": "node scripts/measure.mjs --window 60000"
+    },
+    {
+     "pid": 2593840,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/measure-hardening && sleep 2 && timeout 560 node probes/harden-measure.mjs --window 15 --n 5 --warmup 10 --budget-ms 480000 --label run6-same-probe --out runs/run6-same-probe.json > runs/run6-same-probe.log 2>&1; echo \"NODE_EXIT=$?\"; python3 -c \"\nimport json;d=json.load(open('runs/run6-same-probe.json'))\nf=d['framework'];print('exit',f['exit_code'],f['terminated_reason'],'| gens',f.get('browser_generations'),'| recov',len(f.get('recovery_events') or []))\nprint('probe_sha256',d['provenance']['probe_sha256'][:16],'| bundle',d['provenance']['bundle']['combined_sha256'][:16])\nprint('env start',d['environment']['at_start']['loadavg'],'conc',d['environment']['at_start']['concurrent_browser_processes'])\nprint('env end  ',d['environment']['at_end']['loadavg'],'conc',d['environment']['at_end']['concurrent_browser_processes'])\nfor ph,s in d['scenarios'].items():\n    pw=s['per_window'];print(f\\\"{ph:15} n={s['windows_valid']}/{s['windows_total']} se/s med={pw['ws_session_event_rate_per_s']['median']} p99 med={pw['frame_p99_ms']['median']} o50 med={pw['frames_over_50ms_ratio']['median']} pooled_p99={s['pooled_frames']['p99']} -> {s['verdict'][:30]}\\\")\n\""
+    },
+    {
+     "pid": 2593854,
+     "cmd": "timeout 560 node probes/harden-measure.mjs"
+    },
+    {
+     "pid": 2593855,
+     "cmd": "node probes/harden-measure.mjs --window 15"
+    },
+    {
+     "pid": 2596026,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && timeout 240 node lib/probe.mjs --window=20000 --settle=6000 --cycles=1 --tag=smoke3 --heartbeat=10000 2>&1 | tail -15"
+    },
+    {
+     "pid": 2596027,
+     "cmd": "timeout 240 node lib/probe.mjs"
+    },
+    {
+     "pid": 2596029,
+     "cmd": "node lib/probe.mjs --window=20000 --settle=6000"
+    },
+    {
+     "pid": 2598372,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && python3 - <<'PY'\np='scripts/lib-init.js'\ns=open(p,encoding='utf-8').read()\nold = \"\"\"        push(SR.snapshot, { t: rt(now()), store: name, n: st.snapN, changed, kind: Array.isArray(v) ? 'array' : (v === null ? 'null' : typeof v), len: Array.isArray(v) ? v.length : null, id: null });\n        return v;\"\"\"\nnew = \"\"\"        push(SR.snapshot, {\n          t: rt(now()), store: name, n: st.snapN, changed,\n          kind: Array.isArray(v) ? 'array' : (v === null ? 'null' : typeof v),\n          len: Array.isArray(v) ? v.length : null,\n          commit: SR.counts.commits,\n          src: SR.counts.commits === 0 ? String(new Error().stack || '').split('\\\\n').slice(1, 8) : null,\n        });\n        return v;\"\"\"\nassert old in s\ns = s.replace(old, new, 1)\nold2 = \"\"\"        try { SR.subscribeRefs[name].push({ t: rt(now()), fn: 'ok' }); } catch { }\"\"\"\nnew2 = \"\"\"        try { SR.subscribeRefs[name].push({ t: rt(now()), fn: 'ok', stack: String(new Error().stack || '').split('\\\\n').slice(1, 6) }); } catch { }\"\"\"\nassert old2 in s\ns = s.replace(old2, new2, 1)\nopen(p,'w',encoding='utf-8').write(s)\nprint('ok')\nPY\nnode --check scripts/lib-init.js && echo SYNTAX_OK && timeout 180 node scripts/measure.mjs --window 10000 --tag smoke4 --states general 2>&1 | tail -5"
+    },
+    {
+     "pid": 2598381,
+     "cmd": "timeout 180 node scripts/measure.mjs"
+    },
+    {
+     "pid": 2598383,
+     "cmd": "node scripts/measure.mjs --window 10000"
+    }
+   ],
+   "distinctBrowserInstances": 5
+  },
+  "lockAtEnd": "agent: react-commit-audit (subagent of DSH session, workspace .workspace/lag-fix/research-v2/react-commit)\nline: React commit counting / settings-subtree re-render measurement\nhost_pid: 1390375 (node dsh web, monitored, never restarted)\nstarted_at: 2026-09-21T15:17:26+08:00\nstarted_epoch: 1789975046\nexpected_release: within ~20 min\npurpose: re-collect the 8x60s window set + 4x60s state-dependence experiment under exclusive lock\n"
+ },
+ "boot": {
+  "rev": "102e374d338e",
+  "entryCount": 50,
+  "entries": {
+   "@deepseek-ai/dsh-client-runtime": "a0fb4bb225d3",
+   "@deepseek-ai/dsh-client-locale": "2660ca3f6a00",
+   "@deepseek-ai/dsh-client-ui-renderer": "79b59d365f3b",
+   "@deepseek-ai/dsh-client-ui-sidebar": "7563cb4b02ca",
+   "@deepseek-ai/dsh-client-ui-settings-general": "f733efde3f2f"
+  }
+ },
+ "premise": {
+  "hookPresent": true,
+  "hookIsWrapped": false,
+  "hookCalls": {
+   "inject": 1,
+   "onCommitFiberRoot": 126,
+   "onPostCommitFiberRoot": 104,
+   "onCommitFiberUnmount": 16
+  },
+  "injected": [
+   {
+    "t": 26.9,
+    "id": 1,
+    "version": "18.3.1",
+    "pkg": "react-dom",
+    "bundleType": 0,
+    "reconcilerVersion": "18.3.1-next-f1338f8080-20240426",
+    "hasScheduleRoot": false
+   }
+  ],
+  "flags": {
+   "shimTrapActive": false,
+   "shimTrapAt": 7.1,
+   "shimTrapFires": 1,
+   "shimTrapFired": true,
+   "shimTrapFiredAt": 210.1,
+   "wrappedStores": true,
+   "wrappedAt": 410.5,
+   "shimTrapOffReason": "installed",
+   "shimTrapOffAt": 1710.4
+  },
+  "counts": {
+   "commits": 126,
+   "targetRenderId": 115,
+   "targetRenderPw": 115,
+   "targetMounted": 125
+  },
+  "storeNames": [
+   "sections",
+   "onboardingSteps"
+  ],
+  "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+  "bootRev": "102e374d338e",
+  "entryCount": 50,
+  "errors": []
+ },
+ "windows": [
+  {
+   "name": "general",
+   "requested": {
+    "panel": "open",
+    "section": "general",
+    "net": "active"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "panelAction": {
+    "alreadyOpen": false,
+    "panelNodes": 1
+   },
+   "sectionAction": {
+    "clicked": "通用设置",
+    "before": "通用设置",
+    "after": "通用设置"
+   },
+   "panelNodesAtStart": 1,
+   "activeSectionAtStart": "通用设置",
+   "startEpochMs": 1789975958378,
+   "startIso": "2026-09-21T07:32:38.378Z",
+   "sessionListAtStart": {
+    "ok": true,
+    "items": 297,
+    "topLevel": 103,
+    "subagents": 194,
+    "running": 12
+   },
+   "censusAtStart": {
+    "headlessShellProcs": 30,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-VknQTo",
+     "/tmp/playwright_chromiumdev_profile-mxVU9P",
+     "/tmp/playwright_chromiumdev_profile-RMH2Fo",
+     "/tmp/playwright_chromiumdev_profile-WYGgKN"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2351242,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main --window 60000 > run-main.out 2> run-main.err; echo \"exit=$?\"; tail -5 run-main.err"
+     },
+     {
+      "pid": 2351243,
+      "cmd": "node measure-slot.mjs --tag main"
+     },
+     {
+      "pid": 2588673,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/react-commit && node scripts/measure.mjs --window 60000 --tag locked --plan lock --idle-budget 90000 2>&1 | tee raw/locked-run.log"
+     },
+     {
+      "pid": 2588674,
+      "cmd": "node scripts/measure.mjs --window 60000"
+     },
+     {
+      "pid": 2593840,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/measure-hardening && sleep 2 && timeout 560 node probes/harden-measure.mjs --window 15 --n 5 --warmup 10 --budget-ms 480000 --label run6-same-probe --out runs/run6-same-probe.json > runs/run6-same-probe.log 2>&1; echo \"NODE_EXIT=$?\"; python3 -c \"\nimport json;d=json.load(open('runs/run6-same-probe.json'))\nf=d['framework'];print('exit',f['exit_code'],f['terminated_reason'],'| gens',f.get('browser_generations'),'| recov',len(f.get('recovery_events') or []))\nprint('probe_sha256',d['provenance']['probe_sha256'][:16],'| bundle',d['provenance']['bundle']['combined_sha256'][:16])\nprint('env start',d['environment']['at_start']['loadavg'],'conc',d['environment']['at_start']['concurrent_browser_processes'])\nprint('env end  ',d['environment']['at_end']['loadavg'],'conc',d['environment']['at_end']['concurrent_browser_processes'])\nfor ph,s in d['scenarios'].items():\n    pw=s['per_window'];print(f\\\"{ph:15} n={s['windows_valid']}/{s['windows_total']} se/s med={pw['ws_session_event_rate_per_s']['median']} p99 med={pw['frame_p99_ms']['median']} o50 med={pw['frames_over_50ms_ratio']['median']} pooled_p99={s['pooled_frames']['p99']} -> {s['verdict'][:30]}\\\")\n\""
+     },
+     {
+      "pid": 2593854,
+      "cmd": "timeout 560 node probes/harden-measure.mjs"
+     },
+     {
+      "pid": 2593855,
+      "cmd": "node probes/harden-measure.mjs --window 15"
+     },
+     {
+      "pid": 2596026,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && timeout 240 node lib/probe.mjs --window=20000 --settle=6000 --cycles=1 --tag=smoke3 --heartbeat=10000 2>&1 | tail -15"
+     },
+     {
+      "pid": 2596027,
+      "cmd": "timeout 240 node lib/probe.mjs"
+     },
+     {
+      "pid": 2596029,
+      "cmd": "node lib/probe.mjs --window=20000 --settle=6000"
+     },
+     {
+      "pid": 2598372,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && python3 - <<'PY'\np='scripts/lib-init.js'\ns=open(p,encoding='utf-8').read()\nold = \"\"\"        push(SR.snapshot, { t: rt(now()), store: name, n: st.snapN, changed, kind: Array.isArray(v) ? 'array' : (v === null ? 'null' : typeof v), len: Array.isArray(v) ? v.length : null, id: null });\n        return v;\"\"\"\nnew = \"\"\"        push(SR.snapshot, {\n          t: rt(now()), store: name, n: st.snapN, changed,\n          kind: Array.isArray(v) ? 'array' : (v === null ? 'null' : typeof v),\n          len: Array.isArray(v) ? v.length : null,\n          commit: SR.counts.commits,\n          src: SR.counts.commits === 0 ? String(new Error().stack || '').split('\\\\n').slice(1, 8) : null,\n        });\n        return v;\"\"\"\nassert old in s\ns = s.replace(old, new, 1)\nold2 = \"\"\"        try { SR.subscribeRefs[name].push({ t: rt(now()), fn: 'ok' }); } catch { }\"\"\"\nnew2 = \"\"\"        try { SR.subscribeRefs[name].push({ t: rt(now()), fn: 'ok', stack: String(new Error().stack || '').split('\\\\n').slice(1, 6) }); } catch { }\"\"\"\nassert old2 in s\ns = s.replace(old2, new2, 1)\nopen(p,'w',encoding='utf-8').write(s)\nprint('ok')\nPY\nnode --check scripts/lib-init.js && echo SYNTAX_OK && timeout 180 node scripts/measure.mjs --window 10000 --tag smoke4 --states general 2>&1 | tail -5"
+     },
+     {
+      "pid": 2598381,
+      "cmd": "timeout 180 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2598383,
+      "cmd": "node scripts/measure.mjs --window 10000"
+     }
+    ],
+    "distinctBrowserInstances": 5
+   },
+   "commitIndexStart": 217,
+   "endEpochMs": 1789975968666,
+   "endIso": "2026-09-21T07:32:48.666Z",
+   "elapsedMs": 10288,
+   "panelNodesAtEnd": 1,
+   "activeSectionAtEnd": "通用设置",
+   "sessionListAtEnd": {
+    "ok": true,
+    "items": 297,
+    "topLevel": 103,
+    "subagents": 194,
+    "running": 12
+   },
+   "censusAtEnd": {
+    "headlessShellProcs": 30,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-VknQTo",
+     "/tmp/playwright_chromiumdev_profile-mxVU9P",
+     "/tmp/playwright_chromiumdev_profile-RMH2Fo",
+     "/tmp/playwright_chromiumdev_profile-WYGgKN"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2351242,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main --window 60000 > run-main.out 2> run-main.err; echo \"exit=$?\"; tail -5 run-main.err"
+     },
+     {
+      "pid": 2351243,
+      "cmd": "node measure-slot.mjs --tag main"
+     },
+     {
+      "pid": 2588673,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/react-commit && node scripts/measure.mjs --window 60000 --tag locked --plan lock --idle-budget 90000 2>&1 | tee raw/locked-run.log"
+     },
+     {
+      "pid": 2588674,
+      "cmd": "node scripts/measure.mjs --window 60000"
+     },
+     {
+      "pid": 2593840,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/measure-hardening && sleep 2 && timeout 560 node probes/harden-measure.mjs --window 15 --n 5 --warmup 10 --budget-ms 480000 --label run6-same-probe --out runs/run6-same-probe.json > runs/run6-same-probe.log 2>&1; echo \"NODE_EXIT=$?\"; python3 -c \"\nimport json;d=json.load(open('runs/run6-same-probe.json'))\nf=d['framework'];print('exit',f['exit_code'],f['terminated_reason'],'| gens',f.get('browser_generations'),'| recov',len(f.get('recovery_events') or []))\nprint('probe_sha256',d['provenance']['probe_sha256'][:16],'| bundle',d['provenance']['bundle']['combined_sha256'][:16])\nprint('env start',d['environment']['at_start']['loadavg'],'conc',d['environment']['at_start']['concurrent_browser_processes'])\nprint('env end  ',d['environment']['at_end']['loadavg'],'conc',d['environment']['at_end']['concurrent_browser_processes'])\nfor ph,s in d['scenarios'].items():\n    pw=s['per_window'];print(f\\\"{ph:15} n={s['windows_valid']}/{s['windows_total']} se/s med={pw['ws_session_event_rate_per_s']['median']} p99 med={pw['frame_p99_ms']['median']} o50 med={pw['frames_over_50ms_ratio']['median']} pooled_p99={s['pooled_frames']['p99']} -> {s['verdict'][:30]}\\\")\n\""
+     },
+     {
+      "pid": 2593854,
+      "cmd": "timeout 560 node probes/harden-measure.mjs"
+     },
+     {
+      "pid": 2593855,
+      "cmd": "node probes/harden-measure.mjs --window 15"
+     },
+     {
+      "pid": 2596026,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && timeout 240 node lib/probe.mjs --window=20000 --settle=6000 --cycles=1 --tag=smoke3 --heartbeat=10000 2>&1 | tail -15"
+     },
+     {
+      "pid": 2596027,
+      "cmd": "timeout 240 node lib/probe.mjs"
+     },
+     {
+      "pid": 2596029,
+      "cmd": "node lib/probe.mjs --window=20000 --settle=6000"
+     },
+     {
+      "pid": 2598372,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && python3 - <<'PY'\np='scripts/lib-init.js'\ns=open(p,encoding='utf-8').read()\nold = \"\"\"        push(SR.snapshot, { t: rt(now()), store: name, n: st.snapN, changed, kind: Array.isArray(v) ? 'array' : (v === null ? 'null' : typeof v), len: Array.isArray(v) ? v.length : null, id: null });\n        return v;\"\"\"\nnew = \"\"\"        push(SR.snapshot, {\n          t: rt(now()), store: name, n: st.snapN, changed,\n          kind: Array.isArray(v) ? 'array' : (v === null ? 'null' : typeof v),\n          len: Array.isArray(v) ? v.length : null,\n          commit: SR.counts.commits,\n          src: SR.counts.commits === 0 ? String(new Error().stack || '').split('\\\\n').slice(1, 8) : null,\n        });\n        return v;\"\"\"\nassert old in s\ns = s.replace(old, new, 1)\nold2 = \"\"\"        try { SR.subscribeRefs[name].push({ t: rt(now()), fn: 'ok' }); } catch { }\"\"\"\nnew2 = \"\"\"        try { SR.subscribeRefs[name].push({ t: rt(now()), fn: 'ok', stack: String(new Error().stack || '').split('\\\\n').slice(1, 6) }); } catch { }\"\"\"\nassert old2 in s\ns = s.replace(old2, new2, 1)\nopen(p,'w',encoding='utf-8').write(s)\nprint('ok')\nPY\nnode --check scripts/lib-init.js && echo SYNTAX_OK && timeout 180 node scripts/measure.mjs --window 10000 --tag smoke4 --states general 2>&1 | tail -5"
+     },
+     {
+      "pid": 2598381,
+      "cmd": "timeout 180 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2598383,
+      "cmd": "node scripts/measure.mjs --window 10000"
+     }
+    ],
+    "distinctBrowserInstances": 5
+   },
+   "commitIndexEnd": 283,
+   "slice": {
+    "nCommits": 66,
+    "nNotify": 0,
+    "nSel": 0,
+    "nSnap": 0,
+    "nSlotChange": 0
+   },
+   "summary": {
+    "name": "general",
+    "seconds": 10.288,
+    "panelNodesStart": 1,
+    "panelNodesEnd": 1,
+    "sectionStart": "通用设置",
+    "sectionEnd": "通用设置",
+    "commits": 66,
+    "commitsWithTarget": 66,
+    "targetRendered_pw": 66,
+    "targetRendered_id": 66,
+    "panelOpenCommits": 66,
+    "selfDrivenRenders": 0,
+    "parentDrivenRenders": 66,
+    "panelOpenSelfDriven": 0,
+    "panelOpenParentDriven": 66,
+    "selByStore": {},
+    "notifyByStore": {},
+    "snapByStore": {},
+    "localeRevHist": {},
+    "slotChangeByKey": {},
+    "selfRenderCause": {
+     "real": 0,
+     "identity": 0,
+     "other": 0
+    },
+    "perSecRate": {
+     "commitPerSec": 6.415241057542768,
+     "selfRenderPerSec": 0
+    }
+   }
+  }
+ ],
+ "consoleErrors": [],
+ "wsSockets": [
+  {
+   "url": "ws://127.0.0.1:3080/api/events.mux",
+   "frames": 2333,
+   "byType": {
+    "session/subscribed": 19,
+    "session/queue": 6,
+    "session/jobs": 5,
+    "session/event": 2103,
+    "session/projection": 200
+   }
+  },
+  {
+   "url": "ws://127.0.0.1:3080/api/events.host",
+   "frames": 0,
+   "byType": {}
+  }
+ ],
+ "notes": [],
+ "final": {
+  "probe": {
+   "hookPresent": true,
+   "hookIsWrapped": false,
+   "hookCalls": {
+    "inject": 1,
+    "onCommitFiberRoot": 283,
+    "onPostCommitFiberRoot": 234,
+    "onCommitFiberUnmount": 16
+   },
+   "injected": [
+    {
+     "t": 26.9,
+     "id": 1,
+     "version": "18.3.1",
+     "pkg": "react-dom",
+     "bundleType": 0,
+     "reconcilerVersion": "18.3.1-next-f1338f8080-20240426",
+     "hasScheduleRoot": false
+    }
+   ],
+   "flags": {
+    "shimTrapActive": false,
+    "shimTrapAt": 7.1,
+    "shimTrapFires": 1,
+    "shimTrapFired": true,
+    "shimTrapFiredAt": 210.1,
+    "wrappedStores": true,
+    "wrappedAt": 410.5,
+    "shimTrapOffReason": "installed",
+    "shimTrapOffAt": 1710.4
+   },
+   "counts": {
+    "commits": 283,
+    "targetRenderId": 198,
+    "targetRenderPw": 198,
+    "targetMounted": 282
+   },
+   "storeNames": [
+    "sections",
+    "onboardingSteps"
+   ],
+   "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+   "bootRev": "102e374d338e",
+   "entryCount": 50,
+   "errors": []
+  }
+ }
+}

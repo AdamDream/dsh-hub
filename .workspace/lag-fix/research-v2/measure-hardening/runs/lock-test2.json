@@ -1,0 +1,163 @@
+{
+  "probe": "harden-measure",
+  "schema_version": 2,
+  "label": "lock-test2",
+  "generated_at": "2026-09-21T07:39:15.402Z",
+  "target": {
+    "url": "http://127.0.0.1:3080",
+    "node": "v22.23.2",
+    "playwright": "1.49.1",
+    "host": {
+      "boot_id": "dbe2fd56-1424-4921-b1da-c5a2246c633b",
+      "pid": "1390375",
+      "starttime_ticks": "9878669",
+      "cmdline": "node /home/CNS2026495165/.npm-global/bin/dsh web"
+    },
+    "viewport": "1440x900",
+    "headless": true,
+    "window_sec": 12,
+    "n_per_scenario": 5,
+    "warmup_sec": 10
+  },
+  "pre_registered": {
+    "thresholds": {
+      "script_ms_per_s": 60,
+      "frame_p99_ms": 50,
+      "frames_over_50ms_ratio": 0.02,
+      "long_task_total_ms_per_s": 100
+    },
+    "min_valid_windows": 3,
+    "min_dom_nodes": 300,
+    "min_raf_frames": 20,
+    "envelope_contract": "{type:'server-request',rpcId,method,payload} ; payload.type 为分类键",
+    "ws_classification": "payload.type 规范划分（sum==total）；不复刻历史基线的子串关键词口径",
+    "mutation_scope": "document.body childList+subtree（默认）—— 本应用流式渲染为原地改文本节点，实测该口径每窗口仅 6~8 次，**不是 re-render 代理**",
+    "click_to_paint": "打开设置入口时记录 click→下一帧；样本量小，仅作参考，不构成 primary 终点",
+    "scenarios": [
+      "idle",
+      "settings-open",
+      "settings-dwell"
+    ],
+    "note": "门槛与场景在本探针内预注册，测量前固定；不得事后调整。",
+    "exclusive_lock": {
+      "dir": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/.probe.lock",
+      "acquire": "mkdir（原子）—— 必须在启动任何浏览器之前",
+      "retry": "每 20–40s，最长 30 min（--lock-wait-ms）",
+      "owner_file": "owner.txt（agent / pid / started_at / started_epoch）",
+      "release": "rmdir（浏览器全部关闭之后）",
+      "preempt": "仅当 锁存在 且 owner 开始 >25min 且 owner 进程已不存在；抢占写入 framework.lock.events",
+      "unlocked_batch": "未持锁批次的结论一律标 INCONCLUSIVE"
+    }
+  },
+  "framework": {
+    "self_check": {
+      "ok": false,
+      "failures": [
+        "probe-lock-not-acquired"
+      ]
+    },
+    "gates": {},
+    "exit_code": 1,
+    "exit_code_meaning": "0=仅框架自检通过(不等于性能通过) / 2=存在 invalid 窗口或场景 INCONCLUSIVE 或指标超门槛 / 1=框架级 FATAL",
+    "terminated_reason": "lock-timeout",
+    "lock": {
+      "acquired": false,
+      "mode": "timeout",
+      "waited_ms": 1202,
+      "owner": {
+        "agent": "react-commit-audit (subagent of DSH session, workspace .workspace/lag-fix/research-v2/react-commit)",
+        "pid": null,
+        "started_epoch": 1789975046
+      },
+      "owner_age_min": 21.846,
+      "owner_pid_alive": null,
+      "events": [
+        {
+          "at": "2026-09-21T07:39:15.546Z",
+          "event": "waiting-for-lock",
+          "attempt": 1,
+          "sleep_ms": 1200,
+          "owner_agent": "react-commit-audit (subagent of DSH session, workspace .workspace/lag-fix/research-v2/react-commit)",
+          "owner_pid": null,
+          "owner_age_min": 21.826,
+          "owner_pid_alive": null
+        },
+        {
+          "at": "2026-09-21T07:39:16.748Z",
+          "event": "lock-timeout",
+          "waited_ms": 1202,
+          "owner_agent": "react-commit-audit (subagent of DSH session, workspace .workspace/lag-fix/research-v2/react-commit)",
+          "owner_pid": null,
+          "owner_age_min": 21.846,
+          "owner_pid_alive": null,
+          "preempt_blocked_reason": "owner.txt 缺 pid 字段 → 存活未知 → 按安全默认不抢占"
+        }
+      ],
+      "lock_dir": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/.probe.lock"
+    },
+    "verdict_override": "INCONCLUSIVE(no-exclusive-lock)"
+  },
+  "scale_snapshot": null,
+  "windows": [],
+  "scenarios": {},
+  "invalid_runs": [],
+  "mutation_guard": null,
+  "limitations": [
+    "无法人为制造可控流式负载：本探针只能观测自然发生的 session/event 流，无法固定事件率，因此跨 run 的「同事件率」配对只能事后筛选、不能事前保证。",
+    "CDP 指标采用 node Date.now 与页面 performance.now 映射，含 offset_uncertainty_ms 级误差；CDP delta 不能在 common_interval 内重切（只有 rAF/WS/mutation 可精确重切）。",
+    "N（session.list items）是快照量：本探针在每个窗口**结束后**（计时区间之外）采一次快照，窗口期间 N 仍可能变化。",
+    "rAF 帧间隔在 headless 下由 CPU 合成器驱动，与有头/真实显示器刷新率不完全一致。",
+    "mutation 默认只统计 document.body 的 childList+subtree（节点增删）。实测本应用流式渲染为原地改文本节点，该口径每窗口仅 6~8 次 ⇒ **mutation_count 不是 re-render / React commit 代理，禁止用作渲染成本证据**；要量化文本 churn 需 --mutation-chardata（扰动轮）。",
+    "窗口级 p99 在 15s 窗口下只有约 9 个尾样本，不具备判定力；判定尾部请用 pooled_frames。",
+    "跨线并发是主要污染源：必须持 .probe.lock 独占；未持锁批次的结论一律 INCONCLUSIVE（framework.lock.acquired 为 false 即为未持锁）。"
+  ],
+  "environment": {
+    "at_start": {
+      "at": "2026-09-21T07:39:15.467Z",
+      "loadavg": "17.25 26.99 35.54 10/4374 2721423",
+      "cpu_count": "32",
+      "concurrent_browser_processes": "6",
+      "mem_used_mb": "22186",
+      "note": "concurrent_browser_processes 含本探针自己；>1 说明有并发租户，测量窗口可能被外来负载污染"
+    },
+    "at_end": null
+  },
+  "provenance": {
+    "probe_path": "probes/harden-measure.mjs",
+    "probe_sha256": "dfcc6ff8d705081e14962b169f5eefe5949df99078a4667f3043a8a6cfae386f",
+    "bundle": {
+      "boot_html_sha256": "f106bd918f58fa8c79dfc5bb0a7f8f1bca8fe4b6266f3c6228eb96f092d9bfb3",
+      "assets": [
+        {
+          "ref": "/plugins/@deepseek-ai/dsh-client-modules/client.js?rev=7eb526320903",
+          "status": 200,
+          "bytes": 15313,
+          "sha256": "01abe15bd0c624312ac587d00a0219f9756336b1e83b7b8d2f6d273a6e8c8050"
+        },
+        {
+          "ref": "/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "status": 200,
+          "bytes": 397783,
+          "sha256": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b"
+        },
+        {
+          "ref": "/assets/index-ClqxG24t.js",
+          "status": 200,
+          "bytes": 398995,
+          "sha256": "e7e0fe9aa54df4397e42ce3b3231f06c888dca9fef37f171f1748907b5e047e8"
+        },
+        {
+          "ref": "/assets/vendor-D22_Mp1f.js",
+          "status": 200,
+          "bytes": 741668,
+          "sha256": "a999d26735448a40f2a8a21bf9cf9748b7815634fae4c5ca51d929843da9a907"
+        }
+      ],
+      "boot_html_status": 200,
+      "boot_html_bytes": 16611,
+      "combined_sha256": "6f76616e24d935d9f03c675a260fa655bbdd65825455f31fbfb3f34725068ece",
+      "note": "boot HTML + 全部被引用 client .js 的 sha256；?rev= 查询参数本身也是指纹的一部分"
+    },
+    "note": "probe_sha256 + bundle.combined_sha256 是「同代码」配对的必要条件；二者任一变化即禁止直接配对比较"
+  }
+}

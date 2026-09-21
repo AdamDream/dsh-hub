@@ -1,0 +1,254 @@
+{
+  "suite": "E1-worker-vs-sync-equivalence",
+  "expectAppendNewEvents": 0,
+  "tz": "UTC",
+  "lib": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/stage/lib-origdb",
+  "label": "lib-origdb-UTC",
+  "libIsCandidate": false,
+  "libIsOriginal": false,
+  "pass": true,
+  "counts": {
+    "sync": {
+      "events": 6,
+      "daily": 5,
+      "sync": 5
+    },
+    "worker": {
+      "events": 6,
+      "daily": 5,
+      "sync": 5
+    }
+  },
+  "results": {
+    "syncFirst": {
+      "dsh": {
+        "scanned": 2,
+        "newEvents": 5,
+        "failedFiles": [
+          {
+            "file": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/equiv-lib-origdb-UTC/sync/dsh/sessions/sessC/session.jsonl.zstd",
+            "error": "corrupt Zstandard session log: invalid frame magic at byte 0"
+          }
+        ]
+      },
+      "cc": {
+        "scanned": 2,
+        "newEvents": 1,
+        "failedFiles": []
+      }
+    },
+    "syncSecond": {
+      "dsh": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "cc": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      }
+    },
+    "syncAppend": {
+      "dsh": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "cc": {
+        "scanned": 1,
+        "newEvents": 0,
+        "failedFiles": [
+          {
+            "file": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/equiv-lib-origdb-UTC/sync/cc/-home-CNS2026495165-dsh/ccsess1.jsonl",
+            "error": "1 unparsable JSON lines"
+          }
+        ]
+      }
+    },
+    "syncClean": {
+      "dsh": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "cc": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      }
+    },
+    "workerFirst": {
+      "ok": true,
+      "dsh": {
+        "scanned": 2,
+        "newEvents": 5,
+        "failedFiles": [
+          {
+            "file": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/equiv-lib-origdb-UTC/worker/dsh/sessions/sessC/session.jsonl.zstd",
+            "error": "corrupt Zstandard session log: invalid frame magic at byte 0"
+          }
+        ]
+      },
+      "cc": {
+        "scanned": 2,
+        "newEvents": 1,
+        "failedFiles": []
+      },
+      "wallMs": 35
+    },
+    "workerSecond": {
+      "ok": true,
+      "dsh": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "cc": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "wallMs": 1
+    },
+    "workerAppend": {
+      "ok": true,
+      "dsh": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "cc": {
+        "scanned": 1,
+        "newEvents": 0,
+        "failedFiles": [
+          {
+            "file": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/equiv-lib-origdb-UTC/worker/cc/-home-CNS2026495165-dsh/ccsess1.jsonl",
+            "error": "1 unparsable JSON lines"
+          }
+        ]
+      },
+      "wallMs": 3
+    },
+    "workerClean": {
+      "ok": true,
+      "dsh": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "cc": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "wallMs": 5
+    },
+    "stats": {
+      "runs": 3,
+      "ok": 3,
+      "failed": 0,
+      "stalls": 0,
+      "timeouts": 0,
+      "workerSpawns": 1,
+      "invalidations": 3,
+      "workerAlive": true,
+      "workerThreadId": 1,
+      "pendingId": null,
+      "inFlight": false,
+      "disposed": false,
+      "stallMs": 120000,
+      "hardTimeoutMs": 900000
+    }
+  },
+  "diffs": {
+    "return_dshFirst": [],
+    "return_ccFirst": [],
+    "return_dshSecond": [],
+    "return_ccSecond": [],
+    "return_dshAppend": [],
+    "return_ccAppend": [],
+    "return_dshClean": [],
+    "return_ccClean": [],
+    "db_usage_events": [],
+    "db_usage_daily": [],
+    "db_sync_state": []
+  },
+  "rows": [
+    {
+      "id": "face:return_dshFirst",
+      "ok": true,
+      "detail": "byte-identical"
+    },
+    {
+      "id": "face:return_ccFirst",
+      "ok": true,
+      "detail": "byte-identical"
+    },
+    {
+      "id": "face:return_dshSecond",
+      "ok": true,
+      "detail": "byte-identical"
+    },
+    {
+      "id": "face:return_ccSecond",
+      "ok": true,
+      "detail": "byte-identical"
+    },
+    {
+      "id": "face:return_dshAppend",
+      "ok": true,
+      "detail": "byte-identical"
+    },
+    {
+      "id": "face:return_ccAppend",
+      "ok": true,
+      "detail": "byte-identical"
+    },
+    {
+      "id": "face:return_dshClean",
+      "ok": true,
+      "detail": "byte-identical"
+    },
+    {
+      "id": "face:return_ccClean",
+      "ok": true,
+      "detail": "byte-identical"
+    },
+    {
+      "id": "face:db_usage_events",
+      "ok": true,
+      "detail": "byte-identical"
+    },
+    {
+      "id": "face:db_usage_daily",
+      "ok": true,
+      "detail": "byte-identical"
+    },
+    {
+      "id": "face:db_sync_state",
+      "ok": true,
+      "detail": "byte-identical"
+    },
+    {
+      "id": "worker:results-ok",
+      "ok": true,
+      "detail": "{\"first\":true,\"second\":true,\"append\":true,\"clean\":true}"
+    },
+    {
+      "id": "worker:persistent-worker-reused",
+      "ok": true,
+      "detail": "runs=3 workerSpawns=1 (one persistent worker reused across passes)"
+    },
+    {
+      "id": "append:exercised",
+      "ok": true,
+      "detail": "cc append pass scanned=1 newEvents=0 failed=1 (expected newEvents=0; the pre-fix ingest-cc.js cursor off-by-one loses the appended record — both paths lose it IDENTICALLY, which is what the faces above prove)"
+    },
+    {
+      "id": "fixture:non-vacuous",
+      "ok": true,
+      "detail": "events=6 daily=5 sync=5"
+    }
+  ]
+}

@@ -1,0 +1,798 @@
+{
+  "label": "tz-UTC",
+  "tz": "UTC",
+  "timestamp": "2026-09-21T06:50:04.777Z",
+  "baseline": {
+    "mode": "baseline",
+    "dir": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_append/tz-UTC-baseline",
+    "phases": [
+      {
+        "phase": "initial",
+        "size": 454,
+        "result": {
+          "scanned": 1,
+          "newEvents": 2,
+          "failedFiles": []
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-1",
+              "ts": 1789898400000,
+              "input_tokens": 5,
+              "output_tokens": 1,
+              "cache_read_tokens": 2,
+              "cache_write_tokens": 3
+            },
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-2",
+              "ts": 1789898460000,
+              "input_tokens": 20,
+              "output_tokens": 2,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 2,
+              "input_tokens": 25,
+              "output_tokens": 3
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905600000,
+              "size": 454,
+              "fingerprint": null,
+              "last_offset": 455,
+              "last_seq": null
+            }
+          ]
+        }
+      },
+      {
+        "phase": "append-new",
+        "size": 651,
+        "result": {
+          "scanned": 1,
+          "newEvents": 0,
+          "failedFiles": [
+            {
+              "file": "<ROOT>/cc/-home-CNS2026495165-dsh/app1.jsonl",
+              "error": "1 unparsable JSON lines"
+            }
+          ]
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-1",
+              "ts": 1789898400000,
+              "input_tokens": 5,
+              "output_tokens": 1,
+              "cache_read_tokens": 2,
+              "cache_write_tokens": 3
+            },
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-2",
+              "ts": 1789898460000,
+              "input_tokens": 20,
+              "output_tokens": 2,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 2,
+              "input_tokens": 25,
+              "output_tokens": 3
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905630000,
+              "size": 651,
+              "fingerprint": null,
+              "last_offset": 652,
+              "last_seq": null
+            }
+          ]
+        }
+      },
+      {
+        "phase": "append-conflict-update",
+        "size": 909,
+        "result": {
+          "scanned": 1,
+          "newEvents": 0,
+          "failedFiles": [
+            {
+              "file": "<ROOT>/cc/-home-CNS2026495165-dsh/app1.jsonl",
+              "error": "1 unparsable JSON lines"
+            }
+          ]
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-1",
+              "ts": 1789898400000,
+              "input_tokens": 5,
+              "output_tokens": 1,
+              "cache_read_tokens": 2,
+              "cache_write_tokens": 3
+            },
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-2",
+              "ts": 1789898460000,
+              "input_tokens": 20,
+              "output_tokens": 2,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 2,
+              "input_tokens": 25,
+              "output_tokens": 3
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905660000,
+              "size": 909,
+              "fingerprint": null,
+              "last_offset": 910,
+              "last_seq": null
+            }
+          ]
+        }
+      },
+      {
+        "phase": "unchanged-noop",
+        "size": 909,
+        "result": {
+          "scanned": 0,
+          "newEvents": 0,
+          "failedFiles": []
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-1",
+              "ts": 1789898400000,
+              "input_tokens": 5,
+              "output_tokens": 1,
+              "cache_read_tokens": 2,
+              "cache_write_tokens": 3
+            },
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-2",
+              "ts": 1789898460000,
+              "input_tokens": 20,
+              "output_tokens": 2,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 2,
+              "input_tokens": 25,
+              "output_tokens": 3
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905660000,
+              "size": 909,
+              "fingerprint": null,
+              "last_offset": 910,
+              "last_seq": null
+            }
+          ]
+        }
+      }
+    ],
+    "expectedCursor": {
+      "size0": 454,
+      "afterAppend1": 651,
+      "afterAppend2": 909
+    }
+  },
+  "candidate": {
+    "mode": "candidate",
+    "dir": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_append/tz-UTC-candidate",
+    "phases": [
+      {
+        "phase": "initial",
+        "size": 454,
+        "result": {
+          "scanned": 1,
+          "newEvents": 2,
+          "failedFiles": []
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-1",
+              "ts": 1789898400000,
+              "input_tokens": 5,
+              "output_tokens": 1,
+              "cache_read_tokens": 2,
+              "cache_write_tokens": 3
+            },
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-2",
+              "ts": 1789898460000,
+              "input_tokens": 20,
+              "output_tokens": 2,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 2,
+              "input_tokens": 25,
+              "output_tokens": 3
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905600000,
+              "size": 454,
+              "fingerprint": null,
+              "last_offset": 455,
+              "last_seq": null
+            }
+          ]
+        }
+      },
+      {
+        "phase": "append-new",
+        "size": 651,
+        "result": {
+          "scanned": 1,
+          "newEvents": 0,
+          "failedFiles": [
+            {
+              "file": "<ROOT>/cc/-home-CNS2026495165-dsh/app1.jsonl",
+              "error": "1 unparsable JSON lines"
+            }
+          ]
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-1",
+              "ts": 1789898400000,
+              "input_tokens": 5,
+              "output_tokens": 1,
+              "cache_read_tokens": 2,
+              "cache_write_tokens": 3
+            },
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-2",
+              "ts": 1789898460000,
+              "input_tokens": 20,
+              "output_tokens": 2,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 2,
+              "input_tokens": 25,
+              "output_tokens": 3
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905630000,
+              "size": 651,
+              "fingerprint": null,
+              "last_offset": 652,
+              "last_seq": null
+            }
+          ]
+        }
+      },
+      {
+        "phase": "append-conflict-update",
+        "size": 909,
+        "result": {
+          "scanned": 1,
+          "newEvents": 0,
+          "failedFiles": [
+            {
+              "file": "<ROOT>/cc/-home-CNS2026495165-dsh/app1.jsonl",
+              "error": "1 unparsable JSON lines"
+            }
+          ]
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-1",
+              "ts": 1789898400000,
+              "input_tokens": 5,
+              "output_tokens": 1,
+              "cache_read_tokens": 2,
+              "cache_write_tokens": 3
+            },
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-2",
+              "ts": 1789898460000,
+              "input_tokens": 20,
+              "output_tokens": 2,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 2,
+              "input_tokens": 25,
+              "output_tokens": 3
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905660000,
+              "size": 909,
+              "fingerprint": null,
+              "last_offset": 910,
+              "last_seq": null
+            }
+          ]
+        }
+      },
+      {
+        "phase": "unchanged-noop",
+        "size": 909,
+        "result": {
+          "scanned": 0,
+          "newEvents": 0,
+          "failedFiles": []
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-1",
+              "ts": 1789898400000,
+              "input_tokens": 5,
+              "output_tokens": 1,
+              "cache_read_tokens": 2,
+              "cache_write_tokens": 3
+            },
+            {
+              "data_source": "cc",
+              "session_id": "app1",
+              "dedup_key": "m-2",
+              "ts": 1789898460000,
+              "input_tokens": 20,
+              "output_tokens": 2,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 2,
+              "input_tokens": 25,
+              "output_tokens": 3
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905660000,
+              "size": 909,
+              "fingerprint": null,
+              "last_offset": 910,
+              "last_seq": null
+            }
+          ]
+        }
+      }
+    ],
+    "expectedCursor": {
+      "size0": 454,
+      "afterAppend1": 651,
+      "afterAppend2": 909
+    }
+  },
+  "rows": [
+    {
+      "phase": "initial",
+      "resultEqual": true,
+      "eventsEqual": true,
+      "dailyEqual": true,
+      "syncEqual": true,
+      "baselineResult": {
+        "scanned": 1,
+        "newEvents": 2,
+        "failedFiles": []
+      },
+      "candidateResult": {
+        "scanned": 1,
+        "newEvents": 2,
+        "failedFiles": []
+      },
+      "baselineSync": [
+        {
+          "mtime": 1789905600000,
+          "size": 454,
+          "fingerprint": null,
+          "last_offset": 455,
+          "last_seq": null
+        }
+      ],
+      "candidateSync": [
+        {
+          "mtime": 1789905600000,
+          "size": 454,
+          "fingerprint": null,
+          "last_offset": 455,
+          "last_seq": null
+        }
+      ],
+      "baselineEvents": [
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-1",
+          "ts": 1789898400000,
+          "input_tokens": 5,
+          "output_tokens": 1,
+          "cache_read_tokens": 2,
+          "cache_write_tokens": 3
+        },
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-2",
+          "ts": 1789898460000,
+          "input_tokens": 20,
+          "output_tokens": 2,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ],
+      "candidateEvents": [
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-1",
+          "ts": 1789898400000,
+          "input_tokens": 5,
+          "output_tokens": 1,
+          "cache_read_tokens": 2,
+          "cache_write_tokens": 3
+        },
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-2",
+          "ts": 1789898460000,
+          "input_tokens": 20,
+          "output_tokens": 2,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ],
+      "expectedSize": 454
+    },
+    {
+      "phase": "append-new",
+      "resultEqual": true,
+      "eventsEqual": true,
+      "dailyEqual": true,
+      "syncEqual": true,
+      "baselineResult": {
+        "scanned": 1,
+        "newEvents": 0,
+        "failedFiles": [
+          {
+            "file": "<ROOT>/cc/-home-CNS2026495165-dsh/app1.jsonl",
+            "error": "1 unparsable JSON lines"
+          }
+        ]
+      },
+      "candidateResult": {
+        "scanned": 1,
+        "newEvents": 0,
+        "failedFiles": [
+          {
+            "file": "<ROOT>/cc/-home-CNS2026495165-dsh/app1.jsonl",
+            "error": "1 unparsable JSON lines"
+          }
+        ]
+      },
+      "baselineSync": [
+        {
+          "mtime": 1789905630000,
+          "size": 651,
+          "fingerprint": null,
+          "last_offset": 652,
+          "last_seq": null
+        }
+      ],
+      "candidateSync": [
+        {
+          "mtime": 1789905630000,
+          "size": 651,
+          "fingerprint": null,
+          "last_offset": 652,
+          "last_seq": null
+        }
+      ],
+      "baselineEvents": [
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-1",
+          "ts": 1789898400000,
+          "input_tokens": 5,
+          "output_tokens": 1,
+          "cache_read_tokens": 2,
+          "cache_write_tokens": 3
+        },
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-2",
+          "ts": 1789898460000,
+          "input_tokens": 20,
+          "output_tokens": 2,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ],
+      "candidateEvents": [
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-1",
+          "ts": 1789898400000,
+          "input_tokens": 5,
+          "output_tokens": 1,
+          "cache_read_tokens": 2,
+          "cache_write_tokens": 3
+        },
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-2",
+          "ts": 1789898460000,
+          "input_tokens": 20,
+          "output_tokens": 2,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ],
+      "expectedSize": 651
+    },
+    {
+      "phase": "append-conflict-update",
+      "resultEqual": true,
+      "eventsEqual": true,
+      "dailyEqual": true,
+      "syncEqual": true,
+      "baselineResult": {
+        "scanned": 1,
+        "newEvents": 0,
+        "failedFiles": [
+          {
+            "file": "<ROOT>/cc/-home-CNS2026495165-dsh/app1.jsonl",
+            "error": "1 unparsable JSON lines"
+          }
+        ]
+      },
+      "candidateResult": {
+        "scanned": 1,
+        "newEvents": 0,
+        "failedFiles": [
+          {
+            "file": "<ROOT>/cc/-home-CNS2026495165-dsh/app1.jsonl",
+            "error": "1 unparsable JSON lines"
+          }
+        ]
+      },
+      "baselineSync": [
+        {
+          "mtime": 1789905660000,
+          "size": 909,
+          "fingerprint": null,
+          "last_offset": 910,
+          "last_seq": null
+        }
+      ],
+      "candidateSync": [
+        {
+          "mtime": 1789905660000,
+          "size": 909,
+          "fingerprint": null,
+          "last_offset": 910,
+          "last_seq": null
+        }
+      ],
+      "baselineEvents": [
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-1",
+          "ts": 1789898400000,
+          "input_tokens": 5,
+          "output_tokens": 1,
+          "cache_read_tokens": 2,
+          "cache_write_tokens": 3
+        },
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-2",
+          "ts": 1789898460000,
+          "input_tokens": 20,
+          "output_tokens": 2,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ],
+      "candidateEvents": [
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-1",
+          "ts": 1789898400000,
+          "input_tokens": 5,
+          "output_tokens": 1,
+          "cache_read_tokens": 2,
+          "cache_write_tokens": 3
+        },
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-2",
+          "ts": 1789898460000,
+          "input_tokens": 20,
+          "output_tokens": 2,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ],
+      "expectedSize": 909
+    },
+    {
+      "phase": "unchanged-noop",
+      "resultEqual": true,
+      "eventsEqual": true,
+      "dailyEqual": true,
+      "syncEqual": true,
+      "baselineResult": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "candidateResult": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "baselineSync": [
+        {
+          "mtime": 1789905660000,
+          "size": 909,
+          "fingerprint": null,
+          "last_offset": 910,
+          "last_seq": null
+        }
+      ],
+      "candidateSync": [
+        {
+          "mtime": 1789905660000,
+          "size": 909,
+          "fingerprint": null,
+          "last_offset": 910,
+          "last_seq": null
+        }
+      ],
+      "baselineEvents": [
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-1",
+          "ts": 1789898400000,
+          "input_tokens": 5,
+          "output_tokens": 1,
+          "cache_read_tokens": 2,
+          "cache_write_tokens": 3
+        },
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-2",
+          "ts": 1789898460000,
+          "input_tokens": 20,
+          "output_tokens": 2,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ],
+      "candidateEvents": [
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-1",
+          "ts": 1789898400000,
+          "input_tokens": 5,
+          "output_tokens": 1,
+          "cache_read_tokens": 2,
+          "cache_write_tokens": 3
+        },
+        {
+          "data_source": "cc",
+          "session_id": "app1",
+          "dedup_key": "m-2",
+          "ts": 1789898460000,
+          "input_tokens": 20,
+          "output_tokens": 2,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ],
+      "expectedSize": 909
+    }
+  ],
+  "overall": true
+}

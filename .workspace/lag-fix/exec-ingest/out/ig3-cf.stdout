@@ -1,0 +1,74 @@
+=================== IG3 scenario TZ=Asia/Shanghai ===================
+file:///home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/tests/run-ig3-acceptance.mjs:104
+	db.exec("DELETE FROM usage_daily");
+	   ^
+
+Error: no such table: usage_daily
+    at fullRecompute (file:///home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/tests/run-ig3-acceptance.mjs:104:5)
+    at file:///home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/tests/run-ig3-acceptance.mjs:196:2 {
+  code: 'ERR_SQLITE_ERROR',
+  errcode: 1,
+  errstr: 'SQL logic error'
+}
+
+Node.js v22.23.2
+=================== IG3 scenario TZ=UTC ===================
+file:///home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/tests/run-ig3-acceptance.mjs:104
+	db.exec("DELETE FROM usage_daily");
+	   ^
+
+Error: no such table: usage_daily
+    at fullRecompute (file:///home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/tests/run-ig3-acceptance.mjs:104:5)
+    at file:///home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/tests/run-ig3-acceptance.mjs:196:2 {
+  code: 'ERR_SQLITE_ERROR',
+  errcode: 1,
+  errstr: 'SQL logic error'
+}
+
+Node.js v22.23.2
+=================== IG3 scenario TZ=America/New_York ===================
+file:///home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/tests/run-ig3-acceptance.mjs:104
+	db.exec("DELETE FROM usage_daily");
+	   ^
+
+Error: no such table: usage_daily
+    at fullRecompute (file:///home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/tests/run-ig3-acceptance.mjs:104:5)
+    at file:///home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/tests/run-ig3-acceptance.mjs:196:2 {
+  code: 'ERR_SQLITE_ERROR',
+  errcode: 1,
+  errstr: 'SQL logic error'
+}
+
+Node.js v22.23.2
+=================== counterfactuals ===================
+node:internal/modules/package_json_reader:314
+  throw new ERR_MODULE_NOT_FOUND(packageName, fileURLToPath(base), null);
+        ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@deepseek-ai/dsh-home-paths' imported from /home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/lib-noig3/db.js
+    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:314:9)
+    at packageResolve (node:internal/modules/esm/resolve:768:81)
+    at moduleResolve (node:internal/modules/esm/resolve:855:18)
+    at defaultResolve (node:internal/modules/esm/resolve:985:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+  code: 'ERR_MODULE_NOT_FOUND'
+}
+
+Node.js v22.23.2
+=================== IG3 real root ===================
+file:///home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/tests/run-ig3-acceptance.mjs:104
+	db.exec("DELETE FROM usage_daily");
+	   ^
+
+Error: no such table: usage_daily
+    at fullRecompute (file:///home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/tests/run-ig3-acceptance.mjs:104:5)
+    at file:///home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/tests/run-ig3-acceptance.mjs:196:2 {
+  code: 'ERR_SQLITE_ERROR',
+  errcode: 1,
+  errstr: 'SQL logic error'
+}
+
+Node.js v22.23.2

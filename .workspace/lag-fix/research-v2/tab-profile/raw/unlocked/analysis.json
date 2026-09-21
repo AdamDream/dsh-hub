@@ -1,0 +1,8521 @@
+{
+ "meta": {
+  "at": "2026-09-21T08:03:31.644Z",
+  "batch": "unlocked",
+  "source": "raw/unlocked/run.json",
+  "recomputedFromRawCumulativeSnapshots": true,
+  "criteria": {
+   "openLatency_perceivable_ms": 100,
+   "openLatency_note": "openMsClean is the mutation-precise click->first-DOM-change figure; openMs is rAF-quantised (~16.7ms) and is reported only as a sanity cross-check.",
+   "amplification_ratio": 1.5,
+   "amplification_note": "ABSOLUTE sustained cost per second vs the same-page closed-settings baseline. Only meaningful while ambient event load is comparable; prefer perEventAmplification when load differs.",
+   "per_event_amplification_ratio": 1.5,
+   "per_event_note": "LOAD-NORMALISED amplification: ms of Script per ambient session event, tab vs closed-settings baseline on the same page. Primary \"does this tab itself cost more\" test, because the host is shared with a live streaming session and absolute cost tracks that stream.",
+   "frame_rate_floor_fps": 45,
+   "frame_rate_note": "closed-settings baseline ran at ~57 fps on this (already loaded) host; a sustained window below 45 fps means rAF could not keep up, which is the clearest user-perceivable symptom.",
+   "jank_over50_per_100_frames": 3,
+   "jank_note": "frames longer than 50ms per 100 frames, versus the same figure measured with settings closed."
+  },
+  "lock": null
+ },
+ "concurrency": {
+  "censusGeneratedAtLocal": "2026-09-21T16:03:17",
+  "liveNow": {
+   "headlessShellProcessTotal": 24,
+   "browserInstanceTotal": 4,
+   "foreignBrowserInstances": 4,
+   "lockHeldBy": "react-commit-audit (subagent, workspace .workspace/lag-fix/research-v2/react-commit)",
+   "lockViolatedNow": true
+  },
+  "thisBatch": {
+   "batchWindow": [
+    "2026-09-21T14:55:00+08:00",
+    "2026-09-21T15:13:00+08:00"
+   ],
+   "foreignBrowserInstancesAliveAtSomePointDuringBatch_lowerBound": 0,
+   "foreignBrowserInstancesAliveFromBatchStart_lowerBound": 0,
+   "evidence": [],
+   "directObservationForeignAtLeast": 3,
+   "directObservation": "During this batch `ps` was used live and recorded >=3 concurrent headless Chromium instances on this host; tab-profile also leaked its own crashed-run browser from 15:04 until 15:28. Both are recorded in audit.md section 3.",
+   "caveat": "LOWER BOUND ONLY: processes that started and exited during the batch are invisible to /proc after the fact, so a lower bound of 0 does NOT prove exclusivity.",
+   "exclusiveCertified": false,
+   "exclusiveRefuted": false,
+   "status": "NOT EXCLUSIVE (refuted by direct observation during the batch; retrospectively invisible)"
+  },
+  "exclusiveCertifiedAnyBatch": false,
+  "headline": "No tab-profile batch was exclusive, including the one whose lock tab-profile actually held. Per the standing order no further browser was launched to retry: exclusivity was empirically unobtainable (the coordinator measured 0/5 exclusive windows and 18-31 foreign Playwright processes per window during another line's 1635s lock hold).",
+  "pollutionTier": "ALL-WINDOWS-POLLUTION-PRONE",
+  "pollutionTierReason": "Per-window concurrent-browser counts were NOT recorded live for this batch (the instrumentation was added afterwards). Retroactive process-start analysis refutes exclusivity for both batches. Therefore no window in this batch may be used for a load-sensitive verdict; only structural/count conclusions survive."
+ },
+ "lockCertification": {
+  "batch": "unlocked",
+  "lockRecordedInRun": false,
+  "heldAcrossWholeRun": null,
+  "acquiredAt": null,
+  "waitedMs": null,
+  "retriesBeforeAcquire": null,
+  "preemptions": null,
+  "windowsTotal": 42,
+  "windowsLockHeld": 0,
+  "windowsWithoutLock": [
+   "baseline:home-settings-closed",
+   "baseline:profile-page-home-settings-closed-w1_10s",
+   "general:r1:general-r1-w1_10s",
+   "general:r1:general-r1-w2_20s",
+   "general:r2:general-r2-w1_10s",
+   "general:r2:general-r2-w2_20s",
+   "models:r1:models-r1-w1_10s",
+   "models:r1:models-r1-w2_20s",
+   "models:r2:models-r2-w1_10s",
+   "models:r2:models-r2-w2_20s",
+   "plugins:r1:plugins-r1-w1_10s",
+   "plugins:r1:plugins-r1-w2_20s",
+   "plugins:r2:plugins-r2-w1_10s",
+   "plugins:r2:plugins-r2-w2_20s",
+   "agent-preset:r1:agent-preset-r1-w1_10s",
+   "agent-preset:r1:agent-preset-r1-w2_20s",
+   "agent-preset:r2:agent-preset-r2-w1_10s",
+   "agent-preset:r2:agent-preset-r2-w2_20s",
+   "remote-workspace:r1:remote-workspace-r1-w1_10s",
+   "remote-workspace:r1:remote-workspace-r1-w2_20s",
+   "remote-workspace:r2:remote-workspace-r2-w1_10s",
+   "remote-workspace:r2:remote-workspace-r2-w2_20s",
+   "distributed:r1:distributed-r1-w1_10s",
+   "distributed:r1:distributed-r1-w2_20s",
+   "distributed:r2:distributed-r2-w1_10s",
+   "distributed:r2:distributed-r2-w2_20s",
+   "vision-adam:r1:vision-adam-r1-w1_10s",
+   "vision-adam:r1:vision-adam-r1-w2_20s",
+   "vision-adam:r2:vision-adam-r2-w1_10s",
+   "vision-adam:r2:vision-adam-r2-w2_20s",
+   "subagent-model:r1:subagent-model-r1-w1_10s",
+   "subagent-model:r1:subagent-model-r1-w2_20s",
+   "subagent-model:r2:subagent-model-r2-w1_10s",
+   "subagent-model:r2:subagent-model-r2-w2_20s",
+   "plugins:firstMount",
+   "plugins:poll:plugins-poll-10s-1",
+   "plugins:poll:plugins-poll-10s-2",
+   "plugins:poll:plugins-poll-10s-3",
+   "plugins:poll:plugins-poll-10s-4",
+   "plugins:poll:plugins-poll-10s-5",
+   "plugins:poll:plugins-poll-10s-6",
+   "plugins:return"
+  ],
+  "verdict": "INCONCLUSIVE-UNLOCKED"
+ },
+ "integrity": {
+  "windowsChecked": 42,
+  "issues": [],
+  "reportedVsRecomputedAllMatch": true,
+  "negativeOrBackward": 0
+ },
+ "baselineFloor": {
+  "source": "profile-page-home-settings-closed-w1_10s",
+  "seconds": 10.002,
+  "scriptPerSec": 48.798,
+  "taskPerSec": 105.18,
+  "recalcPerSec": 43.091,
+  "layoutPerSec": 0,
+  "scriptPerEvent": 0.599,
+  "recalcPerEvent": 0.529,
+  "load": {
+   "sessionEventPerSec": 69.786,
+   "sessionProjectionPerSec": 11.698,
+   "totalPerSec": 81.484
+  },
+  "frames": {
+   "n": 572,
+   "p50": 16.7,
+   "p95": 16.8,
+   "p99": 33.4,
+   "max": 66.7,
+   "mean": 17.453,
+   "over50": 6,
+   "over16_7": 204,
+   "over50Per100Frames": 1.049,
+   "fps": 57.189
+  },
+  "longtasks": {
+   "n": 0,
+   "totalMs": 0,
+   "maxMs": 0
+  },
+  "wsByPayload": {
+   "session/event": {
+    "n": 698,
+    "perSec": 69.786
+   },
+   "session/projection": {
+    "n": 117,
+    "perSec": 11.698
+   }
+  }
+ },
+ "baselineNonStationarity": [
+  {
+   "label": "home-settings-closed",
+   "seconds": 5.031,
+   "load": {
+    "sessionEventPerSec": 422.779,
+    "sessionProjectionPerSec": 13.516,
+    "totalPerSec": 436.295
+   },
+   "scriptPerSec": 58.306,
+   "recalcPerSec": 54.661,
+   "scriptPerEvent": 0.134,
+   "over50Per100Frames": 1.429
+  },
+  {
+   "label": "profile-page-home-settings-closed-w1_10s",
+   "seconds": 10.002,
+   "load": {
+    "sessionEventPerSec": 69.786,
+    "sessionProjectionPerSec": 11.698,
+    "totalPerSec": 81.484
+   },
+   "scriptPerSec": 48.798,
+   "recalcPerSec": 43.091,
+   "scriptPerEvent": 0.599,
+   "over50Per100Frames": 1.049
+  }
+ ],
+ "loadCorrelation": {
+  "n": 34,
+  "script_vs_totalEvents": -0.183,
+  "recalc_vs_totalEvents": -0.328,
+  "over50_vs_totalEvents": -0.301
+ },
+ "naturalWindows": [
+  {
+   "scope": "baseline-closed-settings",
+   "seconds": 5.031,
+   "load": {
+    "sessionEventPerSec": 422.779,
+    "sessionProjectionPerSec": 13.516,
+    "totalPerSec": 436.295
+   },
+   "scriptPerSec": 58.306,
+   "recalcPerSec": 54.661,
+   "scriptPerEvent": 0.134,
+   "recalcPerEvent": 0.125,
+   "over50": 4,
+   "frames": 280,
+   "over50Per100": 1.429,
+   "p99": 66.6,
+   "max": 100,
+   "domNodes": 605,
+   "jseventListeners": 215
+  },
+  {
+   "scope": "baseline-closed-settings",
+   "seconds": 10.002,
+   "load": {
+    "sessionEventPerSec": 69.786,
+    "sessionProjectionPerSec": 11.698,
+    "totalPerSec": 81.484
+   },
+   "scriptPerSec": 48.798,
+   "recalcPerSec": 43.091,
+   "scriptPerEvent": 0.599,
+   "recalcPerEvent": 0.529,
+   "over50": 6,
+   "frames": 572,
+   "over50Per100": 1.049,
+   "p99": 33.4,
+   "max": 66.7,
+   "domNodes": 597,
+   "jseventListeners": 215
+  },
+  {
+   "scope": "general:r1:w1_10s",
+   "seconds": 10,
+   "load": {
+    "sessionEventPerSec": 165.5,
+    "sessionProjectionPerSec": 12.9,
+    "totalPerSec": 178.4
+   },
+   "scriptPerSec": 58.693,
+   "recalcPerSec": 71.413,
+   "scriptPerEvent": 0.329,
+   "recalcPerEvent": 0.4,
+   "over50": 7,
+   "frames": 545,
+   "over50Per100": 1.284,
+   "p99": 50.1,
+   "max": 100,
+   "domNodes": 768,
+   "jseventListeners": 257
+  },
+  {
+   "scope": "general:r1:w2_20s",
+   "seconds": 20,
+   "load": {
+    "sessionEventPerSec": 90.8,
+    "sessionProjectionPerSec": 12.9,
+    "totalPerSec": 103.7
+   },
+   "scriptPerSec": 59.087,
+   "recalcPerSec": 75.966,
+   "scriptPerEvent": 0.57,
+   "recalcPerEvent": 0.733,
+   "over50": 15,
+   "frames": 1085,
+   "over50Per100": 1.382,
+   "p99": 66.7,
+   "max": 100.1,
+   "domNodes": 776,
+   "jseventListeners": 257
+  },
+  {
+   "scope": "general:r2:w1_10s",
+   "seconds": 10,
+   "load": {
+    "sessionEventPerSec": 208.3,
+    "sessionProjectionPerSec": 8.8,
+    "totalPerSec": 217.1
+   },
+   "scriptPerSec": 50.443,
+   "recalcPerSec": 59.864,
+   "scriptPerEvent": 0.232,
+   "recalcPerEvent": 0.276,
+   "over50": 10,
+   "frames": 509,
+   "over50Per100": 1.965,
+   "p99": 50.1,
+   "max": 133.3,
+   "domNodes": 776,
+   "jseventListeners": 257
+  },
+  {
+   "scope": "general:r2:w2_20s",
+   "seconds": 20,
+   "load": {
+    "sessionEventPerSec": 175.05,
+    "sessionProjectionPerSec": 16.9,
+    "totalPerSec": 191.95
+   },
+   "scriptPerSec": 68.331,
+   "recalcPerSec": 94.223,
+   "scriptPerEvent": 0.356,
+   "recalcPerEvent": 0.491,
+   "over50": 19,
+   "frames": 1056,
+   "over50Per100": 1.799,
+   "p99": 66.6,
+   "max": 116.6,
+   "domNodes": 776,
+   "jseventListeners": 257
+  },
+  {
+   "scope": "models:r1:w1_10s",
+   "seconds": 10.002,
+   "load": {
+    "sessionEventPerSec": 61.088,
+    "sessionProjectionPerSec": 12.997,
+    "totalPerSec": 74.085
+   },
+   "scriptPerSec": 79.025,
+   "recalcPerSec": 98.119,
+   "scriptPerEvent": 1.067,
+   "recalcPerEvent": 1.324,
+   "over50": 26,
+   "frames": 412,
+   "over50Per100": 6.311,
+   "p99": 150,
+   "max": 183.3,
+   "domNodes": 728,
+   "jseventListeners": 246
+  },
+  {
+   "scope": "models:r1:w2_20s",
+   "seconds": 20,
+   "load": {
+    "sessionEventPerSec": 37.35,
+    "sessionProjectionPerSec": 10.8,
+    "totalPerSec": 48.15
+   },
+   "scriptPerSec": 124.945,
+   "recalcPerSec": 149.598,
+   "scriptPerEvent": 2.595,
+   "recalcPerEvent": 3.107,
+   "over50": 147,
+   "frames": 300,
+   "over50Per100": 49,
+   "p99": 166.7,
+   "max": 316.6,
+   "domNodes": 728,
+   "jseventListeners": 246
+  },
+  {
+   "scope": "models:r2:w1_10s",
+   "seconds": 10,
+   "load": {
+    "sessionEventPerSec": 17.3,
+    "sessionProjectionPerSec": 5.7,
+    "totalPerSec": 23
+   },
+   "scriptPerSec": 60.218,
+   "recalcPerSec": 73.6,
+   "scriptPerEvent": 2.618,
+   "recalcPerEvent": 3.2,
+   "over50": 76,
+   "frames": 132,
+   "over50Per100": 57.576,
+   "p99": 166.7,
+   "max": 183.3,
+   "domNodes": 728,
+   "jseventListeners": 246
+  },
+  {
+   "scope": "models:r2:w2_20s",
+   "seconds": 19.999,
+   "load": {
+    "sessionEventPerSec": 146.657,
+    "sessionProjectionPerSec": 11.301,
+    "totalPerSec": 157.958
+   },
+   "scriptPerSec": 65.572,
+   "recalcPerSec": 77.79,
+   "scriptPerEvent": 0.415,
+   "recalcPerEvent": 0.492,
+   "over50": 50,
+   "frames": 846,
+   "over50Per100": 5.91,
+   "p99": 149.9,
+   "max": 266.7,
+   "domNodes": 728,
+   "jseventListeners": 246
+  },
+  {
+   "scope": "plugins:r1:w1_10s",
+   "seconds": 10.001,
+   "load": {
+    "sessionEventPerSec": 111.789,
+    "sessionProjectionPerSec": 10.099,
+    "totalPerSec": 121.888
+   },
+   "scriptPerSec": 49.9,
+   "recalcPerSec": 85.005,
+   "scriptPerEvent": 0.409,
+   "recalcPerEvent": 0.697,
+   "over50": 13,
+   "frames": 529,
+   "over50Per100": 2.457,
+   "p99": 66.7,
+   "max": 116.6,
+   "domNodes": 1025,
+   "jseventListeners": 256
+  },
+  {
+   "scope": "plugins:r1:w2_20s",
+   "seconds": 20,
+   "load": {
+    "sessionEventPerSec": 76.4,
+    "sessionProjectionPerSec": 9.75,
+    "totalPerSec": 86.15
+   },
+   "scriptPerSec": 56.252,
+   "recalcPerSec": 96.52,
+   "scriptPerEvent": 0.653,
+   "recalcPerEvent": 1.12,
+   "over50": 25,
+   "frames": 1019,
+   "over50Per100": 2.453,
+   "p99": 83.3,
+   "max": 200,
+   "domNodes": 1025,
+   "jseventListeners": 256
+  },
+  {
+   "scope": "plugins:r2:w1_10s",
+   "seconds": 10,
+   "load": {
+    "sessionEventPerSec": 2.4,
+    "sessionProjectionPerSec": 7.2,
+    "totalPerSec": 9.6
+   },
+   "scriptPerSec": 76.989,
+   "recalcPerSec": 124.703,
+   "scriptPerEvent": 8.02,
+   "recalcPerEvent": 12.99,
+   "over50": 72,
+   "frames": 201,
+   "over50Per100": 35.821,
+   "p99": 183.4,
+   "max": 216.6,
+   "domNodes": 1025,
+   "jseventListeners": 256
+  },
+  {
+   "scope": "plugins:r2:w2_20s",
+   "seconds": 20.001,
+   "load": {
+    "sessionEventPerSec": 4.5,
+    "sessionProjectionPerSec": 13.199,
+    "totalPerSec": 17.699
+   },
+   "scriptPerSec": 75.369,
+   "recalcPerSec": 133.509,
+   "scriptPerEvent": 4.258,
+   "recalcPerEvent": 7.543,
+   "over50": 53,
+   "frames": 860,
+   "over50Per100": 6.163,
+   "p99": 116.7,
+   "max": 183.4,
+   "domNodes": 1025,
+   "jseventListeners": 256
+  },
+  {
+   "scope": "agent-preset:r1:w1_10s",
+   "seconds": 10,
+   "load": {
+    "sessionEventPerSec": 47,
+    "sessionProjectionPerSec": 13.5,
+    "totalPerSec": 60.5
+   },
+   "scriptPerSec": 70.062,
+   "recalcPerSec": 100.701,
+   "scriptPerEvent": 1.158,
+   "recalcPerEvent": 1.664,
+   "over50": 16,
+   "frames": 491,
+   "over50Per100": 3.259,
+   "p99": 83.5,
+   "max": 150,
+   "domNodes": 786,
+   "jseventListeners": 273
+  },
+  {
+   "scope": "agent-preset:r1:w2_20s",
+   "seconds": 20,
+   "load": {
+    "sessionEventPerSec": 4.65,
+    "sessionProjectionPerSec": 13.7,
+    "totalPerSec": 18.35
+   },
+   "scriptPerSec": 86.06,
+   "recalcPerSec": 125.073,
+   "scriptPerEvent": 4.69,
+   "recalcPerEvent": 6.816,
+   "over50": 74,
+   "frames": 817,
+   "over50Per100": 9.058,
+   "p99": 116.5,
+   "max": 200,
+   "domNodes": 786,
+   "jseventListeners": 256
+  },
+  {
+   "scope": "agent-preset:r2:w1_10s",
+   "seconds": 10,
+   "load": {
+    "sessionEventPerSec": 4,
+    "sessionProjectionPerSec": 12,
+    "totalPerSec": 16
+   },
+   "scriptPerSec": 43.539,
+   "recalcPerSec": 65.962,
+   "scriptPerEvent": 2.721,
+   "recalcPerEvent": 4.123,
+   "over50": 2,
+   "frames": 561,
+   "over50Per100": 0.357,
+   "p99": 33.4,
+   "max": 66.7,
+   "domNodes": 786,
+   "jseventListeners": 256
+  },
+  {
+   "scope": "agent-preset:r2:w2_20s",
+   "seconds": 20,
+   "load": {
+    "sessionEventPerSec": 100.25,
+    "sessionProjectionPerSec": 12.85,
+    "totalPerSec": 113.1
+   },
+   "scriptPerSec": 48.73,
+   "recalcPerSec": 68.031,
+   "scriptPerEvent": 0.431,
+   "recalcPerEvent": 0.602,
+   "over50": 14,
+   "frames": 1089,
+   "over50Per100": 1.286,
+   "p99": 66.7,
+   "max": 116.6,
+   "domNodes": 786,
+   "jseventListeners": 256
+  },
+  {
+   "scope": "remote-workspace:r1:w1_10s",
+   "seconds": 9.999,
+   "load": {
+    "sessionEventPerSec": 34.203,
+    "sessionProjectionPerSec": 11.001,
+    "totalPerSec": 45.204
+   },
+   "scriptPerSec": 38.082,
+   "recalcPerSec": 50.629,
+   "scriptPerEvent": 0.842,
+   "recalcPerEvent": 1.12,
+   "over50": 7,
+   "frames": 546,
+   "over50Per100": 1.282,
+   "p99": 50.1,
+   "max": 83.4,
+   "domNodes": 740,
+   "jseventListeners": 253
+  },
+  {
+   "scope": "remote-workspace:r1:w2_20s",
+   "seconds": 20,
+   "load": {
+    "sessionEventPerSec": 95.25,
+    "sessionProjectionPerSec": 13.5,
+    "totalPerSec": 108.75
+   },
+   "scriptPerSec": 52.24,
+   "recalcPerSec": 66.095,
+   "scriptPerEvent": 0.48,
+   "recalcPerEvent": 0.608,
+   "over50": 11,
+   "frames": 1087,
+   "over50Per100": 1.012,
+   "p99": 50,
+   "max": 116.6,
+   "domNodes": 740,
+   "jseventListeners": 253
+  },
+  {
+   "scope": "remote-workspace:r2:w1_10s",
+   "seconds": 9.999,
+   "load": {
+    "sessionEventPerSec": 167.517,
+    "sessionProjectionPerSec": 6.501,
+    "totalPerSec": 174.018
+   },
+   "scriptPerSec": 30.803,
+   "recalcPerSec": 37.311,
+   "scriptPerEvent": 0.177,
+   "recalcPerEvent": 0.214,
+   "over50": 6,
+   "frames": 564,
+   "over50Per100": 1.064,
+   "p99": 50,
+   "max": 100,
+   "domNodes": 740,
+   "jseventListeners": 253
+  },
+  {
+   "scope": "remote-workspace:r2:w2_20s",
+   "seconds": 20.001,
+   "load": {
+    "sessionEventPerSec": 172.291,
+    "sessionProjectionPerSec": 6.85,
+    "totalPerSec": 179.141
+   },
+   "scriptPerSec": 30.811,
+   "recalcPerSec": 36.843,
+   "scriptPerEvent": 0.172,
+   "recalcPerEvent": 0.206,
+   "over50": 9,
+   "frames": 1135,
+   "over50Per100": 0.793,
+   "p99": 33.4,
+   "max": 183.3,
+   "domNodes": 740,
+   "jseventListeners": 253
+  },
+  {
+   "scope": "distributed:r1:w1_10s",
+   "seconds": 10.001,
+   "load": {
+    "sessionEventPerSec": 2.6,
+    "sessionProjectionPerSec": 7.299,
+    "totalPerSec": 9.899
+   },
+   "scriptPerSec": 29.55,
+   "recalcPerSec": 38.525,
+   "scriptPerEvent": 2.985,
+   "recalcPerEvent": 3.892,
+   "over50": 1,
+   "frames": 574,
+   "over50Per100": 0.174,
+   "p99": 33.4,
+   "max": 50.1,
+   "domNodes": 707,
+   "jseventListeners": 242
+  },
+  {
+   "scope": "distributed:r1:w2_20s",
+   "seconds": 20,
+   "load": {
+    "sessionEventPerSec": 7.1,
+    "sessionProjectionPerSec": 6.5,
+    "totalPerSec": 13.6
+   },
+   "scriptPerSec": 25.127,
+   "recalcPerSec": 32.225,
+   "scriptPerEvent": 1.848,
+   "recalcPerEvent": 2.369,
+   "over50": 5,
+   "frames": 1139,
+   "over50Per100": 0.439,
+   "p99": 33.4,
+   "max": 283.3,
+   "domNodes": 707,
+   "jseventListeners": 242
+  },
+  {
+   "scope": "distributed:r2:w1_10s",
+   "seconds": 10,
+   "load": {
+    "sessionEventPerSec": 1.9,
+    "sessionProjectionPerSec": 5.5,
+    "totalPerSec": 7.4
+   },
+   "scriptPerSec": 22.716,
+   "recalcPerSec": 32.721,
+   "scriptPerEvent": 3.07,
+   "recalcPerEvent": 4.422,
+   "over50": 1,
+   "frames": 590,
+   "over50Per100": 0.169,
+   "p99": 33.4,
+   "max": 83.4,
+   "domNodes": 707,
+   "jseventListeners": 242
+  },
+  {
+   "scope": "distributed:r2:w2_20s",
+   "seconds": 20,
+   "load": {
+    "sessionEventPerSec": 55.75,
+    "sessionProjectionPerSec": 6.45,
+    "totalPerSec": 62.2
+   },
+   "scriptPerSec": 31.579,
+   "recalcPerSec": 40.801,
+   "scriptPerEvent": 0.508,
+   "recalcPerEvent": 0.656,
+   "over50": 6,
+   "frames": 1121,
+   "over50Per100": 0.535,
+   "p99": 50,
+   "max": 216.6,
+   "domNodes": 707,
+   "jseventListeners": 242
+  },
+  {
+   "scope": "vision-adam:r1:w1_10s",
+   "seconds": 10,
+   "load": {
+    "sessionEventPerSec": 323.4,
+    "sessionProjectionPerSec": 5.4,
+    "totalPerSec": 328.8
+   },
+   "scriptPerSec": 30.86,
+   "recalcPerSec": 33.633,
+   "scriptPerEvent": 0.094,
+   "recalcPerEvent": 0.102,
+   "over50": 4,
+   "frames": 558,
+   "over50Per100": 0.717,
+   "p99": 50,
+   "max": 283.3,
+   "domNodes": 716,
+   "jseventListeners": 245
+  },
+  {
+   "scope": "vision-adam:r1:w2_20s",
+   "seconds": 20,
+   "load": {
+    "sessionEventPerSec": 215.2,
+    "sessionProjectionPerSec": 4.2,
+    "totalPerSec": 219.4
+   },
+   "scriptPerSec": 23.591,
+   "recalcPerSec": 26.174,
+   "scriptPerEvent": 0.108,
+   "recalcPerEvent": 0.119,
+   "over50": 9,
+   "frames": 1125,
+   "over50Per100": 0.8,
+   "p99": 50,
+   "max": 183.4,
+   "domNodes": 716,
+   "jseventListeners": 245
+  },
+  {
+   "scope": "vision-adam:r2:w1_10s",
+   "seconds": 10,
+   "load": {
+    "sessionEventPerSec": 234.5,
+    "sessionProjectionPerSec": 5.3,
+    "totalPerSec": 239.8
+   },
+   "scriptPerSec": 30.421,
+   "recalcPerSec": 35.379,
+   "scriptPerEvent": 0.127,
+   "recalcPerEvent": 0.148,
+   "over50": 5,
+   "frames": 555,
+   "over50Per100": 0.901,
+   "p99": 50,
+   "max": 116.6,
+   "domNodes": 716,
+   "jseventListeners": 245
+  },
+  {
+   "scope": "vision-adam:r2:w2_20s",
+   "seconds": 20.001,
+   "load": {
+    "sessionEventPerSec": 140.243,
+    "sessionProjectionPerSec": 6.3,
+    "totalPerSec": 146.543
+   },
+   "scriptPerSec": 27.197,
+   "recalcPerSec": 33.112,
+   "scriptPerEvent": 0.186,
+   "recalcPerEvent": 0.226,
+   "over50": 3,
+   "frames": 1149,
+   "over50Per100": 0.261,
+   "p99": 33.4,
+   "max": 83.3,
+   "domNodes": 716,
+   "jseventListeners": 245
+  },
+  {
+   "scope": "subagent-model:r1:w1_10s",
+   "seconds": 10.001,
+   "load": {
+    "sessionEventPerSec": 102.59,
+    "sessionProjectionPerSec": 5.299,
+    "totalPerSec": 107.889
+   },
+   "scriptPerSec": 28.053,
+   "recalcPerSec": 33.067,
+   "scriptPerEvent": 0.26,
+   "recalcPerEvent": 0.306,
+   "over50": 4,
+   "frames": 545,
+   "over50Per100": 0.734,
+   "p99": 50,
+   "max": 150,
+   "domNodes": 760,
+   "jseventListeners": 243
+  },
+  {
+   "scope": "subagent-model:r1:w2_20s",
+   "seconds": 20.001,
+   "load": {
+    "sessionEventPerSec": 120.344,
+    "sessionProjectionPerSec": 9.1,
+    "totalPerSec": 129.444
+   },
+   "scriptPerSec": 45.403,
+   "recalcPerSec": 53.895,
+   "scriptPerEvent": 0.351,
+   "recalcPerEvent": 0.416,
+   "over50": 15,
+   "frames": 1068,
+   "over50Per100": 1.404,
+   "p99": 66.6,
+   "max": 116.6,
+   "domNodes": 760,
+   "jseventListeners": 243
+  },
+  {
+   "scope": "subagent-model:r2:w1_10s",
+   "seconds": 10.001,
+   "load": {
+    "sessionEventPerSec": 43.696,
+    "sessionProjectionPerSec": 6.299,
+    "totalPerSec": 49.995
+   },
+   "scriptPerSec": 31.487,
+   "recalcPerSec": 37.915,
+   "scriptPerEvent": 0.63,
+   "recalcPerEvent": 0.758,
+   "over50": 6,
+   "frames": 543,
+   "over50Per100": 1.105,
+   "p99": 50,
+   "max": 116.7,
+   "domNodes": 760,
+   "jseventListeners": 243
+  },
+  {
+   "scope": "subagent-model:r2:w2_20s",
+   "seconds": 20,
+   "load": {
+    "sessionEventPerSec": 123.75,
+    "sessionProjectionPerSec": 10.3,
+    "totalPerSec": 134.05
+   },
+   "scriptPerSec": 43.679,
+   "recalcPerSec": 54.276,
+   "scriptPerEvent": 0.326,
+   "recalcPerEvent": 0.405,
+   "over50": 14,
+   "frames": 1091,
+   "over50Per100": 1.283,
+   "p99": 50.1,
+   "max": 150,
+   "domNodes": 760,
+   "jseventListeners": 243
+  }
+ ],
+ "baselineWindows": [
+  {
+   "label": "home-settings-closed",
+   "seconds": 5.031,
+   "cdp": {
+    "ScriptDuration": 293.339,
+    "TaskDuration": 755.315,
+    "RecalcStyleDuration": 275,
+    "LayoutDuration": 0
+   },
+   "cdpPerSec": {
+    "ScriptDuration": 58.306,
+    "TaskDuration": 150.132,
+    "RecalcStyleDuration": 54.661,
+    "LayoutDuration": 0
+   },
+   "load": {
+    "sessionEventPerSec": 422.779,
+    "sessionProjectionPerSec": 13.516,
+    "totalPerSec": 436.295
+   },
+   "scriptPerEvent": 0.134,
+   "recalcPerEvent": 0.125,
+   "frames": {
+    "n": 280,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 66.6,
+    "max": 100,
+    "mean": 17.856,
+    "over50": 4,
+    "over16_7": 68,
+    "over50Per100Frames": 1.429,
+    "fps": 55.655
+   },
+   "frameStarvation": false,
+   "longtasks": {
+    "n": 0,
+    "totalMs": 0,
+    "maxMs": 0
+   },
+   "domNodes": 605,
+   "jseventListeners": 215,
+   "wsByPayload": {
+    "session/event": {
+     "n": 2127,
+     "perSec": 422.779
+    },
+    "session/projection": {
+     "n": 68,
+     "perSec": 13.516
+    }
+   },
+   "wsBySub": {
+    "event:assistant/chunk": {
+     "n": 2104,
+     "perSec": 418.207
+    },
+    "event:step/start": {
+     "n": 5,
+     "perSec": 0.994
+    },
+    "event:assistant/message": {
+     "n": 5,
+     "perSec": 0.994
+    },
+    "event:tool/call": {
+     "n": 5,
+     "perSec": 0.994
+    },
+    "event:tool/result": {
+     "n": 4,
+     "perSec": 0.795
+    },
+    "event:step/end": {
+     "n": 4,
+     "perSec": 0.795
+    }
+   },
+   "wsByEnvelope": {
+    "server-request": {
+     "n": 2195,
+     "perSec": 436.295
+    }
+   },
+   "wsBytesPerSec": 171746.571,
+   "wsFramesRecv": 2195,
+   "usageSamples": [],
+   "reasons": [],
+   "hidden": false
+  },
+  {
+   "label": "profile-page-home-settings-closed-w1_10s",
+   "seconds": 10.002,
+   "cdp": {
+    "ScriptDuration": 488.078,
+    "TaskDuration": 1052.008,
+    "RecalcStyleDuration": 430.997,
+    "LayoutDuration": 0
+   },
+   "cdpPerSec": {
+    "ScriptDuration": 48.798,
+    "TaskDuration": 105.18,
+    "RecalcStyleDuration": 43.091,
+    "LayoutDuration": 0
+   },
+   "load": {
+    "sessionEventPerSec": 69.786,
+    "sessionProjectionPerSec": 11.698,
+    "totalPerSec": 81.484
+   },
+   "scriptPerEvent": 0.599,
+   "recalcPerEvent": 0.529,
+   "frames": {
+    "n": 572,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 33.4,
+    "max": 66.7,
+    "mean": 17.453,
+    "over50": 6,
+    "over16_7": 204,
+    "over50Per100Frames": 1.049,
+    "fps": 57.189
+   },
+   "frameStarvation": false,
+   "longtasks": {
+    "n": 0,
+    "totalMs": 0,
+    "maxMs": 0
+   },
+   "domNodes": 597,
+   "jseventListeners": 215,
+   "wsByPayload": {
+    "session/event": {
+     "n": 698,
+     "perSec": 69.786
+    },
+    "session/projection": {
+     "n": 117,
+     "perSec": 11.698
+    }
+   },
+   "wsBySub": {
+    "event:assistant/chunk": {
+     "n": 658,
+     "perSec": 65.787
+    },
+    "event:assistant/message": {
+     "n": 8,
+     "perSec": 0.8
+    },
+    "event:tool/call": {
+     "n": 8,
+     "perSec": 0.8
+    },
+    "event:tool/result": {
+     "n": 8,
+     "perSec": 0.8
+    },
+    "event:step/end": {
+     "n": 8,
+     "perSec": 0.8
+    },
+    "event:step/start": {
+     "n": 8,
+     "perSec": 0.8
+    }
+   },
+   "wsByEnvelope": {
+    "server-request": {
+     "n": 815,
+     "perSec": 81.484
+    }
+   },
+   "wsBytesPerSec": 39448.71,
+   "wsFramesRecv": 815,
+   "usageSamples": [],
+   "reasons": [],
+   "hidden": false
+  }
+ ],
+ "tabs": [
+  {
+   "id": "general",
+   "label": "通用设置",
+   "runs": 2,
+   "status": "PASS",
+   "openMs": {
+    "r1": 10.2,
+    "r2": 11.6,
+    "median": 10.9,
+    "cleanMedian": 8.4
+   },
+   "w1": {
+    "n": 2,
+    "seconds": 10,
+    "cdpPerSec": {
+     "ScriptDuration": 54.568,
+     "TaskDuration": 145.305,
+     "RecalcStyleDuration": 65.639,
+     "LayoutDuration": 0
+    },
+    "cdpMs": {
+     "ScriptDuration": 545.682,
+     "TaskDuration": 1453.043,
+     "RecalcStyleDuration": 656.387,
+     "LayoutDuration": 0
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 33.35,
+     "p99": 50.1,
+     "max": 133.3,
+     "over50": 8.5,
+     "over50Per100Frames": 1.625,
+     "framesPerSec": 52.7,
+     "n": 527,
+     "starvationWindows": 0
+    },
+    "longtasks": {
+     "nTotal": 0,
+     "nMedian": 0,
+     "maxMs": 0,
+     "totalMs": 0
+    },
+    "scriptPerEvent": 0.281,
+    "recalcPerEvent": 0.338,
+    "load": {
+     "sessionEventPerSec": 186.9,
+     "sessionProjectionPerSec": 10.85,
+     "totalPerSec": 197.75
+    },
+    "domNodes": 772,
+    "jseventListeners": 257,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 186.9,
+      "maxPerSec": 208.3
+     },
+     "session/projection": {
+      "medianPerSec": 10.85,
+      "maxPerSec": 12.9
+     },
+     "session/jobs": {
+      "medianPerSec": 0.1,
+      "maxPerSec": 0.1
+     },
+     "session/subscribed": {
+      "medianPerSec": 0.05,
+      "maxPerSec": 0.1
+     },
+     "host/session-added": {
+      "medianPerSec": 0.05,
+      "maxPerSec": 0.1
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 183.1
+     },
+     "event:tool/result": {
+      "medianPerSec": 0.8
+     },
+     "event:step/end": {
+      "medianPerSec": 0.8
+     },
+     "event:step/start": {
+      "medianPerSec": 0.8
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.7
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.7
+     }
+    },
+    "wsBytesPerSec": 82589.15,
+    "wsFramesRecvPerSec": 197.95,
+    "usageSamples": []
+   },
+   "w2": {
+    "n": 2,
+    "seconds": 20,
+    "cdpPerSec": {
+     "ScriptDuration": 63.709,
+     "TaskDuration": 173.628,
+     "RecalcStyleDuration": 85.095,
+     "LayoutDuration": 0.119
+    },
+    "cdpMs": {
+     "ScriptDuration": 1274.18,
+     "TaskDuration": 3472.567,
+     "RecalcStyleDuration": 1701.891,
+     "LayoutDuration": 2.373
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 33.3,
+     "p99": 66.65,
+     "max": 116.6,
+     "over50": 17,
+     "over50Per100Frames": 1.591,
+     "framesPerSec": 53.525,
+     "n": 1070.5,
+     "starvationWindows": 0
+    },
+    "longtasks": {
+     "nTotal": 0,
+     "nMedian": 0,
+     "maxMs": 0,
+     "totalMs": 0
+    },
+    "scriptPerEvent": 0.463,
+    "recalcPerEvent": 0.612,
+    "load": {
+     "sessionEventPerSec": 132.925,
+     "sessionProjectionPerSec": 14.9,
+     "totalPerSec": 147.825
+    },
+    "domNodes": 776,
+    "jseventListeners": 257,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 132.925,
+      "maxPerSec": 175.05
+     },
+     "session/projection": {
+      "medianPerSec": 14.9,
+      "maxPerSec": 16.9
+     },
+     "session/jobs": {
+      "medianPerSec": 0.05,
+      "maxPerSec": 0.05
+     },
+     "question/resolved": {
+      "medianPerSec": 0.025,
+      "maxPerSec": 0.05
+     },
+     "session/subscribed": {
+      "medianPerSec": 0.025,
+      "maxPerSec": 0.05
+     },
+     "host/session-added": {
+      "medianPerSec": 0.025,
+      "maxPerSec": 0.05
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 127.775
+     },
+     "event:assistant/message": {
+      "medianPerSec": 1.025
+     },
+     "event:tool/call": {
+      "medianPerSec": 1.075
+     },
+     "event:tool/result": {
+      "medianPerSec": 1.05
+     },
+     "event:step/end": {
+      "medianPerSec": 1
+     },
+     "event:step/start": {
+      "medianPerSec": 1
+     }
+    },
+    "wsBytesPerSec": 65249.075,
+    "wsFramesRecvPerSec": 147.95,
+    "usageSamples": []
+   },
+   "panelNodes": {
+    "after": [
+     97,
+     97
+    ],
+    "dialog": [
+     168,
+     168
+    ]
+   },
+   "per": [
+    {
+     "repeat": 1,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 10.2,
+     "openMsClean": 8.6,
+     "panelNodesBefore": 49,
+     "panelNodesAfter": 97,
+     "activeLabelAfter": "通用设置",
+     "parkedAt": {
+      "index": 1,
+      "label": "模型"
+     },
+     "w1": {
+      "label": "general-r1-w1_10s",
+      "seconds": 10,
+      "cdp": {
+       "ScriptDuration": 586.933,
+       "TaskDuration": 1544.888,
+       "RecalcStyleDuration": 714.13,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 58.693,
+       "TaskDuration": 154.489,
+       "RecalcStyleDuration": 71.413,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 165.5,
+       "sessionProjectionPerSec": 12.9,
+       "totalPerSec": 178.4
+      },
+      "scriptPerEvent": 0.329,
+      "recalcPerEvent": 0.4,
+      "frames": {
+       "n": 545,
+       "p50": 16.7,
+       "p95": 33.3,
+       "p99": 50.1,
+       "max": 100,
+       "mean": 18.317,
+       "over50": 7,
+       "over16_7": 293,
+       "over50Per100Frames": 1.284,
+       "fps": 54.5
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 768,
+      "jseventListeners": 257,
+      "wsByPayload": {
+       "session/event": {
+        "n": 1655,
+        "perSec": 165.5
+       },
+       "session/projection": {
+        "n": 129,
+        "perSec": 12.9
+       },
+       "session/jobs": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 1612,
+        "perSec": 161.2
+       },
+       "event:tool/result": {
+        "n": 9,
+        "perSec": 0.9
+       },
+       "event:step/end": {
+        "n": 9,
+        "perSec": 0.9
+       },
+       "event:step/start": {
+        "n": 9,
+        "perSec": 0.9
+       },
+       "event:assistant/message": {
+        "n": 8,
+        "perSec": 0.8
+       },
+       "event:tool/call": {
+        "n": 8,
+        "perSec": 0.8
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 1785,
+        "perSec": 178.5
+       }
+      },
+      "wsBytesPerSec": 77985,
+      "wsFramesRecv": 1785,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "general-r1-w2_20s",
+      "seconds": 20,
+      "cdp": {
+       "ScriptDuration": 1181.736,
+       "TaskDuration": 3102.104,
+       "RecalcStyleDuration": 1519.329,
+       "LayoutDuration": 2.68
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 59.087,
+       "TaskDuration": 155.105,
+       "RecalcStyleDuration": 75.966,
+       "LayoutDuration": 0.134
+      },
+      "load": {
+       "sessionEventPerSec": 90.8,
+       "sessionProjectionPerSec": 12.9,
+       "totalPerSec": 103.7
+      },
+      "scriptPerEvent": 0.57,
+      "recalcPerEvent": 0.733,
+      "frames": {
+       "n": 1085,
+       "p50": 16.7,
+       "p95": 33.3,
+       "p99": 66.7,
+       "max": 100.1,
+       "mean": 18.417,
+       "over50": 15,
+       "over16_7": 393,
+       "over50Per100Frames": 1.382,
+       "fps": 54.25
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 776,
+      "jseventListeners": 257,
+      "wsByPayload": {
+       "session/event": {
+        "n": 1816,
+        "perSec": 90.8
+       },
+       "session/projection": {
+        "n": 258,
+        "perSec": 12.9
+       },
+       "session/jobs": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "question/resolved": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 1726,
+        "perSec": 86.3
+       },
+       "event:assistant/message": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:tool/call": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:tool/result": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:step/end": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:step/start": {
+        "n": 18,
+        "perSec": 0.9
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 2076,
+        "perSec": 103.8
+       }
+      },
+      "wsBytesPerSec": 44423.95,
+      "wsFramesRecv": 2076,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    },
+    {
+     "repeat": 2,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 11.6,
+     "openMsClean": 8.2,
+     "panelNodesBefore": 49,
+     "panelNodesAfter": 97,
+     "activeLabelAfter": "通用设置",
+     "parkedAt": {
+      "index": 1,
+      "label": "模型"
+     },
+     "w1": {
+      "label": "general-r2-w1_10s",
+      "seconds": 10,
+      "cdp": {
+       "ScriptDuration": 504.43,
+       "TaskDuration": 1361.198,
+       "RecalcStyleDuration": 598.644,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 50.443,
+       "TaskDuration": 136.12,
+       "RecalcStyleDuration": 59.864,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 208.3,
+       "sessionProjectionPerSec": 8.8,
+       "totalPerSec": 217.1
+      },
+      "scriptPerEvent": 0.232,
+      "recalcPerEvent": 0.276,
+      "frames": {
+       "n": 509,
+       "p50": 16.7,
+       "p95": 33.4,
+       "p99": 50.1,
+       "max": 133.3,
+       "mean": 19.58,
+       "over50": 10,
+       "over16_7": 188,
+       "over50Per100Frames": 1.965,
+       "fps": 50.9
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 776,
+      "jseventListeners": 257,
+      "wsByPayload": {
+       "session/event": {
+        "n": 2083,
+        "perSec": 208.3
+       },
+       "session/projection": {
+        "n": 88,
+        "perSec": 8.8
+       },
+       "session/subscribed": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "host/session-added": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "session/jobs": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 2050,
+        "perSec": 205
+       },
+       "event:tool/result": {
+        "n": 7,
+        "perSec": 0.7
+       },
+       "event:step/end": {
+        "n": 7,
+        "perSec": 0.7
+       },
+       "event:step/start": {
+        "n": 7,
+        "perSec": 0.7
+       },
+       "event:assistant/message": {
+        "n": 6,
+        "perSec": 0.6
+       },
+       "event:tool/call": {
+        "n": 6,
+        "perSec": 0.6
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 2174,
+        "perSec": 217.4
+       }
+      },
+      "wsBytesPerSec": 87193.3,
+      "wsFramesRecv": 2174,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "general-r2-w2_20s",
+      "seconds": 20,
+      "cdp": {
+       "ScriptDuration": 1366.624,
+       "TaskDuration": 3843.029,
+       "RecalcStyleDuration": 1884.452,
+       "LayoutDuration": 2.065
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 68.331,
+       "TaskDuration": 192.151,
+       "RecalcStyleDuration": 94.223,
+       "LayoutDuration": 0.103
+      },
+      "load": {
+       "sessionEventPerSec": 175.05,
+       "sessionProjectionPerSec": 16.9,
+       "totalPerSec": 191.95
+      },
+      "scriptPerEvent": 0.356,
+      "recalcPerEvent": 0.491,
+      "frames": {
+       "n": 1056,
+       "p50": 16.7,
+       "p95": 33.3,
+       "p99": 66.6,
+       "max": 116.6,
+       "mean": 18.939,
+       "over50": 19,
+       "over16_7": 275,
+       "over50Per100Frames": 1.799,
+       "fps": 52.8
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 776,
+      "jseventListeners": 257,
+      "wsByPayload": {
+       "session/event": {
+        "n": 3501,
+        "perSec": 175.05
+       },
+       "session/projection": {
+        "n": 338,
+        "perSec": 16.9
+       },
+       "session/subscribed": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "host/session-added": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "session/jobs": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 3385,
+        "perSec": 169.25
+       },
+       "event:tool/call": {
+        "n": 25,
+        "perSec": 1.25
+       },
+       "event:tool/result": {
+        "n": 24,
+        "perSec": 1.2
+       },
+       "event:assistant/message": {
+        "n": 23,
+        "perSec": 1.15
+       },
+       "event:step/end": {
+        "n": 22,
+        "perSec": 1.1
+       },
+       "event:step/start": {
+        "n": 22,
+        "perSec": 1.1
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 3842,
+        "perSec": 192.1
+       }
+      },
+      "wsBytesPerSec": 86074.2,
+      "wsFramesRecv": 3842,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    }
+   ]
+  },
+  {
+   "id": "models",
+   "label": "模型",
+   "runs": 2,
+   "status": "PASS",
+   "openMs": {
+    "r1": 10.6,
+    "r2": 101.9,
+    "median": 56.25,
+    "cleanMedian": 24.2
+   },
+   "w1": {
+    "n": 2,
+    "seconds": 10.001,
+    "cdpPerSec": {
+     "ScriptDuration": 69.622,
+     "TaskDuration": 183.707,
+     "RecalcStyleDuration": 85.86,
+     "LayoutDuration": 0
+    },
+    "cdpMs": {
+     "ScriptDuration": 696.294,
+     "TaskDuration": 1837.268,
+     "RecalcStyleDuration": 858.692,
+     "LayoutDuration": 0
+    },
+    "frames": {
+     "p50": 50,
+     "p95": 116.6,
+     "p99": 158.35,
+     "max": 183.3,
+     "over50": 51,
+     "over50Per100Frames": 31.944,
+     "framesPerSec": 27.196,
+     "n": 272,
+     "starvationWindows": 2
+    },
+    "longtasks": {
+     "nTotal": 1,
+     "nMedian": 0.5,
+     "maxMs": 50,
+     "totalMs": 50
+    },
+    "scriptPerEvent": 1.842,
+    "recalcPerEvent": 2.262,
+    "load": {
+     "sessionEventPerSec": 39.194,
+     "sessionProjectionPerSec": 9.349,
+     "totalPerSec": 48.543
+    },
+    "domNodes": 728,
+    "jseventListeners": 246,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 39.194,
+      "maxPerSec": 61.088
+     },
+     "session/projection": {
+      "medianPerSec": 9.349,
+      "maxPerSec": 12.997
+     },
+     "session/queue": {
+      "medianPerSec": 0.1,
+      "maxPerSec": 0.2
+     },
+     "host/session-status": {
+      "medianPerSec": 0.05,
+      "maxPerSec": 0.1
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 35.845
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.65
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.65
+     },
+     "event:step/start": {
+      "medianPerSec": 0.65
+     },
+     "event:tool/result": {
+      "medianPerSec": 0.6
+     },
+     "event:step/end": {
+      "medianPerSec": 0.6
+     },
+     "event:agent/inbox/spliced": {
+      "medianPerSec": 0.1
+     },
+     "event:turn/start": {
+      "medianPerSec": 0.05
+     },
+     "event:user/message": {
+      "medianPerSec": 0.05
+     }
+    },
+    "wsBytesPerSec": 22078.32,
+    "wsFramesRecvPerSec": 48.693,
+    "usageSamples": []
+   },
+   "w2": {
+    "n": 2,
+    "seconds": 19.999,
+    "cdpPerSec": {
+     "ScriptDuration": 95.259,
+     "TaskDuration": 247.731,
+     "RecalcStyleDuration": 113.694,
+     "LayoutDuration": 0.031
+    },
+    "cdpMs": {
+     "ScriptDuration": 1905.145,
+     "TaskDuration": 4954.515,
+     "RecalcStyleDuration": 2273.839,
+     "LayoutDuration": 0.616
+    },
+    "frames": {
+     "p50": 33.35,
+     "p95": 108.35,
+     "p99": 158.3,
+     "max": 316.6,
+     "over50": 98.5,
+     "over50Per100Frames": 27.455,
+     "framesPerSec": 28.651,
+     "n": 573,
+     "starvationWindows": 2
+    },
+    "longtasks": {
+     "nTotal": 2,
+     "nMedian": 1,
+     "maxMs": 50,
+     "totalMs": 100
+    },
+    "scriptPerEvent": 1.505,
+    "recalcPerEvent": 1.8,
+    "load": {
+     "sessionEventPerSec": 92.004,
+     "sessionProjectionPerSec": 11.051,
+     "totalPerSec": 103.054
+    },
+    "domNodes": 728,
+    "jseventListeners": 246,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 92.004,
+      "maxPerSec": 146.657
+     },
+     "session/projection": {
+      "medianPerSec": 11.051,
+      "maxPerSec": 11.301
+     },
+     "session/jobs": {
+      "medianPerSec": 0.05,
+      "maxPerSec": 0.05
+     },
+     "host/session-status": {
+      "medianPerSec": 0.025,
+      "maxPerSec": 0.05
+     },
+     "session/queue": {
+      "medianPerSec": 0.05,
+      "maxPerSec": 0.1
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 88.129
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.725
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.775
+     },
+     "event:tool/result": {
+      "medianPerSec": 0.8
+     },
+     "event:step/end": {
+      "medianPerSec": 0.75
+     },
+     "event:step/start": {
+      "medianPerSec": 0.725
+     },
+     "event:turn/end": {
+      "medianPerSec": 0.025
+     },
+     "event:agent/inbox/spliced": {
+      "medianPerSec": 0.05
+     },
+     "event:user/message": {
+      "medianPerSec": 0.025
+     }
+    },
+    "wsBytesPerSec": 47656.723,
+    "wsFramesRecvPerSec": 103.179,
+    "usageSamples": []
+   },
+   "panelNodes": {
+    "after": [
+     49,
+     49
+    ],
+    "dialog": [
+     120,
+     120
+    ]
+   },
+   "per": [
+    {
+     "repeat": 1,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 10.6,
+     "openMsClean": 8.1,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 49,
+     "activeLabelAfter": "模型",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "models-r1-w1_10s",
+      "seconds": 10.002,
+      "cdp": {
+       "ScriptDuration": 790.405,
+       "TaskDuration": 2030.012,
+       "RecalcStyleDuration": 981.383,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 79.025,
+       "TaskDuration": 202.961,
+       "RecalcStyleDuration": 98.119,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 61.088,
+       "sessionProjectionPerSec": 12.997,
+       "totalPerSec": 74.085
+      },
+      "scriptPerEvent": 1.067,
+      "recalcPerEvent": 1.324,
+      "frames": {
+       "n": 412,
+       "p50": 16.7,
+       "p95": 66.6,
+       "p99": 150,
+       "max": 183.3,
+       "mean": 23.907,
+       "over50": 26,
+       "over16_7": 116,
+       "over50Per100Frames": 6.311,
+       "fps": 41.192
+      },
+      "frameStarvation": true,
+      "longtasks": {
+       "n": 1,
+       "totalMs": 50,
+       "maxMs": 50
+      },
+      "domNodes": 728,
+      "jseventListeners": 246,
+      "wsByPayload": {
+       "session/event": {
+        "n": 611,
+        "perSec": 61.088
+       },
+       "session/projection": {
+        "n": 130,
+        "perSec": 12.997
+       },
+       "session/queue": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "host/session-status": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 564,
+        "perSec": 56.389
+       },
+       "event:assistant/message": {
+        "n": 9,
+        "perSec": 0.9
+       },
+       "event:tool/call": {
+        "n": 9,
+        "perSec": 0.9
+       },
+       "event:step/start": {
+        "n": 9,
+        "perSec": 0.9
+       },
+       "event:tool/result": {
+        "n": 8,
+        "perSec": 0.8
+       },
+       "event:step/end": {
+        "n": 8,
+        "perSec": 0.8
+       },
+       "event:agent/inbox/spliced": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:turn/start": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:user/message": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 744,
+        "perSec": 74.385
+       }
+      },
+      "wsBytesPerSec": 32797.041,
+      "wsFramesRecv": 744,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "models-r1-w2_20s",
+      "seconds": 20,
+      "cdp": {
+       "ScriptDuration": 2498.905,
+       "TaskDuration": 6375.251,
+       "RecalcStyleDuration": 2991.952,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 124.945,
+       "TaskDuration": 318.763,
+       "RecalcStyleDuration": 149.598,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 37.35,
+       "sessionProjectionPerSec": 10.8,
+       "totalPerSec": 48.15
+      },
+      "scriptPerEvent": 2.595,
+      "recalcPerEvent": 3.107,
+      "frames": {
+       "n": 300,
+       "p50": 50,
+       "p95": 150,
+       "p99": 166.7,
+       "max": 316.6,
+       "mean": 66.053,
+       "over50": 147,
+       "over16_7": 183,
+       "over50Per100Frames": 49,
+       "fps": 15
+      },
+      "frameStarvation": true,
+      "longtasks": {
+       "n": 1,
+       "totalMs": 50,
+       "maxMs": 50
+      },
+      "domNodes": 728,
+      "jseventListeners": 246,
+      "wsByPayload": {
+       "session/event": {
+        "n": 747,
+        "perSec": 37.35
+       },
+       "session/projection": {
+        "n": 216,
+        "perSec": 10.8
+       },
+       "session/jobs": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "host/session-status": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 672,
+        "perSec": 33.6
+       },
+       "event:assistant/message": {
+        "n": 15,
+        "perSec": 0.75
+       },
+       "event:tool/call": {
+        "n": 15,
+        "perSec": 0.75
+       },
+       "event:tool/result": {
+        "n": 15,
+        "perSec": 0.75
+       },
+       "event:step/end": {
+        "n": 15,
+        "perSec": 0.75
+       },
+       "event:step/start": {
+        "n": 14,
+        "perSec": 0.7
+       },
+       "event:turn/end": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 965,
+        "perSec": 48.25
+       }
+      },
+      "wsBytesPerSec": 21390.4,
+      "wsFramesRecv": 965,
+      "usageSamples": [],
+      "reasons": [
+       "frame-count-low:300<598 (possible throttling)"
+      ],
+      "hidden": false
+     }
+    },
+    {
+     "repeat": 2,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 101.9,
+     "openMsClean": 40.3,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 49,
+     "activeLabelAfter": "模型",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "models-r2-w1_10s",
+      "seconds": 10,
+      "cdp": {
+       "ScriptDuration": 602.182,
+       "TaskDuration": 1644.523,
+       "RecalcStyleDuration": 736.001,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 60.218,
+       "TaskDuration": 164.452,
+       "RecalcStyleDuration": 73.6,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 17.3,
+       "sessionProjectionPerSec": 5.7,
+       "totalPerSec": 23
+      },
+      "scriptPerEvent": 2.618,
+      "recalcPerEvent": 3.2,
+      "frames": {
+       "n": 132,
+       "p50": 83.3,
+       "p95": 166.6,
+       "p99": 166.7,
+       "max": 183.3,
+       "mean": 75.502,
+       "over50": 76,
+       "over16_7": 90,
+       "over50Per100Frames": 57.576,
+       "fps": 13.2
+      },
+      "frameStarvation": true,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 728,
+      "jseventListeners": 246,
+      "wsByPayload": {
+       "session/event": {
+        "n": 173,
+        "perSec": 17.3
+       },
+       "session/projection": {
+        "n": 57,
+        "perSec": 5.7
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 153,
+        "perSec": 15.3
+       },
+       "event:assistant/message": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/result": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/end": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/start": {
+        "n": 4,
+        "perSec": 0.4
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 230,
+        "perSec": 23
+       }
+      },
+      "wsBytesPerSec": 11359.6,
+      "wsFramesRecv": 230,
+      "usageSamples": [],
+      "reasons": [
+       "frame-count-low:132<299 (possible throttling)"
+      ],
+      "hidden": false
+     },
+     "w2": {
+      "label": "models-r2-w2_20s",
+      "seconds": 19.999,
+      "cdp": {
+       "ScriptDuration": 1311.384,
+       "TaskDuration": 3533.779,
+       "RecalcStyleDuration": 1555.725,
+       "LayoutDuration": 1.231
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 65.572,
+       "TaskDuration": 176.698,
+       "RecalcStyleDuration": 77.79,
+       "LayoutDuration": 0.062
+      },
+      "load": {
+       "sessionEventPerSec": 146.657,
+       "sessionProjectionPerSec": 11.301,
+       "totalPerSec": 157.958
+      },
+      "scriptPerEvent": 0.415,
+      "recalcPerEvent": 0.492,
+      "frames": {
+       "n": 846,
+       "p50": 16.7,
+       "p95": 66.7,
+       "p99": 149.9,
+       "max": 266.7,
+       "mean": 23.541,
+       "over50": 50,
+       "over16_7": 340,
+       "over50Per100Frames": 5.91,
+       "fps": 42.302
+      },
+      "frameStarvation": true,
+      "longtasks": {
+       "n": 1,
+       "totalMs": 50,
+       "maxMs": 50
+      },
+      "domNodes": 728,
+      "jseventListeners": 246,
+      "wsByPayload": {
+       "session/event": {
+        "n": 2933,
+        "perSec": 146.657
+       },
+       "session/projection": {
+        "n": 226,
+        "perSec": 11.301
+       },
+       "session/queue": {
+        "n": 2,
+        "perSec": 0.1
+       },
+       "session/jobs": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 2853,
+        "perSec": 142.657
+       },
+       "event:tool/result": {
+        "n": 17,
+        "perSec": 0.85
+       },
+       "event:tool/call": {
+        "n": 16,
+        "perSec": 0.8
+       },
+       "event:step/end": {
+        "n": 15,
+        "perSec": 0.75
+       },
+       "event:step/start": {
+        "n": 15,
+        "perSec": 0.75
+       },
+       "event:assistant/message": {
+        "n": 14,
+        "perSec": 0.7
+       },
+       "event:agent/inbox/spliced": {
+        "n": 2,
+        "perSec": 0.1
+       },
+       "event:user/message": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 3162,
+        "perSec": 158.108
+       }
+      },
+      "wsBytesPerSec": 73923.046,
+      "wsFramesRecv": 3162,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    }
+   ]
+  },
+  {
+   "id": "plugins",
+   "label": "插件",
+   "runs": 2,
+   "status": "PASS",
+   "openMs": {
+    "r1": 26.4,
+    "r2": 45,
+    "median": 35.7,
+    "cleanMedian": 20.15
+   },
+   "w1": {
+    "n": 2,
+    "seconds": 10,
+    "cdpPerSec": {
+     "ScriptDuration": 63.445,
+     "TaskDuration": 201.915,
+     "RecalcStyleDuration": 104.854,
+     "LayoutDuration": 0.422
+    },
+    "cdpMs": {
+     "ScriptDuration": 634.469,
+     "TaskDuration": 2019.231,
+     "RecalcStyleDuration": 1048.584,
+     "LayoutDuration": 4.219
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 83.3,
+     "p99": 125.05,
+     "max": 216.6,
+     "over50": 42.5,
+     "over50Per100Frames": 19.139,
+     "framesPerSec": 36.498,
+     "n": 365,
+     "starvationWindows": 1
+    },
+    "longtasks": {
+     "nTotal": 1,
+     "nMedian": 0.5,
+     "maxMs": 50,
+     "totalMs": 50
+    },
+    "scriptPerEvent": 4.215,
+    "recalcPerEvent": 6.844,
+    "load": {
+     "sessionEventPerSec": 57.095,
+     "sessionProjectionPerSec": 8.65,
+     "totalPerSec": 65.744
+    },
+    "domNodes": 1025,
+    "jseventListeners": 256,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 57.095,
+      "maxPerSec": 111.789
+     },
+     "session/projection": {
+      "medianPerSec": 8.65,
+      "maxPerSec": 10.099
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 54.145
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.65
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.55
+     },
+     "event:tool/result": {
+      "medianPerSec": 0.65
+     },
+     "event:step/end": {
+      "medianPerSec": 0.55
+     },
+     "event:step/start": {
+      "medianPerSec": 0.55
+     }
+    },
+    "wsBytesPerSec": 31424.159,
+    "wsFramesRecvPerSec": 65.744,
+    "usageSamples": [
+     {
+      "path": "/usage/summary",
+      "method": "summary",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 270
+     },
+     {
+      "path": "/usage/byDay",
+      "method": "byDay",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 932
+     },
+     {
+      "path": "/usage/timeseries",
+      "method": "timeseries",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 932
+     },
+     {
+      "path": "/usage/timeseries",
+      "method": "timeseries",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 775
+     },
+     {
+      "path": "/usage/heatmap",
+      "method": "heatmap",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 1390
+     },
+     {
+      "path": "/usage/status",
+      "method": "status",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 310
+     },
+     {
+      "path": "/usage/sessions",
+      "method": "sessions",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 53697
+     },
+     {
+      "path": "/usage/byModel",
+      "method": "byModel",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 950
+     },
+     {
+      "path": "/usage/byProject",
+      "method": "byProject",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 1041
+     },
+     {
+      "path": "/usage/byDay",
+      "method": "byDay",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 932
+     },
+     {
+      "path": "/usage/heatmap",
+      "method": "heatmap",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 1390
+     },
+     {
+      "path": "/usage/sessions",
+      "method": "sessions",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 53697
+     },
+     {
+      "path": "/usage/timeseries",
+      "method": "timeseries",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 775
+     },
+     {
+      "path": "/usage/byModel",
+      "method": "byModel",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 950
+     },
+     {
+      "path": "/usage/status",
+      "method": "status",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 310
+     },
+     {
+      "path": "/usage/byProject",
+      "method": "byProject",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 1041
+     }
+    ]
+   },
+   "w2": {
+    "n": 2,
+    "seconds": 20.001,
+    "cdpPerSec": {
+     "ScriptDuration": 65.811,
+     "TaskDuration": 207.876,
+     "RecalcStyleDuration": 115.015,
+     "LayoutDuration": 0.023
+    },
+    "cdpMs": {
+     "ScriptDuration": 1316.242,
+     "TaskDuration": 4157.63,
+     "RecalcStyleDuration": 2300.357,
+     "LayoutDuration": 0.462
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 50,
+     "p99": 100,
+     "max": 200,
+     "over50": 39,
+     "over50Per100Frames": 4.308,
+     "framesPerSec": 46.974,
+     "n": 939.5,
+     "starvationWindows": 1
+    },
+    "longtasks": {
+     "nTotal": 3,
+     "nMedian": 1.5,
+     "maxMs": 64,
+     "totalMs": 181
+    },
+    "scriptPerEvent": 2.456,
+    "recalcPerEvent": 4.332,
+    "load": {
+     "sessionEventPerSec": 40.45,
+     "sessionProjectionPerSec": 11.474,
+     "totalPerSec": 51.925
+    },
+    "domNodes": 1025,
+    "jseventListeners": 256,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 40.45,
+      "maxPerSec": 76.4
+     },
+     "session/projection": {
+      "medianPerSec": 11.474,
+      "maxPerSec": 13.199
+     },
+     "question/requested": {
+      "medianPerSec": 0.025,
+      "maxPerSec": 0.05
+     },
+     "host/session-status": {
+      "medianPerSec": 0.025,
+      "maxPerSec": 0.05
+     },
+     "session/queue": {
+      "medianPerSec": 0.05,
+      "maxPerSec": 0.05
+     },
+     "host/session-removed": {
+      "medianPerSec": 0.025,
+      "maxPerSec": 0.05
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 36.5
+     },
+     "event:tool/result": {
+      "medianPerSec": 0.8
+     },
+     "event:step/end": {
+      "medianPerSec": 0.8
+     },
+     "event:step/start": {
+      "medianPerSec": 0.775
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.75
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.725
+     },
+     "event:turn/end": {
+      "medianPerSec": 0.025
+     },
+     "event:agent/inbox/spliced": {
+      "medianPerSec": 0.05
+     },
+     "event:user/message": {
+      "medianPerSec": 0.025
+     }
+    },
+    "wsBytesPerSec": 23818.954,
+    "wsFramesRecvPerSec": 52.05,
+    "usageSamples": []
+   },
+   "panelNodes": {
+    "after": [
+     99,
+     99
+    ],
+    "dialog": [
+     170,
+     170
+    ]
+   },
+   "per": [
+    {
+     "repeat": 1,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 26.4,
+     "openMsClean": 17.8,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 99,
+     "activeLabelAfter": "插件",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "plugins-r1-w1_10s",
+      "seconds": 10.001,
+      "cdp": {
+       "ScriptDuration": 499.048,
+       "TaskDuration": 1614.759,
+       "RecalcStyleDuration": 850.135,
+       "LayoutDuration": 3.948
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 49.9,
+       "TaskDuration": 161.46,
+       "RecalcStyleDuration": 85.005,
+       "LayoutDuration": 0.395
+      },
+      "load": {
+       "sessionEventPerSec": 111.789,
+       "sessionProjectionPerSec": 10.099,
+       "totalPerSec": 121.888
+      },
+      "scriptPerEvent": 0.409,
+      "recalcPerEvent": 0.697,
+      "frames": {
+       "n": 529,
+       "p50": 16.7,
+       "p95": 33.3,
+       "p99": 66.7,
+       "max": 116.6,
+       "mean": 18.871,
+       "over50": 13,
+       "over16_7": 213,
+       "over50Per100Frames": 2.457,
+       "fps": 52.895
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 1025,
+      "jseventListeners": 256,
+      "wsByPayload": {
+       "session/event": {
+        "n": 1118,
+        "perSec": 111.789
+       },
+       "session/projection": {
+        "n": 101,
+        "perSec": 10.099
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 1083,
+        "perSec": 108.289
+       },
+       "event:tool/call": {
+        "n": 9,
+        "perSec": 0.9
+       },
+       "event:assistant/message": {
+        "n": 7,
+        "perSec": 0.7
+       },
+       "event:tool/result": {
+        "n": 7,
+        "perSec": 0.7
+       },
+       "event:step/end": {
+        "n": 6,
+        "perSec": 0.6
+       },
+       "event:step/start": {
+        "n": 6,
+        "perSec": 0.6
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 1219,
+        "perSec": 121.888
+       }
+      },
+      "wsBytesPerSec": 55815.618,
+      "wsFramesRecv": 1219,
+      "usageSamples": [
+       {
+        "path": "/usage/summary",
+        "method": "summary",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 270
+       },
+       {
+        "path": "/usage/byDay",
+        "method": "byDay",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 932
+       },
+       {
+        "path": "/usage/timeseries",
+        "method": "timeseries",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 932
+       },
+       {
+        "path": "/usage/timeseries",
+        "method": "timeseries",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 775
+       },
+       {
+        "path": "/usage/heatmap",
+        "method": "heatmap",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 1390
+       },
+       {
+        "path": "/usage/status",
+        "method": "status",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 310
+       },
+       {
+        "path": "/usage/sessions",
+        "method": "sessions",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 53697
+       },
+       {
+        "path": "/usage/byModel",
+        "method": "byModel",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 950
+       },
+       {
+        "path": "/usage/byProject",
+        "method": "byProject",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 1041
+       }
+      ],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "plugins-r1-w2_20s",
+      "seconds": 20,
+      "cdp": {
+       "ScriptDuration": 1125.031,
+       "TaskDuration": 3551.106,
+       "RecalcStyleDuration": 1930.39,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 56.252,
+       "TaskDuration": 177.555,
+       "RecalcStyleDuration": 96.52,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 76.4,
+       "sessionProjectionPerSec": 9.75,
+       "totalPerSec": 86.15
+      },
+      "scriptPerEvent": 0.653,
+      "recalcPerEvent": 1.12,
+      "frames": {
+       "n": 1019,
+       "p50": 16.7,
+       "p95": 33.3,
+       "p99": 83.3,
+       "max": 200,
+       "mean": 19.61,
+       "over50": 25,
+       "over16_7": 449,
+       "over50Per100Frames": 2.453,
+       "fps": 50.95
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 2,
+       "totalMs": 117,
+       "maxMs": 59
+      },
+      "domNodes": 1025,
+      "jseventListeners": 256,
+      "wsByPayload": {
+       "session/event": {
+        "n": 1528,
+        "perSec": 76.4
+       },
+       "session/projection": {
+        "n": 195,
+        "perSec": 9.75
+       },
+       "question/requested": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "host/session-status": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "session/queue": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "host/session-removed": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 1460,
+        "perSec": 73
+       },
+       "event:tool/result": {
+        "n": 14,
+        "perSec": 0.7
+       },
+       "event:step/end": {
+        "n": 14,
+        "perSec": 0.7
+       },
+       "event:step/start": {
+        "n": 13,
+        "perSec": 0.65
+       },
+       "event:tool/call": {
+        "n": 13,
+        "perSec": 0.65
+       },
+       "event:assistant/message": {
+        "n": 12,
+        "perSec": 0.6
+       },
+       "event:turn/end": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "event:agent/inbox/spliced": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 1727,
+        "perSec": 86.35
+       }
+      },
+      "wsBytesPerSec": 35786.35,
+      "wsFramesRecv": 1727,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    },
+    {
+     "repeat": 2,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 45,
+     "openMsClean": 22.5,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 99,
+     "activeLabelAfter": "插件",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "plugins-r2-w1_10s",
+      "seconds": 10,
+      "cdp": {
+       "ScriptDuration": 769.889,
+       "TaskDuration": 2423.703,
+       "RecalcStyleDuration": 1247.033,
+       "LayoutDuration": 4.49
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 76.989,
+       "TaskDuration": 242.37,
+       "RecalcStyleDuration": 124.703,
+       "LayoutDuration": 0.449
+      },
+      "load": {
+       "sessionEventPerSec": 2.4,
+       "sessionProjectionPerSec": 7.2,
+       "totalPerSec": 9.6
+      },
+      "scriptPerEvent": 8.02,
+      "recalcPerEvent": 12.99,
+      "frames": {
+       "n": 201,
+       "p50": 16.7,
+       "p95": 133.3,
+       "p99": 183.4,
+       "max": 216.6,
+       "mean": 49.252,
+       "over50": 72,
+       "over16_7": 138,
+       "over50Per100Frames": 35.821,
+       "fps": 20.1
+      },
+      "frameStarvation": true,
+      "longtasks": {
+       "n": 1,
+       "totalMs": 50,
+       "maxMs": 50
+      },
+      "domNodes": 1025,
+      "jseventListeners": 256,
+      "wsByPayload": {
+       "session/projection": {
+        "n": 72,
+        "perSec": 7.2
+       },
+       "session/event": {
+        "n": 24,
+        "perSec": 2.4
+       }
+      },
+      "wsBySub": {
+       "event:tool/result": {
+        "n": 6,
+        "perSec": 0.6
+       },
+       "event:step/end": {
+        "n": 5,
+        "perSec": 0.5
+       },
+       "event:step/start": {
+        "n": 5,
+        "perSec": 0.5
+       },
+       "event:assistant/message": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 96,
+        "perSec": 9.6
+       }
+      },
+      "wsBytesPerSec": 7032.7,
+      "wsFramesRecv": 96,
+      "usageSamples": [
+       {
+        "path": "/usage/byDay",
+        "method": "byDay",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 932
+       },
+       {
+        "path": "/usage/heatmap",
+        "method": "heatmap",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 1390
+       },
+       {
+        "path": "/usage/sessions",
+        "method": "sessions",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 53697
+       },
+       {
+        "path": "/usage/timeseries",
+        "method": "timeseries",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 775
+       },
+       {
+        "path": "/usage/byModel",
+        "method": "byModel",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 950
+       },
+       {
+        "path": "/usage/status",
+        "method": "status",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 310
+       },
+       {
+        "path": "/usage/byProject",
+        "method": "byProject",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 1041
+       }
+      ],
+      "reasons": [
+       "frame-count-low:201<299 (possible throttling)"
+      ],
+      "hidden": false
+     },
+     "w2": {
+      "label": "plugins-r2-w2_20s",
+      "seconds": 20.001,
+      "cdp": {
+       "ScriptDuration": 1507.454,
+       "TaskDuration": 4764.153,
+       "RecalcStyleDuration": 2670.323,
+       "LayoutDuration": 0.923
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 75.369,
+       "TaskDuration": 238.196,
+       "RecalcStyleDuration": 133.509,
+       "LayoutDuration": 0.046
+      },
+      "load": {
+       "sessionEventPerSec": 4.5,
+       "sessionProjectionPerSec": 13.199,
+       "totalPerSec": 17.699
+      },
+      "scriptPerEvent": 4.258,
+      "recalcPerEvent": 7.543,
+      "frames": {
+       "n": 860,
+       "p50": 16.7,
+       "p95": 66.7,
+       "p99": 116.7,
+       "max": 183.4,
+       "mean": 23.197,
+       "over50": 53,
+       "over16_7": 397,
+       "over50Per100Frames": 6.163,
+       "fps": 42.998
+      },
+      "frameStarvation": true,
+      "longtasks": {
+       "n": 1,
+       "totalMs": 64,
+       "maxMs": 64
+      },
+      "domNodes": 1025,
+      "jseventListeners": 256,
+      "wsByPayload": {
+       "session/projection": {
+        "n": 264,
+        "perSec": 13.199
+       },
+       "session/event": {
+        "n": 90,
+        "perSec": 4.5
+       },
+       "session/queue": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsBySub": {
+       "event:tool/result": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:step/end": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:step/start": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:assistant/message": {
+        "n": 17,
+        "perSec": 0.85
+       },
+       "event:tool/call": {
+        "n": 17,
+        "perSec": 0.85
+       },
+       "event:agent/inbox/spliced": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "event:user/message": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 355,
+        "perSec": 17.749
+       }
+      },
+      "wsBytesPerSec": 11851.557,
+      "wsFramesRecv": 355,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    }
+   ]
+  },
+  {
+   "id": "agent-preset",
+   "label": "Agent 预设",
+   "runs": 2,
+   "status": "PASS",
+   "openMs": {
+    "r1": 7.5,
+    "r2": 11.6,
+    "median": 9.55,
+    "cleanMedian": 8.5
+   },
+   "w1": {
+    "n": 2,
+    "seconds": 10,
+    "cdpPerSec": {
+     "ScriptDuration": 56.801,
+     "TaskDuration": 160.7,
+     "RecalcStyleDuration": 83.332,
+     "LayoutDuration": 0
+    },
+    "cdpMs": {
+     "ScriptDuration": 568.005,
+     "TaskDuration": 1606.997,
+     "RecalcStyleDuration": 833.315,
+     "LayoutDuration": 0
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 41.55,
+     "p99": 58.45,
+     "max": 150,
+     "over50": 9,
+     "over50Per100Frames": 1.808,
+     "framesPerSec": 52.6,
+     "n": 526,
+     "starvationWindows": 0
+    },
+    "longtasks": {
+     "nTotal": 0,
+     "nMedian": 0,
+     "maxMs": 0,
+     "totalMs": 0
+    },
+    "scriptPerEvent": 1.94,
+    "recalcPerEvent": 2.894,
+    "load": {
+     "sessionEventPerSec": 25.5,
+     "sessionProjectionPerSec": 12.75,
+     "totalPerSec": 38.25
+    },
+    "domNodes": 786,
+    "jseventListeners": 264.5,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 25.5,
+      "maxPerSec": 47
+     },
+     "session/projection": {
+      "medianPerSec": 12.75,
+      "maxPerSec": 13.5
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 21.3
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.9
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.9
+     },
+     "event:tool/result": {
+      "medianPerSec": 0.8
+     },
+     "event:step/end": {
+      "medianPerSec": 0.8
+     },
+     "event:step/start": {
+      "medianPerSec": 0.8
+     }
+    },
+    "wsBytesPerSec": 19443.35,
+    "wsFramesRecvPerSec": 38.25,
+    "usageSamples": []
+   },
+   "w2": {
+    "n": 2,
+    "seconds": 20,
+    "cdpPerSec": {
+     "ScriptDuration": 67.395,
+     "TaskDuration": 191.739,
+     "RecalcStyleDuration": 96.552,
+     "LayoutDuration": 0.028
+    },
+    "cdpMs": {
+     "ScriptDuration": 1347.906,
+     "TaskDuration": 3834.781,
+     "RecalcStyleDuration": 1931.044,
+     "LayoutDuration": 0.562
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 50,
+     "p99": 91.6,
+     "max": 200,
+     "over50": 44,
+     "over50Per100Frames": 5.172,
+     "framesPerSec": 47.65,
+     "n": 953,
+     "starvationWindows": 1
+    },
+    "longtasks": {
+     "nTotal": 0,
+     "nMedian": 0,
+     "maxMs": 0,
+     "totalMs": 0
+    },
+    "scriptPerEvent": 2.561,
+    "recalcPerEvent": 3.709,
+    "load": {
+     "sessionEventPerSec": 52.45,
+     "sessionProjectionPerSec": 13.275,
+     "totalPerSec": 65.725
+    },
+    "domNodes": 786,
+    "jseventListeners": 256,
+    "wsByPayload": {
+     "session/projection": {
+      "medianPerSec": 13.275,
+      "maxPerSec": 13.7
+     },
+     "session/event": {
+      "medianPerSec": 52.45,
+      "maxPerSec": 100.25
+     },
+     "session/queue": {
+      "medianPerSec": 0.05,
+      "maxPerSec": 0.1
+     },
+     "session/jobs": {
+      "medianPerSec": 0.025,
+      "maxPerSec": 0.05
+     },
+     "question/resolved": {
+      "medianPerSec": 0.025,
+      "maxPerSec": 0.05
+     }
+    },
+    "wsBySub": {
+     "event:tool/result": {
+      "medianPerSec": 0.925
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.875
+     },
+     "event:step/end": {
+      "medianPerSec": 0.9
+     },
+     "event:step/start": {
+      "medianPerSec": 0.9
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.85
+     },
+     "event:agent/inbox/spliced": {
+      "medianPerSec": 0.05
+     },
+     "event:user/message": {
+      "medianPerSec": 0.025
+     },
+     "event:assistant/chunk": {
+      "medianPerSec": 47.925
+     }
+    },
+    "wsBytesPerSec": 32087.625,
+    "wsFramesRecvPerSec": 65.825,
+    "usageSamples": []
+   },
+   "panelNodes": {
+    "after": [
+     16,
+     107
+    ],
+    "dialog": [
+     87,
+     178
+    ]
+   },
+   "per": [
+    {
+     "repeat": 1,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 7.5,
+     "openMsClean": 5.8,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 16,
+     "activeLabelAfter": "Agent 预设",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "agent-preset-r1-w1_10s",
+      "seconds": 10,
+      "cdp": {
+       "ScriptDuration": 700.622,
+       "TaskDuration": 1929.076,
+       "RecalcStyleDuration": 1007.012,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 70.062,
+       "TaskDuration": 192.908,
+       "RecalcStyleDuration": 100.701,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 47,
+       "sessionProjectionPerSec": 13.5,
+       "totalPerSec": 60.5
+      },
+      "scriptPerEvent": 1.158,
+      "recalcPerEvent": 1.664,
+      "frames": {
+       "n": 491,
+       "p50": 16.7,
+       "p95": 49.9,
+       "p99": 83.5,
+       "max": 150,
+       "mean": 20.366,
+       "over50": 16,
+       "over16_7": 233,
+       "over50Per100Frames": 3.259,
+       "fps": 49.1
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 786,
+      "jseventListeners": 273,
+      "wsByPayload": {
+       "session/event": {
+        "n": 470,
+        "perSec": 47
+       },
+       "session/projection": {
+        "n": 135,
+        "perSec": 13.5
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 426,
+        "perSec": 42.6
+       },
+       "event:assistant/message": {
+        "n": 10,
+        "perSec": 1
+       },
+       "event:tool/call": {
+        "n": 10,
+        "perSec": 1
+       },
+       "event:tool/result": {
+        "n": 8,
+        "perSec": 0.8
+       },
+       "event:step/end": {
+        "n": 8,
+        "perSec": 0.8
+       },
+       "event:step/start": {
+        "n": 8,
+        "perSec": 0.8
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 605,
+        "perSec": 60.5
+       }
+      },
+      "wsBytesPerSec": 27397.6,
+      "wsFramesRecv": 605,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "agent-preset-r1-w2_20s",
+      "seconds": 20,
+      "cdp": {
+       "ScriptDuration": 1721.205,
+       "TaskDuration": 4865.622,
+       "RecalcStyleDuration": 2501.469,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 86.06,
+       "TaskDuration": 243.281,
+       "RecalcStyleDuration": 125.073,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 4.65,
+       "sessionProjectionPerSec": 13.7,
+       "totalPerSec": 18.35
+      },
+      "scriptPerEvent": 4.69,
+      "recalcPerEvent": 6.816,
+      "frames": {
+       "n": 817,
+       "p50": 16.7,
+       "p95": 66.7,
+       "p99": 116.5,
+       "max": 200,
+       "mean": 24.418,
+       "over50": 74,
+       "over16_7": 394,
+       "over50Per100Frames": 9.058,
+       "fps": 40.85
+      },
+      "frameStarvation": true,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 786,
+      "jseventListeners": 256,
+      "wsByPayload": {
+       "session/projection": {
+        "n": 274,
+        "perSec": 13.7
+       },
+       "session/event": {
+        "n": 93,
+        "perSec": 4.65
+       },
+       "session/queue": {
+        "n": 2,
+        "perSec": 0.1
+       },
+       "session/jobs": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsBySub": {
+       "event:tool/result": {
+        "n": 19,
+        "perSec": 0.95
+       },
+       "event:tool/call": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:step/end": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:step/start": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:assistant/message": {
+        "n": 17,
+        "perSec": 0.85
+       },
+       "event:agent/inbox/spliced": {
+        "n": 2,
+        "perSec": 0.1
+       },
+       "event:user/message": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 370,
+        "perSec": 18.5
+       }
+      },
+      "wsBytesPerSec": 11823.45,
+      "wsFramesRecv": 370,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    },
+    {
+     "repeat": 2,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 11.6,
+     "openMsClean": 11.2,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 107,
+     "activeLabelAfter": "Agent 预设",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "agent-preset-r2-w1_10s",
+      "seconds": 10,
+      "cdp": {
+       "ScriptDuration": 435.387,
+       "TaskDuration": 1284.917,
+       "RecalcStyleDuration": 659.619,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 43.539,
+       "TaskDuration": 128.492,
+       "RecalcStyleDuration": 65.962,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 4,
+       "sessionProjectionPerSec": 12,
+       "totalPerSec": 16
+      },
+      "scriptPerEvent": 2.721,
+      "recalcPerEvent": 4.123,
+      "frames": {
+       "n": 561,
+       "p50": 16.7,
+       "p95": 33.2,
+       "p99": 33.4,
+       "max": 66.7,
+       "mean": 17.795,
+       "over50": 2,
+       "over16_7": 236,
+       "over50Per100Frames": 0.357,
+       "fps": 56.1
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 786,
+      "jseventListeners": 256,
+      "wsByPayload": {
+       "session/projection": {
+        "n": 120,
+        "perSec": 12
+       },
+       "session/event": {
+        "n": 40,
+        "perSec": 4
+       }
+      },
+      "wsBySub": {
+       "event:assistant/message": {
+        "n": 8,
+        "perSec": 0.8
+       },
+       "event:tool/call": {
+        "n": 8,
+        "perSec": 0.8
+       },
+       "event:tool/result": {
+        "n": 8,
+        "perSec": 0.8
+       },
+       "event:step/end": {
+        "n": 8,
+        "perSec": 0.8
+       },
+       "event:step/start": {
+        "n": 8,
+        "perSec": 0.8
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 160,
+        "perSec": 16
+       }
+      },
+      "wsBytesPerSec": 11489.1,
+      "wsFramesRecv": 160,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "agent-preset-r2-w2_20s",
+      "seconds": 20,
+      "cdp": {
+       "ScriptDuration": 974.607,
+       "TaskDuration": 2803.939,
+       "RecalcStyleDuration": 1360.619,
+       "LayoutDuration": 1.124
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 48.73,
+       "TaskDuration": 140.197,
+       "RecalcStyleDuration": 68.031,
+       "LayoutDuration": 0.056
+      },
+      "load": {
+       "sessionEventPerSec": 100.25,
+       "sessionProjectionPerSec": 12.85,
+       "totalPerSec": 113.1
+      },
+      "scriptPerEvent": 0.431,
+      "recalcPerEvent": 0.602,
+      "frames": {
+       "n": 1089,
+       "p50": 16.7,
+       "p95": 33.3,
+       "p99": 66.7,
+       "max": 116.6,
+       "mean": 18.349,
+       "over50": 14,
+       "over16_7": 511,
+       "over50Per100Frames": 1.286,
+       "fps": 54.45
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 786,
+      "jseventListeners": 256,
+      "wsByPayload": {
+       "session/event": {
+        "n": 2005,
+        "perSec": 100.25
+       },
+       "session/projection": {
+        "n": 257,
+        "perSec": 12.85
+       },
+       "question/resolved": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 1917,
+        "perSec": 95.85
+       },
+       "event:tool/result": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:step/end": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:step/start": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:assistant/message": {
+        "n": 17,
+        "perSec": 0.85
+       },
+       "event:tool/call": {
+        "n": 17,
+        "perSec": 0.85
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 2263,
+        "perSec": 113.15
+       }
+      },
+      "wsBytesPerSec": 52351.8,
+      "wsFramesRecv": 2263,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    }
+   ]
+  },
+  {
+   "id": "remote-workspace",
+   "label": "远程工作区",
+   "runs": 2,
+   "status": "PASS",
+   "openMs": {
+    "r1": 29.2,
+    "r2": 13.2,
+    "median": 21.2,
+    "cleanMedian": 13.05
+   },
+   "w1": {
+    "n": 2,
+    "seconds": 9.999,
+    "cdpPerSec": {
+     "ScriptDuration": 34.443,
+     "TaskDuration": 105.961,
+     "RecalcStyleDuration": 43.97,
+     "LayoutDuration": 0
+    },
+    "cdpMs": {
+     "ScriptDuration": 344.389,
+     "TaskDuration": 1059.498,
+     "RecalcStyleDuration": 439.658,
+     "LayoutDuration": 0
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 25.05,
+     "p99": 50.05,
+     "max": 100,
+     "over50": 6.5,
+     "over50Per100Frames": 1.173,
+     "framesPerSec": 55.506,
+     "n": 555,
+     "starvationWindows": 0
+    },
+    "longtasks": {
+     "nTotal": 1,
+     "nMedian": 0.5,
+     "maxMs": 87,
+     "totalMs": 87
+    },
+    "scriptPerEvent": 0.509,
+    "recalcPerEvent": 0.667,
+    "load": {
+     "sessionEventPerSec": 100.86,
+     "sessionProjectionPerSec": 8.751,
+     "totalPerSec": 109.611
+    },
+    "domNodes": 740,
+    "jseventListeners": 253,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 100.86,
+      "maxPerSec": 167.517
+     },
+     "session/projection": {
+      "medianPerSec": 8.751,
+      "maxPerSec": 11.001
+     },
+     "session/queue": {
+      "medianPerSec": 0.05,
+      "maxPerSec": 0.1
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 97.76
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.6
+     },
+     "event:tool/result": {
+      "medianPerSec": 0.55
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.6
+     },
+     "event:step/end": {
+      "medianPerSec": 0.55
+     },
+     "event:step/start": {
+      "medianPerSec": 0.55
+     },
+     "event:todo/write": {
+      "medianPerSec": 0.05
+     },
+     "event:turn/end": {
+      "medianPerSec": 0.05
+     },
+     "event:turn/start": {
+      "medianPerSec": 0.05
+     },
+     "event:agent/inbox/spliced": {
+      "medianPerSec": 0.05
+     },
+     "event:user/message": {
+      "medianPerSec": 0.05
+     }
+    },
+    "wsBytesPerSec": 43821.982,
+    "wsFramesRecvPerSec": 109.661,
+    "usageSamples": []
+   },
+   "w2": {
+    "n": 2,
+    "seconds": 20.001,
+    "cdpPerSec": {
+     "ScriptDuration": 41.526,
+     "TaskDuration": 118.236,
+     "RecalcStyleDuration": 51.469,
+     "LayoutDuration": 0.056
+    },
+    "cdpMs": {
+     "ScriptDuration": 830.522,
+     "TaskDuration": 2364.762,
+     "RecalcStyleDuration": 1029.396,
+     "LayoutDuration": 1.125
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 25.05,
+     "p99": 41.7,
+     "max": 183.3,
+     "over50": 10,
+     "over50Per100Frames": 0.903,
+     "framesPerSec": 55.549,
+     "n": 1111,
+     "starvationWindows": 0
+    },
+    "longtasks": {
+     "nTotal": 0,
+     "nMedian": 0,
+     "maxMs": 0,
+     "totalMs": 0
+    },
+    "scriptPerEvent": 0.326,
+    "recalcPerEvent": 0.407,
+    "load": {
+     "sessionEventPerSec": 133.771,
+     "sessionProjectionPerSec": 10.175,
+     "totalPerSec": 143.945
+    },
+    "domNodes": 740,
+    "jseventListeners": 253,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 133.771,
+      "maxPerSec": 172.291
+     },
+     "session/projection": {
+      "medianPerSec": 10.175,
+      "maxPerSec": 13.5
+     },
+     "session/queue": {
+      "medianPerSec": 0.05,
+      "maxPerSec": 0.1
+     },
+     "session/jobs": {
+      "medianPerSec": 0.025,
+      "maxPerSec": 0.05
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 130.221
+     },
+     "event:tool/result": {
+      "medianPerSec": 0.7
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.775
+     },
+     "event:step/end": {
+      "medianPerSec": 0.65
+     },
+     "event:step/start": {
+      "medianPerSec": 0.65
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.725
+     },
+     "event:agent/inbox/spliced": {
+      "medianPerSec": 0.05
+     }
+    },
+    "wsBytesPerSec": 59039.057,
+    "wsFramesRecvPerSec": 144.021,
+    "usageSamples": []
+   },
+   "panelNodes": {
+    "after": [
+     61,
+     61
+    ],
+    "dialog": [
+     132,
+     132
+    ]
+   },
+   "per": [
+    {
+     "repeat": 1,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 29.2,
+     "openMsClean": 17.2,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 61,
+     "activeLabelAfter": "远程工作区",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "remote-workspace-r1-w1_10s",
+      "seconds": 9.999,
+      "cdp": {
+       "ScriptDuration": 380.782,
+       "TaskDuration": 1094.852,
+       "RecalcStyleDuration": 506.244,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 38.082,
+       "TaskDuration": 109.496,
+       "RecalcStyleDuration": 50.629,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 34.203,
+       "sessionProjectionPerSec": 11.001,
+       "totalPerSec": 45.204
+      },
+      "scriptPerEvent": 0.842,
+      "recalcPerEvent": 1.12,
+      "frames": {
+       "n": 546,
+       "p50": 16.7,
+       "p95": 33.3,
+       "p99": 50.1,
+       "max": 83.4,
+       "mean": 18.253,
+       "over50": 7,
+       "over16_7": 291,
+       "over50Per100Frames": 1.282,
+       "fps": 54.605
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 740,
+      "jseventListeners": 253,
+      "wsByPayload": {
+       "session/event": {
+        "n": 342,
+        "perSec": 34.203
+       },
+       "session/projection": {
+        "n": 110,
+        "perSec": 11.001
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 304,
+        "perSec": 30.403
+       },
+       "event:tool/call": {
+        "n": 8,
+        "perSec": 0.8
+       },
+       "event:tool/result": {
+        "n": 8,
+        "perSec": 0.8
+       },
+       "event:assistant/message": {
+        "n": 7,
+        "perSec": 0.7
+       },
+       "event:step/end": {
+        "n": 7,
+        "perSec": 0.7
+       },
+       "event:step/start": {
+        "n": 7,
+        "perSec": 0.7
+       },
+       "event:todo/write": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 452,
+        "perSec": 45.205
+       }
+      },
+      "wsBytesPerSec": 20272.727,
+      "wsFramesRecv": 452,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "remote-workspace-r1-w2_20s",
+      "seconds": 20,
+      "cdp": {
+       "ScriptDuration": 1044.796,
+       "TaskDuration": 2837.141,
+       "RecalcStyleDuration": 1321.89,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 52.24,
+       "TaskDuration": 141.857,
+       "RecalcStyleDuration": 66.095,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 95.25,
+       "sessionProjectionPerSec": 13.5,
+       "totalPerSec": 108.75
+      },
+      "scriptPerEvent": 0.48,
+      "recalcPerEvent": 0.608,
+      "frames": {
+       "n": 1087,
+       "p50": 16.7,
+       "p95": 33.3,
+       "p99": 50,
+       "max": 116.6,
+       "mean": 18.383,
+       "over50": 11,
+       "over16_7": 579,
+       "over50Per100Frames": 1.012,
+       "fps": 54.35
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 740,
+      "jseventListeners": 253,
+      "wsByPayload": {
+       "session/event": {
+        "n": 1905,
+        "perSec": 95.25
+       },
+       "session/projection": {
+        "n": 270,
+        "perSec": 13.5
+       },
+       "session/queue": {
+        "n": 2,
+        "perSec": 0.1
+       },
+       "session/jobs": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 1809,
+        "perSec": 90.45
+       },
+       "event:tool/result": {
+        "n": 20,
+        "perSec": 1
+       },
+       "event:tool/call": {
+        "n": 20,
+        "perSec": 1
+       },
+       "event:step/end": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:step/start": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:assistant/message": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:agent/inbox/spliced": {
+        "n": 2,
+        "perSec": 0.1
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 2178,
+        "perSec": 108.9
+       }
+      },
+      "wsBytesPerSec": 47346.25,
+      "wsFramesRecv": 2178,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    },
+    {
+     "repeat": 2,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 13.2,
+     "openMsClean": 8.9,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 61,
+     "activeLabelAfter": "远程工作区",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "remote-workspace-r2-w1_10s",
+      "seconds": 9.999,
+      "cdp": {
+       "ScriptDuration": 307.996,
+       "TaskDuration": 1024.144,
+       "RecalcStyleDuration": 373.072,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 30.803,
+       "TaskDuration": 102.425,
+       "RecalcStyleDuration": 37.311,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 167.517,
+       "sessionProjectionPerSec": 6.501,
+       "totalPerSec": 174.018
+      },
+      "scriptPerEvent": 0.177,
+      "recalcPerEvent": 0.214,
+      "frames": {
+       "n": 564,
+       "p50": 16.7,
+       "p95": 16.8,
+       "p99": 50,
+       "max": 100,
+       "mean": 17.73,
+       "over50": 6,
+       "over16_7": 283,
+       "over50Per100Frames": 1.064,
+       "fps": 56.406
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 1,
+       "totalMs": 87,
+       "maxMs": 87
+      },
+      "domNodes": 740,
+      "jseventListeners": 253,
+      "wsByPayload": {
+       "session/event": {
+        "n": 1675,
+        "perSec": 167.517
+       },
+       "session/projection": {
+        "n": 65,
+        "perSec": 6.501
+       },
+       "session/queue": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 1651,
+        "perSec": 165.117
+       },
+       "event:assistant/message": {
+        "n": 5,
+        "perSec": 0.5
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/end": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/start": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/result": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:turn/end": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:turn/start": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:agent/inbox/spliced": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:user/message": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 1741,
+        "perSec": 174.117
+       }
+      },
+      "wsBytesPerSec": 67371.237,
+      "wsFramesRecv": 1741,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "remote-workspace-r2-w2_20s",
+      "seconds": 20.001,
+      "cdp": {
+       "ScriptDuration": 616.247,
+       "TaskDuration": 1892.383,
+       "RecalcStyleDuration": 736.901,
+       "LayoutDuration": 2.25
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 30.811,
+       "TaskDuration": 94.614,
+       "RecalcStyleDuration": 36.843,
+       "LayoutDuration": 0.112
+      },
+      "load": {
+       "sessionEventPerSec": 172.291,
+       "sessionProjectionPerSec": 6.85,
+       "totalPerSec": 179.141
+      },
+      "scriptPerEvent": 0.172,
+      "recalcPerEvent": 0.206,
+      "frames": {
+       "n": 1135,
+       "p50": 16.7,
+       "p95": 16.8,
+       "p99": 33.4,
+       "max": 183.3,
+       "mean": 17.606,
+       "over50": 9,
+       "over16_7": 568,
+       "over50Per100Frames": 0.793,
+       "fps": 56.747
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 740,
+      "jseventListeners": 253,
+      "wsByPayload": {
+       "session/event": {
+        "n": 3446,
+        "perSec": 172.291
+       },
+       "session/projection": {
+        "n": 137,
+        "perSec": 6.85
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 3400,
+        "perSec": 169.992
+       },
+       "event:assistant/message": {
+        "n": 11,
+        "perSec": 0.55
+       },
+       "event:tool/call": {
+        "n": 11,
+        "perSec": 0.55
+       },
+       "event:tool/result": {
+        "n": 8,
+        "perSec": 0.4
+       },
+       "event:step/end": {
+        "n": 8,
+        "perSec": 0.4
+       },
+       "event:step/start": {
+        "n": 8,
+        "perSec": 0.4
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 3583,
+        "perSec": 179.141
+       }
+      },
+      "wsBytesPerSec": 70731.863,
+      "wsFramesRecv": 3583,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    }
+   ]
+  },
+  {
+   "id": "distributed",
+   "label": "分布式控制 · dsh-ssh-gui",
+   "runs": 2,
+   "status": "PASS",
+   "openMs": {
+    "r1": 9.4,
+    "r2": 13.6,
+    "median": 11.5,
+    "cleanMedian": 7.35
+   },
+   "w1": {
+    "n": 2,
+    "seconds": 10,
+    "cdpPerSec": {
+     "ScriptDuration": 26.133,
+     "TaskDuration": 83.932,
+     "RecalcStyleDuration": 35.623,
+     "LayoutDuration": 0.029
+    },
+    "cdpMs": {
+     "ScriptDuration": 261.344,
+     "TaskDuration": 839.362,
+     "RecalcStyleDuration": 356.248,
+     "LayoutDuration": 0.291
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 16.8,
+     "p99": 33.4,
+     "max": 83.4,
+     "over50": 1,
+     "over50Per100Frames": 0.172,
+     "framesPerSec": 58.197,
+     "n": 582,
+     "starvationWindows": 0
+    },
+    "longtasks": {
+     "nTotal": 0,
+     "nMedian": 0,
+     "maxMs": 0,
+     "totalMs": 0
+    },
+    "scriptPerEvent": 3.028,
+    "recalcPerEvent": 4.157,
+    "load": {
+     "sessionEventPerSec": 2.25,
+     "sessionProjectionPerSec": 6.4,
+     "totalPerSec": 8.65
+    },
+    "domNodes": 707,
+    "jseventListeners": 242,
+    "wsByPayload": {
+     "session/projection": {
+      "medianPerSec": 6.4,
+      "maxPerSec": 7.299
+     },
+     "session/event": {
+      "medianPerSec": 2.25,
+      "maxPerSec": 2.6
+     },
+     "session/jobs": {
+      "medianPerSec": 0.05,
+      "maxPerSec": 0.1
+     }
+    },
+    "wsBySub": {
+     "event:tool/result": {
+      "medianPerSec": 0.5
+     },
+     "event:step/end": {
+      "medianPerSec": 0.5
+     },
+     "event:step/start": {
+      "medianPerSec": 0.45
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.4
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.4
+     }
+    },
+    "wsBytesPerSec": 12236.765,
+    "wsFramesRecvPerSec": 8.7,
+    "usageSamples": []
+   },
+   "w2": {
+    "n": 2,
+    "seconds": 20,
+    "cdpPerSec": {
+     "ScriptDuration": 28.353,
+     "TaskDuration": 84.255,
+     "RecalcStyleDuration": 36.513,
+     "LayoutDuration": 0.039
+    },
+    "cdpMs": {
+     "ScriptDuration": 567.058,
+     "TaskDuration": 1685.088,
+     "RecalcStyleDuration": 730.262,
+     "LayoutDuration": 0.769
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 16.8,
+     "p99": 41.7,
+     "max": 283.3,
+     "over50": 5.5,
+     "over50Per100Frames": 0.487,
+     "framesPerSec": 56.5,
+     "n": 1130,
+     "starvationWindows": 0
+    },
+    "longtasks": {
+     "nTotal": 0,
+     "nMedian": 0,
+     "maxMs": 0,
+     "totalMs": 0
+    },
+    "scriptPerEvent": 1.178,
+    "recalcPerEvent": 1.513,
+    "load": {
+     "sessionEventPerSec": 31.425,
+     "sessionProjectionPerSec": 6.475,
+     "totalPerSec": 37.9
+    },
+    "domNodes": 707,
+    "jseventListeners": 242,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 31.425,
+      "maxPerSec": 55.75
+     },
+     "session/projection": {
+      "medianPerSec": 6.475,
+      "maxPerSec": 6.5
+     },
+     "session/jobs": {
+      "medianPerSec": 0.05,
+      "maxPerSec": 0.1
+     },
+     "session/queue": {
+      "medianPerSec": 0.025,
+      "maxPerSec": 0.05
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 29.1
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.45
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.4
+     },
+     "event:tool/result": {
+      "medianPerSec": 0.5
+     },
+     "event:step/end": {
+      "medianPerSec": 0.45
+     },
+     "event:step/start": {
+      "medianPerSec": 0.475
+     },
+     "event:agent/inbox/spliced": {
+      "medianPerSec": 0.025
+     },
+     "event:user/message": {
+      "medianPerSec": 0.025
+     }
+    },
+    "wsBytesPerSec": 16504.25,
+    "wsFramesRecvPerSec": 37.975,
+    "usageSamples": []
+   },
+   "panelNodes": {
+    "after": [
+     28,
+     28
+    ],
+    "dialog": [
+     99,
+     99
+    ]
+   },
+   "per": [
+    {
+     "repeat": 1,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 9.4,
+     "openMsClean": 6,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 28,
+     "activeLabelAfter": "分布式控制 · dsh-ssh-gui",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "distributed-r1-w1_10s",
+      "seconds": 10.001,
+      "cdp": {
+       "ScriptDuration": 295.531,
+       "TaskDuration": 880.698,
+       "RecalcStyleDuration": 385.29,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 29.55,
+       "TaskDuration": 88.061,
+       "RecalcStyleDuration": 38.525,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 2.6,
+       "sessionProjectionPerSec": 7.299,
+       "totalPerSec": 9.899
+      },
+      "scriptPerEvent": 2.985,
+      "recalcPerEvent": 3.892,
+      "frames": {
+       "n": 574,
+       "p50": 16.7,
+       "p95": 16.8,
+       "p99": 33.4,
+       "max": 50.1,
+       "mean": 17.392,
+       "over50": 1,
+       "over16_7": 299,
+       "over50Per100Frames": 0.174,
+       "fps": 57.394
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 707,
+      "jseventListeners": 242,
+      "wsByPayload": {
+       "session/projection": {
+        "n": 73,
+        "perSec": 7.299
+       },
+       "session/event": {
+        "n": 26,
+        "perSec": 2.6
+       },
+       "session/jobs": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "wsBySub": {
+       "event:tool/result": {
+        "n": 6,
+        "perSec": 0.6
+       },
+       "event:step/end": {
+        "n": 6,
+        "perSec": 0.6
+       },
+       "event:step/start": {
+        "n": 6,
+        "perSec": 0.6
+       },
+       "event:assistant/message": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 100,
+        "perSec": 9.999
+       }
+      },
+      "wsBytesPerSec": 10709.029,
+      "wsFramesRecv": 100,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "distributed-r1-w2_20s",
+      "seconds": 20,
+      "cdp": {
+       "ScriptDuration": 502.537,
+       "TaskDuration": 1445.53,
+       "RecalcStyleDuration": 644.495,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 25.127,
+       "TaskDuration": 72.277,
+       "RecalcStyleDuration": 32.225,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 7.1,
+       "sessionProjectionPerSec": 6.5,
+       "totalPerSec": 13.6
+      },
+      "scriptPerEvent": 1.848,
+      "recalcPerEvent": 2.369,
+      "frames": {
+       "n": 1139,
+       "p50": 16.7,
+       "p95": 16.8,
+       "p99": 33.4,
+       "max": 283.3,
+       "mean": 17.544,
+       "over50": 5,
+       "over16_7": 581,
+       "over50Per100Frames": 0.439,
+       "fps": 56.95
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 707,
+      "jseventListeners": 242,
+      "wsByPayload": {
+       "session/event": {
+        "n": 142,
+        "perSec": 7.1
+       },
+       "session/projection": {
+        "n": 130,
+        "perSec": 6.5
+       },
+       "session/jobs": {
+        "n": 2,
+        "perSec": 0.1
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 98,
+        "perSec": 4.9
+       },
+       "event:tool/call": {
+        "n": 10,
+        "perSec": 0.5
+       },
+       "event:assistant/message": {
+        "n": 9,
+        "perSec": 0.45
+       },
+       "event:tool/result": {
+        "n": 9,
+        "perSec": 0.45
+       },
+       "event:step/end": {
+        "n": 8,
+        "perSec": 0.4
+       },
+       "event:step/start": {
+        "n": 8,
+        "perSec": 0.4
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 274,
+        "perSec": 13.7
+       }
+      },
+      "wsBytesPerSec": 7386.2,
+      "wsFramesRecv": 274,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    },
+    {
+     "repeat": 2,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 13.6,
+     "openMsClean": 8.7,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 28,
+     "activeLabelAfter": "分布式控制 · dsh-ssh-gui",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "distributed-r2-w1_10s",
+      "seconds": 10,
+      "cdp": {
+       "ScriptDuration": 227.156,
+       "TaskDuration": 798.025,
+       "RecalcStyleDuration": 327.205,
+       "LayoutDuration": 0.582
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 22.716,
+       "TaskDuration": 79.803,
+       "RecalcStyleDuration": 32.721,
+       "LayoutDuration": 0.058
+      },
+      "load": {
+       "sessionEventPerSec": 1.9,
+       "sessionProjectionPerSec": 5.5,
+       "totalPerSec": 7.4
+      },
+      "scriptPerEvent": 3.07,
+      "recalcPerEvent": 4.422,
+      "frames": {
+       "n": 590,
+       "p50": 16.7,
+       "p95": 16.8,
+       "p99": 33.4,
+       "max": 83.4,
+       "mean": 17.287,
+       "over50": 1,
+       "over16_7": 304,
+       "over50Per100Frames": 0.169,
+       "fps": 59
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 707,
+      "jseventListeners": 242,
+      "wsByPayload": {
+       "session/projection": {
+        "n": 55,
+        "perSec": 5.5
+       },
+       "session/event": {
+        "n": 19,
+        "perSec": 1.9
+       }
+      },
+      "wsBySub": {
+       "event:tool/result": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/end": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:assistant/message": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/start": {
+        "n": 3,
+        "perSec": 0.3
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 74,
+        "perSec": 7.4
+       }
+      },
+      "wsBytesPerSec": 13764.5,
+      "wsFramesRecv": 74,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "distributed-r2-w2_20s",
+      "seconds": 20,
+      "cdp": {
+       "ScriptDuration": 631.578,
+       "TaskDuration": 1924.645,
+       "RecalcStyleDuration": 816.028,
+       "LayoutDuration": 1.537
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 31.579,
+       "TaskDuration": 96.232,
+       "RecalcStyleDuration": 40.801,
+       "LayoutDuration": 0.077
+      },
+      "load": {
+       "sessionEventPerSec": 55.75,
+       "sessionProjectionPerSec": 6.45,
+       "totalPerSec": 62.2
+      },
+      "scriptPerEvent": 0.508,
+      "recalcPerEvent": 0.656,
+      "frames": {
+       "n": 1121,
+       "p50": 16.7,
+       "p95": 16.8,
+       "p99": 50,
+       "max": 216.6,
+       "mean": 17.841,
+       "over50": 6,
+       "over16_7": 580,
+       "over50Per100Frames": 0.535,
+       "fps": 56.05
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 707,
+      "jseventListeners": 242,
+      "wsByPayload": {
+       "session/event": {
+        "n": 1115,
+        "perSec": 55.75
+       },
+       "session/projection": {
+        "n": 129,
+        "perSec": 6.45
+       },
+       "session/queue": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 1066,
+        "perSec": 53.3
+       },
+       "event:tool/result": {
+        "n": 11,
+        "perSec": 0.55
+       },
+       "event:step/start": {
+        "n": 11,
+        "perSec": 0.55
+       },
+       "event:step/end": {
+        "n": 10,
+        "perSec": 0.5
+       },
+       "event:tool/call": {
+        "n": 8,
+        "perSec": 0.4
+       },
+       "event:assistant/message": {
+        "n": 7,
+        "perSec": 0.35
+       },
+       "event:agent/inbox/spliced": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "event:user/message": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 1245,
+        "perSec": 62.25
+       }
+      },
+      "wsBytesPerSec": 25622.3,
+      "wsFramesRecv": 1245,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    }
+   ]
+  },
+  {
+   "id": "vision-adam",
+   "label": "vision-adam 识图设置",
+   "runs": 2,
+   "status": "PASS",
+   "openMs": {
+    "r1": 32.9,
+    "r2": 11.4,
+    "median": 22.15,
+    "cleanMedian": 9.3
+   },
+   "w1": {
+    "n": 2,
+    "seconds": 10,
+    "cdpPerSec": {
+     "ScriptDuration": 30.641,
+     "TaskDuration": 90.435,
+     "RecalcStyleDuration": 34.506,
+     "LayoutDuration": 0
+    },
+    "cdpMs": {
+     "ScriptDuration": 306.405,
+     "TaskDuration": 904.346,
+     "RecalcStyleDuration": 345.058,
+     "LayoutDuration": 0
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 16.8,
+     "p99": 50,
+     "max": 283.3,
+     "over50": 4.5,
+     "over50Per100Frames": 0.809,
+     "framesPerSec": 55.65,
+     "n": 556.5,
+     "starvationWindows": 0
+    },
+    "longtasks": {
+     "nTotal": 0,
+     "nMedian": 0,
+     "maxMs": 0,
+     "totalMs": 0
+    },
+    "scriptPerEvent": 0.111,
+    "recalcPerEvent": 0.125,
+    "load": {
+     "sessionEventPerSec": 278.95,
+     "sessionProjectionPerSec": 5.35,
+     "totalPerSec": 284.3
+    },
+    "domNodes": 716,
+    "jseventListeners": 245,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 278.95,
+      "maxPerSec": 323.4
+     },
+     "session/projection": {
+      "medianPerSec": 5.35,
+      "maxPerSec": 5.4
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 276.95
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.4
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.4
+     },
+     "event:tool/result": {
+      "medianPerSec": 0.4
+     },
+     "event:step/end": {
+      "medianPerSec": 0.4
+     },
+     "event:step/start": {
+      "medianPerSec": 0.4
+     }
+    },
+    "wsBytesPerSec": 110679.8,
+    "wsFramesRecvPerSec": 284.3,
+    "usageSamples": []
+   },
+   "w2": {
+    "n": 2,
+    "seconds": 20.001,
+    "cdpPerSec": {
+     "ScriptDuration": 25.394,
+     "TaskDuration": 80.767,
+     "RecalcStyleDuration": 29.643,
+     "LayoutDuration": 0.023
+    },
+    "cdpMs": {
+     "ScriptDuration": 507.896,
+     "TaskDuration": 1615.385,
+     "RecalcStyleDuration": 592.876,
+     "LayoutDuration": 0.446
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 16.8,
+     "p99": 41.7,
+     "max": 183.4,
+     "over50": 6,
+     "over50Per100Frames": 0.531,
+     "framesPerSec": 56.849,
+     "n": 1137,
+     "starvationWindows": 0
+    },
+    "longtasks": {
+     "nTotal": 0,
+     "nMedian": 0,
+     "maxMs": 0,
+     "totalMs": 0
+    },
+    "scriptPerEvent": 0.147,
+    "recalcPerEvent": 0.173,
+    "load": {
+     "sessionEventPerSec": 177.722,
+     "sessionProjectionPerSec": 5.25,
+     "totalPerSec": 182.972
+    },
+    "domNodes": 716,
+    "jseventListeners": 245,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 177.722,
+      "maxPerSec": 215.2
+     },
+     "session/projection": {
+      "medianPerSec": 5.25,
+      "maxPerSec": 6.3
+     },
+     "session/jobs": {
+      "medianPerSec": 0.05,
+      "maxPerSec": 0.1
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 175.897
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.35
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.35
+     },
+     "event:tool/result": {
+      "medianPerSec": 0.375
+     },
+     "event:step/end": {
+      "medianPerSec": 0.375
+     },
+     "event:step/start": {
+      "medianPerSec": 0.375
+     }
+    },
+    "wsBytesPerSec": 73302.836,
+    "wsFramesRecvPerSec": 183.021,
+    "usageSamples": []
+   },
+   "panelNodes": {
+    "after": [
+     37,
+     37
+    ],
+    "dialog": [
+     108,
+     108
+    ]
+   },
+   "per": [
+    {
+     "repeat": 1,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 32.9,
+     "openMsClean": 11.7,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 37,
+     "activeLabelAfter": "vision-adam 识图设置",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "vision-adam-r1-w1_10s",
+      "seconds": 10,
+      "cdp": {
+       "ScriptDuration": 308.602,
+       "TaskDuration": 880.263,
+       "RecalcStyleDuration": 336.329,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 30.86,
+       "TaskDuration": 88.026,
+       "RecalcStyleDuration": 33.633,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 323.4,
+       "sessionProjectionPerSec": 5.4,
+       "totalPerSec": 328.8
+      },
+      "scriptPerEvent": 0.094,
+      "recalcPerEvent": 0.102,
+      "frames": {
+       "n": 558,
+       "p50": 16.7,
+       "p95": 16.8,
+       "p99": 50,
+       "max": 283.3,
+       "mean": 18.219,
+       "over50": 4,
+       "over16_7": 297,
+       "over50Per100Frames": 0.717,
+       "fps": 55.8
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 716,
+      "jseventListeners": 245,
+      "wsByPayload": {
+       "session/event": {
+        "n": 3234,
+        "perSec": 323.4
+       },
+       "session/projection": {
+        "n": 54,
+        "perSec": 5.4
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 3214,
+        "perSec": 321.4
+       },
+       "event:assistant/message": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/result": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/end": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/start": {
+        "n": 4,
+        "perSec": 0.4
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 3288,
+        "perSec": 328.8
+       }
+      },
+      "wsBytesPerSec": 120711.9,
+      "wsFramesRecv": 3288,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "vision-adam-r1-w2_20s",
+      "seconds": 20,
+      "cdp": {
+       "ScriptDuration": 471.817,
+       "TaskDuration": 1549.727,
+       "RecalcStyleDuration": 523.475,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 23.591,
+       "TaskDuration": 77.486,
+       "RecalcStyleDuration": 26.174,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 215.2,
+       "sessionProjectionPerSec": 4.2,
+       "totalPerSec": 219.4
+      },
+      "scriptPerEvent": 0.108,
+      "recalcPerEvent": 0.119,
+      "frames": {
+       "n": 1125,
+       "p50": 16.7,
+       "p95": 16.8,
+       "p99": 50,
+       "max": 183.4,
+       "mean": 17.762,
+       "over50": 9,
+       "over16_7": 572,
+       "over50Per100Frames": 0.8,
+       "fps": 56.25
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 716,
+      "jseventListeners": 245,
+      "wsByPayload": {
+       "session/event": {
+        "n": 4304,
+        "perSec": 215.2
+       },
+       "session/projection": {
+        "n": 84,
+        "perSec": 4.2
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 4274,
+        "perSec": 213.7
+       },
+       "event:assistant/message": {
+        "n": 6,
+        "perSec": 0.3
+       },
+       "event:tool/call": {
+        "n": 6,
+        "perSec": 0.3
+       },
+       "event:tool/result": {
+        "n": 6,
+        "perSec": 0.3
+       },
+       "event:step/end": {
+        "n": 6,
+        "perSec": 0.3
+       },
+       "event:step/start": {
+        "n": 6,
+        "perSec": 0.3
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 4388,
+        "perSec": 219.4
+       }
+      },
+      "wsBytesPerSec": 84038.65,
+      "wsFramesRecv": 4388,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    },
+    {
+     "repeat": 2,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 11.4,
+     "openMsClean": 6.9,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 37,
+     "activeLabelAfter": "vision-adam 识图设置",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "vision-adam-r2-w1_10s",
+      "seconds": 10,
+      "cdp": {
+       "ScriptDuration": 304.208,
+       "TaskDuration": 928.428,
+       "RecalcStyleDuration": 353.787,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 30.421,
+       "TaskDuration": 92.843,
+       "RecalcStyleDuration": 35.379,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 234.5,
+       "sessionProjectionPerSec": 5.3,
+       "totalPerSec": 239.8
+      },
+      "scriptPerEvent": 0.127,
+      "recalcPerEvent": 0.148,
+      "frames": {
+       "n": 555,
+       "p50": 16.7,
+       "p95": 16.8,
+       "p99": 50,
+       "max": 116.6,
+       "mean": 17.957,
+       "over50": 5,
+       "over16_7": 298,
+       "over50Per100Frames": 0.901,
+       "fps": 55.5
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 716,
+      "jseventListeners": 245,
+      "wsByPayload": {
+       "session/event": {
+        "n": 2345,
+        "perSec": 234.5
+       },
+       "session/projection": {
+        "n": 53,
+        "perSec": 5.3
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 2325,
+        "perSec": 232.5
+       },
+       "event:assistant/message": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/result": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/end": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/start": {
+        "n": 4,
+        "perSec": 0.4
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 2398,
+        "perSec": 239.8
+       }
+      },
+      "wsBytesPerSec": 100647.7,
+      "wsFramesRecv": 2398,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "vision-adam-r2-w2_20s",
+      "seconds": 20.001,
+      "cdp": {
+       "ScriptDuration": 543.975,
+       "TaskDuration": 1681.043,
+       "RecalcStyleDuration": 662.277,
+       "LayoutDuration": 0.892
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 27.197,
+       "TaskDuration": 84.048,
+       "RecalcStyleDuration": 33.112,
+       "LayoutDuration": 0.045
+      },
+      "load": {
+       "sessionEventPerSec": 140.243,
+       "sessionProjectionPerSec": 6.3,
+       "totalPerSec": 146.543
+      },
+      "scriptPerEvent": 0.186,
+      "recalcPerEvent": 0.226,
+      "frames": {
+       "n": 1149,
+       "p50": 16.7,
+       "p95": 16.8,
+       "p99": 33.4,
+       "max": 83.3,
+       "mean": 17.391,
+       "over50": 3,
+       "over16_7": 589,
+       "over50Per100Frames": 0.261,
+       "fps": 57.447
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 716,
+      "jseventListeners": 245,
+      "wsByPayload": {
+       "session/event": {
+        "n": 2805,
+        "perSec": 140.243
+       },
+       "session/projection": {
+        "n": 126,
+        "perSec": 6.3
+       },
+       "session/jobs": {
+        "n": 2,
+        "perSec": 0.1
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 2762,
+        "perSec": 138.093
+       },
+       "event:tool/result": {
+        "n": 9,
+        "perSec": 0.45
+       },
+       "event:step/end": {
+        "n": 9,
+        "perSec": 0.45
+       },
+       "event:step/start": {
+        "n": 9,
+        "perSec": 0.45
+       },
+       "event:assistant/message": {
+        "n": 8,
+        "perSec": 0.4
+       },
+       "event:tool/call": {
+        "n": 8,
+        "perSec": 0.4
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 2933,
+        "perSec": 146.643
+       }
+      },
+      "wsBytesPerSec": 62567.022,
+      "wsFramesRecv": 2933,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    }
+   ]
+  },
+  {
+   "id": "subagent-model",
+   "label": "子代理模型",
+   "runs": 2,
+   "status": "PASS",
+   "openMs": {
+    "r1": 36.3,
+    "r2": 8.9,
+    "median": 22.6,
+    "cleanMedian": 7.45
+   },
+   "w1": {
+    "n": 2,
+    "seconds": 10.001,
+    "cdpPerSec": {
+     "ScriptDuration": 29.77,
+     "TaskDuration": 96.277,
+     "RecalcStyleDuration": 35.491,
+     "LayoutDuration": 0.308
+    },
+    "cdpMs": {
+     "ScriptDuration": 297.73,
+     "TaskDuration": 962.871,
+     "RecalcStyleDuration": 354.945,
+     "LayoutDuration": 3.079
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 33.25,
+     "p99": 50,
+     "max": 150,
+     "over50": 5,
+     "over50Per100Frames": 0.92,
+     "framesPerSec": 54.395,
+     "n": 544,
+     "starvationWindows": 0
+    },
+    "longtasks": {
+     "nTotal": 2,
+     "nMedian": 1,
+     "maxMs": 97,
+     "totalMs": 184
+    },
+    "scriptPerEvent": 0.445,
+    "recalcPerEvent": 0.532,
+    "load": {
+     "sessionEventPerSec": 73.143,
+     "sessionProjectionPerSec": 5.799,
+     "totalPerSec": 78.942
+    },
+    "domNodes": 760,
+    "jseventListeners": 243,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 73.143,
+      "maxPerSec": 102.59
+     },
+     "session/projection": {
+      "medianPerSec": 5.799,
+      "maxPerSec": 6.299
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 71.143
+     },
+     "event:step/start": {
+      "medianPerSec": 0.4
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.45
+     },
+     "event:tool/result": {
+      "medianPerSec": 0.45
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.35
+     },
+     "event:step/end": {
+      "medianPerSec": 0.35
+     }
+    },
+    "wsBytesPerSec": 32884.211,
+    "wsFramesRecvPerSec": 78.942,
+    "usageSamples": []
+   },
+   "w2": {
+    "n": 2,
+    "seconds": 20.001,
+    "cdpPerSec": {
+     "ScriptDuration": 44.541,
+     "TaskDuration": 123.718,
+     "RecalcStyleDuration": 54.086,
+     "LayoutDuration": 0
+    },
+    "cdpMs": {
+     "ScriptDuration": 890.844,
+     "TaskDuration": 2474.424,
+     "RecalcStyleDuration": 1081.742,
+     "LayoutDuration": 0
+    },
+    "frames": {
+     "p50": 16.7,
+     "p95": 33.3,
+     "p99": 58.35,
+     "max": 150,
+     "over50": 14.5,
+     "over50Per100Frames": 1.344,
+     "framesPerSec": 53.974,
+     "n": 1079.5,
+     "starvationWindows": 0
+    },
+    "longtasks": {
+     "nTotal": 0,
+     "nMedian": 0,
+     "maxMs": 0,
+     "totalMs": 0
+    },
+    "scriptPerEvent": 0.339,
+    "recalcPerEvent": 0.411,
+    "load": {
+     "sessionEventPerSec": 122.047,
+     "sessionProjectionPerSec": 9.7,
+     "totalPerSec": 131.747
+    },
+    "domNodes": 760,
+    "jseventListeners": 243,
+    "wsByPayload": {
+     "session/event": {
+      "medianPerSec": 122.047,
+      "maxPerSec": 123.75
+     },
+     "session/projection": {
+      "medianPerSec": 9.7,
+      "maxPerSec": 10.3
+     }
+    },
+    "wsBySub": {
+     "event:assistant/chunk": {
+      "medianPerSec": 118.772
+     },
+     "event:tool/call": {
+      "medianPerSec": 0.7
+     },
+     "event:tool/result": {
+      "medianPerSec": 0.7
+     },
+     "event:assistant/message": {
+      "medianPerSec": 0.625
+     },
+     "event:step/end": {
+      "medianPerSec": 0.625
+     },
+     "event:step/start": {
+      "medianPerSec": 0.625
+     }
+    },
+    "wsBytesPerSec": 52728.22,
+    "wsFramesRecvPerSec": 131.747,
+    "usageSamples": []
+   },
+   "panelNodes": {
+    "after": [
+     81,
+     81
+    ],
+    "dialog": [
+     152,
+     152
+    ]
+   },
+   "per": [
+    {
+     "repeat": 1,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 36.3,
+     "openMsClean": 9.1,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 81,
+     "activeLabelAfter": "子代理模型",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "subagent-model-r1-w1_10s",
+      "seconds": 10.001,
+      "cdp": {
+       "ScriptDuration": 280.561,
+       "TaskDuration": 923.726,
+       "RecalcStyleDuration": 330.705,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 28.053,
+       "TaskDuration": 92.363,
+       "RecalcStyleDuration": 33.067,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 102.59,
+       "sessionProjectionPerSec": 5.299,
+       "totalPerSec": 107.889
+      },
+      "scriptPerEvent": 0.26,
+      "recalcPerEvent": 0.306,
+      "frames": {
+       "n": 545,
+       "p50": 16.7,
+       "p95": 33.3,
+       "p99": 50,
+       "max": 150,
+       "mean": 18.287,
+       "over50": 4,
+       "over16_7": 286,
+       "over50Per100Frames": 0.734,
+       "fps": 54.495
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 1,
+       "totalMs": 87,
+       "maxMs": 87
+      },
+      "domNodes": 760,
+      "jseventListeners": 243,
+      "wsByPayload": {
+       "session/event": {
+        "n": 1026,
+        "perSec": 102.59
+       },
+       "session/projection": {
+        "n": 53,
+        "perSec": 5.299
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 1008,
+        "perSec": 100.79
+       },
+       "event:step/start": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/result": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:assistant/message": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:step/end": {
+        "n": 3,
+        "perSec": 0.3
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 1079,
+        "perSec": 107.889
+       }
+      },
+      "wsBytesPerSec": 40106.689,
+      "wsFramesRecv": 1079,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "subagent-model-r1-w2_20s",
+      "seconds": 20.001,
+      "cdp": {
+       "ScriptDuration": 908.108,
+       "TaskDuration": 2455.342,
+       "RecalcStyleDuration": 1077.956,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 45.403,
+       "TaskDuration": 122.761,
+       "RecalcStyleDuration": 53.895,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 120.344,
+       "sessionProjectionPerSec": 9.1,
+       "totalPerSec": 129.444
+      },
+      "scriptPerEvent": 0.351,
+      "recalcPerEvent": 0.416,
+      "frames": {
+       "n": 1068,
+       "p50": 16.7,
+       "p95": 33.3,
+       "p99": 66.6,
+       "max": 116.6,
+       "mean": 18.71,
+       "over50": 15,
+       "over16_7": 584,
+       "over50Per100Frames": 1.404,
+       "fps": 53.397
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 760,
+      "jseventListeners": 243,
+      "wsByPayload": {
+       "session/event": {
+        "n": 2407,
+        "perSec": 120.344
+       },
+       "session/projection": {
+        "n": 182,
+        "perSec": 9.1
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 2346,
+        "perSec": 117.294
+       },
+       "event:tool/call": {
+        "n": 14,
+        "perSec": 0.7
+       },
+       "event:tool/result": {
+        "n": 13,
+        "perSec": 0.65
+       },
+       "event:assistant/message": {
+        "n": 12,
+        "perSec": 0.6
+       },
+       "event:step/end": {
+        "n": 11,
+        "perSec": 0.55
+       },
+       "event:step/start": {
+        "n": 11,
+        "perSec": 0.55
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 2589,
+        "perSec": 129.444
+       }
+      },
+      "wsBytesPerSec": 52217.239,
+      "wsFramesRecv": 2589,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    },
+    {
+     "repeat": 2,
+     "status": "PASS",
+     "valid": true,
+     "invalidReasons": [],
+     "openMs": 8.9,
+     "openMsClean": 5.8,
+     "panelNodesBefore": 97,
+     "panelNodesAfter": 81,
+     "activeLabelAfter": "子代理模型",
+     "parkedAt": {
+      "index": 0,
+      "label": "通用设置"
+     },
+     "w1": {
+      "label": "subagent-model-r2-w1_10s",
+      "seconds": 10.001,
+      "cdp": {
+       "ScriptDuration": 314.899,
+       "TaskDuration": 1002.015,
+       "RecalcStyleDuration": 379.184,
+       "LayoutDuration": 6.158
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 31.487,
+       "TaskDuration": 100.191,
+       "RecalcStyleDuration": 37.915,
+       "LayoutDuration": 0.616
+      },
+      "load": {
+       "sessionEventPerSec": 43.696,
+       "sessionProjectionPerSec": 6.299,
+       "totalPerSec": 49.995
+      },
+      "scriptPerEvent": 0.63,
+      "recalcPerEvent": 0.758,
+      "frames": {
+       "n": 543,
+       "p50": 16.7,
+       "p95": 33.2,
+       "p99": 50,
+       "max": 116.7,
+       "mean": 18.324,
+       "over50": 6,
+       "over16_7": 291,
+       "over50Per100Frames": 1.105,
+       "fps": 54.295
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 1,
+       "totalMs": 97,
+       "maxMs": 97
+      },
+      "domNodes": 760,
+      "jseventListeners": 243,
+      "wsByPayload": {
+       "session/event": {
+        "n": 437,
+        "perSec": 43.696
+       },
+       "session/projection": {
+        "n": 63,
+        "perSec": 6.299
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 415,
+        "perSec": 41.496
+       },
+       "event:tool/call": {
+        "n": 5,
+        "perSec": 0.5
+       },
+       "event:tool/result": {
+        "n": 5,
+        "perSec": 0.5
+       },
+       "event:assistant/message": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/end": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/start": {
+        "n": 4,
+        "perSec": 0.4
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 500,
+        "perSec": 49.995
+       }
+      },
+      "wsBytesPerSec": 25661.734,
+      "wsFramesRecv": 500,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     },
+     "w2": {
+      "label": "subagent-model-r2-w2_20s",
+      "seconds": 20,
+      "cdp": {
+       "ScriptDuration": 873.579,
+       "TaskDuration": 2493.506,
+       "RecalcStyleDuration": 1085.529,
+       "LayoutDuration": 0
+      },
+      "cdpPerSec": {
+       "ScriptDuration": 43.679,
+       "TaskDuration": 124.675,
+       "RecalcStyleDuration": 54.276,
+       "LayoutDuration": 0
+      },
+      "load": {
+       "sessionEventPerSec": 123.75,
+       "sessionProjectionPerSec": 10.3,
+       "totalPerSec": 134.05
+      },
+      "scriptPerEvent": 0.326,
+      "recalcPerEvent": 0.405,
+      "frames": {
+       "n": 1091,
+       "p50": 16.7,
+       "p95": 33.3,
+       "p99": 50.1,
+       "max": 150,
+       "mean": 18.316,
+       "over50": 14,
+       "over16_7": 595,
+       "over50Per100Frames": 1.283,
+       "fps": 54.55
+      },
+      "frameStarvation": false,
+      "longtasks": {
+       "n": 0,
+       "totalMs": 0,
+       "maxMs": 0
+      },
+      "domNodes": 760,
+      "jseventListeners": 243,
+      "wsByPayload": {
+       "session/event": {
+        "n": 2475,
+        "perSec": 123.75
+       },
+       "session/projection": {
+        "n": 206,
+        "perSec": 10.3
+       }
+      },
+      "wsBySub": {
+       "event:assistant/chunk": {
+        "n": 2405,
+        "perSec": 120.25
+       },
+       "event:tool/result": {
+        "n": 15,
+        "perSec": 0.75
+       },
+       "event:tool/call": {
+        "n": 14,
+        "perSec": 0.7
+       },
+       "event:step/end": {
+        "n": 14,
+        "perSec": 0.7
+       },
+       "event:step/start": {
+        "n": 14,
+        "perSec": 0.7
+       },
+       "event:assistant/message": {
+        "n": 13,
+        "perSec": 0.65
+       }
+      },
+      "wsByEnvelope": {
+       "server-request": {
+        "n": 2681,
+        "perSec": 134.05
+       }
+      },
+      "wsBytesPerSec": 53239.2,
+      "wsFramesRecv": 2681,
+      "usageSamples": [],
+      "reasons": [],
+      "hidden": false
+     }
+    }
+   ]
+  }
+ ],
+ "verdicts": [
+  {
+   "id": "general",
+   "label": "通用设置",
+   "status": "PASS",
+   "openMsClean": 8.4,
+   "scriptPerSec": 54.568,
+   "recalcPerSec": 65.639,
+   "scriptAmp": 1.118,
+   "recalcAmp": 1.523,
+   "scriptPerEvent": 0.281,
+   "recalcPerEvent": 0.338,
+   "scriptPerEventAmp": 0.469,
+   "recalcPerEventAmp": 0.639,
+   "load": {
+    "sessionEventPerSec": 186.9,
+    "sessionProjectionPerSec": 10.85,
+    "totalPerSec": 197.75
+   },
+   "domNodes": 772,
+   "fps": 52.7,
+   "baselineFps": 57.189,
+   "starvedWindows": 0,
+   "over50Per100": 1.625,
+   "baselineOver50Per100": 1.049,
+   "longtasks": 0,
+   "longtaskMaxMs": 0,
+   "findings": [
+    "recalc 1.523x baseline"
+   ],
+   "cleanIfNoFindings": false
+  },
+  {
+   "id": "models",
+   "label": "模型",
+   "status": "PASS",
+   "openMsClean": 24.2,
+   "scriptPerSec": 69.622,
+   "recalcPerSec": 85.86,
+   "scriptAmp": 1.427,
+   "recalcAmp": 1.993,
+   "scriptPerEvent": 1.842,
+   "recalcPerEvent": 2.262,
+   "scriptPerEventAmp": 3.075,
+   "recalcPerEventAmp": 4.276,
+   "load": {
+    "sessionEventPerSec": 39.194,
+    "sessionProjectionPerSec": 9.349,
+    "totalPerSec": 48.543
+   },
+   "domNodes": 728,
+   "fps": 27.196,
+   "baselineFps": 57.189,
+   "starvedWindows": 2,
+   "over50Per100": 31.944,
+   "baselineOver50Per100": 1.049,
+   "longtasks": 1,
+   "longtaskMaxMs": 50,
+   "findings": [
+    "frame rate collapsed to 27.196 fps (< 45); 2 of 2 windows starved",
+    "recalc 1.993x baseline",
+    ">50ms frames 31.944/100 vs baseline 1.049/100",
+    "1 longtask(s), max 50ms"
+   ],
+   "cleanIfNoFindings": false
+  },
+  {
+   "id": "plugins",
+   "label": "插件",
+   "status": "PASS",
+   "openMsClean": 20.15,
+   "scriptPerSec": 63.445,
+   "recalcPerSec": 104.854,
+   "scriptAmp": 1.3,
+   "recalcAmp": 2.433,
+   "scriptPerEvent": 4.215,
+   "recalcPerEvent": 6.844,
+   "scriptPerEventAmp": 7.037,
+   "recalcPerEventAmp": 12.938,
+   "load": {
+    "sessionEventPerSec": 57.095,
+    "sessionProjectionPerSec": 8.65,
+    "totalPerSec": 65.744
+   },
+   "domNodes": 1025,
+   "fps": 36.498,
+   "baselineFps": 57.189,
+   "starvedWindows": 1,
+   "over50Per100": 19.139,
+   "baselineOver50Per100": 1.049,
+   "longtasks": 1,
+   "longtaskMaxMs": 50,
+   "findings": [
+    "frame rate collapsed to 36.498 fps (< 45); 1 of 2 windows starved",
+    "recalc 2.433x baseline",
+    ">50ms frames 19.139/100 vs baseline 1.049/100",
+    "1 longtask(s), max 50ms"
+   ],
+   "cleanIfNoFindings": false
+  },
+  {
+   "id": "agent-preset",
+   "label": "Agent 预设",
+   "status": "PASS",
+   "openMsClean": 8.5,
+   "scriptPerSec": 56.801,
+   "recalcPerSec": 83.332,
+   "scriptAmp": 1.164,
+   "recalcAmp": 1.934,
+   "scriptPerEvent": 1.94,
+   "recalcPerEvent": 2.894,
+   "scriptPerEventAmp": 3.239,
+   "recalcPerEventAmp": 5.471,
+   "load": {
+    "sessionEventPerSec": 25.5,
+    "sessionProjectionPerSec": 12.75,
+    "totalPerSec": 38.25
+   },
+   "domNodes": 786,
+   "fps": 52.6,
+   "baselineFps": 57.189,
+   "starvedWindows": 0,
+   "over50Per100": 1.808,
+   "baselineOver50Per100": 1.049,
+   "longtasks": 0,
+   "longtaskMaxMs": 0,
+   "findings": [
+    "recalc 1.934x baseline"
+   ],
+   "cleanIfNoFindings": false
+  },
+  {
+   "id": "remote-workspace",
+   "label": "远程工作区",
+   "status": "PASS",
+   "openMsClean": 13.05,
+   "scriptPerSec": 34.443,
+   "recalcPerSec": 43.97,
+   "scriptAmp": 0.706,
+   "recalcAmp": 1.02,
+   "scriptPerEvent": 0.509,
+   "recalcPerEvent": 0.667,
+   "scriptPerEventAmp": 0.85,
+   "recalcPerEventAmp": 1.261,
+   "load": {
+    "sessionEventPerSec": 100.86,
+    "sessionProjectionPerSec": 8.751,
+    "totalPerSec": 109.611
+   },
+   "domNodes": 740,
+   "fps": 55.506,
+   "baselineFps": 57.189,
+   "starvedWindows": 0,
+   "over50Per100": 1.173,
+   "baselineOver50Per100": 1.049,
+   "longtasks": 1,
+   "longtaskMaxMs": 87,
+   "findings": [
+    "1 longtask(s), max 87ms"
+   ],
+   "cleanIfNoFindings": false
+  },
+  {
+   "id": "distributed",
+   "label": "分布式控制 · dsh-ssh-gui",
+   "status": "PASS",
+   "openMsClean": 7.35,
+   "scriptPerSec": 26.133,
+   "recalcPerSec": 35.623,
+   "scriptAmp": 0.536,
+   "recalcAmp": 0.827,
+   "scriptPerEvent": 3.028,
+   "recalcPerEvent": 4.157,
+   "scriptPerEventAmp": 5.055,
+   "recalcPerEventAmp": 7.858,
+   "load": {
+    "sessionEventPerSec": 2.25,
+    "sessionProjectionPerSec": 6.4,
+    "totalPerSec": 8.65
+   },
+   "domNodes": 707,
+   "fps": 58.197,
+   "baselineFps": 57.189,
+   "starvedWindows": 0,
+   "over50Per100": 0.172,
+   "baselineOver50Per100": 1.049,
+   "longtasks": 0,
+   "longtaskMaxMs": 0,
+   "findings": [],
+   "cleanIfNoFindings": true
+  },
+  {
+   "id": "vision-adam",
+   "label": "vision-adam 识图设置",
+   "status": "PASS",
+   "openMsClean": 9.3,
+   "scriptPerSec": 30.641,
+   "recalcPerSec": 34.506,
+   "scriptAmp": 0.628,
+   "recalcAmp": 0.801,
+   "scriptPerEvent": 0.111,
+   "recalcPerEvent": 0.125,
+   "scriptPerEventAmp": 0.185,
+   "recalcPerEventAmp": 0.236,
+   "load": {
+    "sessionEventPerSec": 278.95,
+    "sessionProjectionPerSec": 5.35,
+    "totalPerSec": 284.3
+   },
+   "domNodes": 716,
+   "fps": 55.65,
+   "baselineFps": 57.189,
+   "starvedWindows": 0,
+   "over50Per100": 0.809,
+   "baselineOver50Per100": 1.049,
+   "longtasks": 0,
+   "longtaskMaxMs": 0,
+   "findings": [],
+   "cleanIfNoFindings": true
+  },
+  {
+   "id": "subagent-model",
+   "label": "子代理模型",
+   "status": "PASS",
+   "openMsClean": 7.45,
+   "scriptPerSec": 29.77,
+   "recalcPerSec": 35.491,
+   "scriptAmp": 0.61,
+   "recalcAmp": 0.824,
+   "scriptPerEvent": 0.445,
+   "recalcPerEvent": 0.532,
+   "scriptPerEventAmp": 0.743,
+   "recalcPerEventAmp": 1.006,
+   "load": {
+    "sessionEventPerSec": 73.143,
+    "sessionProjectionPerSec": 5.799,
+    "totalPerSec": 78.942
+   },
+   "domNodes": 760,
+   "fps": 54.395,
+   "baselineFps": 57.189,
+   "starvedWindows": 0,
+   "over50Per100": 0.92,
+   "baselineOver50Per100": 1.049,
+   "longtasks": 2,
+   "longtaskMaxMs": 97,
+   "findings": [
+    "2 longtask(s), max 97ms"
+   ],
+   "cleanIfNoFindings": false
+  }
+ ],
+ "plugins": {
+  "firstMount": {
+   "at": "2026-09-21T07:11:27.648Z",
+   "nav": {
+    "status": "FOUND",
+    "index": 2,
+    "text": "插件",
+    "total": 8,
+    "strategy": "exact"
+   },
+   "clicked": {
+    "ok": true,
+    "box": {
+     "x": 414,
+     "y": 222,
+     "w": 164,
+     "h": 40
+    }
+   },
+   "armRes": {
+    "hasDialog": true,
+    "hasNav": true,
+    "hasContent": true,
+    "contentNodes": 97,
+    "textLen": 314
+   },
+   "firstMountMs": 25.6,
+   "openProbe": {
+    "firstMut": 6344.20000000298,
+    "firstMutClean": 6344.20000000298,
+    "firstText": 6353,
+    "clickT0": 6327.4000000059605
+   },
+   "window": {
+    "label": "plugins-firstmount-w1_10s",
+    "windowMs": 10000,
+    "seconds": 10,
+    "cdpRawStart": {
+     "at": 1789974677639,
+     "ScriptDuration": 0.246046,
+     "TaskDuration": 0.759438,
+     "RecalcStyleDuration": 0.065891,
+     "LayoutDuration": 0.059879,
+     "Nodes": 1273,
+     "JSEventListeners": 287,
+     "JSHeapUsedSize": 34345488,
+     "Documents": 6,
+     "Frames": 3
+    },
+    "cdpRawEnd": {
+     "at": 1789974687640,
+     "ScriptDuration": 0.360744,
+     "TaskDuration": 1.191893,
+     "RecalcStyleDuration": 0.205631,
+     "LayoutDuration": 0.064904,
+     "Nodes": 1442,
+     "JSEventListeners": 256,
+     "JSHeapUsedSize": 28527060,
+     "Documents": 3,
+     "Frames": 3
+    },
+    "frames": {
+     "n": 581,
+     "p50": 16.7,
+     "p95": 16.8,
+     "p99": 33.3,
+     "max": 100,
+     "mean": 17.154,
+     "over50": 3,
+     "over16_7": 220
+    },
+    "domNodes": 1016,
+    "documentHidden": false,
+    "longtasks": {
+     "n": 0,
+     "totalMs": 0,
+     "maxMs": 0,
+     "entries": []
+    },
+    "ws": {
+     "totalFramesRecv": 22,
+     "totalFramesSent": 0,
+     "recvBytes": 12470,
+     "byEnvelopePerSec": {
+      "server-request": {
+       "n": 22,
+       "perSec": 2.2
+      }
+     },
+     "byPayloadTypePerSec": {
+      "session/projection": {
+       "n": 16,
+       "perSec": 1.6
+      },
+      "session/event": {
+       "n": 6,
+       "perSec": 0.6
+      }
+     },
+     "byPayloadSubTypePerSec": {
+      "event:tool/result": {
+       "n": 2,
+       "perSec": 0.2
+      },
+      "event:step/end": {
+       "n": 2,
+       "perSec": 0.2
+      },
+      "event:step/start": {
+       "n": 2,
+       "perSec": 0.2
+      }
+     },
+     "bySocketAndPayloadPerSec": {
+      "mux:session/projection": {
+       "n": 16,
+       "perSec": 1.6
+      },
+      "mux:session/event": {
+       "n": 6,
+       "perSec": 0.6
+      }
+     }
+    },
+    "http": {
+     "total": 8,
+     "usageSamples": [
+      {
+       "path": "/usage/timeseries",
+       "method": "timeseries",
+       "rpcId": "b2d78362-646c-44ba-93c3-86c216829fe3",
+       "granularity": "day",
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 57,
+       "wallToHeadersMs": 69.612,
+       "wallToBodyMs": 69.583,
+       "bodyBytes": 932,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/heatmap",
+       "method": "heatmap",
+       "rpcId": "97535591-ed4c-4287-af24-201e805feb5d",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 58,
+       "wallToHeadersMs": 69.849,
+       "wallToBodyMs": 69.834,
+       "bodyBytes": 1390,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/byModel",
+       "method": "byModel",
+       "rpcId": "9d24deac-ea72-4561-b888-120bd437459b",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 74,
+       "wallToHeadersMs": 85.381,
+       "wallToBodyMs": 85.363,
+       "bodyBytes": 950,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/byProject",
+       "method": "byProject",
+       "rpcId": "600ed11f-752a-4d18-8f67-5e39bdfa0615",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 97,
+       "wallToHeadersMs": 108.786,
+       "wallToBodyMs": 108.747,
+       "bodyBytes": 1041,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/timeseries",
+       "method": "timeseries",
+       "rpcId": "7ded25d3-fed6-42d8-a290-5a891d294220",
+       "granularity": "hour",
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 113,
+       "wallToHeadersMs": 123.527,
+       "wallToBodyMs": 123.503,
+       "bodyBytes": 775,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/sessions",
+       "method": "sessions",
+       "rpcId": "67be18c6-264a-4544-ae13-b61b5a2e3440",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 183,
+       "wallToHeadersMs": 193.68,
+       "wallToBodyMs": 193.727,
+       "bodyBytes": 53697,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/status",
+       "method": "status",
+       "rpcId": "2983dfe8-7fe0-4aed-90ca-8fbbf85a5f79",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 188,
+       "wallToHeadersMs": 197.703,
+       "wallToBodyMs": 197.662,
+       "bodyBytes": 310,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/byDay",
+       "method": "byDay",
+       "rpcId": "d935266a-2f0b-40ea-84c0-97237fc05825",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 239,
+       "wallToHeadersMs": 250.303,
+       "wallToBodyMs": 250.323,
+       "bodyBytes": 932,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      }
+     ]
+    },
+    "_rawTaken": 581,
+    "reasons": [],
+    "cdpDeltaMs": {
+     "ScriptDuration": 114.698,
+     "TaskDuration": 432.455,
+     "RecalcStyleDuration": 139.74,
+     "LayoutDuration": 5.025,
+     "Nodes": 1442,
+     "NodesDelta": 169,
+     "JSEventListeners": 256,
+     "JSHeapUsedSize": 28527060,
+     "Documents": 3,
+     "Frames": 3
+    }
+   },
+   "usageHttpRequests": [
+    {
+     "kind": "request",
+     "path": "/usage/summary",
+     "method": "POST",
+     "usage": "summary"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/timeseries",
+     "method": "POST",
+     "usage": "timeseries"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/heatmap",
+     "method": "POST",
+     "usage": "heatmap"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/byModel",
+     "method": "POST",
+     "usage": "byModel"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/byProject",
+     "method": "POST",
+     "usage": "byProject"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/byDay",
+     "method": "POST",
+     "usage": "byDay"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/timeseries",
+     "method": "POST",
+     "usage": "timeseries"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/sessions",
+     "method": "POST",
+     "usage": "sessions"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/status",
+     "method": "POST",
+     "usage": "status"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/summary",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 270,
+     "usage": "summary"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/timeseries",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 932,
+     "usage": "timeseries"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/heatmap",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 1390,
+     "usage": "heatmap"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/byModel",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 950,
+     "usage": "byModel"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/byProject",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 1041,
+     "usage": "byProject"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/timeseries",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 775,
+     "usage": "timeseries"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/sessions",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 53697,
+     "usage": "sessions"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/status",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 310,
+     "usage": "status"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/byDay",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 932,
+     "usage": "byDay"
+    }
+   ],
+   "usageSamples": [
+    {
+     "path": "/usage/summary",
+     "rpcMethod": "summary",
+     "rpcId": "a7e8d0b5-b713-4ef3-8f2c-4ebed27042e5",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 6,
+     "wallToHeadersMs": 19.24,
+     "wallToBodyMs": 18.45,
+     "bodyBytes": 270,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/timeseries",
+     "rpcMethod": "timeseries",
+     "rpcId": "b2d78362-646c-44ba-93c3-86c216829fe3",
+     "granularity": "day",
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 57,
+     "wallToHeadersMs": 69.612,
+     "wallToBodyMs": 69.583,
+     "bodyBytes": 932,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/heatmap",
+     "rpcMethod": "heatmap",
+     "rpcId": "97535591-ed4c-4287-af24-201e805feb5d",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 58,
+     "wallToHeadersMs": 69.849,
+     "wallToBodyMs": 69.834,
+     "bodyBytes": 1390,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byModel",
+     "rpcMethod": "byModel",
+     "rpcId": "9d24deac-ea72-4561-b888-120bd437459b",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 74,
+     "wallToHeadersMs": 85.381,
+     "wallToBodyMs": 85.363,
+     "bodyBytes": 950,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byProject",
+     "rpcMethod": "byProject",
+     "rpcId": "600ed11f-752a-4d18-8f67-5e39bdfa0615",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 97,
+     "wallToHeadersMs": 108.786,
+     "wallToBodyMs": 108.747,
+     "bodyBytes": 1041,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/timeseries",
+     "rpcMethod": "timeseries",
+     "rpcId": "7ded25d3-fed6-42d8-a290-5a891d294220",
+     "granularity": "hour",
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 113,
+     "wallToHeadersMs": 123.527,
+     "wallToBodyMs": 123.503,
+     "bodyBytes": 775,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/sessions",
+     "rpcMethod": "sessions",
+     "rpcId": "67be18c6-264a-4544-ae13-b61b5a2e3440",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 183,
+     "wallToHeadersMs": 193.68,
+     "wallToBodyMs": 193.727,
+     "bodyBytes": 53697,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/status",
+     "rpcMethod": "status",
+     "rpcId": "2983dfe8-7fe0-4aed-90ca-8fbbf85a5f79",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 188,
+     "wallToHeadersMs": 197.703,
+     "wallToBodyMs": 197.662,
+     "bodyBytes": 310,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byDay",
+     "rpcMethod": "byDay",
+     "rpcId": "d935266a-2f0b-40ea-84c0-97237fc05825",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 239,
+     "wallToHeadersMs": 250.303,
+     "wallToBodyMs": 250.323,
+     "bodyBytes": 932,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    }
+   ],
+   "usageValidCount": 9,
+   "usageInvalidCount": 0,
+   "usageFailedRequests": [],
+   "invalidReasons": []
+  },
+  "poll60": {
+   "at": "2026-09-21T07:12:27.751Z",
+   "windowMs": 60101,
+   "subWindows": [
+    {
+     "label": "plugins-poll-10s-1",
+     "windowMs": 10001,
+     "seconds": 10.001,
+     "cdpRawStart": {
+      "at": 1789974687651,
+      "ScriptDuration": 0.360753,
+      "TaskDuration": 1.194196,
+      "RecalcStyleDuration": 0.205631,
+      "LayoutDuration": 0.064904,
+      "Nodes": 1442,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 28706148,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974697694,
+      "ScriptDuration": 0.582357,
+      "TaskDuration": 1.906232,
+      "RecalcStyleDuration": 0.524574,
+      "LayoutDuration": 0.067578,
+      "Nodes": 1507,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 30534920,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 525,
+      "p50": 16.7,
+      "p95": 33.4,
+      "p99": 50.1,
+      "max": 133.4,
+      "mean": 19.079,
+      "over50": 8,
+      "over16_7": 294
+     },
+     "domNodes": 1026,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 149,
+      "totalFramesSent": 0,
+      "recvBytes": 73075,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 149,
+        "perSec": 14.899
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 118,
+        "perSec": 11.799
+       },
+       "session/projection": {
+        "n": 28,
+        "perSec": 2.8
+       },
+       "session/queue": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "host/session-status": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 106,
+        "perSec": 10.599
+       },
+       "event:assistant/message": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:tool/call": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:agent/inbox/spliced": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:step/start": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:turn/start": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:user/message": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:tool/result": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:step/end": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 118,
+        "perSec": 11.799
+       },
+       "mux:session/projection": {
+        "n": 28,
+        "perSec": 2.8
+       },
+       "mux:session/queue": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "host:host/session-status": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 525,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 221.604,
+      "TaskDuration": 712.036,
+      "RecalcStyleDuration": 318.943,
+      "LayoutDuration": 2.674,
+      "Nodes": 1507,
+      "NodesDelta": 65,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 30534920,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "plugins-poll-10s-2",
+     "windowMs": 10004,
+     "seconds": 10.004,
+     "cdpRawStart": {
+      "at": 1789974697714,
+      "ScriptDuration": 0.583471,
+      "TaskDuration": 1.916101,
+      "RecalcStyleDuration": 0.524981,
+      "LayoutDuration": 0.067578,
+      "Nodes": 1507,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 30726628,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974707715,
+      "ScriptDuration": 0.729489,
+      "TaskDuration": 2.36944,
+      "RecalcStyleDuration": 0.72246,
+      "LayoutDuration": 0.070526,
+      "Nodes": 1447,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 27701488,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 568,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 66.7,
+      "max": 149.9,
+      "mean": 17.576,
+      "over50": 7,
+      "over16_7": 249
+     },
+     "domNodes": 1018,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 30,
+      "totalFramesSent": 0,
+      "recvBytes": 13745,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 30,
+        "perSec": 2.999
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/projection": {
+        "n": 20,
+        "perSec": 1.999
+       },
+       "session/event": {
+        "n": 9,
+        "perSec": 0.9
+       },
+       "host/session-status": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/message": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:step/end": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:assistant/chunk": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:turn/end": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:tool/call": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:tool/result": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:step/start": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/projection": {
+        "n": 20,
+        "perSec": 1.999
+       },
+       "mux:session/event": {
+        "n": 9,
+        "perSec": 0.9
+       },
+       "host:host/session-status": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 568,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 146.018,
+      "TaskDuration": 453.339,
+      "RecalcStyleDuration": 197.479,
+      "LayoutDuration": 2.948,
+      "Nodes": 1447,
+      "NodesDelta": -60,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 27701488,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "plugins-poll-10s-3",
+     "windowMs": 10001,
+     "seconds": 10.001,
+     "cdpRawStart": {
+      "at": 1789974707721,
+      "ScriptDuration": 0.729495,
+      "TaskDuration": 2.370431,
+      "RecalcStyleDuration": 0.72246,
+      "LayoutDuration": 0.070526,
+      "Nodes": 1447,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 27882452,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974717723,
+      "ScriptDuration": 0.88158,
+      "TaskDuration": 2.8239,
+      "RecalcStyleDuration": 0.913508,
+      "LayoutDuration": 0.070526,
+      "Nodes": 1450,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 27698760,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 580,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 33.4,
+      "max": 83.4,
+      "mean": 17.212,
+      "over50": 4,
+      "over16_7": 174
+     },
+     "domNodes": 1018,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 31,
+      "totalFramesSent": 0,
+      "recvBytes": 32133,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 31,
+        "perSec": 3.1
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/projection": {
+        "n": 23,
+        "perSec": 2.3
+       },
+       "session/event": {
+        "n": 8,
+        "perSec": 0.8
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:tool/result": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:step/end": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:step/start": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:assistant/message": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:tool/call": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/projection": {
+        "n": 23,
+        "perSec": 2.3
+       },
+       "mux:session/event": {
+        "n": 8,
+        "perSec": 0.8
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 580,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 152.085,
+      "TaskDuration": 453.469,
+      "RecalcStyleDuration": 191.048,
+      "LayoutDuration": 0,
+      "Nodes": 1450,
+      "NodesDelta": 3,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 27698760,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "plugins-poll-10s-4",
+     "windowMs": 10001,
+     "seconds": 10.001,
+     "cdpRawStart": {
+      "at": 1789974717728,
+      "ScriptDuration": 0.88158,
+      "TaskDuration": 2.824751,
+      "RecalcStyleDuration": 0.913508,
+      "LayoutDuration": 0.070526,
+      "Nodes": 1450,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 27867872,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974727729,
+      "ScriptDuration": 1.185741,
+      "TaskDuration": 3.846893,
+      "RecalcStyleDuration": 1.37159,
+      "LayoutDuration": 0.071627,
+      "Nodes": 1471,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 31920004,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 508,
+      "p50": 16.7,
+      "p95": 33.4,
+      "p99": 66.7,
+      "max": 66.8,
+      "mean": 19.652,
+      "over50": 12,
+      "over16_7": 176
+     },
+     "domNodes": 1026,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 485,
+      "totalFramesSent": 0,
+      "recvBytes": 182841,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 485,
+        "perSec": 48.495
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 431,
+        "perSec": 43.096
+       },
+       "session/projection": {
+        "n": 51,
+        "perSec": 5.099
+       },
+       "session/queue": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "host/session-status": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 411,
+        "perSec": 41.096
+       },
+       "event:step/start": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:assistant/message": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:tool/call": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:tool/result": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:step/end": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:agent/inbox/spliced": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:turn/start": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:user/message": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 431,
+        "perSec": 43.096
+       },
+       "mux:session/projection": {
+        "n": 51,
+        "perSec": 5.099
+       },
+       "mux:session/queue": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "host:host/session-status": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 508,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 304.161,
+      "TaskDuration": 1022.142,
+      "RecalcStyleDuration": 458.082,
+      "LayoutDuration": 1.101,
+      "Nodes": 1471,
+      "NodesDelta": 21,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 31920004,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "plugins-poll-10s-5",
+     "windowMs": 10001,
+     "seconds": 10.001,
+     "cdpRawStart": {
+      "at": 1789974727737,
+      "ScriptDuration": 1.185785,
+      "TaskDuration": 3.848663,
+      "RecalcStyleDuration": 1.371644,
+      "LayoutDuration": 0.071627,
+      "Nodes": 1471,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 32061864,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974737738,
+      "ScriptDuration": 1.511233,
+      "TaskDuration": 4.988104,
+      "RecalcStyleDuration": 1.855823,
+      "LayoutDuration": 0.072558,
+      "Nodes": 1459,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 30585856,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 492,
+      "p50": 16.7,
+      "p95": 33.4,
+      "p99": 83.3,
+      "max": 133.3,
+      "mean": 20.29,
+      "over50": 9,
+      "over16_7": 189
+     },
+     "domNodes": 1026,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 1022,
+      "totalFramesSent": 0,
+      "recvBytes": 409017,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 1022,
+        "perSec": 102.19
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 974,
+        "perSec": 97.39
+       },
+       "session/projection": {
+        "n": 48,
+        "perSec": 4.8
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 957,
+        "perSec": 95.69
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/result": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:assistant/message": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:step/end": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:step/start": {
+        "n": 3,
+        "perSec": 0.3
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 974,
+        "perSec": 97.39
+       },
+       "mux:session/projection": {
+        "n": 48,
+        "perSec": 4.8
+       }
+      }
+     },
+     "http": {
+      "total": 11,
+      "usageSamples": [
+       {
+        "path": "/usage/summary",
+        "method": "summary",
+        "rpcId": "38fc7db6-73eb-4250-a840-196887ac2e5a",
+        "granularity": null,
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 21,
+        "wallToHeadersMs": 22.12,
+        "wallToBodyMs": 21.997,
+        "bodyBytes": 270,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       },
+       {
+        "path": "/usage/timeseries",
+        "method": "timeseries",
+        "rpcId": "736e42e5-3b18-48ad-9fd6-ea877ceb1134",
+        "granularity": "day",
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 82,
+        "wallToHeadersMs": 83.195,
+        "wallToBodyMs": 83.003,
+        "bodyBytes": 932,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       },
+       {
+        "path": "/usage/heatmap",
+        "method": "heatmap",
+        "rpcId": "78c46b63-f805-49e9-a73e-a47caf543201",
+        "granularity": null,
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 83,
+        "wallToHeadersMs": 84.348,
+        "wallToBodyMs": 84.276,
+        "bodyBytes": 1390,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       },
+       {
+        "path": "/usage/byModel",
+        "method": "byModel",
+        "rpcId": "e04d929a-98f4-4b6c-88b1-71ea8b7d055a",
+        "granularity": null,
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 100,
+        "wallToHeadersMs": 101.042,
+        "wallToBodyMs": 101.01,
+        "bodyBytes": 950,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       }
+      ]
+     },
+     "_rawTaken": 492,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 325.448,
+      "TaskDuration": 1139.441,
+      "RecalcStyleDuration": 484.179,
+      "LayoutDuration": 0.931,
+      "Nodes": 1459,
+      "NodesDelta": -12,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 30585856,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "plugins-poll-10s-6",
+     "windowMs": 10001,
+     "seconds": 10.001,
+     "cdpRawStart": {
+      "at": 1789974737744,
+      "ScriptDuration": 1.511305,
+      "TaskDuration": 4.989709,
+      "RecalcStyleDuration": 1.855823,
+      "LayoutDuration": 0.072558,
+      "Nodes": 1459,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 30723616,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974747745,
+      "ScriptDuration": 1.841124,
+      "TaskDuration": 6.199158,
+      "RecalcStyleDuration": 2.315128,
+      "LayoutDuration": 0.072807,
+      "Nodes": 1501,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 28712552,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 463,
+      "p50": 16.7,
+      "p95": 33.4,
+      "p99": 100,
+      "max": 150,
+      "mean": 21.562,
+      "over50": 14,
+      "over16_7": 139
+     },
+     "domNodes": 1026,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 2808,
+      "totalFramesSent": 0,
+      "recvBytes": 1221854,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 2808,
+        "perSec": 280.772
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 2757,
+        "perSec": 275.672
+       },
+       "session/projection": {
+        "n": 51,
+        "perSec": 5.099
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 2740,
+        "perSec": 273.973
+       },
+       "event:assistant/message": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/result": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:step/end": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:step/start": {
+        "n": 3,
+        "perSec": 0.3
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 2757,
+        "perSec": 275.672
+       },
+       "mux:session/projection": {
+        "n": 51,
+        "perSec": 5.099
+       }
+      }
+     },
+     "http": {
+      "total": 3,
+      "usageSamples": [
+       {
+        "path": "/usage/byProject",
+        "method": "byProject",
+        "rpcId": "063c6537-6683-4c6b-8312-5a82068408bc",
+        "granularity": null,
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 120,
+        "wallToHeadersMs": 120.683,
+        "wallToBodyMs": 120.634,
+        "bodyBytes": 1041,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       },
+       {
+        "path": "/usage/timeseries",
+        "method": "timeseries",
+        "rpcId": "44752c55-3031-4d69-b97e-edfafc368b14",
+        "granularity": "hour",
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 164,
+        "wallToHeadersMs": 163.954,
+        "wallToBodyMs": 163.804,
+        "bodyBytes": 775,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       },
+       {
+        "path": "/usage/byDay",
+        "method": "byDay",
+        "rpcId": "f335d7e9-b6de-41ad-b46e-c8a5972ae9e4",
+        "granularity": null,
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 241,
+        "wallToHeadersMs": 241.338,
+        "wallToBodyMs": 241.222,
+        "bodyBytes": 932,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       }
+      ]
+     },
+     "_rawTaken": 463,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 329.819,
+      "TaskDuration": 1209.449,
+      "RecalcStyleDuration": 459.305,
+      "LayoutDuration": 0.249,
+      "Nodes": 1501,
+      "NodesDelta": 42,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 28712552,
+      "Documents": 3,
+      "Frames": 3
+     }
+    }
+   ],
+   "usageSamples": [
+    {
+     "path": "/usage/summary",
+     "rpcMethod": "summary",
+     "rpcId": "38fc7db6-73eb-4250-a840-196887ac2e5a",
+     "granularity": null,
+     "atOffsetMs": 49994,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 21,
+     "wallToHeadersMs": 22.12,
+     "wallToBodyMs": 21.997,
+     "bodyBytes": 270,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/timeseries",
+     "rpcMethod": "timeseries",
+     "rpcId": "736e42e5-3b18-48ad-9fd6-ea877ceb1134",
+     "granularity": "day",
+     "atOffsetMs": 50055,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 82,
+     "wallToHeadersMs": 83.195,
+     "wallToBodyMs": 83.003,
+     "bodyBytes": 932,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/heatmap",
+     "rpcMethod": "heatmap",
+     "rpcId": "78c46b63-f805-49e9-a73e-a47caf543201",
+     "granularity": null,
+     "atOffsetMs": 50056,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 83,
+     "wallToHeadersMs": 84.348,
+     "wallToBodyMs": 84.276,
+     "bodyBytes": 1390,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byModel",
+     "rpcMethod": "byModel",
+     "rpcId": "e04d929a-98f4-4b6c-88b1-71ea8b7d055a",
+     "granularity": null,
+     "atOffsetMs": 50073,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 100,
+     "wallToHeadersMs": 101.042,
+     "wallToBodyMs": 101.01,
+     "bodyBytes": 950,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byProject",
+     "rpcMethod": "byProject",
+     "rpcId": "063c6537-6683-4c6b-8312-5a82068408bc",
+     "granularity": null,
+     "atOffsetMs": 50093,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 120,
+     "wallToHeadersMs": 120.683,
+     "wallToBodyMs": 120.634,
+     "bodyBytes": 1041,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/timeseries",
+     "rpcMethod": "timeseries",
+     "rpcId": "44752c55-3031-4d69-b97e-edfafc368b14",
+     "granularity": "hour",
+     "atOffsetMs": 50137,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 164,
+     "wallToHeadersMs": 163.954,
+     "wallToBodyMs": 163.804,
+     "bodyBytes": 775,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byDay",
+     "rpcMethod": "byDay",
+     "rpcId": "f335d7e9-b6de-41ad-b46e-c8a5972ae9e4",
+     "granularity": null,
+     "atOffsetMs": 50214,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 241,
+     "wallToHeadersMs": 241.338,
+     "wallToBodyMs": 241.222,
+     "bodyBytes": 932,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    }
+   ],
+   "usageValidCount": 7,
+   "usageInvalidCount": 0,
+   "windowCdpDeltaMs": {
+    "ScriptDuration": 1480.371,
+    "TaskDuration": 5004.962,
+    "RecalcStyleDuration": 2109.497,
+    "LayoutDuration": 7.903
+   }
+  },
+  "return": {
+   "at": "2026-09-21T07:12:41.827Z",
+   "armRes": {
+    "hasDialog": true,
+    "hasNav": true,
+    "hasContent": true,
+    "contentNodes": 97,
+    "textLen": 314
+   },
+   "clicked": {
+    "ok": true,
+    "box": {
+     "x": 414,
+     "y": 222,
+     "w": 164,
+     "h": 40
+    }
+   },
+   "returnMs": 26.1,
+   "openProbe": {
+    "firstMut": 80522.10000000894,
+    "firstMutClean": 80522.10000000894,
+    "firstText": 80529.70000000298,
+    "clickT0": 80503.60000000894
+   },
+   "window": {
+    "label": "plugins-return-w1_10s",
+    "windowMs": 10001,
+    "seconds": 10.001,
+    "cdpRawStart": {
+     "at": 1789974751820,
+     "ScriptDuration": 1.973253,
+     "TaskDuration": 6.749957,
+     "RecalcStyleDuration": 2.492647,
+     "LayoutDuration": 0.083979,
+     "Nodes": 1263,
+     "JSEventListeners": 274,
+     "JSHeapUsedSize": 28891768,
+     "Documents": 3,
+     "Frames": 3
+    },
+    "cdpRawEnd": {
+     "at": 1789974761822,
+     "ScriptDuration": 2.371279,
+     "TaskDuration": 8.090113,
+     "RecalcStyleDuration": 3.149968,
+     "LayoutDuration": 0.087468,
+     "Nodes": 1501,
+     "JSEventListeners": 256,
+     "JSHeapUsedSize": 28598740,
+     "Documents": 3,
+     "Frames": 3
+    },
+    "frames": {
+     "n": 532,
+     "p50": 16.7,
+     "p95": 33.3,
+     "p99": 66.6,
+     "max": 100,
+     "mean": 18.765,
+     "over50": 9,
+     "over16_7": 117
+    },
+    "domNodes": 1026,
+    "documentHidden": false,
+    "longtasks": {
+     "n": 0,
+     "totalMs": 0,
+     "maxMs": 0,
+     "entries": []
+    },
+    "ws": {
+     "totalFramesRecv": 547,
+     "totalFramesSent": 0,
+     "recvBytes": 235792,
+     "byEnvelopePerSec": {
+      "server-request": {
+       "n": 547,
+       "perSec": 54.695
+      }
+     },
+     "byPayloadTypePerSec": {
+      "session/event": {
+       "n": 470,
+       "perSec": 46.995
+      },
+      "session/projection": {
+       "n": 77,
+       "perSec": 7.699
+      }
+     },
+     "byPayloadSubTypePerSec": {
+      "event:assistant/chunk": {
+       "n": 442,
+       "perSec": 44.196
+      },
+      "event:tool/result": {
+       "n": 6,
+       "perSec": 0.6
+      },
+      "event:step/end": {
+       "n": 6,
+       "perSec": 0.6
+      },
+      "event:step/start": {
+       "n": 6,
+       "perSec": 0.6
+      },
+      "event:assistant/message": {
+       "n": 5,
+       "perSec": 0.5
+      },
+      "event:tool/call": {
+       "n": 5,
+       "perSec": 0.5
+      }
+     },
+     "bySocketAndPayloadPerSec": {
+      "mux:session/event": {
+       "n": 470,
+       "perSec": 46.995
+      },
+      "mux:session/projection": {
+       "n": 77,
+       "perSec": 7.699
+      }
+     }
+    },
+    "http": {
+     "total": 9,
+     "usageSamples": [
+      {
+       "path": "/usage/summary",
+       "method": "summary",
+       "rpcId": "8dc949c2-5666-49c9-9b06-5a7e00da10e6",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 14,
+       "wallToHeadersMs": 22.56,
+       "wallToBodyMs": 22.187,
+       "bodyBytes": 270,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/timeseries",
+       "method": "timeseries",
+       "rpcId": "5bcf786c-aa8e-4a17-919a-e81fa338d761",
+       "granularity": "day",
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 72,
+       "wallToHeadersMs": 82.494,
+       "wallToBodyMs": 82.417,
+       "bodyBytes": 932,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/timeseries",
+       "method": "timeseries",
+       "rpcId": "a9c18422-4364-441e-aaf2-55fc3e1d8819",
+       "granularity": "hour",
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 119,
+       "wallToHeadersMs": 129.349,
+       "wallToBodyMs": 129.312,
+       "bodyBytes": 775,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/byDay",
+       "method": "byDay",
+       "rpcId": "a838ce02-7a5e-481d-94d0-dc406b55d35a",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 169,
+       "wallToHeadersMs": 180.32,
+       "wallToBodyMs": 180.279,
+       "bodyBytes": 932,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/heatmap",
+       "method": "heatmap",
+       "rpcId": "134e9dbe-6758-48c0-b68d-a583fddbdb32",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 183,
+       "wallToHeadersMs": 195.089,
+       "wallToBodyMs": 195.021,
+       "bodyBytes": 1390,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/sessions",
+       "method": "sessions",
+       "rpcId": "0fa3102f-c1ea-47cf-ac20-80fbaa58b160",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 306,
+       "wallToHeadersMs": 316.676,
+       "wallToBodyMs": 316.609,
+       "bodyBytes": 53697,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/status",
+       "method": "status",
+       "rpcId": "f5221f31-223d-425d-a4e0-76df9fedbf81",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 311,
+       "wallToHeadersMs": 320.905,
+       "wallToBodyMs": 320.846,
+       "bodyBytes": 310,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/byModel",
+       "method": "byModel",
+       "rpcId": "b6797a6d-47a7-4efb-9ba9-2f70843d741e",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 328,
+       "wallToHeadersMs": 339.445,
+       "wallToBodyMs": 339.381,
+       "bodyBytes": 950,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/byProject",
+       "method": "byProject",
+       "rpcId": "886eddbf-28e6-4676-904a-0c7a987d4a5f",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 349,
+       "wallToHeadersMs": 359.488,
+       "wallToBodyMs": 359.38,
+       "bodyBytes": 1041,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      }
+     ]
+    },
+    "_rawTaken": 532,
+    "reasons": [],
+    "cdpDeltaMs": {
+     "ScriptDuration": 398.026,
+     "TaskDuration": 1340.156,
+     "RecalcStyleDuration": 657.321,
+     "LayoutDuration": 3.489,
+     "Nodes": 1501,
+     "NodesDelta": 238,
+     "JSEventListeners": 256,
+     "JSHeapUsedSize": 28598740,
+     "Documents": 3,
+     "Frames": 3
+    }
+   },
+   "usageWhileAway": [],
+   "usageOnReturn": [
+    {
+     "path": "/usage/summary",
+     "rpcMethod": "summary",
+     "rpcId": "8dc949c2-5666-49c9-9b06-5a7e00da10e6",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 22.56,
+     "wallToBodyMs": 22.187,
+     "bodyBytes": 270,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/timeseries",
+     "rpcMethod": "timeseries",
+     "rpcId": "5bcf786c-aa8e-4a17-919a-e81fa338d761",
+     "granularity": "day",
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 82.494,
+     "wallToBodyMs": 82.417,
+     "bodyBytes": 932,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/timeseries",
+     "rpcMethod": "timeseries",
+     "rpcId": "a9c18422-4364-441e-aaf2-55fc3e1d8819",
+     "granularity": "hour",
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 129.349,
+     "wallToBodyMs": 129.312,
+     "bodyBytes": 775,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byDay",
+     "rpcMethod": "byDay",
+     "rpcId": "a838ce02-7a5e-481d-94d0-dc406b55d35a",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 180.32,
+     "wallToBodyMs": 180.279,
+     "bodyBytes": 932,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/heatmap",
+     "rpcMethod": "heatmap",
+     "rpcId": "134e9dbe-6758-48c0-b68d-a583fddbdb32",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 195.089,
+     "wallToBodyMs": 195.021,
+     "bodyBytes": 1390,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/sessions",
+     "rpcMethod": "sessions",
+     "rpcId": "0fa3102f-c1ea-47cf-ac20-80fbaa58b160",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 316.676,
+     "wallToBodyMs": 316.609,
+     "bodyBytes": 53697,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/status",
+     "rpcMethod": "status",
+     "rpcId": "f5221f31-223d-425d-a4e0-76df9fedbf81",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 320.905,
+     "wallToBodyMs": 320.846,
+     "bodyBytes": 310,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byModel",
+     "rpcMethod": "byModel",
+     "rpcId": "b6797a6d-47a7-4efb-9ba9-2f70843d741e",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 339.445,
+     "wallToBodyMs": 339.381,
+     "bodyBytes": 950,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byProject",
+     "rpcMethod": "byProject",
+     "rpcId": "886eddbf-28e6-4676-904a-0c7a987d4a5f",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 359.488,
+     "wallToBodyMs": 359.38,
+     "bodyBytes": 1041,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    }
+   ],
+   "remountRefetched": true,
+   "invalidReasons": []
+  }
+ },
+ "aborted": false,
+ "runMeta": {
+  "url": "http://127.0.0.1:3080",
+  "at": "2026-09-21T06:55:10.603Z",
+  "phase": "all",
+  "headless": true,
+  "viewport": "1440x900",
+  "windows": {
+   "openLatency": "in-page pointerdown -> first content textContent change",
+   "stay1_s": 10,
+   "stay2_s": 20,
+   "park_ms": 1500,
+   "pollWindow_s": 60
+  },
+  "cdpNote": "Performance.getMetrics returns cumulative counters; raw snapshots are recorded per window and all deltas are computed by this script.",
+  "wsNote": "WS frames classified by payload discriminator (MuxFrame/HostFrame type) and one level deeper for session/event - never by envelope type.",
+  "usageNote": "/usage/<method> is a real HTTP POST surface on the host origin (verified by recon), not an /api RPC path.",
+  "confounderNote": "The host is shared with a concurrently running agent session; ambient session/event traffic is measured as the closed-settings baseline and cannot be paused by this read-only probe.",
+  "phases": {
+   "map+profile": {
+    "process": "node lib/tab-profile.mjs --phase=all --budget-min=20",
+    "wrote": "raw/run.profile-phase.json",
+    "note": "16 profile runs (8 tabs x 2 repeats) completed PASS; the plugins phase of that same process then hit a harness bug (missing mm.snap in the poll loop) and wrote nothing."
+   },
+   "plugins": {
+    "process": "node lib/tab-profile.mjs --phase=plugins --budget-min=8",
+    "wrote": "raw/run.plugins-phase.json",
+    "note": "re-run solo after adding CDP network-stack timing for /usage/*; Playwright request.timing() returned -1 for these requests so wallMs was null in the first pass."
+   },
+   "merge": "python3 merge of raw/run.profile-phase.json (baseline/tabMap/runs) + raw/run.plugins-phase.json (plugins)"
+  }
+ },
+ "tabMap": {
+  "perTab": [
+   {
+    "label": "通用设置",
+    "status": "NOT-FOUND",
+    "openMs": null,
+    "openMsClean": null,
+    "nodes": 97,
+    "textChanged": false,
+    "activeMoved": false,
+    "contentTextHead": "打开配置文件关闭Agent 预设对此后新建的会话生效。运行中的会话保持它开始时的预设。标准模式（子代理 deepseek-v4.1-flash）权限选择新会话的默认权限模式Workspace Write语言中文外观浅色深色跟随系统繁忙时 Enter 键行为仅在智能体运行时生效；Cmd/Ctrl+Enter 使用另一行为排队发送壁纸配置目标全局默认首页会话页设置页选择图片移除壁纸应用暗色遮罩0%透明度88%模糊0px壁纸配置（全局默认与各"
+   },
+   {
+    "label": "模型",
+    "status": "SWITCHED",
+    "openMs": 11.7,
+    "openMsClean": 9.5,
+    "nodes": 49,
+    "textChanged": true,
+    "activeMoved": true,
+    "contentTextHead": "打开配置文件关闭模型填入各提供方的 API 密钥即可使用其模型。DeepSeek编辑opencode-go编辑删除adam自定义编辑删除添加提供方添加自定义提供方"
+   },
+   {
+    "label": "插件",
+    "status": "SWITCHED",
+    "openMs": 18.7,
+    "openMsClean": 7.9,
+    "nodes": 346,
+    "textChanged": true,
+    "activeMoved": true,
+    "contentTextHead": "打开配置文件关闭插件配置和查看本部署已安装的插件。插件配置插件列表终端限制 agent 运行的每一条命令。Agent 循环Agent 如何派发工具调用。网页搜索DeepSeek 搜索提供方。Token 用量 · dsh-usagedsh + Claude Code 双源统计（不计费）全部来源dshcc近 7 天近 30 天近 90 天自选不轮询5s 刷新30s 刷新60s 刷新手动刷新请求数25439输入(未缓存)123.41m输出23"
+   },
+   {
+    "label": "Agent 预设",
+    "status": "SWITCHED",
+    "openMs": 24.3,
+    "openMsClean": 2.9,
+    "nodes": 107,
+    "textChanged": true,
+    "activeMoved": true,
+    "contentTextHead": "打开配置文件关闭Agent 预设预设即一个会话的 Agent 所运行的插件组装 —— 它的工具、提示词与能力。复制一份既有预设改成自己的，或用「创造模式」让 Agent 帮你创建。内置标准模式内置功能完整的编码 Agent，支持文件编辑、Shell、文件与网页检索、Skills、计划、目标、子代理和工作流。standardPTC 模式内置具备标准模式的全部能力，并通过 Code Mode SDK 呈现工具，让模型用一个 TypeScri"
+   },
+   {
+    "label": "远程工作区",
+    "status": "SWITCHED",
+    "openMs": 20.9,
+    "openMsClean": 4.8,
+    "nodes": 61,
+    "textChanged": true,
+    "activeMoved": true,
+    "contentTextHead": "打开配置文件关闭远程工作区（机器管理）维护多台 SSH 机器（密码 / 私钥 / 主机指纹信任 / 钥匙串）。路径在新建或选择工作区时选：「本机」走系统文件夹对话框；「远程」选一台机器在其远程目录中选择。已配置的机器还没有机器。在下方添加。添加机器主机名 / 别名 *识别 ssh 配置 ▾填写 ~/.ssh/config 里的别名可在失焦时自动补全用户名、端口、私钥与跳板端口 *用户名 *名称（可选）默认工作区（可选）认证方式私钥文件密"
+   },
+   {
+    "label": "分布式控制",
+    "status": "SWITCHED",
+    "openMs": 5.1,
+    "openMsClean": 3.2,
+    "nodes": 28,
+    "textChanged": true,
+    "activeMoved": true,
+    "contentTextHead": "打开配置文件关闭分布式控制 · dsh-ssh-gui统一节点：SSH 主机 / 本地串口 / TCP 串口服务器（nodes.json 一张表）；终端交外部，本面板只做 连接管理/状态/命令/文件/目录浏览。侧栏「分布式节点」文件夹走官方 sidecar list 槽（sidebar.workspaces.remoteHosts）；设置页内为同 UX 补全入口。刷新新建节点完成节点列表（0）暂无节点。点击「新建节点」添加（SSH / "
+   },
+   {
+    "label": "vision-adam",
+    "status": "SWITCHED",
+    "openMs": 8.3,
+    "openMsClean": 1.8,
+    "nodes": 37,
+    "textChanged": true,
+    "activeMoved": true,
+    "contentTextHead": "打开配置文件关闭vision-adam 识图设置图片/视频转文本工具（analyze_image 与 btw 图片分析的视觉模型配置）。保存后写入 settings.yaml 的 vision-adam 段；键名与插件 Config 一致，旧配置未涉及的字段保持默认值。 当前生效：model=deepseek-v4.1-flash · baseURL=https://llmapi.roboscience.xyz/v1 · apiKeyE"
+   },
+   {
+    "label": "子代理模型",
+    "status": "SWITCHED",
+    "openMs": 15.4,
+    "openMsClean": 1.5,
+    "nodes": 81,
+    "textChanged": true,
+    "activeMoved": true,
+    "contentTextHead": "打开配置文件关闭子代理模型subagent / subagent_fork 派发的默认 LLM 路由。保存后写入 settings.yaml 的 dsh-subagent 段，每次派发热读，立即生效（无需重启）；清空字段恢复 preset 默认。 当前生效：provider=adam · model=deepseek-v4-pro（settings 段覆盖 preset 默认 adam/deepseek-v4.1-flash）Provi"
+   }
+  ],
+  "navStructure": {
+   "dialogPresent": true,
+   "dialogRole": "dialog",
+   "navTag": "NAV",
+   "navChildButtons": 8,
+   "navButtonsHaveRoleTab": 0,
+   "navButtonAriaSelected": 0,
+   "navButtonDataState": 0,
+   "firstButtonClass": [
+    "VOzbGW_navCell VOzbGW_active",
+    "VOzbGW_navCell",
+    "VOzbGW_navCell",
+    "VOzbGW_navCell",
+    "VOzbGW_navCell",
+    "VOzbGW_navCell",
+    "VOzbGW_navCell",
+    "VOzbGW_navCell"
+   ],
+   "contentTag": "DIV",
+   "contentNodes": 97,
+   "contentTextHead": "打开配置文件关闭Agent 预设对此后新建的会话生效。运行中的会话保持它开始时的预设。标准模式（子代理 deepseek-v4.1-flash）权限选择新会话的默认权限模式Workspace Write语言中文外观浅色深色跟随系统繁忙时 Enter 键行为仅在智能体运行时生效；Cmd/Ctrl+Enter 使用另一行为排队发送壁纸配置目标全局默认首页会话页设置页选择图片移除壁纸应用暗色遮罩0%透明",
+   "activeMarker": {
+    "token": "VOzbGW_navCell VOzbGW_active",
+    "index": 0,
+    "label": "通用设置",
+    "method": "modal-class-differs"
+   },
+   "labels": [
+    "通用设置",
+    "模型",
+    "插件",
+    "Agent 预设",
+    "远程工作区",
+    "分布式控制 · dsh-ssh-gui",
+    "vision-adam 识图设置",
+    "子代理模型"
+   ]
+  }
+ }
+}

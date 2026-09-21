@@ -1,0 +1,668 @@
+{
+ "id": "vision-adam",
+ "label": "vision-adam",
+ "runs": [
+  {
+   "id": "vision-adam",
+   "label": "vision-adam",
+   "repeat": 1,
+   "mode": "repeat",
+   "startedAt": "2026-09-21T07:51:38.707Z",
+   "nav": {
+    "status": "FOUND",
+    "index": 6,
+    "text": "vision-adam 识图设置",
+    "total": 8,
+    "strategy": "unique-substring"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "openMs": 9.6,
+   "openMsClean": 5,
+   "panels": {
+    "before": {
+     "nodes": 97,
+     "activeLabel": "通用设置",
+     "textHead": "打开配置文件关闭Agent 预设对此后新建的会话生效。运行中的会话保持它开始时的预设。标准模式（子代理 deepseek-v4.1-flash）权限选择新会话的默认权限模式Workspace Write语言中文外观浅色深色跟随系统繁忙时 Enter 键行为仅在智能体运行时生效；Cmd/Ctrl+Enter 使用另一行为"
+    },
+    "arm": {
+     "hasDialog": true,
+     "hasNav": true,
+     "hasContent": true,
+     "contentNodes": 97,
+     "textLen": 314
+    },
+    "after": {
+     "nodes": 37,
+     "activeLabel": "vision-adam 识图设置",
+     "textHead": "打开配置文件关闭vision-adam 识图设置图片/视频转文本工具（analyze_image 与 btw 图片分析的视觉模型配置）。保存后写入 settings.yaml 的 vision-adam 段；键名与插件 Config 一致，旧配置未涉及的字段保持默认值。 当前生效：model=deepseek-v4.1-flash · baseURL=https://llmapi.roboscience.xyz/v1 · apiKeyE",
+     "dialogNodes": 108
+    }
+   },
+   "windows": [
+    {
+     "label": "vision-adam-r1-w1_10s",
+     "windowMs": 10000,
+     "seconds": 10,
+     "lock": {
+      "heldForWholeWindow": true,
+      "atStart": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true,
+       "ok": true
+      },
+      "atEnd": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true
+      }
+     },
+     "cdpRawStart": {
+      "at": 1789977099023,
+      "ScriptDuration": 8.361621,
+      "TaskDuration": 26.737808,
+      "RecalcStyleDuration": 11.052245,
+      "LayoutDuration": 0.123964,
+      "Nodes": 1104,
+      "JSEventListeners": 266,
+      "JSHeapUsedSize": 30683284,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789977109025,
+      "ScriptDuration": 8.447808,
+      "TaskDuration": 27.095805,
+      "RecalcStyleDuration": 11.187449,
+      "LayoutDuration": 0.124447,
+      "Nodes": 930,
+      "JSEventListeners": 245,
+      "JSHeapUsedSize": 29280996,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 590,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 33.3,
+      "max": 50,
+      "mean": 16.92,
+      "over50": 0,
+      "over16_7": 292
+     },
+     "domNodes": 717,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 21,
+      "totalFramesSent": 0,
+      "recvBytes": 9775,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 21,
+        "perSec": 2.1
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/projection": {
+        "n": 15,
+        "perSec": 1.5
+       },
+       "session/event": {
+        "n": 5,
+        "perSec": 0.5
+       },
+       "session/jobs": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/message": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:tool/call": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:tool/result": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:step/end": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:step/start": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/projection": {
+        "n": 15,
+        "perSec": 1.5
+       },
+       "mux:session/event": {
+        "n": 5,
+        "perSec": 0.5
+       },
+       "mux:session/jobs": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 590,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 86.187,
+      "TaskDuration": 357.997,
+      "RecalcStyleDuration": 135.204,
+      "LayoutDuration": 0.483,
+      "Nodes": 930,
+      "NodesDelta": -174,
+      "JSEventListeners": 245,
+      "JSHeapUsedSize": 29280996,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "vision-adam-r1-w2_20s",
+     "windowMs": 20000,
+     "seconds": 20,
+     "lock": {
+      "heldForWholeWindow": true,
+      "atStart": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true,
+       "ok": true
+      },
+      "atEnd": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true
+      }
+     },
+     "cdpRawStart": {
+      "at": 1789977109210,
+      "ScriptDuration": 8.448049,
+      "TaskDuration": 27.100331,
+      "RecalcStyleDuration": 11.188625,
+      "LayoutDuration": 0.124447,
+      "Nodes": 930,
+      "JSEventListeners": 245,
+      "JSHeapUsedSize": 29458900,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789977129211,
+      "ScriptDuration": 8.663197,
+      "TaskDuration": 27.903282,
+      "RecalcStyleDuration": 11.49648,
+      "LayoutDuration": 0.125263,
+      "Nodes": 930,
+      "JSEventListeners": 245,
+      "JSHeapUsedSize": 29199284,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 1148,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 33.4,
+      "max": 316.7,
+      "mean": 17.406,
+      "over50": 3,
+      "over16_7": 607
+     },
+     "domNodes": 717,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 49,
+      "totalFramesSent": 0,
+      "recvBytes": 30215,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 49,
+        "perSec": 2.45
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/projection": {
+        "n": 37,
+        "perSec": 1.85
+       },
+       "session/event": {
+        "n": 12,
+        "perSec": 0.6
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/message": {
+        "n": 3,
+        "perSec": 0.15
+       },
+       "event:tool/call": {
+        "n": 3,
+        "perSec": 0.15
+       },
+       "event:tool/result": {
+        "n": 2,
+        "perSec": 0.1
+       },
+       "event:step/end": {
+        "n": 2,
+        "perSec": 0.1
+       },
+       "event:step/start": {
+        "n": 2,
+        "perSec": 0.1
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/projection": {
+        "n": 37,
+        "perSec": 1.85
+       },
+       "mux:session/event": {
+        "n": 12,
+        "perSec": 0.6
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 1148,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 215.148,
+      "TaskDuration": 802.951,
+      "RecalcStyleDuration": 307.855,
+      "LayoutDuration": 0.816,
+      "Nodes": 930,
+      "NodesDelta": 0,
+      "JSEventListeners": 245,
+      "JSHeapUsedSize": 29199284,
+      "Documents": 3,
+      "Frames": 3
+     }
+    }
+   ],
+   "http": {
+    "requests": [],
+    "usageSamples": []
+   },
+   "errors": [],
+   "parkedAt": {
+    "index": 0,
+    "label": "通用设置"
+   },
+   "openProbe": {
+    "firstMut": 395586.90000000596,
+    "firstMutClean": 395586.90000000596,
+    "firstText": 395591.5,
+    "clickT0": 395581.90000000596
+   },
+   "status": "PASS",
+   "wsSockets": [
+    "ws://127.0.0.1:3080/api/events.mux"
+   ]
+  },
+  {
+   "id": "vision-adam",
+   "label": "vision-adam",
+   "repeat": 2,
+   "mode": "repeat",
+   "startedAt": "2026-09-21T07:52:09.462Z",
+   "nav": {
+    "status": "FOUND",
+    "index": 6,
+    "text": "vision-adam 识图设置",
+    "total": 8,
+    "strategy": "unique-substring"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "openMs": 10.8,
+   "openMsClean": 8.2,
+   "panels": {
+    "before": {
+     "nodes": 97,
+     "activeLabel": "通用设置",
+     "textHead": "打开配置文件关闭Agent 预设对此后新建的会话生效。运行中的会话保持它开始时的预设。标准模式（子代理 deepseek-v4.1-flash）权限选择新会话的默认权限模式Workspace Write语言中文外观浅色深色跟随系统繁忙时 Enter 键行为仅在智能体运行时生效；Cmd/Ctrl+Enter 使用另一行为"
+    },
+    "arm": {
+     "hasDialog": true,
+     "hasNav": true,
+     "hasContent": true,
+     "contentNodes": 97,
+     "textLen": 314
+    },
+    "after": {
+     "nodes": 37,
+     "activeLabel": "vision-adam 识图设置",
+     "textHead": "打开配置文件关闭vision-adam 识图设置图片/视频转文本工具（analyze_image 与 btw 图片分析的视觉模型配置）。保存后写入 settings.yaml 的 vision-adam 段；键名与插件 Config 一致，旧配置未涉及的字段保持默认值。 当前生效：model=deepseek-v4.1-flash · baseURL=https://llmapi.roboscience.xyz/v1 · apiKeyE",
+     "dialogNodes": 108
+    }
+   },
+   "windows": [
+    {
+     "label": "vision-adam-r2-w1_10s",
+     "windowMs": 9999,
+     "seconds": 9.999,
+     "lock": {
+      "heldForWholeWindow": true,
+      "atStart": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true,
+       "ok": true
+      },
+      "atEnd": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true
+      }
+     },
+     "cdpRawStart": {
+      "at": 1789977130996,
+      "ScriptDuration": 8.674483,
+      "TaskDuration": 27.968325,
+      "RecalcStyleDuration": 11.518603,
+      "LayoutDuration": 0.129905,
+      "Nodes": 1131,
+      "JSEventListeners": 269,
+      "JSHeapUsedSize": 30052924,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789977140997,
+      "ScriptDuration": 8.774016,
+      "TaskDuration": 28.36038,
+      "RecalcStyleDuration": 11.670601,
+      "LayoutDuration": 0.130695,
+      "Nodes": 930,
+      "JSEventListeners": 245,
+      "JSHeapUsedSize": 29591364,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 588,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 33.3,
+      "max": 83.3,
+      "mean": 16.978,
+      "over50": 1,
+      "over16_7": 303
+     },
+     "domNodes": 717,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 20,
+      "totalFramesSent": 0,
+      "recvBytes": 7840,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 20,
+        "perSec": 2
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/projection": {
+        "n": 15,
+        "perSec": 1.5
+       },
+       "session/event": {
+        "n": 5,
+        "perSec": 0.5
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/message": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:tool/call": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:tool/result": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:step/end": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:step/start": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/projection": {
+        "n": 15,
+        "perSec": 1.5
+       },
+       "mux:session/event": {
+        "n": 5,
+        "perSec": 0.5
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 588,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 99.533,
+      "TaskDuration": 392.055,
+      "RecalcStyleDuration": 151.998,
+      "LayoutDuration": 0.79,
+      "Nodes": 930,
+      "NodesDelta": -201,
+      "JSEventListeners": 245,
+      "JSHeapUsedSize": 29591364,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "vision-adam-r2-w2_20s",
+     "windowMs": 19999,
+     "seconds": 19.999,
+     "lock": {
+      "heldForWholeWindow": true,
+      "atStart": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true,
+       "ok": true
+      },
+      "atEnd": {
+       "held": true,
+       "mine": true,
+       "owner": "tab-profile",
+       "ownerTokenMatches": true
+      }
+     },
+     "cdpRawStart": {
+      "at": 1789977141005,
+      "ScriptDuration": 8.774021,
+      "TaskDuration": 28.361719,
+      "RecalcStyleDuration": 11.670731,
+      "LayoutDuration": 0.130695,
+      "Nodes": 930,
+      "JSEventListeners": 245,
+      "JSHeapUsedSize": 29766936,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789977161005,
+      "ScriptDuration": 8.955082,
+      "TaskDuration": 28.990523,
+      "RecalcStyleDuration": 11.919379,
+      "LayoutDuration": 0.130695,
+      "Nodes": 930,
+      "JSEventListeners": 245,
+      "JSHeapUsedSize": 30206540,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 1185,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 16.8,
+      "max": 66.6,
+      "mean": 16.863,
+      "over50": 1,
+      "over16_7": 596
+     },
+     "domNodes": 717,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 40,
+      "totalFramesSent": 0,
+      "recvBytes": 20208,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 40,
+        "perSec": 2
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/projection": {
+        "n": 30,
+        "perSec": 1.5
+       },
+       "session/event": {
+        "n": 10,
+        "perSec": 0.5
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:tool/result": {
+        "n": 2,
+        "perSec": 0.1
+       },
+       "event:step/end": {
+        "n": 2,
+        "perSec": 0.1
+       },
+       "event:step/start": {
+        "n": 2,
+        "perSec": 0.1
+       },
+       "event:assistant/message": {
+        "n": 2,
+        "perSec": 0.1
+       },
+       "event:tool/call": {
+        "n": 2,
+        "perSec": 0.1
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/projection": {
+        "n": 30,
+        "perSec": 1.5
+       },
+       "mux:session/event": {
+        "n": 10,
+        "perSec": 0.5
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 1185,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 181.061,
+      "TaskDuration": 628.804,
+      "RecalcStyleDuration": 248.648,
+      "LayoutDuration": 0,
+      "Nodes": 930,
+      "NodesDelta": 0,
+      "JSEventListeners": 245,
+      "JSHeapUsedSize": 30206540,
+      "Documents": 3,
+      "Frames": 3
+     }
+    }
+   ],
+   "http": {
+    "requests": [],
+    "usageSamples": []
+   },
+   "errors": [],
+   "parkedAt": {
+    "index": 0,
+    "label": "通用设置"
+   },
+   "openProbe": {
+    "firstMut": 427561.60000000894,
+    "firstMutClean": 427561.60000000894,
+    "firstText": 427564.200000003,
+    "clickT0": 427553.40000000596
+   },
+   "status": "PASS",
+   "wsSockets": [
+    "ws://127.0.0.1:3080/api/events.mux"
+   ]
+  }
+ ]
+}

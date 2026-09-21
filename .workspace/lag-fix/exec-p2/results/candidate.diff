@@ -1,0 +1,40 @@
+--- /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-runtime/lib/client.js	2026-09-20 15:39:48.976985102 +0800
++++ candidate/client.js	2026-09-21 16:40:30.949059476 +0800
+@@ -9291,12 +9291,14 @@
+ 						...entry.agentPreset !== void 0 ? { agentPreset: entry.agentPreset } : {}
+ 					};
+ 				}
++				const chainRowIds = new Set(); /* p2ac-fix */
+ 				if (current !== void 0 && currentAddress !== void 0) {
+ 					const seen = /* @__PURE__ */ new Set();
+ 					let address = currentAddress;
+ 					while (address !== void 0 && !seen.has(address.childSessionId)) {
+ 						const childId = address.childSessionId;
+ 						seen.add(childId);
++						chainRowIds.add(childId); /* p2ac-fix */
+ 						const child = subagentsByParent[address.parentSessionId]?.entries.find((entry) => entry.kind === "child" && entry.id === childId);
+ 						if (child?.kind !== "child") break;
+ 						const displayTitle = child.label ?? childId;
+@@ -9323,8 +9325,8 @@
+ 				const previousProjection = this.listProjection !== void 0 && this.listProjection === this.list.getSnapshot() ? this.listProjection : void 0;
+ 				const copiedPrevious = previousProjection !== void 0 && sameIdList(previousProjection.ids, ids);
+ 				if (copiedPrevious) {
+-					/* Carry the previous projection's extra rows (address-chain children) forward before diffing. */
+-					for (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0) byId[id] = previousProjection.byId[id];
++					/* p2ac-fix */ /* address-chain scoped carry-forward: only ids a visited chain step genuinely needs. */
++					for (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0 && chainRowIds.has(id)) byId[id] = previousProjection.byId[id];
+ 				}
+ 				const liveKeys = Object.keys(byId);
+ 				const stableIds = copiedPrevious ? previousProjection.ids : ids;
+@@ -9337,7 +9339,10 @@
+ 					stableById[id] = reusable ? previousEntry : entry;
+ 					if (reusable) reusedEntries += 1;
+ 				}
+-				const nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length ? previousProjection.byId : stableById;
++				/* p2ac-fix */ /* key-set gate: reusing the whole previous byId object is only sound when its key set has no extra key. */
++				/* the previous key set is read AFTER the chain-scoped carry-forward, so it is compared against the same liveKeys. */
++				const reusableByIdKeys = previousProjection !== void 0 ? Object.keys(previousProjection.byId) : void 0;
++				const nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length && reusableByIdKeys.length === liveKeys.length && reusableByIdKeys.every((id) => Object.prototype.hasOwnProperty.call(byId, id)) ? previousProjection.byId : stableById;
+ 				let nextSubagentsByParent = subagentsByParent;
+ 				if (previousProjection !== void 0 && sameSubagentCatalogs(previousProjection.subagentsByParent, subagentsByParent)) nextSubagentsByParent = previousProjection.subagentsByParent;
+ 				let nextJobsBySession = jobsBySession;

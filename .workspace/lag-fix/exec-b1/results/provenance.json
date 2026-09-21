@@ -1,0 +1,193 @@
+{
+  "at": "2026-09-21T08:54:42.149Z",
+  "checks": [
+    {
+      "name": "input:deployed/index.js sha256 与记录值一致",
+      "ok": true,
+      "detail": "1b9915f505996912… vs 1b9915f505996912…"
+    },
+    {
+      "name": "input:deployed/types/api-proxy.js sha256 与记录值一致",
+      "ok": true,
+      "detail": "f5c34a439043b9d5… vs f5c34a439043b9d5…"
+    },
+    {
+      "name": "input:pre-image/index.js sha256 与记录值一致",
+      "ok": true,
+      "detail": "142aac84e462173a… vs 142aac84e462173a…"
+    },
+    {
+      "name": "input:pre-image/types/api-proxy.js sha256 与记录值一致",
+      "ok": true,
+      "detail": "7f56fb805fe4d8af… vs 7f56fb805fe4d8af…"
+    },
+    {
+      "name": "input:buggy/index.buggy.js sha256 与记录值一致",
+      "ok": true,
+      "detail": "f568f8a9e67ef123… vs f568f8a9e67ef123…"
+    },
+    {
+      "name": "input:patches/B1-transform.cjs sha256 与记录值一致",
+      "ok": true,
+      "detail": "0f3a66767874841b… vs 0f3a66767874841b…"
+    },
+    {
+      "name": "output:candidate/index.js sha256 与记录值一致",
+      "ok": true,
+      "detail": "96ad39b7c37e1e0a… vs 96ad39b7c37e1e0a…"
+    },
+    {
+      "name": "output:candidate/types/api-proxy.js sha256 与记录值一致",
+      "ok": true,
+      "detail": "f4752c39623f863f… vs f4752c39623f863f…"
+    },
+    {
+      "name": "v2 规格 body 与审计预验证候选（exec-audit/b1/B1-transform.v2-candidate.cjs）逐字节相同（仅新增注释头）",
+      "ok": true,
+      "detail": "body 21239 字符；头部新增 1141 字符"
+    },
+    {
+      "name": "v1 只读副本 body 与 patches/B1-transform.cjs 逐字节相同（patches/ 未被本档触碰）",
+      "ok": true,
+      "detail": "patches sha=0f3a66767874841b…"
+    },
+    {
+      "name": "哨兵补丁后文件 ≠ probes/ 现行文件（待主 agent 执行 --apply）",
+      "ok": true,
+      "detail": "patched=9fd7763577a3d3b3…；probes 现行=fe8cf12554f75b23…"
+    },
+    {
+      "name": "候选件字节数 == 审计期望（index 217,279 B / api-proxy 175,895 B）",
+      "ok": true,
+      "detail": "217279 B / 175895 B"
+    },
+    {
+      "name": "buggy sha 既不等于 pre-image 也不等于 deployed（回滚必须只认 pre-image）",
+      "ok": true,
+      "detail": "f568f8a9…"
+    },
+    {
+      "name": "沙箱纪律：本档未使用 sandbox_permissions，未写 deployed / patches / probes / ~/.dsh",
+      "ok": true,
+      "detail": "写入仅落在 exec-b1/** 与 apply 演练的 backup 目录"
+    }
+  ],
+  "files": {
+    "input:deployed/index.js": {
+      "path": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-host-apiproxy/lib/index.js",
+      "sha256": "1b9915f505996912c6f49b12b0c3f4a8261a74f26422f68f5d22cab2bc078a62",
+      "bytes": 216807
+    },
+    "input:deployed/types/api-proxy.js": {
+      "path": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-host-apiproxy/lib/types/api-proxy.js",
+      "sha256": "f5c34a439043b9d5771286a76c8b16210951c25d7d5873b168bcc947720eac0d",
+      "bytes": 175408
+    },
+    "input:pre-image/index.js": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/20260920-154039/lib/index.js",
+      "sha256": "142aac84e462173aeb6acc3e36d97b5c6aae2a31a087b91f99cffeff48378374",
+      "bytes": 213007
+    },
+    "input:pre-image/types/api-proxy.js": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/20260920-154039/lib/types/api-proxy.js",
+      "sha256": "7f56fb805fe4d8afbdbd9dee0c3e641acaf2d9c9831de0b7ea018e92b9343036",
+      "bytes": 171271
+    },
+    "input:buggy/index.buggy.js": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/b1fix-20260920-183319/index.buggy.js",
+      "sha256": "f568f8a9e67ef123b8f08e659a435bbdff09dfc895e12a9729426c6b30051434",
+      "bytes": 216797
+    },
+    "input:patches/B1-transform.cjs": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/patches/B1-transform.cjs",
+      "sha256": "0f3a66767874841b936aa80c5236962001ed4a89cf43e6b39b222e6505ace1a8",
+      "bytes": 20813
+    },
+    "output:candidate/index.js": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/dryrun/index.js",
+      "sha256": "96ad39b7c37e1e0ab7ef07d991ee86f103c649b0ff595317ca32b6990a2c3310",
+      "bytes": 217279
+    },
+    "output:candidate/types/api-proxy.js": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/dryrun/types/api-proxy.js",
+      "sha256": "f4752c39623f863f9e5c9e455d1226d933bc1950e7b8c12b92cce87658165734",
+      "bytes": 175895
+    },
+    "script:spec-v2": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/B1-transform.v2.cjs",
+      "sha256": "e42916fb21ad9626c18e4b5476efcca29a2c944bb38caff5e1bc60abc253ab50",
+      "bytes": 28186
+    },
+    "script:spec-v1-copy": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/spec/B1-transform.v1.cjs",
+      "sha256": "82582cd5334dca45321d60ab6fd8386231842c310aa3dfac568ca0b41b3172a1",
+      "bytes": 21602
+    },
+    "script:anchors": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/lib/anchors.cjs",
+      "sha256": "91bf2a1769691a4262a0dfe8a6df00a01467cc89d3a1051ca39b756f594e9271",
+      "bytes": 11971
+    },
+    "script:apply-B1-v2": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/apply-B1-v2.mjs",
+      "sha256": "15f648532632c90eb2c9d19dbea1ec802e9eed204c64536b1c685e87ff84f1e0",
+      "bytes": 26154
+    },
+    "script:validate-verifier-v2": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/validate-verifier-v2.mjs",
+      "sha256": "995e454a5766ce226eab0f26c07d223a69b23478613eff0be6975dc9988f74ea",
+      "bytes": 14982
+    },
+    "script:probe-counterfactual": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/probe-b1-counterfactual.mjs",
+      "sha256": "cd8e7ea5fc1d93d7a2d89057ad187649d5cde1a8f538bebd1d4adb7dc603efc7",
+      "bytes": 20892
+    },
+    "script:probe-cold-order": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/probe-b1-cold-order.mjs",
+      "sha256": "4735801eb777eb926e9119863c718739cc7243845539e60e2bfca5ca0fbe3e5e",
+      "bytes": 24625
+    },
+    "script:apply-sentinel-fixture": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/apply-sentinel-fixture.mjs",
+      "sha256": "80d4eb136f34ff6706cdaf8fdfc9625e0261c3c7634daa94d5b7c4ca0ee406a3",
+      "bytes": 10533
+    },
+    "script:sentinel-patched": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/sentinel/verify-b1-ctx-binding.patched.mjs",
+      "sha256": "9fd7763577a3d3b3815865d535e3979c98fc45dbfe8f12febe9ae676d4e2cd81",
+      "bytes": 7140
+    },
+    "script:du-E-rollback": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/du-E-rollback.mjs",
+      "sha256": "277e669d5ddf6cfbf609e42e73a172de8597cf5776adb9e9617d370bc602db1f",
+      "bytes": 12541
+    },
+    "script:run-all": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/run-all.mjs",
+      "sha256": "e7d028b36bcbc661e528c78981e53f7b53de441f2b4b6b7ddb95ea5f28f954c3",
+      "bytes": 4120
+    },
+    "script:pre-image-manifest": {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/results/pre-image-manifest.json",
+      "sha256": "5d343194b061a1ae00c8a31d3b372487bab81ebc31bf4ea5ce868aa4e5360a59",
+      "bytes": 3879
+    }
+  },
+  "outcome": "PASS",
+  "writeBoundary": {
+    "wroteInsideWorkspace": [
+      ".workspace/lag-fix/exec-b1/**",
+      ".workspace/lag-fix/backup/B1/server/b1fix2-*/**（apply 演练产生的备份目录）"
+    ],
+    "didNotWrite": [
+      "~/.npm-global/...（沙箱不可写 ⇒ deployed 写入留给主 agent 用 apply-B1-v2.mjs --apply 执行）",
+      ".workspace/lag-fix/patches/B1-transform.cjs（本体未改，留给主 agent 与 deployed 一起替换）",
+      ".workspace/lag-fix/probes/verify-b1-ctx-binding.mjs（以 apply-sentinel-fixture.mjs --apply 交付）",
+      "~/.dsh/sessions（只按裁决读首帧 header，未写）",
+      "任何 git commit（按指令不做）"
+    ],
+    "sandboxPermissionsUsed": false
+  },
+  "failures": 0
+}

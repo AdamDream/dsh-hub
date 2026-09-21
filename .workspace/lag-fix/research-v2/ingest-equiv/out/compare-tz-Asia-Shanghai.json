@@ -1,0 +1,1955 @@
+{
+  "label": "tz-Asia-Shanghai",
+  "tz": "Asia/Shanghai",
+  "gapMs": 0,
+  "timestamp": "2026-09-21T06:50:02.950Z",
+  "equivalence": {
+    "overall": true,
+    "checks": [
+      {
+        "name": "return.dshFirst",
+        "equal": true,
+        "baselineLen": 170,
+        "candidateLen": 170,
+        "firstDiff": null
+      },
+      {
+        "name": "return.ccFirst",
+        "equal": true,
+        "baselineLen": 44,
+        "candidateLen": 44,
+        "firstDiff": null
+      },
+      {
+        "name": "return.dshSecond",
+        "equal": true,
+        "baselineLen": 44,
+        "candidateLen": 44,
+        "firstDiff": null
+      },
+      {
+        "name": "return.ccSecond",
+        "equal": true,
+        "baselineLen": 44,
+        "candidateLen": 44,
+        "firstDiff": null
+      },
+      {
+        "name": "return.dshClean",
+        "equal": true,
+        "baselineLen": 44,
+        "candidateLen": 44,
+        "firstDiff": null
+      },
+      {
+        "name": "return.ccClean",
+        "equal": true,
+        "baselineLen": 44,
+        "candidateLen": 44,
+        "firstDiff": null
+      },
+      {
+        "name": "db.usage_events",
+        "equal": true,
+        "baselineLen": 1673,
+        "candidateLen": 1673,
+        "firstDiff": null
+      },
+      {
+        "name": "db.usage_daily",
+        "equal": true,
+        "baselineLen": 951,
+        "candidateLen": 951,
+        "firstDiff": null
+      },
+      {
+        "name": "db.sync_state",
+        "equal": true,
+        "baselineLen": 784,
+        "candidateLen": 784,
+        "firstDiff": null
+      }
+    ]
+  },
+  "baseline": {
+    "mode": "baseline",
+    "root": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_run/tz-Asia-Shanghai/base",
+    "dbPath": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_run/tz-Asia-Shanghai/base.db",
+    "endpointsAfterRebuild": {
+      "summary_all": {
+        "ms": 0.688353,
+        "value": {
+          "requests": 6,
+          "input_tokens": 143,
+          "output_tokens": 267,
+          "cache_read_tokens": 38,
+          "cache_write_tokens": 0,
+          "hit_rate": 0.20994475138121546,
+          "sessions": 3
+        }
+      },
+      "heatmap_2025": {
+        "ms": 0.83974,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "total": 425
+          }
+        ]
+      },
+      "heatmap_2026": {
+        "ms": 0.061195,
+        "value": [
+          {
+            "day": "2026-09-18",
+            "total": 23
+          }
+        ]
+      },
+      "byDay_all": {
+        "ms": 0.139845,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 5,
+            "input_tokens": 132,
+            "output_tokens": 255,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byModel_all": {
+        "ms": 0.067257,
+        "value": [
+          {
+            "model": "m-1",
+            "requests": 3,
+            "input_tokens": 24,
+            "output_tokens": 46,
+            "cache_read_tokens": 8,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-3",
+            "requests": 1,
+            "input_tokens": 8,
+            "output_tokens": 9,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-2",
+            "requests": 1,
+            "input_tokens": 100,
+            "output_tokens": 200,
+            "cache_read_tokens": 30,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "claude-sonnet-4",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byProject_all": {
+        "ms": 0.046308,
+        "value": [
+          {
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 5,
+            "input_tokens": 140,
+            "output_tokens": 263,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "project": "/home/CNS2026495165/dsh/dsh-usage",
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_day": {
+        "ms": 0.056246,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 5,
+            "input_tokens": 132,
+            "output_tokens": 255,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_hour": {
+        "ms": 0.030548,
+        "value": [
+          {
+            "day": "2025-08-24 09",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2025-08-24 10",
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18 18",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "sessions_all": {
+        "ms": 0.33793,
+        "value": [
+          {
+            "session_id": "ccsess1",
+            "data_source": "cc",
+            "ts": 1789725900000,
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0,
+            "model": "claude-sonnet-4",
+            "project": "/home/CNS2026495165/dsh"
+          },
+          {
+            "session_id": "sessB",
+            "data_source": "dsh",
+            "ts": 1756001000000,
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0,
+            "model": "m-1",
+            "project": "/home/CNS2026495165/dsh/dsh-usage"
+          },
+          {
+            "session_id": "sessA",
+            "data_source": "dsh",
+            "ts": 1756000200000,
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0,
+            "model": "m-3",
+            "project": "/home/CNS2026495165/dsh"
+          }
+        ]
+      },
+      "raw_count": {
+        "ms": 0.013605,
+        "value": {
+          "c": 6
+        }
+      },
+      "daily_maxday": {
+        "ms": 0.011592,
+        "value": {
+          "d": "2026-09-18"
+        }
+      },
+      "daily_rows": {
+        "ms": 0.006793,
+        "value": {
+          "c": 5
+        }
+      }
+    },
+    "result": {
+      "dshFirst": {
+        "scanned": 2,
+        "newEvents": 5,
+        "failedFiles": [
+          {
+            "error": "corrupt Zstandard session log: invalid frame magic at byte 0",
+            "file": "<ROOT>/dsh/sessions/sessC/session.jsonl.zstd"
+          }
+        ]
+      },
+      "ccFirst": {
+        "scanned": 2,
+        "newEvents": 1,
+        "failedFiles": []
+      },
+      "dshSecond": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "ccSecond": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "dshClean": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "ccClean": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      }
+    },
+    "final": {
+      "events": [
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "cc",
+          "dedup_key": "msg-1",
+          "id": 6,
+          "input_tokens": 11,
+          "is_subagent": 1,
+          "model": "claude-sonnet-4",
+          "output_tokens": 12,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "claude",
+          "session_id": "ccsess1",
+          "step": null,
+          "ts": 1789725900000,
+          "turn": null
+        },
+        {
+          "cache_read_tokens": 5,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t1:s1",
+          "id": 1,
+          "input_tokens": 10,
+          "is_subagent": 0,
+          "model": "m-1",
+          "output_tokens": 20,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "alpha",
+          "session_id": "sessA",
+          "step": 1,
+          "ts": 1756000000000,
+          "turn": 1
+        },
+        {
+          "cache_read_tokens": 3,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t1:s5",
+          "id": 2,
+          "input_tokens": 11,
+          "is_subagent": 0,
+          "model": "m-1",
+          "output_tokens": 22,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "alpha",
+          "session_id": "sessA",
+          "step": 5,
+          "ts": 1756000000104,
+          "turn": 1
+        },
+        {
+          "cache_read_tokens": 30,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t2:s1",
+          "id": 3,
+          "input_tokens": 100,
+          "is_subagent": 0,
+          "model": "m-2",
+          "output_tokens": 200,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "beta",
+          "session_id": "sessA",
+          "step": 1,
+          "ts": 1756000100000,
+          "turn": 2
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t2:s2",
+          "id": 4,
+          "input_tokens": 8,
+          "is_subagent": 0,
+          "model": "m-3",
+          "output_tokens": 9,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "gamma",
+          "session_id": "sessA",
+          "step": 2,
+          "ts": 1756000200000,
+          "turn": 2
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t1:s1",
+          "id": 5,
+          "input_tokens": 3,
+          "is_subagent": 0,
+          "model": "m-1",
+          "output_tokens": 4,
+          "project": "/home/CNS2026495165/dsh/dsh-usage",
+          "provider": "alpha",
+          "session_id": "sessB",
+          "step": 1,
+          "ts": 1756001000000,
+          "turn": 1
+        }
+      ],
+      "daily": [
+        {
+          "cache_read_tokens": 8,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 21,
+          "model": "m-1",
+          "output_tokens": 42,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 2
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 3,
+          "model": "m-1",
+          "output_tokens": 4,
+          "project": "/home/CNS2026495165/dsh/dsh-usage",
+          "requests": 1
+        },
+        {
+          "cache_read_tokens": 30,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 100,
+          "model": "m-2",
+          "output_tokens": 200,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 8,
+          "model": "m-3",
+          "output_tokens": 9,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "cc",
+          "day": "2026-09-18",
+          "input_tokens": 11,
+          "model": "claude-sonnet-4",
+          "output_tokens": 12,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1
+        }
+      ],
+      "sync": [
+        {
+          "fingerprint": null,
+          "last_offset": 917,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 916,
+          "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/ccsess1.jsonl"
+        },
+        {
+          "fingerprint": null,
+          "last_offset": 225,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 224,
+          "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/subagents/agent-x.jsonl"
+        },
+        {
+          "fingerprint": null,
+          "last_offset": 712,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 712,
+          "source": "dsh:<ROOT>/dsh/sessions/sessA/session.jsonl.zstd"
+        },
+        {
+          "fingerprint": "torn:211",
+          "last_offset": 211,
+          "last_seq": 1756001000000,
+          "mtime": 1789905600000,
+          "size": 268,
+          "source": "dsh:<ROOT>/dsh/sessions/sessB/session.jsonl.zstd"
+        },
+        {
+          "fingerprint": "1789905600000:31",
+          "last_offset": null,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 31,
+          "source": "dsh:<ROOT>/dsh/sessions/sessC/session.jsonl.zstd"
+        }
+      ]
+    },
+    "gapObservation": null,
+    "barrierTest": null
+  },
+  "candidate": {
+    "mode": "candidate",
+    "root": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_run/tz-Asia-Shanghai/cand",
+    "dbPath": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_run/tz-Asia-Shanghai/cand.db",
+    "endpointsAfterRebuild": {
+      "summary_all": {
+        "ms": 0.469418,
+        "value": {
+          "requests": 6,
+          "input_tokens": 143,
+          "output_tokens": 267,
+          "cache_read_tokens": 38,
+          "cache_write_tokens": 0,
+          "hit_rate": 0.20994475138121546,
+          "sessions": 3
+        }
+      },
+      "heatmap_2025": {
+        "ms": 0.433351,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "total": 425
+          }
+        ]
+      },
+      "heatmap_2026": {
+        "ms": 0.053491,
+        "value": [
+          {
+            "day": "2026-09-18",
+            "total": 23
+          }
+        ]
+      },
+      "byDay_all": {
+        "ms": 0.112793,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 5,
+            "input_tokens": 132,
+            "output_tokens": 255,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byModel_all": {
+        "ms": 0.076986,
+        "value": [
+          {
+            "model": "m-1",
+            "requests": 3,
+            "input_tokens": 24,
+            "output_tokens": 46,
+            "cache_read_tokens": 8,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-3",
+            "requests": 1,
+            "input_tokens": 8,
+            "output_tokens": 9,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-2",
+            "requests": 1,
+            "input_tokens": 100,
+            "output_tokens": 200,
+            "cache_read_tokens": 30,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "claude-sonnet-4",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byProject_all": {
+        "ms": 0.05289,
+        "value": [
+          {
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 5,
+            "input_tokens": 140,
+            "output_tokens": 263,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "project": "/home/CNS2026495165/dsh/dsh-usage",
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_day": {
+        "ms": 0.061136,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 5,
+            "input_tokens": 132,
+            "output_tokens": 255,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_hour": {
+        "ms": 0.032171,
+        "value": [
+          {
+            "day": "2025-08-24 09",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2025-08-24 10",
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          {
+            "day": "2026-09-18 18",
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "sessions_all": {
+        "ms": 0.285721,
+        "value": [
+          {
+            "session_id": "ccsess1",
+            "data_source": "cc",
+            "ts": 1789725900000,
+            "requests": 1,
+            "input_tokens": 11,
+            "output_tokens": 12,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0,
+            "model": "claude-sonnet-4",
+            "project": "/home/CNS2026495165/dsh"
+          },
+          {
+            "session_id": "sessB",
+            "data_source": "dsh",
+            "ts": 1756001000000,
+            "requests": 1,
+            "input_tokens": 3,
+            "output_tokens": 4,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0,
+            "model": "m-1",
+            "project": "/home/CNS2026495165/dsh/dsh-usage"
+          },
+          {
+            "session_id": "sessA",
+            "data_source": "dsh",
+            "ts": 1756000200000,
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0,
+            "model": "m-3",
+            "project": "/home/CNS2026495165/dsh"
+          }
+        ]
+      },
+      "raw_count": {
+        "ms": 0.016101,
+        "value": {
+          "c": 6
+        }
+      },
+      "daily_maxday": {
+        "ms": 0.012224,
+        "value": {
+          "d": "2026-09-18"
+        }
+      },
+      "daily_rows": {
+        "ms": 0.006603,
+        "value": {
+          "c": 5
+        }
+      }
+    },
+    "result": {
+      "dshFirst": {
+        "scanned": 2,
+        "newEvents": 5,
+        "failedFiles": [
+          {
+            "error": "corrupt Zstandard session log: invalid frame magic at byte 0",
+            "file": "<ROOT>/dsh/sessions/sessC/session.jsonl.zstd"
+          }
+        ]
+      },
+      "ccFirst": {
+        "scanned": 2,
+        "newEvents": 1,
+        "failedFiles": []
+      },
+      "dshSecond": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "ccSecond": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "dshClean": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      },
+      "ccClean": {
+        "scanned": 0,
+        "newEvents": 0,
+        "failedFiles": []
+      }
+    },
+    "final": {
+      "events": [
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "cc",
+          "dedup_key": "msg-1",
+          "id": 6,
+          "input_tokens": 11,
+          "is_subagent": 1,
+          "model": "claude-sonnet-4",
+          "output_tokens": 12,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "claude",
+          "session_id": "ccsess1",
+          "step": null,
+          "ts": 1789725900000,
+          "turn": null
+        },
+        {
+          "cache_read_tokens": 5,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t1:s1",
+          "id": 1,
+          "input_tokens": 10,
+          "is_subagent": 0,
+          "model": "m-1",
+          "output_tokens": 20,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "alpha",
+          "session_id": "sessA",
+          "step": 1,
+          "ts": 1756000000000,
+          "turn": 1
+        },
+        {
+          "cache_read_tokens": 3,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t1:s5",
+          "id": 2,
+          "input_tokens": 11,
+          "is_subagent": 0,
+          "model": "m-1",
+          "output_tokens": 22,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "alpha",
+          "session_id": "sessA",
+          "step": 5,
+          "ts": 1756000000104,
+          "turn": 1
+        },
+        {
+          "cache_read_tokens": 30,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t2:s1",
+          "id": 3,
+          "input_tokens": 100,
+          "is_subagent": 0,
+          "model": "m-2",
+          "output_tokens": 200,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "beta",
+          "session_id": "sessA",
+          "step": 1,
+          "ts": 1756000100000,
+          "turn": 2
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t2:s2",
+          "id": 4,
+          "input_tokens": 8,
+          "is_subagent": 0,
+          "model": "m-3",
+          "output_tokens": 9,
+          "project": "/home/CNS2026495165/dsh",
+          "provider": "gamma",
+          "session_id": "sessA",
+          "step": 2,
+          "ts": 1756000200000,
+          "turn": 2
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "dedup_key": "t1:s1",
+          "id": 5,
+          "input_tokens": 3,
+          "is_subagent": 0,
+          "model": "m-1",
+          "output_tokens": 4,
+          "project": "/home/CNS2026495165/dsh/dsh-usage",
+          "provider": "alpha",
+          "session_id": "sessB",
+          "step": 1,
+          "ts": 1756001000000,
+          "turn": 1
+        }
+      ],
+      "daily": [
+        {
+          "cache_read_tokens": 8,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 21,
+          "model": "m-1",
+          "output_tokens": 42,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 2
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 3,
+          "model": "m-1",
+          "output_tokens": 4,
+          "project": "/home/CNS2026495165/dsh/dsh-usage",
+          "requests": 1
+        },
+        {
+          "cache_read_tokens": 30,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 100,
+          "model": "m-2",
+          "output_tokens": 200,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "dsh",
+          "day": "2025-08-24",
+          "input_tokens": 8,
+          "model": "m-3",
+          "output_tokens": 9,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1
+        },
+        {
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "data_source": "cc",
+          "day": "2026-09-18",
+          "input_tokens": 11,
+          "model": "claude-sonnet-4",
+          "output_tokens": 12,
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1
+        }
+      ],
+      "sync": [
+        {
+          "fingerprint": null,
+          "last_offset": 917,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 916,
+          "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/ccsess1.jsonl"
+        },
+        {
+          "fingerprint": null,
+          "last_offset": 225,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 224,
+          "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/subagents/agent-x.jsonl"
+        },
+        {
+          "fingerprint": null,
+          "last_offset": 712,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 712,
+          "source": "dsh:<ROOT>/dsh/sessions/sessA/session.jsonl.zstd"
+        },
+        {
+          "fingerprint": "torn:211",
+          "last_offset": 211,
+          "last_seq": 1756001000000,
+          "mtime": 1789905600000,
+          "size": 268,
+          "source": "dsh:<ROOT>/dsh/sessions/sessB/session.jsonl.zstd"
+        },
+        {
+          "fingerprint": "1789905600000:31",
+          "last_offset": null,
+          "last_seq": null,
+          "mtime": 1789905600000,
+          "size": 31,
+          "source": "dsh:<ROOT>/dsh/sessions/sessC/session.jsonl.zstd"
+        }
+      ]
+    },
+    "gapObservation": {
+      "commitIndex": 4,
+      "workerDbStateAfterCommit": {
+        "events": 5,
+        "eventsThatDay": 5
+      },
+      "note": "host read taken between the worker's events COMMIT and its daily rebuild",
+      "hostProbeWallMs": 26.443558,
+      "endpointsColdCache": {
+        "summary_all": {
+          "ms": 0.137269,
+          "error": "ERR_SQLITE_ERROR: database is locked"
+        },
+        "heatmap_2025": {
+          "ms": 0.219776,
+          "error": "ERR_SQLITE_ERROR: database is locked"
+        },
+        "heatmap_2026": {
+          "ms": 0.013215,
+          "error": "ERR_SQLITE_ERROR: database is locked"
+        },
+        "byDay_all": {
+          "ms": 0.032171,
+          "error": "ERR_SQLITE_ERROR: database is locked"
+        },
+        "byModel_all": {
+          "ms": 0.022262,
+          "error": "ERR_SQLITE_ERROR: database is locked"
+        },
+        "byProject_all": {
+          "ms": 0.018104,
+          "error": "ERR_SQLITE_ERROR: database is locked"
+        },
+        "timeseries_day": {
+          "ms": 0.023244,
+          "error": "ERR_SQLITE_ERROR: database is locked"
+        },
+        "timeseries_hour": {
+          "ms": 0.009438,
+          "error": "ERR_SQLITE_ERROR: database is locked"
+        },
+        "sessions_all": {
+          "ms": 0.059934,
+          "error": "ERR_SQLITE_ERROR: database is locked"
+        },
+        "raw_count": {
+          "ms": 0.013315,
+          "error": "ERR_SQLITE_ERROR: database is locked"
+        },
+        "daily_maxday": {
+          "ms": 0.007424,
+          "error": "ERR_SQLITE_ERROR: database is locked"
+        },
+        "daily_rows": {
+          "ms": 0.005892,
+          "error": "ERR_SQLITE_ERROR: database is locked"
+        }
+      },
+      "frozenPreRebuildProbe": {
+        "summary_all": {
+          "ms": 0.216951,
+          "value": {
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0,
+            "hit_rate": 0.2275449101796407,
+            "sessions": 1
+          }
+        },
+        "heatmap_2025": {
+          "ms": 0.387043,
+          "value": [
+            {
+              "day": "2025-08-24",
+              "total": 418
+            }
+          ]
+        },
+        "heatmap_2026": {
+          "ms": 0.055054,
+          "value": []
+        },
+        "byDay_all": {
+          "ms": 0.088418,
+          "value": [
+            {
+              "day": "2025-08-24",
+              "requests": 4,
+              "input_tokens": 129,
+              "output_tokens": 251,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "byModel_all": {
+          "ms": 0.0735,
+          "value": [
+            {
+              "model": "m-1",
+              "requests": 2,
+              "input_tokens": 21,
+              "output_tokens": 42,
+              "cache_read_tokens": 8,
+              "cache_write_tokens": 0
+            },
+            {
+              "model": "m-3",
+              "requests": 1,
+              "input_tokens": 8,
+              "output_tokens": 9,
+              "cache_read_tokens": 0,
+              "cache_write_tokens": 0
+            },
+            {
+              "model": "m-2",
+              "requests": 1,
+              "input_tokens": 100,
+              "output_tokens": 200,
+              "cache_read_tokens": 30,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "byProject_all": {
+          "ms": 0.05829,
+          "value": [
+            {
+              "project": "/home/CNS2026495165/dsh",
+              "requests": 4,
+              "input_tokens": 129,
+              "output_tokens": 251,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "timeseries_day": {
+          "ms": 0.064572,
+          "value": [
+            {
+              "day": "2025-08-24",
+              "requests": 4,
+              "input_tokens": 129,
+              "output_tokens": 251,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "timeseries_hour": {
+          "ms": 0.075312,
+          "value": [
+            {
+              "day": "2025-08-24 09",
+              "requests": 4,
+              "input_tokens": 129,
+              "output_tokens": 251,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0
+            }
+          ]
+        },
+        "sessions_all": {
+          "ms": 0.300779,
+          "value": [
+            {
+              "session_id": "sessA",
+              "data_source": "dsh",
+              "ts": 1756000200000,
+              "requests": 4,
+              "input_tokens": 129,
+              "output_tokens": 251,
+              "cache_read_tokens": 38,
+              "cache_write_tokens": 0,
+              "model": "m-3",
+              "project": "/home/CNS2026495165/dsh"
+            }
+          ]
+        },
+        "raw_count": {
+          "ms": 0.027191,
+          "value": {
+            "c": 4
+          }
+        },
+        "daily_maxday": {
+          "ms": 0.022934,
+          "value": {
+            "d": null
+          }
+        },
+        "daily_rows": {
+          "ms": 0.018004,
+          "value": {
+            "c": 0
+          }
+        }
+      },
+      "frozenPreRebuildPath": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_run/tz-Asia-Shanghai/frozen-pre-rebuild.db",
+      "eventRows": 5,
+      "dailyRows": 4,
+      "eventsMinusDaily": 0,
+      "dailyRequestsSum": 5,
+      "daysInEvents": [
+        "2025-08-24"
+      ]
+    },
+    "barrierTest": null
+  },
+  "invariants": {
+    "secondPassIdempotent": true,
+    "ccRowCount": 1,
+    "ccRows": [
+      {
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0,
+        "data_source": "cc",
+        "dedup_key": "msg-1",
+        "id": 6,
+        "input_tokens": 11,
+        "is_subagent": 1,
+        "model": "claude-sonnet-4",
+        "output_tokens": 12,
+        "project": "/home/CNS2026495165/dsh",
+        "provider": "claude",
+        "session_id": "ccsess1",
+        "step": null,
+        "ts": 1789725900000,
+        "turn": null
+      }
+    ],
+    "baselineSyncState": [
+      {
+        "fingerprint": null,
+        "last_offset": 917,
+        "last_seq": null,
+        "mtime": 1789905600000,
+        "size": 916,
+        "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/ccsess1.jsonl"
+      },
+      {
+        "fingerprint": null,
+        "last_offset": 225,
+        "last_seq": null,
+        "mtime": 1789905600000,
+        "size": 224,
+        "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/subagents/agent-x.jsonl"
+      },
+      {
+        "fingerprint": null,
+        "last_offset": 712,
+        "last_seq": null,
+        "mtime": 1789905600000,
+        "size": 712,
+        "source": "dsh:<ROOT>/dsh/sessions/sessA/session.jsonl.zstd"
+      },
+      {
+        "fingerprint": "torn:211",
+        "last_offset": 211,
+        "last_seq": 1756001000000,
+        "mtime": 1789905600000,
+        "size": 268,
+        "source": "dsh:<ROOT>/dsh/sessions/sessB/session.jsonl.zstd"
+      },
+      {
+        "fingerprint": "1789905600000:31",
+        "last_offset": null,
+        "last_seq": null,
+        "mtime": 1789905600000,
+        "size": 31,
+        "source": "dsh:<ROOT>/dsh/sessions/sessC/session.jsonl.zstd"
+      }
+    ]
+  },
+  "gapObservation": {
+    "commitIndex": 4,
+    "workerDbStateAfterCommit": {
+      "events": 5,
+      "eventsThatDay": 5
+    },
+    "note": "host read taken between the worker's events COMMIT and its daily rebuild",
+    "hostProbeWallMs": 26.443558,
+    "endpointsColdCache": {
+      "summary_all": {
+        "ms": 0.137269,
+        "error": "ERR_SQLITE_ERROR: database is locked"
+      },
+      "heatmap_2025": {
+        "ms": 0.219776,
+        "error": "ERR_SQLITE_ERROR: database is locked"
+      },
+      "heatmap_2026": {
+        "ms": 0.013215,
+        "error": "ERR_SQLITE_ERROR: database is locked"
+      },
+      "byDay_all": {
+        "ms": 0.032171,
+        "error": "ERR_SQLITE_ERROR: database is locked"
+      },
+      "byModel_all": {
+        "ms": 0.022262,
+        "error": "ERR_SQLITE_ERROR: database is locked"
+      },
+      "byProject_all": {
+        "ms": 0.018104,
+        "error": "ERR_SQLITE_ERROR: database is locked"
+      },
+      "timeseries_day": {
+        "ms": 0.023244,
+        "error": "ERR_SQLITE_ERROR: database is locked"
+      },
+      "timeseries_hour": {
+        "ms": 0.009438,
+        "error": "ERR_SQLITE_ERROR: database is locked"
+      },
+      "sessions_all": {
+        "ms": 0.059934,
+        "error": "ERR_SQLITE_ERROR: database is locked"
+      },
+      "raw_count": {
+        "ms": 0.013315,
+        "error": "ERR_SQLITE_ERROR: database is locked"
+      },
+      "daily_maxday": {
+        "ms": 0.007424,
+        "error": "ERR_SQLITE_ERROR: database is locked"
+      },
+      "daily_rows": {
+        "ms": 0.005892,
+        "error": "ERR_SQLITE_ERROR: database is locked"
+      }
+    },
+    "frozenPreRebuildProbe": {
+      "summary_all": {
+        "ms": 0.216951,
+        "value": {
+          "requests": 4,
+          "input_tokens": 129,
+          "output_tokens": 251,
+          "cache_read_tokens": 38,
+          "cache_write_tokens": 0,
+          "hit_rate": 0.2275449101796407,
+          "sessions": 1
+        }
+      },
+      "heatmap_2025": {
+        "ms": 0.387043,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "total": 418
+          }
+        ]
+      },
+      "heatmap_2026": {
+        "ms": 0.055054,
+        "value": []
+      },
+      "byDay_all": {
+        "ms": 0.088418,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byModel_all": {
+        "ms": 0.0735,
+        "value": [
+          {
+            "model": "m-1",
+            "requests": 2,
+            "input_tokens": 21,
+            "output_tokens": 42,
+            "cache_read_tokens": 8,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-3",
+            "requests": 1,
+            "input_tokens": 8,
+            "output_tokens": 9,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-2",
+            "requests": 1,
+            "input_tokens": 100,
+            "output_tokens": 200,
+            "cache_read_tokens": 30,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "byProject_all": {
+        "ms": 0.05829,
+        "value": [
+          {
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_day": {
+        "ms": 0.064572,
+        "value": [
+          {
+            "day": "2025-08-24",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "timeseries_hour": {
+        "ms": 0.075312,
+        "value": [
+          {
+            "day": "2025-08-24 09",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      "sessions_all": {
+        "ms": 0.300779,
+        "value": [
+          {
+            "session_id": "sessA",
+            "data_source": "dsh",
+            "ts": 1756000200000,
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0,
+            "model": "m-3",
+            "project": "/home/CNS2026495165/dsh"
+          }
+        ]
+      },
+      "raw_count": {
+        "ms": 0.027191,
+        "value": {
+          "c": 4
+        }
+      },
+      "daily_maxday": {
+        "ms": 0.022934,
+        "value": {
+          "d": null
+        }
+      },
+      "daily_rows": {
+        "ms": 0.018004,
+        "value": {
+          "c": 0
+        }
+      }
+    },
+    "frozenPreRebuildPath": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_run/tz-Asia-Shanghai/frozen-pre-rebuild.db",
+    "eventRows": 5,
+    "dailyRows": 4,
+    "eventsMinusDaily": 0,
+    "dailyRequestsSum": 5,
+    "daysInEvents": [
+      "2025-08-24"
+    ]
+  },
+  "sameStateComparison": {
+    "frozen": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_run/tz-Asia-Shanghai/frozen-pre-rebuild.db",
+    "daysRebuilt": [
+      "2025-08-24"
+    ],
+    "rows": [
+      {
+        "endpoint": "summary_all",
+        "identical": true,
+        "preRebuildMs": 0.216951,
+        "postRebuildMs": 0.14284,
+        "preRebuildValue": {
+          "requests": 4,
+          "input_tokens": 129,
+          "output_tokens": 251,
+          "cache_read_tokens": 38,
+          "cache_write_tokens": 0,
+          "hit_rate": 0.2275449101796407,
+          "sessions": 1
+        }
+      },
+      {
+        "endpoint": "heatmap_2025",
+        "identical": true,
+        "preRebuildMs": 0.387043,
+        "postRebuildMs": 0.141618,
+        "preRebuildValue": [
+          {
+            "day": "2025-08-24",
+            "total": 418
+          }
+        ]
+      },
+      {
+        "endpoint": "heatmap_2026",
+        "identical": true,
+        "preRebuildMs": 0.055054,
+        "postRebuildMs": 0.02109,
+        "preRebuildValue": []
+      },
+      {
+        "endpoint": "byDay_all",
+        "identical": true,
+        "preRebuildMs": 0.088418,
+        "postRebuildMs": 0.05296,
+        "preRebuildValue": [
+          {
+            "day": "2025-08-24",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      {
+        "endpoint": "byModel_all",
+        "identical": true,
+        "preRebuildMs": 0.0735,
+        "postRebuildMs": 0.035567,
+        "preRebuildValue": [
+          {
+            "model": "m-1",
+            "requests": 2,
+            "input_tokens": 21,
+            "output_tokens": 42,
+            "cache_read_tokens": 8,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-3",
+            "requests": 1,
+            "input_tokens": 8,
+            "output_tokens": 9,
+            "cache_read_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          {
+            "model": "m-2",
+            "requests": 1,
+            "input_tokens": 100,
+            "output_tokens": 200,
+            "cache_read_tokens": 30,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      {
+        "endpoint": "byProject_all",
+        "identical": true,
+        "preRebuildMs": 0.05829,
+        "postRebuildMs": 0.028284,
+        "preRebuildValue": [
+          {
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      {
+        "endpoint": "timeseries_day",
+        "identical": true,
+        "preRebuildMs": 0.064572,
+        "postRebuildMs": 0.035698,
+        "preRebuildValue": [
+          {
+            "day": "2025-08-24",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      {
+        "endpoint": "timeseries_hour",
+        "identical": true,
+        "preRebuildMs": 0.075312,
+        "postRebuildMs": 0.058782,
+        "preRebuildValue": [
+          {
+            "day": "2025-08-24 09",
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0
+          }
+        ]
+      },
+      {
+        "endpoint": "sessions_all",
+        "identical": true,
+        "preRebuildMs": 0.300779,
+        "postRebuildMs": 0.149853,
+        "preRebuildValue": [
+          {
+            "session_id": "sessA",
+            "data_source": "dsh",
+            "ts": 1756000200000,
+            "requests": 4,
+            "input_tokens": 129,
+            "output_tokens": 251,
+            "cache_read_tokens": 38,
+            "cache_write_tokens": 0,
+            "model": "m-3",
+            "project": "/home/CNS2026495165/dsh"
+          }
+        ]
+      },
+      {
+        "endpoint": "raw_count",
+        "identical": true,
+        "preRebuildMs": 0.027191,
+        "postRebuildMs": 0.014727,
+        "preRebuildValue": {
+          "c": 4
+        }
+      },
+      {
+        "endpoint": "daily_maxday",
+        "identical": false,
+        "preRebuildMs": 0.022934,
+        "postRebuildMs": 0.016111,
+        "preRebuildValue": {
+          "d": null
+        },
+        "postRebuildValue": {
+          "d": "2025-08-24"
+        }
+      },
+      {
+        "endpoint": "daily_rows",
+        "identical": false,
+        "preRebuildMs": 0.018004,
+        "postRebuildMs": 0.012023,
+        "preRebuildValue": {
+          "c": 0
+        },
+        "postRebuildValue": {
+          "c": 3
+        }
+      }
+    ]
+  },
+  "gapEndpointComparison": [
+    {
+      "endpoint": "summary_all",
+      "identicalDuringGap": false,
+      "duringMs": 0.137269,
+      "afterMs": 0.469418,
+      "duringErr": "ERR_SQLITE_ERROR: database is locked",
+      "afterValue": {
+        "requests": 6,
+        "input_tokens": 143,
+        "output_tokens": 267,
+        "cache_read_tokens": 38,
+        "cache_write_tokens": 0,
+        "hit_rate": 0.20994475138121546,
+        "sessions": 3
+      }
+    },
+    {
+      "endpoint": "heatmap_2025",
+      "identicalDuringGap": false,
+      "duringMs": 0.219776,
+      "afterMs": 0.433351,
+      "duringErr": "ERR_SQLITE_ERROR: database is locked",
+      "afterValue": [
+        {
+          "day": "2025-08-24",
+          "total": 425
+        }
+      ]
+    },
+    {
+      "endpoint": "heatmap_2026",
+      "identicalDuringGap": false,
+      "duringMs": 0.013215,
+      "afterMs": 0.053491,
+      "duringErr": "ERR_SQLITE_ERROR: database is locked",
+      "afterValue": [
+        {
+          "day": "2026-09-18",
+          "total": 23
+        }
+      ]
+    },
+    {
+      "endpoint": "byDay_all",
+      "identicalDuringGap": false,
+      "duringMs": 0.032171,
+      "afterMs": 0.112793,
+      "duringErr": "ERR_SQLITE_ERROR: database is locked",
+      "afterValue": [
+        {
+          "day": "2025-08-24",
+          "requests": 5,
+          "input_tokens": 132,
+          "output_tokens": 255,
+          "cache_read_tokens": 38,
+          "cache_write_tokens": 0
+        },
+        {
+          "day": "2026-09-18",
+          "requests": 1,
+          "input_tokens": 11,
+          "output_tokens": 12,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ]
+    },
+    {
+      "endpoint": "byModel_all",
+      "identicalDuringGap": false,
+      "duringMs": 0.022262,
+      "afterMs": 0.076986,
+      "duringErr": "ERR_SQLITE_ERROR: database is locked",
+      "afterValue": [
+        {
+          "model": "m-1",
+          "requests": 3,
+          "input_tokens": 24,
+          "output_tokens": 46,
+          "cache_read_tokens": 8,
+          "cache_write_tokens": 0
+        },
+        {
+          "model": "m-3",
+          "requests": 1,
+          "input_tokens": 8,
+          "output_tokens": 9,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        {
+          "model": "m-2",
+          "requests": 1,
+          "input_tokens": 100,
+          "output_tokens": 200,
+          "cache_read_tokens": 30,
+          "cache_write_tokens": 0
+        },
+        {
+          "model": "claude-sonnet-4",
+          "requests": 1,
+          "input_tokens": 11,
+          "output_tokens": 12,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ]
+    },
+    {
+      "endpoint": "byProject_all",
+      "identicalDuringGap": false,
+      "duringMs": 0.018104,
+      "afterMs": 0.05289,
+      "duringErr": "ERR_SQLITE_ERROR: database is locked",
+      "afterValue": [
+        {
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 5,
+          "input_tokens": 140,
+          "output_tokens": 263,
+          "cache_read_tokens": 38,
+          "cache_write_tokens": 0
+        },
+        {
+          "project": "/home/CNS2026495165/dsh/dsh-usage",
+          "requests": 1,
+          "input_tokens": 3,
+          "output_tokens": 4,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ]
+    },
+    {
+      "endpoint": "timeseries_day",
+      "identicalDuringGap": false,
+      "duringMs": 0.023244,
+      "afterMs": 0.061136,
+      "duringErr": "ERR_SQLITE_ERROR: database is locked",
+      "afterValue": [
+        {
+          "day": "2025-08-24",
+          "requests": 5,
+          "input_tokens": 132,
+          "output_tokens": 255,
+          "cache_read_tokens": 38,
+          "cache_write_tokens": 0
+        },
+        {
+          "day": "2026-09-18",
+          "requests": 1,
+          "input_tokens": 11,
+          "output_tokens": 12,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ]
+    },
+    {
+      "endpoint": "timeseries_hour",
+      "identicalDuringGap": false,
+      "duringMs": 0.009438,
+      "afterMs": 0.032171,
+      "duringErr": "ERR_SQLITE_ERROR: database is locked",
+      "afterValue": [
+        {
+          "day": "2025-08-24 09",
+          "requests": 4,
+          "input_tokens": 129,
+          "output_tokens": 251,
+          "cache_read_tokens": 38,
+          "cache_write_tokens": 0
+        },
+        {
+          "day": "2025-08-24 10",
+          "requests": 1,
+          "input_tokens": 3,
+          "output_tokens": 4,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        {
+          "day": "2026-09-18 18",
+          "requests": 1,
+          "input_tokens": 11,
+          "output_tokens": 12,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ]
+    },
+    {
+      "endpoint": "sessions_all",
+      "identicalDuringGap": false,
+      "duringMs": 0.059934,
+      "afterMs": 0.285721,
+      "duringErr": "ERR_SQLITE_ERROR: database is locked",
+      "afterValue": [
+        {
+          "session_id": "ccsess1",
+          "data_source": "cc",
+          "ts": 1789725900000,
+          "requests": 1,
+          "input_tokens": 11,
+          "output_tokens": 12,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "model": "claude-sonnet-4",
+          "project": "/home/CNS2026495165/dsh"
+        },
+        {
+          "session_id": "sessB",
+          "data_source": "dsh",
+          "ts": 1756001000000,
+          "requests": 1,
+          "input_tokens": 3,
+          "output_tokens": 4,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "model": "m-1",
+          "project": "/home/CNS2026495165/dsh/dsh-usage"
+        },
+        {
+          "session_id": "sessA",
+          "data_source": "dsh",
+          "ts": 1756000200000,
+          "requests": 4,
+          "input_tokens": 129,
+          "output_tokens": 251,
+          "cache_read_tokens": 38,
+          "cache_write_tokens": 0,
+          "model": "m-3",
+          "project": "/home/CNS2026495165/dsh"
+        }
+      ]
+    },
+    {
+      "endpoint": "raw_count",
+      "identicalDuringGap": false,
+      "duringMs": 0.013315,
+      "afterMs": 0.016101,
+      "duringErr": "ERR_SQLITE_ERROR: database is locked",
+      "afterValue": {
+        "c": 6
+      }
+    },
+    {
+      "endpoint": "daily_maxday",
+      "identicalDuringGap": false,
+      "duringMs": 0.007424,
+      "afterMs": 0.012224,
+      "duringErr": "ERR_SQLITE_ERROR: database is locked",
+      "afterValue": {
+        "d": "2026-09-18"
+      }
+    },
+    {
+      "endpoint": "daily_rows",
+      "identicalDuringGap": false,
+      "duringMs": 0.005892,
+      "afterMs": 0.006603,
+      "duringErr": "ERR_SQLITE_ERROR: database is locked",
+      "afterValue": {
+        "c": 5
+      }
+    }
+  ]
+}

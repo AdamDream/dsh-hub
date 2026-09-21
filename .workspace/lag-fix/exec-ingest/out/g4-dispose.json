@@ -1,0 +1,186 @@
+{
+  "suite": "G4-worker-lifecycle",
+  "lib": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/stage/lib-cand",
+  "rows": [
+    {
+      "id": "G4a:one-pass-one-thread",
+      "ok": true,
+      "detail": "ok=true threads 7→8 (threadId=1)"
+    },
+    {
+      "id": "G4b:dispose-leaves-no-worker-thread",
+      "ok": true,
+      "detail": "threads back to 7 (baseline 7) after 0ms"
+    },
+    {
+      "id": "G4c:run-after-dispose-is-a-no-op-and-spawns-nothing",
+      "ok": true,
+      "detail": "result={\"ok\":false,\"reason\":\"disposed\"} threads=7"
+    },
+    {
+      "id": "G4d:crash-settles-and-next-run-rebuilds",
+      "ok": true,
+      "detail": "first={\"ok\":false,\"reason\":\"worker-exit\"} second.ok=true workerSpawns=2 threads=7"
+    },
+    {
+      "id": "G4e:stall-watchdog-terminates-then-rebuilds-without-retry",
+      "ok": true,
+      "detail": "stalled after 401ms → {\"ok\":false,\"reason\":\"stalled\"}; rebuild ok=true; stalls=1 runs=2 workerSpawns=2; threads=7"
+    },
+    {
+      "id": "G4f:watchdog-keys-on-progress-not-total-duration",
+      "ok": true,
+      "detail": "ok=true stalls=0 timeouts=0"
+    }
+  ],
+  "evidence": {
+    "healthy": {
+      "baseline": 7,
+      "duringCount": 8,
+      "aliveThreadId": 1,
+      "afterDispose": {
+        "ok": true,
+        "waitedMs": 0,
+        "count": 7
+      },
+      "afterDisposeResult": {
+        "ok": false,
+        "reason": "disposed"
+      },
+      "countAfterDisposedRun": 7,
+      "stats": {
+        "runs": 1,
+        "ok": 1,
+        "failed": 0,
+        "stalls": 0,
+        "timeouts": 0,
+        "workerSpawns": 1,
+        "invalidations": 2,
+        "workerAlive": false,
+        "workerThreadId": -1,
+        "pendingId": null,
+        "inFlight": false,
+        "disposed": true,
+        "stallMs": 120000,
+        "hardTimeoutMs": 900000
+      }
+    },
+    "crash": {
+      "crashed": {
+        "ok": false,
+        "reason": "worker-exit",
+        "message": "worker exited with code 3"
+      },
+      "recovered": {
+        "ok": true,
+        "dsh": {
+          "scanned": 0,
+          "newEvents": 0,
+          "failedFiles": []
+        },
+        "cc": {
+          "scanned": 0,
+          "newEvents": 0,
+          "failedFiles": []
+        },
+        "wallMs": 6
+      },
+      "stats": {
+        "runs": 2,
+        "ok": 1,
+        "failed": 1,
+        "stalls": 0,
+        "timeouts": 0,
+        "workerSpawns": 2,
+        "invalidations": 2,
+        "workerAlive": true,
+        "workerThreadId": 3,
+        "pendingId": null,
+        "inFlight": false,
+        "disposed": false,
+        "stallMs": 120000,
+        "hardTimeoutMs": 900000
+      },
+      "after": {
+        "ok": false,
+        "waitedMs": 3015,
+        "count": 8
+      },
+      "final": {
+        "ok": true,
+        "waitedMs": 0,
+        "count": 7
+      }
+    },
+    "stall": {
+      "stalled": {
+        "ok": false,
+        "reason": "stalled",
+        "message": "no progress for 400ms"
+      },
+      "stallMs": 401,
+      "afterStall": {
+        "ok": true,
+        "waitedMs": 25,
+        "count": 7
+      },
+      "recovered": {
+        "ok": true,
+        "dsh": {
+          "scanned": 0,
+          "newEvents": 0,
+          "failedFiles": []
+        },
+        "cc": {
+          "scanned": 0,
+          "newEvents": 0,
+          "failedFiles": []
+        },
+        "wallMs": 6
+      },
+      "stats": {
+        "runs": 2,
+        "ok": 1,
+        "failed": 1,
+        "stalls": 1,
+        "timeouts": 0,
+        "workerSpawns": 2,
+        "invalidations": 2,
+        "workerAlive": true,
+        "workerThreadId": 5,
+        "pendingId": null,
+        "inFlight": false,
+        "disposed": false,
+        "stallMs": 400,
+        "hardTimeoutMs": 60000
+      },
+      "final": {
+        "ok": true,
+        "waitedMs": 0,
+        "count": 7
+      }
+    },
+    "progressing": {
+      "result": {
+        "ok": true
+      },
+      "stats": {
+        "runs": 1,
+        "ok": 1,
+        "failed": 0,
+        "stalls": 0,
+        "timeouts": 0,
+        "workerSpawns": 1,
+        "invalidations": 1,
+        "workerAlive": true,
+        "workerThreadId": 6,
+        "pendingId": null,
+        "inFlight": false,
+        "disposed": false,
+        "stallMs": 5000,
+        "hardTimeoutMs": 900000
+      }
+    }
+  },
+  "pass": true
+}

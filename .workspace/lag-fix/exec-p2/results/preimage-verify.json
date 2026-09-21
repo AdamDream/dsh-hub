@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "assertion": "V1: live target sha256 == the pinned pre-image d71a8ca5… (this execution run never wrote the deployed file)",
+      "status": "PASS",
+      "detail": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+      "evidence": "executed",
+      "expected": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+      "observed": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b"
+    },
+    {
+      "assertion": "V2: at least one P2AC pre-image exists under exec-p2/preimage (taken from the CURRENT live, not from backup/R4-*)",
+      "status": "PASS",
+      "detail": "2 pre-image(s): 20260921-165036, 20260921-165043",
+      "evidence": "executed",
+      "expected": ">=1",
+      "observed": 2
+    },
+    {
+      "assertion": "V2b: the chosen pre-image is byte-identical to the current live bundle and is NOT the misleading R4 file",
+      "status": "PASS",
+      "detail": "stamp=20260921-165036 sha256=d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+      "evidence": "executed",
+      "expected": "sha256 == live && not eeb5dcf2…",
+      "observed": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b"
+    },
+    {
+      "assertion": "V3: META.txt carries unit=P2AC-unit, the absolute target path, pre_sha256, and the rollback iron law (P2AC -> B1/C1 -> C1, C1 --rollback forbidden)",
+      "status": "PASS",
+      "detail": "META.txt of 20260921-165036 validated",
+      "evidence": "executed",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "assertion": "V4: the candidate is REPRODUCIBLE — recomputing the transformation from the current live bundle yields the candidate byte for byte",
+      "status": "PASS",
+      "detail": "rebuilt=357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f candidate=357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f",
+      "evidence": "executed",
+      "expected": "identical",
+      "observed": "identical"
+    },
+    {
+      "assertion": "V5: candidate == candidate sha256 pinned by apply-P2AC.mjs / assert-candidate-static.js / harness副本",
+      "status": "PASS",
+      "detail": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f",
+      "evidence": "executed",
+      "expected": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f",
+      "observed": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f"
+    },
+    {
+      "assertion": "V5b: candidate carries exactly 4 unit markers, 0 occurrences of the old prose comment, 0 occurrences of the blanket carry-forward",
+      "status": "PASS",
+      "detail": "markers=4, oldComment=0, blanket=0",
+      "evidence": "executed",
+      "expected": "4/0/0",
+      "observed": "4/0/0"
+    },
+    {
+      "assertion": "V5c: line delta == +5 (A1 +1, A2 +1, A3 +1, comment removal -1, gate +3)",
+      "status": "PASS",
+      "detail": "10662 -> 10667 lines",
+      "evidence": "executed",
+      "expected": "+5",
+      "observed": 5
+    },
+    {
+      "assertion": "V6: the deployed target is untouched after this whole run (start-of-run sha == end-of-run sha)",
+      "status": "PASS",
+      "detail": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+      "evidence": "executed",
+      "expected": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+      "observed": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b"
+    }
+  ],
+  "preimages": [
+    {
+      "stamp": "20260921-165036",
+      "sha256": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+      "matchesLive": true,
+      "metaOk": true,
+      "sha256FileMatches": true,
+      "isR4MisleadingFile": false
+    },
+    {
+      "stamp": "20260921-165043",
+      "sha256": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+      "matchesLive": true,
+      "metaOk": false,
+      "sha256FileMatches": true,
+      "isR4MisleadingFile": false
+    }
+  ],
+  "summary": {
+    "live_sha256": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+    "chosen_preimage": "20260921-165036",
+    "candidate_sha256": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f",
+    "candidate_reproducible": true,
+    "deployed_target_written": false,
+    "R4_misleading_preimage_rejected": true,
+    "findings": {
+      "pass": 9,
+      "fail": 0
+    }
+  }
+}

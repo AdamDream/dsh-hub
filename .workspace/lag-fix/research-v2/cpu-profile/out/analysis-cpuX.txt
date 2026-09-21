@@ -1,0 +1,323 @@
+# analysis cpuX: windows=7 errors=[]
+meta: {"generatedAt":"2026-09-21T08:27:16.792Z","stamp":"cpuX","exclusivityGate":"per-window: foreignCount==0 && lockHeldByMe required to start a window","url":"http://127.0.0.1:3080","winMs":8000,"reps":1,"scenarios":"all","longSessionOpenProbe":"会话删除更新误删全部会话","fix":"per-window style-write delta (writeMark) + body@style mutation cross-check","unitNote":"CDP profile timeDeltas are microseconds","discipline":"read-only; single browser; single page; closed at end","caveat":"measured with concurrent browser instances and a live host agent; use ratios"}
+
+## anchor-symbol proof (per-function self time from CDP Profiler)
+  ThemePresenter_apply         hitWindows= 7/7 totalSelfMs=  6208.006 maxMsPerS=  150.639 fns=["apply@client.js?rev=abdb7f55acba:366"]
+  buildListSnapshot            hitWindows= 6/7 totalSelfMs=    50.047 maxMsPerS=    1.479 fns=["buildListSnapshot@client.js?rev=a0fb4bb225d3:8553"]
+  projectList                  hitWindows= 7/7 totalSelfMs=    62.803 maxMsPerS=    1.614 fns=["projectList@client.js?rev=a0fb4bb225d3:9272"]
+  flattenLineage               hitWindows= 6/7 totalSelfMs=    15.945 maxMsPerS=    0.399 fns=["flattenLineage@client.js?rev=a0fb4bb225d3:5603"]
+  markDirty                    hitWindows= 0/7 totalSelfMs=         0 maxMsPerS=        0 fns=[]
+  ensureFresh                  hitWindows= 5/7 totalSelfMs=     9.591 maxMsPerS=    0.269 fns=["ensureFresh@client.js?rev=a0fb4bb225d3:5689"]
+  getListSnapshot              hitWindows= 0/7 totalSelfMs=         0 maxMsPerS=        0 fns=[]
+  list_set_applyMutation       hitWindows= 0/7 totalSelfMs=         0 maxMsPerS=        0 fns=[]
+  syncCompletedNotifications   hitWindows= 0/7 totalSelfMs=         0 maxMsPerS=        0 fns=[]
+  rebuildRemote                hitWindows= 1/7 totalSelfMs=      1.07 maxMsPerS=    0.134 fns=["rebuildRemote@client.js?rev=b295bb00e32b:4220"]
+  querySelectorAll             hitWindows= 3/7 totalSelfMs=     8.543 maxMsPerS=    0.404 fns=["querySelectorAll@:0"]
+  sessionChainSum              hitWindows= 7/7 totalSelfMs=   138.386 maxMsPerS=    3.631 fns=["projectList@client.js?rev=a0fb4bb225d3:9272","buildListSnapshot@client.js?rev=a0fb4bb225d3:8553","ensureFresh@client.js?rev=a0fb4bb225d3:5689","flattenLineage@client.js?rev=a0fb4bb225d3:5603"]
+
+## per-scenario
+scenario               n ok | script/s task/s recalc/s layout/s | busy/s | apply/s apply/script | wsIn/s | raf/s >50 | ltN lafN | bodyWrites/s mut | nodes
+home-idle               1  1 |   11.834 44.544    9.985        0 | 20.378 |  10.912        0.938 |       5 | 61.625    1 |   0    1 |          7.5   30 |   595
+long-session-idle       1  1 |    9.292 66.633   37.989        0 | 42.987 |  34.706        3.769 |     2.5 | 59.993    3 |   0    4 |         3.75   15 |  3245
+long-session-active     1  1 |   60.811 254.618  104.348   45.993 | 207.781 | 148.596        2.477 | 137.142 | 53.007   16 |   1   17 |       28.254  113 |  1908
+settings-general-open   1  1 |   47.271 205.532     87.9   32.416 | 165.228 | 116.057        2.475 | 106.931 | 53.776   17 |   0   19 |       18.458  105 |  2078
+settings-models-tab     1  1 |   45.464 197.942    86.97   34.458 | 160.242 | 118.724        2.633 |   13.51 | 53.595   17 |   0   17 |       20.265  115 |  2030
+settings-plugins-tab    1  1 |    31.57 168.826   66.292   22.236 | 115.84 |   84.24        2.725 |   85.62 | 56.932   15 |   1   12 |        12.79   76 |  2329
+settings-dwell          1  1 |     39.5 194.632   94.127   31.244 | 159.977 | 123.562        3.164 |    38.5 | 54.25   12 |   0   12 |           18   72 |  2330
+
+## per-scenario chain ms/s
+  home-idle              {"ThemePresenter_apply":11.1,"buildListSnapshot":0.134,"projectList":0.268,"flattenLineage":0,"markDirty":0,"ensureFresh":0,"getListSnapshot":0,"list_set_applyMutation":0,"syncCompletedNotifications":0,"rebuildRemote":0.134,"querySelectorAll":0,"sessionChainSum":0.401}
+  long-session-idle      {"ThemePresenter_apply":35.018,"buildListSnapshot":0,"projectList":0.133,"flattenLineage":0.133,"markDirty":0,"ensureFresh":0.265,"getListSnapshot":0,"list_set_applyMutation":0,"syncCompletedNotifications":0,"rebuildRemote":0,"querySelectorAll":0,"sessionChainSum":0.531}
+  long-session-active    {"ThemePresenter_apply":150.639,"buildListSnapshot":1.479,"projectList":1.614,"flattenLineage":0.269,"markDirty":0,"ensureFresh":0.269,"getListSnapshot":0,"list_set_applyMutation":0,"syncCompletedNotifications":0,"rebuildRemote":0,"querySelectorAll":0.404,"sessionChainSum":3.631}
+  settings-general-open  {"ThemePresenter_apply":117.014,"buildListSnapshot":1.033,"projectList":1.503,"flattenLineage":0.376,"markDirty":0,"ensureFresh":0,"getListSnapshot":0,"list_set_applyMutation":0,"syncCompletedNotifications":0,"rebuildRemote":0,"querySelectorAll":0.188,"sessionChainSum":2.911}
+  settings-models-tab    {"ThemePresenter_apply":119.716,"buildListSnapshot":1.131,"projectList":1.131,"flattenLineage":0.377,"markDirty":0,"ensureFresh":0.189,"getListSnapshot":0,"list_set_applyMutation":0,"syncCompletedNotifications":0,"rebuildRemote":0,"querySelectorAll":0,"sessionChainSum":2.828}
+  settings-plugins-tab   {"ThemePresenter_apply":86.043,"buildListSnapshot":0.568,"projectList":0.663,"flattenLineage":0.095,"markDirty":0,"ensureFresh":0.189,"getListSnapshot":0,"list_set_applyMutation":0,"syncCompletedNotifications":0,"rebuildRemote":0,"querySelectorAll":0.284,"sessionChainSum":1.514}
+  settings-dwell         {"ThemePresenter_apply":124.967,"buildListSnapshot":0.798,"projectList":1.197,"flattenLineage":0.399,"markDirty":0,"ensureFresh":0.133,"getListSnapshot":0,"list_set_applyMutation":0,"syncCompletedNotifications":0,"rebuildRemote":0,"querySelectorAll":0,"sessionChainSum":2.526}
+
+## per-scenario bundle ms/s
+  home-idle              [["(no-url:native/vm)",979.859],["dsh-client-ui-layout",10.912],["shell:assets:index",4.076],["dsh-client-runtime",2.104],["dsh-client-ui-workspace",0.789],["dsh-client-ui-renderer",0.657]]
+  long-session-idle      [["(no-url:native/vm)",957.181],["dsh-client-ui-layout",34.706],["shell:assets:index",4.206],["dsh-client-runtime",1.446],["dsh-client-ui-renderer",0.526],["dsh-client-ui-workspace",0.526]]
+  long-session-active    [["(no-url:native/vm)",794.06],["dsh-client-ui-layout",148.596],["shell:assets:index",26.802],["dsh-client-runtime",12.206],["dsh-client-ui-workspace",5.838],["dsh-client-ui-conversation",4.909]]
+  settings-general-open  [["(no-url:native/vm)",836.614],["dsh-client-ui-layout",116.057],["shell:assets:index",19.745],["dsh-client-runtime",11.363],["dsh-client-ui-conversation",4.936],["dsh-client-ui-workspace",4.191]]
+  settings-models-tab    [["(no-url:native/vm)",841.54],["dsh-client-ui-layout",118.724],["shell:assets:index",20.757],["dsh-client-runtime",9.349],["dsh-client-ui-workspace",3.459],["dsh-client-ui-renderer",1.59]]
+  settings-plugins-tab   [["(no-url:native/vm)",885.398],["dsh-client-ui-layout",84.24],["shell:assets:index",16.683],["dsh-client-runtime",4.912],["dsh-client-ui-workspace",2.78],["dsh-client-connection",1.297]]
+  settings-dwell         [["(no-url:native/vm)",840.745],["dsh-client-ui-layout",123.562],["shell:assets:index",19.064],["dsh-client-runtime",8.019],["dsh-client-ui-workspace",3.418],["dsh-client-ui-renderer",1.447]]
+
+## window detail
+
+--- home-idle-w1 [home-idle] wall=8s page=home session=null tab=null action=null
+    nodes=595 wsIn=40(5/s) byPayloadType={"session/projection":30,"session/event":10} topSessionIds=[["a9012d40",20],["694d404a",20]]
+    script=94.672ms(11.834/s) task=356.351ms(44.544/s) recalc=79.878ms(9.985/s n=60000) layout=0ms(0/s n=0)
+    profileBusy=165.843ms(20.378/s) reconcileRatio=0.95 apply=88.803ms(10.912/s) apply/script=0.938 apply/busy=0.535
+    raf=61.625/s p50=16.7 p95=16.7 p99=16.8 max=116.7 >50=1 >100=1 ltN=0 ltMax=null lafN=1
+    bodyStyleWrites=60(7.5/s) observedBodyStyleMutations=60 allMutationRecords=30
+    chains: {"ThemePresenter_apply":88.803,"buildListSnapshot":1.07,"projectList":2.14,"rebuildRemote":1.07,"sessionChainSum":3.21}
+    top30:
+         972.891 ms/s    7917.39ms 97.292%  (idle) @:0 [v8]
+           5.785 ms/s     47.076ms  0.578%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+           5.127 ms/s     41.727ms  0.513%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+            4.47 ms/s     36.377ms  0.447%  (program) @:0 [v8]
+           2.235 ms/s     18.189ms  0.224%  (garbage collector) @:0 [v8]
+           0.789 ms/s       6.42ms  0.079%  (anonymous) @client.js:8554 <lib/types/client/sessions/manager.js>
+           0.526 ms/s       4.28ms  0.053%  Xo @index-ClqxG24t.js:54
+           0.394 ms/s       3.21ms  0.039%  nextSessionOrderAccount @client.js:1103
+           0.263 ms/s       2.14ms  0.026%  f1 @index-ClqxG24t.js:56
+           0.263 ms/s       2.14ms  0.026%  get @index-ClqxG24t.js:11
+           0.263 ms/s       2.14ms  0.026%  shadeTokens @client.js:183
+           0.263 ms/s       2.14ms  0.026%  walk @client.js:5615 <lib/types/client/sessions/lineage.js>
+           0.263 ms/s       2.14ms  0.026%  projectList @client.js:9272 <lib/types/client/sessions/service.js>
+           0.263 ms/s       2.14ms  0.026%  handleMessage @client.js:10289
+           0.263 ms/s       2.14ms  0.026%  SessionMaybeEntry @client.js:672
+           0.263 ms/s       2.14ms  0.026%  $e @index-ClqxG24t.js:54
+           0.263 ms/s       2.14ms  0.026%  F4 @index-ClqxG24t.js:56
+           0.131 ms/s       1.07ms  0.013%  buildListSnapshot @client.js:8553 <lib/types/client/sessions/manager.js>
+           0.131 ms/s       1.07ms  0.013%  get @index-ClqxG24t.js:11
+           0.131 ms/s       1.07ms  0.013%  ConversationSessionHeader @client.js:7321
+           0.131 ms/s       1.07ms  0.013%  se @index-ClqxG24t.js:41
+           0.131 ms/s       1.07ms  0.013%  rebuildRemote @client.js:4220
+           0.131 ms/s       1.07ms  0.013%  Xe @index-ClqxG24t.js:56
+           0.131 ms/s       1.07ms  0.013%  Y1 @index-ClqxG24t.js:54
+           0.131 ms/s       1.07ms  0.013%  y @index-ClqxG24t.js:54
+           0.131 ms/s       1.07ms  0.013%  $l @index-ClqxG24t.js:2
+           0.131 ms/s       1.07ms  0.013%  deriveGroups @client.js:191
+           0.131 ms/s       1.07ms  0.013%  get @index-ClqxG24t.js:11
+           0.131 ms/s       1.07ms  0.013%  p0 @index-ClqxG24t.js:56
+           0.131 ms/s       1.07ms  0.013%  (anonymous) @client.js:208
+
+--- long-idle-w1 [long-session-idle] wall=8.001s page=long-session session=会话删除更新误删全部会话 tab=null action=null
+    nodes=3245 wsIn=20(2.5/s) byPayloadType={"session/projection":15,"session/event":5} topSessionIds=[["7c9c9ffe",20]]
+    script=74.344ms(9.292/s) task=533.133ms(66.633/s) recalc=303.947ms(37.989/s n=499000) layout=0ms(0/s n=0)
+    profileBusy=347.034ms(42.987/s) reconcileRatio=0.917 apply=280.183ms(34.706/s) apply/script=3.769 apply/busy=0.807
+    raf=59.993/s p50=16.7 p95=16.8 p99=16.8 max=100 >50=3 >100=0 ltN=0 ltMax=null lafN=4
+    bodyStyleWrites=30(3.75/s) observedBodyStyleMutations=30 allMutationRecords=15
+    chains: {"ThemePresenter_apply":280.183,"projectList":1.061,"flattenLineage":1.061,"ensureFresh":2.123,"sessionChainSum":4.245}
+    top30:
+         943.378 ms/s   7615.888ms 94.347%  (idle) @:0 [v8]
+          18.273 ms/s    147.521ms  1.828%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+          16.433 ms/s    132.662ms  1.643%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+          13.015 ms/s    105.069ms  1.302%  (program) @:0 [v8]
+           0.526 ms/s      4.245ms  0.053%  (garbage collector) @:0 [v8]
+           0.394 ms/s      3.184ms  0.039%  (anonymous) @client.js:8554 <lib/types/client/sessions/manager.js>
+           0.263 ms/s      2.123ms  0.026%  ao @index-ClqxG24t.js:53
+           0.263 ms/s      2.123ms  0.026%  (anonymous) @index-ClqxG24t.js:53
+           0.263 ms/s      2.123ms  0.026%  SlotOutlet @client.js:741
+           0.263 ms/s      2.123ms  0.026%  ensureFresh @client.js:5689 <lib/types/client/sessions/notifier.js>
+           0.263 ms/s      2.123ms  0.026%  Xo @index-ClqxG24t.js:54
+           0.263 ms/s      2.123ms  0.026%  p0 @index-ClqxG24t.js:56
+           0.263 ms/s      2.123ms  0.026%  Eo @index-ClqxG24t.js:53
+           0.131 ms/s      1.061ms  0.013%  f @:11
+           0.131 ms/s      1.061ms  0.013%  Eo @index-ClqxG24t.js:53
+           0.131 ms/s      1.061ms  0.013%  (anonymous) @client.js:571
+           0.131 ms/s      1.061ms  0.013%  G @index-ClqxG24t.js:54
+           0.131 ms/s      1.061ms  0.013%  $e @index-ClqxG24t.js:54
+           0.131 ms/s      1.061ms  0.013%  runChecks @client.js:1724
+           0.131 ms/s      1.061ms  0.013%  extend @index-ClqxG24t.js:13
+           0.131 ms/s      1.061ms  0.013%  nextSessionOrderAccount @client.js:1103
+           0.131 ms/s      1.061ms  0.013%  (anonymous) @index-ClqxG24t.js:8
+           0.131 ms/s      1.061ms  0.013%  lookup @client.js:1158
+           0.131 ms/s      1.061ms  0.013%  ComposerAttachments @client.js:524
+           0.131 ms/s      1.061ms  0.013%  get @client.js:5754 <lib/types/client/sessions/projection-store.js>
+           0.131 ms/s      1.061ms  0.013%  Qo @index-ClqxG24t.js:54
+           0.131 ms/s      1.061ms  0.013%  lookup @client.js:1158
+           0.131 ms/s      1.061ms  0.013%  ModelSelect @client.js:291
+           0.131 ms/s      1.061ms  0.013%  SessionTree @client.js:1200
+           0.131 ms/s      1.061ms  0.013%  J3 @index-ClqxG24t.js:56
+
+--- long-active-w1 [long-session-active] wall=7.999s page=long-session session=DeepSeek模型渠道不存在报错排查 tab=null action=null
+    nodes=1908 wsIn=1097(137.142/s) byPayloadType={"session/event":984,"session/projection":113} topSessionIds=[["537af3ac",48],["7c9c9ffe",40],["a9012d40",28],["a0995398",20]]
+    script=486.425ms(60.811/s) task=2036.687ms(254.618/s) recalc=834.677ms(104.348/s n=639000) layout=367.9ms(45.993/s n=113000)
+    profileBusy=1684.825ms(207.781/s) reconcileRatio=1.275 apply=1204.965ms(148.596/s) apply/script=2.477 apply/busy=0.715
+    raf=53.007/s p50=16.7 p95=16.8 p99=100 max=116.7 >50=16 >100=3 ltN=1 ltMax=97 lafN=17
+    bodyStyleWrites=226(28.254/s) observedBodyStyleMutations=226 allMutationRecords=113
+    chains: {"ThemePresenter_apply":1204.965,"buildListSnapshot":11.834,"projectList":12.91,"flattenLineage":2.152,"ensureFresh":2.152,"querySelectorAll":3.228,"sessionChainSum":29.048}
+    top30:
+          758.37 ms/s   6149.623ms 75.849%  (idle) @:0 [v8]
+          74.696 ms/s     605.71ms  7.471%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+            73.9 ms/s    599.255ms  7.391%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+          31.577 ms/s    256.055ms  3.158%  (program) @:0 [v8]
+           2.256 ms/s      18.29ms  0.226%  (anonymous) @client.js:9204
+           2.123 ms/s     17.214ms  0.212%  (garbage collector) @:0 [v8]
+           1.592 ms/s      12.91ms  0.159%  projectList @client.js:9272 <lib/types/client/sessions/service.js>
+           1.459 ms/s     11.834ms  0.146%  buildListSnapshot @client.js:8553 <lib/types/client/sessions/manager.js>
+           1.327 ms/s     10.759ms  0.133%  mi @index-ClqxG24t.js:56
+           1.327 ms/s     10.759ms  0.133%  walk @client.js:5615 <lib/types/client/sessions/lineage.js>
+           1.194 ms/s      9.683ms  0.119%  enqueue @client.js:10281
+           1.194 ms/s      9.683ms  0.119%  X @index-ClqxG24t.js:54
+           1.194 ms/s      9.683ms  0.119%  J3 @index-ClqxG24t.js:56
+           0.929 ms/s      7.531ms  0.093%  $e @index-ClqxG24t.js:54
+           0.929 ms/s      7.531ms  0.093%  get @index-ClqxG24t.js:11
+           0.929 ms/s      7.531ms  0.093%  v0 @index-ClqxG24t.js:56
+           0.929 ms/s      7.531ms  0.093%  deriveGroups @client.js:191
+           0.929 ms/s      7.531ms  0.093%  (anonymous) @client.js:8554 <lib/types/client/sessions/manager.js>
+           0.796 ms/s      6.455ms   0.08%  get @client.js:5754 <lib/types/client/sessions/projection-store.js>
+           0.663 ms/s      5.379ms  0.066%  (anonymous) @client.js:1221
+           0.663 ms/s      5.379ms  0.066%  r @index-ClqxG24t.js:54
+           0.663 ms/s      5.379ms  0.066%  (anonymous) @client.js:1225
+           0.663 ms/s      5.379ms  0.066%  f1 @index-ClqxG24t.js:56
+           0.663 ms/s      5.379ms  0.066%  Xo @index-ClqxG24t.js:54
+           0.663 ms/s      5.379ms  0.066%  get @index-ClqxG24t.js:11
+           0.663 ms/s      5.379ms  0.066%  reconciledSessionOrder @client.js:1078
+           0.663 ms/s      5.379ms  0.066%  (anonymous) @client.js:1107
+           0.531 ms/s      4.303ms  0.053%  (anonymous) @client.js:8972 <lib/types/client/sessions/service.js>
+           0.531 ms/s      4.303ms  0.053%  indexSubagentDescendants @client.js:10355 <lib/types/client/sessions/subagent-lineage.js>
+           0.531 ms/s      4.303ms  0.053%  get @index-ClqxG24t.js:11
+
+--- settings-open-t1 [settings-general-open] wall=11.269s page=settings session=会话删除更新误删全部会话 tab=通用设置 action=open-settings
+    nodes=2078 wsIn=1205(106.931/s) byPayloadType={"session/projection":101,"session/event":1103,"host/session-status":1} topSessionIds=[["537af3ac",60],["a0995398",40],["7c9c9ffe",24]]
+    script=532.696ms(47.271/s) task=2316.142ms(205.532/s) recalc=990.54ms(87.9/s n=810000) layout=365.297ms(32.416/s n=106000)
+    profileBusy=1877.373ms(165.228/s) reconcileRatio=1.232 apply=1318.635ms(116.057/s) apply/script=2.475 apply/busy=0.702
+    raf=53.776/s p50=16.7 p95=16.8 p99=100 max=116.7 >50=17 >100=6 ltN=0 ltMax=null lafN=19
+    bodyStyleWrites=208(18.458/s) observedBodyStyleMutations=208 allMutationRecords=105
+    chains: {"ThemePresenter_apply":1318.635,"buildListSnapshot":11.641,"projectList":16.933,"flattenLineage":4.233,"querySelectorAll":2.117,"sessionChainSum":32.807}
+    top30:
+          800.94 ms/s   9100.282ms 80.095%  (idle) @:0 [v8]
+          57.283 ms/s    650.852ms  5.728%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+          56.817 ms/s     645.56ms  5.682%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+          31.855 ms/s    361.937ms  3.186%  (program) @:0 [v8]
+           2.981 ms/s     33.865ms  0.298%  (anonymous) @client.js:9204
+           1.956 ms/s     22.224ms  0.196%  (garbage collector) @:0 [v8]
+            1.49 ms/s     16.933ms  0.149%  projectList @client.js:9272 <lib/types/client/sessions/service.js>
+           1.211 ms/s     13.758ms  0.121%  Xo @index-ClqxG24t.js:54
+           1.025 ms/s     11.641ms  0.102%  buildListSnapshot @client.js:8553 <lib/types/client/sessions/manager.js>
+           0.931 ms/s     10.583ms  0.093%  F4 @index-ClqxG24t.js:56
+           0.838 ms/s      9.525ms  0.084%  get @index-ClqxG24t.js:11
+           0.745 ms/s      8.466ms  0.075%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+           0.652 ms/s      7.408ms  0.065%  f1 @index-ClqxG24t.js:56
+           0.652 ms/s      7.408ms  0.065%  J3 @index-ClqxG24t.js:56
+           0.652 ms/s      7.408ms  0.065%  SessionManager.notifier @client.js:7844 <lib/types/client/sessions/manager.js>
+           0.652 ms/s      7.408ms  0.065%  mi @index-ClqxG24t.js:56
+           0.559 ms/s       6.35ms  0.056%  (anonymous) @client.js:8554 <lib/types/client/sessions/manager.js>
+           0.559 ms/s       6.35ms  0.056%  indexSubagentDescendants @client.js:10355 <lib/types/client/sessions/subagent-lineage.js>
+           0.559 ms/s       6.35ms  0.056%  reconciledSessionOrder @client.js:1078
+           0.559 ms/s       6.35ms  0.056%  nextSessionOrderAccount @client.js:1103
+           0.559 ms/s       6.35ms  0.056%  get @index-ClqxG24t.js:11
+           0.559 ms/s       6.35ms  0.056%  get @client.js:5754 <lib/types/client/sessions/projection-store.js>
+           0.466 ms/s      5.291ms  0.047%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+           0.466 ms/s      5.291ms  0.047%  Z4 @index-ClqxG24t.js:56
+           0.466 ms/s      5.291ms  0.047%  get @index-ClqxG24t.js:11
+           0.466 ms/s      5.291ms  0.047%  indexSubagentDescendants @client.js:10355 <lib/types/client/sessions/subagent-lineage.js>
+           0.466 ms/s      5.291ms  0.047%  enqueue @client.js:10281
+           0.466 ms/s      5.291ms  0.047%  walk @client.js:5615 <lib/types/client/sessions/lineage.js>
+           0.466 ms/s      5.291ms  0.047%  shadeTokens @client.js:183
+           0.466 ms/s      5.291ms  0.047%  (anonymous) @client.js:1107
+
+--- settings-models-tab-t1 [settings-models-tab] wall=11.251s page=settings session=会话删除更新误删全部会话 tab=模型 action=switch-tab:模型
+    nodes=2030 wsIn=152(13.51/s) byPayloadType={"session/projection":113,"session/event":39} topSessionIds=[["537af3ac",56],["7c9c9ffe",40],["a0995398",24],["a9012d40",24]]
+    script=511.516ms(45.464/s) task=2227.051ms(197.942/s) recalc=978.504ms(86.97/s n=824000) layout=387.682ms(34.458/s n=115000)
+    profileBusy=1817.888ms(160.242/s) reconcileRatio=1.22 apply=1346.926ms(118.724/s) apply/script=2.633 apply/busy=0.741
+    raf=53.595/s p50=16.7 p95=16.8 p99=100 max=116.7 >50=17 >100=4 ltN=0 ltMax=null lafN=17
+    bodyStyleWrites=228(20.265/s) observedBodyStyleMutations=228 allMutationRecords=115
+    chains: {"ThemePresenter_apply":1346.926,"buildListSnapshot":12.727,"projectList":12.727,"flattenLineage":4.242,"ensureFresh":2.121,"sessionChainSum":31.817}
+    top30:
+         809.848 ms/s   9187.728ms 80.993%  (idle) @:0 [v8]
+           59.83 ms/s    678.766ms  5.984%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+          57.866 ms/s    656.494ms  5.787%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+          26.456 ms/s    300.142ms  2.646%  (program) @:0 [v8]
+           3.365 ms/s     38.181ms  0.337%  (garbage collector) @:0 [v8]
+           1.309 ms/s     14.848ms  0.131%  (anonymous) @client.js:8554 <lib/types/client/sessions/manager.js>
+           1.122 ms/s     12.727ms  0.112%  projectList @client.js:9272 <lib/types/client/sessions/service.js>
+           1.122 ms/s     12.727ms  0.112%  buildListSnapshot @client.js:8553 <lib/types/client/sessions/manager.js>
+           1.122 ms/s     12.727ms  0.112%  mi @index-ClqxG24t.js:56
+           1.028 ms/s     11.666ms  0.103%  F4 @index-ClqxG24t.js:56
+           0.935 ms/s     10.606ms  0.093%  (anonymous) @client.js:8972 <lib/types/client/sessions/service.js>
+           0.841 ms/s      9.545ms  0.084%  H @index-ClqxG24t.js:54
+           0.654 ms/s      7.424ms  0.065%  $e @index-ClqxG24t.js:54
+           0.654 ms/s      7.424ms  0.065%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+           0.654 ms/s      7.424ms  0.065%  deriveGroups @client.js:191
+           0.654 ms/s      7.424ms  0.065%  requestAnimationFrame @:0
+           0.561 ms/s      6.363ms  0.056%  SessionManager.notifier @client.js:7844 <lib/types/client/sessions/manager.js>
+           0.561 ms/s      6.363ms  0.056%  get @index-ClqxG24t.js:11
+           0.561 ms/s      6.363ms  0.056%  J3 @index-ClqxG24t.js:56
+           0.467 ms/s      5.303ms  0.047%  nextSessionOrderAccount @client.js:1103
+           0.467 ms/s      5.303ms  0.047%  get @index-ClqxG24t.js:11
+           0.467 ms/s      5.303ms  0.047%  get @index-ClqxG24t.js:11
+           0.467 ms/s      5.303ms  0.047%  groupByWorkspace @client.js:147
+           0.467 ms/s      5.303ms  0.047%  f1 @index-ClqxG24t.js:56
+           0.467 ms/s      5.303ms  0.047%  get @client.js:5754 <lib/types/client/sessions/projection-store.js>
+           0.467 ms/s      5.303ms  0.047%  get @index-ClqxG24t.js:11
+           0.467 ms/s      5.303ms  0.047%  indexSubagentDescendants @client.js:10355 <lib/types/client/sessions/subagent-lineage.js>
+           0.374 ms/s      4.242ms  0.037%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+           0.374 ms/s      4.242ms  0.037%  ChatView @client.js:5621
+           0.374 ms/s      4.242ms  0.037%  h @index-ClqxG24t.js:33
+
+--- settings-plugins-tab-t1 [settings-plugins-tab] wall=11.259s page=settings session=会话删除更新误删全部会话 tab=插件 action=switch-tab:插件
+    nodes=2329 wsIn=964(85.62/s) byPayloadType={"session/event":892,"session/projection":72} topSessionIds=[["537af3ac",31],["a0995398",20],["7c9c9ffe",20],["a9012d40",9]]
+    script=355.447ms(31.57/s) task=1900.817ms(168.826/s) recalc=746.387ms(66.292/s n=772000) layout=250.35ms(22.236/s n=73000)
+    profileBusy=1332.202ms(115.84/s) reconcileRatio=1.209 apply=968.757ms(84.24/s) apply/script=2.725 apply/busy=0.727
+    raf=56.932/s p50=16.7 p95=16.8 p99=100 max=133.3 >50=15 >100=4 ltN=1 ltMax=122 lafN=12
+    bodyStyleWrites=144(12.79/s) observedBodyStyleMutations=144 allMutationRecords=76
+    chains: {"ThemePresenter_apply":968.757,"buildListSnapshot":6.394,"projectList":7.46,"flattenLineage":1.066,"ensureFresh":2.131,"querySelectorAll":3.198,"sessionChainSum":17.051}
+    top30:
+         850.367 ms/s   9779.224ms 85.042%  (idle) @:0 [v8]
+          42.352 ms/s    487.043ms  4.235%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+          41.888 ms/s    481.714ms  4.189%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+          30.211 ms/s    347.431ms  3.021%  (program) @:0 [v8]
+           3.522 ms/s     40.498ms  0.352%  (garbage collector) @:0 [v8]
+           0.741 ms/s      8.526ms  0.074%  mi @index-ClqxG24t.js:56
+           0.741 ms/s      8.526ms  0.074%  nextSessionOrderAccount @client.js:1103
+           0.741 ms/s      8.526ms  0.074%  Xo @index-ClqxG24t.js:54
+           0.649 ms/s       7.46ms  0.065%  projectList @client.js:9272 <lib/types/client/sessions/service.js>
+           0.649 ms/s       7.46ms  0.065%  enqueue @client.js:10281
+           0.556 ms/s      6.394ms  0.056%  indexSubagentDescendants @client.js:10355 <lib/types/client/sessions/subagent-lineage.js>
+           0.556 ms/s      6.394ms  0.056%  buildListSnapshot @client.js:8553 <lib/types/client/sessions/manager.js>
+           0.463 ms/s      5.329ms  0.046%  SessionManager.notifier @client.js:7844 <lib/types/client/sessions/manager.js>
+           0.463 ms/s      5.329ms  0.046%  (anonymous) @client.js:8554 <lib/types/client/sessions/manager.js>
+           0.371 ms/s      4.263ms  0.037%  F4 @index-ClqxG24t.js:56
+           0.371 ms/s      4.263ms  0.037%  get @index-ClqxG24t.js:11
+           0.371 ms/s      4.263ms  0.037%  X @index-ClqxG24t.js:54
+           0.371 ms/s      4.263ms  0.037%  ChatView @client.js:5621
+           0.371 ms/s      4.263ms  0.037%  ProjectRowItem @client.js:454
+           0.371 ms/s      4.263ms  0.037%  H @index-ClqxG24t.js:54
+           0.371 ms/s      4.263ms  0.037%  translate @client.js:1153
+           0.371 ms/s      4.263ms  0.037%  $e @index-ClqxG24t.js:54
+           0.278 ms/s      3.197ms  0.028%  (anonymous) @index-ClqxG24t.js:53
+           0.278 ms/s      3.197ms  0.028%  WorkspacePickFlow @client.js:821
+           0.278 ms/s      3.197ms  0.028%  J3 @index-ClqxG24t.js:56
+           0.278 ms/s      3.197ms  0.028%  f1 @index-ClqxG24t.js:56
+           0.278 ms/s      3.197ms  0.028%  remoteSessionIndex @client.js:4109
+           0.278 ms/s      3.197ms  0.028%  walk @client.js:5615 <lib/types/client/sessions/lineage.js>
+           0.278 ms/s      3.197ms  0.028%  deriveGroups @client.js:191
+           0.278 ms/s      3.197ms  0.028%  get @index-ClqxG24t.js:11
+
+--- settings-dwell-w1 [settings-dwell] wall=8s page=settings session=会话删除更新误删全部会话 tab=插件 action=null
+    nodes=2330 wsIn=308(38.5/s) byPayloadType={"session/projection":71,"session/event":234,"host/session-status":1,"session/queue":2} topSessionIds=[["537af3ac",20],["7c9c9ffe",20],["a0995398",20],["a9012d40",20]]
+    script=316.001ms(39.5/s) task=1557.059ms(194.632/s) recalc=753.016ms(94.127/s n=567000) layout=249.953ms(31.244/s n=72000)
+    profileBusy=1294.395ms(159.977/s) reconcileRatio=1.211 apply=999.737ms(123.562/s) apply/script=3.164 apply/busy=0.772
+    raf=54.25/s p50=16.7 p95=16.8 p99=100 max=116.7 >50=12 >100=5 ltN=0 ltMax=null lafN=12
+    bodyStyleWrites=144(18/s) observedBodyStyleMutations=144 allMutationRecords=72
+    chains: {"ThemePresenter_apply":999.737,"buildListSnapshot":6.381,"projectList":9.572,"flattenLineage":3.191,"ensureFresh":1.064,"sessionChainSum":20.208}
+    top30:
+         817.347 ms/s   6613.152ms 81.741%  (idle) @:0 [v8]
+          62.701 ms/s    507.313ms  6.271%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+          60.861 ms/s    492.424ms  6.086%  apply @client.js:366 <lib/types/client/theme-presenter.js>
+          21.426 ms/s    173.359ms  2.143%  (program) @:0 [v8]
+           1.183 ms/s      9.572ms  0.118%  (garbage collector) @:0 [v8]
+           1.183 ms/s      9.572ms  0.118%  projectList @client.js:9272 <lib/types/client/sessions/service.js>
+           1.052 ms/s      8.508ms  0.105%  (anonymous) @client.js:8554 <lib/types/client/sessions/manager.js>
+            0.92 ms/s      7.445ms  0.092%  J3 @index-ClqxG24t.js:56
+           0.789 ms/s      6.381ms  0.079%  Xo @index-ClqxG24t.js:54
+           0.789 ms/s      6.381ms  0.079%  mi @index-ClqxG24t.js:56
+           0.789 ms/s      6.381ms  0.079%  deriveGroups @client.js:191
+           0.789 ms/s      6.381ms  0.079%  buildListSnapshot @client.js:8553 <lib/types/client/sessions/manager.js>
+           0.789 ms/s      6.381ms  0.079%  nextSessionOrderAccount @client.js:1103
+           0.789 ms/s      6.381ms  0.079%  $e @index-ClqxG24t.js:54
+           0.657 ms/s      5.318ms  0.066%  get @index-ClqxG24t.js:11
+           0.657 ms/s      5.318ms  0.066%  get @index-ClqxG24t.js:11
+           0.657 ms/s      5.318ms  0.066%  get @client.js:5754 <lib/types/client/sessions/projection-store.js>
+           0.526 ms/s      4.254ms  0.053%  indexSubagentDescendants @client.js:10355 <lib/types/client/sessions/subagent-lineage.js>
+           0.526 ms/s      4.254ms  0.053%  enqueue @client.js:10281
+           0.526 ms/s      4.254ms  0.053%  walk @client.js:5615 <lib/types/client/sessions/lineage.js>
+           0.526 ms/s      4.254ms  0.053%  indexSubagentDescendants @client.js:10355 <lib/types/client/sessions/subagent-lineage.js>
+           0.526 ms/s      4.254ms  0.053%  get @index-ClqxG24t.js:11
+           0.394 ms/s      3.191ms  0.039%  flattenLineage @client.js:5603 <lib/types/client/sessions/lineage.js>
+           0.394 ms/s      3.191ms  0.039%  groupByWorkspace @client.js:147
+           0.394 ms/s      3.191ms  0.039%  get @index-ClqxG24t.js:11
+           0.394 ms/s      3.191ms  0.039%  F4 @index-ClqxG24t.js:56
+           0.394 ms/s      3.191ms  0.039%  X @index-ClqxG24t.js:54
+           0.394 ms/s      3.191ms  0.039%  f1 @index-ClqxG24t.js:56
+           0.394 ms/s      3.191ms  0.039%  $e @index-ClqxG24t.js:54
+           0.394 ms/s      3.191ms  0.039%  SessionManager.notifier @client.js:7844 <lib/types/client/sessions/manager.js>
+
+## world totals + headline ratios
+  {"script":2371.1010000000006,"busy":8519.56,"apply":6208.0059999999985,"chain":138.38600000000002,"recalc":4686.949,"layout":1621.1819999999998,"task":10927.24,"applyShareOfScript":2.618,"applyShareOfBusy":0.729,"chainShareOfScript":0.058,"chainShareOfBusy":0.016,"applyOverChain":44.86,"scriptShareOfTask":0.217,"recalcShareOfTask":0.429,"layoutShareOfTask":0.148} 
+written out/analysis-cpuX.json / .txt

@@ -1,0 +1,95 @@
+{
+  "foldWallMs": 30697,
+  "scanned": 875,
+  "newEvents": 53906,
+  "failedCount": 14,
+  "rebuildCalls": 858,
+  "openErrors": 3,
+  "uniqueErrors": 11,
+  "firstUnique": {
+    "days": [
+      "2026-08-19",
+      "2026-08-20",
+      "2026-08-24",
+      "2026-08-25"
+    ],
+    "lo": 1787068800000,
+    "hi": 1787673600000,
+    "loISO": "Wed Aug 19 2026 00:00:00 GMT+0800 (中国标准时间)",
+    "hiISO": "Wed Aug 26 2026 00:00:00 GMT+0800 (中国标准时间)",
+    "error": "UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project",
+    "diag": {
+      "deletedDays": [
+        "2026-08-19",
+        "2026-08-20",
+        "2026-08-24",
+        "2026-08-25"
+      ],
+      "deletedSetSize": 4,
+      "producedDays": [
+        "2026-08-19",
+        "2026-08-20",
+        "2026-08-21",
+        "2026-08-22",
+        "2026-08-24",
+        "2026-08-25"
+      ],
+      "producedCount": 8,
+      "daysNotDeletedCount": 2,
+      "daysNotDeletedSample": [
+        {
+          "day": "2026-08-21",
+          "data_source": "dsh",
+          "model": "deepseek-v4-pro",
+          "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+          "requests": 384
+        },
+        {
+          "day": "2026-08-22",
+          "data_source": "dsh",
+          "model": "deepseek-v4-pro",
+          "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+          "requests": 201
+        }
+      ],
+      "clashCount": 2,
+      "clashSample": [
+        {
+          "produced": {
+            "day": "2026-08-21",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 384
+          },
+          "existing": {
+            "day": "2026-08-21",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 384
+          }
+        },
+        {
+          "produced": {
+            "day": "2026-08-22",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 201
+          },
+          "existing": {
+            "day": "2026-08-22",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 201
+          }
+        }
+      ],
+      "leftovers": [],
+      "inRangeNotDeleted": [
+        "2026-08-21",
+        "2026-08-22"
+      ]
+    }
+  }
+}

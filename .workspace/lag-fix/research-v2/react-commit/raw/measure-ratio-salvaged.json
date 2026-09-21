@@ -1,0 +1,77 @@
+{
+  "provenance": "SALVAGED from raw/ratio-run.log — the harness crashed during window H4 (browser closed externally) before writing raw/measure-ratio.json. These numbers are the harness own per-window summary lines; per-window pgrep values are the last idle-gate samples recorded in the same log.",
+  "run": {
+    "tag": "ratio",
+    "plan": "hunt",
+    "windowMs": 60000,
+    "idleBudgetMs": 40000,
+    "startedApprox": "2026-09-21T16:01 local",
+    "crashedAt": "~16:12 local",
+    "crash": "page.evaluate: Target page, context or browser has been closed (during H4)"
+  },
+  "hostPid": 1390375,
+  "lockHeldThroughout": true,
+  "exclusiveWindows": 0,
+  "windowsAttempted": 4,
+  "windowsCompleted": 3,
+  "windows": [
+    {
+      "name": "H1-active-open-models",
+      "valid": false,
+      "lockHeld": true,
+      "foreignBrowserInstancesAtStart": 3,
+      "foreignBrowserInstancesAtEnd": 8,
+      "activeSection": "模型",
+      "commits": 755,
+      "panelRootRenders": 755,
+      "sessionFrames": 9673,
+      "wholeTreeRendersPerCommit": 270.63046357615895,
+      "panelRendersPerCommit": 1,
+      "panelRendersPerSessionFrame": 0.07805231055515352,
+      "commitsPerSessionFrame": 0.07805231055515352,
+      "lastIdleGateSample": {
+        "foreignInstances": 2,
+        "pgrepHeadlessShell": 9
+      }
+    },
+    {
+      "name": "H2-active-open-general",
+      "valid": false,
+      "lockHeld": true,
+      "foreignBrowserInstancesAtStart": 8,
+      "foreignBrowserInstancesAtEnd": 7,
+      "activeSection": "通用设置",
+      "commits": 443,
+      "panelRootRenders": 0,
+      "sessionFrames": 4734,
+      "wholeTreeRendersPerCommit": 281.1015801354402,
+      "panelRendersPerCommit": 0,
+      "panelRendersPerSessionFrame": 0,
+      "commitsPerSessionFrame": 0.09357836924376849,
+      "lastIdleGateSample": {
+        "foreignInstances": 8,
+        "pgrepHeadlessShell": 15
+      }
+    },
+    {
+      "name": "H3-active-closed",
+      "valid": false,
+      "lockHeld": true,
+      "foreignBrowserInstancesAtStart": 8,
+      "foreignBrowserInstancesAtEnd": 8,
+      "activeSection": null,
+      "commits": 662,
+      "panelRootRenders": 0,
+      "sessionFrames": 6598,
+      "wholeTreeRendersPerCommit": 236.35649546827796,
+      "panelRendersPerCommit": 0,
+      "panelRendersPerSessionFrame": 0,
+      "commitsPerSessionFrame": 0.10033343437405275,
+      "lastIdleGateSample": {
+        "foreignInstances": 8,
+        "pgrepHeadlessShell": 15
+      }
+    }
+  ],
+  "verdict": "INCONCLUSIVE — every completed window had >1 concurrent foreign browser instance (coordinator rule ①)"
+}

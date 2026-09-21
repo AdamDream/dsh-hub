@@ -1,0 +1,352 @@
+{
+  "lock": {
+    "path": ".workspace/lag-fix/research-v2/.probe.lock",
+    "mechanism": "atomic mkdir",
+    "acquiredIso": "2026-09-21T15:17:26+08:00",
+    "acquiredEpoch": 1789975046,
+    "releasedIso": "2026-09-21T15:44:41+08:00",
+    "heldSeconds": 1635,
+    "acquiredOnFirstAttempt": true,
+    "preemptionPerformed": false,
+    "preemptionNote": "no lock existed at 15:17:03, so a clean atomic mkdir succeeded; no stale-owner takeover was needed",
+    "releaseMechanism": "rm owner.txt && rmdir (rmdir requires an empty directory; owner.txt must be removed first)",
+    "ownerTxtArchivedAt": "raw/lock-owner.txt",
+    "ownerTxtContent": "agent: react-commit-audit (subagent of DSH session, workspace .workspace/lag-fix/research-v2/react-commit)\nline: React commit counting / settings-subtree re-render measurement\nhost_pid: 1390375 (node dsh web, monitored, never restarted)\nstarted_at: 2026-09-21T15:17:26+08:00\nstarted_epoch: 1789975046\nexpected_release: within ~20 min\npurpose: re-collect the 8x60s window set + 4x60s state-dependence experiment under exclusive lock\n",
+    "note_on_boot_read": "meta.lockAtBoot in measure-locked.json reports a TDZ error (\"Cannot access LOCK_DIR before initialization\") because the reader was defined below its first use in the options object; per-window and end-of-run lock reads are unaffected and are the ones used for the verdict."
+  },
+  "predecessorWait": {
+    "observedBeforeMyBrowserStart": [
+      {
+        "line": "tab-profile",
+        "script": "lib/tab-profile.mjs --phase=all --budget-min=20",
+        "browserPid": 1740805,
+        "startedAt": "2026-09-21T14:55:09+08:00",
+        "note": "in-flight before my lock"
+      },
+      {
+        "line": "measure-hardening",
+        "script": "probes/harden-measure.mjs",
+        "startedAt": "2026-09-21T15:12:43+08:00",
+        "note": "in-flight before my lock"
+      }
+    ],
+    "actionTaken": "waited ~10 min for those two to end before starting my browser; they were immediately replaced by other lines (cpu-profile, probe.mjs, probe-threads, capture4, measure-slot, probe-theme-apply2/3, probe-hooks, /tmp/probe2.mjs)"
+  },
+  "myBrowserSession": {
+    "startedAt": "2026-09-21T15:30:16Z (meta.startedAt of measure-locked.json)",
+    "endedAt": "after L5, ~15:42 local",
+    "singleInstance": true,
+    "closedAfterRun": true
+  },
+  "violations": {
+    "lockHeldThroughoutMyBrowserSession": true,
+    "exclusiveWindowsAchieved": 0,
+    "windowsAttempted": 5,
+    "distinctConcurrentLinesObserved": 7,
+    "concurrentLines": [
+      {
+        "browserPid": 2104881,
+        "chain": [
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "browserPid": 2593885,
+        "chain": [
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "browserPid": 2596043,
+        "chain": [
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "browserPid": 2604720,
+        "chain": [
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "browserPid": 2721575,
+        "chain": [
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "browserPid": 2746899,
+        "chain": [
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "browserPid": 2746999,
+        "chain": [
+          null,
+          null,
+          null
+        ]
+      }
+    ],
+    "notable": "one concurrent line ran with an explicit --nolockwait flag (node measure-slot.mjs --tag main --window 60000 --nolockwait), i.e. deliberate lock bypass"
+  },
+  "windows": [
+    {
+      "name": "L1-active-open-general",
+      "requested": {
+        "panel": "open",
+        "net": "active",
+        "section": "general"
+      },
+      "activeSection": "通用设置",
+      "lockHeldAtWindowStart": true,
+      "foreignBrowsersAtStart": 18,
+      "foreignBrowsersAtEnd": 24,
+      "foreignOwnerScripts": [
+        [
+          "scripts/capture3.mjs",
+          6
+        ],
+        [
+          "probes/harden-measure.mjs",
+          6
+        ],
+        [
+          "lib/probe.mjs",
+          6
+        ]
+      ],
+      "idleGateReached": false,
+      "idleGateWaitedMs": 100080,
+      "startIso": "2026-09-21T07:32:08.916Z",
+      "endIso": "2026-09-21T07:33:09.537Z",
+      "commits": 616,
+      "sessionFrames": 5852,
+      "panelRootRenders": 616,
+      "panelRendersPerCommit": 1,
+      "settingsSubtreeRendersPerCommit": 62,
+      "ancestorChainRenders": {
+        "0": 616,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 0
+      },
+      "exclusive": false
+    },
+    {
+      "name": "L2-active-open-models",
+      "requested": {
+        "panel": "open",
+        "net": "active",
+        "section": "models"
+      },
+      "activeSection": "模型",
+      "lockHeldAtWindowStart": true,
+      "foreignBrowsersAtStart": 24,
+      "foreignBrowsersAtEnd": 18,
+      "foreignOwnerScripts": [
+        [
+          "scripts/capture3.mjs",
+          6
+        ],
+        [
+          "probes/harden-measure.mjs",
+          6
+        ],
+        [
+          "lib/probe.mjs",
+          6
+        ],
+        [
+          "scripts/capture4.mjs",
+          6
+        ]
+      ],
+      "idleGateReached": false,
+      "idleGateWaitedMs": 100057,
+      "startIso": "2026-09-21T07:34:53.087Z",
+      "endIso": "2026-09-21T07:35:53.405Z",
+      "commits": 658,
+      "sessionFrames": 4096,
+      "panelRootRenders": 658,
+      "panelRendersPerCommit": 1,
+      "settingsSubtreeRendersPerCommit": 26.5,
+      "ancestorChainRenders": {
+        "0": 658,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 0
+      },
+      "exclusive": false
+    },
+    {
+      "name": "L3-active-closed",
+      "requested": {
+        "panel": "closed",
+        "net": "active",
+        "section": null
+      },
+      "activeSection": null,
+      "lockHeldAtWindowStart": true,
+      "foreignBrowsersAtStart": 18,
+      "foreignBrowsersAtEnd": 19,
+      "foreignOwnerScripts": [
+        [
+          "scripts/capture3.mjs",
+          6
+        ],
+        [
+          "lib/probe.mjs",
+          6
+        ],
+        [
+          "scripts/capture4.mjs",
+          6
+        ]
+      ],
+      "idleGateReached": false,
+      "idleGateWaitedMs": 100048,
+      "startIso": "2026-09-21T07:37:37.009Z",
+      "endIso": "2026-09-21T07:38:37.268Z",
+      "commits": 330,
+      "sessionFrames": 4098,
+      "panelRootRenders": 0,
+      "panelRendersPerCommit": 0,
+      "settingsSubtreeRendersPerCommit": 0,
+      "ancestorChainRenders": {},
+      "exclusive": false
+    },
+    {
+      "name": "L4-quiet-open-models",
+      "requested": {
+        "panel": "open",
+        "net": "quiet",
+        "section": "models"
+      },
+      "activeSection": "模型",
+      "lockHeldAtWindowStart": true,
+      "foreignBrowsersAtStart": 24,
+      "foreignBrowsersAtEnd": 24,
+      "foreignOwnerScripts": [
+        [
+          "scripts/capture3.mjs",
+          6
+        ],
+        [
+          "lib/probe.mjs",
+          6
+        ],
+        [
+          "scripts/capture4.mjs",
+          6
+        ],
+        [
+          "measure-slot.mjs",
+          6
+        ]
+      ],
+      "idleGateReached": false,
+      "idleGateWaitedMs": 100048,
+      "startIso": "2026-09-21T07:40:23.353Z",
+      "endIso": "2026-09-21T07:41:23.788Z",
+      "commits": 0,
+      "sessionFrames": 0,
+      "panelRootRenders": 0,
+      "panelRendersPerCommit": null,
+      "settingsSubtreeRendersPerCommit": null,
+      "ancestorChainRenders": {},
+      "exclusive": false
+    },
+    {
+      "name": "L5-quiet-closed",
+      "requested": {
+        "panel": "closed",
+        "net": "quiet",
+        "section": null
+      },
+      "activeSection": null,
+      "lockHeldAtWindowStart": true,
+      "foreignBrowsersAtStart": 30,
+      "foreignBrowsersAtEnd": 31,
+      "foreignOwnerScripts": [
+        [
+          "scripts/capture3.mjs",
+          6
+        ],
+        [
+          "lib/probe.mjs",
+          6
+        ],
+        [
+          "measure-slot.mjs",
+          6
+        ],
+        [
+          "scripts/probe-theme-apply2.mjs",
+          6
+        ],
+        [
+          "scripts/probe-hooks.mjs",
+          6
+        ]
+      ],
+      "idleGateReached": false,
+      "idleGateWaitedMs": 100052,
+      "startIso": "2026-09-21T07:43:08.285Z",
+      "endIso": "2026-09-21T07:44:08.493Z",
+      "commits": 0,
+      "sessionFrames": 0,
+      "panelRootRenders": 0,
+      "panelRendersPerCommit": null,
+      "settingsSubtreeRendersPerCommit": null,
+      "ancestorChainRenders": {},
+      "exclusive": false
+    }
+  ],
+  "verdict": {
+    "preLockBatch": {
+      "tag": "main",
+      "windows": 8,
+      "lockHeld": false,
+      "verdict": "INCONCLUSIVE",
+      "reason": "collected before the cross-line probe lock existed/existed-and-was-held by me; concurrency not controlled"
+    },
+    "lockedBatch": {
+      "tag": "locked",
+      "windows": 5,
+      "lockHeld": true,
+      "exclusive": false,
+      "verdict": "INCONCLUSIVE",
+      "reason": "lock was held for the whole browser session, but 18-31 foreign Playwright browser processes from >=6 other research lines were running during every window; the host was never exclusive, so the lock gave no protection"
+    }
+  }
+}

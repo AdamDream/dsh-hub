@@ -1,0 +1,409 @@
+{
+ "url": "ws://127.0.0.1:3080/api/events.mux",
+ "seconds": 20,
+ "framesTotal": 138,
+ "byType": {
+  "session/subscribed": 17,
+  "session/queue": 6,
+  "session/jobs": 7,
+  "session/projection": 81,
+  "session/event": 27
+ },
+ "innerTop": [
+  [
+   "session/projection > key,value,seq",
+   81
+  ],
+  [
+   "session/subscribed > lastSeq",
+   17
+  ],
+  [
+   "session/jobs > jobs",
+   7
+  ],
+  [
+   "session/queue > items",
+   6
+  ],
+  [
+   "session/event > tool/call",
+   6
+  ],
+  [
+   "session/event > tool/result",
+   6
+  ],
+  [
+   "session/event > assistant/message",
+   5
+  ],
+  [
+   "session/event > step/end",
+   5
+  ],
+  [
+   "session/event > step/start",
+   5
+  ]
+ ],
+ "sizes": {
+  "session/subscribed": {
+   "n": 17,
+   "avgBytes": 211,
+   "min": 207,
+   "max": 218,
+   "mbPerSec": 0
+  },
+  "session/queue": {
+   "n": 6,
+   "avgBytes": 1450,
+   "min": 759,
+   "max": 2918,
+   "mbPerSec": 0
+  },
+  "session/jobs": {
+   "n": 7,
+   "avgBytes": 1370,
+   "min": 857,
+   "max": 2387,
+   "mbPerSec": 0
+  },
+  "session/projection": {
+   "n": 81,
+   "avgBytes": 320,
+   "min": 301,
+   "max": 343,
+   "mbPerSec": 0.001
+  },
+  "session/event": {
+   "n": 27,
+   "avgBytes": 709,
+   "min": 271,
+   "max": 1434,
+   "mbPerSec": 0.001
+  }
+ },
+ "sample": [
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "session-d565c2bf-ea67-43e0",
+   "len": 218,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"539e1759-db71-4ca4-a5a1-913ad9979b5b\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"session-d565c2bf-ea67-43e0-a9e0-406790c115a7\",\"lastSeq\":196579}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "session-3e18f4d0-bd77-49fc",
+   "len": 218,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"a435a03e-ad98-4c31-b89f-c92a1cb0f58f\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"session-3e18f4d0-bd77-49fc-b5ed-a64af4b75b5c\",\"lastSeq\":184757}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "session-6ea8d570-d1ae-4e75",
+   "len": 217,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"c6222012-414f-4ee4-aa11-565ae1cee191\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"session-6ea8d570-d1ae-4e75-ab88-8297eac64d50\",\"lastSeq\":45025}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "0acde5b4-8c45-4ab8-9b54-f4",
+   "len": 207,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"1583d4e5-74f7-45b1-a61e-339a19505269\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"0acde5b4-8c45-4ab8-9b54-f4278a76cd69\",\"lastSeq\":794}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "f5adabaa-b041-467a-92bc-fd",
+   "len": 207,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"f5e6b868-226d-4974-ad72-c92227606463\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"f5adabaa-b041-467a-92bc-fd5f59a0c256\",\"lastSeq\":563}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "a9012d40-3f81-4168-bda2-0a",
+   "len": 207,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"e1fb3fa1-5f43-440f-b993-110d832c202f\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"a9012d40-3f81-4168-bda2-0aff6f8537f0\",\"lastSeq\":895}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "80eed089-ec77-415f-9a2d-65",
+   "len": 207,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"86f89e27-f832-4a9f-ad0b-15c21b5a4acf\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"80eed089-ec77-415f-9a2d-65b1015d022c\",\"lastSeq\":806}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "session-4dc1144d-075a-4e9f",
+   "len": 213,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"a814af6e-1485-4159-80f5-284b5e888615\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"session-4dc1144d-075a-4e9f-9e87-3ea6242d20f9\",\"lastSeq\":2}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "d63e320d-367d-4400-8fc5-2e",
+   "len": 209,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"3aa9bb52-0174-4362-8b3d-41445c50019e\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"d63e320d-367d-4400-8fc5-2ed42a5b7753\",\"lastSeq\":68276}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "69d2313a-c1a3-4a27-9fa9-f0",
+   "len": 209,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"1ca68901-047f-46d9-a367-7d8cdbf5088c\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"69d2313a-c1a3-4a27-9fa9-f06226c3a324\",\"lastSeq\":19297}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "session-8d4dab86-6ec1-4881",
+   "len": 217,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"264c831f-287d-4bab-a287-501017517ad4\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"session-8d4dab86-6ec1-4881-99b2-102cda754d60\",\"lastSeq\":23807}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "session-b2741c34-9729-4d95",
+   "len": 218,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"8339ee2d-989f-4404-b282-8939fa9d1e30\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"session-b2741c34-9729-4d95-8491-9eb2ad5fb651\",\"lastSeq\":195901}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "17181bfc-e600-48cf-bc1b-16",
+   "len": 207,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"66c5b9ee-5d3a-418b-86a4-4aac11d942ee\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"17181bfc-e600-48cf-bc1b-16956e728daa\",\"lastSeq\":622}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "2031a6b6-ece5-4aba-a48f-10",
+   "len": 207,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"5b17160c-4bb6-4e1d-adfa-e4b021ae6314\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"2031a6b6-ece5-4aba-a48f-106d63472282\",\"lastSeq\":710}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "3589c07a-78e1-4a25-a71e-ff",
+   "len": 207,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"a0386b1a-93a3-40fc-8380-aad348a48696\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"3589c07a-78e1-4a25-a71e-ffe86549bbc8\",\"lastSeq\":688}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "0b82f24c-529e-4b1c-a46b-a1",
+   "len": 207,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"52cfb64a-222f-4936-90f0-c386a8f1fd51\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"0b82f24c-529e-4b1c-a46b-a14248df6093\",\"lastSeq\":395}}"
+  },
+  {
+   "t": 6,
+   "type": "session/subscribed",
+   "inner": "lastSeq",
+   "sessionId": "session-9220413a-e3ce-4e3e",
+   "len": 218,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"0691dbbd-cbd1-4abb-a3b3-939f6b0fbdb8\",\"method\":\"session/subscribed\",\"payload\":{\"type\":\"session/subscribed\",\"sessionId\":\"session-9220413a-e3ce-4e3e-a46c-db8b05483cd0\",\"lastSeq\":232168}}"
+  },
+  {
+   "t": 6,
+   "type": "session/queue",
+   "inner": "items",
+   "sessionId": "f5adabaa-b041-467a-92bc-fd",
+   "len": 2918,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"4b9f8d25-e885-4dad-9139-6b51ce50f8d7\",\"method\":\"session/queue\",\"payload\":{\"type\":\"session/queue\",\"sessionId\":\"f5adabaa-b041-467a-92bc-fd5f59a0c256\",\"items\":[{\"id\":\"42468538-6ff7-4fdb-ba9b-5007744de058\",\"placement\":\"queued\",\"me"
+  },
+  {
+   "t": 6,
+   "type": "session/queue",
+   "inner": "items",
+   "sessionId": "a9012d40-3f81-4168-bda2-0a",
+   "len": 1318,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"22616236-be01-4686-b9e8-871360494d2e\",\"method\":\"session/queue\",\"payload\":{\"type\":\"session/queue\",\"sessionId\":\"a9012d40-3f81-4168-bda2-0aff6f8537f0\",\"items\":[{\"id\":\"e029b09f-3666-4468-9aa0-990dca4ab1e8\",\"placement\":\"queued\",\"me"
+  },
+  {
+   "t": 6,
+   "type": "session/queue",
+   "inner": "items",
+   "sessionId": "80eed089-ec77-415f-9a2d-65",
+   "len": 759,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"2953337b-e599-46d8-bdad-9c2671469257\",\"method\":\"session/queue\",\"payload\":{\"type\":\"session/queue\",\"sessionId\":\"80eed089-ec77-415f-9a2d-65b1015d022c\",\"items\":[{\"id\":\"e71d6901-7426-4cd2-bc00-895e2cb4cdff\",\"placement\":\"queued\",\"me"
+  },
+  {
+   "t": 6,
+   "type": "session/queue",
+   "inner": "items",
+   "sessionId": "2031a6b6-ece5-4aba-a48f-10",
+   "len": 1426,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"97466b0b-4619-4218-b727-4d52a6214185\",\"method\":\"session/queue\",\"payload\":{\"type\":\"session/queue\",\"sessionId\":\"2031a6b6-ece5-4aba-a48f-106d63472282\",\"items\":[{\"id\":\"7916a57e-4722-44cb-b76d-b2c7f3067333\",\"placement\":\"queued\",\"me"
+  },
+  {
+   "t": 6,
+   "type": "session/queue",
+   "inner": "items",
+   "sessionId": "3589c07a-78e1-4a25-a71e-ff",
+   "len": 1413,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"b09a0e16-0b00-4d1c-949b-3c0c1556ccb3\",\"method\":\"session/queue\",\"payload\":{\"type\":\"session/queue\",\"sessionId\":\"3589c07a-78e1-4a25-a71e-ffe86549bbc8\",\"items\":[{\"id\":\"8a61a3d9-4846-4691-aa24-5c20c99d9ab9\",\"placement\":\"queued\",\"me"
+  },
+  {
+   "t": 6,
+   "type": "session/queue",
+   "inner": "items",
+   "sessionId": "0b82f24c-529e-4b1c-a46b-a1",
+   "len": 868,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"94a1847e-dc84-4212-b3c5-b474ac8b4b51\",\"method\":\"session/queue\",\"payload\":{\"type\":\"session/queue\",\"sessionId\":\"0b82f24c-529e-4b1c-a46b-a14248df6093\",\"items\":[{\"id\":\"d317df7d-5a11-406c-8250-faa45eb5db9c\",\"placement\":\"queued\",\"me"
+  },
+  {
+   "t": 6,
+   "type": "session/jobs",
+   "inner": "jobs",
+   "sessionId": "0acde5b4-8c45-4ab8-9b54-f4",
+   "len": 1167,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"18206059-0da5-4dc2-8f20-9425df905e30\",\"method\":\"session/jobs\",\"payload\":{\"type\":\"session/jobs\",\"sessionId\":\"0acde5b4-8c45-4ab8-9b54-f4278a76cd69\",\"jobs\":[{\"id\":\"bash-13\",\"kind\":\"bash\",\"label\":\"cd /home/CNS2026495165/dsh/.works"
+  },
+  {
+   "t": 6,
+   "type": "session/jobs",
+   "inner": "jobs",
+   "sessionId": "f5adabaa-b041-467a-92bc-fd",
+   "len": 2387,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"bfb5c5c8-5110-4674-ac47-52c604cca802\",\"method\":\"session/jobs\",\"payload\":{\"type\":\"session/jobs\",\"sessionId\":\"f5adabaa-b041-467a-92bc-fd5f59a0c256\",\"jobs\":[{\"id\":\"bash-3\",\"kind\":\"bash\",\"label\":\"cd /home/CNS2026495165/dsh/.worksp"
+  },
+  {
+   "t": 6,
+   "type": "session/jobs",
+   "inner": "jobs",
+   "sessionId": "a9012d40-3f81-4168-bda2-0a",
+   "len": 1028,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"f0b309ae-336d-4900-b809-1bfd28d0d8e5\",\"method\":\"session/jobs\",\"payload\":{\"type\":\"session/jobs\",\"sessionId\":\"a9012d40-3f81-4168-bda2-0aff6f8537f0\",\"jobs\":[{\"id\":\"bash-4\",\"kind\":\"bash\",\"label\":\"cd /home/CNS2026495165/dsh/.worksp"
+  },
+  {
+   "t": 6,
+   "type": "session/jobs",
+   "inner": "jobs",
+   "sessionId": "80eed089-ec77-415f-9a2d-65",
+   "len": 1549,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"c48a3d20-182d-4aa8-8f72-fdeffc8901d5\",\"method\":\"session/jobs\",\"payload\":{\"type\":\"session/jobs\",\"sessionId\":\"80eed089-ec77-415f-9a2d-65b1015d022c\",\"jobs\":[{\"id\":\"bash-2\",\"kind\":\"bash\",\"label\":\"cd /home/CNS2026495165/dsh/.worksp"
+  },
+  {
+   "t": 6,
+   "type": "session/jobs",
+   "inner": "jobs",
+   "sessionId": "2031a6b6-ece5-4aba-a48f-10",
+   "len": 1165,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"226e03b1-6d33-49e3-99e7-148e1ef810e4\",\"method\":\"session/jobs\",\"payload\":{\"type\":\"session/jobs\",\"sessionId\":\"2031a6b6-ece5-4aba-a48f-106d63472282\",\"jobs\":[{\"id\":\"bash-41\",\"kind\":\"bash\",\"label\":\"cd /home/CNS2026495165/dsh/.works"
+  },
+  {
+   "t": 6,
+   "type": "session/jobs",
+   "inner": "jobs",
+   "sessionId": "0b82f24c-529e-4b1c-a46b-a1",
+   "len": 857,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"7fa32113-0aac-45c6-b7d0-70d60ada5da8\",\"method\":\"session/jobs\",\"payload\":{\"type\":\"session/jobs\",\"sessionId\":\"0b82f24c-529e-4b1c-a46b-a14248df6093\",\"jobs\":[{\"id\":\"bash-44\",\"kind\":\"bash\",\"label\":\"cd /home/CNS2026495165/dsh/.works"
+  },
+  {
+   "t": 2623,
+   "type": "session/projection",
+   "inner": "key,value,seq",
+   "sessionId": "f5adabaa-b041-467a-92bc-fd",
+   "len": 343,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"864ca579-cea8-4428-a89b-b7fe824b03ed\",\"method\":\"session/projection\",\"payload\":{\"type\":\"session/projection\",\"sessionId\":\"f5adabaa-b041-467a-92bc-fd5f59a0c256\",\"key\":\"sessionStats\",\"value\":{\"turns\":1,\"steps\":103,\"llmMs\":807502,\""
+  },
+  {
+   "t": 2623,
+   "type": "session/projection",
+   "inner": "key,value,seq",
+   "sessionId": "f5adabaa-b041-467a-92bc-fd",
+   "len": 331,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"741c5224-7acc-443b-8000-744dfa4adc8b\",\"method\":\"session/projection\",\"payload\":{\"type\":\"session/projection\",\"sessionId\":\"f5adabaa-b041-467a-92bc-fd5f59a0c256\",\"key\":\"tokenUsage\",\"value\":{\"uncachedInputTokens\":120062,\"outputToke"
+  },
+  {
+   "t": 2624,
+   "type": "session/projection",
+   "inner": "key,value,seq",
+   "sessionId": "f5adabaa-b041-467a-92bc-fd",
+   "len": 310,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"db7c7d0e-6ba1-44c2-adb6-d68b8aa1301b\",\"method\":\"session/projection\",\"payload\":{\"type\":\"session/projection\",\"sessionId\":\"f5adabaa-b041-467a-92bc-fd5f59a0c256\",\"key\":\"contextPressure\",\"value\":{\"pressureTokens\":223440,\"projectedT"
+  },
+  {
+   "t": 2624,
+   "type": "session/projection",
+   "inner": "key,value,seq",
+   "sessionId": "f5adabaa-b041-467a-92bc-fd",
+   "len": 301,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"4700fed8-43ae-4082-bc16-7d3b5b969981\",\"method\":\"session/projection\",\"payload\":{\"type\":\"session/projection\",\"sessionId\":\"f5adabaa-b041-467a-92bc-fd5f59a0c256\",\"key\":\"contextBreakdown\",\"value\":{\"systemTokens\":3042,\"toolsTokens\":"
+  },
+  {
+   "t": 2624,
+   "type": "session/projection",
+   "inner": "key,value,seq",
+   "sessionId": "f5adabaa-b041-467a-92bc-fd",
+   "len": 307,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"67e0d914-9159-4b5c-8115-4bffae269acf\",\"method\":\"session/projection\",\"payload\":{\"type\":\"session/projection\",\"sessionId\":\"f5adabaa-b041-467a-92bc-fd5f59a0c256\",\"key\":\"subagentTiming\",\"value\":{\"settledMs\":0,\"active\":{\"since\":1789"
+  },
+  {
+   "t": 2624,
+   "type": "session/event",
+   "inner": "assistant/message",
+   "sessionId": "f5adabaa-b041-467a-92bc-fd",
+   "len": 1137,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"3c219efc-0bdd-4279-b8a6-2cbaf213eb53\",\"method\":\"session/event\",\"payload\":{\"type\":\"session/event\",\"sessionId\":\"f5adabaa-b041-467a-92bc-fd5f59a0c256\",\"event\":{\"type\":\"assistant/message\",\"seq\":564,\"time\":1789976912436,\"data\":{\"tu"
+  },
+  {
+   "t": 2624,
+   "type": "session/projection",
+   "inner": "key,value,seq",
+   "sessionId": "f5adabaa-b041-467a-92bc-fd",
+   "len": 343,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"c8df2ee8-ec91-4394-8c78-917cbbbe80a2\",\"method\":\"session/projection\",\"payload\":{\"type\":\"session/projection\",\"sessionId\":\"f5adabaa-b041-467a-92bc-fd5f59a0c256\",\"key\":\"sessionStats\",\"value\":{\"turns\":1,\"steps\":103,\"llmMs\":807502,\""
+  },
+  {
+   "t": 2624,
+   "type": "session/projection",
+   "inner": "key,value,seq",
+   "sessionId": "f5adabaa-b041-467a-92bc-fd",
+   "len": 307,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"797a76ca-b74e-415f-8b5f-0fbf92892fdf\",\"method\":\"session/projection\",\"payload\":{\"type\":\"session/projection\",\"sessionId\":\"f5adabaa-b041-467a-92bc-fd5f59a0c256\",\"key\":\"subagentTiming\",\"value\":{\"settledMs\":0,\"active\":{\"since\":1789"
+  },
+  {
+   "t": 2624,
+   "type": "session/event",
+   "inner": "tool/call",
+   "sessionId": "f5adabaa-b041-467a-92bc-fd",
+   "len": 799,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"f0bac314-d97d-4d74-bb9d-f61d87183ba4\",\"method\":\"session/event\",\"payload\":{\"type\":\"session/event\",\"sessionId\":\"f5adabaa-b041-467a-92bc-fd5f59a0c256\",\"event\":{\"type\":\"tool/call\",\"seq\":565,\"time\":1789976912437,\"data\":{\"turn\":1,\"s"
+  },
+  {
+   "t": 3806,
+   "type": "session/projection",
+   "inner": "key,value,seq",
+   "sessionId": "17181bfc-e600-48cf-bc1b-16",
+   "len": 343,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"7b36be65-85af-4523-8193-60e6b9a9efc9\",\"method\":\"session/projection\",\"payload\":{\"type\":\"session/projection\",\"sessionId\":\"17181bfc-e600-48cf-bc1b-16956e728daa\",\"key\":\"sessionStats\",\"value\":{\"turns\":1,\"steps\":118,\"llmMs\":1695286,"
+  },
+  {
+   "t": 3807,
+   "type": "session/projection",
+   "inner": "key,value,seq",
+   "sessionId": "17181bfc-e600-48cf-bc1b-16",
+   "len": 330,
+   "head": "{\"type\":\"server-request\",\"rpcId\":\"6b3725ad-0b90-43e9-bf7e-8ff8f729082f\",\"method\":\"session/projection\",\"payload\":{\"type\":\"session/projection\",\"sessionId\":\"17181bfc-e600-48cf-bc1b-16956e728daa\",\"key\":\"tokenUsage\",\"value\":{\"uncachedInputTokens\":128710,\"outputToke"
+  }
+ ]
+}

@@ -208,6 +208,10 @@ sequenceDiagram
 | `.workspace/workstreams/deploy/deploy-lag/README.md` §9 | 运行时热载能力矩阵（P0-a 实测固化） |
 | `examples/minimal-plugin/README.md` | 写第一个插件 |
 | `.dsh/skills/program-notebook/` | 本页的编写规范（skill 自述 + `references/`） |
+| `.workspace/lag-fix/research-v2/MEASUREMENT-STATUS.md` | **性能数字可信度单一事实源**：数据分级（可用＝比值/为零/占比；不可用＝绝对 ms）、协议失败实测、撤回清单、并发口径与锁释放顺序 |
+| `.workspace/lag-fix/exec-audit/BATCH-PLAN.md` | **落地批次计划**：单元清单／重启分组／闸门 G1–G5／写入者边界／测量协议 7 条 |
+| `.workspace/lag-fix/research-v2/theme-fix-ab/BEFORE.md` | 主题修复 A/B 的修复前基线（门禁全通过）与**重新推导后的判据** |
+| `.workspace/lag-fix/exec-audit/{ingest,b1,p2,theme}/audit.md` | 四份执行前审计（根因、精确锚点、验收标准、回滚点） |
 
 ---
 
@@ -228,7 +232,13 @@ sequenceDiagram
 | D9 | **`session-board` 包的实际部署位置未确证**：`@deepseek-ai/dsh-session-board` 未出现在 `~/.dsh/profiles/node_modules/@local/` 列表中 | **未知** | `ls ~/.dsh/profiles/node_modules/@local/`（本轮取证未见该包） |
 | D10 | **`install — models 段不完整的历史教训已修复但机制仍脆弱**：adam 曾 45/50 条目缺 `contextWindow` → 回落 262144 触发误判超窗；现按保守档补齐，但**新增模型若漏写 `contextWindow` 会再次踩坑** | 已修复（机制性风险仍在） | `acceptance-exec.md` §3.6；`dsh-llm-pi-ai/lib/index.js:849`（`DEFAULT_CONTEXT_WINDOW = 262144`） |
 | D11 | **btw vitest 存在负载敏感 flake**（已加固为首跑 1 failed / 隔离 10/10、全量复跑 3/3 全绿）——不得写成"测试全绿"或"存在回归" | 已加固 | `acceptance-exec.md` §3.2；`dsh-btw/tests/host-opening.spec.ts:145` |
-| D12 | **设置页全链路卡顿尚未证实消除**：P1/P2/C2 只覆盖局部 runtime/插件成本；session churn→projection/list.set→下游渲染与 usage 同步 SQLite/ingest 仍是两个独立候选。**已修** usage 旧响应覆盖（client，热面，真实浏览器 before/after 已验证）与宿主 bootstrap 生命周期（host，冷面，待重启生效）。**被推翻**：`SettingsRoot` selector 早已返回 boolean（`useSyncExternalStoreWithSelector` 比较选择结果）、`SessionMaybeProvider` 订阅稳定 provideInfo ⇒「无 memo 即每事件重渲染」不成立；C2 生产已有 pendingScan 合并 + 300ms 间隔。**口径更正**：ingest 478–846ms 是独立进程 parser 基准，不是宿主 tick 实测 | **部分修复**（R4 已落地；memo/C2 待根因重定） | `.workspace/lag-fix/reports/settings-jank-revise-exec.md`；`settings-jank-audit-synthesis.md`；`settings-jank-revise-audit.md`；`.workspace/lag-fix/ingest-gate/audit.md` |
+| D12 | **设置页卡顿：根因已从"会话链"改判为客户端主题重放 + 宿主 ingest**。8 条独立审计 + 独占复测结果：① **客户端第一位成本项 = `dsh-client-ui-layout` 的 `ThemePresenter.apply`**（`theme-presenter.js:366`；独占批占非 idle **72.9%**、受污染批 78.6%，**是整条会话链的 44.9×**，触发源是 `ctx.on("theme/change")` 而非 session 事件；每次调用含 **1 次 `getComputedStyle(body)` 强制全文档重算**，成本随 DOM 规模超线性）。② 会话投影链（`buildListSnapshot`/`projectList`/`list.set`）仅占非 idle **1.6%** ⇒ **原"首要机制"被证伪**。③ 单个设置标签内容渲染、C2 全树扫描、usage 首挂载 **均已证伪**（模型面板 12/12 窗 0 fiber；`rebuildRemote` 0 命中；9 路请求 0/591 掉帧）。④ **口径**：历史"设置页 script 80–190 ms/s"系并发污染，实测膨胀 **Script 4.5–10.3×、apply 9.6–20.5×**；`Layout` 仅独占批可测。 | **主题批待落地**（候选与实验脚本产出中）；R4 已落地 | `research-v2/MEASUREMENT-STATUS.md`；`research-v2/cpu-profile/audit.md`；`research-v2/theme-fix-ab/BEFORE.md`；`reports/settings-jank-audit-synthesis.md` |
+| D13 | **usage 45s ingest 定时器从未触发**（自启动起冻结，实测跨 ≥117 个周期；R4 之前即存在）。根因：`dsh-usage` 的 `inject` **无 `"timer"`**，而 `ctx.setInterval` 是 timer 服务 mixin accessor ⇒ `typeof ctx.setInterval` **读取即抛** `cannot get property "timer" without inject`；因 `A ? B : C` 先求值 `A`，`ctx.effect` 兜底**语法上不可达**（与 D14/9-20 事故同属"死掉的兜底路径"）。**修法形状**：`ctx.inject(["timer"], cb)`，不得保留 `typeof` 探测。**铁律：必须先让 ingest 离开主线程（G1：单 pass 宿主事件循环最大延迟 <100ms）再启用**，否则变成每 45s 冻 2.7s | **未修**（U-IG1 先决） | `exec-audit/ingest/audit.md` §1；`research-v2/ingest-gate/verdict.md` |
+| D14 | **CC ingest 游标 off-by-one ⇒ 静默丢记录**：`ingest-cc.js` 的 `consumedBytes` 在文件以换行结尾时**多算 1 字节** ⇒ `last_offset = size+1` ⇒ 下一轮 `subarray(size+1)` **跳过新内容首字节**，追加批次首条记录解析失败被丢弃（表现为 `failedFiles:"1 unparsable JSON lines"`，每轮复现）。生产 388 条 `sync_state` 行**逐条**满足 `= size+1`。**已修**（source：`consumedBytes` 分支 + 遗留 `size+1` 游标夹回 `state.size` 自愈），复现 `LOSS_CONFIRMED → NO_LOSS`、迁移 `SELF_HEAL_PASS` | **source 已修；deployed 待落地**（脚本就绪） | `research-v2/cc-cursor/audit.md`；`exec-audit/ingest/audit.md` §4 |
+| D15 | **`rebuildDailyForDays` 重复键**：DELETE 集合 = 传入的**非连续** day 集合，而 INSERT 的 SELECT 用 `[min, max+1day)` **连续区间** ⇒ 区间内"间隙日"未删却被 GROUP BY 重新产出 → 裸 INSERT 撞 `UNIQUE(day,data_source,model,project)`（空库全量 11/871 文件；生产 1 例）。**不产生错数字**（`usage_daily` 仅 `queryHeatmap` 读且带新鲜度闸门会回落 raw events），但会让日聚合沿旧值停住。修法：**区间对齐** 或/与 `ON CONFLICT … DO UPDATE` | **未修** | `exec-audit/ingest/audit.md` §2 |
+| D16 | **P2 address-chain stale row**：`projectList` 在 ids 不变时把旧 `byId` 中当前缺失的键**无差别回拷**，且 byId 整体身份复用未校验键集 ⇒ 已剪掉 scope 的 synthetic child 残留在投影里，被后代聚合读取。**已修（deployed 已落地，热面）**：链域回拷 + 键集闸门（`/* p2ac-fix */` ×4；`357f1703…`），58/58 变体对拍 + 18/18 harness 双态 + 反向对照 6/6 | **已修** | `exec-audit/p2/audit.md`；`exec-p2/report.md` |
+| D17 | **B1 冷路径排序与 running 计数两处缺陷**（承接 B1 补丁）：① 冷候选排序用 header **不存在的 `updatedAt`** ⇒ 比较器恒 `NaN` ⇒ 实际为 `readdir` **枚举顺序前 200**（丢的是整行）；② `runningSubagentCount` 有**两条丢弃通道**（收口截断 + attached keep-set 无 running 豁免）。**已修（deployed 已落地，冷面待重启）**：`?? createdAt` + id 消歧；`childrenOf` 改由 `ctx.sessions.list()` 构建。反事实 18/18（201 几何 0→1）；A6 活体断言待重启后验 | **已修，待重启生效** | `exec-audit/b1/audit.md`；`exec-b1/report.md` |
+
 
 ---
 

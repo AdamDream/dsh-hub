@@ -55,3 +55,16 @@ cc-switch-src/
 # Python 编译缓存（本次整理时发现被误纳入）
 __pycache__/
 *.pyc
+
+# 调研/执行档的临时载体与可重生的重型 raw 产物（2026-09-21 加入）
+# 理由：这些是测试 scratch 库或可脚本重生的原始 dump，体积远超其归档价值；
+# 关键证据以 markdown 报告 + 精选 JSON 形式入库（见 research-v2/MEASUREMENT-STATUS.md）。
+.workspace/lag-fix/**/scratch*/
+.workspace/lag-fix/**/*.db
+.workspace/lag-fix/**/*.db-wal
+.workspace/lag-fix/**/*.db-shm
+.workspace/lag-fix/**/*.db-journal
+.workspace/lag-fix/research-v2/slot-churn/raw/
+# 派生副本（非本仓库作者产物）：官方/第三方 bundle 的快照，可由部署件重新取得
+.workspace/lag-fix/**/raw/plugins/
+.workspace/lag-fix/**/served-client.js

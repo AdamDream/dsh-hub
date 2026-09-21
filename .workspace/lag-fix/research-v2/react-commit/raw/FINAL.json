@@ -1,0 +1,2182 @@
+{
+  "generatedAt": "2026-09-21T07:45:38.432Z",
+  "host": {
+    "pid": 1390375,
+    "pidEvidence": "ps -p 1390375 => node /home/CNS2026495165/.npm-global/bin/dsh web (ppid 1390374 = sh -c \"dsh web\"; 1390362 = npm exec @deepseek-ai/dsh web)",
+    "url": "http://127.0.0.1:3080",
+    "bootRev": "102e374d338e",
+    "bundleRevs": {
+      "@deepseek-ai/dsh-client-runtime": {
+        "rev": "a0fb4bb225d3",
+        "url": "/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3"
+      },
+      "@deepseek-ai/dsh-client-ui-renderer": {
+        "rev": "79b59d365f3b",
+        "url": "/plugins/@deepseek-ai/dsh-client-ui-renderer/client.js?rev=79b59d365f3b"
+      },
+      "@deepseek-ai/dsh-client-ui-settings-general": {
+        "rev": "f733efde3f2f",
+        "url": "/plugins/@deepseek-ai/dsh-client-ui-settings-general/client.js?rev=f733efde3f2f"
+      },
+      "@deepseek-ai/dsh-client-ui-workspace": {
+        "rev": "5596cec54007",
+        "url": "/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007"
+      },
+      "@local/dsh-usage": {
+        "rev": "4536b91ed282",
+        "url": "/plugins/@local/dsh-usage/client.js?rev=4536b91ed282"
+      }
+    },
+    "bootEntryCount": 50,
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+    "headless": true,
+    "viewport": "1440x900",
+    "nodeVersion": "v22.23.2"
+  },
+  "premiseSelfProof": {
+    "verdict": "PASS",
+    "hookPreexisting": false,
+    "reactVersionReportedByInject": [
+      "18.3.1"
+    ],
+    "rendererPackageName": [
+      "react-dom"
+    ],
+    "bundleType": [
+      0
+    ],
+    "injectCalls": 1,
+    "onCommitFiberRoot_atBoot": 164,
+    "onCommitFiberRoot_total": 6013,
+    "onPostCommitFiberRoot_total": 5108,
+    "onCommitFiberUnmount_total": 756,
+    "note": "react-dom 18.3.1 production build adopts the hook at module evaluation and calls onCommitFiberRoot on every commit; the CDP-Profiler fallback was therefore NOT required.",
+    "resolvedSettingsFiberChainFromPanelDom": [
+      "host:div(dialog)",
+      "host:div(overlay)",
+      "SettingsPanel",
+      "SettingsRoot",
+      "RootEntry",
+      "SlotErrorBoundary",
+      "host:div",
+      "SlotOutlet",
+      "..."
+    ],
+    "targetNamesResolved": {
+      "panel": "SettingsPanel",
+      "root": "SettingsRoot"
+    }
+  },
+  "sessionScaleN": {
+    "source": "POST /api/session.list with envelope {type:\"client-request\",rpcId,method:\"session.list\",payload:{}}",
+    "samples": [
+      {
+        "window": "W1-active-open-general",
+        "start": {
+          "items": 297,
+          "topLevel": 104,
+          "subagents": 193,
+          "running": 13,
+          "withProjections": 296
+        }
+      },
+      {
+        "window": "W2-active-open-models",
+        "start": {
+          "items": 297,
+          "topLevel": 104,
+          "subagents": 193,
+          "running": 13,
+          "withProjections": 296
+        }
+      },
+      {
+        "window": "W3-active-closed",
+        "start": {
+          "items": 297,
+          "topLevel": 104,
+          "subagents": 193,
+          "running": 13,
+          "withProjections": 296
+        }
+      },
+      {
+        "window": "W4-active-open-general",
+        "start": {
+          "items": 297,
+          "topLevel": 104,
+          "subagents": 193,
+          "running": 13,
+          "withProjections": 296
+        }
+      },
+      {
+        "window": "W5-active-open-models",
+        "start": {
+          "items": 297,
+          "topLevel": 104,
+          "subagents": 193,
+          "running": 12,
+          "withProjections": 296
+        }
+      },
+      {
+        "window": "W6-quiet-open-models",
+        "start": {
+          "items": 297,
+          "topLevel": 104,
+          "subagents": 193,
+          "running": 12,
+          "withProjections": 296
+        }
+      },
+      {
+        "window": "W7-quiet-closed",
+        "start": {
+          "items": 297,
+          "topLevel": 104,
+          "subagents": 193,
+          "running": 11,
+          "withProjections": 296
+        }
+      },
+      {
+        "window": "W8-active-open-models",
+        "start": {
+          "items": 297,
+          "topLevel": 104,
+          "subagents": 193,
+          "running": 11,
+          "withProjections": 296
+        }
+      }
+    ]
+  },
+  "windows": [
+    {
+      "name": "W1-active-open-general",
+      "requested": {
+        "panel": "open",
+        "net": "active",
+        "section": "general"
+      },
+      "activeSection": [
+        "通用设置",
+        "通用设置"
+      ],
+      "sectionAction": {
+        "clicked": "通用设置",
+        "before": "通用设置",
+        "after": "通用设置"
+      },
+      "panelNodes": [
+        1,
+        1
+      ],
+      "startIso": "2026-09-21T06:54:01.328Z",
+      "endIso": "2026-09-21T06:55:02.144Z",
+      "startEpochMs": 1789973641328,
+      "endEpochMs": 1789973702144,
+      "elapsedMs": 60816,
+      "sampledSeconds": 61,
+      "commitActiveSeconds": 52,
+      "panelMountedSeconds": 52,
+      "wsPayloadTypes": {
+        "session/projection": 1061,
+        "session/event": 1845,
+        "session/jobs": 6,
+        "session/queue": 10,
+        "host/session-status": 2,
+        "host/session-removed": 1
+      },
+      "commits": 1238,
+      "commitsPerSec": 20.295081967213115,
+      "sessionFrames": 2906,
+      "sessionFramesPerSec": 47.63934426229508,
+      "panelRootRenders": 1238,
+      "panelRootRenders_pwSignal": 619,
+      "settingsRootRenders": 1238,
+      "panelRendersPerCommit": 1,
+      "panelRendersPerSessionFrame": 0.42601514108740535,
+      "settingsSubtreeRenders": 60662,
+      "settingsSubtreeRendersPerCommit": 49,
+      "settingsSubtreeFiberCount": 62,
+      "wholeTreeRendersPerCommit": 303.89822294022616,
+      "wholeTreeFiberCount": 341,
+      "ancestorChain": {
+        "0": "SettingsRoot",
+        "1": "RootEntry",
+        "2": "SlotErrorBoundary",
+        "3": "host:div",
+        "4": "SlotOutlet",
+        "5": "host:div",
+        "6": "host:div",
+        "7": "host:div",
+        "8": "SidebarRoot",
+        "9": "RootEntry",
+        "10": "SlotErrorBoundary",
+        "11": "host:div"
+      },
+      "ancestorChainRendersPerCommit": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 0
+      },
+      "topRenderingComponentsInsidePanel": [
+        [
+          "RootEntry",
+          9285
+        ],
+        [
+          "SlotErrorBoundary",
+          8047
+        ],
+        [
+          "F9",
+          6190
+        ],
+        [
+          "SlotOutlet",
+          4952
+        ],
+        [
+          "hs",
+          4952
+        ],
+        [
+          "Vu",
+          3095
+        ],
+        [
+          "Slider",
+          1857
+        ],
+        [
+          "HeaderContent",
+          1238
+        ],
+        [
+          "V7",
+          1238
+        ],
+        [
+          "M7",
+          1238
+        ],
+        [
+          "u7",
+          1238
+        ],
+        [
+          "SettingsDocumentAction",
+          1238
+        ],
+        [
+          "ps",
+          1238
+        ],
+        [
+          "Ru",
+          1238
+        ]
+      ],
+      "sessionListAtStart": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "8601c902-1bbc-454b-b7a7-ea93b956b5d5",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 13,
+        "runningTopLevel": 2,
+        "runningSubagent": 11
+      },
+      "sessionListAtEnd": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "082c5516-041a-4809-8441-dce28c2c1e71",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 13,
+        "runningTopLevel": 3,
+        "runningSubagent": 10
+      },
+      "valid": true,
+      "invalidReasons": [],
+      "harnessValidityNotes": [
+        "panel not mounted for >10% of sampled seconds"
+      ],
+      "error": null
+    },
+    {
+      "name": "W2-active-open-models",
+      "requested": {
+        "panel": "open",
+        "net": "active",
+        "section": "models"
+      },
+      "activeSection": [
+        "模型",
+        "模型"
+      ],
+      "sectionAction": {
+        "clicked": "模型",
+        "before": "通用设置",
+        "after": "模型"
+      },
+      "panelNodes": [
+        1,
+        1
+      ],
+      "startIso": "2026-09-21T06:55:06.507Z",
+      "endIso": "2026-09-21T06:56:08.079Z",
+      "startEpochMs": 1789973706507,
+      "endEpochMs": 1789973768079,
+      "elapsedMs": 61572,
+      "sampledSeconds": 61,
+      "commitActiveSeconds": 41,
+      "panelMountedSeconds": 41,
+      "wsPayloadTypes": {
+        "session/event": 8804,
+        "session/projection": 787,
+        "session/jobs": 4,
+        "question/requested": 1
+      },
+      "commits": 929,
+      "commitsPerSec": 15.229508196721312,
+      "sessionFrames": 9591,
+      "sessionFramesPerSec": 157.2295081967213,
+      "panelRootRenders": 929,
+      "panelRootRenders_pwSignal": 929,
+      "settingsRootRenders": 929,
+      "panelRendersPerCommit": 1,
+      "panelRendersPerSessionFrame": 0.0968616411218851,
+      "settingsSubtreeRenders": 27870,
+      "settingsSubtreeRendersPerCommit": 30,
+      "settingsSubtreeFiberCount": 30,
+      "wholeTreeRendersPerCommit": 268.0075349838536,
+      "wholeTreeFiberCount": 309,
+      "ancestorChain": {
+        "0": "SettingsRoot",
+        "1": "RootEntry",
+        "2": "SlotErrorBoundary",
+        "3": "host:div",
+        "4": "SlotOutlet",
+        "5": "host:div",
+        "6": "host:div",
+        "7": "host:div",
+        "8": "SidebarRoot",
+        "9": "RootEntry",
+        "10": "SlotErrorBoundary",
+        "11": "host:div"
+      },
+      "ancestorChainRendersPerCommit": {
+        "0": 1,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 0
+      },
+      "topRenderingComponentsInsidePanel": [
+        [
+          "F9",
+          4645
+        ],
+        [
+          "SlotOutlet",
+          3716
+        ],
+        [
+          "SlotErrorBoundary",
+          3716
+        ],
+        [
+          "RootEntry",
+          3716
+        ],
+        [
+          "Z9",
+          1858
+        ],
+        [
+          "HeaderContent",
+          929
+        ],
+        [
+          "V7",
+          929
+        ],
+        [
+          "M7",
+          929
+        ],
+        [
+          "u7",
+          929
+        ],
+        [
+          "SettingsDocumentAction",
+          929
+        ],
+        [
+          "ps",
+          929
+        ],
+        [
+          "Ru",
+          929
+        ],
+        [
+          "CloseLabel",
+          929
+        ],
+        [
+          "ModelsSection",
+          929
+        ]
+      ],
+      "sessionListAtStart": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "bd0456cf-8e63-4666-8ef4-dd658394017d",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 13,
+        "runningTopLevel": 3,
+        "runningSubagent": 10
+      },
+      "sessionListAtEnd": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "db46605f-7413-4a01-bbfd-179a79f338d5",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 13,
+        "runningTopLevel": 3,
+        "runningSubagent": 10
+      },
+      "valid": true,
+      "invalidReasons": [],
+      "harnessValidityNotes": [
+        "panel not mounted for >10% of sampled seconds"
+      ],
+      "error": null
+    },
+    {
+      "name": "W3-active-closed",
+      "requested": {
+        "panel": "closed",
+        "net": "active",
+        "section": null
+      },
+      "activeSection": [
+        null,
+        null
+      ],
+      "sectionAction": {
+        "skipped": true
+      },
+      "panelNodes": [
+        0,
+        0
+      ],
+      "startIso": "2026-09-21T06:56:11.720Z",
+      "endIso": "2026-09-21T06:57:11.956Z",
+      "startEpochMs": 1789973771720,
+      "endEpochMs": 1789973831956,
+      "elapsedMs": 60236,
+      "sampledSeconds": 60,
+      "commitActiveSeconds": 45,
+      "panelMountedSeconds": 0,
+      "wsPayloadTypes": {
+        "session/projection": 764,
+        "session/event": 8256,
+        "question/resolved": 1,
+        "session/subscribed": 2,
+        "host/session-added": 2,
+        "session/jobs": 2,
+        "session/queue": 2,
+        "host/session-status": 1
+      },
+      "commits": 923,
+      "commitsPerSec": 15.383333333333333,
+      "sessionFrames": 9020,
+      "sessionFramesPerSec": 150.33333333333334,
+      "panelRootRenders": 0,
+      "panelRootRenders_pwSignal": 0,
+      "settingsRootRenders": 0,
+      "panelRendersPerCommit": 0,
+      "panelRendersPerSessionFrame": 0,
+      "settingsSubtreeRenders": 0,
+      "settingsSubtreeRendersPerCommit": 0,
+      "settingsSubtreeFiberCount": 0,
+      "wholeTreeRendersPerCommit": 235.08125677139762,
+      "wholeTreeFiberCount": 278,
+      "ancestorChain": {
+        "0": "SettingsRoot",
+        "1": "RootEntry",
+        "2": "SlotErrorBoundary",
+        "3": "host:div",
+        "4": "SlotOutlet",
+        "5": "host:div",
+        "6": "host:div",
+        "7": "host:div",
+        "8": "SidebarRoot",
+        "9": "RootEntry",
+        "10": "SlotErrorBoundary",
+        "11": "host:div"
+      },
+      "ancestorChainRendersPerCommit": {},
+      "topRenderingComponentsInsidePanel": [],
+      "sessionListAtStart": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "eeead821-980c-4ca5-a35b-3b1e581f40f2",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 13,
+        "runningTopLevel": 3,
+        "runningSubagent": 10
+      },
+      "sessionListAtEnd": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "9fbdf818-33b6-4fb0-a6d1-dddccfffaa6d",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 14,
+        "runningTopLevel": 4,
+        "runningSubagent": 10
+      },
+      "valid": true,
+      "invalidReasons": [],
+      "harnessValidityNotes": [],
+      "error": null
+    },
+    {
+      "name": "W4-active-open-general",
+      "requested": {
+        "panel": "open",
+        "net": "active",
+        "section": "general"
+      },
+      "activeSection": [
+        "通用设置",
+        "通用设置"
+      ],
+      "sectionAction": {
+        "clicked": "通用设置",
+        "before": "通用设置",
+        "after": "通用设置"
+      },
+      "panelNodes": [
+        1,
+        1
+      ],
+      "startIso": "2026-09-21T06:57:23.346Z",
+      "endIso": "2026-09-21T06:58:29.703Z",
+      "startEpochMs": 1789973843346,
+      "endEpochMs": 1789973909703,
+      "elapsedMs": 66357,
+      "sampledSeconds": 66,
+      "commitActiveSeconds": 43,
+      "panelMountedSeconds": 43,
+      "wsPayloadTypes": {
+        "session/event": 6303,
+        "session/projection": 612,
+        "session/jobs": 1,
+        "session/queue": 3,
+        "question/requested": 1,
+        "host/session-status": 1,
+        "host/session-removed": 1
+      },
+      "commits": 732,
+      "commitsPerSec": 11.090909090909092,
+      "sessionFrames": 6915,
+      "sessionFramesPerSec": 104.77272727272727,
+      "panelRootRenders": 732,
+      "panelRootRenders_pwSignal": 366,
+      "settingsRootRenders": 732,
+      "panelRendersPerCommit": 1,
+      "panelRendersPerSessionFrame": 0.10585683297180043,
+      "settingsSubtreeRenders": 39894,
+      "settingsSubtreeRendersPerCommit": 54.5,
+      "settingsSubtreeFiberCount": 62,
+      "wholeTreeRendersPerCommit": 302.172131147541,
+      "wholeTreeFiberCount": 341,
+      "ancestorChain": {
+        "0": "SettingsRoot",
+        "1": "RootEntry",
+        "2": "SlotErrorBoundary",
+        "3": "host:div",
+        "4": "SlotOutlet",
+        "5": "host:div",
+        "6": "host:div",
+        "7": "host:div",
+        "8": "SidebarRoot",
+        "9": "RootEntry",
+        "10": "SlotErrorBoundary",
+        "11": "host:div"
+      },
+      "ancestorChainRendersPerCommit": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 0
+      },
+      "topRenderingComponentsInsidePanel": [
+        [
+          "RootEntry",
+          6588
+        ],
+        [
+          "SlotErrorBoundary",
+          4758
+        ],
+        [
+          "F9",
+          3660
+        ],
+        [
+          "SlotOutlet",
+          2928
+        ],
+        [
+          "hs",
+          2928
+        ],
+        [
+          "Vu",
+          2562
+        ],
+        [
+          "Slider",
+          2196
+        ],
+        [
+          "HeaderContent",
+          732
+        ],
+        [
+          "V7",
+          732
+        ],
+        [
+          "M7",
+          732
+        ],
+        [
+          "u7",
+          732
+        ],
+        [
+          "SettingsDocumentAction",
+          732
+        ],
+        [
+          "ps",
+          732
+        ],
+        [
+          "Ru",
+          732
+        ]
+      ],
+      "sessionListAtStart": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "ab60597b-d028-4ad7-b483-fb0f4d8ba93e",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 13,
+        "runningTopLevel": 3,
+        "runningSubagent": 10
+      },
+      "sessionListAtEnd": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "2674e43e-4ba7-4cd7-ad87-efe12c95a614",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 12,
+        "runningTopLevel": 3,
+        "runningSubagent": 9
+      },
+      "valid": true,
+      "invalidReasons": [],
+      "harnessValidityNotes": [
+        "panel not mounted for >10% of sampled seconds"
+      ],
+      "error": null
+    },
+    {
+      "name": "W5-active-open-models",
+      "requested": {
+        "panel": "open",
+        "net": "active",
+        "section": "models"
+      },
+      "activeSection": [
+        "模型",
+        "模型"
+      ],
+      "sectionAction": {
+        "clicked": "模型",
+        "before": "通用设置",
+        "after": "模型"
+      },
+      "panelNodes": [
+        1,
+        1
+      ],
+      "startIso": "2026-09-21T06:58:35.180Z",
+      "endIso": "2026-09-21T06:59:36.630Z",
+      "startEpochMs": 1789973915180,
+      "endEpochMs": 1789973976630,
+      "elapsedMs": 61450,
+      "sampledSeconds": 61,
+      "commitActiveSeconds": 50,
+      "panelMountedSeconds": 50,
+      "wsPayloadTypes": {
+        "session/projection": 815,
+        "session/event": 852,
+        "session/queue": 3,
+        "session/jobs": 1
+      },
+      "commits": 943,
+      "commitsPerSec": 15.459016393442623,
+      "sessionFrames": 1667,
+      "sessionFramesPerSec": 27.327868852459016,
+      "panelRootRenders": 943,
+      "panelRootRenders_pwSignal": 943,
+      "settingsRootRenders": 943,
+      "panelRendersPerCommit": 1,
+      "panelRendersPerSessionFrame": 0.5656868626274745,
+      "settingsSubtreeRenders": 28290,
+      "settingsSubtreeRendersPerCommit": 30,
+      "settingsSubtreeFiberCount": 30,
+      "wholeTreeRendersPerCommit": 269.033934252386,
+      "wholeTreeFiberCount": 309,
+      "ancestorChain": {
+        "0": "SettingsRoot",
+        "1": "RootEntry",
+        "2": "SlotErrorBoundary",
+        "3": "host:div",
+        "4": "SlotOutlet",
+        "5": "host:div",
+        "6": "host:div",
+        "7": "host:div",
+        "8": "SidebarRoot",
+        "9": "RootEntry",
+        "10": "SlotErrorBoundary",
+        "11": "host:div"
+      },
+      "ancestorChainRendersPerCommit": {
+        "0": 1,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 0
+      },
+      "topRenderingComponentsInsidePanel": [
+        [
+          "F9",
+          4715
+        ],
+        [
+          "SlotOutlet",
+          3772
+        ],
+        [
+          "SlotErrorBoundary",
+          3772
+        ],
+        [
+          "RootEntry",
+          3772
+        ],
+        [
+          "Z9",
+          1886
+        ],
+        [
+          "HeaderContent",
+          943
+        ],
+        [
+          "V7",
+          943
+        ],
+        [
+          "M7",
+          943
+        ],
+        [
+          "u7",
+          943
+        ],
+        [
+          "SettingsDocumentAction",
+          943
+        ],
+        [
+          "ps",
+          943
+        ],
+        [
+          "Ru",
+          943
+        ],
+        [
+          "CloseLabel",
+          943
+        ],
+        [
+          "ModelsSection",
+          943
+        ]
+      ],
+      "sessionListAtStart": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "3cc37db8-6d16-4b36-9316-8eb994b69f72",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 12,
+        "runningTopLevel": 3,
+        "runningSubagent": 9
+      },
+      "sessionListAtEnd": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "ed43f625-8d69-49ed-a202-c6e1fa64c3bd",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 12,
+        "runningTopLevel": 3,
+        "runningSubagent": 9
+      },
+      "valid": true,
+      "invalidReasons": [],
+      "harnessValidityNotes": [
+        "panel not mounted for >10% of sampled seconds"
+      ],
+      "error": null
+    },
+    {
+      "name": "W6-quiet-open-models",
+      "requested": {
+        "panel": "open",
+        "net": "quiet",
+        "section": "models"
+      },
+      "activeSection": [
+        "模型",
+        "模型"
+      ],
+      "sectionAction": {
+        "clicked": "模型",
+        "before": "模型",
+        "after": "模型"
+      },
+      "panelNodes": [
+        1,
+        1
+      ],
+      "startIso": "2026-09-21T06:59:41.090Z",
+      "endIso": "2026-09-21T07:00:41.427Z",
+      "startEpochMs": 1789973981090,
+      "endEpochMs": 1789974041427,
+      "elapsedMs": 60337,
+      "sampledSeconds": 61,
+      "commitActiveSeconds": 0,
+      "panelMountedSeconds": 0,
+      "wsPayloadTypes": {},
+      "commits": 0,
+      "commitsPerSec": 0,
+      "sessionFrames": 0,
+      "sessionFramesPerSec": 0,
+      "panelRootRenders": 0,
+      "panelRootRenders_pwSignal": 0,
+      "settingsRootRenders": 0,
+      "panelRendersPerCommit": null,
+      "panelRendersPerSessionFrame": null,
+      "settingsSubtreeRenders": 0,
+      "settingsSubtreeRendersPerCommit": null,
+      "settingsSubtreeFiberCount": 0,
+      "wholeTreeRendersPerCommit": null,
+      "wholeTreeFiberCount": 0,
+      "ancestorChain": {
+        "0": "SettingsRoot",
+        "1": "RootEntry",
+        "2": "SlotErrorBoundary",
+        "3": "host:div",
+        "4": "SlotOutlet",
+        "5": "host:div",
+        "6": "host:div",
+        "7": "host:div",
+        "8": "SidebarRoot",
+        "9": "RootEntry",
+        "10": "SlotErrorBoundary",
+        "11": "host:div"
+      },
+      "ancestorChainRendersPerCommit": {},
+      "topRenderingComponentsInsidePanel": [],
+      "sessionListAtStart": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "613184fe-e6d0-44ff-acba-b268c394372b",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 12,
+        "runningTopLevel": 3,
+        "runningSubagent": 9
+      },
+      "sessionListAtEnd": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "8af08300-635f-4bd7-aca1-5b6edc2f6881",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 11,
+        "runningTopLevel": 3,
+        "runningSubagent": 8
+      },
+      "valid": true,
+      "invalidReasons": [],
+      "harnessValidityNotes": [
+        "panel not mounted for >10% of sampled seconds"
+      ],
+      "error": null
+    },
+    {
+      "name": "W7-quiet-closed",
+      "requested": {
+        "panel": "closed",
+        "net": "quiet",
+        "section": null
+      },
+      "activeSection": [
+        null,
+        null
+      ],
+      "sectionAction": {
+        "skipped": true
+      },
+      "panelNodes": [
+        0,
+        0
+      ],
+      "startIso": "2026-09-21T07:00:45.835Z",
+      "endIso": "2026-09-21T07:01:46.496Z",
+      "startEpochMs": 1789974045835,
+      "endEpochMs": 1789974106496,
+      "elapsedMs": 60661,
+      "sampledSeconds": 61,
+      "commitActiveSeconds": 0,
+      "panelMountedSeconds": 0,
+      "wsPayloadTypes": {},
+      "commits": 0,
+      "commitsPerSec": 0,
+      "sessionFrames": 0,
+      "sessionFramesPerSec": 0,
+      "panelRootRenders": 0,
+      "panelRootRenders_pwSignal": 0,
+      "settingsRootRenders": 0,
+      "panelRendersPerCommit": null,
+      "panelRendersPerSessionFrame": null,
+      "settingsSubtreeRenders": 0,
+      "settingsSubtreeRendersPerCommit": null,
+      "settingsSubtreeFiberCount": 0,
+      "wholeTreeRendersPerCommit": null,
+      "wholeTreeFiberCount": 0,
+      "ancestorChain": {
+        "0": "SettingsRoot",
+        "1": "RootEntry",
+        "2": "SlotErrorBoundary",
+        "3": "host:div",
+        "4": "SlotOutlet",
+        "5": "host:div",
+        "6": "host:div",
+        "7": "host:div",
+        "8": "SidebarRoot",
+        "9": "RootEntry",
+        "10": "SlotErrorBoundary",
+        "11": "host:div"
+      },
+      "ancestorChainRendersPerCommit": {},
+      "topRenderingComponentsInsidePanel": [],
+      "sessionListAtStart": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "a0c70638-b633-4da0-9d2a-67e2fa952ba0",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 11,
+        "runningTopLevel": 3,
+        "runningSubagent": 8
+      },
+      "sessionListAtEnd": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "46a7ac74-d633-4792-b1e3-10e38a20b3f9",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 11,
+        "runningTopLevel": 3,
+        "runningSubagent": 8
+      },
+      "valid": true,
+      "invalidReasons": [],
+      "harnessValidityNotes": [],
+      "error": null
+    },
+    {
+      "name": "W8-active-open-models",
+      "requested": {
+        "panel": "open",
+        "net": "active",
+        "section": "models"
+      },
+      "activeSection": [
+        "模型",
+        "模型"
+      ],
+      "sectionAction": {
+        "clicked": "模型",
+        "before": "通用设置",
+        "after": "模型"
+      },
+      "panelNodes": [
+        1,
+        1
+      ],
+      "startIso": "2026-09-21T07:01:51.814Z",
+      "endIso": "2026-09-21T07:02:52.228Z",
+      "startEpochMs": 1789974111814,
+      "endEpochMs": 1789974172228,
+      "elapsedMs": 60414,
+      "sampledSeconds": 61,
+      "commitActiveSeconds": 33,
+      "panelMountedSeconds": 33,
+      "wsPayloadTypes": {
+        "session/event": 11488,
+        "session/projection": 340,
+        "session/queue": 1
+      },
+      "commits": 425,
+      "commitsPerSec": 6.967213114754099,
+      "sessionFrames": 11828,
+      "sessionFramesPerSec": 193.9016393442623,
+      "panelRootRenders": 425,
+      "panelRootRenders_pwSignal": 425,
+      "settingsRootRenders": 425,
+      "panelRendersPerCommit": 1,
+      "panelRendersPerSessionFrame": 0.035931687521136284,
+      "settingsSubtreeRenders": 12750,
+      "settingsSubtreeRendersPerCommit": 30,
+      "settingsSubtreeFiberCount": 30,
+      "wholeTreeRendersPerCommit": 267.32941176470587,
+      "wholeTreeFiberCount": 309,
+      "ancestorChain": {
+        "0": "SettingsRoot",
+        "1": "RootEntry",
+        "2": "SlotErrorBoundary",
+        "3": "host:div",
+        "4": "SlotOutlet",
+        "5": "host:div",
+        "6": "host:div",
+        "7": "host:div",
+        "8": "SidebarRoot",
+        "9": "RootEntry",
+        "10": "SlotErrorBoundary",
+        "11": "host:div"
+      },
+      "ancestorChainRendersPerCommit": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 0
+      },
+      "topRenderingComponentsInsidePanel": [
+        [
+          "F9",
+          2125
+        ],
+        [
+          "SlotOutlet",
+          1700
+        ],
+        [
+          "SlotErrorBoundary",
+          1700
+        ],
+        [
+          "RootEntry",
+          1700
+        ],
+        [
+          "Z9",
+          850
+        ],
+        [
+          "HeaderContent",
+          425
+        ],
+        [
+          "V7",
+          425
+        ],
+        [
+          "M7",
+          425
+        ],
+        [
+          "u7",
+          425
+        ],
+        [
+          "SettingsDocumentAction",
+          425
+        ],
+        [
+          "ps",
+          425
+        ],
+        [
+          "Ru",
+          425
+        ],
+        [
+          "CloseLabel",
+          425
+        ],
+        [
+          "ModelsSection",
+          425
+        ]
+      ],
+      "sessionListAtStart": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "b44bde1b-242c-42f6-b34b-55a6b6d82eb1",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 11,
+        "runningTopLevel": 3,
+        "runningSubagent": 8
+      },
+      "sessionListAtEnd": {
+        "ok": true,
+        "http": 200,
+        "rpcId": "99b28ffc-27fd-45c5-ae6d-608ec857045e",
+        "items": 297,
+        "topLevel": 104,
+        "subagents": 193,
+        "blank": 6,
+        "withProjections": 296,
+        "running": 11,
+        "runningTopLevel": 3,
+        "runningSubagent": 8
+      },
+      "valid": true,
+      "invalidReasons": [],
+      "harnessValidityNotes": [
+        "panel not mounted for >10% of sampled seconds"
+      ],
+      "error": null
+    }
+  ],
+  "stateDependenceExperiment": {
+    "script": "scripts/ab-diagnostic.mjs --slice=60000 (no CDP network calls)",
+    "note": "Same page walked through four settings states, 60s each. All four share one code path except the panel state.",
+    "results": [
+      {
+        "label": "A1-opened-then-clicked-general",
+        "activeSection": "通用设置",
+        "commits": 493,
+        "panelRootRendersPerCommit": 1,
+        "ancestorChainRendersPerCommit": {
+          "0": 1,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 1,
+          "5": 1,
+          "6": 0.002,
+          "7": 0.002,
+          "8": 0.002,
+          "9": 0,
+          "10": 0,
+          "11": 0
+        },
+        "settingsSubtreeRendersPerCommit": 49.026,
+        "wholeTreeRendersPerCommit": 300.653,
+        "topRenderingComponentsInsidePanel": [
+          "RootEntry=3700",
+          "SlotErrorBoundary=3208",
+          "F9=2465",
+          "SlotOutlet=1973",
+          "hs=1972",
+          "Vu=1234",
+          "Slider=741",
+          "HeaderContent=493",
+          "V7=493",
+          "M7=493",
+          "u7=493",
+          "SettingsDocumentAction=493"
+        ],
+        "wsPayloadTypes": {
+          "session/projection": 403,
+          "session/event": 6798
+        },
+        "remountDetectors": {
+          "alternateNull": 0,
+          "dialogDomReplaced": 0,
+          "targetSetGrew": 0
+        }
+      },
+      {
+        "label": "A2-reopened-then-clicked-general",
+        "activeSection": "通用设置",
+        "commits": 460,
+        "panelRootRendersPerCommit": 1,
+        "ancestorChainRendersPerCommit": {
+          "0": 1,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 1,
+          "5": 1,
+          "6": 0.002,
+          "7": 0.002,
+          "8": 0.002,
+          "9": 0,
+          "10": 0,
+          "11": 0
+        },
+        "settingsSubtreeRendersPerCommit": 54.5,
+        "wholeTreeRendersPerCommit": 301.554,
+        "topRenderingComponentsInsidePanel": [
+          "RootEntry=4140",
+          "SlotErrorBoundary=2990",
+          "F9=2300",
+          "SlotOutlet=1840",
+          "hs=1840",
+          "Vu=1610",
+          "Slider=1380",
+          "HeaderContent=460",
+          "V7=460",
+          "M7=460",
+          "u7=460",
+          "SettingsDocumentAction=460"
+        ],
+        "wsPayloadTypes": {
+          "session/event": 4651,
+          "session/projection": 379,
+          "session/queue": 2,
+          "host/session-status": 1,
+          "host/session-removed": 1,
+          "session/jobs": 1
+        },
+        "remountDetectors": {
+          "alternateNull": 0,
+          "dialogDomReplaced": 0,
+          "targetSetGrew": 0
+        }
+      },
+      {
+        "label": "A3-models",
+        "activeSection": "模型",
+        "commits": 339,
+        "panelRootRendersPerCommit": 1,
+        "ancestorChainRendersPerCommit": {
+          "0": 1,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 0,
+          "11": 0
+        },
+        "settingsSubtreeRendersPerCommit": 30,
+        "wholeTreeRendersPerCommit": 267.649,
+        "topRenderingComponentsInsidePanel": [
+          "F9=1695",
+          "SlotOutlet=1356",
+          "SlotErrorBoundary=1356",
+          "RootEntry=1356",
+          "Z9=678",
+          "HeaderContent=339",
+          "V7=339",
+          "M7=339",
+          "u7=339",
+          "SettingsDocumentAction=339",
+          "ps=339",
+          "Ru=339"
+        ],
+        "wsPayloadTypes": {
+          "session/event": 1938,
+          "session/projection": 286,
+          "session/queue": 1,
+          "host/session-status": 1
+        },
+        "remountDetectors": {
+          "alternateNull": 0,
+          "dialogDomReplaced": 0,
+          "targetSetGrew": 0
+        }
+      },
+      {
+        "label": "A4-back-to-general",
+        "activeSection": "通用设置",
+        "commits": 191,
+        "panelRootRendersPerCommit": 0,
+        "ancestorChainRendersPerCommit": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 0,
+          "11": 0
+        },
+        "settingsSubtreeRendersPerCommit": 44.508,
+        "wholeTreeRendersPerCommit": 279.178,
+        "topRenderingComponentsInsidePanel": [
+          "RootEntry=1337",
+          "F9=955",
+          "hs=764",
+          "SlotOutlet=573",
+          "SlotErrorBoundary=573",
+          "Slider=573",
+          "Vu=478",
+          "HeaderContent=191",
+          "V7=191",
+          "M7=191",
+          "u7=191",
+          "SettingsDocumentAction=191"
+        ],
+        "wsPayloadTypes": {
+          "session/projection": 153,
+          "session/event": 185,
+          "session/queue": 2,
+          "host/session-status": 2
+        },
+        "remountDetectors": {
+          "alternateNull": 0,
+          "dialogDomReplaced": 0,
+          "targetSetGrew": 0
+        }
+      }
+    ]
+  },
+  "auxiliaryShortSliceExperiment": {
+    "script": "scripts/debug-target.mjs (12s slices)",
+    "note": "Short slices used only to characterise which settings states show a panel-root re-render; not part of the 60s window set.",
+    "results": [
+      {
+        "label": "s1-default-section",
+        "commits": 112,
+        "panelRootRenders": 0,
+        "settingsSubtreeRenders": 4816,
+        "wsPayloadTypes": {
+          "session/event": 2069,
+          "session/projection": 90
+        }
+      },
+      {
+        "label": "s2-tab1-模型",
+        "commits": 129,
+        "panelRootRenders": 129,
+        "settingsSubtreeRenders": 3815,
+        "wsPayloadTypes": {
+          "session/projection": 109,
+          "session/event": 1597
+        }
+      },
+      {
+        "label": "s3-tab0-通用设置",
+        "commits": 148,
+        "panelRootRenders": 0,
+        "settingsSubtreeRenders": 6586,
+        "wsPayloadTypes": {
+          "session/event": 910,
+          "session/projection": 125
+        }
+      },
+      {
+        "label": "s4-tab1-again-模型",
+        "commits": 167,
+        "panelRootRenders": 167,
+        "settingsSubtreeRenders": 5010,
+        "wsPayloadTypes": {
+          "session/event": 758,
+          "session/projection": 145,
+          "host/session-status": 1
+        }
+      }
+    ]
+  },
+  "quietIntervention": {
+    "method": "CDP Network.emulateNetworkConditions({offline:true}) on the same page",
+    "reversible": true,
+    "productStateMutated": false,
+    "observedEffect": "session/* frames drop to 0 and React commits drop to 0 for the whole window"
+  },
+  "lock": {
+    "lock": {
+      "path": ".workspace/lag-fix/research-v2/.probe.lock",
+      "mechanism": "atomic mkdir",
+      "acquiredIso": "2026-09-21T15:17:26+08:00",
+      "acquiredEpoch": 1789975046,
+      "releasedIso": "2026-09-21T15:44:41+08:00",
+      "heldSeconds": 1635,
+      "acquiredOnFirstAttempt": true,
+      "preemptionPerformed": false,
+      "preemptionNote": "no lock existed at 15:17:03, so a clean atomic mkdir succeeded; no stale-owner takeover was needed",
+      "releaseMechanism": "rm owner.txt && rmdir (rmdir requires an empty directory; owner.txt must be removed first)",
+      "ownerTxtArchivedAt": "raw/lock-owner.txt",
+      "ownerTxtContent": "agent: react-commit-audit (subagent of DSH session, workspace .workspace/lag-fix/research-v2/react-commit)\nline: React commit counting / settings-subtree re-render measurement\nhost_pid: 1390375 (node dsh web, monitored, never restarted)\nstarted_at: 2026-09-21T15:17:26+08:00\nstarted_epoch: 1789975046\nexpected_release: within ~20 min\npurpose: re-collect the 8x60s window set + 4x60s state-dependence experiment under exclusive lock\n",
+      "note_on_boot_read": "meta.lockAtBoot in measure-locked.json reports a TDZ error (\"Cannot access LOCK_DIR before initialization\") because the reader was defined below its first use in the options object; per-window and end-of-run lock reads are unaffected and are the ones used for the verdict."
+    },
+    "predecessorWait": {
+      "observedBeforeMyBrowserStart": [
+        {
+          "line": "tab-profile",
+          "script": "lib/tab-profile.mjs --phase=all --budget-min=20",
+          "browserPid": 1740805,
+          "startedAt": "2026-09-21T14:55:09+08:00",
+          "note": "in-flight before my lock"
+        },
+        {
+          "line": "measure-hardening",
+          "script": "probes/harden-measure.mjs",
+          "startedAt": "2026-09-21T15:12:43+08:00",
+          "note": "in-flight before my lock"
+        }
+      ],
+      "actionTaken": "waited ~10 min for those two to end before starting my browser; they were immediately replaced by other lines (cpu-profile, probe.mjs, probe-threads, capture4, measure-slot, probe-theme-apply2/3, probe-hooks, /tmp/probe2.mjs)"
+    },
+    "myBrowserSession": {
+      "startedAt": "2026-09-21T15:30:16Z (meta.startedAt of measure-locked.json)",
+      "endedAt": "after L5, ~15:42 local",
+      "singleInstance": true,
+      "closedAfterRun": true
+    },
+    "violations": {
+      "lockHeldThroughoutMyBrowserSession": true,
+      "exclusiveWindowsAchieved": 0,
+      "windowsAttempted": 5,
+      "distinctConcurrentLinesObserved": 7,
+      "concurrentLines": [
+        {
+          "browserPid": 2104881,
+          "chain": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "browserPid": 2593885,
+          "chain": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "browserPid": 2596043,
+          "chain": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "browserPid": 2604720,
+          "chain": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "browserPid": 2721575,
+          "chain": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "browserPid": 2746899,
+          "chain": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "browserPid": 2746999,
+          "chain": [
+            null,
+            null,
+            null
+          ]
+        }
+      ],
+      "notable": "one concurrent line ran with an explicit --nolockwait flag (node measure-slot.mjs --tag main --window 60000 --nolockwait), i.e. deliberate lock bypass"
+    },
+    "windows": [
+      {
+        "name": "L1-active-open-general",
+        "requested": {
+          "panel": "open",
+          "net": "active",
+          "section": "general"
+        },
+        "activeSection": "通用设置",
+        "lockHeldAtWindowStart": true,
+        "foreignBrowsersAtStart": 18,
+        "foreignBrowsersAtEnd": 24,
+        "foreignOwnerScripts": [
+          [
+            "scripts/capture3.mjs",
+            6
+          ],
+          [
+            "probes/harden-measure.mjs",
+            6
+          ],
+          [
+            "lib/probe.mjs",
+            6
+          ]
+        ],
+        "idleGateReached": false,
+        "idleGateWaitedMs": 100080,
+        "startIso": "2026-09-21T07:32:08.916Z",
+        "endIso": "2026-09-21T07:33:09.537Z",
+        "commits": 616,
+        "sessionFrames": 5852,
+        "panelRootRenders": 616,
+        "panelRendersPerCommit": 1,
+        "settingsSubtreeRendersPerCommit": 62,
+        "ancestorChainRenders": {
+          "0": 616,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 0,
+          "11": 0
+        },
+        "exclusive": false
+      },
+      {
+        "name": "L2-active-open-models",
+        "requested": {
+          "panel": "open",
+          "net": "active",
+          "section": "models"
+        },
+        "activeSection": "模型",
+        "lockHeldAtWindowStart": true,
+        "foreignBrowsersAtStart": 24,
+        "foreignBrowsersAtEnd": 18,
+        "foreignOwnerScripts": [
+          [
+            "scripts/capture3.mjs",
+            6
+          ],
+          [
+            "probes/harden-measure.mjs",
+            6
+          ],
+          [
+            "lib/probe.mjs",
+            6
+          ],
+          [
+            "scripts/capture4.mjs",
+            6
+          ]
+        ],
+        "idleGateReached": false,
+        "idleGateWaitedMs": 100057,
+        "startIso": "2026-09-21T07:34:53.087Z",
+        "endIso": "2026-09-21T07:35:53.405Z",
+        "commits": 658,
+        "sessionFrames": 4096,
+        "panelRootRenders": 658,
+        "panelRendersPerCommit": 1,
+        "settingsSubtreeRendersPerCommit": 26.5,
+        "ancestorChainRenders": {
+          "0": 658,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 0,
+          "11": 0
+        },
+        "exclusive": false
+      },
+      {
+        "name": "L3-active-closed",
+        "requested": {
+          "panel": "closed",
+          "net": "active",
+          "section": null
+        },
+        "activeSection": null,
+        "lockHeldAtWindowStart": true,
+        "foreignBrowsersAtStart": 18,
+        "foreignBrowsersAtEnd": 19,
+        "foreignOwnerScripts": [
+          [
+            "scripts/capture3.mjs",
+            6
+          ],
+          [
+            "lib/probe.mjs",
+            6
+          ],
+          [
+            "scripts/capture4.mjs",
+            6
+          ]
+        ],
+        "idleGateReached": false,
+        "idleGateWaitedMs": 100048,
+        "startIso": "2026-09-21T07:37:37.009Z",
+        "endIso": "2026-09-21T07:38:37.268Z",
+        "commits": 330,
+        "sessionFrames": 4098,
+        "panelRootRenders": 0,
+        "panelRendersPerCommit": 0,
+        "settingsSubtreeRendersPerCommit": 0,
+        "ancestorChainRenders": {},
+        "exclusive": false
+      },
+      {
+        "name": "L4-quiet-open-models",
+        "requested": {
+          "panel": "open",
+          "net": "quiet",
+          "section": "models"
+        },
+        "activeSection": "模型",
+        "lockHeldAtWindowStart": true,
+        "foreignBrowsersAtStart": 24,
+        "foreignBrowsersAtEnd": 24,
+        "foreignOwnerScripts": [
+          [
+            "scripts/capture3.mjs",
+            6
+          ],
+          [
+            "lib/probe.mjs",
+            6
+          ],
+          [
+            "scripts/capture4.mjs",
+            6
+          ],
+          [
+            "measure-slot.mjs",
+            6
+          ]
+        ],
+        "idleGateReached": false,
+        "idleGateWaitedMs": 100048,
+        "startIso": "2026-09-21T07:40:23.353Z",
+        "endIso": "2026-09-21T07:41:23.788Z",
+        "commits": 0,
+        "sessionFrames": 0,
+        "panelRootRenders": 0,
+        "panelRendersPerCommit": null,
+        "settingsSubtreeRendersPerCommit": null,
+        "ancestorChainRenders": {},
+        "exclusive": false
+      },
+      {
+        "name": "L5-quiet-closed",
+        "requested": {
+          "panel": "closed",
+          "net": "quiet",
+          "section": null
+        },
+        "activeSection": null,
+        "lockHeldAtWindowStart": true,
+        "foreignBrowsersAtStart": 30,
+        "foreignBrowsersAtEnd": 31,
+        "foreignOwnerScripts": [
+          [
+            "scripts/capture3.mjs",
+            6
+          ],
+          [
+            "lib/probe.mjs",
+            6
+          ],
+          [
+            "measure-slot.mjs",
+            6
+          ],
+          [
+            "scripts/probe-theme-apply2.mjs",
+            6
+          ],
+          [
+            "scripts/probe-hooks.mjs",
+            6
+          ]
+        ],
+        "idleGateReached": false,
+        "idleGateWaitedMs": 100052,
+        "startIso": "2026-09-21T07:43:08.285Z",
+        "endIso": "2026-09-21T07:44:08.493Z",
+        "commits": 0,
+        "sessionFrames": 0,
+        "panelRootRenders": 0,
+        "panelRendersPerCommit": null,
+        "settingsSubtreeRendersPerCommit": null,
+        "ancestorChainRenders": {},
+        "exclusive": false
+      }
+    ],
+    "verdict": {
+      "preLockBatch": {
+        "tag": "main",
+        "windows": 8,
+        "lockHeld": false,
+        "verdict": "INCONCLUSIVE",
+        "reason": "collected before the cross-line probe lock existed/existed-and-was-held by me; concurrency not controlled"
+      },
+      "lockedBatch": {
+        "tag": "locked",
+        "windows": 5,
+        "lockHeld": true,
+        "exclusive": false,
+        "verdict": "INCONCLUSIVE",
+        "reason": "lock was held for the whole browser session, but 18-31 foreign Playwright browser processes from >=6 other research lines were running during every window; the host was never exclusive, so the lock gave no protection"
+      }
+    }
+  },
+  "lockedBatch": {
+    "tag": "locked",
+    "file": "raw/measure-locked.json",
+    "verdict": "INCONCLUSIVE (lock held for the whole session, but 18-31 foreign browsers from 7 concurrent research lines ran during every window; 0/5 windows were exclusive)",
+    "windows": [
+      {
+        "name": "L1-active-open-general",
+        "requested": {
+          "panel": "open",
+          "net": "active",
+          "section": "general"
+        },
+        "activeSection": "通用设置",
+        "lockHeld": true,
+        "foreignBrowsers": [
+          18,
+          24
+        ],
+        "exclusive": false,
+        "startIso": "2026-09-21T07:32:08.916Z",
+        "endIso": "2026-09-21T07:33:09.537Z",
+        "commits": 616,
+        "sessionFrames": 5852,
+        "panelRootRenders": 616,
+        "panelRendersPerCommit": 1,
+        "settingsSubtreeRendersPerCommit": 62,
+        "ancestorChainRenders": {
+          "0": 616,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 0,
+          "11": 0
+        }
+      },
+      {
+        "name": "L2-active-open-models",
+        "requested": {
+          "panel": "open",
+          "net": "active",
+          "section": "models"
+        },
+        "activeSection": "模型",
+        "lockHeld": true,
+        "foreignBrowsers": [
+          24,
+          18
+        ],
+        "exclusive": false,
+        "startIso": "2026-09-21T07:34:53.087Z",
+        "endIso": "2026-09-21T07:35:53.405Z",
+        "commits": 658,
+        "sessionFrames": 4096,
+        "panelRootRenders": 658,
+        "panelRendersPerCommit": 1,
+        "settingsSubtreeRendersPerCommit": 26.5,
+        "ancestorChainRenders": {
+          "0": 658,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 0,
+          "11": 0
+        }
+      },
+      {
+        "name": "L3-active-closed",
+        "requested": {
+          "panel": "closed",
+          "net": "active",
+          "section": null
+        },
+        "activeSection": null,
+        "lockHeld": true,
+        "foreignBrowsers": [
+          18,
+          19
+        ],
+        "exclusive": false,
+        "startIso": "2026-09-21T07:37:37.009Z",
+        "endIso": "2026-09-21T07:38:37.268Z",
+        "commits": 330,
+        "sessionFrames": 4098,
+        "panelRootRenders": 0,
+        "panelRendersPerCommit": 0,
+        "settingsSubtreeRendersPerCommit": 0,
+        "ancestorChainRenders": {}
+      },
+      {
+        "name": "L4-quiet-open-models",
+        "requested": {
+          "panel": "open",
+          "net": "quiet",
+          "section": "models"
+        },
+        "activeSection": "模型",
+        "lockHeld": true,
+        "foreignBrowsers": [
+          24,
+          24
+        ],
+        "exclusive": false,
+        "startIso": "2026-09-21T07:40:23.353Z",
+        "endIso": "2026-09-21T07:41:23.788Z",
+        "commits": 0,
+        "sessionFrames": 0,
+        "panelRootRenders": 0,
+        "panelRendersPerCommit": null,
+        "settingsSubtreeRendersPerCommit": null,
+        "ancestorChainRenders": {}
+      },
+      {
+        "name": "L5-quiet-closed",
+        "requested": {
+          "panel": "closed",
+          "net": "quiet",
+          "section": null
+        },
+        "activeSection": null,
+        "lockHeld": true,
+        "foreignBrowsers": [
+          30,
+          31
+        ],
+        "exclusive": false,
+        "startIso": "2026-09-21T07:43:08.285Z",
+        "endIso": "2026-09-21T07:44:08.493Z",
+        "commits": 0,
+        "sessionFrames": 0,
+        "panelRootRenders": 0,
+        "panelRendersPerCommit": null,
+        "settingsSubtreeRendersPerCommit": null,
+        "ancestorChainRenders": {}
+      }
+    ]
+  },
+  "batchVerdicts": {
+    "batchA_preLock": {
+      "files": [
+        "raw/measure-main.json",
+        "raw/ab-nocdp.json",
+        "raw/debug-plain.json"
+      ],
+      "lockHeld": false,
+      "verdict": "INCONCLUSIVE"
+    },
+    "batchB_locked": {
+      "files": [
+        "raw/measure-locked.json"
+      ],
+      "lockHeld": true,
+      "exclusive": false,
+      "verdict": "INCONCLUSIVE"
+    },
+    "stillUsable": "contention-robust structural and ratio findings only, replicated across 3 batches / 13 windows: panel renders per commit (1.000 open, 0 closed), settings-subtree renders per commit (26.5-62), zero-on-close, zero-on-quiet, payload-type distribution. Absolute rates are NOT usable as a baseline.",
+    "batchH_locked": {
+      "files": [
+        "raw/measure-ratio-salvaged.json"
+      ],
+      "lockHeld": true,
+      "exclusive": false,
+      "verdict": "INCONCLUSIVE",
+      "reason": "per coordinator rule 1: every completed window had >1 concurrent foreign browser instance (3-8); 0/4 exclusive"
+    }
+  },
+  "discipline": {
+    "clickedSaveApplyDelete": false,
+    "modelSwitch": false,
+    "usageManualRefresh": false,
+    "allowedLocalUiStateUsed": [
+      "open/close settings panel (trigger click, Escape)",
+      "switch settings nav section",
+      "CDP network emulation for the quiet control"
+    ],
+    "singleBrowserInstance": true,
+    "browsersClosed": true,
+    "probeLockAcquiredAtomically": true,
+    "probeLockAcquiredAt": "2026-09-21T15:17:26+08:00",
+    "probeLockReleasedAt": "2026-09-21T15:44:41+08:00",
+    "probeLockHeldSeconds": 1635,
+    "preemptionOccurred": false,
+    "preemptionNote": "lock was free at first check; a single atomic mkdir succeeded, so the >25min stale-owner takeover rule was never triggered",
+    "lockViolatedByConcurrentLines": 7,
+    "exclusiveWindowsAchieved": "0/5",
+    "orphanBrowsersAfterRelease": 0,
+    "concurrentPeerBrowsersObserved": "a peer agent ran its own Playwright/browser measurement against the same GUI during W1-W8 (ps showed measure-hardening/probes/harden-measure.mjs); it is a shared-host load condition, not a second instance of this harness"
+  },
+  "ratioBatchH": {
+    "file": "raw/measure-ratio-salvaged.json",
+    "provenance": "SALVAGED from raw/ratio-run.log — the harness crashed during window H4 (browser closed externally) before writing raw/measure-ratio.json. These numbers are the harness own per-window summary lines; per-window pgrep values are the last idle-gate samples recorded in the same log.",
+    "windows": [
+      {
+        "name": "H1-active-open-models",
+        "valid": false,
+        "lockHeld": true,
+        "foreignBrowserInstancesAtStart": 3,
+        "foreignBrowserInstancesAtEnd": 8,
+        "activeSection": "模型",
+        "commits": 755,
+        "panelRootRenders": 755,
+        "sessionFrames": 9673,
+        "wholeTreeRendersPerCommit": 270.63046357615895,
+        "panelRendersPerCommit": 1,
+        "panelRendersPerSessionFrame": 0.07805231055515352,
+        "commitsPerSessionFrame": 0.07805231055515352,
+        "lastIdleGateSample": {
+          "foreignInstances": 2,
+          "pgrepHeadlessShell": 9
+        }
+      },
+      {
+        "name": "H2-active-open-general",
+        "valid": false,
+        "lockHeld": true,
+        "foreignBrowserInstancesAtStart": 8,
+        "foreignBrowserInstancesAtEnd": 7,
+        "activeSection": "通用设置",
+        "commits": 443,
+        "panelRootRenders": 0,
+        "sessionFrames": 4734,
+        "wholeTreeRendersPerCommit": 281.1015801354402,
+        "panelRendersPerCommit": 0,
+        "panelRendersPerSessionFrame": 0,
+        "commitsPerSessionFrame": 0.09357836924376849,
+        "lastIdleGateSample": {
+          "foreignInstances": 8,
+          "pgrepHeadlessShell": 15
+        }
+      },
+      {
+        "name": "H3-active-closed",
+        "valid": false,
+        "lockHeld": true,
+        "foreignBrowserInstancesAtStart": 8,
+        "foreignBrowserInstancesAtEnd": 8,
+        "activeSection": null,
+        "commits": 662,
+        "panelRootRenders": 0,
+        "sessionFrames": 6598,
+        "wholeTreeRendersPerCommit": 236.35649546827796,
+        "panelRendersPerCommit": 0,
+        "panelRendersPerSessionFrame": 0,
+        "commitsPerSessionFrame": 0.10033343437405275,
+        "lastIdleGateSample": {
+          "foreignInstances": 8,
+          "pgrepHeadlessShell": 15
+        }
+      }
+    ],
+    "exclusiveWindows": 0,
+    "windowsAttempted": 4,
+    "verdict": "INCONCLUSIVE — every completed window had >1 concurrent foreign browser instance (coordinator rule ①)",
+    "crash": "page.evaluate: Target page, context or browser has been closed (during H4)"
+  },
+  "coordinatorRequests": {
+    "perWindowConcurrencyAndHostPid": {
+      "done": true,
+      "hostPid": 1390375,
+      "hostPidStableThroughout": true,
+      "metric": "pgrep -c -f headless_shell",
+      "valuesInBatchH": [
+        9,
+        15,
+        15
+      ],
+      "valuesInBatchB": "foreign browser instances 18-31"
+    },
+    "keyRatioAcrossWindows": {
+      "done": true,
+      "panelRendersPerCommit_open": 1,
+      "panelRendersPerCommit_closed": 0,
+      "settingsSubtreeRendersPerCommit": "26.5-62",
+      "zeroOnQuiet": true,
+      "batches": 3,
+      "windows": 13
+    },
+    "hookFeasibility": {
+      "hookPathFeasible": true,
+      "needsCpuProfileFallback": false,
+      "evidence": "inject x1 version 18.3.1 react-dom; onCommitFiberRoot 6013 (batch A) + 4293 (batch B) + thousands (batch H); injection contract corroborated from shipped bundle",
+      "codeInferenceUsedForConclusion": false,
+      "noMemoInferenceVerdict": "FAIL (rejected in section 6; not used to support any conclusion)"
+    },
+    "exclusiveMeasurementStillNeeded": [
+      "Absolute-rate baseline: same page, >=6x60s contiguous, foreign browser instances == 0 throughout, settings open/closed half each, with per-second session/event vs session/projection split. Only this can separate contention effects from genuine event-stream burstiness in the 0.036-0.566 commits-per-frame spread.",
+      "Section state boundary: exclusive reversible general<->models switching, >=3 rounds x 60s, foreign == 0, to rule out that the general=0 vs models=1.000 difference is a contention timing artifact.",
+      "Per-event causal alignment: exclusive run recording each commit timestamp against adjacent session/event and session/projection frame timestamps (commitLog + wsFramesRaw already implemented); converts the window-level ratio into commits-per-event."
+    ]
+  },
+  "lockSecondAttempt": {
+    "acquiredIso": "2026-09-21T16:00:54+08:00",
+    "releasedIso": "2026-09-21T16:12:45+08:00",
+    "acquiredAfterRetry": true,
+    "waitedBeforeAcquireMinutes": 5.5,
+    "preemptionPerformed": false,
+    "preemptionBlockedBecause": "first attempt found the lock held by measure-hardening whose owner process was alive and whose lock age was only 48s (rule allows takeover only when owner age >25 min AND process gone)",
+    "ownerTxtArchivedAt": "raw/lock-owner-attempt2.txt"
+  }
+}

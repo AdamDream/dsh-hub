@@ -1,0 +1,181 @@
+{
+  "env": {
+    "node": "v22.23.2",
+    "TZ": "Asia/Shanghai",
+    "now": "Mon Sep 21 2026 16:14:54 GMT+0800 (中国标准时间)"
+  },
+  "B_sameKeyTwice": {
+    "error": null,
+    "rows": [
+      {
+        "day": "2025-08-24",
+        "data_source": "dsh",
+        "model": "m1",
+        "project": "/tmp/proj",
+        "requests": 1
+      }
+    ]
+  },
+  "C_missingDay": {
+    "before": [
+      {
+        "day": "2025-08-24",
+        "model": "m1",
+        "requests": 1
+      },
+      {
+        "day": "2025-08-25",
+        "model": "m1",
+        "requests": 1
+      }
+    ],
+    "error": null
+  },
+  "C2_repeatCorrectDay": {
+    "error": null
+  },
+  "D_realFold": {
+    "wallMs": 33378,
+    "scanned": 874,
+    "newEvents": 53842,
+    "failedFiles": 14,
+    "failures": [
+      {
+        "file": "--home-CNS2026495165-Dexterous_Hand_23Dof-Dexterous_Hand_23Dof--/session-aa169d83-5517-429b-9899-4ca4b4963d84/session.jsonl.zstd",
+        "error": "daily rebuild: UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project"
+      },
+      {
+        "file": "--home-CNS2026495165-Dexterous_Hand_23Dof-Dexterous_Hand_23Dof-orca_core-main--/session-2e63b9dd-fcce-488e-985e-ef4b7aa1926b/session.jsonl.zstd",
+        "error": "daily rebuild: UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project"
+      },
+      {
+        "file": "--home-CNS2026495165-MCU--/8fbac8fb-bc39-4e14-b2ad-6d14a2173c0d/session.jsonl.zstd",
+        "error": "daily rebuild: UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project"
+      },
+      {
+        "file": "--home-CNS2026495165-MCU--/session-9220413a-e3ce-4e3e-a46c-db8b05483cd0/session.jsonl.zstd",
+        "error": "daily rebuild: UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project"
+      },
+      {
+        "file": "--home-CNS2026495165-dsh--/25320889-b440-43ed-845c-c46020645847/session.jsonl.zstd",
+        "error": "daily rebuild: unable to open database file"
+      },
+      {
+        "file": "--home-CNS2026495165-dsh--/30f4c698-120b-49d4-9efc-3282a5b015d0/session.jsonl.zstd",
+        "error": "daily rebuild: unable to open database file"
+      },
+      {
+        "file": "--home-CNS2026495165-dsh--/83d9e651-4455-4857-af82-a91fc83b2c6c/session.jsonl.zstd",
+        "error": "daily rebuild: UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project"
+      },
+      {
+        "file": "--home-CNS2026495165-dsh--/c59c3503-6928-482c-9af4-c9849d93cd80/session.jsonl.zstd",
+        "error": "daily rebuild: UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project"
+      },
+      {
+        "file": "--home-CNS2026495165-dsh--/session-0fcc294d-6494-4d0b-831e-02b917b32db7/session.jsonl.zstd",
+        "error": "daily rebuild: UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project"
+      },
+      {
+        "file": "--home-CNS2026495165-dsh--/session-543294d7-9c12-4931-9acf-d4399ab1a0da/session.jsonl.zstd",
+        "error": "daily rebuild: UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project"
+      },
+      {
+        "file": "--home-CNS2026495165-dsh--/session-6a7367fe-7bd8-4b8d-b3fa-7c22a7d9b616/session.jsonl.zstd",
+        "error": "daily rebuild: UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project"
+      },
+      {
+        "file": "--home-CNS2026495165-dsh--/session-bc0b7655-8e6a-4d10-9d91-03888c3e57ce/session.jsonl.zstd",
+        "error": "daily rebuild: unable to open database file"
+      },
+      {
+        "file": "--home-CNS2026495165-openarm--/session-d46ce7b0-a848-4fb9-87c1-49b5d595bcf5/session.jsonl.zstd",
+        "error": "daily rebuild: UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project"
+      },
+      {
+        "file": "--home-CNS2026495165-university--/session-30adbc54-8184-426b-92a6-5068508f8c94/session.jsonl.zstd",
+        "error": "daily rebuild: UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project"
+      }
+    ]
+  },
+  "D_failureKinds": {
+    "UNIQUE": 11,
+    "OPEN": 3
+  },
+  "E_dailyVsTrue": {
+    "events": 53842,
+    "dailyRows": 125,
+    "trueKeys": 135,
+    "dailyKeys": 125,
+    "mismatchedCount": 4,
+    "orphanCount": 0,
+    "missingCount": 10,
+    "mismatchedFirst10": [
+      {
+        "k": "2026-09-16|dsh|deepseek-v4-flash|/home/CNS2026495165/dsh",
+        "daily": 1343,
+        "true": 1413
+      },
+      {
+        "k": "2026-09-14|dsh|deepseek-v4-flash|/home/CNS2026495165/dsh",
+        "daily": 1465,
+        "true": 1539
+      },
+      {
+        "k": "2026-09-01|dsh|glm-5.3|/home/CNS2026495165/dsh",
+        "daily": 262,
+        "true": 544
+      },
+      {
+        "k": "2026-09-15|dsh|deepseek-v4-flash|/home/CNS2026495165/dsh",
+        "daily": 2826,
+        "true": 2961
+      }
+    ],
+    "orphanFirst10": [],
+    "missingFirst10": [
+      {
+        "k": "2026-08-19|dsh|deepseek-v4-pro|/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof/orca_core-main",
+        "true": 110
+      },
+      {
+        "k": "2026-08-21|dsh|deepseek-v4-pro|/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof/orca_core-main",
+        "true": 228
+      },
+      {
+        "k": "2026-09-05|dsh|deepseek-v4-pro|/home/CNS2026495165/dsh",
+        "true": 130
+      },
+      {
+        "k": "2026-09-07|dsh|deepseek-v4-pro|/home/CNS2026495165/dsh",
+        "true": 285
+      },
+      {
+        "k": "2026-09-03|dsh|gpt-5.6-sol-max|/home/CNS2026495165/dsh",
+        "true": 81
+      },
+      {
+        "k": "2026-09-03|dsh|glm-5.3|/home/CNS2026495165/dsh",
+        "true": 11
+      },
+      {
+        "k": "2026-09-03|dsh|deepseek-v4-pro|/home/CNS2026495165/dsh",
+        "true": 9
+      },
+      {
+        "k": "2026-09-09|dsh|deepseek-v4-pro|/home/CNS2026495165/dsh",
+        "true": 20
+      },
+      {
+        "k": "2026-08-21|dsh|deepseek-v4-pro|/home/CNS2026495165/openarm",
+        "true": 86
+      },
+      {
+        "k": "2026-08-27|dsh|deepseek-v4-pro|/home/CNS2026495165/openarm",
+        "true": 18
+      }
+    ]
+  },
+  "D_maxDay": "2026-09-21"
+}
+DONE

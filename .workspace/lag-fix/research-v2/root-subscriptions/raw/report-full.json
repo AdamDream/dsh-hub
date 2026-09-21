@@ -1,0 +1,622 @@
+{
+ "meta": {
+  "tag": "full",
+  "startedAt": "2026-09-21T07:53:21.641Z",
+  "windowMs": 40000,
+  "states": [
+   "models"
+  ],
+  "target": "http://127.0.0.1:3080",
+  "hostPid": {
+   "pid": 1390362,
+   "cmdline": "npm exec @deepseek-ai/dsh web",
+   "starttimeTicks": 11
+  },
+  "hostPidExpected": 1390375,
+  "lockAtStart": "agent: tab-profile\nline: per-tab settings jank profile (.workspace/lag-fix/research-v2/tab-profile)\npurpose: --phase=all browser probe batch\nowner_pid: 2311184   # the probe process; preemption checks THIS\nhost_pid: 1390375   # monitored GUI host (node dsh web); never restarted, not the owner\nstarted_at: 2026-09-21T15:44:41+08:00   # local time; started_epoch is authoritative\nstarted_epoch: 1789976681\ntoken: CNS202649516533-2311184-c9vng7qc\n",
+  "censusAtStart": {
+   "headlessShellProcs": 31,
+   "distinctUserDataDirs": [
+    "/tmp/playwright_chromiumdev_profile-25ZbPn",
+    "/tmp/playwright_chromiumdev_profile-xZcvuf",
+    "/tmp/playwright_chromiumdev_profile-UK7kgP",
+    "/tmp/playwright_chromiumdev_profile-cFqaIS",
+    "/tmp/playwright_chromiumdev_profile-y3HkSw"
+   ],
+   "otherHarnessProcs": [
+    {
+     "pid": 1258240,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+    },
+    {
+     "pid": 1258241,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+    },
+    {
+     "pid": 2104196,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+    },
+    {
+     "pid": 2104259,
+     "cmd": "node scripts/capture3.mjs --scenarios all"
+    },
+    {
+     "pid": 2311182,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+    },
+    {
+     "pid": 2311183,
+     "cmd": "timeout 3300 node lib/tab-profile.mjs"
+    },
+    {
+     "pid": 2311184,
+     "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+    },
+    {
+     "pid": 2777483,
+     "cmd": "bash -c sleep 6; cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main4 --window 60000 --nolockwait > run-main4.out 2> run-main4.err; echo \"exit=$?\""
+    },
+    {
+     "pid": 2777517,
+     "cmd": "node measure-slot.mjs --tag main4"
+    },
+    {
+     "pid": 2780873,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/measure-hardening && echo \"start $(date '+%H:%M:%S')\"; timeout 585 node probes/harden-measure.mjs --window 15 --n 5 --warmup 10 --budget-ms 400000 --lock-wait-ms 310000 --label locked-baseline --out runs/baseline-live.json > runs/locked-baseline.log 2>&1; echo \"NODE_EXIT=$? at $(date '+%H:%M:%S')\"; python3 -c \"\nimport json\nd=json.load(open('runs/baseline-live.json'))\nl=d['framework'].get('lock') or {}\nprint('lock acquired:',l.get('acquired'),'waited_ms',l.get('waited_ms'))\nprint('exit',d['framework']['exit_code'],d['framework']['terminated_reason'],'windows',len(d['windows']))\nif l.get('owner'): print('blocked by:',l['owner'].get('agent'),'age_min',l.get('owner_age_min'),'alive',l.get('owner_pid_alive'))\n\""
+    },
+    {
+     "pid": 2780875,
+     "cmd": "timeout 585 node probes/harden-measure.mjs"
+    },
+    {
+     "pid": 2780876,
+     "cmd": "node probes/harden-measure.mjs --window 15"
+    },
+    {
+     "pid": 2785821,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node scripts/capture5.mjs --scenarios all --reps 4 --win 12000 --stamp cpu4 --coverage \"cov\" 2>&1"
+    },
+    {
+     "pid": 2785822,
+     "cmd": "node scripts/capture5.mjs --scenarios all"
+    },
+    {
+     "pid": 2794546,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && node lib/verify2.mjs --window=30000 --settle=8000 > raw/verify2.stdout 2> raw/verify2.stderr; echo EXIT=$?; tail -14 raw/verify2.stderr"
+    },
+    {
+     "pid": 2794547,
+     "cmd": "node lib/verify2.mjs --window=30000 --settle=8000"
+    },
+    {
+     "pid": 2833731,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && python3 - <<'PY'\np='scripts/lib-init-slots.js'\ns=open(p,encoding='utf-8').read()\nanchor=\"  const SEL_HOOKS = { 7: 'sections', 10: 'onboardingSteps', 14: 'sessionsInner', 17: 'sessions' };\"\nassert anchor in s\ns=s.replace(anchor, anchor + \"\"\"\n\n  /** Full 22-slot identity map of the committed SettingsRoot fiber (empirical, no guessing). */\n  function fullHookMap(f) {\n    const a = f.alternate;\n    const out = [];\n    let h = f.memoizedState, i = 0;\n    while (h && i < 26) {\n      const v = h.memoizedState;\n      const ha = a ? hookAt(a, i) : null;\n      const alt = ha ? ha.memoizedState : '__noalt__';\n      out.push({\n        i,\n        kind: v === null ? 'null' : v === undefined ? 'undefined' : Array.isArray(v) ? 'array' : (v instanceof Set ? 'Set' : typeof v),\n        len: Array.isArray(v) ? v.length : (v instanceof Set ? v.size : null),\n        val: (typeof v === 'boolean' || typeof v === 'string' || typeof v === 'number') ? v : undefined,\n        altPresent: !!ha,\n        changed: ha ? v !== alt : null,\n        sig: Array.isArray(v) ? JSON.stringify(v).slice(0, 120) : (v && typeof v === 'object' ? Object.keys(v).slice(0, 5).join(',') : String(v)),\n      });\n      h = h.next; i++;\n    }\n    return out;\n  }\"\"\",1)\ns=s.replace(\"\"\"          version: readVersionCounters(f),\n          outlet: readAncestorOutlet(f),\"\"\",\"\"\"          version: readVersionCounters(f),\n          outlet: readAncestorOutlet(f),\n          full: fullHookMap(f),\"\"\",1)\nopen(p,'w',encoding='utf-8').write(s)\nprint('ok')\nPY\nnode --check scripts/lib-init-slots.js && timeout 200 node scripts/measure.mjs --window 40000 --tag full --states models 2>&1 | tail -4"
+    },
+    {
+     "pid": 2834724,
+     "cmd": "timeout 200 node scripts/measure.mjs"
+    },
+    {
+     "pid": 2834728,
+     "cmd": "node scripts/measure.mjs --window 40000"
+    }
+   ],
+   "distinctBrowserInstances": 5
+  },
+  "node": "v22.23.2",
+  "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+  "initScriptSha256": "4ce8a2e5e2706f27943123d6da82556aa40deffd297921e7a7c5e5d2f4dbc6a9",
+  "endedAt": "2026-09-21T07:54:20.881Z",
+  "hostPidAtEnd": {
+   "pid": 1390362,
+   "cmdline": "npm exec @deepseek-ai/dsh web",
+   "starttimeTicks": 11
+  },
+  "censusAtEnd": {
+   "headlessShellProcs": 38,
+   "distinctUserDataDirs": [
+    "/tmp/playwright_chromiumdev_profile-25ZbPn",
+    "/tmp/playwright_chromiumdev_profile-xZcvuf",
+    "/tmp/playwright_chromiumdev_profile-UK7kgP",
+    "/tmp/playwright_chromiumdev_profile-cFqaIS",
+    "/tmp/playwright_chromiumdev_profile-y3HkSw",
+    "/tmp/playwright_chromiumdev_profile-I0sAAw"
+   ],
+   "otherHarnessProcs": [
+    {
+     "pid": 1258240,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+    },
+    {
+     "pid": 1258241,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+    },
+    {
+     "pid": 2104196,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+    },
+    {
+     "pid": 2104259,
+     "cmd": "node scripts/capture3.mjs --scenarios all"
+    },
+    {
+     "pid": 2311182,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+    },
+    {
+     "pid": 2311183,
+     "cmd": "timeout 3300 node lib/tab-profile.mjs"
+    },
+    {
+     "pid": 2311184,
+     "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+    },
+    {
+     "pid": 2777483,
+     "cmd": "bash -c sleep 6; cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main4 --window 60000 --nolockwait > run-main4.out 2> run-main4.err; echo \"exit=$?\""
+    },
+    {
+     "pid": 2777517,
+     "cmd": "node measure-slot.mjs --tag main4"
+    },
+    {
+     "pid": 2780873,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/measure-hardening && echo \"start $(date '+%H:%M:%S')\"; timeout 585 node probes/harden-measure.mjs --window 15 --n 5 --warmup 10 --budget-ms 400000 --lock-wait-ms 310000 --label locked-baseline --out runs/baseline-live.json > runs/locked-baseline.log 2>&1; echo \"NODE_EXIT=$? at $(date '+%H:%M:%S')\"; python3 -c \"\nimport json\nd=json.load(open('runs/baseline-live.json'))\nl=d['framework'].get('lock') or {}\nprint('lock acquired:',l.get('acquired'),'waited_ms',l.get('waited_ms'))\nprint('exit',d['framework']['exit_code'],d['framework']['terminated_reason'],'windows',len(d['windows']))\nif l.get('owner'): print('blocked by:',l['owner'].get('agent'),'age_min',l.get('owner_age_min'),'alive',l.get('owner_pid_alive'))\n\""
+    },
+    {
+     "pid": 2780875,
+     "cmd": "timeout 585 node probes/harden-measure.mjs"
+    },
+    {
+     "pid": 2780876,
+     "cmd": "node probes/harden-measure.mjs --window 15"
+    },
+    {
+     "pid": 2785821,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node scripts/capture5.mjs --scenarios all --reps 4 --win 12000 --stamp cpu4 --coverage \"cov\" 2>&1"
+    },
+    {
+     "pid": 2785822,
+     "cmd": "node scripts/capture5.mjs --scenarios all"
+    },
+    {
+     "pid": 2794546,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && node lib/verify2.mjs --window=30000 --settle=8000 > raw/verify2.stdout 2> raw/verify2.stderr; echo EXIT=$?; tail -14 raw/verify2.stderr"
+    },
+    {
+     "pid": 2794547,
+     "cmd": "node lib/verify2.mjs --window=30000 --settle=8000"
+    },
+    {
+     "pid": 2833731,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && python3 - <<'PY'\np='scripts/lib-init-slots.js'\ns=open(p,encoding='utf-8').read()\nanchor=\"  const SEL_HOOKS = { 7: 'sections', 10: 'onboardingSteps', 14: 'sessionsInner', 17: 'sessions' };\"\nassert anchor in s\ns=s.replace(anchor, anchor + \"\"\"\n\n  /** Full 22-slot identity map of the committed SettingsRoot fiber (empirical, no guessing). */\n  function fullHookMap(f) {\n    const a = f.alternate;\n    const out = [];\n    let h = f.memoizedState, i = 0;\n    while (h && i < 26) {\n      const v = h.memoizedState;\n      const ha = a ? hookAt(a, i) : null;\n      const alt = ha ? ha.memoizedState : '__noalt__';\n      out.push({\n        i,\n        kind: v === null ? 'null' : v === undefined ? 'undefined' : Array.isArray(v) ? 'array' : (v instanceof Set ? 'Set' : typeof v),\n        len: Array.isArray(v) ? v.length : (v instanceof Set ? v.size : null),\n        val: (typeof v === 'boolean' || typeof v === 'string' || typeof v === 'number') ? v : undefined,\n        altPresent: !!ha,\n        changed: ha ? v !== alt : null,\n        sig: Array.isArray(v) ? JSON.stringify(v).slice(0, 120) : (v && typeof v === 'object' ? Object.keys(v).slice(0, 5).join(',') : String(v)),\n      });\n      h = h.next; i++;\n    }\n    return out;\n  }\"\"\",1)\ns=s.replace(\"\"\"          version: readVersionCounters(f),\n          outlet: readAncestorOutlet(f),\"\"\",\"\"\"          version: readVersionCounters(f),\n          outlet: readAncestorOutlet(f),\n          full: fullHookMap(f),\"\"\",1)\nopen(p,'w',encoding='utf-8').write(s)\nprint('ok')\nPY\nnode --check scripts/lib-init-slots.js && timeout 200 node scripts/measure.mjs --window 40000 --tag full --states models 2>&1 | tail -4"
+    },
+    {
+     "pid": 2834724,
+     "cmd": "timeout 200 node scripts/measure.mjs"
+    },
+    {
+     "pid": 2834728,
+     "cmd": "node scripts/measure.mjs --window 40000"
+    }
+   ],
+   "distinctBrowserInstances": 6
+  },
+  "lockAtEnd": "agent: tab-profile\nline: per-tab settings jank profile (.workspace/lag-fix/research-v2/tab-profile)\npurpose: --phase=all browser probe batch\nowner_pid: 2311184   # the probe process; preemption checks THIS\nhost_pid: 1390375   # monitored GUI host (node dsh web); never restarted, not the owner\nstarted_at: 2026-09-21T15:44:41+08:00   # local time; started_epoch is authoritative\nstarted_epoch: 1789976681\ntoken: CNS202649516533-2311184-c9vng7qc\n"
+ },
+ "boot": {
+  "rev": "102e374d338e",
+  "entryCount": 50,
+  "entries": {
+   "@deepseek-ai/dsh-client-runtime": "a0fb4bb225d3",
+   "@deepseek-ai/dsh-client-locale": "2660ca3f6a00",
+   "@deepseek-ai/dsh-client-ui-renderer": "79b59d365f3b",
+   "@deepseek-ai/dsh-client-ui-sidebar": "7563cb4b02ca",
+   "@deepseek-ai/dsh-client-ui-settings-general": "f733efde3f2f"
+  }
+ },
+ "premise": {
+  "hookPresent": true,
+  "hookIsWrapped": false,
+  "hookCalls": {
+   "inject": 1,
+   "onCommitFiberRoot": 45,
+   "onPostCommitFiberRoot": 37,
+   "onCommitFiberUnmount": 16
+  },
+  "injected": [
+   {
+    "t": 34.2,
+    "id": 1,
+    "version": "18.3.1",
+    "pkg": "react-dom",
+    "bundleType": 0,
+    "reconcilerVersion": "18.3.1-next-f1338f8080-20240426",
+    "hasScheduleRoot": false
+   }
+  ],
+  "flags": {
+   "shimTrapActive": false,
+   "shimTrapAt": 9.4,
+   "shimTrapFires": 1,
+   "shimTrapFired": true,
+   "shimTrapFiredAt": 299.3,
+   "wrappedStores": true,
+   "wrappedAt": 871.3,
+   "shimTrapOffReason": "installed",
+   "shimTrapOffAt": 1799.8
+  },
+  "counts": {
+   "commits": 45,
+   "targetRenderId": 34,
+   "targetRenderPw": 34,
+   "targetMounted": 44
+  },
+  "storeNames": [
+   "sections",
+   "onboardingSteps"
+  ],
+  "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+  "bootRev": "102e374d338e",
+  "entryCount": 50,
+  "errors": []
+ },
+ "windows": [
+  {
+   "name": "models",
+   "requested": {
+    "panel": "open",
+    "section": "models",
+    "net": "active"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "panelAction": {
+    "alreadyOpen": false,
+    "panelNodes": 1
+   },
+   "sectionAction": {
+    "clicked": "模型",
+    "before": "通用设置",
+    "after": "模型"
+   },
+   "panelNodesAtStart": 1,
+   "activeSectionAtStart": "模型",
+   "startEpochMs": 1789977220016,
+   "startIso": "2026-09-21T07:53:40.016Z",
+   "sessionListAtStart": {
+    "ok": true,
+    "items": 298,
+    "topLevel": 105,
+    "subagents": 193,
+    "running": 9
+   },
+   "censusAtStart": {
+    "headlessShellProcs": 37,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-xZcvuf",
+     "/tmp/playwright_chromiumdev_profile-UK7kgP",
+     "/tmp/playwright_chromiumdev_profile-cFqaIS",
+     "/tmp/playwright_chromiumdev_profile-y3HkSw",
+     "/tmp/playwright_chromiumdev_profile-I0sAAw"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2777483,
+      "cmd": "bash -c sleep 6; cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main4 --window 60000 --nolockwait > run-main4.out 2> run-main4.err; echo \"exit=$?\""
+     },
+     {
+      "pid": 2777517,
+      "cmd": "node measure-slot.mjs --tag main4"
+     },
+     {
+      "pid": 2780873,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/measure-hardening && echo \"start $(date '+%H:%M:%S')\"; timeout 585 node probes/harden-measure.mjs --window 15 --n 5 --warmup 10 --budget-ms 400000 --lock-wait-ms 310000 --label locked-baseline --out runs/baseline-live.json > runs/locked-baseline.log 2>&1; echo \"NODE_EXIT=$? at $(date '+%H:%M:%S')\"; python3 -c \"\nimport json\nd=json.load(open('runs/baseline-live.json'))\nl=d['framework'].get('lock') or {}\nprint('lock acquired:',l.get('acquired'),'waited_ms',l.get('waited_ms'))\nprint('exit',d['framework']['exit_code'],d['framework']['terminated_reason'],'windows',len(d['windows']))\nif l.get('owner'): print('blocked by:',l['owner'].get('agent'),'age_min',l.get('owner_age_min'),'alive',l.get('owner_pid_alive'))\n\""
+     },
+     {
+      "pid": 2780875,
+      "cmd": "timeout 585 node probes/harden-measure.mjs"
+     },
+     {
+      "pid": 2780876,
+      "cmd": "node probes/harden-measure.mjs --window 15"
+     },
+     {
+      "pid": 2785821,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node scripts/capture5.mjs --scenarios all --reps 4 --win 12000 --stamp cpu4 --coverage \"cov\" 2>&1"
+     },
+     {
+      "pid": 2785822,
+      "cmd": "node scripts/capture5.mjs --scenarios all"
+     },
+     {
+      "pid": 2794546,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && node lib/verify2.mjs --window=30000 --settle=8000 > raw/verify2.stdout 2> raw/verify2.stderr; echo EXIT=$?; tail -14 raw/verify2.stderr"
+     },
+     {
+      "pid": 2794547,
+      "cmd": "node lib/verify2.mjs --window=30000 --settle=8000"
+     },
+     {
+      "pid": 2833731,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && python3 - <<'PY'\np='scripts/lib-init-slots.js'\ns=open(p,encoding='utf-8').read()\nanchor=\"  const SEL_HOOKS = { 7: 'sections', 10: 'onboardingSteps', 14: 'sessionsInner', 17: 'sessions' };\"\nassert anchor in s\ns=s.replace(anchor, anchor + \"\"\"\n\n  /** Full 22-slot identity map of the committed SettingsRoot fiber (empirical, no guessing). */\n  function fullHookMap(f) {\n    const a = f.alternate;\n    const out = [];\n    let h = f.memoizedState, i = 0;\n    while (h && i < 26) {\n      const v = h.memoizedState;\n      const ha = a ? hookAt(a, i) : null;\n      const alt = ha ? ha.memoizedState : '__noalt__';\n      out.push({\n        i,\n        kind: v === null ? 'null' : v === undefined ? 'undefined' : Array.isArray(v) ? 'array' : (v instanceof Set ? 'Set' : typeof v),\n        len: Array.isArray(v) ? v.length : (v instanceof Set ? v.size : null),\n        val: (typeof v === 'boolean' || typeof v === 'string' || typeof v === 'number') ? v : undefined,\n        altPresent: !!ha,\n        changed: ha ? v !== alt : null,\n        sig: Array.isArray(v) ? JSON.stringify(v).slice(0, 120) : (v && typeof v === 'object' ? Object.keys(v).slice(0, 5).join(',') : String(v)),\n      });\n      h = h.next; i++;\n    }\n    return out;\n  }\"\"\",1)\ns=s.replace(\"\"\"          version: readVersionCounters(f),\n          outlet: readAncestorOutlet(f),\"\"\",\"\"\"          version: readVersionCounters(f),\n          outlet: readAncestorOutlet(f),\n          full: fullHookMap(f),\"\"\",1)\nopen(p,'w',encoding='utf-8').write(s)\nprint('ok')\nPY\nnode --check scripts/lib-init-slots.js && timeout 200 node scripts/measure.mjs --window 40000 --tag full --states models 2>&1 | tail -4"
+     },
+     {
+      "pid": 2834724,
+      "cmd": "timeout 200 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2834728,
+      "cmd": "node scripts/measure.mjs --window 40000"
+     }
+    ],
+    "distinctBrowserInstances": 6
+   },
+   "commitIndexStart": 72,
+   "endEpochMs": 1789977260244,
+   "endIso": "2026-09-21T07:54:20.244Z",
+   "elapsedMs": 40228,
+   "panelNodesAtEnd": 1,
+   "activeSectionAtEnd": "模型",
+   "sessionListAtEnd": {
+    "ok": true,
+    "items": 298,
+    "topLevel": 105,
+    "subagents": 193,
+    "running": 9
+   },
+   "censusAtEnd": {
+    "headlessShellProcs": 38,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-xZcvuf",
+     "/tmp/playwright_chromiumdev_profile-UK7kgP",
+     "/tmp/playwright_chromiumdev_profile-cFqaIS",
+     "/tmp/playwright_chromiumdev_profile-y3HkSw",
+     "/tmp/playwright_chromiumdev_profile-I0sAAw"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2777483,
+      "cmd": "bash -c sleep 6; cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main4 --window 60000 --nolockwait > run-main4.out 2> run-main4.err; echo \"exit=$?\""
+     },
+     {
+      "pid": 2777517,
+      "cmd": "node measure-slot.mjs --tag main4"
+     },
+     {
+      "pid": 2780873,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/measure-hardening && echo \"start $(date '+%H:%M:%S')\"; timeout 585 node probes/harden-measure.mjs --window 15 --n 5 --warmup 10 --budget-ms 400000 --lock-wait-ms 310000 --label locked-baseline --out runs/baseline-live.json > runs/locked-baseline.log 2>&1; echo \"NODE_EXIT=$? at $(date '+%H:%M:%S')\"; python3 -c \"\nimport json\nd=json.load(open('runs/baseline-live.json'))\nl=d['framework'].get('lock') or {}\nprint('lock acquired:',l.get('acquired'),'waited_ms',l.get('waited_ms'))\nprint('exit',d['framework']['exit_code'],d['framework']['terminated_reason'],'windows',len(d['windows']))\nif l.get('owner'): print('blocked by:',l['owner'].get('agent'),'age_min',l.get('owner_age_min'),'alive',l.get('owner_pid_alive'))\n\""
+     },
+     {
+      "pid": 2780875,
+      "cmd": "timeout 585 node probes/harden-measure.mjs"
+     },
+     {
+      "pid": 2780876,
+      "cmd": "node probes/harden-measure.mjs --window 15"
+     },
+     {
+      "pid": 2785821,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node scripts/capture5.mjs --scenarios all --reps 4 --win 12000 --stamp cpu4 --coverage \"cov\" 2>&1"
+     },
+     {
+      "pid": 2785822,
+      "cmd": "node scripts/capture5.mjs --scenarios all"
+     },
+     {
+      "pid": 2794546,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && node lib/verify2.mjs --window=30000 --settle=8000 > raw/verify2.stdout 2> raw/verify2.stderr; echo EXIT=$?; tail -14 raw/verify2.stderr"
+     },
+     {
+      "pid": 2794547,
+      "cmd": "node lib/verify2.mjs --window=30000 --settle=8000"
+     },
+     {
+      "pid": 2833731,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && python3 - <<'PY'\np='scripts/lib-init-slots.js'\ns=open(p,encoding='utf-8').read()\nanchor=\"  const SEL_HOOKS = { 7: 'sections', 10: 'onboardingSteps', 14: 'sessionsInner', 17: 'sessions' };\"\nassert anchor in s\ns=s.replace(anchor, anchor + \"\"\"\n\n  /** Full 22-slot identity map of the committed SettingsRoot fiber (empirical, no guessing). */\n  function fullHookMap(f) {\n    const a = f.alternate;\n    const out = [];\n    let h = f.memoizedState, i = 0;\n    while (h && i < 26) {\n      const v = h.memoizedState;\n      const ha = a ? hookAt(a, i) : null;\n      const alt = ha ? ha.memoizedState : '__noalt__';\n      out.push({\n        i,\n        kind: v === null ? 'null' : v === undefined ? 'undefined' : Array.isArray(v) ? 'array' : (v instanceof Set ? 'Set' : typeof v),\n        len: Array.isArray(v) ? v.length : (v instanceof Set ? v.size : null),\n        val: (typeof v === 'boolean' || typeof v === 'string' || typeof v === 'number') ? v : undefined,\n        altPresent: !!ha,\n        changed: ha ? v !== alt : null,\n        sig: Array.isArray(v) ? JSON.stringify(v).slice(0, 120) : (v && typeof v === 'object' ? Object.keys(v).slice(0, 5).join(',') : String(v)),\n      });\n      h = h.next; i++;\n    }\n    return out;\n  }\"\"\",1)\ns=s.replace(\"\"\"          version: readVersionCounters(f),\n          outlet: readAncestorOutlet(f),\"\"\",\"\"\"          version: readVersionCounters(f),\n          outlet: readAncestorOutlet(f),\n          full: fullHookMap(f),\"\"\",1)\nopen(p,'w',encoding='utf-8').write(s)\nprint('ok')\nPY\nnode --check scripts/lib-init-slots.js && timeout 200 node scripts/measure.mjs --window 40000 --tag full --states models 2>&1 | tail -4"
+     },
+     {
+      "pid": 2834724,
+      "cmd": "timeout 200 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2834728,
+      "cmd": "node scripts/measure.mjs --window 40000"
+     }
+    ],
+    "distinctBrowserInstances": 6
+   },
+   "commitIndexEnd": 153,
+   "instrumentation": {
+    "wrappedStores": true,
+    "shimTrapFired": true,
+    "shimTrapActive": false,
+    "storeNames": [
+     "sections",
+     "onboardingSteps"
+    ]
+   },
+   "slice": {
+    "nCommits": 81,
+    "nNotify": 0,
+    "nSel": 0,
+    "nSnap": 0,
+    "nSlotChange": 0
+   },
+   "summary": {
+    "name": "models",
+    "seconds": 40.228,
+    "panelNodesStart": 1,
+    "panelNodesEnd": 1,
+    "sectionStart": "模型",
+    "sectionEnd": "模型",
+    "commits": 81,
+    "commitsWithTarget": 81,
+    "targetRendered_pw": 81,
+    "targetRendered_id": 81,
+    "panelOpenCommits": 81,
+    "selfDrivenRenders": 0,
+    "parentDrivenRenders": 81,
+    "panelOpenSelfDriven": 0,
+    "panelOpenParentDriven": 81,
+    "selByStore": {},
+    "notifyByStore": {},
+    "snapByStore": {},
+    "localeRevHist": {},
+    "slotChangeByKey": {},
+    "slotVersions": {},
+    "slotVersionBumpsNearSelfRender": {},
+    "hookIdentityCounts": {
+     "sections:false": 81,
+     "onboardingSteps:false": 81,
+     "sessionsInner:true": 81,
+     "sessions:false": 81,
+     "completedOnboarding:undefined": 81
+    },
+    "selfRenderCause": {
+     "real": 0,
+     "identity": 0,
+     "other": 0,
+     "noAlt": 0
+    },
+    "selfRenderCauseSel": {
+     "real": 0,
+     "identity": 0,
+     "other": 0
+    },
+    "selfRenderSample": [],
+    "selfRenderCauseDetail": [],
+    "perSecRate": {
+     "commitPerSec": 2.0135229193596498,
+     "selfRenderPerSec": 0
+    }
+   }
+  }
+ ],
+ "consoleErrors": [],
+ "wsSockets": [
+  {
+   "url": "ws://127.0.0.1:3080/api/events.mux",
+   "frames": 150,
+   "byType": {
+    "session/subscribed": 18,
+    "session/queue": 6,
+    "session/jobs": 6,
+    "session/projection": 90,
+    "session/event": 30
+   }
+  },
+  {
+   "url": "ws://127.0.0.1:3080/api/events.host",
+   "frames": 0,
+   "byType": {}
+  }
+ ],
+ "notes": [],
+ "final": {
+  "probe": {
+   "hookPresent": true,
+   "hookIsWrapped": false,
+   "hookCalls": {
+    "inject": 1,
+    "onCommitFiberRoot": 153,
+    "onPostCommitFiberRoot": 126,
+    "onCommitFiberUnmount": 150
+   },
+   "injected": [
+    {
+     "t": 34.2,
+     "id": 1,
+     "version": "18.3.1",
+     "pkg": "react-dom",
+     "bundleType": 0,
+     "reconcilerVersion": "18.3.1-next-f1338f8080-20240426",
+     "hasScheduleRoot": false
+    }
+   ],
+   "flags": {
+    "shimTrapActive": false,
+    "shimTrapAt": 9.4,
+    "shimTrapFires": 1,
+    "shimTrapFired": true,
+    "shimTrapFiredAt": 299.3,
+    "wrappedStores": true,
+    "wrappedAt": 871.3,
+    "shimTrapOffReason": "installed",
+    "shimTrapOffAt": 1799.8
+   },
+   "counts": {
+    "commits": 153,
+    "targetRenderId": 138,
+    "targetRenderPw": 138,
+    "targetMounted": 152
+   },
+   "storeNames": [
+    "sections",
+    "onboardingSteps"
+   ],
+   "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+   "bootRev": "102e374d338e",
+   "entryCount": 50,
+   "errors": []
+  }
+ }
+}

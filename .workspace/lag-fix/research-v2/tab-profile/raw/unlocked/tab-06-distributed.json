@@ -1,0 +1,726 @@
+{
+ "id": "distributed",
+ "label": "分布式控制",
+ "runs": [
+  {
+   "id": "distributed",
+   "label": "分布式控制",
+   "repeat": 1,
+   "mode": "repeat",
+   "startedAt": "2026-09-21T07:01:05.335Z",
+   "nav": {
+    "status": "FOUND",
+    "index": 5,
+    "text": "分布式控制 · dsh-ssh-gui",
+    "total": 8,
+    "strategy": "unique-substring"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "openMs": 9.4,
+   "openMsClean": 6,
+   "panels": {
+    "before": {
+     "nodes": 97,
+     "activeLabel": "通用设置",
+     "textHead": "打开配置文件关闭Agent 预设对此后新建的会话生效。运行中的会话保持它开始时的预设。标准模式（子代理 deepseek-v4.1-flash）权限选择新会话的默认权限模式Workspace Write语言中文外观浅色深色跟随系统繁忙时 Enter 键行为仅在智能体运行时生效；Cmd/Ctrl+Enter 使用另一行为"
+    },
+    "arm": {
+     "hasDialog": true,
+     "hasNav": true,
+     "hasContent": true,
+     "contentNodes": 97,
+     "textLen": 314
+    },
+    "after": {
+     "nodes": 28,
+     "activeLabel": "分布式控制 · dsh-ssh-gui",
+     "textHead": "打开配置文件关闭分布式控制 · dsh-ssh-gui统一节点：SSH 主机 / 本地串口 / TCP 串口服务器（nodes.json 一张表）；终端交外部，本面板只做 连接管理/状态/命令/文件/目录浏览。侧栏「分布式节点」文件夹走官方 sidecar list 槽（sidebar.workspaces.remoteHosts）；设置页内为同 UX 补全入口。刷新新建节点完成节点列表（0）暂无节点。点击「新建节点」添加（SSH / ",
+     "dialogNodes": 99
+    }
+   },
+   "windows": [
+    {
+     "label": "distributed-r1-w1_10s",
+     "windowMs": 10001,
+     "seconds": 10.001,
+     "cdpRawStart": {
+      "at": 1789974065652,
+      "ScriptDuration": 21.50361,
+      "TaskDuration": 60.205288,
+      "RecalcStyleDuration": 28.854675,
+      "LayoutDuration": 0.141224,
+      "Nodes": 1050,
+      "JSEventListeners": 260,
+      "JSHeapUsedSize": 31665272,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974075660,
+      "ScriptDuration": 21.799141,
+      "TaskDuration": 61.085986,
+      "RecalcStyleDuration": 29.239965,
+      "LayoutDuration": 0.141224,
+      "Nodes": 901,
+      "JSEventListeners": 242,
+      "JSHeapUsedSize": 34007256,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 574,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 33.4,
+      "max": 50.1,
+      "mean": 17.392,
+      "over50": 1,
+      "over16_7": 299
+     },
+     "domNodes": 707,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 100,
+      "totalFramesSent": 0,
+      "recvBytes": 107101,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 100,
+        "perSec": 9.999
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/projection": {
+        "n": 73,
+        "perSec": 7.299
+       },
+       "session/event": {
+        "n": 26,
+        "perSec": 2.6
+       },
+       "session/jobs": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:tool/result": {
+        "n": 6,
+        "perSec": 0.6
+       },
+       "event:step/end": {
+        "n": 6,
+        "perSec": 0.6
+       },
+       "event:step/start": {
+        "n": 6,
+        "perSec": 0.6
+       },
+       "event:assistant/message": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/projection": {
+        "n": 73,
+        "perSec": 7.299
+       },
+       "mux:session/event": {
+        "n": 26,
+        "perSec": 2.6
+       },
+       "mux:session/jobs": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 574,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 295.531,
+      "TaskDuration": 880.698,
+      "RecalcStyleDuration": 385.29,
+      "LayoutDuration": 0,
+      "Nodes": 901,
+      "NodesDelta": -149,
+      "JSEventListeners": 242,
+      "JSHeapUsedSize": 34007256,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "distributed-r1-w2_20s",
+     "windowMs": 20000,
+     "seconds": 20,
+     "cdpRawStart": {
+      "at": 1789974075720,
+      "ScriptDuration": 21.799222,
+      "TaskDuration": 61.088858,
+      "RecalcStyleDuration": 29.240302,
+      "LayoutDuration": 0.141224,
+      "Nodes": 901,
+      "JSEventListeners": 242,
+      "JSHeapUsedSize": 34144756,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974095721,
+      "ScriptDuration": 22.301759,
+      "TaskDuration": 62.534388,
+      "RecalcStyleDuration": 29.884797,
+      "LayoutDuration": 0.141224,
+      "Nodes": 901,
+      "JSEventListeners": 242,
+      "JSHeapUsedSize": 34523932,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 1139,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 33.4,
+      "max": 283.3,
+      "mean": 17.544,
+      "over50": 5,
+      "over16_7": 581
+     },
+     "domNodes": 707,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 274,
+      "totalFramesSent": 0,
+      "recvBytes": 147724,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 274,
+        "perSec": 13.7
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 142,
+        "perSec": 7.1
+       },
+       "session/projection": {
+        "n": 130,
+        "perSec": 6.5
+       },
+       "session/jobs": {
+        "n": 2,
+        "perSec": 0.1
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 98,
+        "perSec": 4.9
+       },
+       "event:tool/call": {
+        "n": 10,
+        "perSec": 0.5
+       },
+       "event:assistant/message": {
+        "n": 9,
+        "perSec": 0.45
+       },
+       "event:tool/result": {
+        "n": 9,
+        "perSec": 0.45
+       },
+       "event:step/end": {
+        "n": 8,
+        "perSec": 0.4
+       },
+       "event:step/start": {
+        "n": 8,
+        "perSec": 0.4
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 142,
+        "perSec": 7.1
+       },
+       "mux:session/projection": {
+        "n": 130,
+        "perSec": 6.5
+       },
+       "mux:session/jobs": {
+        "n": 2,
+        "perSec": 0.1
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 1139,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 502.537,
+      "TaskDuration": 1445.53,
+      "RecalcStyleDuration": 644.495,
+      "LayoutDuration": 0,
+      "Nodes": 901,
+      "NodesDelta": 0,
+      "JSEventListeners": 242,
+      "JSHeapUsedSize": 34523932,
+      "Documents": 3,
+      "Frames": 3
+     }
+    }
+   ],
+   "http": {
+    "requests": [
+     {
+      "kind": "request",
+      "path": "/ssh-gui/nodes.list",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/ssh-gui/keyref.list",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/ssh-gui/config.get",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/ssh-gui/serial.ports",
+      "method": "POST"
+     },
+     {
+      "kind": "response",
+      "path": "/ssh-gui/nodes.list",
+      "status": 200,
+      "wallMs": null
+     },
+     {
+      "kind": "response",
+      "path": "/ssh-gui/keyref.list",
+      "status": 200,
+      "wallMs": null
+     },
+     {
+      "kind": "response",
+      "path": "/ssh-gui/config.get",
+      "status": 200,
+      "wallMs": null
+     },
+     {
+      "kind": "response",
+      "path": "/ssh-gui/serial.ports",
+      "status": 200,
+      "wallMs": null
+     }
+    ],
+    "usageSamples": []
+   },
+   "errors": [],
+   "parkedAt": {
+    "index": 0,
+    "label": "通用设置"
+   },
+   "openProbe": {
+    "firstMut": 333080.40000000596,
+    "firstMutClean": 333080.40000000596,
+    "firstText": 333083.799999997,
+    "clickT0": 333074.40000000596
+   },
+   "status": "PASS",
+   "wsSockets": [
+    "ws://127.0.0.1:3080/api/events.mux"
+   ]
+  },
+  {
+   "id": "distributed",
+   "label": "分布式控制",
+   "repeat": 2,
+   "mode": "repeat",
+   "startedAt": "2026-09-21T07:01:35.736Z",
+   "nav": {
+    "status": "FOUND",
+    "index": 5,
+    "text": "分布式控制 · dsh-ssh-gui",
+    "total": 8,
+    "strategy": "unique-substring"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "openMs": 13.6,
+   "openMsClean": 8.7,
+   "panels": {
+    "before": {
+     "nodes": 97,
+     "activeLabel": "通用设置",
+     "textHead": "打开配置文件关闭Agent 预设对此后新建的会话生效。运行中的会话保持它开始时的预设。标准模式（子代理 deepseek-v4.1-flash）权限选择新会话的默认权限模式Workspace Write语言中文外观浅色深色跟随系统繁忙时 Enter 键行为仅在智能体运行时生效；Cmd/Ctrl+Enter 使用另一行为"
+    },
+    "arm": {
+     "hasDialog": true,
+     "hasNav": true,
+     "hasContent": true,
+     "contentNodes": 97,
+     "textLen": 314
+    },
+    "after": {
+     "nodes": 28,
+     "activeLabel": "分布式控制 · dsh-ssh-gui",
+     "textHead": "打开配置文件关闭分布式控制 · dsh-ssh-gui统一节点：SSH 主机 / 本地串口 / TCP 串口服务器（nodes.json 一张表）；终端交外部，本面板只做 连接管理/状态/命令/文件/目录浏览。侧栏「分布式节点」文件夹走官方 sidecar list 槽（sidebar.workspaces.remoteHosts）；设置页内为同 UX 补全入口。刷新新建节点完成节点列表（0）暂无节点。点击「新建节点」添加（SSH / ",
+     "dialogNodes": 99
+    }
+   },
+   "windows": [
+    {
+     "label": "distributed-r2-w1_10s",
+     "windowMs": 10000,
+     "seconds": 10,
+     "cdpRawStart": {
+      "at": 1789974097481,
+      "ScriptDuration": 22.350121,
+      "TaskDuration": 62.692642,
+      "RecalcStyleDuration": 29.941752,
+      "LayoutDuration": 0.147955,
+      "Nodes": 1050,
+      "JSEventListeners": 260,
+      "JSHeapUsedSize": 32855856,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974107697,
+      "ScriptDuration": 22.577277,
+      "TaskDuration": 63.490667,
+      "RecalcStyleDuration": 30.268957,
+      "LayoutDuration": 0.148537,
+      "Nodes": 901,
+      "JSEventListeners": 242,
+      "JSHeapUsedSize": 34908260,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 590,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 33.4,
+      "max": 83.4,
+      "mean": 17.287,
+      "over50": 1,
+      "over16_7": 304
+     },
+     "domNodes": 707,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 74,
+      "totalFramesSent": 0,
+      "recvBytes": 137645,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 74,
+        "perSec": 7.4
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/projection": {
+        "n": 55,
+        "perSec": 5.5
+       },
+       "session/event": {
+        "n": 19,
+        "perSec": 1.9
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:tool/result": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/end": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:assistant/message": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:step/start": {
+        "n": 3,
+        "perSec": 0.3
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/projection": {
+        "n": 55,
+        "perSec": 5.5
+       },
+       "mux:session/event": {
+        "n": 19,
+        "perSec": 1.9
+       }
+      }
+     },
+     "http": {
+      "total": 4,
+      "usageSamples": []
+     },
+     "_rawTaken": 590,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 227.156,
+      "TaskDuration": 798.025,
+      "RecalcStyleDuration": 327.205,
+      "LayoutDuration": 0.582,
+      "Nodes": 901,
+      "NodesDelta": -149,
+      "JSEventListeners": 242,
+      "JSHeapUsedSize": 34908260,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "distributed-r2-w2_20s",
+     "windowMs": 20000,
+     "seconds": 20,
+     "cdpRawStart": {
+      "at": 1789974107817,
+      "ScriptDuration": 22.583488,
+      "TaskDuration": 63.508331,
+      "RecalcStyleDuration": 30.276983,
+      "LayoutDuration": 0.148537,
+      "Nodes": 901,
+      "JSEventListeners": 242,
+      "JSHeapUsedSize": 36802580,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974127818,
+      "ScriptDuration": 23.215066,
+      "TaskDuration": 65.432976,
+      "RecalcStyleDuration": 31.093011,
+      "LayoutDuration": 0.150074,
+      "Nodes": 901,
+      "JSEventListeners": 242,
+      "JSHeapUsedSize": 33098224,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 1121,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 50,
+      "max": 216.6,
+      "mean": 17.841,
+      "over50": 6,
+      "over16_7": 580
+     },
+     "domNodes": 707,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 1245,
+      "totalFramesSent": 0,
+      "recvBytes": 512446,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 1245,
+        "perSec": 62.25
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 1115,
+        "perSec": 55.75
+       },
+       "session/projection": {
+        "n": 129,
+        "perSec": 6.45
+       },
+       "session/queue": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 1066,
+        "perSec": 53.3
+       },
+       "event:tool/result": {
+        "n": 11,
+        "perSec": 0.55
+       },
+       "event:step/start": {
+        "n": 11,
+        "perSec": 0.55
+       },
+       "event:step/end": {
+        "n": 10,
+        "perSec": 0.5
+       },
+       "event:tool/call": {
+        "n": 8,
+        "perSec": 0.4
+       },
+       "event:assistant/message": {
+        "n": 7,
+        "perSec": 0.35
+       },
+       "event:agent/inbox/spliced": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "event:user/message": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 1115,
+        "perSec": 55.75
+       },
+       "mux:session/projection": {
+        "n": 129,
+        "perSec": 6.45
+       },
+       "mux:session/queue": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 1121,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 631.578,
+      "TaskDuration": 1924.645,
+      "RecalcStyleDuration": 816.028,
+      "LayoutDuration": 1.537,
+      "Nodes": 901,
+      "NodesDelta": 0,
+      "JSEventListeners": 242,
+      "JSHeapUsedSize": 33098224,
+      "Documents": 3,
+      "Frames": 3
+     }
+    }
+   ],
+   "http": {
+    "requests": [
+     {
+      "kind": "request",
+      "path": "/ssh-gui/nodes.list",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/ssh-gui/keyref.list",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/ssh-gui/config.get",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/ssh-gui/serial.ports",
+      "method": "POST"
+     },
+     {
+      "kind": "response",
+      "path": "/ssh-gui/nodes.list",
+      "status": 200,
+      "wallMs": null
+     },
+     {
+      "kind": "response",
+      "path": "/ssh-gui/keyref.list",
+      "status": 200,
+      "wallMs": null
+     },
+     {
+      "kind": "response",
+      "path": "/ssh-gui/config.get",
+      "status": 200,
+      "wallMs": null
+     },
+     {
+      "kind": "response",
+      "path": "/ssh-gui/serial.ports",
+      "status": 200,
+      "wallMs": null
+     }
+    ],
+    "usageSamples": []
+   },
+   "errors": [],
+   "parkedAt": {
+    "index": 0,
+    "label": "通用设置"
+   },
+   "openProbe": {
+    "firstMut": 364905.700000003,
+    "firstMutClean": 364905.700000003,
+    "firstText": 364910.60000000894,
+    "clickT0": 364897
+   },
+   "status": "PASS",
+   "wsSockets": [
+    "ws://127.0.0.1:3080/api/events.mux"
+   ]
+  }
+ ]
+}

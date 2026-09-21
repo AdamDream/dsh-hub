@@ -1,0 +1,168 @@
+{
+  "suite": "G1-sandbox-substitute-event-loop-delay",
+  "lib": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/stage/lib-cand",
+  "workload": {
+    "dshRoot": "/home/CNS2026495165/.dsh/sessions",
+    "ccRoot": "/home/CNS2026495165/.claude/projects",
+    "dshRootExists": true,
+    "ccRootExists": true,
+    "rounds": 2
+  },
+  "gateMs": 100,
+  "summary": {
+    "workerWorstMonitorMaxMs": 11.86,
+    "syncWorstMonitorMaxMs": 31188.84,
+    "workerWorstHeartbeatGapMs": 2,
+    "syncWorstHeartbeatGapMs": 31157
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "phase": "worker",
+      "ok": true,
+      "wallMs": 30212,
+      "monitorMaxMs": 11.07,
+      "monitorMeanMs": 10.08,
+      "monitorP99Ms": 10.84,
+      "heartbeatWorstGapMs": 1,
+      "fold": {
+        "dsh": {
+          "scanned": 880,
+          "newEvents": 54980,
+          "failedFiles": []
+        },
+        "cc": {
+          "scanned": 388,
+          "newEvents": 22700,
+          "failedFiles": []
+        }
+      },
+      "stats": {
+        "runs": 1,
+        "ok": 1,
+        "failed": 0,
+        "stalls": 0,
+        "timeouts": 0,
+        "workerSpawns": 1,
+        "invalidations": 1,
+        "workerAlive": true,
+        "workerThreadId": 1,
+        "pendingId": null,
+        "inFlight": false,
+        "disposed": false,
+        "stallMs": 600000,
+        "hardTimeoutMs": 1800000
+      }
+    },
+    {
+      "round": 1,
+      "phase": "sync",
+      "ok": true,
+      "wallMs": 31440,
+      "monitorMaxMs": 31188.84,
+      "monitorMeanMs": 1164.53,
+      "monitorP99Ms": 31188.84,
+      "heartbeatWorstGapMs": 31157,
+      "fold": {
+        "dsh": {
+          "scanned": 888,
+          "newEvents": 55045,
+          "failedFiles": []
+        },
+        "cc": {
+          "scanned": 388,
+          "newEvents": 22700,
+          "failedFiles": []
+        }
+      }
+    },
+    {
+      "round": 2,
+      "phase": "worker",
+      "ok": true,
+      "wallMs": 31744,
+      "monitorMaxMs": 11.86,
+      "monitorMeanMs": 10.08,
+      "monitorP99Ms": 10.87,
+      "heartbeatWorstGapMs": 2,
+      "fold": {
+        "dsh": {
+          "scanned": 888,
+          "newEvents": 55084,
+          "failedFiles": []
+        },
+        "cc": {
+          "scanned": 388,
+          "newEvents": 22700,
+          "failedFiles": []
+        }
+      },
+      "stats": {
+        "runs": 1,
+        "ok": 1,
+        "failed": 0,
+        "stalls": 0,
+        "timeouts": 0,
+        "workerSpawns": 1,
+        "invalidations": 1,
+        "workerAlive": true,
+        "workerThreadId": 2,
+        "pendingId": null,
+        "inFlight": false,
+        "disposed": false,
+        "stallMs": 600000,
+        "hardTimeoutMs": 1800000
+      }
+    },
+    {
+      "round": 2,
+      "phase": "sync",
+      "ok": true,
+      "wallMs": 30096,
+      "monitorMaxMs": 29829.89,
+      "monitorMeanMs": 1114.33,
+      "monitorP99Ms": 29829.89,
+      "heartbeatWorstGapMs": 29809,
+      "fold": {
+        "dsh": {
+          "scanned": 888,
+          "newEvents": 55116,
+          "failedFiles": []
+        },
+        "cc": {
+          "scanned": 388,
+          "newEvents": 22700,
+          "failedFiles": []
+        }
+      }
+    }
+  ],
+  "rows": [
+    {
+      "id": "G1a:worker-pass-max-event-loop-delay<gate",
+      "ok": true,
+      "detail": "worker max=11.86ms (gate <100ms) over 2 pass(es)"
+    },
+    {
+      "id": "G1b:heartbeat-independent-confirmation",
+      "ok": true,
+      "detail": "worker worst 10ms-heartbeat gap=2ms"
+    },
+    {
+      "id": "G1c:sync-control-shows-the-defect",
+      "ok": true,
+      "detail": "same pass, synchronous: max=31188.84ms / heartbeat gap=31157ms (this is the pre-fix behaviour the gate exists to rule out)"
+    },
+    {
+      "id": "G1d:worker-ratio",
+      "ok": true,
+      "detail": "worker/sync max-delay ratio = 0.0004"
+    },
+    {
+      "id": "G1e:worker-actually-did-the-work",
+      "ok": true,
+      "detail": "[{\"dshScanned\":880,\"ccScanned\":388,\"dshEvents\":54980,\"ccEvents\":22700,\"dshFailed\":0,\"ccFailed\":0},{\"dshScanned\":888,\"ccScanned\":388,\"dshEvents\":55084,\"ccEvents\":22700,\"dshFailed\":0,\"ccFailed\":0}]"
+    }
+  ],
+  "pass": true
+}

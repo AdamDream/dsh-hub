@@ -1,0 +1,297 @@
+{
+ "out": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn/raw/slot-churn-main.json",
+ "premise": {
+  "version": 1,
+  "inject": 1,
+  "onCommitFiberRoot": 1794,
+  "onPostCommitFiberRoot": 1484,
+  "hookPreexisting": false,
+  "injected": [
+   {
+    "rendererPackageName": "react-dom",
+    "version": "18.3.1",
+    "bundleType": 0
+   }
+  ],
+  "rendererPackageName": [
+   "react-dom"
+  ],
+  "rendererVersion": [
+   "18.3.1"
+  ],
+  "bundleType": [
+   0
+  ],
+  "commits": 1794,
+  "hostResolve": {
+   "attempts": 14528,
+   "ok": false,
+   "how": null,
+   "err": "no hook memoizedState exposes getVersion; seen=[\"number\",\"tag|create|destroy|deps|next\",\"number\",\"tag|create|destroy|deps|next\",\"number\",\"tag|create|destroy|deps|next\",\"number\",\"tag|create|destroy|deps|next\"]"
+  },
+  "micro": {
+   "scheduled": 4732,
+   "invoked": 4732,
+   "dropped": 0
+  },
+  "versionPollCount": 0,
+  "versionTransitions": 0,
+  "coreHook": {
+   "installed": false,
+   "how": null,
+   "err": "SlotCore not found via __ModuleLoader__ yet (0 module candidates)",
+   "bumpCount": 0,
+   "perKey": {},
+   "perStack": {}
+  },
+  "errors": []
+ },
+ "lock": {
+  "acquired": false,
+  "waitedMs": 15007,
+  "attempts": 2,
+  "preempted": false,
+  "holderAtBoot": {
+   "present": true,
+   "owner": "agent: react-commit-audit (subagent of DSH session, workspace .workspace/lag-fix/research-v2/react-commit)\nline: React commit counting / settings-subtree re-render measurement\nhost_pid: 1390375 (node dsh web, monitored, never restarted)\nstarted_at: 2026-09-21T15:17:26+08:00\nstarted_epoch: 1789975046\nexpected_release: within ~20 min\npurpose: re-collect the 8x60s window set + 4x60s state-dependence experiment under exclusive lock\n",
+   "mtimeIso": "2026-09-21T07:17:26.664Z"
+  },
+  "contended": true
+ },
+ "censusBoot": {
+  "foreign": 30,
+  "shells": 30
+ },
+ "censusEnd": {
+  "foreign": 19,
+  "shells": 19
+ },
+ "windows": [
+  {
+   "name": "S1-active-open-general",
+   "valid": false,
+   "invalidReasons": [
+    "renderer host not resolved (slot versions unreadable)"
+   ],
+   "commits": 224,
+   "commitsPerSec": 3.72,
+   "sessionFrames": 257,
+   "ancestorRendersOverWindow": {
+    "SettingsPanel": 224,
+    "SettingsRoot": 224,
+    "RootEntry": 224,
+    "SlotErrorBoundary": 224,
+    "SlotOutlet": 224,
+    "SidebarRoot": 0,
+    "AppFrame": 0,
+    "RootOutlet": 0,
+    "SessionMaybeProvider": 0
+   },
+   "ancestorChain": [
+    "SettingsPanel",
+    "SettingsRoot",
+    "RootEntry",
+    "SlotErrorBoundary",
+    "SlotOutlet",
+    "SidebarRoot",
+    "RootEntry",
+    "SlotErrorBoundary"
+   ],
+   "panelRendersPerCommit": 1,
+   "settingsSubtreeRendersPerCommit": 36,
+   "domStableCommits": 224,
+   "domChangedCommits": 0,
+   "commitsWithVersionDelta": 0,
+   "versionTransitionCount": 0,
+   "versionTransitionKeys": {},
+   "coreHook": {
+    "installed": false,
+    "how": null,
+    "bumpsInWindow": 0,
+    "perKey": {},
+    "perStack": {}
+   },
+   "coreBumpsPerSec": 0,
+   "versionDeltaKeysOnCommits": {},
+   "pureNoChangeButPanelRenderedCommits": 224,
+   "hostResolve": false
+  },
+  {
+   "name": "S2-active-open-general",
+   "valid": false,
+   "invalidReasons": [
+    "renderer host not resolved (slot versions unreadable)"
+   ],
+   "commits": 238,
+   "commitsPerSec": 3.95,
+   "sessionFrames": 2599,
+   "ancestorRendersOverWindow": {
+    "SettingsPanel": 238,
+    "SettingsRoot": 238,
+    "RootEntry": 238,
+    "SlotErrorBoundary": 238,
+    "SlotOutlet": 238,
+    "SidebarRoot": 0,
+    "AppFrame": 0,
+    "RootOutlet": 0,
+    "SessionMaybeProvider": 0
+   },
+   "ancestorChain": [
+    "SettingsPanel",
+    "SettingsRoot",
+    "RootEntry",
+    "SlotErrorBoundary",
+    "SlotOutlet",
+    "SidebarRoot",
+    "RootEntry",
+    "SlotErrorBoundary"
+   ],
+   "panelRendersPerCommit": 1,
+   "settingsSubtreeRendersPerCommit": 36,
+   "domStableCommits": 238,
+   "domChangedCommits": 0,
+   "commitsWithVersionDelta": 0,
+   "versionTransitionCount": 0,
+   "versionTransitionKeys": {},
+   "coreHook": {
+    "installed": false,
+    "how": null,
+    "bumpsInWindow": 0,
+    "perKey": {},
+    "perStack": {}
+   },
+   "coreBumpsPerSec": 0,
+   "versionDeltaKeysOnCommits": {},
+   "pureNoChangeButPanelRenderedCommits": 238,
+   "hostResolve": false
+  },
+  {
+   "name": "S3-active-open-models",
+   "valid": false,
+   "invalidReasons": [
+    "renderer host not resolved (slot versions unreadable)"
+   ],
+   "commits": 331,
+   "commitsPerSec": 5.47,
+   "sessionFrames": 2613,
+   "ancestorRendersOverWindow": {
+    "SettingsPanel": 331,
+    "SettingsRoot": 331,
+    "RootEntry": 0,
+    "SlotErrorBoundary": 0,
+    "SlotOutlet": 0,
+    "SidebarRoot": 0,
+    "AppFrame": 0,
+    "RootOutlet": 0,
+    "SessionMaybeProvider": 0
+   },
+   "ancestorChain": [
+    "SettingsPanel",
+    "SettingsRoot",
+    "RootEntry",
+    "SlotErrorBoundary",
+    "SlotOutlet",
+    "SidebarRoot",
+    "RootEntry",
+    "SlotErrorBoundary"
+   ],
+   "panelRendersPerCommit": 1,
+   "settingsSubtreeRendersPerCommit": 30,
+   "domStableCommits": 331,
+   "domChangedCommits": 0,
+   "commitsWithVersionDelta": 0,
+   "versionTransitionCount": 0,
+   "versionTransitionKeys": {},
+   "coreHook": {
+    "installed": false,
+    "how": null,
+    "bumpsInWindow": 0,
+    "perKey": {},
+    "perStack": {}
+   },
+   "coreBumpsPerSec": 0,
+   "versionDeltaKeysOnCommits": {},
+   "pureNoChangeButPanelRenderedCommits": 331,
+   "hostResolve": false
+  },
+  {
+   "name": "S4-active-closed-control",
+   "valid": false,
+   "invalidReasons": [
+    "renderer host not resolved (slot versions unreadable)"
+   ],
+   "commits": 376,
+   "commitsPerSec": 6.26,
+   "sessionFrames": 2447,
+   "ancestorRendersOverWindow": {},
+   "ancestorChain": [],
+   "panelRendersPerCommit": 0,
+   "settingsSubtreeRendersPerCommit": 0,
+   "domStableCommits": 376,
+   "domChangedCommits": 0,
+   "commitsWithVersionDelta": 0,
+   "versionTransitionCount": 0,
+   "versionTransitionKeys": {},
+   "coreHook": {
+    "installed": false,
+    "how": null,
+    "bumpsInWindow": 0,
+    "perKey": {},
+    "perStack": {}
+   },
+   "coreBumpsPerSec": 0,
+   "versionDeltaKeysOnCommits": {},
+   "pureNoChangeButPanelRenderedCommits": 0,
+   "hostResolve": false
+  },
+  {
+   "name": "S5-active-open-general-recheck",
+   "valid": false,
+   "invalidReasons": [
+    "renderer host not resolved (slot versions unreadable)"
+   ],
+   "commits": 332,
+   "commitsPerSec": 5.48,
+   "sessionFrames": 402,
+   "ancestorRendersOverWindow": {
+    "SettingsPanel": 332,
+    "SettingsRoot": 332,
+    "RootEntry": 332,
+    "SlotErrorBoundary": 332,
+    "SlotOutlet": 332,
+    "SidebarRoot": 0,
+    "AppFrame": 0,
+    "RootOutlet": 0,
+    "SessionMaybeProvider": 0
+   },
+   "ancestorChain": [
+    "SettingsPanel",
+    "SettingsRoot",
+    "RootEntry",
+    "SlotErrorBoundary",
+    "SlotOutlet",
+    "SidebarRoot",
+    "RootEntry",
+    "SlotErrorBoundary"
+   ],
+   "panelRendersPerCommit": 1,
+   "settingsSubtreeRendersPerCommit": 47,
+   "domStableCommits": 332,
+   "domChangedCommits": 0,
+   "commitsWithVersionDelta": 0,
+   "versionTransitionCount": 0,
+   "versionTransitionKeys": {},
+   "coreHook": {
+    "installed": false,
+    "how": null,
+    "bumpsInWindow": 0,
+    "perKey": {},
+    "perStack": {}
+   },
+   "coreBumpsPerSec": 0,
+   "versionDeltaKeysOnCommits": {},
+   "pureNoChangeButPanelRenderedCommits": 332,
+   "hostResolve": false
+  }
+ ]
+}

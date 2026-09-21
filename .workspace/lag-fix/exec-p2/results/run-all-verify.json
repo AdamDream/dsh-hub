@@ -1,0 +1,77 @@
+{
+  "generatedBy": "exec-p2/run-all-verify.cjs",
+  "steps": [
+    {
+      "label": "0. pre-image + candidate reproducibility",
+      "cmd": "node verify-preimage.cjs",
+      "exitCode": 0,
+      "ms": 66,
+      "tail": " | raw json: /home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/results/preimage-verify.json | findings: 9 PASS / 0 FAIL"
+    },
+    {
+      "label": "1. candidate static assertions (T1/T2/T3 + reverse controls)",
+      "cmd": "node assert-candidate-static.js",
+      "exitCode": 0,
+      "ms": 118,
+      "tail": "raw json: /home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/results/candidate-static.json | static assertions: 21 PASS / 0 FAIL | T1_declaration_scope_ok=true T2_anchor_position_ok=true T3_whole_line_deletion_ok=true reverse_controls_caught=true"
+    },
+    {
+      "label": "2. candidate variant matrix (3 forms x 6 scenarios + reverse controls)",
+      "cmd": "node verify-candidate-p2ac.cjs",
+      "exitCode": 0,
+      "ms": 75,
+      "tail": "raw json: /home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/results/candidate-p2ac-verify.json | assertions: 58 PASS / 0 FAIL | candidate_matches_audited_patch=true unpatched_reproduces_defect=true candidate_file_is_full_fix=true member_gate_is_full_fix=true count_gate_is_full_fix=true p2_identity_preserved=true cutover_drops_preexisting_stale_row=true reverse_controls_caught=true"
+    },
+    {
+      "label": "3. PRE-state baseline harness (defect must reproduce; pins the live bundle)",
+      "cmd": "node ../research-v2/semantics/harness-a-p2-stale-row.cjs",
+      "exitCode": 0,
+      "ms": 32,
+      "tail": " | raw json: /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/semantics/results/p2-stale-row.json | assertions: 18 PASS / 0 FAIL"
+    },
+    {
+      "label": "4. POST-state harness (defect must be gone; pins the candidate)",
+      "cmd": "node harness-a-p2-stale-row-post-p2ac.cjs",
+      "exitCode": 0,
+      "ms": 32,
+      "tail": " | raw json: /home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/results/p2-stale-row-post-p2ac.json | assertions: 18 PASS / 0 FAIL"
+    },
+    {
+      "label": "5a. sandbox rehearsal: --apply on a COPY of the pre-image",
+      "cmd": "node apply-P2AC.mjs --apply --target=/home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/sandbox/deployed-client.js",
+      "exitCode": 0,
+      "ms": 54,
+      "tail": "[P2AC] APPLIED to /home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/sandbox/deployed-client.js; pre-image /home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/preimage/20260921-165159 | [P2AC] 生效面：client 热面，浏览器刷新即生效（不需要重启 DSH、不需要 pkill）。 | [P2AC] 回滚：node apply-P2AC.mjs --rollback （次序铁律 P2AC → B1/C1 → C1）。"
+    },
+    {
+      "label": "5b. sandbox apply result == candidate bytes",
+      "exitCode": 0,
+      "ms": 0,
+      "tail": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f vs 357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f"
+    },
+    {
+      "label": "6a. sandbox rehearsal: idempotent re-apply must SKIP (exit 0)",
+      "cmd": "node apply-P2AC.mjs --apply --target=/home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/sandbox/deployed-client.js",
+      "exitCode": 0,
+      "ms": 20,
+      "tail": "[P2AC] G3: SKIP — target already carries 4 × /* p2ac-fix */ (idempotent no-op); nothing to do. | [P2AC] G3: target sha256 = 357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f"
+    },
+    {
+      "label": "6b. sandbox rehearsal: --rollback must restore the pre-image byte for byte",
+      "cmd": "node apply-P2AC.mjs --rollback --target=/home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/sandbox/deployed-client.js",
+      "exitCode": 0,
+      "ms": 44,
+      "tail": "  grep -c '/* p2ac-fix */' -> 0  (expect 0) |   node --check -> 见下（rollback 也跑） | [ROLLBACK] 铁律：若需继续回滚，次序为 P2AC → B1/C1 → C1；禁止用 C1 --rollback 抹掉 B1/P2AC/P1/P2。"
+    },
+    {
+      "label": "6c. sandbox rollback restored the pre-image bytes",
+      "exitCode": 0,
+      "ms": 0,
+      "tail": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b vs d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b"
+    }
+  ],
+  "passed": 10,
+  "failed": 0,
+  "deployed_target_written": false,
+  "note": "deployed 写入由主 agent 执行：node apply-P2AC.mjs --apply（自动 pre-image + 写后 node --check）"
+}

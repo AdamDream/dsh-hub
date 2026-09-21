@@ -1,0 +1,647 @@
+{
+  "candidatePatches": {
+    "anchors": {
+      "carryForward": "for (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0 && chainRowIds.has(id)) byId[id] = previousProjection.byId[id];",
+      "byIdIdentityReuse": "const nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length && reusableByIdKeys.length === liveKeys.length && reusableByIdKeys.every((id) => Object.prototype.hasOwnProperty.call(byId, id)) ? previousProjection.byId : stableById;"
+    },
+    "chainScopedCarryReplacement": "/* candidate P-A variant: the chain filter is replaced by a second, independent walk */ for (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0 && walkChainIds().has(id)) byId[id] = previousProjection.byId[id];",
+    "keySetGateReplacement": "const nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length && reusableByIdKeys.length === liveKeys.length ? previousProjection.byId : stableById;",
+    "candidates": [
+      {
+        "id": "P-AC",
+        "description": "the candidate态 itself: chain-scoped carry-forward (A1/A2/A3) + membership key-set gate (B) — both halves present",
+        "predicted": "FULL: drops the residue and keeps every legitimate row",
+        "checks": [
+          {
+            "scenario": "S1 (address cleared)",
+            "expectation": "child dropped (residue gone)",
+            "unpatched_ok": true,
+            "patched_ok": true,
+            "unpatched_byId_keys": [
+              "p"
+            ],
+            "patched_byId_keys": [
+              "p"
+            ]
+          },
+          {
+            "scenario": "S3 (address retained, catalog absent)",
+            "expectation": "child kept (the carry-forward case still works)",
+            "unpatched_ok": true,
+            "patched_ok": true,
+            "unpatched_byId_keys": [
+              "p",
+              "child"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child"
+            ]
+          },
+          {
+            "scenario": "S2 (address retained, catalog present, renamed)",
+            "expectation": "child kept and refreshed",
+            "unpatched_ok": true,
+            "patched_ok": true,
+            "unpatched_byId_keys": [
+              "p",
+              "child"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child"
+            ]
+          },
+          {
+            "scenario": "S4 (address retargeted)",
+            "expectation": "only child2 kept",
+            "unpatched_ok": true,
+            "patched_ok": true,
+            "unpatched_byId_keys": [
+              "p",
+              "child2"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child2"
+            ]
+          }
+        ],
+        "fixes_reported_defect": true,
+        "keeps_controls": true,
+        "verdict": "FULL FIX",
+        "evidence": "executed"
+      },
+      {
+        "id": "P-A",
+        "description": "the equivalent form of audit §3.1: the chain filter is computed by a second, independent walk instead of reusing the main walk registry",
+        "predicted": "FULL: the equivalent predicate is behaviourally identical on S1-S5",
+        "checks": [
+          {
+            "scenario": "S1 (address cleared)",
+            "expectation": "child dropped (residue gone)",
+            "unpatched_ok": true,
+            "patched_ok": true,
+            "unpatched_byId_keys": [
+              "p"
+            ],
+            "patched_byId_keys": [
+              "p"
+            ]
+          },
+          {
+            "scenario": "S3 (address retained, catalog absent)",
+            "expectation": "child kept (the carry-forward case still works)",
+            "unpatched_ok": true,
+            "patched_ok": true,
+            "unpatched_byId_keys": [
+              "p",
+              "child"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child"
+            ]
+          },
+          {
+            "scenario": "S2 (address retained, catalog present, renamed)",
+            "expectation": "child kept and refreshed",
+            "unpatched_ok": true,
+            "patched_ok": true,
+            "unpatched_byId_keys": [
+              "p",
+              "child"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child"
+            ]
+          },
+          {
+            "scenario": "S4 (address retargeted)",
+            "expectation": "only child2 kept",
+            "unpatched_ok": true,
+            "patched_ok": true,
+            "unpatched_byId_keys": [
+              "p",
+              "child2"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child2"
+            ]
+          }
+        ],
+        "fixes_reported_defect": true,
+        "keeps_controls": true,
+        "verdict": "FULL FIX",
+        "evidence": "executed"
+      },
+      {
+        "id": "P-B",
+        "description": "negative control: the membership gate is deleted, so the byId identity reuse reverts to the unchecked wholesale reuse",
+        "predicted": "PARTIAL: the stale key is republished by the wholesale reuse, so S1 stays stale",
+        "checks": [
+          {
+            "scenario": "S1 (address cleared)",
+            "expectation": "child dropped (residue gone)",
+            "unpatched_ok": true,
+            "patched_ok": false,
+            "unpatched_byId_keys": [
+              "p"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child"
+            ]
+          },
+          {
+            "scenario": "S3 (address retained, catalog absent)",
+            "expectation": "child kept (the carry-forward case still works)",
+            "unpatched_ok": true,
+            "patched_ok": true,
+            "unpatched_byId_keys": [
+              "p",
+              "child"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child"
+            ]
+          },
+          {
+            "scenario": "S2 (address retained, catalog present, renamed)",
+            "expectation": "child kept and refreshed",
+            "unpatched_ok": true,
+            "patched_ok": true,
+            "unpatched_byId_keys": [
+              "p",
+              "child"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child"
+            ]
+          },
+          {
+            "scenario": "S4 (address retargeted)",
+            "expectation": "only child2 kept",
+            "unpatched_ok": true,
+            "patched_ok": true,
+            "unpatched_byId_keys": [
+              "p",
+              "child2"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child2"
+            ]
+          }
+        ],
+        "fixes_reported_defect": false,
+        "keeps_controls": true,
+        "verdict": "PARTIAL",
+        "evidence": "executed"
+      },
+      {
+        "id": "P-D",
+        "description": "negative control: the chain filter is removed and the OLD blanket carry-forward is restored (the membership gate is kept)",
+        "predicted": "REGRESSION: the blanket carry-forward re-injects the stale key into liveKeys, so S1 stays stale (the gate cannot help — the stale key is already a live key)",
+        "checks": [
+          {
+            "scenario": "S1 (address cleared)",
+            "expectation": "child dropped (residue gone)",
+            "unpatched_ok": true,
+            "patched_ok": false,
+            "unpatched_byId_keys": [
+              "p"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child"
+            ]
+          },
+          {
+            "scenario": "S3 (address retained, catalog absent)",
+            "expectation": "child kept (the carry-forward case still works)",
+            "unpatched_ok": true,
+            "patched_ok": true,
+            "unpatched_byId_keys": [
+              "p",
+              "child"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child"
+            ]
+          },
+          {
+            "scenario": "S2 (address retained, catalog present, renamed)",
+            "expectation": "child kept and refreshed",
+            "unpatched_ok": true,
+            "patched_ok": true,
+            "unpatched_byId_keys": [
+              "p",
+              "child"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child"
+            ]
+          },
+          {
+            "scenario": "S4 (address retargeted)",
+            "expectation": "only child2 kept",
+            "unpatched_ok": true,
+            "patched_ok": false,
+            "unpatched_byId_keys": [
+              "p",
+              "child2"
+            ],
+            "patched_byId_keys": [
+              "p",
+              "child2",
+              "child1"
+            ]
+          }
+        ],
+        "fixes_reported_defect": false,
+        "keeps_controls": false,
+        "verdict": "REGRESSION",
+        "evidence": "executed"
+      }
+    ],
+    "minimal_fix": {
+      "id": "P-AC",
+      "description": "the candidate态 itself: chain-scoped carry-forward (A1/A2/A3) + membership key-set gate (B) — both halves present",
+      "scope": "2 edits inside SessionRuntime.projectList",
+      "validated_by": "same harness scenarios as the unpatched code"
+    }
+  },
+  "codeInferenceNotes": [
+    {
+      "claim": "The residual row is reachable by real consumers, but it is not rendered as a top-level row: row enumeration walks list.ids while every descendant aggregation walks list.byId.",
+      "evidence": "code-inference",
+      "anchors": [
+        "dsh-client-ui-workspace/lib/client.js:194,224,253 `const descendants = indexSubagentDescendants(list.byId);` (deriveGroups/deriveFlat/deriveSearchResults)",
+        "dsh-client-ui-workspace/lib/client.js:226,260 `for (const id of list.ids) { const s = list.byId[id]; ... }` (rows come from ids)",
+        "dsh-client-ui-workspace/lib/client.js:171,286 `runningSubagentCount: typeof s.runningSubagentCount === \"number\" ? s.runningSubagentCount : (descendants.get(s.id)?.runningCount ?? 0)` (byId-derived fallback feeds the sidebar badge)",
+        "dsh-client-ui-subagent/lib/client.js:397 `const summaries = useSessions((state) => state.byId);` and :415 `indexSubagentDescendants(summaries)`",
+        "dsh-client-ui-subagent/lib/client.js:176-177 `const children = Object.values(summaries).filter((summary) => summary.origin === \"subagent\" && summary.parentId === parentSessionId);` (catalog loading rows enumerate byId)"
+      ],
+      "consequence": "While the id list is unchanged, a phantom child row inflates the byId-derived descendant/running aggregates and the subagent catalog rows for its parent, and keeps a frozen `running` flag from the last round it was live."
+    },
+    {
+      "claim": "projectList also validates `byId[current] !== void 0` before republishing the selection, so a residual row can keep a stale selection alive.",
+      "evidence": "code-inference",
+      "anchors": [
+        "client.js:9366 `} else if (byId[current] !== void 0 && (persisted !== current || ...)) this.selection.set({`"
+      ]
+    },
+    {
+      "claim": "The P2 projection is a pure client-side reuse optimization: it does not change what the host sent, only object identity and (in the buggy paths) key sets.",
+      "evidence": "code-inference",
+      "anchors": [
+        "client.js:9322-9327 marker `/* dsh-perf-fix P2 v1 */`",
+        "client.js:9340 `const nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length ? previousProjection.byId : stableById;`"
+      ]
+    }
+  ],
+  "target": {
+    "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/candidate/client.js",
+    "sha256": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f",
+    "lines": 10667
+  },
+  "extractionProof": {
+    "target": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/candidate/client.js",
+    "targetSha256": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f",
+    "pinnedSha256": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f",
+    "pieces": {
+      "projectList": {
+        "lineStart": 9272,
+        "byteStart": 340272,
+        "byteEnd": 347063,
+        "bytes": 6791,
+        "runtimeSourceEqualsNormalizedSlice": true,
+        "normalizationDelta": 3
+      },
+      "eligible": {
+        "lineStart": 9267,
+        "byteStart": 340051,
+        "byteEnd": 340174,
+        "bytes": 123,
+        "runtimeSourceEqualsNormalizedSlice": true,
+        "normalizationDelta": 3
+      },
+      "pruneScopes": {
+        "lineStart": 9379,
+        "byteStart": 347189,
+        "byteEnd": 347495,
+        "bytes": 306,
+        "runtimeSourceEqualsNormalizedSlice": true,
+        "normalizationDelta": 3
+      },
+      "workspaceTitleOf": {
+        "lineStart": 8826,
+        "byteStart": 321440,
+        "byteEnd": 321543,
+        "bytes": 103
+      },
+      "displayTitleOf": {
+        "lineStart": 8833,
+        "byteStart": 321649,
+        "byteEnd": 321867,
+        "bytes": 218
+      },
+      "sameIdList": {
+        "lineStart": 8843,
+        "byteStart": 321979,
+        "byteEnd": 322262,
+        "bytes": 283
+      },
+      "sameJobViewList": {
+        "lineStart": 8850,
+        "byteStart": 322331,
+        "byteEnd": 322886,
+        "bytes": 555
+      },
+      "sameSubagentCatalogs": {
+        "lineStart": 8863,
+        "byteStart": 322968,
+        "byteEnd": 323651,
+        "bytes": 683
+      },
+      "sameSubagentCatalogEntries": {
+        "lineStart": 8878,
+        "byteStart": 323652,
+        "byteEnd": 324152,
+        "bytes": 500
+      },
+      "indexSubagentDescendants": {
+        "lineStart": 10360,
+        "byteStart": 386545,
+        "byteEnd": 387322,
+        "bytes": 777
+      }
+    },
+    "projectListAnchorsVerified": [
+      "P2 patch version marker",
+      "P2 identity guard",
+      "P2AC patch marker (the unit that landed)",
+      "P2AC chain-scope registry declaration (A1)",
+      "P2AC chain-step registration (A2)",
+      "chain-scoped carry-forward (A3)",
+      "membership key-set gate",
+      "address-chain synthetic-child synthesis",
+      "catalog lookup in chain walk",
+      "chain walk step",
+      "publish"
+    ],
+    "mutationControl": "extractMethod(source, \"projectListTypo() {\") threw as required"
+  },
+  "storeContractEvidence": {
+    "createSnapshotStore.getSnapshot": "client.js:5416 `getSnapshot: () => api.getState(),`",
+    "createSnapshotStore.set": "client.js:5423-5425 `set: (next) => { api.setState(devFreeze(next), true); }`",
+    "getListSnapshot": "client.js:8266-8270 `getListSnapshot() { this.notifier.ensureFresh(); return this.listSnapshotCache; }`",
+    "navigationAddress": "client.js:7906-7915 `navigationAddress(sessionId) { const retained = this.addresses.get(sessionId); ... }`",
+    "note": "zustand setState(replace) stores the object reference, so getSnapshot() === the object passed to set(); the P2 guard `this.listProjection === this.list.getSnapshot()` therefore holds on the real store. Harness double preserves object identity across set/getSnapshot."
+  },
+  "scenarios": [
+    {
+      "scenario": "S1 — address cleared between rounds, manager items unchanged (ids=[p])",
+      "previousProjection_ids": [
+        "p"
+      ],
+      "current_byId_keys": [
+        "p"
+      ],
+      "current_ids": [
+        "p"
+      ],
+      "stale_row_present": false,
+      "stale_row": null,
+      "id_not_in_ids": false,
+      "client_indexSubagentDescendants_for_p": null,
+      "scope_eligible_child": false,
+      "scope_eligible_parent": true,
+      "scope_consistent": false,
+      "verdict": "no residue",
+      "evidence": "executed"
+    },
+    {
+      "scenario": "S2 control — address retained, catalog retained, child renamed",
+      "current_byId_keys": [
+        "p",
+        "child"
+      ],
+      "row": {
+        "id": "child",
+        "displayTitle": "ChildRenamed",
+        "parentId": "p",
+        "origin": "subagent",
+        "running": false,
+        "blank": false,
+        "updatedAt": 0
+      },
+      "verdict": "child kept and refreshed",
+      "evidence": "executed"
+    },
+    {
+      "scenario": "S3 control — address retained (manager.navigationAddress(p)=undefined, catalog absent)",
+      "current_byId_keys": [
+        "p",
+        "child"
+      ],
+      "row": {
+        "id": "child",
+        "displayTitle": "Child",
+        "parentId": "p",
+        "origin": "subagent",
+        "running": true,
+        "blank": false,
+        "updatedAt": 0
+      },
+      "verdict": "child kept (this is the case the carry-forward serves)",
+      "evidence": "executed"
+    },
+    {
+      "scenario": "S4 — address retargeted child1 -> child2",
+      "current_byId_keys": [
+        "p",
+        "child2"
+      ],
+      "child1_present": false,
+      "child2_present": true,
+      "verdict": "retarget handled",
+      "evidence": "executed"
+    },
+    {
+      "scenario": "S5 — bound: ids list changes (second top-level session appears)",
+      "current_ids": [
+        "p",
+        "q"
+      ],
+      "current_byId_keys": [
+        "p",
+        "q"
+      ],
+      "residue_cleared": true,
+      "verdict": "residue clears as soon as the id list changes",
+      "evidence": "executed"
+    }
+  ],
+  "findings": [
+    {
+      "assertion": "self-proof: target file sha256 matches pinned value",
+      "status": "PASS",
+      "detail": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "self-proof: every semantic anchor found inside the extracted projectList body",
+      "status": "PASS",
+      "detail": "11 anchors (incl. the carry-forward line)",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "self-proof: runtime prototype source text === extracted slice (projectList/eligible/pruneScopes)",
+      "status": "PASS",
+      "detail": "identity after V8 method-source normalization; projectList delta 3 bytes (leading indent + trailing newline)",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "self-proof: mutation control (missing anchor throws, exit-coded)",
+      "status": "PASS",
+      "detail": "guard is not vacuous",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "S1 precondition: round 1 synthesizes the address-chain child row",
+      "status": "PASS",
+      "detail": "ids=[\"p\"] byIdKeys=[\"p\",\"child\"]",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "S1: NO residue — the address-chain child row is dropped once the address is cleared (P2AC fix)",
+      "status": "PASS",
+      "detail": "byId keys = [\"p\"], ids = [\"p\"]",
+      "evidence": "executed",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "assertion": "S1: no row is keyed by an id absent from the projection ids list (byId keys == ids)",
+      "status": "PASS",
+      "detail": "ids=[\"p\"] byIdKeys=[\"p\"]",
+      "evidence": "executed",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "assertion": "S1: the real client indexSubagentDescendants(byId) no longer fabricates a child count for p",
+      "status": "PASS",
+      "detail": "indexSubagentDescendants(byId).get(\"p\") = undefined while ids=[p]",
+      "evidence": "executed",
+      "expected": "undefined (no phantom descendant)",
+      "observed": null
+    },
+    {
+      "assertion": "S1: no projection/scope divergence — the child is not published and not eligible, the parent is both",
+      "status": "PASS",
+      "detail": "eligible(\"child\")=false, eligible(\"p\")=true (extracted real predicate)",
+      "evidence": "executed",
+      "expected": "child absent + not eligible; parent present + eligible",
+      "observed": {
+        "child": false,
+        "p": true
+      }
+    },
+    {
+      "assertion": "S2 control: child row kept while the address still points at it",
+      "status": "PASS",
+      "detail": "displayTitle=ChildRenamed",
+      "evidence": "executed",
+      "expected": "present",
+      "observed": true
+    },
+    {
+      "assertion": "S2 control: kept row is refreshed from the live catalog, not frozen at the carried value",
+      "status": "PASS",
+      "detail": "displayTitle=ChildRenamed",
+      "evidence": "executed",
+      "expected": "ChildRenamed",
+      "observed": "ChildRenamed"
+    },
+    {
+      "assertion": "S3 control: child row kept from the carried previous projection when the catalog is absent",
+      "status": "PASS",
+      "detail": "displayTitle=Child",
+      "evidence": "executed",
+      "expected": "present",
+      "observed": true
+    },
+    {
+      "assertion": "S4: the abandoned child1 row does NOT survive the retarget to child2 (P2AC fix)",
+      "status": "PASS",
+      "detail": "byId keys = [\"p\",\"child2\"]",
+      "evidence": "executed",
+      "expected": "only child2",
+      "observed": {
+        "child1": false,
+        "child2": true
+      }
+    },
+    {
+      "assertion": "S5 (bound): the residue is not permanent — any ids-list change clears it",
+      "status": "PASS",
+      "detail": "ids=[\"p\",\"q\"] byId=[\"p\",\"q\"]",
+      "evidence": "executed",
+      "expected": "cleared",
+      "observed": true
+    },
+    {
+      "assertion": "candidate P-AC behaved as predicted -> FULL FIX (predicted FULL FIX)",
+      "status": "PASS",
+      "detail": "fixes S1=true, keeps S2/S3/S4=true; S1 byId after patch = [\"p\"]",
+      "evidence": "executed",
+      "expected": "FULL FIX",
+      "observed": "FULL FIX"
+    },
+    {
+      "assertion": "candidate P-A behaved as predicted -> FULL FIX (predicted FULL FIX)",
+      "status": "PASS",
+      "detail": "fixes S1=true, keeps S2/S3/S4=true; S1 byId after patch = [\"p\"]",
+      "evidence": "executed",
+      "expected": "FULL FIX",
+      "observed": "FULL FIX"
+    },
+    {
+      "assertion": "candidate P-B behaved as predicted -> PARTIAL (predicted PARTIAL)",
+      "status": "PASS",
+      "detail": "fixes S1=false, keeps S2/S3/S4=true; S1 byId after patch = [\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "PARTIAL",
+      "observed": "PARTIAL"
+    },
+    {
+      "assertion": "candidate P-D behaved as predicted -> REGRESSION (predicted REGRESSION)",
+      "status": "PASS",
+      "detail": "fixes S1=false, keeps S2/S3/S4=false; S1 byId after patch = [\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "REGRESSION",
+      "observed": "REGRESSION"
+    }
+  ],
+  "summary": {
+    "p2ac_candidate_no_stale_row": true,
+    "p2ac_candidate_keeps_legitimate_rows": true,
+    "residue_consumed_by_client_indexSubagentDescendants": false,
+    "residue_bounded_by_ids_change": true,
+    "leak_channels_fixed": 2,
+    "candidate_fix_validated": "P-AC",
+    "evidence_split": {
+      "executed_assertions": 18,
+      "code_inference_notes": 1
+    }
+  }
+}

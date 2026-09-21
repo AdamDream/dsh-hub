@@ -1,0 +1,15 @@
+import { chromium } from '/home/CNS2026495165/playwright_scratch/node_modules/playwright/index.mjs';
+import path from 'node:path';
+import fs from 'node:fs';
+const DIR='/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions';
+const b=await chromium.launch({headless:true,args:['--no-sandbox','--disable-background-timer-throttling','--disable-renderer-backgrounding']});
+const c=await b.newContext({viewport:{width:1440,height:900}});
+const p=await c.newPage();
+await p.addInitScript({path:path.join(DIR,'scripts/dbg-define.js')});
+await p.goto('http://127.0.0.1:3080',{waitUntil:'domcontentloaded'});
+await p.waitForTimeout(14000);
+const out=await p.evaluate(()=>({hits:window.__DBG__.hits,allDefine:window.__DBG__.allDefine,renderers:window.__DBG__.renderers,internalsKeys:window.__DBG__.internalsKeys,err:window.__DBG__.err,first:window.__DBG__.first100.slice(0,25)}));
+fs.writeFileSync(path.join(DIR,'raw','dbg-define.json'),JSON.stringify(out,null,1));
+console.log(JSON.stringify({hits:out.hits.length,allDefine:out.allDefine,renderers:out.renderers,err:out.err}));
+console.log(JSON.stringify(out.hits.slice(0,3),null,1));
+await b.close();

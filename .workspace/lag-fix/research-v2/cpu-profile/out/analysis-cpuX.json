@@ -1,0 +1,4389 @@
+{
+  "meta": {
+    "generatedAt": "2026-09-21T08:27:16.792Z",
+    "stamp": "cpuX",
+    "exclusivityGate": "per-window: foreignCount==0 && lockHeldByMe required to start a window",
+    "url": "http://127.0.0.1:3080",
+    "winMs": 8000,
+    "reps": 1,
+    "scenarios": "all",
+    "longSessionOpenProbe": "会话删除更新误删全部会话",
+    "fix": "per-window style-write delta (writeMark) + body@style mutation cross-check",
+    "unitNote": "CDP profile timeDeltas are microseconds",
+    "discipline": "read-only; single browser; single page; closed at end",
+    "caveat": "measured with concurrent browser instances and a live host agent; use ratios"
+  },
+  "errors": [],
+  "scen": {
+    "home-idle": {
+      "scenario": "home-idle",
+      "n": 1,
+      "ok": 1,
+      "rafOver50": 1,
+      "ltN": 0,
+      "lafN": 1,
+      "mut": 30,
+      "chainPerS": {
+        "ThemePresenter_apply": 11.1,
+        "buildListSnapshot": 0.134,
+        "projectList": 0.268,
+        "flattenLineage": 0,
+        "markDirty": 0,
+        "ensureFresh": 0,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 0.134,
+        "querySelectorAll": 0,
+        "sessionChainSum": 0.401
+      },
+      "bundlePerS": {
+        "(no-url:native/vm)": 979.859,
+        "dsh-client-ui-layout": 10.912,
+        "shell:assets:index": 4.076,
+        "dsh-client-runtime": 2.104,
+        "dsh-client-ui-workspace": 0.789,
+        "dsh-client-ui-renderer": 0.657,
+        "C2:dsh-workspace-enhancement": 0.394,
+        "dsh-wallpaper": 0.263,
+        "dsh-client-connection": 0.263,
+        "dsh-client-ui-conversation": 0.263,
+        "dsh-client-ui-agent-preset": 0.131,
+        "dsh-client-locale": 0.131,
+        "dsh-client-ui-commands": 0.131
+      },
+      "pages": {
+        "home": 1
+      },
+      "tabs": {},
+      "scriptAvg": 11.834,
+      "taskAvg": 44.544,
+      "recalcAvg": 9.985,
+      "layoutAvg": 0,
+      "busyAvg": 20.378,
+      "applyAvg": 10.912,
+      "wsInAvg": 5,
+      "rafAvg": 61.625,
+      "nodesAvg": 595,
+      "bodyWritesAvg": 7.5,
+      "applyShareOfScriptAvg": 0.938
+    },
+    "long-session-idle": {
+      "scenario": "long-session-idle",
+      "n": 1,
+      "ok": 1,
+      "rafOver50": 3,
+      "ltN": 0,
+      "lafN": 4,
+      "mut": 15,
+      "chainPerS": {
+        "ThemePresenter_apply": 35.018,
+        "buildListSnapshot": 0,
+        "projectList": 0.133,
+        "flattenLineage": 0.133,
+        "markDirty": 0,
+        "ensureFresh": 0.265,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 0,
+        "querySelectorAll": 0,
+        "sessionChainSum": 0.531
+      },
+      "bundlePerS": {
+        "(no-url:native/vm)": 957.181,
+        "dsh-client-ui-layout": 34.706,
+        "shell:assets:index": 4.206,
+        "dsh-client-runtime": 1.446,
+        "dsh-client-ui-renderer": 0.526,
+        "dsh-client-ui-workspace": 0.526,
+        "dsh-client-locale": 0.394,
+        "dsh-client-connection": 0.263,
+        "C2:dsh-workspace-enhancement": 0.263,
+        "dsh-wallpaper": 0.131,
+        "dsh-client-ui-attachment": 0.131,
+        "dsh-client-ui-model-selection": 0.131
+      },
+      "pages": {
+        "long-session": 1
+      },
+      "tabs": {},
+      "scriptAvg": 9.292,
+      "taskAvg": 66.633,
+      "recalcAvg": 37.989,
+      "layoutAvg": 0,
+      "busyAvg": 42.987,
+      "applyAvg": 34.706,
+      "wsInAvg": 2.5,
+      "rafAvg": 59.993,
+      "nodesAvg": 3245,
+      "bodyWritesAvg": 3.75,
+      "applyShareOfScriptAvg": 3.769
+    },
+    "long-session-active": {
+      "scenario": "long-session-active",
+      "n": 1,
+      "ok": 1,
+      "rafOver50": 16,
+      "ltN": 1,
+      "lafN": 17,
+      "mut": 113,
+      "chainPerS": {
+        "ThemePresenter_apply": 150.639,
+        "buildListSnapshot": 1.479,
+        "projectList": 1.614,
+        "flattenLineage": 0.269,
+        "markDirty": 0,
+        "ensureFresh": 0.269,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 0,
+        "querySelectorAll": 0.404,
+        "sessionChainSum": 3.631
+      },
+      "bundlePerS": {
+        "(no-url:native/vm)": 794.06,
+        "dsh-client-ui-layout": 148.596,
+        "shell:assets:index": 26.802,
+        "dsh-client-runtime": 12.206,
+        "dsh-client-ui-workspace": 5.838,
+        "dsh-client-ui-conversation": 4.909,
+        "dsh-client-connection": 1.725,
+        "C2:dsh-workspace-enhancement": 1.194,
+        "dsh-client-ui-renderer": 0.929,
+        "dsh-client-ui-trajectory": 0.929,
+        "dsh-client-locale": 0.663,
+        "dsh-wallpaper": 0.663,
+        "dsh-client-ui-goal": 0.265,
+        "dsh-client-ui-model-selection": 0.133,
+        "dsh-client-ui-plan": 0.133,
+        "dsh-client-ui-theme": 0.133,
+        "dsh-client-ui-input-trigger": 0.133,
+        "dsh-ssh-gui": 0.133,
+        "dsh-client-ui-tool": 0.133,
+        "dsh-client-ui-subagent": 0.133,
+        "dsh-session-log-export": 0.133
+      },
+      "pages": {
+        "long-session": 1
+      },
+      "tabs": {},
+      "scriptAvg": 60.811,
+      "taskAvg": 254.618,
+      "recalcAvg": 104.348,
+      "layoutAvg": 45.993,
+      "busyAvg": 207.781,
+      "applyAvg": 148.596,
+      "wsInAvg": 137.142,
+      "rafAvg": 53.007,
+      "nodesAvg": 1908,
+      "bodyWritesAvg": 28.254,
+      "applyShareOfScriptAvg": 2.477
+    },
+    "settings-general-open": {
+      "scenario": "settings-general-open",
+      "n": 1,
+      "ok": 1,
+      "rafOver50": 17,
+      "ltN": 0,
+      "lafN": 19,
+      "mut": 105,
+      "chainPerS": {
+        "ThemePresenter_apply": 117.014,
+        "buildListSnapshot": 1.033,
+        "projectList": 1.503,
+        "flattenLineage": 0.376,
+        "markDirty": 0,
+        "ensureFresh": 0,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 0,
+        "querySelectorAll": 0.188,
+        "sessionChainSum": 2.911
+      },
+      "bundlePerS": {
+        "(no-url:native/vm)": 836.614,
+        "dsh-client-ui-layout": 116.057,
+        "shell:assets:index": 19.745,
+        "dsh-client-runtime": 11.363,
+        "dsh-client-ui-conversation": 4.936,
+        "dsh-client-ui-workspace": 4.191,
+        "dsh-client-ui-renderer": 1.583,
+        "C2:dsh-workspace-enhancement": 1.211,
+        "dsh-wallpaper": 1.118,
+        "dsh-client-connection": 0.745,
+        "dsh-client-ui-trajectory": 0.559,
+        "dsh-client-locale": 0.466,
+        "dsh-client-ui-theme": 0.279,
+        "dsh-client-ui-model-selection": 0.186,
+        "dsh-btw": 0.186,
+        "dsh-client-ui-agent-preset": 0.186,
+        "dsh-client-ui-settings-general": 0.093,
+        "dsh-taste": 0.093,
+        "dsh-client-ui-jobs": 0.093,
+        "dsh-client-ui-subagent": 0.093,
+        "dsh-client-ui-input-trigger": 0.093,
+        "dsh-client-ui-goal": 0.093
+      },
+      "pages": {
+        "settings": 1
+      },
+      "tabs": {
+        "通用设置": 1
+      },
+      "scriptAvg": 47.271,
+      "taskAvg": 205.532,
+      "recalcAvg": 87.9,
+      "layoutAvg": 32.416,
+      "busyAvg": 165.228,
+      "applyAvg": 116.057,
+      "wsInAvg": 106.931,
+      "rafAvg": 53.776,
+      "nodesAvg": 2078,
+      "bodyWritesAvg": 18.458,
+      "applyShareOfScriptAvg": 2.475
+    },
+    "settings-models-tab": {
+      "scenario": "settings-models-tab",
+      "n": 1,
+      "ok": 1,
+      "rafOver50": 17,
+      "ltN": 0,
+      "lafN": 17,
+      "mut": 115,
+      "chainPerS": {
+        "ThemePresenter_apply": 119.716,
+        "buildListSnapshot": 1.131,
+        "projectList": 1.131,
+        "flattenLineage": 0.377,
+        "markDirty": 0,
+        "ensureFresh": 0.189,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 0,
+        "querySelectorAll": 0,
+        "sessionChainSum": 2.828
+      },
+      "bundlePerS": {
+        "(no-url:native/vm)": 841.54,
+        "dsh-client-ui-layout": 118.724,
+        "shell:assets:index": 20.757,
+        "dsh-client-runtime": 9.349,
+        "dsh-client-ui-workspace": 3.459,
+        "dsh-client-ui-renderer": 1.59,
+        "dsh-client-ui-conversation": 1.029,
+        "C2:dsh-workspace-enhancement": 0.841,
+        "dsh-wallpaper": 0.654,
+        "dsh-client-ui-theme": 0.468,
+        "dsh-client-locale": 0.374,
+        "dsh-client-connection": 0.281,
+        "dsh-client-ui-sidebar": 0.187,
+        "dsh-client-ui-subagent": 0.187,
+        "dsh-client-ui-agent-preset": 0.094,
+        "dsh-btw": 0.094,
+        "dsh-client-ui-commands": 0.094,
+        "dsh-client-ui-attachment": 0.094,
+        "dsh-ssh-gui": 0.094
+      },
+      "pages": {
+        "settings": 1
+      },
+      "tabs": {
+        "模型": 1
+      },
+      "scriptAvg": 45.464,
+      "taskAvg": 197.942,
+      "recalcAvg": 86.97,
+      "layoutAvg": 34.458,
+      "busyAvg": 160.242,
+      "applyAvg": 118.724,
+      "wsInAvg": 13.51,
+      "rafAvg": 53.595,
+      "nodesAvg": 2030,
+      "bodyWritesAvg": 20.265,
+      "applyShareOfScriptAvg": 2.633
+    },
+    "settings-plugins-tab": {
+      "scenario": "settings-plugins-tab",
+      "n": 1,
+      "ok": 1,
+      "rafOver50": 15,
+      "ltN": 1,
+      "lafN": 12,
+      "mut": 76,
+      "chainPerS": {
+        "ThemePresenter_apply": 86.043,
+        "buildListSnapshot": 0.568,
+        "projectList": 0.663,
+        "flattenLineage": 0.095,
+        "markDirty": 0,
+        "ensureFresh": 0.189,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 0,
+        "querySelectorAll": 0.284,
+        "sessionChainSum": 1.514
+      },
+      "bundlePerS": {
+        "(no-url:native/vm)": 885.398,
+        "dsh-client-ui-layout": 84.24,
+        "shell:assets:index": 16.683,
+        "dsh-client-runtime": 4.912,
+        "dsh-client-ui-workspace": 2.78,
+        "dsh-client-connection": 1.297,
+        "dsh-client-ui-conversation": 1.205,
+        "dsh-client-locale": 0.834,
+        "dsh-client-ui-renderer": 0.742,
+        "C2:dsh-workspace-enhancement": 0.741,
+        "dsh-wallpaper": 0.371,
+        "dsh-usage": 0.185,
+        "dsh-client-ui-theme": 0.185,
+        "dsh-client-ui-subagent": 0.185,
+        "dsh-btw": 0.093,
+        "dsh-ssh-gui": 0.093
+      },
+      "pages": {
+        "settings": 1
+      },
+      "tabs": {
+        "插件": 1
+      },
+      "scriptAvg": 31.57,
+      "taskAvg": 168.826,
+      "recalcAvg": 66.292,
+      "layoutAvg": 22.236,
+      "busyAvg": 115.84,
+      "applyAvg": 84.24,
+      "wsInAvg": 85.62,
+      "rafAvg": 56.932,
+      "nodesAvg": 2329,
+      "bodyWritesAvg": 12.79,
+      "applyShareOfScriptAvg": 2.725
+    },
+    "settings-dwell": {
+      "scenario": "settings-dwell",
+      "n": 1,
+      "ok": 1,
+      "rafOver50": 12,
+      "ltN": 0,
+      "lafN": 12,
+      "mut": 72,
+      "chainPerS": {
+        "ThemePresenter_apply": 124.967,
+        "buildListSnapshot": 0.798,
+        "projectList": 1.197,
+        "flattenLineage": 0.399,
+        "markDirty": 0,
+        "ensureFresh": 0.133,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 0,
+        "querySelectorAll": 0,
+        "sessionChainSum": 2.526
+      },
+      "bundlePerS": {
+        "(no-url:native/vm)": 840.745,
+        "dsh-client-ui-layout": 123.562,
+        "shell:assets:index": 19.064,
+        "dsh-client-runtime": 8.019,
+        "dsh-client-ui-workspace": 3.418,
+        "dsh-client-ui-renderer": 1.447,
+        "C2:dsh-workspace-enhancement": 1.052,
+        "dsh-client-ui-conversation": 0.789,
+        "dsh-client-connection": 0.657,
+        "dsh-client-ui-theme": 0.395,
+        "dsh-btw": 0.132,
+        "dsh-wallpaper": 0.132,
+        "dsh-client-ui-trajectory": 0.132,
+        "dsh-client-ui-input-trigger": 0.132,
+        "dsh-client-ui-model-selection": 0.132,
+        "dsh-client-locale": 0.132
+      },
+      "pages": {
+        "settings": 1
+      },
+      "tabs": {
+        "插件": 1
+      },
+      "scriptAvg": 39.5,
+      "taskAvg": 194.632,
+      "recalcAvg": 94.127,
+      "layoutAvg": 31.244,
+      "busyAvg": 159.977,
+      "applyAvg": 123.562,
+      "wsInAvg": 38.5,
+      "rafAvg": 54.25,
+      "nodesAvg": 2330,
+      "bodyWritesAvg": 18,
+      "applyShareOfScriptAvg": 3.164
+    }
+  },
+  "chains": {
+    "ThemePresenter_apply": {
+      "chain": "ThemePresenter_apply",
+      "windowsWithHits": 7,
+      "totalWindows": 7,
+      "selfMs": 6208.006,
+      "maxMsPerS": 150.639,
+      "perScenarioMsPerS": {
+        "home-idle": 11.1,
+        "long-session-idle": 35.018,
+        "long-session-active": 150.639,
+        "settings-general-open": 117.014,
+        "settings-models-tab": 119.716,
+        "settings-plugins-tab": 86.043,
+        "settings-dwell": 124.967
+      },
+      "fns": [
+        "apply@client.js?rev=abdb7f55acba:366"
+      ]
+    },
+    "buildListSnapshot": {
+      "chain": "buildListSnapshot",
+      "windowsWithHits": 6,
+      "totalWindows": 7,
+      "selfMs": 50.047,
+      "maxMsPerS": 1.479,
+      "perScenarioMsPerS": {
+        "home-idle": 0.134,
+        "long-session-active": 1.479,
+        "settings-general-open": 1.033,
+        "settings-models-tab": 1.131,
+        "settings-plugins-tab": 0.568,
+        "settings-dwell": 0.798
+      },
+      "fns": [
+        "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553"
+      ]
+    },
+    "projectList": {
+      "chain": "projectList",
+      "windowsWithHits": 7,
+      "totalWindows": 7,
+      "selfMs": 62.803,
+      "maxMsPerS": 1.614,
+      "perScenarioMsPerS": {
+        "home-idle": 0.268,
+        "long-session-idle": 0.133,
+        "long-session-active": 1.614,
+        "settings-general-open": 1.503,
+        "settings-models-tab": 1.131,
+        "settings-plugins-tab": 0.663,
+        "settings-dwell": 1.197
+      },
+      "fns": [
+        "projectList@client.js?rev=a0fb4bb225d3:9272"
+      ]
+    },
+    "flattenLineage": {
+      "chain": "flattenLineage",
+      "windowsWithHits": 6,
+      "totalWindows": 7,
+      "selfMs": 15.945,
+      "maxMsPerS": 0.399,
+      "perScenarioMsPerS": {
+        "long-session-idle": 0.133,
+        "long-session-active": 0.269,
+        "settings-general-open": 0.376,
+        "settings-models-tab": 0.377,
+        "settings-plugins-tab": 0.095,
+        "settings-dwell": 0.399
+      },
+      "fns": [
+        "flattenLineage@client.js?rev=a0fb4bb225d3:5603"
+      ]
+    },
+    "markDirty": {
+      "chain": "markDirty",
+      "windowsWithHits": 0,
+      "totalWindows": 7,
+      "selfMs": 0,
+      "maxMsPerS": 0,
+      "perScenarioMsPerS": {},
+      "fns": []
+    },
+    "ensureFresh": {
+      "chain": "ensureFresh",
+      "windowsWithHits": 5,
+      "totalWindows": 7,
+      "selfMs": 9.591,
+      "maxMsPerS": 0.269,
+      "perScenarioMsPerS": {
+        "long-session-idle": 0.265,
+        "long-session-active": 0.269,
+        "settings-models-tab": 0.189,
+        "settings-plugins-tab": 0.189,
+        "settings-dwell": 0.133
+      },
+      "fns": [
+        "ensureFresh@client.js?rev=a0fb4bb225d3:5689"
+      ]
+    },
+    "getListSnapshot": {
+      "chain": "getListSnapshot",
+      "windowsWithHits": 0,
+      "totalWindows": 7,
+      "selfMs": 0,
+      "maxMsPerS": 0,
+      "perScenarioMsPerS": {},
+      "fns": []
+    },
+    "list_set_applyMutation": {
+      "chain": "list_set_applyMutation",
+      "windowsWithHits": 0,
+      "totalWindows": 7,
+      "selfMs": 0,
+      "maxMsPerS": 0,
+      "perScenarioMsPerS": {},
+      "fns": []
+    },
+    "syncCompletedNotifications": {
+      "chain": "syncCompletedNotifications",
+      "windowsWithHits": 0,
+      "totalWindows": 7,
+      "selfMs": 0,
+      "maxMsPerS": 0,
+      "perScenarioMsPerS": {},
+      "fns": []
+    },
+    "rebuildRemote": {
+      "chain": "rebuildRemote",
+      "windowsWithHits": 1,
+      "totalWindows": 7,
+      "selfMs": 1.07,
+      "maxMsPerS": 0.134,
+      "perScenarioMsPerS": {
+        "home-idle": 0.134
+      },
+      "fns": [
+        "rebuildRemote@client.js?rev=b295bb00e32b:4220"
+      ]
+    },
+    "querySelectorAll": {
+      "chain": "querySelectorAll",
+      "windowsWithHits": 3,
+      "totalWindows": 7,
+      "selfMs": 8.543,
+      "maxMsPerS": 0.404,
+      "perScenarioMsPerS": {
+        "long-session-active": 0.404,
+        "settings-general-open": 0.188,
+        "settings-plugins-tab": 0.284
+      },
+      "fns": [
+        "querySelectorAll@:0"
+      ]
+    },
+    "sessionChainSum": {
+      "chain": "sessionChainSum",
+      "windowsWithHits": 7,
+      "totalWindows": 7,
+      "selfMs": 138.386,
+      "maxMsPerS": 3.631,
+      "perScenarioMsPerS": {
+        "home-idle": 0.401,
+        "long-session-idle": 0.531,
+        "long-session-active": 3.631,
+        "settings-general-open": 2.911,
+        "settings-models-tab": 2.828,
+        "settings-plugins-tab": 1.514,
+        "settings-dwell": 2.526
+      },
+      "fns": [
+        "projectList@client.js?rev=a0fb4bb225d3:9272",
+        "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553",
+        "ensureFresh@client.js?rev=a0fb4bb225d3:5689",
+        "flattenLineage@client.js?rev=a0fb4bb225d3:5603"
+      ]
+    }
+  },
+  "windows": [
+    {
+      "label": "home-idle-w1",
+      "scenario": "home-idle",
+      "page": "home",
+      "session": null,
+      "tab": null,
+      "action": null,
+      "wallSec": 8,
+      "nodes": 595,
+      "wsIn": 40,
+      "wsInPerS": 5,
+      "wsOut": 0,
+      "byKind": {
+        "session/projection": 30,
+        "session/event": 10
+      },
+      "byPayloadType": {
+        "session/projection": 30,
+        "session/event": 10
+      },
+      "topSessionIds": [
+        [
+          "a9012d40",
+          20
+        ],
+        [
+          "694d404a",
+          20
+        ]
+      ],
+      "scriptMs": 94.672,
+      "scriptMsPerS": 11.834,
+      "taskMs": 356.351,
+      "taskMsPerS": 44.544,
+      "recalcMs": 79.878,
+      "recalcMsPerS": 9.985,
+      "recalcCount": 60000,
+      "layoutMs": 0,
+      "layoutMsPerS": 0,
+      "layoutCount": 0,
+      "busyMs": 165.843,
+      "busyMsPerS": 20.378,
+      "reconcileRatio": 0.95,
+      "applyMs": 88.803,
+      "applyMsPerS": 10.912,
+      "applyShareOfScript": 0.938,
+      "applyShareOfBusy": 0.535,
+      "chainMs": {
+        "ThemePresenter_apply": 88.803,
+        "buildListSnapshot": 1.07,
+        "projectList": 2.14,
+        "flattenLineage": 0,
+        "markDirty": 0,
+        "ensureFresh": 0,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 1.07,
+        "querySelectorAll": 0,
+        "sessionChainSum": 3.21
+      },
+      "chainFn": {
+        "ThemePresenter_apply": [
+          "apply@client.js?rev=abdb7f55acba:366"
+        ],
+        "buildListSnapshot": [
+          "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553"
+        ],
+        "projectList": [
+          "projectList@client.js?rev=a0fb4bb225d3:9272"
+        ],
+        "flattenLineage": [],
+        "markDirty": [],
+        "ensureFresh": [],
+        "getListSnapshot": [],
+        "list_set_applyMutation": [],
+        "syncCompletedNotifications": [],
+        "rebuildRemote": [
+          "rebuildRemote@client.js?rev=b295bb00e32b:4220"
+        ],
+        "querySelectorAll": [],
+        "sessionChainSum": [
+          "projectList@client.js?rev=a0fb4bb225d3:9272",
+          "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553"
+        ]
+      },
+      "rafPerS": 61.625,
+      "rafP50": 16.7,
+      "rafP95": 16.7,
+      "rafP99": 16.8,
+      "rafMax": 116.7,
+      "rafOver50": 1,
+      "rafOver100": 1,
+      "ltN": 0,
+      "ltMaxMs": null,
+      "ltTotalMs": 0,
+      "lafN": 1,
+      "mutRecords": 30,
+      "bodyStyleWrites": 60,
+      "bodyStyleMut": 60,
+      "bodyWritesPerS": 7.5,
+      "samples": 7606,
+      "msPerSample": 1.07,
+      "top30": [
+        {
+          "fn": "(idle)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 7917.39,
+          "selfPct": 97.292,
+          "msPerS": 972.891,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 47.076,
+          "selfPct": 0.578,
+          "msPerS": 5.785,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 41.727,
+          "selfPct": 0.513,
+          "msPerS": 5.127,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "(program)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 36.377,
+          "selfPct": 0.447,
+          "msPerS": 4.47,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "(garbage collector)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 18.189,
+          "selfPct": 0.224,
+          "msPerS": 2.235,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8554,
+          "selfMs": 6.42,
+          "selfPct": 0.079,
+          "msPerS": 0.789,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "Xo",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 4.28,
+          "selfPct": 0.053,
+          "msPerS": 0.526,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "nextSessionOrderAccount",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 1103,
+          "selfMs": 3.21,
+          "selfPct": 0.039,
+          "msPerS": 0.394,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "f1",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 2.14,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 2.14,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "shadeTokens",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@local/dsh-wallpaper/client.js?rev=fb28faf9db9a",
+          "line": 183,
+          "selfMs": 2.14,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "walk",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 5615,
+          "selfMs": 2.14,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": "lib/types/client/sessions/lineage.js"
+        },
+        {
+          "fn": "projectList",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 9272,
+          "selfMs": 2.14,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": "lib/types/client/sessions/service.js"
+        },
+        {
+          "fn": "handleMessage",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+          "line": 10289,
+          "selfMs": 2.14,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "SessionMaybeEntry",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-renderer/client.js?rev=79b59d365f3b",
+          "line": 672,
+          "selfMs": 2.14,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "$e",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 2.14,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "F4",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 2.14,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "buildListSnapshot",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8553,
+          "selfMs": 1.07,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 1.07,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "ConversationSessionHeader",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-conversation/client.js?rev=cf4575517765",
+          "line": 7321,
+          "selfMs": 1.07,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "se",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 41,
+          "selfMs": 1.07,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "rebuildRemote",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b",
+          "line": 4220,
+          "selfMs": 1.07,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "Xe",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 1.07,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "Y1",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 1.07,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "y",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 1.07,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "$l",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 2,
+          "selfMs": 1.07,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "deriveGroups",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 191,
+          "selfMs": 1.07,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 1.07,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "p0",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 1.07,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 208,
+          "selfMs": 1.07,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        }
+      ],
+      "bundles": [
+        {
+          "bundle": "(no-url:native/vm)",
+          "selfMs": 7974.096,
+          "msPerS": 979.859
+        },
+        {
+          "bundle": "dsh-client-ui-layout",
+          "selfMs": 88.803,
+          "msPerS": 10.912
+        },
+        {
+          "bundle": "shell:assets:index",
+          "selfMs": 33.17,
+          "msPerS": 4.076
+        },
+        {
+          "bundle": "dsh-client-runtime",
+          "selfMs": 17.12,
+          "msPerS": 2.104
+        },
+        {
+          "bundle": "dsh-client-ui-workspace",
+          "selfMs": 6.42,
+          "msPerS": 0.789
+        },
+        {
+          "bundle": "dsh-client-ui-renderer",
+          "selfMs": 5.35,
+          "msPerS": 0.657
+        },
+        {
+          "bundle": "C2:dsh-workspace-enhancement",
+          "selfMs": 3.21,
+          "msPerS": 0.394
+        },
+        {
+          "bundle": "dsh-wallpaper",
+          "selfMs": 2.14,
+          "msPerS": 0.263
+        },
+        {
+          "bundle": "dsh-client-connection",
+          "selfMs": 2.14,
+          "msPerS": 0.263
+        },
+        {
+          "bundle": "dsh-client-ui-conversation",
+          "selfMs": 2.14,
+          "msPerS": 0.263
+        },
+        {
+          "bundle": "dsh-client-ui-agent-preset",
+          "selfMs": 1.07,
+          "msPerS": 0.131
+        },
+        {
+          "bundle": "dsh-client-locale",
+          "selfMs": 1.07,
+          "msPerS": 0.131
+        },
+        {
+          "bundle": "dsh-client-ui-commands",
+          "selfMs": 1.07,
+          "msPerS": 0.131
+        }
+      ],
+      "integrity": {
+        "rafOk": true,
+        "rafRateSane": true,
+        "muOk": true,
+        "unitOk": true
+      }
+    },
+    {
+      "label": "long-idle-w1",
+      "scenario": "long-session-idle",
+      "page": "long-session",
+      "session": "会话删除更新误删全部会话",
+      "tab": null,
+      "action": null,
+      "wallSec": 8.001,
+      "nodes": 3245,
+      "wsIn": 20,
+      "wsInPerS": 2.5,
+      "wsOut": 0,
+      "byKind": {
+        "session/projection": 15,
+        "session/event": 5
+      },
+      "byPayloadType": {
+        "session/projection": 15,
+        "session/event": 5
+      },
+      "topSessionIds": [
+        [
+          "7c9c9ffe",
+          20
+        ]
+      ],
+      "scriptMs": 74.344,
+      "scriptMsPerS": 9.292,
+      "taskMs": 533.133,
+      "taskMsPerS": 66.633,
+      "recalcMs": 303.947,
+      "recalcMsPerS": 37.989,
+      "recalcCount": 499000,
+      "layoutMs": 0,
+      "layoutMsPerS": 0,
+      "layoutCount": 0,
+      "busyMs": 347.034,
+      "busyMsPerS": 42.987,
+      "reconcileRatio": 0.917,
+      "applyMs": 280.183,
+      "applyMsPerS": 34.706,
+      "applyShareOfScript": 3.769,
+      "applyShareOfBusy": 0.807,
+      "chainMs": {
+        "ThemePresenter_apply": 280.183,
+        "buildListSnapshot": 0,
+        "projectList": 1.061,
+        "flattenLineage": 1.061,
+        "markDirty": 0,
+        "ensureFresh": 2.123,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 0,
+        "querySelectorAll": 0,
+        "sessionChainSum": 4.245
+      },
+      "chainFn": {
+        "ThemePresenter_apply": [
+          "apply@client.js?rev=abdb7f55acba:366"
+        ],
+        "buildListSnapshot": [],
+        "projectList": [
+          "projectList@client.js?rev=a0fb4bb225d3:9272"
+        ],
+        "flattenLineage": [
+          "flattenLineage@client.js?rev=a0fb4bb225d3:5603"
+        ],
+        "markDirty": [],
+        "ensureFresh": [
+          "ensureFresh@client.js?rev=a0fb4bb225d3:5689"
+        ],
+        "getListSnapshot": [],
+        "list_set_applyMutation": [],
+        "syncCompletedNotifications": [],
+        "rebuildRemote": [],
+        "querySelectorAll": [],
+        "sessionChainSum": [
+          "ensureFresh@client.js?rev=a0fb4bb225d3:5689",
+          "flattenLineage@client.js?rev=a0fb4bb225d3:5603",
+          "projectList@client.js?rev=a0fb4bb225d3:9272"
+        ]
+      },
+      "rafPerS": 59.993,
+      "rafP50": 16.7,
+      "rafP95": 16.8,
+      "rafP99": 16.8,
+      "rafMax": 100,
+      "rafOver50": 3,
+      "rafOver100": 0,
+      "ltN": 0,
+      "ltMaxMs": null,
+      "ltTotalMs": 0,
+      "lafN": 4,
+      "mutRecords": 15,
+      "bodyStyleWrites": 30,
+      "bodyStyleMut": 30,
+      "bodyWritesPerS": 3.75,
+      "samples": 7606,
+      "msPerSample": 1.061,
+      "top30": [
+        {
+          "fn": "(idle)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 7615.888,
+          "selfPct": 94.347,
+          "msPerS": 943.378,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 147.521,
+          "selfPct": 1.828,
+          "msPerS": 18.273,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 132.662,
+          "selfPct": 1.643,
+          "msPerS": 16.433,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "(program)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 105.069,
+          "selfPct": 1.302,
+          "msPerS": 13.015,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "(garbage collector)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 4.245,
+          "selfPct": 0.053,
+          "msPerS": 0.526,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8554,
+          "selfMs": 3.184,
+          "selfPct": 0.039,
+          "msPerS": 0.394,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "ao",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 53,
+          "selfMs": 2.123,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 53,
+          "selfMs": 2.123,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "SlotOutlet",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-renderer/client.js?rev=79b59d365f3b",
+          "line": 741,
+          "selfMs": 2.123,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "ensureFresh",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 5689,
+          "selfMs": 2.123,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": "lib/types/client/sessions/notifier.js"
+        },
+        {
+          "fn": "Xo",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 2.123,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "p0",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 2.123,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "Eo",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 53,
+          "selfMs": 2.123,
+          "selfPct": 0.026,
+          "msPerS": 0.263,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "f",
+          "bundle": "",
+          "url": "",
+          "line": 11,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "Eo",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 53,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@local/dsh-wallpaper/client.js?rev=fb28faf9db9a",
+          "line": 571,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "G",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "$e",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "runChecks",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+          "line": 1724,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "extend",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 13,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "nextSessionOrderAccount",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 1103,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 8,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "lookup",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-locale/client.js?rev=2660ca3f6a00",
+          "line": 1158,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "ComposerAttachments",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-attachment/client.js?rev=5349ce7aa495",
+          "line": 524,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 5754,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": "lib/types/client/sessions/projection-store.js"
+        },
+        {
+          "fn": "Qo",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "lookup",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-locale/client.js?rev=2660ca3f6a00",
+          "line": 1158,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "ModelSelect",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-model-selection/client.js?rev=639da97bfe66",
+          "line": 291,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "SessionTree",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 1200,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "J3",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 1.061,
+          "selfPct": 0.013,
+          "msPerS": 0.131,
+          "v8": false,
+          "region": null
+        }
+      ],
+      "bundles": [
+        {
+          "bundle": "(no-url:native/vm)",
+          "selfMs": 7727.324,
+          "msPerS": 957.181
+        },
+        {
+          "bundle": "dsh-client-ui-layout",
+          "selfMs": 280.183,
+          "msPerS": 34.706
+        },
+        {
+          "bundle": "shell:assets:index",
+          "selfMs": 33.957,
+          "msPerS": 4.206
+        },
+        {
+          "bundle": "dsh-client-runtime",
+          "selfMs": 11.673,
+          "msPerS": 1.446
+        },
+        {
+          "bundle": "dsh-client-ui-renderer",
+          "selfMs": 4.245,
+          "msPerS": 0.526
+        },
+        {
+          "bundle": "dsh-client-ui-workspace",
+          "selfMs": 4.244,
+          "msPerS": 0.526
+        },
+        {
+          "bundle": "dsh-client-locale",
+          "selfMs": 3.183,
+          "msPerS": 0.394
+        },
+        {
+          "bundle": "dsh-client-connection",
+          "selfMs": 2.122,
+          "msPerS": 0.263
+        },
+        {
+          "bundle": "C2:dsh-workspace-enhancement",
+          "selfMs": 2.122,
+          "msPerS": 0.263
+        },
+        {
+          "bundle": "dsh-wallpaper",
+          "selfMs": 1.061,
+          "msPerS": 0.131
+        },
+        {
+          "bundle": "dsh-client-ui-attachment",
+          "selfMs": 1.061,
+          "msPerS": 0.131
+        },
+        {
+          "bundle": "dsh-client-ui-model-selection",
+          "selfMs": 1.061,
+          "msPerS": 0.131
+        }
+      ],
+      "integrity": {
+        "rafOk": true,
+        "rafRateSane": true,
+        "muOk": true,
+        "unitOk": true
+      }
+    },
+    {
+      "label": "long-active-w1",
+      "scenario": "long-session-active",
+      "page": "long-session",
+      "session": "DeepSeek模型渠道不存在报错排查",
+      "tab": null,
+      "action": null,
+      "wallSec": 7.999,
+      "nodes": 1908,
+      "wsIn": 1097,
+      "wsInPerS": 137.142,
+      "wsOut": 0,
+      "byKind": {
+        "session/event": 984,
+        "session/projection": 113
+      },
+      "byPayloadType": {
+        "session/event": 984,
+        "session/projection": 113
+      },
+      "topSessionIds": [
+        [
+          "537af3ac",
+          48
+        ],
+        [
+          "7c9c9ffe",
+          40
+        ],
+        [
+          "a9012d40",
+          28
+        ],
+        [
+          "a0995398",
+          20
+        ]
+      ],
+      "scriptMs": 486.425,
+      "scriptMsPerS": 60.811,
+      "taskMs": 2036.687,
+      "taskMsPerS": 254.618,
+      "recalcMs": 834.677,
+      "recalcMsPerS": 104.348,
+      "recalcCount": 639000,
+      "layoutMs": 367.9,
+      "layoutMsPerS": 45.993,
+      "layoutCount": 113000,
+      "busyMs": 1684.825,
+      "busyMsPerS": 207.781,
+      "reconcileRatio": 1.275,
+      "applyMs": 1204.965,
+      "applyMsPerS": 148.596,
+      "applyShareOfScript": 2.477,
+      "applyShareOfBusy": 0.715,
+      "chainMs": {
+        "ThemePresenter_apply": 1204.965,
+        "buildListSnapshot": 11.834,
+        "projectList": 12.91,
+        "flattenLineage": 2.152,
+        "markDirty": 0,
+        "ensureFresh": 2.152,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 0,
+        "querySelectorAll": 3.228,
+        "sessionChainSum": 29.048
+      },
+      "chainFn": {
+        "ThemePresenter_apply": [
+          "apply@client.js?rev=abdb7f55acba:366"
+        ],
+        "buildListSnapshot": [
+          "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553"
+        ],
+        "projectList": [
+          "projectList@client.js?rev=a0fb4bb225d3:9272"
+        ],
+        "flattenLineage": [
+          "flattenLineage@client.js?rev=a0fb4bb225d3:5603"
+        ],
+        "markDirty": [],
+        "ensureFresh": [
+          "ensureFresh@client.js?rev=a0fb4bb225d3:5689"
+        ],
+        "getListSnapshot": [],
+        "list_set_applyMutation": [],
+        "syncCompletedNotifications": [],
+        "rebuildRemote": [],
+        "querySelectorAll": [
+          "querySelectorAll@:0"
+        ],
+        "sessionChainSum": [
+          "projectList@client.js?rev=a0fb4bb225d3:9272",
+          "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553",
+          "ensureFresh@client.js?rev=a0fb4bb225d3:5689",
+          "flattenLineage@client.js?rev=a0fb4bb225d3:5603"
+        ]
+      },
+      "rafPerS": 53.007,
+      "rafP50": 16.7,
+      "rafP95": 16.8,
+      "rafP99": 100,
+      "rafMax": 116.7,
+      "rafOver50": 16,
+      "rafOver100": 3,
+      "ltN": 1,
+      "ltMaxMs": 97,
+      "ltTotalMs": 97,
+      "lafN": 17,
+      "mutRecords": 113,
+      "bodyStyleWrites": 226,
+      "bodyStyleMut": 226,
+      "bodyWritesPerS": 28.254,
+      "samples": 7536,
+      "msPerSample": 1.076,
+      "top30": [
+        {
+          "fn": "(idle)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 6149.623,
+          "selfPct": 75.849,
+          "msPerS": 758.37,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 605.71,
+          "selfPct": 7.471,
+          "msPerS": 74.696,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 599.255,
+          "selfPct": 7.391,
+          "msPerS": 73.9,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "(program)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 256.055,
+          "selfPct": 3.158,
+          "msPerS": 31.577,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-conversation/client.js?rev=cf4575517765",
+          "line": 9204,
+          "selfMs": 18.29,
+          "selfPct": 0.226,
+          "msPerS": 2.256,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(garbage collector)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 17.214,
+          "selfPct": 0.212,
+          "msPerS": 2.123,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "projectList",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 9272,
+          "selfMs": 12.91,
+          "selfPct": 0.159,
+          "msPerS": 1.592,
+          "v8": false,
+          "region": "lib/types/client/sessions/service.js"
+        },
+        {
+          "fn": "buildListSnapshot",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8553,
+          "selfMs": 11.834,
+          "selfPct": 0.146,
+          "msPerS": 1.459,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "mi",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 10.759,
+          "selfPct": 0.133,
+          "msPerS": 1.327,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "walk",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 5615,
+          "selfMs": 10.759,
+          "selfPct": 0.133,
+          "msPerS": 1.327,
+          "v8": false,
+          "region": "lib/types/client/sessions/lineage.js"
+        },
+        {
+          "fn": "enqueue",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+          "line": 10281,
+          "selfMs": 9.683,
+          "selfPct": 0.119,
+          "msPerS": 1.194,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "X",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 9.683,
+          "selfPct": 0.119,
+          "msPerS": 1.194,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "J3",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 9.683,
+          "selfPct": 0.119,
+          "msPerS": 1.194,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "$e",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 7.531,
+          "selfPct": 0.093,
+          "msPerS": 0.929,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 7.531,
+          "selfPct": 0.093,
+          "msPerS": 0.929,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "v0",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 7.531,
+          "selfPct": 0.093,
+          "msPerS": 0.929,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "deriveGroups",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 191,
+          "selfMs": 7.531,
+          "selfPct": 0.093,
+          "msPerS": 0.929,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8554,
+          "selfMs": 7.531,
+          "selfPct": 0.093,
+          "msPerS": 0.929,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "get",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 5754,
+          "selfMs": 6.455,
+          "selfPct": 0.08,
+          "msPerS": 0.796,
+          "v8": false,
+          "region": "lib/types/client/sessions/projection-store.js"
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 1221,
+          "selfMs": 5.379,
+          "selfPct": 0.066,
+          "msPerS": 0.663,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "r",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 5.379,
+          "selfPct": 0.066,
+          "msPerS": 0.663,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 1225,
+          "selfMs": 5.379,
+          "selfPct": 0.066,
+          "msPerS": 0.663,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "f1",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 5.379,
+          "selfPct": 0.066,
+          "msPerS": 0.663,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "Xo",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 5.379,
+          "selfPct": 0.066,
+          "msPerS": 0.663,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 5.379,
+          "selfPct": 0.066,
+          "msPerS": 0.663,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "reconciledSessionOrder",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 1078,
+          "selfMs": 5.379,
+          "selfPct": 0.066,
+          "msPerS": 0.663,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 1107,
+          "selfMs": 5.379,
+          "selfPct": 0.066,
+          "msPerS": 0.663,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8972,
+          "selfMs": 4.303,
+          "selfPct": 0.053,
+          "msPerS": 0.531,
+          "v8": false,
+          "region": "lib/types/client/sessions/service.js"
+        },
+        {
+          "fn": "indexSubagentDescendants",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 10355,
+          "selfMs": 4.303,
+          "selfPct": 0.053,
+          "msPerS": 0.531,
+          "v8": false,
+          "region": "lib/types/client/sessions/subagent-lineage.js"
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 4.303,
+          "selfPct": 0.053,
+          "msPerS": 0.531,
+          "v8": false,
+          "region": null
+        }
+      ],
+      "bundles": [
+        {
+          "bundle": "(no-url:native/vm)",
+          "selfMs": 6439.032,
+          "msPerS": 794.06
+        },
+        {
+          "bundle": "dsh-client-ui-layout",
+          "selfMs": 1204.965,
+          "msPerS": 148.596
+        },
+        {
+          "bundle": "shell:assets:index",
+          "selfMs": 217.337,
+          "msPerS": 26.802
+        },
+        {
+          "bundle": "dsh-client-runtime",
+          "selfMs": 98.981,
+          "msPerS": 12.206
+        },
+        {
+          "bundle": "dsh-client-ui-workspace",
+          "selfMs": 47.338,
+          "msPerS": 5.838
+        },
+        {
+          "bundle": "dsh-client-ui-conversation",
+          "selfMs": 39.81,
+          "msPerS": 4.909
+        },
+        {
+          "bundle": "dsh-client-connection",
+          "selfMs": 13.987,
+          "msPerS": 1.725
+        },
+        {
+          "bundle": "C2:dsh-workspace-enhancement",
+          "selfMs": 9.684,
+          "msPerS": 1.194
+        },
+        {
+          "bundle": "dsh-client-ui-renderer",
+          "selfMs": 7.532,
+          "msPerS": 0.929
+        },
+        {
+          "bundle": "dsh-client-ui-trajectory",
+          "selfMs": 7.531,
+          "msPerS": 0.929
+        },
+        {
+          "bundle": "dsh-client-locale",
+          "selfMs": 5.38,
+          "msPerS": 0.663
+        },
+        {
+          "bundle": "dsh-wallpaper",
+          "selfMs": 5.38,
+          "msPerS": 0.663
+        },
+        {
+          "bundle": "dsh-client-ui-goal",
+          "selfMs": 2.152,
+          "msPerS": 0.265
+        },
+        {
+          "bundle": "dsh-client-ui-model-selection",
+          "selfMs": 1.076,
+          "msPerS": 0.133
+        },
+        {
+          "bundle": "dsh-client-ui-plan",
+          "selfMs": 1.076,
+          "msPerS": 0.133
+        },
+        {
+          "bundle": "dsh-client-ui-theme",
+          "selfMs": 1.076,
+          "msPerS": 0.133
+        },
+        {
+          "bundle": "dsh-client-ui-input-trigger",
+          "selfMs": 1.076,
+          "msPerS": 0.133
+        },
+        {
+          "bundle": "dsh-ssh-gui",
+          "selfMs": 1.076,
+          "msPerS": 0.133
+        },
+        {
+          "bundle": "dsh-client-ui-tool",
+          "selfMs": 1.076,
+          "msPerS": 0.133
+        },
+        {
+          "bundle": "dsh-client-ui-subagent",
+          "selfMs": 1.076,
+          "msPerS": 0.133
+        },
+        {
+          "bundle": "dsh-session-log-export",
+          "selfMs": 1.076,
+          "msPerS": 0.133
+        }
+      ],
+      "integrity": {
+        "rafOk": true,
+        "rafRateSane": true,
+        "muOk": true,
+        "unitOk": true
+      }
+    },
+    {
+      "label": "settings-open-t1",
+      "scenario": "settings-general-open",
+      "page": "settings",
+      "session": "会话删除更新误删全部会话",
+      "tab": "通用设置",
+      "action": "open-settings",
+      "wallSec": 11.269,
+      "nodes": 2078,
+      "wsIn": 1205,
+      "wsInPerS": 106.931,
+      "wsOut": 0,
+      "byKind": {
+        "session/projection": 101,
+        "session/event": 1103,
+        "host/session-status": 1
+      },
+      "byPayloadType": {
+        "session/projection": 101,
+        "session/event": 1103,
+        "host/session-status": 1
+      },
+      "topSessionIds": [
+        [
+          "537af3ac",
+          60
+        ],
+        [
+          "a0995398",
+          40
+        ],
+        [
+          "7c9c9ffe",
+          24
+        ]
+      ],
+      "scriptMs": 532.696,
+      "scriptMsPerS": 47.271,
+      "taskMs": 2316.142,
+      "taskMsPerS": 205.532,
+      "recalcMs": 990.54,
+      "recalcMsPerS": 87.9,
+      "recalcCount": 810000,
+      "layoutMs": 365.297,
+      "layoutMsPerS": 32.416,
+      "layoutCount": 106000,
+      "busyMs": 1877.373,
+      "busyMsPerS": 165.228,
+      "reconcileRatio": 1.232,
+      "applyMs": 1318.635,
+      "applyMsPerS": 116.057,
+      "applyShareOfScript": 2.475,
+      "applyShareOfBusy": 0.702,
+      "chainMs": {
+        "ThemePresenter_apply": 1318.635,
+        "buildListSnapshot": 11.641,
+        "projectList": 16.933,
+        "flattenLineage": 4.233,
+        "markDirty": 0,
+        "ensureFresh": 0,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 0,
+        "querySelectorAll": 2.117,
+        "sessionChainSum": 32.807
+      },
+      "chainFn": {
+        "ThemePresenter_apply": [
+          "apply@client.js?rev=abdb7f55acba:366"
+        ],
+        "buildListSnapshot": [
+          "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553"
+        ],
+        "projectList": [
+          "projectList@client.js?rev=a0fb4bb225d3:9272"
+        ],
+        "flattenLineage": [
+          "flattenLineage@client.js?rev=a0fb4bb225d3:5603"
+        ],
+        "markDirty": [],
+        "ensureFresh": [],
+        "getListSnapshot": [],
+        "list_set_applyMutation": [],
+        "syncCompletedNotifications": [],
+        "rebuildRemote": [],
+        "querySelectorAll": [
+          "querySelectorAll@:0"
+        ],
+        "sessionChainSum": [
+          "projectList@client.js?rev=a0fb4bb225d3:9272",
+          "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553",
+          "flattenLineage@client.js?rev=a0fb4bb225d3:5603"
+        ]
+      },
+      "rafPerS": 53.776,
+      "rafP50": 16.7,
+      "rafP95": 16.8,
+      "rafP99": 100,
+      "rafMax": 116.7,
+      "rafOver50": 17,
+      "rafOver100": 6,
+      "ltN": 0,
+      "ltMaxMs": null,
+      "ltTotalMs": 0,
+      "lafN": 19,
+      "mutRecords": 105,
+      "bodyStyleWrites": 208,
+      "bodyStyleMut": 208,
+      "bodyWritesPerS": 18.458,
+      "samples": 10736,
+      "msPerSample": 1.058,
+      "top30": [
+        {
+          "fn": "(idle)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 9100.282,
+          "selfPct": 80.095,
+          "msPerS": 800.94,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 650.852,
+          "selfPct": 5.728,
+          "msPerS": 57.283,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 645.56,
+          "selfPct": 5.682,
+          "msPerS": 56.817,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "(program)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 361.937,
+          "selfPct": 3.186,
+          "msPerS": 31.855,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-conversation/client.js?rev=cf4575517765",
+          "line": 9204,
+          "selfMs": 33.865,
+          "selfPct": 0.298,
+          "msPerS": 2.981,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(garbage collector)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 22.224,
+          "selfPct": 0.196,
+          "msPerS": 1.956,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "projectList",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 9272,
+          "selfMs": 16.933,
+          "selfPct": 0.149,
+          "msPerS": 1.49,
+          "v8": false,
+          "region": "lib/types/client/sessions/service.js"
+        },
+        {
+          "fn": "Xo",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 13.758,
+          "selfPct": 0.121,
+          "msPerS": 1.211,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "buildListSnapshot",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8553,
+          "selfMs": 11.641,
+          "selfPct": 0.102,
+          "msPerS": 1.025,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "F4",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 10.583,
+          "selfPct": 0.093,
+          "msPerS": 0.931,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 9.525,
+          "selfPct": 0.084,
+          "msPerS": 0.838,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 8.466,
+          "selfPct": 0.075,
+          "msPerS": 0.745,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "f1",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 7.408,
+          "selfPct": 0.065,
+          "msPerS": 0.652,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "J3",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 7.408,
+          "selfPct": 0.065,
+          "msPerS": 0.652,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "SessionManager.notifier",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 7844,
+          "selfMs": 7.408,
+          "selfPct": 0.065,
+          "msPerS": 0.652,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "mi",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 7.408,
+          "selfPct": 0.065,
+          "msPerS": 0.652,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8554,
+          "selfMs": 6.35,
+          "selfPct": 0.056,
+          "msPerS": 0.559,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "indexSubagentDescendants",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 10355,
+          "selfMs": 6.35,
+          "selfPct": 0.056,
+          "msPerS": 0.559,
+          "v8": false,
+          "region": "lib/types/client/sessions/subagent-lineage.js"
+        },
+        {
+          "fn": "reconciledSessionOrder",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 1078,
+          "selfMs": 6.35,
+          "selfPct": 0.056,
+          "msPerS": 0.559,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "nextSessionOrderAccount",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 1103,
+          "selfMs": 6.35,
+          "selfPct": 0.056,
+          "msPerS": 0.559,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 6.35,
+          "selfPct": 0.056,
+          "msPerS": 0.559,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 5754,
+          "selfMs": 6.35,
+          "selfPct": 0.056,
+          "msPerS": 0.559,
+          "v8": false,
+          "region": "lib/types/client/sessions/projection-store.js"
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 5.291,
+          "selfPct": 0.047,
+          "msPerS": 0.466,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "Z4",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 5.291,
+          "selfPct": 0.047,
+          "msPerS": 0.466,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 5.291,
+          "selfPct": 0.047,
+          "msPerS": 0.466,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "indexSubagentDescendants",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 10355,
+          "selfMs": 5.291,
+          "selfPct": 0.047,
+          "msPerS": 0.466,
+          "v8": false,
+          "region": "lib/types/client/sessions/subagent-lineage.js"
+        },
+        {
+          "fn": "enqueue",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+          "line": 10281,
+          "selfMs": 5.291,
+          "selfPct": 0.047,
+          "msPerS": 0.466,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "walk",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 5615,
+          "selfMs": 5.291,
+          "selfPct": 0.047,
+          "msPerS": 0.466,
+          "v8": false,
+          "region": "lib/types/client/sessions/lineage.js"
+        },
+        {
+          "fn": "shadeTokens",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@local/dsh-wallpaper/client.js?rev=fb28faf9db9a",
+          "line": 183,
+          "selfMs": 5.291,
+          "selfPct": 0.047,
+          "msPerS": 0.466,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 1107,
+          "selfMs": 5.291,
+          "selfPct": 0.047,
+          "msPerS": 0.466,
+          "v8": false,
+          "region": null
+        }
+      ],
+      "bundles": [
+        {
+          "bundle": "(no-url:native/vm)",
+          "selfMs": 9505.606,
+          "msPerS": 836.614
+        },
+        {
+          "bundle": "dsh-client-ui-layout",
+          "selfMs": 1318.635,
+          "msPerS": 116.057
+        },
+        {
+          "bundle": "shell:assets:index",
+          "selfMs": 224.343,
+          "msPerS": 19.745
+        },
+        {
+          "bundle": "dsh-client-runtime",
+          "selfMs": 129.105,
+          "msPerS": 11.363
+        },
+        {
+          "bundle": "dsh-client-ui-conversation",
+          "selfMs": 56.087,
+          "msPerS": 4.936
+        },
+        {
+          "bundle": "dsh-client-ui-workspace",
+          "selfMs": 47.621,
+          "msPerS": 4.191
+        },
+        {
+          "bundle": "dsh-client-ui-renderer",
+          "selfMs": 17.987,
+          "msPerS": 1.583
+        },
+        {
+          "bundle": "C2:dsh-workspace-enhancement",
+          "selfMs": 13.758,
+          "msPerS": 1.211
+        },
+        {
+          "bundle": "dsh-wallpaper",
+          "selfMs": 12.7,
+          "msPerS": 1.118
+        },
+        {
+          "bundle": "dsh-client-connection",
+          "selfMs": 8.465,
+          "msPerS": 0.745
+        },
+        {
+          "bundle": "dsh-client-ui-trajectory",
+          "selfMs": 6.349,
+          "msPerS": 0.559
+        },
+        {
+          "bundle": "dsh-client-locale",
+          "selfMs": 5.29,
+          "msPerS": 0.466
+        },
+        {
+          "bundle": "dsh-client-ui-theme",
+          "selfMs": 3.174,
+          "msPerS": 0.279
+        },
+        {
+          "bundle": "dsh-client-ui-model-selection",
+          "selfMs": 2.116,
+          "msPerS": 0.186
+        },
+        {
+          "bundle": "dsh-btw",
+          "selfMs": 2.116,
+          "msPerS": 0.186
+        },
+        {
+          "bundle": "dsh-client-ui-agent-preset",
+          "selfMs": 2.116,
+          "msPerS": 0.186
+        },
+        {
+          "bundle": "dsh-client-ui-settings-general",
+          "selfMs": 1.058,
+          "msPerS": 0.093
+        },
+        {
+          "bundle": "dsh-taste",
+          "selfMs": 1.058,
+          "msPerS": 0.093
+        },
+        {
+          "bundle": "dsh-client-ui-jobs",
+          "selfMs": 1.058,
+          "msPerS": 0.093
+        },
+        {
+          "bundle": "dsh-client-ui-subagent",
+          "selfMs": 1.058,
+          "msPerS": 0.093
+        },
+        {
+          "bundle": "dsh-client-ui-input-trigger",
+          "selfMs": 1.058,
+          "msPerS": 0.093
+        },
+        {
+          "bundle": "dsh-client-ui-goal",
+          "selfMs": 1.058,
+          "msPerS": 0.093
+        }
+      ],
+      "integrity": {
+        "rafOk": true,
+        "rafRateSane": true,
+        "muOk": true,
+        "unitOk": true
+      }
+    },
+    {
+      "label": "settings-models-tab-t1",
+      "scenario": "settings-models-tab",
+      "page": "settings",
+      "session": "会话删除更新误删全部会话",
+      "tab": "模型",
+      "action": "switch-tab:模型",
+      "wallSec": 11.251,
+      "nodes": 2030,
+      "wsIn": 152,
+      "wsInPerS": 13.51,
+      "wsOut": 0,
+      "byKind": {
+        "session/projection": 113,
+        "session/event": 39
+      },
+      "byPayloadType": {
+        "session/projection": 113,
+        "session/event": 39
+      },
+      "topSessionIds": [
+        [
+          "537af3ac",
+          56
+        ],
+        [
+          "7c9c9ffe",
+          40
+        ],
+        [
+          "a0995398",
+          24
+        ],
+        [
+          "a9012d40",
+          24
+        ]
+      ],
+      "scriptMs": 511.516,
+      "scriptMsPerS": 45.464,
+      "taskMs": 2227.051,
+      "taskMsPerS": 197.942,
+      "recalcMs": 978.504,
+      "recalcMsPerS": 86.97,
+      "recalcCount": 824000,
+      "layoutMs": 387.682,
+      "layoutMsPerS": 34.458,
+      "layoutCount": 115000,
+      "busyMs": 1817.888,
+      "busyMsPerS": 160.242,
+      "reconcileRatio": 1.22,
+      "applyMs": 1346.926,
+      "applyMsPerS": 118.724,
+      "applyShareOfScript": 2.633,
+      "applyShareOfBusy": 0.741,
+      "chainMs": {
+        "ThemePresenter_apply": 1346.926,
+        "buildListSnapshot": 12.727,
+        "projectList": 12.727,
+        "flattenLineage": 4.242,
+        "markDirty": 0,
+        "ensureFresh": 2.121,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 0,
+        "querySelectorAll": 0,
+        "sessionChainSum": 31.817
+      },
+      "chainFn": {
+        "ThemePresenter_apply": [
+          "apply@client.js?rev=abdb7f55acba:366"
+        ],
+        "buildListSnapshot": [
+          "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553"
+        ],
+        "projectList": [
+          "projectList@client.js?rev=a0fb4bb225d3:9272"
+        ],
+        "flattenLineage": [
+          "flattenLineage@client.js?rev=a0fb4bb225d3:5603"
+        ],
+        "markDirty": [],
+        "ensureFresh": [
+          "ensureFresh@client.js?rev=a0fb4bb225d3:5689"
+        ],
+        "getListSnapshot": [],
+        "list_set_applyMutation": [],
+        "syncCompletedNotifications": [],
+        "rebuildRemote": [],
+        "querySelectorAll": [],
+        "sessionChainSum": [
+          "projectList@client.js?rev=a0fb4bb225d3:9272",
+          "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553",
+          "flattenLineage@client.js?rev=a0fb4bb225d3:5603",
+          "ensureFresh@client.js?rev=a0fb4bb225d3:5689"
+        ]
+      },
+      "rafPerS": 53.595,
+      "rafP50": 16.7,
+      "rafP95": 16.8,
+      "rafP99": 100,
+      "rafMax": 116.7,
+      "rafOver50": 17,
+      "rafOver100": 4,
+      "ltN": 0,
+      "ltMaxMs": null,
+      "ltTotalMs": 0,
+      "lafN": 17,
+      "mutRecords": 115,
+      "bodyStyleWrites": 228,
+      "bodyStyleMut": 228,
+      "bodyWritesPerS": 20.265,
+      "samples": 10696,
+      "msPerSample": 1.061,
+      "top30": [
+        {
+          "fn": "(idle)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 9187.728,
+          "selfPct": 80.993,
+          "msPerS": 809.848,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 678.766,
+          "selfPct": 5.984,
+          "msPerS": 59.83,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 656.494,
+          "selfPct": 5.787,
+          "msPerS": 57.866,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "(program)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 300.142,
+          "selfPct": 2.646,
+          "msPerS": 26.456,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "(garbage collector)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 38.181,
+          "selfPct": 0.337,
+          "msPerS": 3.365,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8554,
+          "selfMs": 14.848,
+          "selfPct": 0.131,
+          "msPerS": 1.309,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "projectList",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 9272,
+          "selfMs": 12.727,
+          "selfPct": 0.112,
+          "msPerS": 1.122,
+          "v8": false,
+          "region": "lib/types/client/sessions/service.js"
+        },
+        {
+          "fn": "buildListSnapshot",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8553,
+          "selfMs": 12.727,
+          "selfPct": 0.112,
+          "msPerS": 1.122,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "mi",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 12.727,
+          "selfPct": 0.112,
+          "msPerS": 1.122,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "F4",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 11.666,
+          "selfPct": 0.103,
+          "msPerS": 1.028,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8972,
+          "selfMs": 10.606,
+          "selfPct": 0.093,
+          "msPerS": 0.935,
+          "v8": false,
+          "region": "lib/types/client/sessions/service.js"
+        },
+        {
+          "fn": "H",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 9.545,
+          "selfPct": 0.084,
+          "msPerS": 0.841,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "$e",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 7.424,
+          "selfPct": 0.065,
+          "msPerS": 0.654,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 7.424,
+          "selfPct": 0.065,
+          "msPerS": 0.654,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "deriveGroups",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 191,
+          "selfMs": 7.424,
+          "selfPct": 0.065,
+          "msPerS": 0.654,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "requestAnimationFrame",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 7.424,
+          "selfPct": 0.065,
+          "msPerS": 0.654,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "SessionManager.notifier",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 7844,
+          "selfMs": 6.363,
+          "selfPct": 0.056,
+          "msPerS": 0.561,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 6.363,
+          "selfPct": 0.056,
+          "msPerS": 0.561,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "J3",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 6.363,
+          "selfPct": 0.056,
+          "msPerS": 0.561,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "nextSessionOrderAccount",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 1103,
+          "selfMs": 5.303,
+          "selfPct": 0.047,
+          "msPerS": 0.467,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 5.303,
+          "selfPct": 0.047,
+          "msPerS": 0.467,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 5.303,
+          "selfPct": 0.047,
+          "msPerS": 0.467,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "groupByWorkspace",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 147,
+          "selfMs": 5.303,
+          "selfPct": 0.047,
+          "msPerS": 0.467,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "f1",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 5.303,
+          "selfPct": 0.047,
+          "msPerS": 0.467,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 5754,
+          "selfMs": 5.303,
+          "selfPct": 0.047,
+          "msPerS": 0.467,
+          "v8": false,
+          "region": "lib/types/client/sessions/projection-store.js"
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 5.303,
+          "selfPct": 0.047,
+          "msPerS": 0.467,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "indexSubagentDescendants",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 10355,
+          "selfMs": 5.303,
+          "selfPct": 0.047,
+          "msPerS": 0.467,
+          "v8": false,
+          "region": "lib/types/client/sessions/subagent-lineage.js"
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 4.242,
+          "selfPct": 0.037,
+          "msPerS": 0.374,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "ChatView",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-conversation/client.js?rev=cf4575517765",
+          "line": 5621,
+          "selfMs": 4.242,
+          "selfPct": 0.037,
+          "msPerS": 0.374,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "h",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 33,
+          "selfMs": 4.242,
+          "selfPct": 0.037,
+          "msPerS": 0.374,
+          "v8": false,
+          "region": null
+        }
+      ],
+      "bundles": [
+        {
+          "bundle": "(no-url:native/vm)",
+          "selfMs": 9547.267,
+          "msPerS": 841.54
+        },
+        {
+          "bundle": "dsh-client-ui-layout",
+          "selfMs": 1346.926,
+          "msPerS": 118.724
+        },
+        {
+          "bundle": "shell:assets:index",
+          "selfMs": 235.484,
+          "msPerS": 20.757
+        },
+        {
+          "bundle": "dsh-client-runtime",
+          "selfMs": 106.064,
+          "msPerS": 9.349
+        },
+        {
+          "bundle": "dsh-client-ui-workspace",
+          "selfMs": 39.246,
+          "msPerS": 3.459
+        },
+        {
+          "bundle": "dsh-client-ui-renderer",
+          "selfMs": 18.033,
+          "msPerS": 1.59
+        },
+        {
+          "bundle": "dsh-client-ui-conversation",
+          "selfMs": 11.669,
+          "msPerS": 1.029
+        },
+        {
+          "bundle": "C2:dsh-workspace-enhancement",
+          "selfMs": 9.546,
+          "msPerS": 0.841
+        },
+        {
+          "bundle": "dsh-wallpaper",
+          "selfMs": 7.425,
+          "msPerS": 0.654
+        },
+        {
+          "bundle": "dsh-client-ui-theme",
+          "selfMs": 5.305,
+          "msPerS": 0.468
+        },
+        {
+          "bundle": "dsh-client-locale",
+          "selfMs": 4.243,
+          "msPerS": 0.374
+        },
+        {
+          "bundle": "dsh-client-connection",
+          "selfMs": 3.183,
+          "msPerS": 0.281
+        },
+        {
+          "bundle": "dsh-client-ui-sidebar",
+          "selfMs": 2.122,
+          "msPerS": 0.187
+        },
+        {
+          "bundle": "dsh-client-ui-subagent",
+          "selfMs": 2.121,
+          "msPerS": 0.187
+        },
+        {
+          "bundle": "dsh-client-ui-agent-preset",
+          "selfMs": 1.061,
+          "msPerS": 0.094
+        },
+        {
+          "bundle": "dsh-btw",
+          "selfMs": 1.061,
+          "msPerS": 0.094
+        },
+        {
+          "bundle": "dsh-client-ui-commands",
+          "selfMs": 1.061,
+          "msPerS": 0.094
+        },
+        {
+          "bundle": "dsh-client-ui-attachment",
+          "selfMs": 1.061,
+          "msPerS": 0.094
+        },
+        {
+          "bundle": "dsh-ssh-gui",
+          "selfMs": 1.061,
+          "msPerS": 0.094
+        }
+      ],
+      "integrity": {
+        "rafOk": true,
+        "rafRateSane": true,
+        "muOk": true,
+        "unitOk": true
+      }
+    },
+    {
+      "label": "settings-plugins-tab-t1",
+      "scenario": "settings-plugins-tab",
+      "page": "settings",
+      "session": "会话删除更新误删全部会话",
+      "tab": "插件",
+      "action": "switch-tab:插件",
+      "wallSec": 11.259,
+      "nodes": 2329,
+      "wsIn": 964,
+      "wsInPerS": 85.62,
+      "wsOut": 0,
+      "byKind": {
+        "session/event": 892,
+        "session/projection": 72
+      },
+      "byPayloadType": {
+        "session/event": 892,
+        "session/projection": 72
+      },
+      "topSessionIds": [
+        [
+          "537af3ac",
+          31
+        ],
+        [
+          "a0995398",
+          20
+        ],
+        [
+          "7c9c9ffe",
+          20
+        ],
+        [
+          "a9012d40",
+          9
+        ]
+      ],
+      "scriptMs": 355.447,
+      "scriptMsPerS": 31.57,
+      "taskMs": 1900.817,
+      "taskMsPerS": 168.826,
+      "recalcMs": 746.387,
+      "recalcMsPerS": 66.292,
+      "recalcCount": 772000,
+      "layoutMs": 250.35,
+      "layoutMsPerS": 22.236,
+      "layoutCount": 73000,
+      "busyMs": 1332.202,
+      "busyMsPerS": 115.84,
+      "reconcileRatio": 1.209,
+      "applyMs": 968.757,
+      "applyMsPerS": 84.24,
+      "applyShareOfScript": 2.725,
+      "applyShareOfBusy": 0.727,
+      "chainMs": {
+        "ThemePresenter_apply": 968.757,
+        "buildListSnapshot": 6.394,
+        "projectList": 7.46,
+        "flattenLineage": 1.066,
+        "markDirty": 0,
+        "ensureFresh": 2.131,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 0,
+        "querySelectorAll": 3.198,
+        "sessionChainSum": 17.051
+      },
+      "chainFn": {
+        "ThemePresenter_apply": [
+          "apply@client.js?rev=abdb7f55acba:366"
+        ],
+        "buildListSnapshot": [
+          "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553"
+        ],
+        "projectList": [
+          "projectList@client.js?rev=a0fb4bb225d3:9272"
+        ],
+        "flattenLineage": [
+          "flattenLineage@client.js?rev=a0fb4bb225d3:5603"
+        ],
+        "markDirty": [],
+        "ensureFresh": [
+          "ensureFresh@client.js?rev=a0fb4bb225d3:5689"
+        ],
+        "getListSnapshot": [],
+        "list_set_applyMutation": [],
+        "syncCompletedNotifications": [],
+        "rebuildRemote": [],
+        "querySelectorAll": [
+          "querySelectorAll@:0"
+        ],
+        "sessionChainSum": [
+          "projectList@client.js?rev=a0fb4bb225d3:9272",
+          "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553",
+          "ensureFresh@client.js?rev=a0fb4bb225d3:5689",
+          "flattenLineage@client.js?rev=a0fb4bb225d3:5603"
+        ]
+      },
+      "rafPerS": 56.932,
+      "rafP50": 16.7,
+      "rafP95": 16.8,
+      "rafP99": 100,
+      "rafMax": 133.3,
+      "rafOver50": 15,
+      "rafOver100": 4,
+      "ltN": 1,
+      "ltMaxMs": 122,
+      "ltTotalMs": 122,
+      "lafN": 12,
+      "mutRecords": 76,
+      "bodyStyleWrites": 144,
+      "bodyStyleMut": 144,
+      "bodyWritesPerS": 12.79,
+      "samples": 10790,
+      "msPerSample": 1.066,
+      "top30": [
+        {
+          "fn": "(idle)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 9779.224,
+          "selfPct": 85.042,
+          "msPerS": 850.367,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 487.043,
+          "selfPct": 4.235,
+          "msPerS": 42.352,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 481.714,
+          "selfPct": 4.189,
+          "msPerS": 41.888,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "(program)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 347.431,
+          "selfPct": 3.021,
+          "msPerS": 30.211,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "(garbage collector)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 40.498,
+          "selfPct": 0.352,
+          "msPerS": 3.522,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "mi",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 8.526,
+          "selfPct": 0.074,
+          "msPerS": 0.741,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "nextSessionOrderAccount",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 1103,
+          "selfMs": 8.526,
+          "selfPct": 0.074,
+          "msPerS": 0.741,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "Xo",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 8.526,
+          "selfPct": 0.074,
+          "msPerS": 0.741,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "projectList",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 9272,
+          "selfMs": 7.46,
+          "selfPct": 0.065,
+          "msPerS": 0.649,
+          "v8": false,
+          "region": "lib/types/client/sessions/service.js"
+        },
+        {
+          "fn": "enqueue",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+          "line": 10281,
+          "selfMs": 7.46,
+          "selfPct": 0.065,
+          "msPerS": 0.649,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "indexSubagentDescendants",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 10355,
+          "selfMs": 6.394,
+          "selfPct": 0.056,
+          "msPerS": 0.556,
+          "v8": false,
+          "region": "lib/types/client/sessions/subagent-lineage.js"
+        },
+        {
+          "fn": "buildListSnapshot",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8553,
+          "selfMs": 6.394,
+          "selfPct": 0.056,
+          "msPerS": 0.556,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "SessionManager.notifier",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 7844,
+          "selfMs": 5.329,
+          "selfPct": 0.046,
+          "msPerS": 0.463,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8554,
+          "selfMs": 5.329,
+          "selfPct": 0.046,
+          "msPerS": 0.463,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "F4",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 4.263,
+          "selfPct": 0.037,
+          "msPerS": 0.371,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 4.263,
+          "selfPct": 0.037,
+          "msPerS": 0.371,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "X",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 4.263,
+          "selfPct": 0.037,
+          "msPerS": 0.371,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "ChatView",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-conversation/client.js?rev=cf4575517765",
+          "line": 5621,
+          "selfMs": 4.263,
+          "selfPct": 0.037,
+          "msPerS": 0.371,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "ProjectRowItem",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 454,
+          "selfMs": 4.263,
+          "selfPct": 0.037,
+          "msPerS": 0.371,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "H",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 4.263,
+          "selfPct": 0.037,
+          "msPerS": 0.371,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "translate",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-locale/client.js?rev=2660ca3f6a00",
+          "line": 1153,
+          "selfMs": 4.263,
+          "selfPct": 0.037,
+          "msPerS": 0.371,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "$e",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 4.263,
+          "selfPct": 0.037,
+          "msPerS": 0.371,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 53,
+          "selfMs": 3.197,
+          "selfPct": 0.028,
+          "msPerS": 0.278,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "WorkspacePickFlow",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 821,
+          "selfMs": 3.197,
+          "selfPct": 0.028,
+          "msPerS": 0.278,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "J3",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 3.197,
+          "selfPct": 0.028,
+          "msPerS": 0.278,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "f1",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 3.197,
+          "selfPct": 0.028,
+          "msPerS": 0.278,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "remoteSessionIndex",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b",
+          "line": 4109,
+          "selfMs": 3.197,
+          "selfPct": 0.028,
+          "msPerS": 0.278,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "walk",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 5615,
+          "selfMs": 3.197,
+          "selfPct": 0.028,
+          "msPerS": 0.278,
+          "v8": false,
+          "region": "lib/types/client/sessions/lineage.js"
+        },
+        {
+          "fn": "deriveGroups",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 191,
+          "selfMs": 3.197,
+          "selfPct": 0.028,
+          "msPerS": 0.278,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 3.197,
+          "selfPct": 0.028,
+          "msPerS": 0.278,
+          "v8": false,
+          "region": null
+        }
+      ],
+      "bundles": [
+        {
+          "bundle": "(no-url:native/vm)",
+          "selfMs": 10182.075,
+          "msPerS": 885.398
+        },
+        {
+          "bundle": "dsh-client-ui-layout",
+          "selfMs": 968.757,
+          "msPerS": 84.24
+        },
+        {
+          "bundle": "shell:assets:index",
+          "selfMs": 191.852,
+          "msPerS": 16.683
+        },
+        {
+          "bundle": "dsh-client-runtime",
+          "selfMs": 56.484,
+          "msPerS": 4.912
+        },
+        {
+          "bundle": "dsh-client-ui-workspace",
+          "selfMs": 31.971,
+          "msPerS": 2.78
+        },
+        {
+          "bundle": "dsh-client-connection",
+          "selfMs": 14.921,
+          "msPerS": 1.297
+        },
+        {
+          "bundle": "dsh-client-ui-conversation",
+          "selfMs": 13.856,
+          "msPerS": 1.205
+        },
+        {
+          "bundle": "dsh-client-locale",
+          "selfMs": 9.593,
+          "msPerS": 0.834
+        },
+        {
+          "bundle": "dsh-client-ui-renderer",
+          "selfMs": 8.528,
+          "msPerS": 0.742
+        },
+        {
+          "bundle": "C2:dsh-workspace-enhancement",
+          "selfMs": 8.527,
+          "msPerS": 0.741
+        },
+        {
+          "bundle": "dsh-wallpaper",
+          "selfMs": 4.264,
+          "msPerS": 0.371
+        },
+        {
+          "bundle": "dsh-usage",
+          "selfMs": 2.132,
+          "msPerS": 0.185
+        },
+        {
+          "bundle": "dsh-client-ui-theme",
+          "selfMs": 2.132,
+          "msPerS": 0.185
+        },
+        {
+          "bundle": "dsh-client-ui-subagent",
+          "selfMs": 2.131,
+          "msPerS": 0.185
+        },
+        {
+          "bundle": "dsh-btw",
+          "selfMs": 1.066,
+          "msPerS": 0.093
+        },
+        {
+          "bundle": "dsh-ssh-gui",
+          "selfMs": 1.066,
+          "msPerS": 0.093
+        }
+      ],
+      "integrity": {
+        "rafOk": true,
+        "rafRateSane": true,
+        "muOk": true,
+        "unitOk": true
+      }
+    },
+    {
+      "label": "settings-dwell-w1",
+      "scenario": "settings-dwell",
+      "page": "settings",
+      "session": "会话删除更新误删全部会话",
+      "tab": "插件",
+      "action": null,
+      "wallSec": 8,
+      "nodes": 2330,
+      "wsIn": 308,
+      "wsInPerS": 38.5,
+      "wsOut": 0,
+      "byKind": {
+        "session/projection": 71,
+        "session/event": 234,
+        "host/session-status": 1,
+        "session/queue": 2
+      },
+      "byPayloadType": {
+        "session/projection": 71,
+        "session/event": 234,
+        "host/session-status": 1,
+        "session/queue": 2
+      },
+      "topSessionIds": [
+        [
+          "537af3ac",
+          20
+        ],
+        [
+          "7c9c9ffe",
+          20
+        ],
+        [
+          "a0995398",
+          20
+        ],
+        [
+          "a9012d40",
+          20
+        ]
+      ],
+      "scriptMs": 316.001,
+      "scriptMsPerS": 39.5,
+      "taskMs": 1557.059,
+      "taskMsPerS": 194.632,
+      "recalcMs": 753.016,
+      "recalcMsPerS": 94.127,
+      "recalcCount": 567000,
+      "layoutMs": 249.953,
+      "layoutMsPerS": 31.244,
+      "layoutCount": 72000,
+      "busyMs": 1294.395,
+      "busyMsPerS": 159.977,
+      "reconcileRatio": 1.211,
+      "applyMs": 999.737,
+      "applyMsPerS": 123.562,
+      "applyShareOfScript": 3.164,
+      "applyShareOfBusy": 0.772,
+      "chainMs": {
+        "ThemePresenter_apply": 999.737,
+        "buildListSnapshot": 6.381,
+        "projectList": 9.572,
+        "flattenLineage": 3.191,
+        "markDirty": 0,
+        "ensureFresh": 1.064,
+        "getListSnapshot": 0,
+        "list_set_applyMutation": 0,
+        "syncCompletedNotifications": 0,
+        "rebuildRemote": 0,
+        "querySelectorAll": 0,
+        "sessionChainSum": 20.208
+      },
+      "chainFn": {
+        "ThemePresenter_apply": [
+          "apply@client.js?rev=abdb7f55acba:366"
+        ],
+        "buildListSnapshot": [
+          "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553"
+        ],
+        "projectList": [
+          "projectList@client.js?rev=a0fb4bb225d3:9272"
+        ],
+        "flattenLineage": [
+          "flattenLineage@client.js?rev=a0fb4bb225d3:5603"
+        ],
+        "markDirty": [],
+        "ensureFresh": [
+          "ensureFresh@client.js?rev=a0fb4bb225d3:5689"
+        ],
+        "getListSnapshot": [],
+        "list_set_applyMutation": [],
+        "syncCompletedNotifications": [],
+        "rebuildRemote": [],
+        "querySelectorAll": [],
+        "sessionChainSum": [
+          "projectList@client.js?rev=a0fb4bb225d3:9272",
+          "buildListSnapshot@client.js?rev=a0fb4bb225d3:8553",
+          "flattenLineage@client.js?rev=a0fb4bb225d3:5603",
+          "ensureFresh@client.js?rev=a0fb4bb225d3:5689"
+        ]
+      },
+      "rafPerS": 54.25,
+      "rafP50": 16.7,
+      "rafP95": 16.8,
+      "rafP99": 100,
+      "rafMax": 116.7,
+      "rafOver50": 12,
+      "rafOver100": 5,
+      "ltN": 0,
+      "ltMaxMs": null,
+      "ltTotalMs": 0,
+      "lafN": 12,
+      "mutRecords": 72,
+      "bodyStyleWrites": 144,
+      "bodyStyleMut": 144,
+      "bodyWritesPerS": 18,
+      "samples": 7607,
+      "msPerSample": 1.064,
+      "top30": [
+        {
+          "fn": "(idle)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 6613.152,
+          "selfPct": 81.741,
+          "msPerS": 817.347,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 507.313,
+          "selfPct": 6.271,
+          "msPerS": 62.701,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "apply",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+          "line": 366,
+          "selfMs": 492.424,
+          "selfPct": 6.086,
+          "msPerS": 60.861,
+          "v8": false,
+          "region": "lib/types/client/theme-presenter.js"
+        },
+        {
+          "fn": "(program)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 173.359,
+          "selfPct": 2.143,
+          "msPerS": 21.426,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "(garbage collector)",
+          "bundle": "",
+          "url": "",
+          "line": 0,
+          "selfMs": 9.572,
+          "selfPct": 0.118,
+          "msPerS": 1.183,
+          "v8": true,
+          "region": null
+        },
+        {
+          "fn": "projectList",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 9272,
+          "selfMs": 9.572,
+          "selfPct": 0.118,
+          "msPerS": 1.183,
+          "v8": false,
+          "region": "lib/types/client/sessions/service.js"
+        },
+        {
+          "fn": "(anonymous)",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8554,
+          "selfMs": 8.508,
+          "selfPct": 0.105,
+          "msPerS": 1.052,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "J3",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 7.445,
+          "selfPct": 0.092,
+          "msPerS": 0.92,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "Xo",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 6.381,
+          "selfPct": 0.079,
+          "msPerS": 0.789,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "mi",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 6.381,
+          "selfPct": 0.079,
+          "msPerS": 0.789,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "deriveGroups",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 191,
+          "selfMs": 6.381,
+          "selfPct": 0.079,
+          "msPerS": 0.789,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "buildListSnapshot",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 8553,
+          "selfMs": 6.381,
+          "selfPct": 0.079,
+          "msPerS": 0.789,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        },
+        {
+          "fn": "nextSessionOrderAccount",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 1103,
+          "selfMs": 6.381,
+          "selfPct": 0.079,
+          "msPerS": 0.789,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "$e",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 6.381,
+          "selfPct": 0.079,
+          "msPerS": 0.789,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 5.318,
+          "selfPct": 0.066,
+          "msPerS": 0.657,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 5.318,
+          "selfPct": 0.066,
+          "msPerS": 0.657,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 5754,
+          "selfMs": 5.318,
+          "selfPct": 0.066,
+          "msPerS": 0.657,
+          "v8": false,
+          "region": "lib/types/client/sessions/projection-store.js"
+        },
+        {
+          "fn": "indexSubagentDescendants",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 10355,
+          "selfMs": 4.254,
+          "selfPct": 0.053,
+          "msPerS": 0.526,
+          "v8": false,
+          "region": "lib/types/client/sessions/subagent-lineage.js"
+        },
+        {
+          "fn": "enqueue",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+          "line": 10281,
+          "selfMs": 4.254,
+          "selfPct": 0.053,
+          "msPerS": 0.526,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "walk",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 5615,
+          "selfMs": 4.254,
+          "selfPct": 0.053,
+          "msPerS": 0.526,
+          "v8": false,
+          "region": "lib/types/client/sessions/lineage.js"
+        },
+        {
+          "fn": "indexSubagentDescendants",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 10355,
+          "selfMs": 4.254,
+          "selfPct": 0.053,
+          "msPerS": 0.526,
+          "v8": false,
+          "region": "lib/types/client/sessions/subagent-lineage.js"
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 4.254,
+          "selfPct": 0.053,
+          "msPerS": 0.526,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "flattenLineage",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 5603,
+          "selfMs": 3.191,
+          "selfPct": 0.039,
+          "msPerS": 0.394,
+          "v8": false,
+          "region": "lib/types/client/sessions/lineage.js"
+        },
+        {
+          "fn": "groupByWorkspace",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+          "line": 147,
+          "selfMs": 3.191,
+          "selfPct": 0.039,
+          "msPerS": 0.394,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "get",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 11,
+          "selfMs": 3.191,
+          "selfPct": 0.039,
+          "msPerS": 0.394,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "F4",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 3.191,
+          "selfPct": 0.039,
+          "msPerS": 0.394,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "X",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 3.191,
+          "selfPct": 0.039,
+          "msPerS": 0.394,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "f1",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 56,
+          "selfMs": 3.191,
+          "selfPct": 0.039,
+          "msPerS": 0.394,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "$e",
+          "bundle": "index-ClqxG24t.js",
+          "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+          "line": 54,
+          "selfMs": 3.191,
+          "selfPct": 0.039,
+          "msPerS": 0.394,
+          "v8": false,
+          "region": null
+        },
+        {
+          "fn": "SessionManager.notifier",
+          "bundle": "client.js",
+          "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+          "line": 7844,
+          "selfMs": 3.191,
+          "selfPct": 0.039,
+          "msPerS": 0.394,
+          "v8": false,
+          "region": "lib/types/client/sessions/manager.js"
+        }
+      ],
+      "bundles": [
+        {
+          "bundle": "(no-url:native/vm)",
+          "selfMs": 6802.467,
+          "msPerS": 840.745
+        },
+        {
+          "bundle": "dsh-client-ui-layout",
+          "selfMs": 999.737,
+          "msPerS": 123.562
+        },
+        {
+          "bundle": "shell:assets:index",
+          "selfMs": 154.246,
+          "msPerS": 19.064
+        },
+        {
+          "bundle": "dsh-client-runtime",
+          "selfMs": 64.882,
+          "msPerS": 8.019
+        },
+        {
+          "bundle": "dsh-client-ui-workspace",
+          "selfMs": 27.654,
+          "msPerS": 3.418
+        },
+        {
+          "bundle": "dsh-client-ui-renderer",
+          "selfMs": 11.704,
+          "msPerS": 1.447
+        },
+        {
+          "bundle": "C2:dsh-workspace-enhancement",
+          "selfMs": 8.51,
+          "msPerS": 1.052
+        },
+        {
+          "bundle": "dsh-client-ui-conversation",
+          "selfMs": 6.384,
+          "msPerS": 0.789
+        },
+        {
+          "bundle": "dsh-client-connection",
+          "selfMs": 5.318,
+          "msPerS": 0.657
+        },
+        {
+          "bundle": "dsh-client-ui-theme",
+          "selfMs": 3.192,
+          "msPerS": 0.395
+        },
+        {
+          "bundle": "dsh-btw",
+          "selfMs": 1.064,
+          "msPerS": 0.132
+        },
+        {
+          "bundle": "dsh-wallpaper",
+          "selfMs": 1.064,
+          "msPerS": 0.132
+        },
+        {
+          "bundle": "dsh-client-ui-trajectory",
+          "selfMs": 1.064,
+          "msPerS": 0.132
+        },
+        {
+          "bundle": "dsh-client-ui-input-trigger",
+          "selfMs": 1.064,
+          "msPerS": 0.132
+        },
+        {
+          "bundle": "dsh-client-ui-model-selection",
+          "selfMs": 1.064,
+          "msPerS": 0.132
+        },
+        {
+          "bundle": "dsh-client-locale",
+          "selfMs": 1.064,
+          "msPerS": 0.132
+        }
+      ],
+      "integrity": {
+        "rafOk": true,
+        "rafRateSane": true,
+        "muOk": true,
+        "unitOk": true
+      }
+    }
+  ],
+  "totals": {
+    "script": 2371.1010000000006,
+    "busy": 8519.56,
+    "apply": 6208.0059999999985,
+    "chain": 138.38600000000002,
+    "recalc": 4686.949,
+    "layout": 1621.1819999999998,
+    "task": 10927.24,
+    "applyShareOfScript": 2.618,
+    "applyShareOfBusy": 0.729,
+    "chainShareOfScript": 0.058,
+    "chainShareOfBusy": 0.016,
+    "applyOverChain": 44.86,
+    "scriptShareOfTask": 0.217,
+    "recalcShareOfTask": 0.429,
+    "layoutShareOfTask": 0.148
+  }
+}

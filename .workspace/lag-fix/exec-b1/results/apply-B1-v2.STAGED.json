@@ -1,0 +1,1217 @@
+{
+  "at": "2026-09-21T08:38:17.663Z",
+  "mode": "APPLY",
+  "targetDir": "./dryrun-apply",
+  "checks": [
+    {
+      "name": "deployed index.js sha256 == 记录的现行部署值",
+      "ok": true,
+      "detail": "1b9915f505996912… vs 1b9915f505996912…"
+    },
+    {
+      "name": "deployed types/api-proxy.js sha256 == 记录的现行部署值",
+      "ok": true,
+      "detail": "f5c34a439043b9d5… vs f5c34a439043b9d5…"
+    },
+    {
+      "name": "pre-image index.js sha256 == 记录的 pre-image 值（唯一权威回滚点）",
+      "ok": true,
+      "detail": "142aac84e462173a… vs 142aac84e462173a…"
+    },
+    {
+      "name": "pre-image types/api-proxy.js sha256 == 记录的 pre-image 值（唯一权威回滚点）",
+      "ok": true,
+      "detail": "7f56fb805fe4d8af… vs 7f56fb805fe4d8af…"
+    },
+    {
+      "name": "负向：`b1fix-20260920-183319/index.buggy.js` 的 sha **不是**任何 pre-image（中间故障态，回滚不得认它）",
+      "ok": true,
+      "detail": "f568f8a9e67ef123…（标记为「B1 已打但 ctx 缺参」的中间态）"
+    },
+    {
+      "name": "负向：pre-image 目录内**没有** buggy 文件冒充 pre-image",
+      "ok": true,
+      "detail": "pre-image 目录 = /home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/20260920-154039/lib"
+    },
+    {
+      "name": "v1 只读副本的 body 与 `patches/B1-transform.cjs` 逐字节相同（只多 provenance 头注释）",
+      "ok": true,
+      "detail": "spec/B1-transform.v1.cjs ↔ patches/B1-transform.cjs（自证副本未被改写）"
+    },
+    {
+      "name": "[index.js] applyServerFilter_v1(pre_image) 与现行部署**逐字节相同**（审计 §0-E2 不变量成立）",
+      "ok": true,
+      "detail": "v1 replay 1b9915f505996912… vs deployed 1b9915f505996912…"
+    },
+    {
+      "name": "[index.js] v1 规格的 verifyServerFilter 对现行部署零失败（v1 自洽）",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "[types/api-proxy.js] applyServerFilter_v1(pre_image) 与现行部署**逐字节相同**（审计 §0-E2 不变量成立）",
+      "ok": true,
+      "detail": "v1 replay f5c34a439043b9d5… vs deployed f5c34a439043b9d5…"
+    },
+    {
+      "name": "[types/api-proxy.js] v1 规格的 verifyServerFilter 对现行部署零失败（v1 自洽）",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "[index.js] 候选件 sha256 == 审计给出的期望值",
+      "ok": true,
+      "detail": "96ad39b7c37e1e0a… vs 96ad39b7c37e1e0a…"
+    },
+    {
+      "name": "[index.js] 候选件字节数 == 审计给出的期望值",
+      "ok": true,
+      "detail": "217279 B vs 217279 B"
+    },
+    {
+      "name": "[index.js] verifyServerFilter(候选件) 零失败",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "[types/api-proxy.js] 候选件 sha256 == 审计给出的期望值",
+      "ok": true,
+      "detail": "f4752c39623f863f… vs f4752c39623f863f…"
+    },
+    {
+      "name": "[types/api-proxy.js] 候选件字节数 == 审计给出的期望值",
+      "ok": true,
+      "detail": "175895 B vs 175895 B"
+    },
+    {
+      "name": "[types/api-proxy.js] verifyServerFilter(候选件) 零失败",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "[index.js] deployed 侧锚点：24 条（含替换 14 条）全部按期望命中",
+      "ok": true,
+      "detail": "锚点并集 24 条 / 替换 14 条（每条恰好命中，含撞车锚点按注册表计数）"
+    },
+    {
+      "name": "[index.js] target 侧锚点：24 条全部按期望命中",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "[index.js] deployed 侧结构判据：确认修订**尚未**落地（S1 撞车 2 次等）",
+      "ok": true,
+      "detail": "6 项未达标（预期 6）"
+    },
+    {
+      "name": "[index.js] target 侧结构判据：裸比较器恰好剩 1 次 + 血缘边同源 + 缺陷源清零",
+      "ok": true,
+      "detail": "S1=1 S2=1 S3=1 S4=1 S5=0 S6=1"
+    },
+    {
+      "name": "[types/api-proxy.js] deployed 侧锚点：24 条（含替换 14 条）全部按期望命中",
+      "ok": true,
+      "detail": "锚点并集 24 条 / 替换 14 条（每条恰好命中，含撞车锚点按注册表计数）"
+    },
+    {
+      "name": "[types/api-proxy.js] target 侧锚点：24 条全部按期望命中",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "[types/api-proxy.js] deployed 侧结构判据：确认修订**尚未**落地（S1 撞车 2 次等）",
+      "ok": true,
+      "detail": "6 项未达标（预期 6）"
+    },
+    {
+      "name": "[types/api-proxy.js] target 侧结构判据：裸比较器恰好剩 1 次 + 血缘边同源 + 缺陷源清零",
+      "ok": true,
+      "detail": "S1=1 S2=1 S3=1 S4=1 S5=0 S6=1"
+    },
+    {
+      "name": "[index.js] node --check 通过（候选件语法合法）",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "[index.js] 聚合函数首形参 == ctx（V6：9-20 事故直接判据）",
+      "ok": true,
+      "detail": "params=[ctx, items]"
+    },
+    {
+      "name": "[index.js] 「引入标识符必须在本文件内有声明」：聚合函数体内无未声明标识符（V5）",
+      "ok": true,
+      "detail": "自由标识符根=[Map, Set] 全部已声明/内建"
+    },
+    {
+      "name": "[index.js] 插入文本无未展开的模板字面量残渣（审计 §8 坑#4 回归探针）",
+      "ok": true,
+      "detail": "未发现 ${…} 残渣"
+    },
+    {
+      "name": "[types/api-proxy.js] node --check 通过（候选件语法合法）",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "[types/api-proxy.js] 聚合函数首形参 == ctx（V6：9-20 事故直接判据）",
+      "ok": true,
+      "detail": "params=[ctx, items]"
+    },
+    {
+      "name": "[types/api-proxy.js] 「引入标识符必须在本文件内有声明」：聚合函数体内无未声明标识符（V5）",
+      "ok": true,
+      "detail": "自由标识符根=[Map, Set] 全部已声明/内建"
+    },
+    {
+      "name": "[types/api-proxy.js] 插入文本无未展开的模板字面量残渣（审计 §8 坑#4 回归探针）",
+      "ok": true,
+      "detail": "未发现 ${…} 残渣"
+    },
+    {
+      "name": "[apply][index.js] 写入后 sha256 == 期望值",
+      "ok": true,
+      "detail": "96ad39b7c37e1e0a…"
+    },
+    {
+      "name": "[apply][index.js] 写入后 node --check 通过",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "[apply][index.js] 写入后锚点全部按期望命中",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "[apply][types/api-proxy.js] 写入后 sha256 == 期望值",
+      "ok": true,
+      "detail": "f4752c39623f863f…"
+    },
+    {
+      "name": "[apply][types/api-proxy.js] 写入后 node --check 通过",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "[apply][types/api-proxy.js] 写入后锚点全部按期望命中",
+      "ok": true,
+      "detail": "ok"
+    }
+  ],
+  "anchors": {
+    "index.js": {
+      "deployed": {
+        "rows": [
+          {
+            "id": "B1a-cold-comment-recent",
+            "kind": "replacement",
+            "at": "T3",
+            "role": "B① 说谎注释（声称「最近」实为枚举序）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-comparator-bare-in-cold",
+            "kind": "replacement",
+            "at": "T4",
+            "role": "B① 比较器：**撞车**（冷候选 + 收口字面相同）→ 必须整条语句作锚点",
+            "expected": 2,
+            "actual": 2,
+            "ok": true
+          },
+          {
+            "id": "B1a-cold-candidates-stmt",
+            "kind": "replacement",
+            "at": "T4",
+            "role": "B① 替换锚点骨架（带 coldSource 上下文，避开与收口排序撞车；声明本身在 v2 产物中保留）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-cold-sort-line",
+            "kind": "replacement",
+            "at": "T4",
+            "role": "B① 待换比较器行（行尾换行确保只匹配冷候选那四行语句的中间行）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-childrenOf-from-items",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "B② 建边起点（保留：childrenOf 声明本身不变）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-edge-parent-from-item",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "B② **缺陷源**：边由已截断行构建",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-live-status-loop",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "B② running 状态独立一趟（修订后合并进同一趟）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-truncated-claim",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#1（修订后不再成立）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-param-items",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#2（items 不再参与建边）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-cost-line",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#3（成本口径需改为「一次 live 表遍历」）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-no-dependency",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#4（同上一句的续行，其实仍在依赖）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-signature",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "聚合函数签名（事故后已是 (ctx, items)；本轮**不得改签名与调用点**）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-call-site",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "调用点（本轮**不改**；V7 断言实参 == 形参）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-agg-close",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "聚合函数体内标注收尾（确认标注仍在**顶层行**上发生）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-collector-sort",
+            "kind": "integrity",
+            "at": null,
+            "role": "收口排序（**本轮不改**；B1a 冷候选锚点不得误伤它）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-cold-filter-continuation",
+            "kind": "integrity",
+            "at": null,
+            "role": "冷候选 filter 行（替换块内层，确认未误伤）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "CMT-cold-cut-reason",
+            "kind": "integrity",
+            "at": null,
+            "role": "B① 注释块保留行（改写锚点的上下文）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2b-keep-slice",
+            "kind": "integrity",
+            "at": null,
+            "role": "attached keep-set（**本轮不叠加 running 豁免** ⇒ 必须逐字不动）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2b-overflow-slice",
+            "kind": "integrity",
+            "at": null,
+            "role": "收口 overflow（**本轮不改** ⇒ 下发上界不变）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "MARK-SUBAGENT-MAX",
+            "kind": "integrity",
+            "at": null,
+            "role": "verifyServerFilter 口径标记",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "MARK-RUNNING-COUNT",
+            "kind": "integrity",
+            "at": null,
+            "role": "verifyServerFilter 口径标记（定义处 + 返回体）",
+            "expected": 2,
+            "actual": 2,
+            "ok": true
+          },
+          {
+            "id": "MARK-FILTER",
+            "kind": "integrity",
+            "at": null,
+            "role": "verifyServerFilter 口径标记",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "cold-meta-origin-filter",
+            "kind": "integrity",
+            "at": null,
+            "role": "冷 meta 带 origin（B① 策略前提）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-keep-set-running-absent",
+            "kind": "integrity",
+            "at": null,
+            "role": "负向控制：本批次**不得**引入 keep-set running 豁免所需的 runningIds 集合（独立产品决策，不得搭车）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          }
+        ],
+        "failures": []
+      },
+      "target": {
+        "rows": [
+          {
+            "id": "B1a-cold-comment-recent",
+            "kind": "replacement",
+            "at": "T3",
+            "role": "B① 说谎注释（声称「最近」实为枚举序）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B1a-comparator-bare-in-cold",
+            "kind": "replacement",
+            "at": "T4",
+            "role": "B① 比较器：**撞车**（冷候选 + 收口字面相同）→ 必须整条语句作锚点",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-cold-candidates-stmt",
+            "kind": "replacement",
+            "at": "T4",
+            "role": "B① 替换锚点骨架（带 coldSource 上下文，避开与收口排序撞车；声明本身在 v2 产物中保留）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-cold-sort-line",
+            "kind": "replacement",
+            "at": "T4",
+            "role": "B① 待换比较器行（行尾换行确保只匹配冷候选那四行语句的中间行）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-childrenOf-from-items",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "B② 建边起点（保留：childrenOf 声明本身不变）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-edge-parent-from-item",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "B② **缺陷源**：边由已截断行构建",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-live-status-loop",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "B② running 状态独立一趟（修订后合并进同一趟）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-truncated-claim",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#1（修订后不再成立）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-param-items",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#2（items 不再参与建边）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-cost-line",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#3（成本口径需改为「一次 live 表遍历」）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-no-dependency",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#4（同上一句的续行，其实仍在依赖）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-signature",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "聚合函数签名（事故后已是 (ctx, items)；本轮**不得改签名与调用点**）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-call-site",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "调用点（本轮**不改**；V7 断言实参 == 形参）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-agg-close",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "聚合函数体内标注收尾（确认标注仍在**顶层行**上发生）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-collector-sort",
+            "kind": "integrity",
+            "at": null,
+            "role": "收口排序（**本轮不改**；B1a 冷候选锚点不得误伤它）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-cold-filter-continuation",
+            "kind": "integrity",
+            "at": null,
+            "role": "冷候选 filter 行（替换块内层，确认未误伤）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "CMT-cold-cut-reason",
+            "kind": "integrity",
+            "at": null,
+            "role": "B① 注释块保留行（改写锚点的上下文）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2b-keep-slice",
+            "kind": "integrity",
+            "at": null,
+            "role": "attached keep-set（**本轮不叠加 running 豁免** ⇒ 必须逐字不动）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2b-overflow-slice",
+            "kind": "integrity",
+            "at": null,
+            "role": "收口 overflow（**本轮不改** ⇒ 下发上界不变）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "MARK-SUBAGENT-MAX",
+            "kind": "integrity",
+            "at": null,
+            "role": "verifyServerFilter 口径标记",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "MARK-RUNNING-COUNT",
+            "kind": "integrity",
+            "at": null,
+            "role": "verifyServerFilter 口径标记（定义处 + 返回体）",
+            "expected": 2,
+            "actual": 2,
+            "ok": true
+          },
+          {
+            "id": "MARK-FILTER",
+            "kind": "integrity",
+            "at": null,
+            "role": "verifyServerFilter 口径标记",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "cold-meta-origin-filter",
+            "kind": "integrity",
+            "at": null,
+            "role": "冷 meta 带 origin（B① 策略前提）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-keep-set-running-absent",
+            "kind": "integrity",
+            "at": null,
+            "role": "负向控制：本批次**不得**引入 keep-set running 豁免所需的 runningIds 集合（独立产品决策，不得搭车）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          }
+        ],
+        "failures": []
+      },
+      "structuralDeployed": [
+        "S1 裸比较器写完后恰好剩 1 次（只允许收口那处）：期望 1 实得 2",
+        "S2 新比较器（?? createdAt 回落 + id 升序 tiebreak）恰好 1 次：期望 1 实得 0",
+        "S3 id tiebreak 片段恰好 1 次：期望 1 实得 0",
+        "S4 血缘边改由 live 会话表构建（session.header.parentSession）恰好 1 次：期望 1 实得 0",
+        "S5 缺陷源「由已截断行取 parentSessionId」清零：期望 0 实得 1",
+        "S6 血缘边与 running 状态同源于一趟 live 遍历（liveSessions 声明）恰好 1 次：期望 1 实得 0"
+      ],
+      "structuralTarget": []
+    },
+    "types/api-proxy.js": {
+      "deployed": {
+        "rows": [
+          {
+            "id": "B1a-cold-comment-recent",
+            "kind": "replacement",
+            "at": "T3",
+            "role": "B① 说谎注释（声称「最近」实为枚举序）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-comparator-bare-in-cold",
+            "kind": "replacement",
+            "at": "T4",
+            "role": "B① 比较器：**撞车**（冷候选 + 收口字面相同）→ 必须整条语句作锚点",
+            "expected": 2,
+            "actual": 2,
+            "ok": true
+          },
+          {
+            "id": "B1a-cold-candidates-stmt",
+            "kind": "replacement",
+            "at": "T4",
+            "role": "B① 替换锚点骨架（带 coldSource 上下文，避开与收口排序撞车；声明本身在 v2 产物中保留）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-cold-sort-line",
+            "kind": "replacement",
+            "at": "T4",
+            "role": "B① 待换比较器行（行尾换行确保只匹配冷候选那四行语句的中间行）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-childrenOf-from-items",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "B② 建边起点（保留：childrenOf 声明本身不变）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-edge-parent-from-item",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "B② **缺陷源**：边由已截断行构建",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-live-status-loop",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "B② running 状态独立一趟（修订后合并进同一趟）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-truncated-claim",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#1（修订后不再成立）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-param-items",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#2（items 不再参与建边）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-cost-line",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#3（成本口径需改为「一次 live 表遍历」）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-no-dependency",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#4（同上一句的续行，其实仍在依赖）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-signature",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "聚合函数签名（事故后已是 (ctx, items)；本轮**不得改签名与调用点**）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-call-site",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "调用点（本轮**不改**；V7 断言实参 == 形参）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-agg-close",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "聚合函数体内标注收尾（确认标注仍在**顶层行**上发生）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-collector-sort",
+            "kind": "integrity",
+            "at": null,
+            "role": "收口排序（**本轮不改**；B1a 冷候选锚点不得误伤它）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-cold-filter-continuation",
+            "kind": "integrity",
+            "at": null,
+            "role": "冷候选 filter 行（替换块内层，确认未误伤）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "CMT-cold-cut-reason",
+            "kind": "integrity",
+            "at": null,
+            "role": "B① 注释块保留行（改写锚点的上下文）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2b-keep-slice",
+            "kind": "integrity",
+            "at": null,
+            "role": "attached keep-set（**本轮不叠加 running 豁免** ⇒ 必须逐字不动）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2b-overflow-slice",
+            "kind": "integrity",
+            "at": null,
+            "role": "收口 overflow（**本轮不改** ⇒ 下发上界不变）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "MARK-SUBAGENT-MAX",
+            "kind": "integrity",
+            "at": null,
+            "role": "verifyServerFilter 口径标记",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "MARK-RUNNING-COUNT",
+            "kind": "integrity",
+            "at": null,
+            "role": "verifyServerFilter 口径标记（定义处 + 返回体）",
+            "expected": 2,
+            "actual": 2,
+            "ok": true
+          },
+          {
+            "id": "MARK-FILTER",
+            "kind": "integrity",
+            "at": null,
+            "role": "verifyServerFilter 口径标记",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "cold-meta-origin-filter",
+            "kind": "integrity",
+            "at": null,
+            "role": "冷 meta 带 origin（B① 策略前提）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-keep-set-running-absent",
+            "kind": "integrity",
+            "at": null,
+            "role": "负向控制：本批次**不得**引入 keep-set running 豁免所需的 runningIds 集合（独立产品决策，不得搭车）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          }
+        ],
+        "failures": []
+      },
+      "target": {
+        "rows": [
+          {
+            "id": "B1a-cold-comment-recent",
+            "kind": "replacement",
+            "at": "T3",
+            "role": "B① 说谎注释（声称「最近」实为枚举序）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B1a-comparator-bare-in-cold",
+            "kind": "replacement",
+            "at": "T4",
+            "role": "B① 比较器：**撞车**（冷候选 + 收口字面相同）→ 必须整条语句作锚点",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-cold-candidates-stmt",
+            "kind": "replacement",
+            "at": "T4",
+            "role": "B① 替换锚点骨架（带 coldSource 上下文，避开与收口排序撞车；声明本身在 v2 产物中保留）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-cold-sort-line",
+            "kind": "replacement",
+            "at": "T4",
+            "role": "B① 待换比较器行（行尾换行确保只匹配冷候选那四行语句的中间行）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-childrenOf-from-items",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "B② 建边起点（保留：childrenOf 声明本身不变）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-edge-parent-from-item",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "B② **缺陷源**：边由已截断行构建",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-live-status-loop",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "B② running 状态独立一趟（修订后合并进同一趟）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-truncated-claim",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#1（修订后不再成立）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-param-items",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#2（items 不再参与建边）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-cost-line",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#3（成本口径需改为「一次 live 表遍历」）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-doc-no-dependency",
+            "kind": "replacement",
+            "at": "T2",
+            "role": "B② 文档说谎#4（同上一句的续行，其实仍在依赖）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          },
+          {
+            "id": "B2-signature",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "聚合函数签名（事故后已是 (ctx, items)；本轮**不得改签名与调用点**）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-call-site",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "调用点（本轮**不改**；V7 断言实参 == 形参）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-agg-close",
+            "kind": "replacement",
+            "at": "T1",
+            "role": "聚合函数体内标注收尾（确认标注仍在**顶层行**上发生）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-collector-sort",
+            "kind": "integrity",
+            "at": null,
+            "role": "收口排序（**本轮不改**；B1a 冷候选锚点不得误伤它）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B1a-cold-filter-continuation",
+            "kind": "integrity",
+            "at": null,
+            "role": "冷候选 filter 行（替换块内层，确认未误伤）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "CMT-cold-cut-reason",
+            "kind": "integrity",
+            "at": null,
+            "role": "B① 注释块保留行（改写锚点的上下文）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2b-keep-slice",
+            "kind": "integrity",
+            "at": null,
+            "role": "attached keep-set（**本轮不叠加 running 豁免** ⇒ 必须逐字不动）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2b-overflow-slice",
+            "kind": "integrity",
+            "at": null,
+            "role": "收口 overflow（**本轮不改** ⇒ 下发上界不变）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "MARK-SUBAGENT-MAX",
+            "kind": "integrity",
+            "at": null,
+            "role": "verifyServerFilter 口径标记",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "MARK-RUNNING-COUNT",
+            "kind": "integrity",
+            "at": null,
+            "role": "verifyServerFilter 口径标记（定义处 + 返回体）",
+            "expected": 2,
+            "actual": 2,
+            "ok": true
+          },
+          {
+            "id": "MARK-FILTER",
+            "kind": "integrity",
+            "at": null,
+            "role": "verifyServerFilter 口径标记",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "cold-meta-origin-filter",
+            "kind": "integrity",
+            "at": null,
+            "role": "冷 meta 带 origin（B① 策略前提）",
+            "expected": 1,
+            "actual": 1,
+            "ok": true
+          },
+          {
+            "id": "B2-keep-set-running-absent",
+            "kind": "integrity",
+            "at": null,
+            "role": "负向控制：本批次**不得**引入 keep-set running 豁免所需的 runningIds 集合（独立产品决策，不得搭车）",
+            "expected": 0,
+            "actual": 0,
+            "ok": true
+          }
+        ],
+        "failures": []
+      },
+      "structuralDeployed": [
+        "S1 裸比较器写完后恰好剩 1 次（只允许收口那处）：期望 1 实得 2",
+        "S2 新比较器（?? createdAt 回落 + id 升序 tiebreak）恰好 1 次：期望 1 实得 0",
+        "S3 id tiebreak 片段恰好 1 次：期望 1 实得 0",
+        "S4 血缘边改由 live 会话表构建（session.header.parentSession）恰好 1 次：期望 1 实得 0",
+        "S5 缺陷源「由已截断行取 parentSessionId」清零：期望 0 实得 1",
+        "S6 血缘边与 running 状态同源于一趟 live 遍历（liveSessions 声明）恰好 1 次：期望 1 实得 0"
+      ],
+      "structuralTarget": []
+    }
+  },
+  "identifiers": {
+    "index.js": {
+      "params": [
+        "ctx",
+        "items"
+      ],
+      "roots": [
+        "Map",
+        "Set"
+      ],
+      "undeclared": [],
+      "fileDeclaredSample": [
+        "sessionLogExportDeps",
+        "sessions",
+        "session",
+        "MEDIA_TYPE_EXTENSIONS",
+        "mediaEntryPath",
+        "collectImageRefs",
+        "pending",
+        "value",
+        "block",
+        "ref",
+        "collectEventImageRefs",
+        "data"
+      ]
+    },
+    "types/api-proxy.js": {
+      "params": [
+        "ctx",
+        "items"
+      ],
+      "roots": [
+        "Map",
+        "Set"
+      ],
+      "undeclared": [],
+      "fileDeclaredSample": [
+        "DEFAULT_MAX_MESSAGES",
+        "SESSION_SEARCH_PROVIDER_CALL_LIMIT",
+        "COLD_SUMMARY_BATCH_SIZE",
+        "MESSAGE_TYPES",
+        "refs",
+        "next",
+        "imageBlockIn",
+        "block",
+        "ref",
+        "nested",
+        "imageInEvent",
+        "data"
+      ]
+    }
+  },
+  "shas": {
+    "deployed:index.js": "1b9915f505996912c6f49b12b0c3f4a8261a74f26422f68f5d22cab2bc078a62",
+    "deployed:types/api-proxy.js": "f5c34a439043b9d5771286a76c8b16210951c25d7d5873b168bcc947720eac0d",
+    "pre:index.js": "142aac84e462173aeb6acc3e36d97b5c6aae2a31a087b91f99cffeff48378374",
+    "pre:types/api-proxy.js": "7f56fb805fe4d8afbdbd9dee0c3e641acaf2d9c9831de0b7ea018e92b9343036",
+    "buggy(index.buggy.js)": "f568f8a9e67ef123b8f08e659a435bbdff09dfc895e12a9729426c6b30051434",
+    "target:index.js": "96ad39b7c37e1e0ab7ef07d991ee86f103c649b0ff595317ca32b6990a2c3310",
+    "targetBytes:index.js": 217279,
+    "target:types/api-proxy.js": "f4752c39623f863f9e5c9e455d1226d933bc1950e7b8c12b92cce87658165734",
+    "targetBytes:types/api-proxy.js": 175895
+  },
+  "backups": {
+    "dir": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/b1fix2-20260921-163817",
+    "entries": [
+      {
+        "rel": "index.js",
+        "backupPath": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/b1fix2-20260921-163817/index.js",
+        "deployedSha": "1b9915f505996912c6f49b12b0c3f4a8261a74f26422f68f5d22cab2bc078a62",
+        "preImage": {
+          "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/20260920-154039/lib/index.js",
+          "sha": "142aac84e462173aeb6acc3e36d97b5c6aae2a31a087b91f99cffeff48378374"
+        },
+        "target": {
+          "sha": "96ad39b7c37e1e0ab7ef07d991ee86f103c649b0ff595317ca32b6990a2c3310"
+        }
+      },
+      {
+        "rel": "types/api-proxy.js",
+        "backupPath": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/b1fix2-20260921-163817/types__api-proxy.js",
+        "deployedSha": "f5c34a439043b9d5771286a76c8b16210951c25d7d5873b168bcc947720eac0d",
+        "preImage": {
+          "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/20260920-154039/lib/types/api-proxy.js",
+          "sha": "7f56fb805fe4d8afbdbd9dee0c3e641acaf2d9c9831de0b7ea018e92b9343036"
+        },
+        "target": {
+          "sha": "f4752c39623f863f9e5c9e455d1226d933bc1950e7b8c12b92cce87658165734"
+        }
+      }
+    ]
+  },
+  "writes": [
+    {
+      "rel": "index.js",
+      "path": "dryrun-apply/index.js",
+      "sha256": "96ad39b7c37e1e0ab7ef07d991ee86f103c649b0ff595317ca32b6990a2c3310",
+      "dryRun": false
+    },
+    {
+      "rel": "types/api-proxy.js",
+      "path": "dryrun-apply/types/api-proxy.js",
+      "sha256": "f4752c39623f863f9e5c9e455d1226d933bc1950e7b8c12b92cce87658165734",
+      "dryRun": false
+    }
+  ],
+  "outcome": "PASS"
+}

@@ -1,0 +1,98 @@
+{
+  "at": "2026-09-21T08:39:05.639Z",
+  "preImageDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/20260920-154039/lib",
+  "checks": [
+    {
+      "name": "pre-image index.js sha256 == 记录值",
+      "ok": true,
+      "detail": "142aac84e462173a… · 213007 B · /home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/20260920-154039/lib/index.js"
+    },
+    {
+      "name": "pre-image types/api-proxy.js sha256 == 记录值",
+      "ok": true,
+      "detail": "7f56fb805fe4d8af… · 171271 B · /home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/20260920-154039/lib/types/api-proxy.js"
+    },
+    {
+      "name": "pre-image 不含任何补丁标记（⇒ 全整文件还原 = 纯 B1 回滚，不连带 C1/runtime/usage）",
+      "ok": true,
+      "detail": "命中标记=[]"
+    },
+    {
+      "name": "pre-image 不含 runningSubagentCount（= B1 之前的真实状态）",
+      "ok": true,
+      "detail": "出现 0 次"
+    },
+    {
+      "name": "pre-image 不含 SUBAGENT_LIST_MAX（= B1 之前的真实状态）",
+      "ok": true,
+      "detail": "出现 0 次"
+    },
+    {
+      "name": "index.buggy.js sha256 == 记录值（f568f8a9…）",
+      "ok": true,
+      "detail": "f568f8a9e67ef123…"
+    },
+    {
+      "name": "index.buggy.js sha **不等于** pre-image 的 sha（两者不可互换）",
+      "ok": true,
+      "detail": "f568f8a9… ≠ 142aac84…"
+    },
+    {
+      "name": "index.buggy.js sha **不等于**现行部署的 sha",
+      "ok": true,
+      "detail": "f568f8a9… ≠ 1b9915f5…"
+    },
+    {
+      "name": "index.buggy.js 含聚合函数且**签名缺 ctx 形参**（⇒ 确为「B1 已打、ctx 缺参」的中间故障态，非 pre-image）",
+      "ok": true,
+      "detail": "含聚合函数=true 签名缺 ctx 形参=true 含 runningSubagentCount=true"
+    },
+    {
+      "name": "对照：pre-image **没有**聚合函数（⇒ 二者不可互换，方向唯一）",
+      "ok": true,
+      "detail": "pre-image 无聚合函数"
+    },
+    {
+      "name": "[index.js] pre-image → deployed 恰好 4 个 hunk（既有基线）",
+      "ok": true,
+      "detail": "4 个 hunk；+77/-6 行"
+    },
+    {
+      "name": "[index.js] 新增行里的标识符**全部出自 B1 规格**（⇒ 差异 100% 由 B1 引入，回滚不连带其它批次）",
+      "ok": true,
+      "detail": "新增行标识符 103 个；不在 v1 规格中的 0 个"
+    },
+    {
+      "name": "[types/api-proxy.js] pre-image → deployed 恰好 4 个 hunk（既有基线）",
+      "ok": true,
+      "detail": "4 个 hunk；+76/-6 行"
+    },
+    {
+      "name": "[types/api-proxy.js] 新增行里的标识符**全部出自 B1 规格**（⇒ 差异 100% 由 B1 引入，回滚不连带其它批次）",
+      "ok": true,
+      "detail": "新增行标识符 102 个；不在 v1 规格中的 0 个"
+    },
+    {
+      "name": "机器可读清单已落盘（含权威回滚点 + 非-pre-image 警告 + 回滚命令 + 语义后果）",
+      "ok": true,
+      "detail": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/results/pre-image-manifest.json"
+    }
+  ],
+  "outcome": "PASS",
+  "buggyMisuseConsequence": "若误用 index.buggy.js 回滚：宿主回到「聚合函数引用 ctx 但签名未声明 ctx」的状态 ⇒ 重启后 POST /api/session.list 抛 ReferenceError: ctx is not defined ⇒ HTTP 500 ⇒ GUI 会话列表全空白（2026-09-20 事故原状）。",
+  "diff_index.js": {
+    "hunks": 4,
+    "added": 77,
+    "removed": 6,
+    "identifiersInAdded": 103,
+    "notInSpec": []
+  },
+  "diff_types/api-proxy.js": {
+    "hunks": 4,
+    "added": 76,
+    "removed": 6,
+    "identifiersInAdded": 102,
+    "notInSpec": []
+  },
+  "failures": 0
+}

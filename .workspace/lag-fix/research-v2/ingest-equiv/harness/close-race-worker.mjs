@@ -1,0 +1,11 @@
+import { workerData, parentPort } from "node:worker_threads";
+import { DatabaseSync } from "node:sqlite";
+const db = new DatabaseSync(workerData.dbPath);
+db.exec("PRAGMA journal_mode = WAL");
+db.exec("CREATE TABLE usage_events (id INTEGER PRIMARY KEY, ts INTEGER) STRICT");
+db.exec("BEGIN");
+const ins = db.prepare("INSERT INTO usage_events (ts) VALUES (?)");
+for (let i = 0; i < workerData.rows; i += 1) ins.run(1756000000000 + i);
+db.exec("COMMIT");
+db.close();
+parentPort.postMessage("closed");

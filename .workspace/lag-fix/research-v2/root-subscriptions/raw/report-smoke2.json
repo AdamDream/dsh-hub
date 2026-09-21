@@ -1,0 +1,596 @@
+{
+ "meta": {
+  "tag": "smoke2",
+  "startedAt": "2026-09-21T07:29:49.215Z",
+  "windowMs": 12000,
+  "states": [
+   "general"
+  ],
+  "target": "http://127.0.0.1:3080",
+  "hostPid": {
+   "pid": 1390362,
+   "cmdline": "npm exec @deepseek-ai/dsh web",
+   "starttimeTicks": 11
+  },
+  "hostPidExpected": 1390375,
+  "lockAtStart": "agent: react-commit-audit (subagent of DSH session, workspace .workspace/lag-fix/research-v2/react-commit)\nline: React commit counting / settings-subtree re-render measurement\nhost_pid: 1390375 (node dsh web, monitored, never restarted)\nstarted_at: 2026-09-21T15:17:26+08:00\nstarted_epoch: 1789975046\nexpected_release: within ~20 min\npurpose: re-collect the 8x60s window set + 4x60s state-dependence experiment under exclusive lock\n",
+  "censusAtStart": {
+   "headlessShellProcs": 18,
+   "distinctUserDataDirs": [
+    "/tmp/playwright_chromiumdev_profile-25ZbPn",
+    "/tmp/playwright_chromiumdev_profile-bqTm0R",
+    "/tmp/playwright_chromiumdev_profile-6c2I7E"
+   ],
+   "otherHarnessProcs": [
+    {
+     "pid": 1258240,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+    },
+    {
+     "pid": 1258241,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+    },
+    {
+     "pid": 2104196,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+    },
+    {
+     "pid": 2104259,
+     "cmd": "node scripts/capture3.mjs --scenarios all"
+    },
+    {
+     "pid": 2302813,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+    },
+    {
+     "pid": 2302814,
+     "cmd": "node scripts/capture3.mjs --scenarios all"
+    },
+    {
+     "pid": 2311182,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+    },
+    {
+     "pid": 2311183,
+     "cmd": "timeout 3300 node lib/tab-profile.mjs"
+    },
+    {
+     "pid": 2311184,
+     "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+    },
+    {
+     "pid": 2351242,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main --window 60000 > run-main.out 2> run-main.err; echo \"exit=$?\"; tail -5 run-main.err"
+    },
+    {
+     "pid": 2351243,
+     "cmd": "node measure-slot.mjs --tag main"
+    },
+    {
+     "pid": 2571731,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && timeout 300 node lib/probe.mjs --window=15000 --settle=5000 --cycles=1 --tag=smoke2 --heartbeat=5000 2>&1 | tail -30"
+    },
+    {
+     "pid": 2571887,
+     "cmd": "timeout 300 node lib/probe.mjs"
+    },
+    {
+     "pid": 2571891,
+     "cmd": "node lib/probe.mjs --window=15000 --settle=5000"
+    },
+    {
+     "pid": 2581755,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && timeout 180 node scripts/measure.mjs --window 12000 --tag smoke2 --states general 2>&1 | tail -10; echo \"=== probe ===\"; python3 -c \"\nimport json\nd=json.load(open('raw/dump-smoke2.json'))\np=d['probe']\nprint('flags',json.dumps(p['flags'],ensure_ascii=False))\nprint('nSel',len(d['selCalls']),'nNotify',len(d['notify']),'nSnap',len(d['snapshot']))\nprint('errors',json.dumps(p['errors'],ensure_ascii=False)[:500])\n\""
+    },
+    {
+     "pid": 2581860,
+     "cmd": "timeout 180 node scripts/measure.mjs"
+    },
+    {
+     "pid": 2581864,
+     "cmd": "node scripts/measure.mjs --window 12000"
+    }
+   ],
+   "distinctBrowserInstances": 3
+  },
+  "node": "v22.23.2",
+  "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+  "initScriptSha256": "67cdaba8a5a41c2e51fb878bbe6b3ad01471476c21aa8fdcaa8add2e39143e37",
+  "endedAt": "2026-09-21T07:30:53.091Z",
+  "hostPidAtEnd": {
+   "pid": 1390362,
+   "cmdline": "npm exec @deepseek-ai/dsh web",
+   "starttimeTicks": 11
+  },
+  "censusAtEnd": {
+   "headlessShellProcs": 30,
+   "distinctUserDataDirs": [
+    "/tmp/playwright_chromiumdev_profile-25ZbPn",
+    "/tmp/playwright_chromiumdev_profile-bqTm0R",
+    "/tmp/playwright_chromiumdev_profile-6c2I7E",
+    "/tmp/playwright_chromiumdev_profile-yMmP8U",
+    "/tmp/playwright_chromiumdev_profile-VknQTo"
+   ],
+   "otherHarnessProcs": [
+    {
+     "pid": 1258240,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+    },
+    {
+     "pid": 1258241,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+    },
+    {
+     "pid": 2104196,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+    },
+    {
+     "pid": 2104259,
+     "cmd": "node scripts/capture3.mjs --scenarios all"
+    },
+    {
+     "pid": 2302813,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+    },
+    {
+     "pid": 2302814,
+     "cmd": "node scripts/capture3.mjs --scenarios all"
+    },
+    {
+     "pid": 2311182,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+    },
+    {
+     "pid": 2311183,
+     "cmd": "timeout 3300 node lib/tab-profile.mjs"
+    },
+    {
+     "pid": 2311184,
+     "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+    },
+    {
+     "pid": 2351242,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main --window 60000 > run-main.out 2> run-main.err; echo \"exit=$?\"; tail -5 run-main.err"
+    },
+    {
+     "pid": 2351243,
+     "cmd": "node measure-slot.mjs --tag main"
+    },
+    {
+     "pid": 2571731,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && timeout 300 node lib/probe.mjs --window=15000 --settle=5000 --cycles=1 --tag=smoke2 --heartbeat=5000 2>&1 | tail -30"
+    },
+    {
+     "pid": 2571887,
+     "cmd": "timeout 300 node lib/probe.mjs"
+    },
+    {
+     "pid": 2571891,
+     "cmd": "node lib/probe.mjs --window=15000 --settle=5000"
+    },
+    {
+     "pid": 2581755,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && timeout 180 node scripts/measure.mjs --window 12000 --tag smoke2 --states general 2>&1 | tail -10; echo \"=== probe ===\"; python3 -c \"\nimport json\nd=json.load(open('raw/dump-smoke2.json'))\np=d['probe']\nprint('flags',json.dumps(p['flags'],ensure_ascii=False))\nprint('nSel',len(d['selCalls']),'nNotify',len(d['notify']),'nSnap',len(d['snapshot']))\nprint('errors',json.dumps(p['errors'],ensure_ascii=False)[:500])\n\""
+    },
+    {
+     "pid": 2581860,
+     "cmd": "timeout 180 node scripts/measure.mjs"
+    },
+    {
+     "pid": 2581864,
+     "cmd": "node scripts/measure.mjs --window 12000"
+    },
+    {
+     "pid": 2588673,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/react-commit && node scripts/measure.mjs --window 60000 --tag locked --plan lock --idle-budget 90000 2>&1 | tee raw/locked-run.log"
+    },
+    {
+     "pid": 2588674,
+     "cmd": "node scripts/measure.mjs --window 60000"
+    }
+   ],
+   "distinctBrowserInstances": 5
+  },
+  "lockAtEnd": "agent: react-commit-audit (subagent of DSH session, workspace .workspace/lag-fix/research-v2/react-commit)\nline: React commit counting / settings-subtree re-render measurement\nhost_pid: 1390375 (node dsh web, monitored, never restarted)\nstarted_at: 2026-09-21T15:17:26+08:00\nstarted_epoch: 1789975046\nexpected_release: within ~20 min\npurpose: re-collect the 8x60s window set + 4x60s state-dependence experiment under exclusive lock\n"
+ },
+ "boot": {
+  "rev": "102e374d338e",
+  "entryCount": 50,
+  "entries": {
+   "@deepseek-ai/dsh-client-runtime": "a0fb4bb225d3",
+   "@deepseek-ai/dsh-client-locale": "2660ca3f6a00",
+   "@deepseek-ai/dsh-client-ui-renderer": "79b59d365f3b",
+   "@deepseek-ai/dsh-client-ui-sidebar": "7563cb4b02ca",
+   "@deepseek-ai/dsh-client-ui-settings-general": "f733efde3f2f"
+  }
+ },
+ "premise": {
+  "hookPresent": true,
+  "hookIsWrapped": false,
+  "hookCalls": {
+   "inject": 1,
+   "onCommitFiberRoot": 15,
+   "onPostCommitFiberRoot": 10,
+   "onCommitFiberUnmount": 2
+  },
+  "injected": [
+   {
+    "t": 11530.3,
+    "id": 1,
+    "version": "18.3.1",
+    "pkg": "react-dom",
+    "bundleType": 0,
+    "reconcilerVersion": "18.3.1-next-f1338f8080-20240426",
+    "hasScheduleRoot": false
+   }
+  ],
+  "flags": {
+   "shimTrapActive": false,
+   "shimTrapAt": 10077.4,
+   "shimTrapFired": true,
+   "shimTrapFiredAt": 12365.1,
+   "wrappedStores": true,
+   "wrappedAt": 13295.1,
+   "shimTrapOffReason": "installed",
+   "shimTrapOffAt": 14001.9
+  },
+  "counts": {
+   "commits": 15,
+   "targetRenderId": 14,
+   "targetRenderPw": 14,
+   "targetMounted": 14
+  },
+  "storeNames": [
+   "sections",
+   "onboardingSteps"
+  ],
+  "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+  "bootRev": "102e374d338e",
+  "entryCount": 50,
+  "errors": []
+ },
+ "windows": [
+  {
+   "name": "general",
+   "requested": {
+    "panel": "open",
+    "section": "general",
+    "net": "active"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "panelAction": {
+    "alreadyOpen": false,
+    "panelNodes": 1
+   },
+   "sectionAction": {
+    "clicked": "通用设置",
+    "before": "通用设置",
+    "after": "通用设置"
+   },
+   "panelNodesAtStart": 1,
+   "activeSectionAtStart": "通用设置",
+   "startEpochMs": 1789975819991,
+   "startIso": "2026-09-21T07:30:19.991Z",
+   "sessionListAtStart": {
+    "ok": true,
+    "items": 297,
+    "topLevel": 103,
+    "subagents": 194,
+    "running": 13
+   },
+   "censusAtStart": {
+    "headlessShellProcs": 30,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-bqTm0R",
+     "/tmp/playwright_chromiumdev_profile-6c2I7E",
+     "/tmp/playwright_chromiumdev_profile-yMmP8U",
+     "/tmp/playwright_chromiumdev_profile-VknQTo"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2302813,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2302814,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2351242,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main --window 60000 > run-main.out 2> run-main.err; echo \"exit=$?\"; tail -5 run-main.err"
+     },
+     {
+      "pid": 2351243,
+      "cmd": "node measure-slot.mjs --tag main"
+     },
+     {
+      "pid": 2571731,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && timeout 300 node lib/probe.mjs --window=15000 --settle=5000 --cycles=1 --tag=smoke2 --heartbeat=5000 2>&1 | tail -30"
+     },
+     {
+      "pid": 2571887,
+      "cmd": "timeout 300 node lib/probe.mjs"
+     },
+     {
+      "pid": 2571891,
+      "cmd": "node lib/probe.mjs --window=15000 --settle=5000"
+     },
+     {
+      "pid": 2581755,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && timeout 180 node scripts/measure.mjs --window 12000 --tag smoke2 --states general 2>&1 | tail -10; echo \"=== probe ===\"; python3 -c \"\nimport json\nd=json.load(open('raw/dump-smoke2.json'))\np=d['probe']\nprint('flags',json.dumps(p['flags'],ensure_ascii=False))\nprint('nSel',len(d['selCalls']),'nNotify',len(d['notify']),'nSnap',len(d['snapshot']))\nprint('errors',json.dumps(p['errors'],ensure_ascii=False)[:500])\n\""
+     },
+     {
+      "pid": 2581860,
+      "cmd": "timeout 180 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2581864,
+      "cmd": "node scripts/measure.mjs --window 12000"
+     },
+     {
+      "pid": 2588673,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/react-commit && node scripts/measure.mjs --window 60000 --tag locked --plan lock --idle-budget 90000 2>&1 | tee raw/locked-run.log"
+     },
+     {
+      "pid": 2588674,
+      "cmd": "node scripts/measure.mjs --window 60000"
+     }
+    ],
+    "distinctBrowserInstances": 5
+   },
+   "commitIndexStart": 26,
+   "endEpochMs": 1789975852818,
+   "endIso": "2026-09-21T07:30:52.818Z",
+   "elapsedMs": 32827,
+   "panelNodesAtEnd": 1,
+   "activeSectionAtEnd": "通用设置",
+   "sessionListAtEnd": {
+    "ok": true,
+    "items": 297,
+    "topLevel": 103,
+    "subagents": 194,
+    "running": 13
+   },
+   "censusAtEnd": {
+    "headlessShellProcs": 30,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-bqTm0R",
+     "/tmp/playwright_chromiumdev_profile-6c2I7E",
+     "/tmp/playwright_chromiumdev_profile-yMmP8U",
+     "/tmp/playwright_chromiumdev_profile-VknQTo"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2302813,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2302814,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2351242,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main --window 60000 > run-main.out 2> run-main.err; echo \"exit=$?\"; tail -5 run-main.err"
+     },
+     {
+      "pid": 2351243,
+      "cmd": "node measure-slot.mjs --tag main"
+     },
+     {
+      "pid": 2571731,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && timeout 300 node lib/probe.mjs --window=15000 --settle=5000 --cycles=1 --tag=smoke2 --heartbeat=5000 2>&1 | tail -30"
+     },
+     {
+      "pid": 2571887,
+      "cmd": "timeout 300 node lib/probe.mjs"
+     },
+     {
+      "pid": 2571891,
+      "cmd": "node lib/probe.mjs --window=15000 --settle=5000"
+     },
+     {
+      "pid": 2581755,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && timeout 180 node scripts/measure.mjs --window 12000 --tag smoke2 --states general 2>&1 | tail -10; echo \"=== probe ===\"; python3 -c \"\nimport json\nd=json.load(open('raw/dump-smoke2.json'))\np=d['probe']\nprint('flags',json.dumps(p['flags'],ensure_ascii=False))\nprint('nSel',len(d['selCalls']),'nNotify',len(d['notify']),'nSnap',len(d['snapshot']))\nprint('errors',json.dumps(p['errors'],ensure_ascii=False)[:500])\n\""
+     },
+     {
+      "pid": 2581860,
+      "cmd": "timeout 180 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2581864,
+      "cmd": "node scripts/measure.mjs --window 12000"
+     },
+     {
+      "pid": 2588673,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/react-commit && node scripts/measure.mjs --window 60000 --tag locked --plan lock --idle-budget 90000 2>&1 | tee raw/locked-run.log"
+     },
+     {
+      "pid": 2588674,
+      "cmd": "node scripts/measure.mjs --window 60000"
+     }
+    ],
+    "distinctBrowserInstances": 5
+   },
+   "commitIndexEnd": 26,
+   "slice": {
+    "nCommits": 0,
+    "nNotify": 0,
+    "nSel": 0,
+    "nSnap": 24,
+    "nSlotChange": 0
+   },
+   "summary": {
+    "name": "general",
+    "seconds": 32.827,
+    "panelNodesStart": 1,
+    "panelNodesEnd": 1,
+    "sectionStart": "通用设置",
+    "sectionEnd": "通用设置",
+    "commits": 0,
+    "commitsWithTarget": 0,
+    "targetRendered_pw": 0,
+    "targetRendered_id": 0,
+    "panelOpenCommits": 0,
+    "selfDrivenRenders": 0,
+    "parentDrivenRenders": 0,
+    "panelOpenSelfDriven": 0,
+    "panelOpenParentDriven": 0,
+    "selByStore": {},
+    "notifyByStore": {},
+    "snapByStore": {
+     "sections": {
+      "calls": 12,
+      "changed": 0,
+      "lenHist": {
+       "8": 12
+      }
+     },
+     "onboardingSteps": {
+      "calls": 12,
+      "changed": 0,
+      "lenHist": {
+       "2": 12
+      }
+     }
+    },
+    "localeRevHist": {},
+    "slotChangeByKey": {},
+    "selfRenderCause": {
+     "real": 0,
+     "identity": 0,
+     "other": 0
+    },
+    "perSecRate": {
+     "commitPerSec": 0,
+     "selfRenderPerSec": 0
+    }
+   }
+  }
+ ],
+ "consoleErrors": [],
+ "wsSockets": [
+  {
+   "url": "ws://127.0.0.1:3080/api/events.mux",
+   "frames": 3134,
+   "byType": {
+    "session/subscribed": 19,
+    "session/queue": 8,
+    "session/jobs": 6,
+    "session/projection": 386,
+    "session/event": 2715
+   }
+  },
+  {
+   "url": "ws://127.0.0.1:3080/api/events.host",
+   "frames": 0,
+   "byType": {}
+  }
+ ],
+ "notes": [],
+ "final": {
+  "probe": {
+   "hookPresent": true,
+   "hookIsWrapped": false,
+   "hookCalls": {
+    "inject": 1,
+    "onCommitFiberRoot": 26,
+    "onPostCommitFiberRoot": 17,
+    "onCommitFiberUnmount": 2
+   },
+   "injected": [
+    {
+     "t": 11530.3,
+     "id": 1,
+     "version": "18.3.1",
+     "pkg": "react-dom",
+     "bundleType": 0,
+     "reconcilerVersion": "18.3.1-next-f1338f8080-20240426",
+     "hasScheduleRoot": false
+    }
+   ],
+   "flags": {
+    "shimTrapActive": false,
+    "shimTrapAt": 10077.4,
+    "shimTrapFired": true,
+    "shimTrapFiredAt": 12365.1,
+    "wrappedStores": true,
+    "wrappedAt": 13295.1,
+    "shimTrapOffReason": "installed",
+    "shimTrapOffAt": 14001.9
+   },
+   "counts": {
+    "commits": 26,
+    "targetRenderId": 17,
+    "targetRenderPw": 17,
+    "targetMounted": 25
+   },
+   "storeNames": [
+    "sections",
+    "onboardingSteps"
+   ],
+   "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+   "bootRev": "102e374d338e",
+   "entryCount": 50,
+   "errors": []
+  }
+ }
+}

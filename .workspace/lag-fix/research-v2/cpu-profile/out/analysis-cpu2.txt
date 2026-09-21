@@ -1,0 +1,1031 @@
+# campaign cpu2 | cpu2 | windows: 32 | errors: []
+
+## anchor-symbol proof (captured in CDP profile, top-200 self-time per window)
+  projectList                windows= 28 selfMs=  641.403 maxPerS=   4.823 urls=["http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3"] lines=[9272] regions=["lib/types/client/sessions/service.js"]
+  buildListSnapshot          windows= 27 selfMs=  675.065 maxPerS=   4.407 urls=["http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3"] lines=[8553] regions=["lib/types/client/sessions/manager.js"]
+  flattenLineage             windows= 27 selfMs=   194.22 maxPerS=   1.833 urls=["http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3"] lines=[5603] regions=["lib/types/client/sessions/lineage.js"]
+  ensureFresh                windows=  1 selfMs=     6.33 maxPerS=   0.527 urls=["http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3"] lines=[5689] regions=["lib/types/client/sessions/notifier.js"]
+  querySelectorAll           windows= 53 selfMs=   159.61 maxPerS=   0.889 urls=["(none)"] lines=[0] regions=[null]
+  markDirty                  windows=  1 selfMs=    1.054 maxPerS=   0.088 urls=["http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3"] lines=[5662] regions=["lib/types/client/sessions/notifier.js"]
+  rebuildRemote              windows=  5 selfMs=    7.471 maxPerS=   0.178 urls=["http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b"] lines=[4220] regions=["../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js"]
+
+## per-scenario summary
+scenario                  n  gap script/s  med  max | task/s recalc/s layout/s | wsIn/s max | raf/s >50 >100 p99max | ltN lt/s ltMax | mutRec | nodes | samples
+home-idle                 4   0   0.073 0.068 0.086 |  0.191   0.078        0 | 100.248 109.083 | 56.77   30    7  199.9 |   3 0.063   164 |    973 |   606 |  11308
+long-session-idle         4   0   0.121  0.12  0.16 |  0.615   0.436        0 |  75.248 103.333 | 35.02  234  170  233.3 |  71 1.479   120 |    944 | 2942.75 |  11546
+long-session-active       4   0   0.123 0.097 0.202 |  0.701   0.467        0 |  14.729  17.25 | 35.48  229  194  449.9 | 272 5.667   188 |    531 |  2973 | 10974.5
+settings-general-open     4   0   0.126 0.035 0.243 |  0.711   0.454    0.001 |  53.348 111.184 | 13.553  391  368  516.7 | 436 8.914   451 |    410 | 3058.5 |  10091
+settings-models-open      4   0    0.03 0.003 0.099 |  0.205   0.084    0.001 |   1.156  4.625 | 7.233  248  241 1016.6 |  40 0.924   652 |     40 |  3096 | 6635.5
+settings-plugins-open     4   0   0.084 0.003 0.275 |  0.454    0.24    0.003 |   5.401 20.867 | 7.157  265  262  866.6 | 113 2.697   361 |    163 |  3208 | 7524.5
+settings-general-tab      4   0   0.094 0.075 0.126 |   0.63   0.304    0.001 |  87.033 181.709 | 29.257  237  214 2083.3 | 285 6.777  1876 |    402 | 3144.25 | 9555.25
+settings-dwell            4   0   0.055  0.06 0.067 |  0.311   0.208        0 | 154.319 327.527 | 47.522  115   74  183.3 |  11 0.229   101 |    448 |  3143 | 11601.25
+
+## bundle self-time per second (top per scenario)
+  home-idle                [["(no-url:native/vm)",3402.317],["ui:dsh-client-ui-layout",301.257],["shell:ext:index",125.544],["dsh-client-runtime",66.243],["ui:dsh-client-ui-workspace",30.134],["dsh-client-connection",10.279],["C2:dsh-workspace-enhancement",10.016]]
+  long-session-idle        [["(no-url:native/vm)",1959.396],["ui:dsh-client-ui-layout",1700.125],["shell:ext:index",213.84],["dsh-client-runtime",79.047],["ui:dsh-client-ui-workspace",35.919],["ui:dsh-client-ui-renderer",16.903],["dsh-client-connection",11.613]]
+  long-session-active      [["(no-url:native/vm)",1974.603],["ui:dsh-client-ui-layout",1568.506],["shell:ext:index",177.633],["dsh-client-runtime",62.983],["ui:dsh-client-ui-workspace",28.17],["ui:dsh-client-ui-renderer",20.126],["ui:dsh-client-ui-conversation",11.526]]
+  settings-general-open    [["(no-url:native/vm)",1640.267],["ui:dsh-client-ui-layout",1524.198],["shell:ext:index",170.766],["dsh-client-runtime",63.26],["ui:dsh-client-ui-workspace",26.874],["ui:dsh-client-ui-renderer",17.327],["ui:dsh-client-ui-conversation",10.415]]
+  settings-models-open     [["(no-url:native/vm)",2373.503],["ui:dsh-client-ui-layout",212.184],["shell:ext:index",27.803],["dsh-client-runtime",10.868],["ui:dsh-client-ui-workspace",4.545],["ui:dsh-client-ui-renderer",2.461],["ui:dsh-client-ui-conversation",1.68]]
+  settings-plugins-open    [["(no-url:native/vm)",2119.455],["ui:dsh-client-ui-layout",742.884],["shell:ext:index",95.828],["dsh-client-runtime",34.782],["ui:dsh-client-ui-workspace",13.614],["ui:dsh-client-ui-renderer",8.732],["ui:dsh-client-ui-conversation",5.588]]
+  settings-general-tab     [["(no-url:native/vm)",2415.222],["ui:dsh-client-ui-layout",975.96],["dsh-client-runtime",155.572],["shell:ext:index",110.406],["ui:dsh-client-ui-conversation",66.845],["ui:dsh-client-ui-trajectory",38.411],["dsh-client-connection",22.111]]
+  settings-dwell           [["(no-url:native/vm)",3074.751],["ui:dsh-client-ui-layout",818.013],["shell:ext:index",90.735],["dsh-client-runtime",37.154],["ui:dsh-client-ui-workspace",18.182],["dsh-client-connection",12.033],["ui:dsh-client-ui-renderer",5.797]]
+
+## named-chain scaling vs inbound WS frames/s
+  buildListSnapshot          hits=26/32 slope=   -0.003 ms/s per frame/s r2=  0.037 perScen={"home-idle":11.598,"long-session-idle":10.65,"long-session-active":9.123,"settings-general-open":8.574,"settings-models-open":1.482,"settings-plugins-open":4.478,"settings-general-tab":6.127,"settings-dwell":5.095}
+  projectList                hits=27/32 slope=   -0.004 ms/s per frame/s r2=  0.052 perScen={"home-idle":9.575,"long-session-idle":11.527,"long-session-active":8.24,"settings-general-open":9.01,"settings-models-open":1.976,"settings-plugins-open":4.377,"settings-general-tab":5.629,"settings-dwell":3.953}
+  flattenLineage             hits=26/32 slope=   -0.002 ms/s per frame/s r2=  0.061 perScen={"home-idle":2.636,"long-session-idle":2.113,"long-session-active":3.194,"settings-general-open":3.498,"settings-models-open":0.198,"settings-plugins-open":1.525,"settings-general-tab":1.72,"settings-dwell":1.493}
+  markDirty                  hits= 1/32 slope=     null ms/s per frame/s r2=   null perScen={"home-idle":0.088,"long-session-idle":0,"long-session-active":0,"settings-general-open":0,"settings-models-open":0,"settings-plugins-open":0,"settings-general-tab":0,"settings-dwell":0}
+  rebuildRemote              hits= 4/32 slope=   -0.001 ms/s per frame/s r2=  0.141 perScen={"home-idle":0,"long-session-idle":0,"long-session-active":0.267,"settings-general-open":0.332,"settings-models-open":0,"settings-plugins-open":0,"settings-general-tab":0,"settings-dwell":0}
+  querySelectorAll           hits=30/32 slope=   -0.001 ms/s per frame/s r2=  0.104 perScen={"home-idle":0.352,"long-session-idle":1.41,"long-session-active":2.306,"settings-general-open":2.236,"settings-models-open":1.291,"settings-plugins-open":2.319,"settings-general-tab":3.126,"settings-dwell":0.967}
+  ensureFresh                hits= 1/32 slope=     null ms/s per frame/s r2=   null perScen={"home-idle":0.527,"long-session-idle":0,"long-session-active":0,"settings-general-open":0,"settings-models-open":0,"settings-plugins-open":0,"settings-general-tab":0,"settings-dwell":0}
+  getListSnapshot            hits= 0/32 slope=     null ms/s per frame/s r2=   null perScen={"home-idle":0,"long-session-idle":0,"long-session-active":0,"settings-general-open":0,"settings-models-open":0,"settings-plugins-open":0,"settings-general-tab":0,"settings-dwell":0}
+  applyMutation              hits= 0/32 slope=     null ms/s per frame/s r2=   null perScen={"home-idle":0,"long-session-idle":0,"long-session-active":0,"settings-general-open":0,"settings-models-open":0,"settings-plugins-open":0,"settings-general-tab":0,"settings-dwell":0}
+  recordMutation             hits= 0/32 slope=     null ms/s per frame/s r2=   null perScen={"home-idle":0,"long-session-idle":0,"long-session-active":0,"settings-general-open":0,"settings-models-open":0,"settings-plugins-open":0,"settings-general-tab":0,"settings-dwell":0}
+  syncCompletedNotifications hits= 0/32 slope=     null ms/s per frame/s r2=   null perScen={"home-idle":0,"long-session-idle":0,"long-session-active":0,"settings-general-open":0,"settings-models-open":0,"settings-plugins-open":0,"settings-general-tab":0,"settings-dwell":0}
+  im                         hits=31/32 slope=    0.001 ms/s per frame/s r2=  0.032 perScen={"home-idle":2.548,"long-session-idle":1.32,"long-session-active":2.476,"settings-general-open":1.034,"settings-models-open":0.691,"settings-plugins-open":0.502,"settings-general-tab":1.41,"settings-dwell":1.318}
+  render                     hits=26/32 slope=   -0.004 ms/s per frame/s r2=  0.143 perScen={"home-idle":1.669,"long-session-idle":4.578,"long-session-active":5.588,"settings-general-open":3.948,"settings-models-open":0.395,"settings-plugins-open":2.75,"settings-general-tab":2.404,"settings-dwell":1.845}
+  apply                      hits=28/32 slope=   -0.632 ms/s per frame/s r2=  0.043 perScen={"home-idle":304.948,"long-session-idle":1706.641,"long-session-active":1575.875,"settings-general-open":1530.024,"settings-models-open":213.568,"settings-plugins-open":746.13,"settings-general-tab":979.294,"settings-dwell":820.912}
+
+## per-window top-30 (first 3 windows + any >=0.2ms/s app fn)
+
+--- home-idle-w1 [home-idle] 12s page=home tab=null action=- nodes=606 wsIn/s=109.083 script/s=0.068 mit=obsOK
+       839.599 ms/s  10075.186 ms  83.917%  (idle) @:0  [v8]
+        25.384 ms/s    304.606 ms   2.537%  (program) @:0  [v8]
+          23.1 ms/s    277.202 ms   2.309%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        20.553 ms/s    246.636 ms   2.054%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        12.911 ms/s    154.938 ms    1.29%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        10.101 ms/s     121.21 ms    1.01%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         4.128 ms/s     49.538 ms   0.413%  (garbage collector) @:0  [v8]
+         3.074 ms/s      36.89 ms   0.307%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         2.811 ms/s     33.728 ms   0.281%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         2.635 ms/s      31.62 ms   0.263%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         2.635 ms/s      31.62 ms   0.263%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         2.284 ms/s     27.404 ms   0.228%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.493 ms/s     17.918 ms   0.149%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         1.405 ms/s     16.864 ms    0.14%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+          1.23 ms/s     14.756 ms   0.123%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.142 ms/s     13.702 ms   0.114%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.097%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         0.966 ms/s     11.594 ms   0.097%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.878 ms/s      10.54 ms   0.088%  p0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.878 ms/s      10.54 ms   0.088%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         0.791 ms/s      9.486 ms   0.079%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+         0.703 ms/s      8.432 ms    0.07%  (anonymous) @client.js?rev=a0fb4bb225d3:8570  <lib/types/client/sessions/manager.js>
+         0.703 ms/s      8.432 ms    0.07%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         0.703 ms/s      8.432 ms    0.07%  ProjectRowItem @client.js?rev=5596cec54007:454  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/util.js>
+         0.615 ms/s      7.378 ms   0.061%  flattenLineage @client.js?rev=a0fb4bb225d3:5603  <lib/types/client/sessions/lineage.js>
+         0.615 ms/s      7.378 ms   0.061%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.061%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.061%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.053%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.053%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+
+--- home-idle-w2 [home-idle] 12.001s page=home tab=null action=- nodes=606 wsIn/s=92.242 script/s=0.086 mit=obsOK
+        781.25 ms/s   9375.785 ms  79.235%  (idle) @:0  [v8]
+        38.856 ms/s     466.31 ms   3.941%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        33.493 ms/s    401.955 ms   3.397%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        29.977 ms/s    359.755 ms    3.04%  (program) @:0  [v8]
+         8.351 ms/s    100.225 ms   0.847%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         7.209 ms/s      86.51 ms   0.731%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         4.044 ms/s      48.53 ms    0.41%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         3.868 ms/s      46.42 ms   0.392%  (garbage collector) @:0  [v8]
+         2.022 ms/s     24.265 ms   0.205%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         1.846 ms/s     22.155 ms   0.187%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         1.758 ms/s       21.1 ms   0.178%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         1.582 ms/s      18.99 ms    0.16%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.494 ms/s     17.935 ms   0.152%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         1.407 ms/s      16.88 ms   0.143%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         1.319 ms/s     15.825 ms   0.134%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.319 ms/s     15.825 ms   0.134%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.319 ms/s     15.825 ms   0.134%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         1.231 ms/s      14.77 ms   0.125%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.231 ms/s      14.77 ms   0.125%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.231 ms/s      14.77 ms   0.125%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         1.143 ms/s     13.715 ms   0.116%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.143 ms/s     13.715 ms   0.116%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.055 ms/s      12.66 ms   0.107%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.055 ms/s      12.66 ms   0.107%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.055 ms/s      12.66 ms   0.107%  remoteSessionIndex @client.js?rev=b295bb00e32b:4109  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js>
+         0.967 ms/s     11.605 ms   0.098%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.879 ms/s      10.55 ms   0.089%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.879 ms/s      10.55 ms   0.089%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.791 ms/s      9.495 ms    0.08%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         0.791 ms/s      9.495 ms    0.08%  reconciledSessionOrder @client.js?rev=5596cec54007:1078  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+
+--- home-idle-w3 [home-idle] 12s page=home tab=null action=- nodes=606 wsIn/s=95.5 script/s=0.074 mit=obsOK
+       803.324 ms/s   9639.884 ms  81.479%  (idle) @:0  [v8]
+         31.62 ms/s     379.44 ms   3.207%  (program) @:0  [v8]
+         27.58 ms/s    330.956 ms   2.797%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        23.627 ms/s    283.526 ms   2.396%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        12.736 ms/s     152.83 ms   1.292%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        11.858 ms/s     142.29 ms   1.203%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         3.338 ms/s     40.052 ms   0.339%  (garbage collector) @:0  [v8]
+         2.986 ms/s     35.836 ms   0.303%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         2.986 ms/s     35.836 ms   0.303%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         1.757 ms/s      21.08 ms   0.178%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         1.581 ms/s     18.972 ms    0.16%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         1.405 ms/s     16.864 ms   0.143%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.405 ms/s     16.864 ms   0.143%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         1.405 ms/s     16.864 ms   0.143%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.318 ms/s      15.81 ms   0.134%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.318 ms/s      15.81 ms   0.134%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+          1.23 ms/s     14.756 ms   0.125%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+          1.23 ms/s     14.756 ms   0.125%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+          1.23 ms/s     14.756 ms   0.125%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.142 ms/s     13.702 ms   0.116%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         1.142 ms/s     13.702 ms   0.116%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+         1.054 ms/s     12.648 ms   0.107%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.098%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.098%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         0.966 ms/s     11.594 ms   0.098%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.878 ms/s      10.54 ms   0.089%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         0.878 ms/s      10.54 ms   0.089%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         0.791 ms/s      9.486 ms    0.08%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.791 ms/s      9.486 ms    0.08%  flattenLineage @client.js?rev=a0fb4bb225d3:5603  <lib/types/client/sessions/lineage.js>
+         0.703 ms/s      8.432 ms   0.071%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+
+--- home-idle-w4 [home-idle] 12s page=home tab=null action=- nodes=606 wsIn/s=104.167 script/s=0.065 mit=obsOK
+       843.024 ms/s  10116.292 ms  84.193%  (idle) @:0  [v8]
+        37.154 ms/s    445.842 ms   3.711%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        32.498 ms/s     389.98 ms   3.246%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        24.681 ms/s    296.174 ms   2.465%  (program) @:0  [v8]
+         2.635 ms/s      31.62 ms   0.263%  (garbage collector) @:0  [v8]
+         2.196 ms/s      26.35 ms   0.219%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         1.845 ms/s     22.134 ms   0.184%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.845 ms/s     22.134 ms   0.184%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         1.845 ms/s     22.134 ms   0.184%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         1.405 ms/s     16.864 ms    0.14%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.318 ms/s      15.81 ms   0.132%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+          1.23 ms/s     14.756 ms   0.123%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         1.142 ms/s     13.702 ms   0.114%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         1.054 ms/s     12.648 ms   0.105%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.054 ms/s     12.648 ms   0.105%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.054 ms/s     12.648 ms   0.105%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.054 ms/s     12.648 ms   0.105%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         0.966 ms/s     11.594 ms   0.096%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.096%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.878 ms/s      10.54 ms   0.088%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.878 ms/s      10.54 ms   0.088%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.878 ms/s      10.54 ms   0.088%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.791 ms/s      9.486 ms   0.079%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+         0.791 ms/s      9.486 ms   0.079%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.703 ms/s      8.432 ms    0.07%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.061%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.061%  requestAnimationFrame @:0
+         0.615 ms/s      7.378 ms   0.061%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.061%  flattenLineage @client.js?rev=a0fb4bb225d3:5603  <lib/types/client/sessions/lineage.js>
+         0.527 ms/s      6.324 ms   0.053%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+
+--- long-idle-w1 [long-session-idle] 12s page=long-session tab=null action=- nodes=2942 wsIn/s=53.667 script/s=0.16 mit=obsOK
+       280.723 ms/s    3368.68 ms  29.113%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       260.407 ms/s    3124.88 ms  27.006%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       222.688 ms/s    2672.26 ms  23.095%  (idle) @:0  [v8]
+         62.01 ms/s     744.12 ms   6.431%  (program) @:0  [v8]
+         5.565 ms/s      66.78 ms   0.577%  (garbage collector) @:0  [v8]
+         3.887 ms/s      46.64 ms   0.403%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         3.622 ms/s      43.46 ms   0.376%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         3.445 ms/s      41.34 ms   0.357%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.915 ms/s      34.98 ms   0.302%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.827 ms/s      33.92 ms   0.293%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         2.562 ms/s      30.74 ms   0.266%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         2.562 ms/s      30.74 ms   0.266%  y @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         2.562 ms/s      30.74 ms   0.266%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         2.297 ms/s      27.56 ms   0.238%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.032 ms/s      24.38 ms   0.211%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.032 ms/s      24.38 ms   0.211%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         1.943 ms/s      23.32 ms   0.202%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         1.855 ms/s      22.26 ms   0.192%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.855 ms/s      22.26 ms   0.192%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         1.855 ms/s      22.26 ms   0.192%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.767 ms/s       21.2 ms   0.183%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.678 ms/s      20.14 ms   0.174%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+         1.678 ms/s      20.14 ms   0.174%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.502 ms/s      18.02 ms   0.156%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         1.502 ms/s      18.02 ms   0.156%  v0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.413 ms/s      16.96 ms   0.147%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.325 ms/s       15.9 ms   0.137%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.325 ms/s       15.9 ms   0.137%  onChange @client.js?rev=b295bb00e32b:4413  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js>
+         1.237 ms/s      14.84 ms   0.128%  remoteSessionIndex @client.js?rev=b295bb00e32b:4109  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js>
+         1.237 ms/s      14.84 ms   0.128%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+
+--- long-idle-w2 [long-session-idle] 12.001s page=long-session tab=null action=- nodes=2943 wsIn/s=89.743 script/s=0.075 mit=obsOK
+       622.423 ms/s   7469.698 ms   62.26%  (idle) @:0  [v8]
+       136.218 ms/s   1634.754 ms  13.626%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       129.192 ms/s   1550.434 ms  12.923%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         38.38 ms/s    460.598 ms   3.839%  (program) @:0  [v8]
+         3.777 ms/s     45.322 ms   0.378%  (garbage collector) @:0  [v8]
+         2.723 ms/s     32.674 ms   0.272%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         2.459 ms/s     29.512 ms   0.246%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.844 ms/s     22.134 ms   0.184%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         1.493 ms/s     17.918 ms   0.149%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.493 ms/s     17.918 ms   0.149%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         1.493 ms/s     17.918 ms   0.149%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         1.317 ms/s      15.81 ms   0.132%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+          1.23 ms/s     14.756 ms   0.123%  y @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+          1.23 ms/s     14.756 ms   0.123%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+          1.23 ms/s     14.756 ms   0.123%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.054 ms/s     12.648 ms   0.105%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         1.054 ms/s     12.648 ms   0.105%  v0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.097%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.097%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.097%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.097%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         0.878 ms/s      10.54 ms   0.088%  Z4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.878 ms/s      10.54 ms   0.088%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+          0.79 ms/s      9.486 ms   0.079%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+          0.79 ms/s      9.486 ms   0.079%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+          0.79 ms/s      9.486 ms   0.079%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.703 ms/s      8.432 ms    0.07%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.703 ms/s      8.432 ms    0.07%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.703 ms/s      8.432 ms    0.07%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.061%  workspaceTitleOf @client.js?rev=a0fb4bb225d3:8826  <lib/types/client/sessions/service.js>
+
+--- long-idle-w3 [long-session-idle] 12s page=long-session tab=null action=- nodes=2943 wsIn/s=103.333 script/s=0.12 mit=obsOK
+       436.243 ms/s    5234.91 ms  43.442%  (idle) @:0  [v8]
+       206.428 ms/s    2477.14 ms  20.557%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       199.571 ms/s    2394.85 ms  19.874%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        56.355 ms/s    676.255 ms   5.612%  (program) @:0  [v8]
+         4.132 ms/s     49.585 ms   0.411%  (garbage collector) @:0  [v8]
+         3.165 ms/s      37.98 ms   0.315%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         2.989 ms/s      35.87 ms   0.298%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.637 ms/s      31.65 ms   0.263%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         2.374 ms/s     28.485 ms   0.236%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         2.286 ms/s      27.43 ms   0.228%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+          2.11 ms/s      25.32 ms    0.21%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.022 ms/s     24.265 ms   0.201%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+         1.758 ms/s       21.1 ms   0.175%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.582 ms/s      18.99 ms   0.158%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         1.582 ms/s      18.99 ms   0.158%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.495 ms/s     17.935 ms   0.149%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         1.495 ms/s     17.935 ms   0.149%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         1.495 ms/s     17.935 ms   0.149%  v0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.407 ms/s      16.88 ms    0.14%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.407 ms/s      16.88 ms    0.14%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.231 ms/s      14.77 ms   0.123%  y @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.231 ms/s      14.77 ms   0.123%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         1.055 ms/s      12.66 ms   0.105%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.055 ms/s      12.66 ms   0.105%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.055 ms/s      12.66 ms   0.105%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.055 ms/s      12.66 ms   0.105%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.967 ms/s     11.605 ms   0.096%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.967 ms/s     11.605 ms   0.096%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.967 ms/s     11.605 ms   0.096%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.879 ms/s      10.55 ms   0.088%  applyWallpaper @client.js?rev=fb28faf9db9a:225  <lib/types/client/slots.js>
+
+--- long-idle-w4 [long-session-idle] 12s page=long-session tab=null action=- nodes=2943 wsIn/s=54.25 script/s=0.129 mit=obsOK
+       434.396 ms/s   5212.755 ms  39.645%  (idle) @:0  [v8]
+       193.505 ms/s   2322.055 ms   17.66%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       184.977 ms/s    2219.72 ms  16.882%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        55.739 ms/s     668.87 ms   5.087%  (program) @:0  [v8]
+        55.475 ms/s    665.705 ms   5.063%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        53.629 ms/s     643.55 ms   4.894%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         4.835 ms/s     58.025 ms   0.441%  (garbage collector) @:0  [v8]
+         3.605 ms/s     43.255 ms   0.329%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         3.077 ms/s     36.925 ms   0.281%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         2.901 ms/s     34.815 ms   0.265%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         2.725 ms/s     32.705 ms   0.249%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         2.725 ms/s     32.705 ms   0.249%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.725 ms/s     32.705 ms   0.249%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         2.637 ms/s      31.65 ms   0.241%  y @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         2.374 ms/s     28.485 ms   0.217%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         2.286 ms/s      27.43 ms   0.209%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         2.286 ms/s      27.43 ms   0.209%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         2.198 ms/s     26.375 ms   0.201%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+          2.11 ms/s      25.32 ms   0.193%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+          1.67 ms/s     20.045 ms   0.152%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+          1.67 ms/s     20.045 ms   0.152%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+          1.67 ms/s     20.045 ms   0.152%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.582 ms/s      18.99 ms   0.144%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         1.495 ms/s     17.935 ms   0.136%  v0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.495 ms/s     17.935 ms   0.136%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.319 ms/s     15.825 ms    0.12%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.231 ms/s      14.77 ms   0.112%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.231 ms/s      14.77 ms   0.112%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.143 ms/s     13.715 ms   0.104%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.143 ms/s     13.715 ms   0.104%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+
+--- long-active-w1 [long-session-active] 11.999s page=long-session tab=null action=- nodes=2973 wsIn/s=13.001 script/s=0.052 mit=obsOK
+       713.793 ms/s   8564.804 ms  71.715%  (idle) @:0  [v8]
+        98.206 ms/s   1178.372 ms   9.867%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        95.658 ms/s   1147.806 ms   9.611%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        38.035 ms/s    456.382 ms   3.821%  (program) @:0  [v8]
+         2.723 ms/s     32.674 ms   0.274%  (garbage collector) @:0  [v8]
+         1.493 ms/s     17.918 ms    0.15%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.405 ms/s     16.864 ms   0.141%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         1.142 ms/s     13.702 ms   0.115%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.097%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.097%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.966 ms/s     11.594 ms   0.097%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         0.878 ms/s      10.54 ms   0.088%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         0.791 ms/s      9.486 ms   0.079%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         0.791 ms/s      9.486 ms   0.079%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.791 ms/s      9.486 ms   0.079%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.791 ms/s      9.486 ms   0.079%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.703 ms/s      8.432 ms   0.071%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         0.703 ms/s      8.432 ms   0.071%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         0.615 ms/s      7.378 ms   0.062%  v0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.062%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.062%  (anonymous) @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.062%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.527 ms/s      6.324 ms   0.053%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.053%  WorkspacePickFlow @client.js?rev=5596cec54007:821  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/parse.js>
+         0.527 ms/s      6.324 ms   0.053%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.053%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.439 ms/s       5.27 ms   0.044%  requestAnimationFrame @:0
+         0.439 ms/s       5.27 ms   0.044%  remoteSessionIndex @client.js?rev=b295bb00e32b:4109  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js>
+         0.439 ms/s       5.27 ms   0.044%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.439 ms/s       5.27 ms   0.044%  (anonymous) @client.js?rev=5596cec54007:1268  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+
+--- long-active-w2 [long-session-active] 12s page=long-session tab=null action=- nodes=2973 wsIn/s=17.25 script/s=0.097 mit=obsOK
+       520.643 ms/s    6247.71 ms  52.333%  (idle) @:0  [v8]
+       169.855 ms/s    2038.26 ms  17.073%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       163.173 ms/s    1958.08 ms  16.402%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        61.366 ms/s     736.39 ms   6.168%  (program) @:0  [v8]
+         2.989 ms/s      35.87 ms     0.3%  (garbage collector) @:0  [v8]
+         2.022 ms/s     24.265 ms   0.203%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         1.934 ms/s      23.21 ms   0.194%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         1.846 ms/s     22.155 ms   0.186%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.846 ms/s     22.155 ms   0.186%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         1.582 ms/s      18.99 ms   0.159%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.495 ms/s     17.935 ms    0.15%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.407 ms/s      16.88 ms   0.141%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.407 ms/s      16.88 ms   0.141%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.407 ms/s      16.88 ms   0.141%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         1.407 ms/s      16.88 ms   0.141%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.055 ms/s      12.66 ms   0.106%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         1.055 ms/s      12.66 ms   0.106%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         1.055 ms/s      12.66 ms   0.106%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         0.967 ms/s     11.605 ms   0.097%  (anonymous) @client.js?rev=5596cec54007:1268  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.967 ms/s     11.605 ms   0.097%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.967 ms/s     11.605 ms   0.097%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.879 ms/s      10.55 ms   0.088%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.879 ms/s      10.55 ms   0.088%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.879 ms/s      10.55 ms   0.088%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.879 ms/s      10.55 ms   0.088%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.879 ms/s      10.55 ms   0.088%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.791 ms/s      9.495 ms    0.08%  v0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.791 ms/s      9.495 ms    0.08%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         0.703 ms/s       8.44 ms   0.071%  (anonymous) @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.703 ms/s       8.44 ms   0.071%  requestAnimationFrame @:0
+
+--- long-active-w3 [long-session-active] 12s page=long-session tab=null action=- nodes=2973 wsIn/s=12.583 script/s=0.14 mit=obsOK
+       236.249 ms/s   2834.988 ms   25.79%  (idle) @:0  [v8]
+       228.053 ms/s    2736.64 ms  24.895%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       223.154 ms/s   2677.845 ms  24.361%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       120.173 ms/s   1442.081 ms  13.119%  (program) @:0  [v8]
+         7.839 ms/s     94.072 ms   0.856%  (garbage collector) @:0  [v8]
+         2.673 ms/s      32.07 ms   0.292%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         2.316 ms/s     27.794 ms   0.253%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         2.049 ms/s     24.587 ms   0.224%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         1.782 ms/s      21.38 ms   0.194%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.782 ms/s      21.38 ms   0.194%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.782 ms/s      21.38 ms   0.194%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.782 ms/s      21.38 ms   0.194%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.693 ms/s     20.311 ms   0.185%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.604 ms/s     19.242 ms   0.175%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.604 ms/s     19.242 ms   0.175%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.514 ms/s     18.173 ms   0.165%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.425 ms/s     17.104 ms   0.156%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.425 ms/s     17.104 ms   0.156%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.336 ms/s     16.035 ms   0.146%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         1.336 ms/s     16.035 ms   0.146%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.336 ms/s     16.035 ms   0.146%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         1.158 ms/s     13.897 ms   0.126%  applyWallpaper @client.js?rev=fb28faf9db9a:225  <lib/types/client/slots.js>
+         1.158 ms/s     13.897 ms   0.126%  remoteSessionIndex @client.js?rev=b295bb00e32b:4109  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js>
+         1.158 ms/s     13.897 ms   0.126%  flattenLineage @client.js?rev=a0fb4bb225d3:5603  <lib/types/client/sessions/lineage.js>
+         1.069 ms/s     12.828 ms   0.117%  (anonymous) @client.js?rev=5596cec54007:1268  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.069 ms/s     12.828 ms   0.117%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+          0.98 ms/s     11.759 ms   0.107%  applyWallpaper @client.js?rev=fb28faf9db9a:225  <lib/types/client/slots.js>
+          0.98 ms/s     11.759 ms   0.107%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+          0.98 ms/s     11.759 ms   0.107%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+          0.98 ms/s     11.759 ms   0.107%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+
+--- long-active-w4 [long-session-active] 12s page=long-session tab=null action=- nodes=2973 wsIn/s=16.083 script/s=0.202 mit=obsOK
+       300.716 ms/s   3608.594 ms  30.835%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       289.691 ms/s   3476.286 ms  29.705%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       146.179 ms/s   1754.148 ms  14.989%  (idle) @:0  [v8]
+       105.544 ms/s   1266.529 ms  10.822%  (program) @:0  [v8]
+         5.157 ms/s     61.886 ms   0.529%  (garbage collector) @:0  [v8]
+         3.379 ms/s     40.546 ms   0.346%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         3.023 ms/s     36.278 ms    0.31%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         2.579 ms/s     30.943 ms   0.264%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.401 ms/s     28.809 ms   0.246%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         2.312 ms/s     27.742 ms   0.237%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         2.312 ms/s     27.742 ms   0.237%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.134 ms/s     25.608 ms   0.219%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.134 ms/s     25.608 ms   0.219%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         1.867 ms/s     22.407 ms   0.191%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.867 ms/s     22.407 ms   0.191%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.778 ms/s      21.34 ms   0.182%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.778 ms/s      21.34 ms   0.182%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.778 ms/s      21.34 ms   0.182%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.778 ms/s      21.34 ms   0.182%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         1.512 ms/s     18.139 ms   0.155%  remoteSessionIndex @client.js?rev=b295bb00e32b:4109  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js>
+         1.512 ms/s     18.139 ms   0.155%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.423 ms/s     17.072 ms   0.146%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         1.423 ms/s     17.072 ms   0.146%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.245 ms/s     14.938 ms   0.128%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         1.245 ms/s     14.938 ms   0.128%  flattenLineage @client.js?rev=a0fb4bb225d3:5603  <lib/types/client/sessions/lineage.js>
+         1.245 ms/s     14.938 ms   0.128%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.245 ms/s     14.938 ms   0.128%  (anonymous) @client.js?rev=5596cec54007:1268  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.156 ms/s     13.871 ms   0.119%  renderOutletContent @client.js?rev=79b59d365f3b:752  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/errors.js>
+         1.067 ms/s     12.804 ms   0.109%  applyWallpaper @client.js?rev=fb28faf9db9a:225  <lib/types/client/slots.js>
+         1.067 ms/s     12.804 ms   0.109%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+
+--- settings-open-t1 [settings-general-open] 12.818s page=long-session tab=null action=open-settings nodes=2973 wsIn/s=70.916 script/s=0.207 mit=obsOK
+       227.298 ms/s   2913.504 ms  24.294%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       207.218 ms/s   2656.116 ms  22.148%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       138.312 ms/s    1772.88 ms  14.783%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       134.479 ms/s   1723.752 ms  14.373%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        70.156 ms/s    899.256 ms   7.498%  (program) @:0  [v8]
+         7.166 ms/s     91.848 ms   0.766%  (garbage collector) @:0  [v8]
+         4.666 ms/s     59.808 ms   0.499%  (idle) @:0  [v8]
+         4.083 ms/s     52.332 ms   0.436%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         3.749 ms/s      48.06 ms   0.401%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+             3 ms/s     38.448 ms   0.321%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         2.916 ms/s      37.38 ms   0.312%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.833 ms/s     36.312 ms   0.303%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         2.666 ms/s     34.176 ms   0.285%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         2.583 ms/s     33.108 ms   0.276%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.583 ms/s     33.108 ms   0.276%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+           2.5 ms/s      32.04 ms   0.267%  remoteSessionIndex @client.js?rev=b295bb00e32b:4109  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js>
+           2.5 ms/s      32.04 ms   0.267%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         2.416 ms/s     30.972 ms   0.258%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         2.333 ms/s     29.904 ms   0.249%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         2.083 ms/s       26.7 ms   0.223%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+             2 ms/s     25.632 ms   0.214%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+             2 ms/s     25.632 ms   0.214%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.833 ms/s     23.496 ms   0.196%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.833 ms/s     23.496 ms   0.196%  v0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.833 ms/s     23.496 ms   0.196%  flattenLineage @client.js?rev=a0fb4bb225d3:5603  <lib/types/client/sessions/lineage.js>
+         1.833 ms/s     23.496 ms   0.196%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+          1.75 ms/s     22.428 ms   0.187%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.666 ms/s      21.36 ms   0.178%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.666 ms/s      21.36 ms   0.178%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.583 ms/s     20.292 ms   0.169%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+
+--- settings-open-t2 [settings-general-open] 12.819s page=long-session tab=null action=open-settings nodes=2973 wsIn/s=29.878 script/s=0.243 mit=obsOK
+       365.562 ms/s   4686.136 ms  31.674%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       355.999 ms/s   4563.546 ms  30.845%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        139.04 ms/s   1782.352 ms  12.047%  (idle) @:0  [v8]
+       126.982 ms/s   1627.782 ms  11.002%  (program) @:0  [v8]
+         7.983 ms/s    102.336 ms   0.692%  (garbage collector) @:0  [v8]
+         4.823 ms/s     61.828 ms   0.418%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         4.407 ms/s     56.498 ms   0.382%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         3.825 ms/s     49.036 ms   0.331%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         3.077 ms/s     39.442 ms   0.267%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.994 ms/s     38.376 ms   0.259%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         2.578 ms/s     33.046 ms   0.223%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.495 ms/s      31.98 ms   0.216%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.495 ms/s      31.98 ms   0.216%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         2.245 ms/s     28.782 ms   0.195%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         2.162 ms/s     27.716 ms   0.187%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         1.913 ms/s     24.518 ms   0.166%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         1.913 ms/s     24.518 ms   0.166%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.829 ms/s     23.452 ms   0.159%  (anonymous) @client.js?rev=5596cec54007:1268  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.829 ms/s     23.452 ms   0.159%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.829 ms/s     23.452 ms   0.159%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.746 ms/s     22.386 ms   0.151%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         1.746 ms/s     22.386 ms   0.151%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.746 ms/s     22.386 ms   0.151%  remoteSessionIndex @client.js?rev=b295bb00e32b:4109  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js>
+         1.746 ms/s     22.386 ms   0.151%  v0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.663 ms/s      21.32 ms   0.144%  Z4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+          1.58 ms/s     20.254 ms   0.137%  applyWallpaper @client.js?rev=fb28faf9db9a:225  <lib/types/client/slots.js>
+          1.58 ms/s     20.254 ms   0.137%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+          1.58 ms/s     20.254 ms   0.137%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+          1.58 ms/s     20.254 ms   0.137%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.497 ms/s     19.188 ms    0.13%  flattenLineage @client.js?rev=a0fb4bb225d3:5603  <lib/types/client/sessions/lineage.js>
+
+--- settings-open-t3 [settings-general-open] 10.667s page=long-session tab=通用设置 action=open-settings nodes=3144 wsIn/s=111.184 script/s=0.017 mit=obsOK
+       648.407 ms/s   6916.558 ms  89.218%  (idle) @:0  [v8]
+        30.881 ms/s    329.411 ms   4.249%  (program) @:0  [v8]
+         5.432 ms/s     57.942 ms   0.747%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         5.331 ms/s     56.869 ms   0.734%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         4.426 ms/s     47.212 ms   0.609%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         3.319 ms/s     35.409 ms   0.457%  focus @:0
+         2.414 ms/s     25.752 ms   0.332%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         2.414 ms/s     25.752 ms   0.332%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         2.414 ms/s     25.752 ms   0.332%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         2.314 ms/s     24.679 ms   0.318%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         0.503 ms/s      5.365 ms   0.069%  (anonymous) @:1
+         0.503 ms/s      5.365 ms   0.069%  readWebSocket @client.js?rev=23a7e79f44f6:10275  <lib/types/client/conversation/event-registry.js>
+         0.402 ms/s      4.292 ms   0.055%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.402 ms/s      4.292 ms   0.055%  uo @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.302 ms/s      3.219 ms   0.042%  (garbage collector) @:0  [v8]
+         0.302 ms/s      3.219 ms   0.042%  evaluate @:228  <lib/types/client/slots.js>
+         0.201 ms/s      2.146 ms   0.028%  querySelectorAll @:0
+         0.201 ms/s      2.146 ms   0.028%  query @:3443  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.201 ms/s      2.146 ms   0.028%  inst._zod.parse @client.js?rev=23a7e79f44f6:2389  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/schemas.js>
+         0.201 ms/s      2.146 ms   0.028%  inst._zod.parse @client.js?rev=23a7e79f44f6:2494  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/schemas.js>
+         0.201 ms/s      2.146 ms   0.028%  getBoundingClientRect @:0
+         0.201 ms/s      2.146 ms   0.028%  elementsFromPoint @:0
+         0.201 ms/s      2.146 ms   0.028%  (anonymous) @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.201 ms/s      2.146 ms   0.028%  setAttribute @:0
+         0.201 ms/s      2.146 ms   0.028%  renderOutletContent @client.js?rev=79b59d365f3b:752  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/errors.js>
+         0.201 ms/s      2.146 ms   0.028%  Vu @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.201 ms/s      2.146 ms   0.028%  resolveStore @client.js?rev=a0fb4bb225d3:295  <lib/types/client/slots.js>
+         0.201 ms/s      2.146 ms   0.028%  inject @client.js?rev=fb28faf9db9a:584  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/util.js>
+         0.201 ms/s      2.146 ms   0.028%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.201 ms/s      2.146 ms   0.028%  fetch @:0
+
+--- settings-open-t4 [settings-general-open] 12.722s page=long-session tab=通用设置 action=open-settings nodes=3144 wsIn/s=1.415 script/s=0.035 mit=obsOK
+       563.954 ms/s   7174.629 ms  83.414%  (idle) @:0  [v8]
+        36.789 ms/s    468.027 ms   5.441%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        35.694 ms/s    454.104 ms    5.28%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        15.743 ms/s    200.277 ms   2.328%  (program) @:0  [v8]
+         4.714 ms/s     59.976 ms   0.697%  (garbage collector) @:0  [v8]
+         0.505 ms/s      6.426 ms   0.075%  (anonymous) @:0
+         0.505 ms/s      6.426 ms   0.075%  elementsFromPoint @:0
+         0.421 ms/s      5.355 ms   0.062%  getBoundingClientRect @:0
+         0.421 ms/s      5.355 ms   0.062%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.421 ms/s      5.355 ms   0.062%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         0.337 ms/s      4.284 ms    0.05%  query @:3443  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.337 ms/s      4.284 ms    0.05%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.337 ms/s      4.284 ms    0.05%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         0.337 ms/s      4.284 ms    0.05%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         0.337 ms/s      4.284 ms    0.05%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.337 ms/s      4.284 ms    0.05%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.337 ms/s      4.284 ms    0.05%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.253 ms/s      3.213 ms   0.037%  uo @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.253 ms/s      3.213 ms   0.037%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         0.253 ms/s      3.213 ms   0.037%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.253 ms/s      3.213 ms   0.037%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.253 ms/s      3.213 ms   0.037%  remoteSessionIndex @client.js?rev=b295bb00e32b:4109  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js>
+         0.253 ms/s      3.213 ms   0.037%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.253 ms/s      3.213 ms   0.037%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.253 ms/s      3.213 ms   0.037%  ChatView @client.js?rev=cf4575517765:5621  <lib/types/client/sessions/lineage.js>
+         0.253 ms/s      3.213 ms   0.037%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         0.168 ms/s      2.142 ms   0.025%  (anonymous) @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.168 ms/s      2.142 ms   0.025%  flattenLineage @client.js?rev=a0fb4bb225d3:5603  <lib/types/client/sessions/lineage.js>
+         0.168 ms/s      2.142 ms   0.025%  h @index-ClqxG24t.js:33  <lib/types/client/slots.js>
+         0.168 ms/s      2.142 ms   0.025%  ConversationRoot @client.js?rev=cf4575517765:7154  <lib/types/client/sessions/queue-mirror.js>
+
+--- settings-models-open-t1 [settings-models-open] 11.354s page=long-session tab=模型 action=switch-tab:模型 nodes=3096 wsIn/s=0 script/s=0.015 mit=obsOK
+       604.546 ms/s   6864.016 ms   91.12%  (idle) @:0  [v8]
+        44.281 ms/s    502.768 ms   6.674%  (program) @:0  [v8]
+         4.249 ms/s      48.24 ms    0.64%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         2.832 ms/s      32.16 ms   0.427%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         0.378 ms/s      4.288 ms   0.057%  uo @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.378 ms/s      4.288 ms   0.057%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.283 ms/s      3.216 ms   0.043%  evaluate @:228  <lib/types/client/slots.js>
+         0.283 ms/s      3.216 ms   0.043%  querySelectorAll @:0
+         0.283 ms/s      3.216 ms   0.043%  query @:3443  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.283 ms/s      3.216 ms   0.043%  query @:3443  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.189 ms/s      2.144 ms   0.028%  (anonymous) @:0
+         0.189 ms/s      2.144 ms   0.028%  elementsFromPoint @:0
+         0.189 ms/s      2.144 ms   0.028%  SlotOutlet @client.js?rev=79b59d365f3b:741  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/errors.js>
+         0.189 ms/s      2.144 ms   0.028%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.189 ms/s      2.144 ms   0.028%  Loaded @client.js?rev=f12fb342db3b:1803  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/schemas.js>
+         0.189 ms/s      2.144 ms   0.028%  (anonymous) @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.189 ms/s      2.144 ms   0.028%  requestAnimationFrame @:0
+         0.189 ms/s      2.144 ms   0.028%  Ji @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.094 ms/s      1.072 ms   0.014%  normalizeWhiteSpace @:185  <lib/types/client/slots.js>
+         0.094 ms/s      1.072 ms   0.014%  serialize @:120  <lib/types/client/slots.js>
+         0.094 ms/s      1.072 ms   0.014%  (anonymous) @:1
+         0.094 ms/s      1.072 ms   0.014%  getAriaRole @:514  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/util.js>
+         0.094 ms/s      1.072 ms   0.014%  elementFromPoint @:0
+         0.094 ms/s      1.072 ms   0.014%  F2 @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.094 ms/s      1.072 ms   0.014%  SettingsRoot @client.js?rev=f733efde3f2f:175  <lib/types/client/slots.js>
+         0.094 ms/s      1.072 ms   0.014%  ss @index-ClqxG24t.js:2
+         0.094 ms/s      1.072 ms   0.014%  f3 @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.094 ms/s      1.072 ms   0.014%  Ge @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.094 ms/s      1.072 ms   0.014%  navIcon @client.js?rev=f733efde3f2f:73  <lib/types/client/slots.js>
+         0.094 ms/s      1.072 ms   0.014%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+
+--- settings-models-open-t2 [settings-models-open] 10.81s page=long-session tab=模型 action=switch-tab:模型 nodes=3096 wsIn/s=4.625 script/s=0.099 mit=obsOK
+       446.465 ms/s   4826.292 ms  59.429%  (idle) @:0  [v8]
+       108.183 ms/s    1169.46 ms    14.4%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         96.92 ms/s   1047.708 ms  12.901%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        34.974 ms/s    378.072 ms   4.655%  (program) @:0  [v8]
+        13.239 ms/s    143.112 ms   1.762%  (garbage collector) @:0  [v8]
+         1.976 ms/s      21.36 ms   0.263%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         1.482 ms/s      16.02 ms   0.197%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         1.284 ms/s     13.884 ms   0.171%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.087 ms/s     11.748 ms   0.145%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         0.988 ms/s      10.68 ms   0.132%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         0.889 ms/s      9.612 ms   0.118%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.889 ms/s      9.612 ms   0.118%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+          0.79 ms/s      8.544 ms   0.105%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+          0.79 ms/s      8.544 ms   0.105%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+          0.79 ms/s      8.544 ms   0.105%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.692 ms/s      7.476 ms   0.092%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.692 ms/s      7.476 ms   0.092%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         0.593 ms/s      6.408 ms   0.079%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.593 ms/s      6.408 ms   0.079%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.593 ms/s      6.408 ms   0.079%  (anonymous) @client.js?rev=5596cec54007:1268  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.593 ms/s      6.408 ms   0.079%  ChatView @client.js?rev=cf4575517765:5621  <lib/types/client/sessions/lineage.js>
+         0.593 ms/s      6.408 ms   0.079%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.593 ms/s      6.408 ms   0.079%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.494 ms/s       5.34 ms   0.066%  elementsFromPoint @:0
+         0.494 ms/s       5.34 ms   0.066%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.494 ms/s       5.34 ms   0.066%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.494 ms/s       5.34 ms   0.066%  v0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.494 ms/s       5.34 ms   0.066%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         0.494 ms/s       5.34 ms   0.066%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.494 ms/s       5.34 ms   0.066%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+
+--- settings-models-open-t3 [settings-models-open] 10.437s page=long-session tab=模型 action=switch-tab:模型 nodes=3096 wsIn/s=0 script/s=0.002 mit=obsOK
+       614.595 ms/s   6414.525 ms  97.468%  (idle) @:0  [v8]
+        14.008 ms/s      146.2 ms   2.221%  (program) @:0  [v8]
+         0.309 ms/s      3.225 ms   0.049%  elementsFromPoint @:0
+         0.206 ms/s       2.15 ms   0.033%  querySelectorAll @:0
+         0.206 ms/s       2.15 ms   0.033%  query @:3443  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.206 ms/s       2.15 ms   0.033%  query @:3443  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.103 ms/s      1.075 ms   0.016%  (anonymous) @:3441  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.103 ms/s      1.075 ms   0.016%  elementText @:1108  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.103 ms/s      1.075 ms   0.016%  (anonymous) @:0
+         0.103 ms/s      1.075 ms   0.016%  jsonValue @:245  <lib/types/client/slots.js>
+         0.103 ms/s      1.075 ms   0.016%  getBoundingClientRect @:0
+         0.103 ms/s      1.075 ms   0.016%  belongsToDisabledFieldSet @:1003  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.103 ms/s      1.075 ms   0.016%  (anonymous) @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.103 ms/s      1.075 ms   0.016%  evaluate @:228  <lib/types/client/slots.js>
+         0.103 ms/s      1.075 ms   0.016%  PerformanceObserver.observe.type @:14  <lib/types/client/slots.js>
+         0.103 ms/s      1.075 ms   0.016%  requestAnimationFrame @:0
+
+--- settings-models-open-t4 [settings-models-open] 10.476s page=long-session tab=模型 action=switch-tab:模型 nodes=3096 wsIn/s=0 script/s=0.003 mit=obsOK
+       578.444 ms/s   6059.775 ms  97.374%  (idle) @:0  [v8]
+        12.416 ms/s    130.075 ms    2.09%  (program) @:0  [v8]
+          0.41 ms/s        4.3 ms   0.069%  query @:3443  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+          0.41 ms/s        4.3 ms   0.069%  (anonymous) @:0
+         0.308 ms/s      3.225 ms   0.052%  querySelectorAll @:0
+         0.308 ms/s      3.225 ms   0.052%  query @:3443  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.205 ms/s       2.15 ms   0.035%  elementsFromPoint @:0
+         0.205 ms/s       2.15 ms   0.035%  elementsFromPoint @:0
+         0.205 ms/s       2.15 ms   0.035%  uo @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.103 ms/s      1.075 ms   0.017%  (anonymous) @:3322  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/to-json-schema.js>
+         0.103 ms/s      1.075 ms   0.017%  normalizeWhiteSpace @:185  <lib/types/client/slots.js>
+         0.103 ms/s      1.075 ms   0.017%  (anonymous) @:3441  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.103 ms/s      1.075 ms   0.017%  markTargetElements @:6433  <lib/types/client/sessions/conversation-assembler.js>
+         0.103 ms/s      1.075 ms   0.017%  getBoundingClientRect @:0
+         0.103 ms/s      1.075 ms   0.017%  elementFromPoint @:0
+         0.103 ms/s      1.075 ms   0.017%  T4 @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.103 ms/s      1.075 ms   0.017%  Qs @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.103 ms/s      1.075 ms   0.017%  Eo @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.103 ms/s      1.075 ms   0.017%  (anonymous) @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.103 ms/s      1.075 ms   0.017%  requestAnimationFrame @:0
+
+--- settings-plugins-open-t1 [settings-plugins-open] 10.883s page=long-session tab=插件 action=switch-tab:插件 nodes=3146 wsIn/s=0.735 script/s=0.053 mit=obsOK
+       475.076 ms/s   5170.256 ms  82.586%  (idle) @:0  [v8]
+        35.362 ms/s    384.848 ms   6.147%  (program) @:0  [v8]
+        22.262 ms/s    242.272 ms    3.87%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         16.45 ms/s    179.024 ms    2.86%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         4.728 ms/s     51.456 ms   0.822%  (garbage collector) @:0  [v8]
+         0.591 ms/s      6.432 ms   0.103%  setAttribute @:0
+         0.591 ms/s      6.432 ms   0.103%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.394 ms/s      4.288 ms   0.068%  (anonymous) @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.394 ms/s      4.288 ms   0.068%  fetch @:0
+         0.296 ms/s      3.216 ms   0.051%  querySelectorAll @:0
+         0.296 ms/s      3.216 ms   0.051%  elementsFromPoint @:0
+         0.296 ms/s      3.216 ms   0.051%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.296 ms/s      3.216 ms   0.051%  querySelectorAll @:0
+         0.197 ms/s      2.144 ms   0.034%  requestAnimationFrame @:0
+         0.197 ms/s      2.144 ms   0.034%  (anonymous) @:3441  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.197 ms/s      2.144 ms   0.034%  query @:3443  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.197 ms/s      2.144 ms   0.034%  runInject @client.js?rev=79b59d365f3b:334  <lib/types/client/slots.js>
+         0.197 ms/s      2.144 ms   0.034%  Me @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.197 ms/s      2.144 ms   0.034%  o0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.197 ms/s      2.144 ms   0.034%  Ji @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.197 ms/s      2.144 ms   0.034%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.197 ms/s      2.144 ms   0.034%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.197 ms/s      2.144 ms   0.034%  h @index-ClqxG24t.js:33  <lib/types/client/slots.js>
+         0.197 ms/s      2.144 ms   0.034%  k3 @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.197 ms/s      2.144 ms   0.034%  o0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.197 ms/s      2.144 ms   0.034%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         0.197 ms/s      2.144 ms   0.034%  remoteSessionIndex @client.js?rev=b295bb00e32b:4109  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js>
+         0.197 ms/s      2.144 ms   0.034%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.197 ms/s      2.144 ms   0.034%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         0.197 ms/s      2.144 ms   0.034%  applyWallpaper @client.js?rev=fb28faf9db9a:225  <lib/types/client/slots.js>
+
+--- settings-plugins-open-t2 [settings-plugins-open] 10.579s page=long-session tab=插件 action=switch-tab:插件 nodes=3146 wsIn/s=0 script/s=0.003 mit=obsOK
+       625.629 ms/s   6618.528 ms   91.82%  (idle) @:0  [v8]
+        26.955 ms/s    285.152 ms   3.956%  (program) @:0  [v8]
+        25.941 ms/s    274.432 ms   3.807%  (garbage collector) @:0  [v8]
+         0.304 ms/s      3.216 ms   0.045%  querySelectorAll @:0
+         0.304 ms/s      3.216 ms   0.045%  query @:3443  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.203 ms/s      2.144 ms    0.03%  querySelectorAll @:0
+         0.203 ms/s      2.144 ms    0.03%  query @:3443  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.203 ms/s      2.144 ms    0.03%  elementsFromPoint @:0
+         0.203 ms/s      2.144 ms    0.03%  elementsFromPoint @:0
+         0.203 ms/s      2.144 ms    0.03%  L1 @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.101 ms/s      1.072 ms   0.015%  (anonymous) @:3322  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/to-json-schema.js>
+         0.101 ms/s      1.072 ms   0.015%  (anonymous) @:1
+         0.101 ms/s      1.072 ms   0.015%  getBoundingClientRect @:0
+         0.101 ms/s      1.072 ms   0.015%  (anonymous) @:1
+         0.101 ms/s      1.072 ms   0.015%  Ji @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.101 ms/s      1.072 ms   0.015%  Eo @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.101 ms/s      1.072 ms   0.015%  (anonymous) @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.101 ms/s      1.072 ms   0.015%  xn @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.101 ms/s      1.072 ms   0.015%  rafLoop @:11  <lib/types/client/slots.js>
+         0.101 ms/s      1.072 ms   0.015%  xn @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.101 ms/s      1.072 ms   0.015%  uo @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.101 ms/s      1.072 ms   0.015%  requestAnimationFrame @:0
+
+--- settings-plugins-open-t3 [settings-plugins-open] 10.578s page=long-session tab=插件 action=switch-tab:插件 nodes=3146 wsIn/s=0 script/s=0.003 mit=obsOK
+       637.531 ms/s   6743.805 ms  97.578%  (idle) @:0  [v8]
+        13.593 ms/s    143.782 ms    2.08%  (program) @:0  [v8]
+         0.304 ms/s      3.219 ms   0.047%  L1 @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.203 ms/s      2.146 ms   0.031%  querySelectorAll @:0
+         0.203 ms/s      2.146 ms   0.031%  querySelectorAll @:0
+         0.203 ms/s      2.146 ms   0.031%  elementsFromPoint @:0
+         0.203 ms/s      2.146 ms   0.031%  uo @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.101 ms/s      1.073 ms   0.016%  parseEvaluationResultValue2 @:63  <lib/types/client/slots.js>
+         0.101 ms/s      1.073 ms   0.016%  query @:3443  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.101 ms/s      1.073 ms   0.016%  elementText @:1108  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.101 ms/s      1.073 ms   0.016%  query @:3443  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.101 ms/s      1.073 ms   0.016%  (anonymous) @:3428  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/json-schema-processors.js>
+         0.101 ms/s      1.073 ms   0.016%  (anonymous) @:509  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/util.js>
+         0.101 ms/s      1.073 ms   0.016%  (anonymous) @:0
+         0.101 ms/s      1.073 ms   0.016%  elementFromPoint @:0
+         0.101 ms/s      1.073 ms   0.016%  t @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.101 ms/s      1.073 ms   0.016%  (anonymous) @:1
+         0.101 ms/s      1.073 ms   0.016%  El @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+
+--- settings-plugins-open-t4 [settings-plugins-open] 10.447s page=long-session tab=插件 action=switch-tab:插件 nodes=3394 wsIn/s=20.867 script/s=0.275 mit=obsOK
+       361.966 ms/s   3781.456 ms  32.038%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       342.004 ms/s   3572.912 ms  30.271%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       143.299 ms/s   1497.048 ms  12.684%  (idle) @:0  [v8]
+        93.598 ms/s    977.816 ms   8.285%  (program) @:0  [v8]
+        24.342 ms/s    254.296 ms   2.155%  (garbage collector) @:0  [v8]
+         4.379 ms/s     45.752 ms   0.388%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         4.278 ms/s     44.688 ms   0.379%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         3.463 ms/s     36.176 ms   0.306%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         3.361 ms/s     35.112 ms   0.297%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         3.259 ms/s     34.048 ms   0.288%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.648 ms/s     27.664 ms   0.234%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         2.546 ms/s       26.6 ms   0.225%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         2.546 ms/s       26.6 ms   0.225%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         2.342 ms/s     24.472 ms   0.207%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         2.139 ms/s     22.344 ms   0.189%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         2.037 ms/s      21.28 ms    0.18%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         1.935 ms/s     20.216 ms   0.171%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.935 ms/s     20.216 ms   0.171%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.935 ms/s     20.216 ms   0.171%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         1.833 ms/s     19.152 ms   0.162%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.731 ms/s     18.088 ms   0.153%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         1.731 ms/s     18.088 ms   0.153%  remoteSessionIndex @client.js?rev=b295bb00e32b:4109  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js>
+         1.731 ms/s     18.088 ms   0.153%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+          1.63 ms/s     17.024 ms   0.144%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+          1.63 ms/s     17.024 ms   0.144%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         1.528 ms/s      15.96 ms   0.135%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.528 ms/s      15.96 ms   0.135%  renderOutletContent @client.js?rev=79b59d365f3b:752  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/errors.js>
+         1.426 ms/s     14.896 ms   0.126%  flattenLineage @client.js?rev=a0fb4bb225d3:5603  <lib/types/client/sessions/lineage.js>
+         1.426 ms/s     14.896 ms   0.126%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         1.324 ms/s     13.832 ms   0.117%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+
+--- settings-general-tab-t1 [settings-general-tab] 10.652s page=long-session tab=通用设置 action=switch-tab:通用设置 nodes=3145 wsIn/s=8.355 script/s=0.118 mit=obsOK
+       286.815 ms/s   3055.156 ms  36.607%  (idle) @:0  [v8]
+       167.526 ms/s   1784.484 ms  21.382%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       164.223 ms/s   1749.306 ms  20.961%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        57.143 ms/s    608.686 ms   7.293%  (program) @:0  [v8]
+        16.012 ms/s     170.56 ms   2.044%  (garbage collector) @:0  [v8]
+         4.704 ms/s     50.102 ms     0.6%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         3.202 ms/s     34.112 ms   0.409%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         2.402 ms/s     25.584 ms   0.307%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         2.002 ms/s      21.32 ms   0.255%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         1.901 ms/s     20.254 ms   0.243%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         1.401 ms/s     14.924 ms   0.179%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.401 ms/s     14.924 ms   0.179%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.401 ms/s     14.924 ms   0.179%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         1.401 ms/s     14.924 ms   0.179%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.301 ms/s     13.858 ms   0.166%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.301 ms/s     13.858 ms   0.166%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.201 ms/s     12.792 ms   0.153%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         1.101 ms/s     11.726 ms   0.141%  remoteSessionIndex @client.js?rev=b295bb00e32b:4109  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js>
+         1.001 ms/s      10.66 ms   0.128%  v0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.901 ms/s      9.594 ms   0.115%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.901 ms/s      9.594 ms   0.115%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.901 ms/s      9.594 ms   0.115%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.901 ms/s      9.594 ms   0.115%  (anonymous) @client.js?rev=508ed11aec66:415  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/util.js>
+         0.901 ms/s      9.594 ms   0.115%  toBottom @client.js?rev=cf4575517765:5686  <lib/types/client/sessions/notifier.js>
+         0.801 ms/s      8.528 ms   0.102%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         0.801 ms/s      8.528 ms   0.102%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.801 ms/s      8.528 ms   0.102%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.701 ms/s      7.462 ms   0.089%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.701 ms/s      7.462 ms   0.089%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         0.701 ms/s      7.462 ms   0.089%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+
+--- settings-general-tab-t2 [settings-general-tab] 10.453s page=long-session tab=通用设置 action=switch-tab:通用设置 nodes=3144 wsIn/s=12.341 script/s=0.126 mit=obsOK
+       269.892 ms/s   2821.185 ms  25.449%  (idle) @:0  [v8]
+       141.925 ms/s   1483.545 ms  13.383%  (program) @:0  [v8]
+       134.895 ms/s    1410.06 ms   12.72%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       133.978 ms/s   1400.475 ms  12.633%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        78.349 ms/s    818.985 ms   7.388%  (garbage collector) @:0  [v8]
+        28.426 ms/s    297.135 ms    2.68%  rebuild @client.js?rev=a0fb4bb225d3:5994  <lib/types/client/sessions/conversation-location-index.js>
+        25.369 ms/s    265.185 ms   2.392%  acceptMatch @client.js?rev=a0fb4bb225d3:6540  <lib/types/client/sessions/conversation-assembler.js>
+        19.664 ms/s    205.545 ms   1.854%  (anonymous) @client.js?rev=c4415b657c8b:127  <lib/types/client/slots.js>
+        19.256 ms/s    201.285 ms   1.816%  (anonymous) @client.js?rev=cf4575517765:7619  <lib/types/client/sessions/queue-mirror.js>
+        17.626 ms/s    184.245 ms   1.662%  conversationContextKey @client.js?rev=a0fb4bb225d3:5852  <lib/types/client/contract/conversation.js>
+         12.43 ms/s     129.93 ms   1.172%  updateChunk @client.js?rev=cf4575517765:7638  <lib/types/client/sessions/queue-mirror.js>
+        10.596 ms/s     110.76 ms   0.999%  updateChunk @client.js?rev=c4415b657c8b:148  <lib/types/client/slots.js>
+         9.373 ms/s      97.98 ms   0.884%  replaceWindow @client.js?rev=a0fb4bb225d3:6358  <lib/types/client/sessions/conversation-assembler.js>
+         7.743 ms/s      80.94 ms    0.73%  installWindow @client.js?rev=a0fb4bb225d3:7617  <lib/types/client/sessions/queue-mirror.js>
+         5.909 ms/s      61.77 ms   0.557%  (anonymous) @:1
+         5.706 ms/s      59.64 ms   0.538%  update @client.js?rev=cf4575517765:7809  <lib/types/client/sessions/manager.js>
+         5.298 ms/s      55.38 ms     0.5%  (anonymous) @client.js?rev=a0fb4bb225d3:6503  <lib/types/client/sessions/conversation-assembler.js>
+          3.77 ms/s     39.405 ms   0.355%  dispatchInput @client.js?rev=a0fb4bb225d3:6523  <lib/types/client/sessions/conversation-assembler.js>
+         3.158 ms/s     33.015 ms   0.298%  (anonymous) @:1
+         2.955 ms/s     30.885 ms   0.279%  update @client.js?rev=c4415b657c8b:322  <lib/types/client/slots.js>
+         2.853 ms/s      29.82 ms   0.269%  match @client.js?rev=cf4575517765:8573  <lib/types/client/sessions/manager.js>
+         2.751 ms/s     28.755 ms   0.259%  match @client.js?rev=cf4575517765:7790  <lib/types/client/sessions/manager.js>
+         2.751 ms/s     28.755 ms   0.259%  inst._zod.parse @client.js?rev=23a7e79f44f6:2143  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/schemas.js>
+         2.343 ms/s     24.495 ms   0.221%  tailData @client.js?rev=cf4575517765:9203  <lib/types/client/sessions/service.js>
+         2.343 ms/s     24.495 ms   0.221%  closingAnchor @client.js?rev=cf4575517765:9158  <lib/types/client/sessions/service.js>
+         2.038 ms/s       21.3 ms   0.192%  resolve @client.js?rev=a0fb4bb225d3:6237  <lib/types/client/sessions/conversation-location-index.js>
+         1.936 ms/s     20.235 ms   0.183%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         1.936 ms/s     20.235 ms   0.183%  inst._zod.run @client.js?rev=23a7e79f44f6:1762  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/schemas.js>
+         1.834 ms/s      19.17 ms   0.173%  indexTurnSeq @client.js?rev=a0fb4bb225d3:6213  <lib/types/client/sessions/conversation-location-index.js>
+          1.63 ms/s      17.04 ms   0.154%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+
+--- settings-general-tab-t3 [settings-general-tab] 10.3s page=long-session tab=通用设置 action=switch-tab:通用设置 nodes=3144 wsIn/s=145.728 script/s=0.075 mit=obsOK
+       744.963 ms/s    7673.12 ms  74.705%  (idle) @:0  [v8]
+        83.092 ms/s    855.848 ms   8.332%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        82.376 ms/s     848.47 ms   8.261%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        44.002 ms/s     453.22 ms   4.413%  (program) @:0  [v8]
+          1.33 ms/s     13.702 ms   0.133%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.228 ms/s     12.648 ms   0.123%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.126 ms/s     11.594 ms   0.113%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.921 ms/s      9.486 ms   0.092%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         0.921 ms/s      9.486 ms   0.092%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         0.921 ms/s      9.486 ms   0.092%  (garbage collector) @:0  [v8]
+         0.819 ms/s      8.432 ms   0.082%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.819 ms/s      8.432 ms   0.082%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.716 ms/s      7.378 ms   0.072%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         0.716 ms/s      7.378 ms   0.072%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.614 ms/s      6.324 ms   0.062%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         0.614 ms/s      6.324 ms   0.062%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.614 ms/s      6.324 ms   0.062%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+         0.614 ms/s      6.324 ms   0.062%  (anonymous) @client.js?rev=5596cec54007:1221  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.614 ms/s      6.324 ms   0.062%  gn @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.512 ms/s       5.27 ms   0.051%  (anonymous) @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.512 ms/s       5.27 ms   0.051%  (anonymous) @client.js?rev=23a7e79f44f6:2381  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/schemas.js>
+         0.512 ms/s       5.27 ms   0.051%  remoteSessionIndex @client.js?rev=b295bb00e32b:4109  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/schemas.js>
+         0.512 ms/s       5.27 ms   0.051%  ChatView @client.js?rev=cf4575517765:5621  <lib/types/client/sessions/lineage.js>
+         0.512 ms/s       5.27 ms   0.051%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.512 ms/s       5.27 ms   0.051%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.512 ms/s       5.27 ms   0.051%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         0.512 ms/s       5.27 ms   0.051%  applyWallpaper @client.js?rev=fb28faf9db9a:225  <lib/types/client/slots.js>
+         0.512 ms/s       5.27 ms   0.051%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         0.409 ms/s      4.216 ms   0.041%  h @index-ClqxG24t.js:33  <lib/types/client/slots.js>
+         0.409 ms/s      4.216 ms   0.041%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+
+--- settings-general-tab-t4 [settings-general-tab] 10.803s page=long-session tab=通用设置 action=switch-tab:通用设置 nodes=3144 wsIn/s=181.709 script/s=0.055 mit=obsOK
+       700.715 ms/s   7569.828 ms   70.15%  (idle) @:0  [v8]
+       103.712 ms/s   1120.402 ms  10.383%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        98.053 ms/s    1059.27 ms   9.816%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        45.075 ms/s    486.948 ms   4.513%  (program) @:0  [v8]
+         2.146 ms/s     23.188 ms   0.215%  (garbage collector) @:0  [v8]
+         1.561 ms/s     16.864 ms   0.156%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         1.366 ms/s     14.756 ms   0.137%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.268 ms/s     13.702 ms   0.127%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         1.073 ms/s     11.594 ms   0.107%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         1.073 ms/s     11.594 ms   0.107%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.073 ms/s     11.594 ms   0.107%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         0.976 ms/s      10.54 ms   0.098%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         0.976 ms/s      10.54 ms   0.098%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.976 ms/s      10.54 ms   0.098%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.976 ms/s      10.54 ms   0.098%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.976 ms/s      10.54 ms   0.098%  v0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.878 ms/s      9.486 ms   0.088%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.781 ms/s      8.432 ms   0.078%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.781 ms/s      8.432 ms   0.078%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.781 ms/s      8.432 ms   0.078%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         0.781 ms/s      8.432 ms   0.078%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         0.683 ms/s      7.378 ms   0.068%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.683 ms/s      7.378 ms   0.068%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+         0.585 ms/s      6.324 ms   0.059%  (anonymous) @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.585 ms/s      6.324 ms   0.059%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         0.585 ms/s      6.324 ms   0.059%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.488 ms/s       5.27 ms   0.049%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.488 ms/s       5.27 ms   0.049%  (anonymous) @:1
+         0.488 ms/s       5.27 ms   0.049%  (anonymous) @:1
+          0.39 ms/s      4.216 ms   0.039%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+
+--- settings-dwell-w1 [settings-dwell] 11.999s page=long-session tab=通用设置 action=- nodes=3143 wsIn/s=327.527 script/s=0.067 mit=obsOK
+       646.068 ms/s    7752.17 ms  64.586%  (idle) @:0  [v8]
+       125.963 ms/s   1511.436 ms  12.592%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       122.713 ms/s   1472.438 ms  12.267%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        44.974 ms/s    539.648 ms   4.496%  (program) @:0  [v8]
+         3.426 ms/s     41.106 ms   0.342%  (garbage collector) @:0  [v8]
+         2.635 ms/s      31.62 ms   0.263%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+          1.23 ms/s     14.756 ms   0.123%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+          1.23 ms/s     14.756 ms   0.123%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         1.142 ms/s     13.702 ms   0.114%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         1.142 ms/s     13.702 ms   0.114%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         1.142 ms/s     13.702 ms   0.114%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         1.142 ms/s     13.702 ms   0.114%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.097%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.097%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.791 ms/s      9.486 ms   0.079%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.791 ms/s      9.486 ms   0.079%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.791 ms/s      9.486 ms   0.079%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.703 ms/s      8.432 ms    0.07%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.703 ms/s      8.432 ms    0.07%  mi @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.703 ms/s      8.432 ms    0.07%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         0.615 ms/s      7.378 ms   0.061%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.061%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.053%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.053%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.053%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.053%  (anonymous) @:27  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.053%  removeProperty @:0
+         0.527 ms/s      6.324 ms   0.053%  applyWallpaper @client.js?rev=fb28faf9db9a:225  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.053%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         0.527 ms/s      6.324 ms   0.053%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+
+--- settings-dwell-w2 [settings-dwell] 12s page=long-session tab=通用设置 action=- nodes=3143 wsIn/s=40.25 script/s=0.06 mit=obsOK
+       662.615 ms/s   7951.376 ms   66.85%  (idle) @:0  [v8]
+        94.772 ms/s   1137.266 ms   9.561%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        89.854 ms/s   1078.242 ms   9.065%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        40.052 ms/s    480.624 ms   4.041%  (program) @:0  [v8]
+        25.384 ms/s    304.606 ms   2.561%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        24.066 ms/s    288.796 ms   2.428%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+         3.162 ms/s     37.944 ms   0.319%  (garbage collector) @:0  [v8]
+         2.196 ms/s      26.35 ms   0.222%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         1.405 ms/s     16.864 ms   0.142%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+          1.23 ms/s     14.756 ms   0.124%  p0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.142 ms/s     13.702 ms   0.115%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         1.142 ms/s     13.702 ms   0.115%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         1.142 ms/s     13.702 ms   0.115%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         1.142 ms/s     13.702 ms   0.115%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.054 ms/s     12.648 ms   0.106%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         1.054 ms/s     12.648 ms   0.106%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.097%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         0.966 ms/s     11.594 ms   0.097%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.878 ms/s      10.54 ms   0.089%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.878 ms/s      10.54 ms   0.089%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.878 ms/s      10.54 ms   0.089%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.791 ms/s      9.486 ms    0.08%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+         0.791 ms/s      9.486 ms    0.08%  reconciledSessionOrder @client.js?rev=5596cec54007:1078  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.703 ms/s      8.432 ms   0.071%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         0.703 ms/s      8.432 ms   0.071%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         0.527 ms/s      6.324 ms   0.053%  reconciledSessionOrder @client.js?rev=5596cec54007:1078  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.527 ms/s      6.324 ms   0.053%  (anonymous) @:27  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.053%  flattenLineage @client.js?rev=a0fb4bb225d3:5603  <lib/types/client/sessions/lineage.js>
+         0.527 ms/s      6.324 ms   0.053%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         0.527 ms/s      6.324 ms   0.053%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+
+--- settings-dwell-w3 [settings-dwell] 12s page=long-session tab=通用设置 action=- nodes=3143 wsIn/s=145 script/s=0.028 mit=obsOK
+       841.795 ms/s  10101.536 ms  84.174%  (idle) @:0  [v8]
+        49.099 ms/s    589.186 ms    4.91%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        47.869 ms/s     574.43 ms   4.787%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        33.904 ms/s    406.844 ms    3.39%  (program) @:0  [v8]
+         2.547 ms/s     30.566 ms   0.255%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         0.791 ms/s      9.486 ms   0.079%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.061%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         0.615 ms/s      7.378 ms   0.061%  (garbage collector) @:0  [v8]
+         0.527 ms/s      6.324 ms   0.053%  requestAnimationFrame @:0
+         0.527 ms/s      6.324 ms   0.053%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.053%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         0.439 ms/s       5.27 ms   0.044%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.439 ms/s       5.27 ms   0.044%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         0.439 ms/s       5.27 ms   0.044%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.351 ms/s      4.216 ms   0.035%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.351 ms/s      4.216 ms   0.035%  get @index-ClqxG24t.js:2
+         0.351 ms/s      4.216 ms   0.035%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.351 ms/s      4.216 ms   0.035%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         0.264 ms/s      3.162 ms   0.026%  reconciledSessionOrder @client.js?rev=5596cec54007:1078  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.264 ms/s      3.162 ms   0.026%  o0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.264 ms/s      3.162 ms   0.026%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.264 ms/s      3.162 ms   0.026%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.264 ms/s      3.162 ms   0.026%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         0.264 ms/s      3.162 ms   0.026%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.264 ms/s      3.162 ms   0.026%  get @client.js?rev=a0fb4bb225d3:5754  <lib/types/client/sessions/projection-store.js>
+         0.264 ms/s      3.162 ms   0.026%  (anonymous) @client.js?rev=a0fb4bb225d3:8972  <lib/types/client/sessions/service.js>
+         0.264 ms/s      3.162 ms   0.026%  $1 @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.264 ms/s      3.162 ms   0.026%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.264 ms/s      3.162 ms   0.026%  uo @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.176 ms/s      2.108 ms   0.018%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+
+--- settings-dwell-w4 [settings-dwell] 12s page=long-session tab=通用设置 action=- nodes=3143 wsIn/s=104.5 script/s=0.065 mit=obsOK
+       745.881 ms/s   8950.568 ms  68.783%  (idle) @:0  [v8]
+        121.21 ms/s    1454.52 ms  11.178%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+       116.906 ms/s   1402.874 ms  10.781%  apply @client.js?rev=abdb7f55acba:366  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/core.js>
+        41.194 ms/s    494.326 ms   3.799%  (program) @:0  [v8]
+         2.108 ms/s     25.296 ms   0.194%  (garbage collector) @:0  [v8]
+         1.581 ms/s     18.972 ms   0.146%  (anonymous) @client.js?rev=a0fb4bb225d3:8554  <lib/types/client/sessions/manager.js>
+         1.405 ms/s     16.864 ms    0.13%  X @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+          1.23 ms/s     14.756 ms   0.113%  handleMessage @client.js?rev=23a7e79f44f6:10289  <lib/types/client/conversation/view-registry.js>
+         1.142 ms/s     13.702 ms   0.105%  buildListSnapshot @client.js?rev=a0fb4bb225d3:8553  <lib/types/client/sessions/manager.js>
+         1.142 ms/s     13.702 ms   0.105%  p0 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         1.142 ms/s     13.702 ms   0.105%  projectList @client.js?rev=a0fb4bb225d3:9272  <lib/types/client/sessions/service.js>
+         1.054 ms/s     12.648 ms   0.097%  deriveGroups @client.js?rev=5596cec54007:191  <lib/types/client/slots.js>
+         1.054 ms/s     12.648 ms   0.097%  J3 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.966 ms/s     11.594 ms   0.089%  F4 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.791 ms/s      9.486 ms   0.073%  (anonymous) @client.js?rev=5596cec54007:1225  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.791 ms/s      9.486 ms   0.073%  f1 @index-ClqxG24t.js:56  <lib/types/client/slots.js>
+         0.791 ms/s      9.486 ms   0.073%  nextSessionOrderAccount @client.js?rev=5596cec54007:1103  <../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/checks.js>
+         0.791 ms/s      9.486 ms   0.073%  Xo @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.703 ms/s      8.432 ms   0.065%  walk @client.js?rev=a0fb4bb225d3:5615  <lib/types/client/sessions/lineage.js>
+         0.703 ms/s      8.432 ms   0.065%  H @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.703 ms/s      8.432 ms   0.065%  (anonymous) @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.057%  uo @index-ClqxG24t.js:53  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.057%  SessionManager.notifier @client.js?rev=a0fb4bb225d3:7844  <lib/types/client/sessions/manager.js>
+         0.615 ms/s      7.378 ms   0.057%  indexSubagentDescendants @client.js?rev=a0fb4bb225d3:10355  <lib/types/client/sessions/subagent-lineage.js>
+         0.615 ms/s      7.378 ms   0.057%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.057%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.615 ms/s      7.378 ms   0.057%  $e @index-ClqxG24t.js:54  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.049%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.049%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+         0.527 ms/s      6.324 ms   0.049%  get @index-ClqxG24t.js:11  <lib/types/client/slots.js>
+
+written: /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile/out/analysis-cpu2.json

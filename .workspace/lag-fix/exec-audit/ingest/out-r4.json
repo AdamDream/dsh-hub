@@ -1,0 +1,1473 @@
+{
+  "env": {
+    "TZ": "Asia/Shanghai",
+    "now": "Mon Sep 21 2026 16:16:45 GMT+0800 (中国标准时间)"
+  },
+  "foldWallMs": 30697,
+  "scanned": 875,
+  "newEvents": 53906,
+  "failedCount": 14,
+  "rebuildCalls": 858,
+  "failingRebuilds": [
+    {
+      "days": [
+        "2026-08-19",
+        "2026-08-20",
+        "2026-08-24",
+        "2026-08-25"
+      ],
+      "lo": 1787068800000,
+      "hi": 1787673600000,
+      "loISO": "Wed Aug 19 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Wed Aug 26 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project",
+      "diag": {
+        "deletedDays": [
+          "2026-08-19",
+          "2026-08-20",
+          "2026-08-24",
+          "2026-08-25"
+        ],
+        "deletedSetSize": 4,
+        "producedDays": [
+          "2026-08-19",
+          "2026-08-20",
+          "2026-08-21",
+          "2026-08-22",
+          "2026-08-24",
+          "2026-08-25"
+        ],
+        "producedCount": 8,
+        "daysNotDeletedCount": 2,
+        "daysNotDeletedSample": [
+          {
+            "day": "2026-08-21",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 384
+          },
+          {
+            "day": "2026-08-22",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 201
+          }
+        ],
+        "clashCount": 2,
+        "clashSample": [
+          {
+            "produced": {
+              "day": "2026-08-21",
+              "data_source": "dsh",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 384
+            },
+            "existing": {
+              "day": "2026-08-21",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 384
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-08-22",
+              "data_source": "dsh",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 201
+            },
+            "existing": {
+              "day": "2026-08-22",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 201
+            }
+          }
+        ],
+        "leftovers": [],
+        "inRangeNotDeleted": [
+          "2026-08-21",
+          "2026-08-22"
+        ]
+      }
+    },
+    {
+      "days": [
+        "2026-08-19",
+        "2026-08-21"
+      ],
+      "lo": 1787068800000,
+      "hi": 1787328000000,
+      "loISO": "Wed Aug 19 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Sat Aug 22 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project",
+      "diag": {
+        "deletedDays": [
+          "2026-08-19",
+          "2026-08-21"
+        ],
+        "deletedSetSize": 2,
+        "producedDays": [
+          "2026-08-19",
+          "2026-08-20",
+          "2026-08-21"
+        ],
+        "producedCount": 8,
+        "daysNotDeletedCount": 3,
+        "daysNotDeletedSample": [
+          {
+            "day": "2026-08-20",
+            "data_source": "dsh",
+            "model": "claude-opus-5",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 18
+          },
+          {
+            "day": "2026-08-20",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 308
+          },
+          {
+            "day": "2026-08-20",
+            "data_source": "dsh",
+            "model": "kimi-k3",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 77
+          }
+        ],
+        "clashCount": 3,
+        "clashSample": [
+          {
+            "produced": {
+              "day": "2026-08-20",
+              "data_source": "dsh",
+              "model": "claude-opus-5",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 18
+            },
+            "existing": {
+              "day": "2026-08-20",
+              "model": "claude-opus-5",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 18
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-08-20",
+              "data_source": "dsh",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 308
+            },
+            "existing": {
+              "day": "2026-08-20",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 308
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-08-20",
+              "data_source": "dsh",
+              "model": "kimi-k3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 77
+            },
+            "existing": {
+              "day": "2026-08-20",
+              "model": "kimi-k3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 77
+            }
+          }
+        ],
+        "leftovers": [],
+        "inRangeNotDeleted": [
+          "2026-08-20"
+        ]
+      }
+    },
+    {
+      "days": [
+        "2026-09-18",
+        "2026-09-21"
+      ],
+      "lo": 1789660800000,
+      "hi": 1790006400000,
+      "loISO": "Fri Sep 18 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Tue Sep 22 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project",
+      "diag": {
+        "deletedDays": [
+          "2026-09-18",
+          "2026-09-21"
+        ],
+        "deletedSetSize": 2,
+        "producedDays": [
+          "2026-09-18",
+          "2026-09-20",
+          "2026-09-21"
+        ],
+        "producedCount": 12,
+        "daysNotDeletedCount": 2,
+        "daysNotDeletedSample": [
+          {
+            "day": "2026-09-20",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+            "requests": 1821
+          },
+          {
+            "day": "2026-09-20",
+            "data_source": "dsh",
+            "model": "gpt-6-astra",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+            "requests": 18
+          }
+        ],
+        "clashCount": 2,
+        "clashSample": [
+          {
+            "produced": {
+              "day": "2026-09-20",
+              "data_source": "dsh",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 1821
+            },
+            "existing": {
+              "day": "2026-09-20",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 1821
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-20",
+              "data_source": "dsh",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 18
+            },
+            "existing": {
+              "day": "2026-09-20",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 18
+            }
+          }
+        ],
+        "leftovers": [],
+        "inRangeNotDeleted": [
+          "2026-09-20"
+        ]
+      }
+    },
+    {
+      "days": [
+        "2026-09-16",
+        "2026-09-18",
+        "2026-09-21"
+      ],
+      "lo": 1789488000000,
+      "hi": 1790006400000,
+      "loISO": "Wed Sep 16 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Tue Sep 22 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project",
+      "diag": {
+        "deletedDays": [
+          "2026-09-16",
+          "2026-09-18",
+          "2026-09-21"
+        ],
+        "deletedSetSize": 3,
+        "producedDays": [
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-20",
+          "2026-09-21"
+        ],
+        "producedCount": 21,
+        "daysNotDeletedCount": 5,
+        "daysNotDeletedSample": [
+          {
+            "day": "2026-09-17",
+            "data_source": "dsh",
+            "model": "deepseek-v4-flash",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+            "requests": 989
+          },
+          {
+            "day": "2026-09-17",
+            "data_source": "dsh",
+            "model": "deepseek-v4.1-flash",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+            "requests": 774
+          },
+          {
+            "day": "2026-09-17",
+            "data_source": "dsh",
+            "model": "gpt-6-astra",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+            "requests": 7
+          },
+          {
+            "day": "2026-09-20",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+            "requests": 1821
+          },
+          {
+            "day": "2026-09-20",
+            "data_source": "dsh",
+            "model": "gpt-6-astra",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+            "requests": 18
+          }
+        ],
+        "clashCount": 5,
+        "clashSample": [
+          {
+            "produced": {
+              "day": "2026-09-17",
+              "data_source": "dsh",
+              "model": "deepseek-v4-flash",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 989
+            },
+            "existing": {
+              "day": "2026-09-17",
+              "model": "deepseek-v4-flash",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 989
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-17",
+              "data_source": "dsh",
+              "model": "deepseek-v4.1-flash",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 774
+            },
+            "existing": {
+              "day": "2026-09-17",
+              "model": "deepseek-v4.1-flash",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 774
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-17",
+              "data_source": "dsh",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 7
+            },
+            "existing": {
+              "day": "2026-09-17",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 7
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-20",
+              "data_source": "dsh",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 1821
+            },
+            "existing": {
+              "day": "2026-09-20",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 1821
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-20",
+              "data_source": "dsh",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 18
+            },
+            "existing": {
+              "day": "2026-09-20",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 18
+            }
+          }
+        ],
+        "leftovers": [],
+        "inRangeNotDeleted": [
+          "2026-09-17",
+          "2026-09-20"
+        ]
+      }
+    },
+    {
+      "days": [
+        "2026-09-12",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16"
+      ],
+      "lo": 1789142400000,
+      "hi": 1789574400000,
+      "loISO": "Sat Sep 12 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Thu Sep 17 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "unable to open database file",
+      "diag": {
+        "deletedDays": [
+          "2026-09-12",
+          "2026-09-14",
+          "2026-09-15",
+          "2026-09-16"
+        ],
+        "deletedSetSize": 4,
+        "producedDays": [
+          "2026-09-12",
+          "2026-09-14",
+          "2026-09-15",
+          "2026-09-16"
+        ],
+        "producedCount": 16,
+        "daysNotDeletedCount": 0,
+        "daysNotDeletedSample": [],
+        "clashCount": 0,
+        "clashSample": [],
+        "leftovers": [],
+        "inRangeNotDeleted": []
+      }
+    },
+    {
+      "days": [
+        "2026-09-12",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17"
+      ],
+      "lo": 1789142400000,
+      "hi": 1789660800000,
+      "loISO": "Sat Sep 12 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Fri Sep 18 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "unable to open database file",
+      "diagError": "unable to open database file"
+    },
+    {
+      "days": [
+        "2026-09-01",
+        "2026-09-05",
+        "2026-09-07",
+        "2026-09-08"
+      ],
+      "lo": 1788192000000,
+      "hi": 1788883200000,
+      "loISO": "Tue Sep 01 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Wed Sep 09 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project",
+      "diag": {
+        "deletedDays": [
+          "2026-09-01",
+          "2026-09-05",
+          "2026-09-07",
+          "2026-09-08"
+        ],
+        "deletedSetSize": 4,
+        "producedDays": [
+          "2026-09-01",
+          "2026-09-02",
+          "2026-09-03",
+          "2026-09-05",
+          "2026-09-07",
+          "2026-09-08"
+        ],
+        "producedCount": 21,
+        "daysNotDeletedCount": 4,
+        "daysNotDeletedSample": [
+          {
+            "day": "2026-09-02",
+            "data_source": "dsh",
+            "model": "glm-5.3",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 212
+          },
+          {
+            "day": "2026-09-02",
+            "data_source": "dsh",
+            "model": "gpt-5.6-sol-max",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 48
+          },
+          {
+            "day": "2026-09-03",
+            "data_source": "dsh",
+            "model": "glm-5.3",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 58
+          },
+          {
+            "day": "2026-09-03",
+            "data_source": "dsh",
+            "model": "gpt-5.6-sol-max",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 321
+          }
+        ],
+        "clashCount": 4,
+        "clashSample": [
+          {
+            "produced": {
+              "day": "2026-09-02",
+              "data_source": "dsh",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 212
+            },
+            "existing": {
+              "day": "2026-09-02",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 212
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-02",
+              "data_source": "dsh",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 48
+            },
+            "existing": {
+              "day": "2026-09-02",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 48
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-03",
+              "data_source": "dsh",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 58
+            },
+            "existing": {
+              "day": "2026-09-03",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 58
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-03",
+              "data_source": "dsh",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 321
+            },
+            "existing": {
+              "day": "2026-09-03",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 321
+            }
+          }
+        ],
+        "leftovers": [],
+        "inRangeNotDeleted": [
+          "2026-09-02",
+          "2026-09-03"
+        ]
+      }
+    },
+    {
+      "days": [
+        "2026-09-01",
+        "2026-09-05",
+        "2026-09-07",
+        "2026-09-08"
+      ],
+      "lo": 1788192000000,
+      "hi": 1788883200000,
+      "loISO": "Tue Sep 01 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Wed Sep 09 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project",
+      "diag": {
+        "deletedDays": [
+          "2026-09-01",
+          "2026-09-05",
+          "2026-09-07",
+          "2026-09-08"
+        ],
+        "deletedSetSize": 4,
+        "producedDays": [
+          "2026-09-01",
+          "2026-09-02",
+          "2026-09-03",
+          "2026-09-05",
+          "2026-09-07",
+          "2026-09-08"
+        ],
+        "producedCount": 21,
+        "daysNotDeletedCount": 4,
+        "daysNotDeletedSample": [
+          {
+            "day": "2026-09-02",
+            "data_source": "dsh",
+            "model": "glm-5.3",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 212
+          },
+          {
+            "day": "2026-09-02",
+            "data_source": "dsh",
+            "model": "gpt-5.6-sol-max",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 48
+          },
+          {
+            "day": "2026-09-03",
+            "data_source": "dsh",
+            "model": "glm-5.3",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 58
+          },
+          {
+            "day": "2026-09-03",
+            "data_source": "dsh",
+            "model": "gpt-5.6-sol-max",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 321
+          }
+        ],
+        "clashCount": 4,
+        "clashSample": [
+          {
+            "produced": {
+              "day": "2026-09-02",
+              "data_source": "dsh",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 212
+            },
+            "existing": {
+              "day": "2026-09-02",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 212
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-02",
+              "data_source": "dsh",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 48
+            },
+            "existing": {
+              "day": "2026-09-02",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 48
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-03",
+              "data_source": "dsh",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 58
+            },
+            "existing": {
+              "day": "2026-09-03",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 58
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-03",
+              "data_source": "dsh",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 321
+            },
+            "existing": {
+              "day": "2026-09-03",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 321
+            }
+          }
+        ],
+        "leftovers": [],
+        "inRangeNotDeleted": [
+          "2026-09-02",
+          "2026-09-03"
+        ]
+      }
+    },
+    {
+      "days": [
+        "2026-09-01",
+        "2026-09-02",
+        "2026-09-03",
+        "2026-09-08"
+      ],
+      "lo": 1788192000000,
+      "hi": 1788883200000,
+      "loISO": "Tue Sep 01 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Wed Sep 09 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project",
+      "diag": {
+        "deletedDays": [
+          "2026-09-01",
+          "2026-09-02",
+          "2026-09-03",
+          "2026-09-08"
+        ],
+        "deletedSetSize": 4,
+        "producedDays": [
+          "2026-09-01",
+          "2026-09-02",
+          "2026-09-03",
+          "2026-09-05",
+          "2026-09-07",
+          "2026-09-08"
+        ],
+        "producedCount": 23,
+        "daysNotDeletedCount": 11,
+        "daysNotDeletedSample": [
+          {
+            "day": "2026-09-05",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 192
+          },
+          {
+            "day": "2026-09-05",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 82
+          },
+          {
+            "day": "2026-09-05",
+            "data_source": "dsh",
+            "model": "glm-5.3",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 78
+          },
+          {
+            "day": "2026-09-05",
+            "data_source": "dsh",
+            "model": "gpt-5.6-sol-max",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 2
+          },
+          {
+            "day": "2026-09-05",
+            "data_source": "dsh",
+            "model": "gpt-6-astra",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+            "requests": 28
+          },
+          {
+            "day": "2026-09-05",
+            "data_source": "dsh",
+            "model": "gpt-6-astra",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 103
+          }
+        ],
+        "clashCount": 9,
+        "clashSample": [
+          {
+            "produced": {
+              "day": "2026-09-05",
+              "data_source": "dsh",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 192
+            },
+            "existing": {
+              "day": "2026-09-05",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 192
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-05",
+              "data_source": "dsh",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 78
+            },
+            "existing": {
+              "day": "2026-09-05",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 78
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-05",
+              "data_source": "dsh",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 2
+            },
+            "existing": {
+              "day": "2026-09-05",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 2
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-05",
+              "data_source": "dsh",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 28
+            },
+            "existing": {
+              "day": "2026-09-05",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 28
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-05",
+              "data_source": "dsh",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 103
+            },
+            "existing": {
+              "day": "2026-09-05",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 103
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-07",
+              "data_source": "dsh",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 340
+            },
+            "existing": {
+              "day": "2026-09-07",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 340
+            }
+          }
+        ],
+        "leftovers": [],
+        "inRangeNotDeleted": [
+          "2026-09-05",
+          "2026-09-07"
+        ]
+      }
+    },
+    {
+      "days": [
+        "2026-09-01",
+        "2026-09-02",
+        "2026-09-03",
+        "2026-09-05",
+        "2026-09-08"
+      ],
+      "lo": 1788192000000,
+      "hi": 1788883200000,
+      "loISO": "Tue Sep 01 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Wed Sep 09 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project",
+      "diag": {
+        "deletedDays": [
+          "2026-09-01",
+          "2026-09-02",
+          "2026-09-03",
+          "2026-09-05",
+          "2026-09-08"
+        ],
+        "deletedSetSize": 5,
+        "producedDays": [
+          "2026-09-01",
+          "2026-09-02",
+          "2026-09-03",
+          "2026-09-05",
+          "2026-09-07",
+          "2026-09-08"
+        ],
+        "producedCount": 25,
+        "daysNotDeletedCount": 5,
+        "daysNotDeletedSample": [
+          {
+            "day": "2026-09-07",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 190
+          },
+          {
+            "day": "2026-09-07",
+            "data_source": "dsh",
+            "model": "glm-5.3",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+            "requests": 340
+          },
+          {
+            "day": "2026-09-07",
+            "data_source": "dsh",
+            "model": "glm-5.3",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 12
+          },
+          {
+            "day": "2026-09-07",
+            "data_source": "dsh",
+            "model": "gpt-6-astra",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+            "requests": 10
+          },
+          {
+            "day": "2026-09-07",
+            "data_source": "dsh",
+            "model": "gpt-6-astra",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 14
+          }
+        ],
+        "clashCount": 4,
+        "clashSample": [
+          {
+            "produced": {
+              "day": "2026-09-07",
+              "data_source": "dsh",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 340
+            },
+            "existing": {
+              "day": "2026-09-07",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 340
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-07",
+              "data_source": "dsh",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 12
+            },
+            "existing": {
+              "day": "2026-09-07",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 12
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-07",
+              "data_source": "dsh",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 10
+            },
+            "existing": {
+              "day": "2026-09-07",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 10
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-07",
+              "data_source": "dsh",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 14
+            },
+            "existing": {
+              "day": "2026-09-07",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 14
+            }
+          }
+        ],
+        "leftovers": [],
+        "inRangeNotDeleted": [
+          "2026-09-07"
+        ]
+      }
+    },
+    {
+      "days": [
+        "2026-09-01",
+        "2026-09-05",
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-11"
+      ],
+      "lo": 1788192000000,
+      "hi": 1789142400000,
+      "loISO": "Tue Sep 01 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Sat Sep 12 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project",
+      "diag": {
+        "deletedDays": [
+          "2026-09-01",
+          "2026-09-05",
+          "2026-09-07",
+          "2026-09-08",
+          "2026-09-09",
+          "2026-09-11"
+        ],
+        "deletedSetSize": 6,
+        "producedDays": [
+          "2026-09-01",
+          "2026-09-02",
+          "2026-09-03",
+          "2026-09-05",
+          "2026-09-07",
+          "2026-09-08",
+          "2026-09-09",
+          "2026-09-11"
+        ],
+        "producedCount": 34,
+        "daysNotDeletedCount": 8,
+        "daysNotDeletedSample": [
+          {
+            "day": "2026-09-02",
+            "data_source": "dsh",
+            "model": "glm-5.3",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 212
+          },
+          {
+            "day": "2026-09-02",
+            "data_source": "dsh",
+            "model": "glm-5.3",
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 216
+          },
+          {
+            "day": "2026-09-02",
+            "data_source": "dsh",
+            "model": "gpt-5.6-sol-max",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 48
+          },
+          {
+            "day": "2026-09-03",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 9
+          },
+          {
+            "day": "2026-09-03",
+            "data_source": "dsh",
+            "model": "glm-5.3",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 58
+          },
+          {
+            "day": "2026-09-03",
+            "data_source": "dsh",
+            "model": "glm-5.3",
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 11
+          }
+        ],
+        "clashCount": 4,
+        "clashSample": [
+          {
+            "produced": {
+              "day": "2026-09-02",
+              "data_source": "dsh",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 212
+            },
+            "existing": {
+              "day": "2026-09-02",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 212
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-02",
+              "data_source": "dsh",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 48
+            },
+            "existing": {
+              "day": "2026-09-02",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 48
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-03",
+              "data_source": "dsh",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 58
+            },
+            "existing": {
+              "day": "2026-09-03",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 58
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-03",
+              "data_source": "dsh",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 321
+            },
+            "existing": {
+              "day": "2026-09-03",
+              "model": "gpt-5.6-sol-max",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 321
+            }
+          }
+        ],
+        "leftovers": [],
+        "inRangeNotDeleted": [
+          "2026-09-02",
+          "2026-09-03"
+        ]
+      }
+    },
+    {
+      "days": [
+        "2026-09-12",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17"
+      ],
+      "lo": 1789142400000,
+      "hi": 1789660800000,
+      "loISO": "Sat Sep 12 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Fri Sep 18 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "unable to open database file",
+      "diagError": "unable to open database file"
+    },
+    {
+      "days": [
+        "2026-08-21",
+        "2026-08-24",
+        "2026-08-27"
+      ],
+      "lo": 1787241600000,
+      "hi": 1787846400000,
+      "loISO": "Fri Aug 21 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Fri Aug 28 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project",
+      "diag": {
+        "deletedDays": [
+          "2026-08-21",
+          "2026-08-24",
+          "2026-08-27"
+        ],
+        "deletedSetSize": 3,
+        "producedDays": [
+          "2026-08-21",
+          "2026-08-22",
+          "2026-08-24",
+          "2026-08-25",
+          "2026-08-26",
+          "2026-08-27"
+        ],
+        "producedCount": 17,
+        "daysNotDeletedCount": 8,
+        "daysNotDeletedSample": [
+          {
+            "day": "2026-08-22",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 222
+          },
+          {
+            "day": "2026-08-25",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 528
+          },
+          {
+            "day": "2026-08-25",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/RS",
+            "requests": 94
+          },
+          {
+            "day": "2026-08-25",
+            "data_source": "dsh",
+            "model": "gpt-5.6-sol-ultra",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+            "requests": 167
+          },
+          {
+            "day": "2026-08-25",
+            "data_source": "dsh",
+            "model": "gpt-5.6-sol-ultra",
+            "project": "/home/CNS2026495165/RS",
+            "requests": 94
+          },
+          {
+            "day": "2026-08-25",
+            "data_source": "dsh",
+            "model": "kimi-k3",
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 1
+          }
+        ],
+        "clashCount": 8,
+        "clashSample": [
+          {
+            "produced": {
+              "day": "2026-08-22",
+              "data_source": "dsh",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 222
+            },
+            "existing": {
+              "day": "2026-08-22",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 222
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-08-25",
+              "data_source": "dsh",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 528
+            },
+            "existing": {
+              "day": "2026-08-25",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 528
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-08-25",
+              "data_source": "dsh",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/RS",
+              "requests": 94
+            },
+            "existing": {
+              "day": "2026-08-25",
+              "model": "deepseek-v4-pro",
+              "project": "/home/CNS2026495165/RS",
+              "requests": 94
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-08-25",
+              "data_source": "dsh",
+              "model": "gpt-5.6-sol-ultra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 167
+            },
+            "existing": {
+              "day": "2026-08-25",
+              "model": "gpt-5.6-sol-ultra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof",
+              "requests": 167
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-08-25",
+              "data_source": "dsh",
+              "model": "gpt-5.6-sol-ultra",
+              "project": "/home/CNS2026495165/RS",
+              "requests": 94
+            },
+            "existing": {
+              "day": "2026-08-25",
+              "model": "gpt-5.6-sol-ultra",
+              "project": "/home/CNS2026495165/RS",
+              "requests": 94
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-08-25",
+              "data_source": "dsh",
+              "model": "kimi-k3",
+              "project": "/home/CNS2026495165/dsh",
+              "requests": 1
+            },
+            "existing": {
+              "day": "2026-08-25",
+              "model": "kimi-k3",
+              "project": "/home/CNS2026495165/dsh",
+              "requests": 1
+            }
+          }
+        ],
+        "leftovers": [],
+        "inRangeNotDeleted": [
+          "2026-08-22",
+          "2026-08-25",
+          "2026-08-26"
+        ]
+      }
+    },
+    {
+      "days": [
+        "2026-09-08",
+        "2026-09-11"
+      ],
+      "lo": 1788796800000,
+      "hi": 1789142400000,
+      "loISO": "Tue Sep 08 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "hiISO": "Sat Sep 12 2026 00:00:00 GMT+0800 (中国标准时间)",
+      "error": "UNIQUE constraint failed: usage_daily.day, usage_daily.data_source, usage_daily.model, usage_daily.project",
+      "diag": {
+        "deletedDays": [
+          "2026-09-08",
+          "2026-09-11"
+        ],
+        "deletedSetSize": 2,
+        "producedDays": [
+          "2026-09-08",
+          "2026-09-09",
+          "2026-09-11"
+        ],
+        "producedCount": 15,
+        "daysNotDeletedCount": 3,
+        "daysNotDeletedSample": [
+          {
+            "day": "2026-09-09",
+            "data_source": "dsh",
+            "model": "deepseek-v4-pro",
+            "project": "/home/CNS2026495165/dsh",
+            "requests": 20
+          },
+          {
+            "day": "2026-09-09",
+            "data_source": "dsh",
+            "model": "glm-5.3",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+            "requests": 17
+          },
+          {
+            "day": "2026-09-09",
+            "data_source": "dsh",
+            "model": "gpt-6-astra",
+            "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+            "requests": 10
+          }
+        ],
+        "clashCount": 2,
+        "clashSample": [
+          {
+            "produced": {
+              "day": "2026-09-09",
+              "data_source": "dsh",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 17
+            },
+            "existing": {
+              "day": "2026-09-09",
+              "model": "glm-5.3",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 17
+            }
+          },
+          {
+            "produced": {
+              "day": "2026-09-09",
+              "data_source": "dsh",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 10
+            },
+            "existing": {
+              "day": "2026-09-09",
+              "model": "gpt-6-astra",
+              "project": "/home/CNS2026495165/Dexterous_Hand_23Dof",
+              "requests": 10
+            }
+          }
+        ],
+        "leftovers": [],
+        "inRangeNotDeleted": [
+          "2026-09-09"
+        ]
+      }
+    }
+  ],
+  "openErrors": 3,
+  "uniqueErrors": 11
+}

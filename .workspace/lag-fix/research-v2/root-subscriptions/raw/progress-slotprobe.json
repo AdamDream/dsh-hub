@@ -1,0 +1,450 @@
+{
+ "meta": {
+  "tag": "slotprobe",
+  "startedAt": "2026-09-21T07:46:53.533Z",
+  "windowMs": 30000,
+  "states": [
+   "models"
+  ],
+  "target": "http://127.0.0.1:3080",
+  "hostPid": {
+   "pid": 1390362,
+   "cmdline": "npm exec @deepseek-ai/dsh web",
+   "starttimeTicks": 11
+  },
+  "hostPidExpected": 1390375,
+  "lockAtStart": "agent: tab-profile\nline: per-tab settings jank profile (.workspace/lag-fix/research-v2/tab-profile)\npurpose: --phase=all browser probe batch\nowner_pid: 2311184   # the probe process; preemption checks THIS\nhost_pid: 1390375   # monitored GUI host (node dsh web); never restarted, not the owner\nstarted_at: 2026-09-21T07:44:41.988+08:00\nstarted_epoch: 1789976681\ntoken: CNS202649516533-2311184-c9vng7qc\n",
+  "censusAtStart": {
+   "headlessShellProcs": 25,
+   "distinctUserDataDirs": [
+    "/tmp/playwright_chromiumdev_profile-25ZbPn",
+    "/tmp/playwright_chromiumdev_profile-xZcvuf",
+    "/tmp/playwright_chromiumdev_profile-u3o3X8",
+    "/tmp/playwright_chromiumdev_profile-o6MGdq"
+   ],
+   "otherHarnessProcs": [
+    {
+     "pid": 1258240,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+    },
+    {
+     "pid": 1258241,
+     "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+    },
+    {
+     "pid": 2104196,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+    },
+    {
+     "pid": 2104259,
+     "cmd": "node scripts/capture3.mjs --scenarios all"
+    },
+    {
+     "pid": 2311182,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+    },
+    {
+     "pid": 2311183,
+     "cmd": "timeout 3300 node lib/tab-profile.mjs"
+    },
+    {
+     "pid": 2311184,
+     "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+    },
+    {
+     "pid": 2604385,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && node lib/probe.mjs --window=60000 --settle=8000 --cycles=3 --tag=main --heartbeat=20000 > raw/main.stdout 2> raw/main.stderr; echo \"EXIT=$?\"; tail -6 raw/main.stderr"
+    },
+    {
+     "pid": 2604386,
+     "cmd": "node lib/probe.mjs --window=60000 --settle=8000"
+    },
+    {
+     "pid": 2751628,
+     "cmd": "timeout 570 node probes/harden-measure.mjs"
+    },
+    {
+     "pid": 2751629,
+     "cmd": "node probes/harden-measure.mjs --window 15"
+    },
+    {
+     "pid": 2752543,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main2 --window 60000 --nolockwait > run-main2.out 2> run-main2.err; echo \"exit=$?\""
+    },
+    {
+     "pid": 2752544,
+     "cmd": "node measure-slot.mjs --tag main2"
+    },
+    {
+     "pid": 2755975,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && timeout 240 node scripts/probe-apply-ab.mjs 2>&1 | tail -40"
+    },
+    {
+     "pid": 2755982,
+     "cmd": "timeout 240 node scripts/probe-apply-ab.mjs"
+    },
+    {
+     "pid": 2755984,
+     "cmd": "node scripts/probe-apply-ab.mjs"
+    },
+    {
+     "pid": 2756181,
+     "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && python3 - <<'PY'\np='scripts/lib-init-slots.js'\ns=open(p,encoding='utf-8').read()\ns=s.replace(\"\"\"      onboardingSteps: { valueLen: Array.isArray(hookState(f, 10)) ? hookState(f, 10).length : null, version: null, listenerVersion: null },\n      shim6: hookState(f, 6), shim9: hookState(f, 9),\n    };\"\"\",\"\"\"      onboardingSteps: { valueLen: Array.isArray(hookState(f, 10)) ? hookState(f, 10).length : null, version: null, listenerVersion: null },\n    };\"\"\",1)\nassert 'shim6' not in s\nopen(p,'w',encoding='utf-8').write(s)\nprint('ok')\nPY\nnode --check scripts/lib-init-slots.js && timeout 200 node scripts/measure.mjs --window 30000 --tag slotprobe --states models 2>&1 | tail -5"
+    },
+    {
+     "pid": 2756194,
+     "cmd": "timeout 200 node scripts/measure.mjs"
+    },
+    {
+     "pid": 2756196,
+     "cmd": "node scripts/measure.mjs --window 30000"
+    }
+   ],
+   "distinctBrowserInstances": 4
+  },
+  "node": "v22.23.2",
+  "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+  "initScriptSha256": "a0b447c35a61ec0b5bdda8edbcfa0ed8e06a0547594dec1334d6d41a3b0a8887"
+ },
+ "boot": {
+  "rev": "102e374d338e",
+  "entryCount": 50,
+  "entries": {
+   "@deepseek-ai/dsh-client-runtime": "a0fb4bb225d3",
+   "@deepseek-ai/dsh-client-locale": "2660ca3f6a00",
+   "@deepseek-ai/dsh-client-ui-renderer": "79b59d365f3b",
+   "@deepseek-ai/dsh-client-ui-sidebar": "7563cb4b02ca",
+   "@deepseek-ai/dsh-client-ui-settings-general": "f733efde3f2f"
+  }
+ },
+ "premise": {
+  "hookPresent": true,
+  "hookIsWrapped": false,
+  "hookCalls": {
+   "inject": 1,
+   "onCommitFiberRoot": 86,
+   "onPostCommitFiberRoot": 71,
+   "onCommitFiberUnmount": 16
+  },
+  "injected": [
+   {
+    "t": 23.8,
+    "id": 1,
+    "version": "18.3.1",
+    "pkg": "react-dom",
+    "bundleType": 0,
+    "reconcilerVersion": "18.3.1-next-f1338f8080-20240426",
+    "hasScheduleRoot": false
+   }
+  ],
+  "flags": {
+   "shimTrapActive": false,
+   "shimTrapAt": 5,
+   "shimTrapFires": 1,
+   "shimTrapFired": true,
+   "shimTrapFiredAt": 197.5,
+   "wrappedStores": true,
+   "wrappedAt": 372.2,
+   "shimTrapOffReason": "installed",
+   "shimTrapOffAt": 1697.8
+  },
+  "counts": {
+   "commits": 86,
+   "targetRenderId": 75,
+   "targetRenderPw": 75,
+   "targetMounted": 85
+  },
+  "storeNames": [
+   "sections",
+   "onboardingSteps"
+  ],
+  "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+  "bootRev": "102e374d338e",
+  "entryCount": 50,
+  "errors": []
+ },
+ "windows": [
+  {
+   "name": "models",
+   "requested": {
+    "panel": "open",
+    "section": "models",
+    "net": "active"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "panelAction": {
+    "alreadyOpen": false,
+    "panelNodes": 1
+   },
+   "sectionAction": {
+    "clicked": "模型",
+    "before": "通用设置",
+    "after": "模型"
+   },
+   "panelNodesAtStart": 1,
+   "activeSectionAtStart": "模型",
+   "startEpochMs": 1789976831314,
+   "startIso": "2026-09-21T07:47:11.314Z",
+   "sessionListAtStart": {
+    "ok": true,
+    "items": 297,
+    "topLevel": 104,
+    "subagents": 193,
+    "running": 9
+   },
+   "censusAtStart": {
+    "headlessShellProcs": 32,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-xZcvuf",
+     "/tmp/playwright_chromiumdev_profile-u3o3X8",
+     "/tmp/playwright_chromiumdev_profile-o6MGdq",
+     "/tmp/playwright_chromiumdev_profile-gnn6Ld"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2751628,
+      "cmd": "timeout 570 node probes/harden-measure.mjs"
+     },
+     {
+      "pid": 2751629,
+      "cmd": "node probes/harden-measure.mjs --window 15"
+     },
+     {
+      "pid": 2752543,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main2 --window 60000 --nolockwait > run-main2.out 2> run-main2.err; echo \"exit=$?\""
+     },
+     {
+      "pid": 2752544,
+      "cmd": "node measure-slot.mjs --tag main2"
+     },
+     {
+      "pid": 2755975,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && timeout 240 node scripts/probe-apply-ab.mjs 2>&1 | tail -40"
+     },
+     {
+      "pid": 2755982,
+      "cmd": "timeout 240 node scripts/probe-apply-ab.mjs"
+     },
+     {
+      "pid": 2755984,
+      "cmd": "node scripts/probe-apply-ab.mjs"
+     },
+     {
+      "pid": 2756181,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && python3 - <<'PY'\np='scripts/lib-init-slots.js'\ns=open(p,encoding='utf-8').read()\ns=s.replace(\"\"\"      onboardingSteps: { valueLen: Array.isArray(hookState(f, 10)) ? hookState(f, 10).length : null, version: null, listenerVersion: null },\n      shim6: hookState(f, 6), shim9: hookState(f, 9),\n    };\"\"\",\"\"\"      onboardingSteps: { valueLen: Array.isArray(hookState(f, 10)) ? hookState(f, 10).length : null, version: null, listenerVersion: null },\n    };\"\"\",1)\nassert 'shim6' not in s\nopen(p,'w',encoding='utf-8').write(s)\nprint('ok')\nPY\nnode --check scripts/lib-init-slots.js && timeout 200 node scripts/measure.mjs --window 30000 --tag slotprobe --states models 2>&1 | tail -5"
+     },
+     {
+      "pid": 2756194,
+      "cmd": "timeout 200 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2756196,
+      "cmd": "node scripts/measure.mjs --window 30000"
+     }
+    ],
+    "distinctBrowserInstances": 5
+   },
+   "commitIndexStart": 114,
+   "endEpochMs": 1789976861542,
+   "endIso": "2026-09-21T07:47:41.542Z",
+   "elapsedMs": 30228,
+   "panelNodesAtEnd": 1,
+   "activeSectionAtEnd": "模型",
+   "sessionListAtEnd": {
+    "ok": true,
+    "items": 297,
+    "topLevel": 104,
+    "subagents": 193,
+    "running": 9
+   },
+   "censusAtEnd": {
+    "headlessShellProcs": 38,
+    "distinctUserDataDirs": [
+     "/tmp/playwright_chromiumdev_profile-25ZbPn",
+     "/tmp/playwright_chromiumdev_profile-xZcvuf",
+     "/tmp/playwright_chromiumdev_profile-u3o3X8",
+     "/tmp/playwright_chromiumdev_profile-o6MGdq",
+     "/tmp/playwright_chromiumdev_profile-gnn6Ld",
+     "/tmp/playwright_chromiumdev_profile-DM35cD"
+    ],
+    "otherHarnessProcs": [
+     {
+      "pid": 1258240,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs"
+     },
+     {
+      "pid": 1258241,
+      "cmd": "/usr/lib/chatgpt/resources/cua_node/bin/node /usr/lib/chatgpt/resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+     },
+     {
+      "pid": 2104196,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && node --check scripts/capture3.mjs && echo SYNTAX_OK && node scripts/capture3.mjs --scenarios all --reps 4 --win 12000 --settle 1500 --stamp cpu2 2>&1"
+     },
+     {
+      "pid": 2104259,
+      "cmd": "node scripts/capture3.mjs --scenarios all"
+     },
+     {
+      "pid": 2311182,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/tab-profile && TP_BATCH=locked timeout 3300 node lib/tab-profile.mjs --phase=all --budget-min=20 > raw/locked.stdout 2>&1; echo \"EXIT=$?\""
+     },
+     {
+      "pid": 2311183,
+      "cmd": "timeout 3300 node lib/tab-profile.mjs"
+     },
+     {
+      "pid": 2311184,
+      "cmd": "node lib/tab-profile.mjs --phase=all --budget-min=20"
+     },
+     {
+      "pid": 2751628,
+      "cmd": "timeout 570 node probes/harden-measure.mjs"
+     },
+     {
+      "pid": 2751629,
+      "cmd": "node probes/harden-measure.mjs --window 15"
+     },
+     {
+      "pid": 2752543,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/slot-churn && node measure-slot.mjs --tag main2 --window 60000 --nolockwait > run-main2.out 2> run-main2.err; echo \"exit=$?\""
+     },
+     {
+      "pid": 2752544,
+      "cmd": "node measure-slot.mjs --tag main2"
+     },
+     {
+      "pid": 2755975,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/cpu-profile && timeout 240 node scripts/probe-apply-ab.mjs 2>&1 | tail -40"
+     },
+     {
+      "pid": 2755982,
+      "cmd": "timeout 240 node scripts/probe-apply-ab.mjs"
+     },
+     {
+      "pid": 2755984,
+      "cmd": "node scripts/probe-apply-ab.mjs"
+     },
+     {
+      "pid": 2756181,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions && python3 - <<'PY'\np='scripts/lib-init-slots.js'\ns=open(p,encoding='utf-8').read()\ns=s.replace(\"\"\"      onboardingSteps: { valueLen: Array.isArray(hookState(f, 10)) ? hookState(f, 10).length : null, version: null, listenerVersion: null },\n      shim6: hookState(f, 6), shim9: hookState(f, 9),\n    };\"\"\",\"\"\"      onboardingSteps: { valueLen: Array.isArray(hookState(f, 10)) ? hookState(f, 10).length : null, version: null, listenerVersion: null },\n    };\"\"\",1)\nassert 'shim6' not in s\nopen(p,'w',encoding='utf-8').write(s)\nprint('ok')\nPY\nnode --check scripts/lib-init-slots.js && timeout 200 node scripts/measure.mjs --window 30000 --tag slotprobe --states models 2>&1 | tail -5"
+     },
+     {
+      "pid": 2756194,
+      "cmd": "timeout 200 node scripts/measure.mjs"
+     },
+     {
+      "pid": 2756196,
+      "cmd": "node scripts/measure.mjs --window 30000"
+     },
+     {
+      "pid": 2759669,
+      "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/model-tab && node lib/verify.mjs --window=30000 --settle=8000 > raw/verify.stdout 2> raw/verify.stderr; echo EXIT=$?; tail -20 raw/verify.stderr"
+     },
+     {
+      "pid": 2759670,
+      "cmd": "node lib/verify.mjs --window=30000 --settle=8000"
+     }
+    ],
+    "distinctBrowserInstances": 6
+   },
+   "commitIndexEnd": 200,
+   "instrumentation": {
+    "wrappedStores": true,
+    "shimTrapFired": true,
+    "shimTrapActive": false,
+    "storeNames": [
+     "sections",
+     "onboardingSteps"
+    ]
+   },
+   "slice": {
+    "nCommits": 86,
+    "nNotify": 0,
+    "nSel": 0,
+    "nSnap": 0,
+    "nSlotChange": 0
+   },
+   "summary": {
+    "name": "models",
+    "seconds": 30.228,
+    "panelNodesStart": 1,
+    "panelNodesEnd": 1,
+    "sectionStart": "模型",
+    "sectionEnd": "模型",
+    "commits": 86,
+    "commitsWithTarget": 86,
+    "targetRendered_pw": 86,
+    "targetRendered_id": 86,
+    "panelOpenCommits": 86,
+    "selfDrivenRenders": 0,
+    "parentDrivenRenders": 86,
+    "panelOpenSelfDriven": 0,
+    "panelOpenParentDriven": 86,
+    "selByStore": {},
+    "notifyByStore": {},
+    "snapByStore": {},
+    "localeRevHist": {},
+    "slotChangeByKey": {},
+    "slotVersions": {},
+    "slotVersionBumpsNearSelfRender": {},
+    "hookIdentityCounts": {
+     "sections:false": 86,
+     "onboardingSteps:false": 86,
+     "sessionsInner:true": 86,
+     "sessions:false": 86,
+     "completedOnboarding:undefined": 86
+    },
+    "selfRenderCause": {
+     "real": 0,
+     "identity": 0,
+     "other": 0,
+     "noAlt": 0
+    },
+    "selfRenderCauseSel": {
+     "real": 0,
+     "identity": 0,
+     "other": 0
+    },
+    "selfRenderSample": [],
+    "selfRenderCauseDetail": [],
+    "perSecRate": {
+     "commitPerSec": 2.8450443297604866,
+     "selfRenderPerSec": 0
+    }
+   }
+  }
+ ],
+ "consoleErrors": [],
+ "wsSockets": [],
+ "notes": []
+}

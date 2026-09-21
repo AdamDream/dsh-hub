@@ -1,0 +1,543 @@
+{
+  "label": "tz-UTC",
+  "tz": "UTC",
+  "fileSize": 1028,
+  "firstLineBytes": 257,
+  "rows": [
+    {
+      "seed": "A-exact-cursor",
+      "cursor": 257,
+      "expect": "suffix path: only lines 2..4 parsed",
+      "resultEqual": true,
+      "eventsEqual": true,
+      "dailyEqual": true,
+      "syncEqual": true,
+      "equal": true,
+      "baseline": {
+        "result": {
+          "scanned": 1,
+          "newEvents": 3,
+          "failedFiles": []
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-2",
+              "ts": 1789898520000,
+              "input_tokens": 17,
+              "output_tokens": 2,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-3",
+              "ts": 1789898580000,
+              "input_tokens": 27,
+              "output_tokens": 3,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-4",
+              "ts": 1789898640000,
+              "input_tokens": 37,
+              "output_tokens": 4,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 3,
+              "input_tokens": 81
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905600000,
+              "size": 1028,
+              "fingerprint": null,
+              "last_offset": 1029,
+              "last_seq": null
+            }
+          ]
+        }
+      },
+      "candidate": {
+        "result": {
+          "scanned": 1,
+          "newEvents": 3,
+          "failedFiles": []
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-2",
+              "ts": 1789898520000,
+              "input_tokens": 17,
+              "output_tokens": 2,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-3",
+              "ts": 1789898580000,
+              "input_tokens": 27,
+              "output_tokens": 3,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-4",
+              "ts": 1789898640000,
+              "input_tokens": 37,
+              "output_tokens": 4,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 3,
+              "input_tokens": 81
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905600000,
+              "size": 1028,
+              "fingerprint": null,
+              "last_offset": 1029,
+              "last_seq": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "seed": "B-cursor-past-eof",
+      "cursor": 258,
+      "expect": "size >= cursor FALSE → full rescan from 0",
+      "resultEqual": true,
+      "eventsEqual": true,
+      "dailyEqual": true,
+      "syncEqual": true,
+      "equal": true,
+      "baseline": {
+        "result": {
+          "scanned": 1,
+          "newEvents": 2,
+          "failedFiles": [
+            {
+              "file": "<ROOT>/cc/-home-CNS2026495165-dsh/off1.jsonl",
+              "error": "1 unparsable JSON lines"
+            }
+          ]
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-3",
+              "ts": 1789898580000,
+              "input_tokens": 27,
+              "output_tokens": 3,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-4",
+              "ts": 1789898640000,
+              "input_tokens": 37,
+              "output_tokens": 4,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 2,
+              "input_tokens": 64
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905600000,
+              "size": 1028,
+              "fingerprint": null,
+              "last_offset": 1029,
+              "last_seq": null
+            }
+          ]
+        }
+      },
+      "candidate": {
+        "result": {
+          "scanned": 1,
+          "newEvents": 2,
+          "failedFiles": [
+            {
+              "file": "<ROOT>/cc/-home-CNS2026495165-dsh/off1.jsonl",
+              "error": "1 unparsable JSON lines"
+            }
+          ]
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-3",
+              "ts": 1789898580000,
+              "input_tokens": 27,
+              "output_tokens": 3,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-4",
+              "ts": 1789898640000,
+              "input_tokens": 37,
+              "output_tokens": 4,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 2,
+              "input_tokens": 64
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905600000,
+              "size": 1028,
+              "fingerprint": null,
+              "last_offset": 1029,
+              "last_seq": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "seed": "C-absurd-cursor",
+      "cursor": 10000000,
+      "expect": "size >= cursor FALSE → full rescan from 0",
+      "resultEqual": true,
+      "eventsEqual": true,
+      "dailyEqual": true,
+      "syncEqual": true,
+      "equal": true,
+      "baseline": {
+        "result": {
+          "scanned": 1,
+          "newEvents": 4,
+          "failedFiles": []
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-1",
+              "ts": 1789898460000,
+              "input_tokens": 7,
+              "output_tokens": 1,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-2",
+              "ts": 1789898520000,
+              "input_tokens": 17,
+              "output_tokens": 2,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-3",
+              "ts": 1789898580000,
+              "input_tokens": 27,
+              "output_tokens": 3,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-4",
+              "ts": 1789898640000,
+              "input_tokens": 37,
+              "output_tokens": 4,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 4,
+              "input_tokens": 88
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905600000,
+              "size": 1028,
+              "fingerprint": null,
+              "last_offset": 1029,
+              "last_seq": null
+            }
+          ]
+        }
+      },
+      "candidate": {
+        "result": {
+          "scanned": 1,
+          "newEvents": 4,
+          "failedFiles": []
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-1",
+              "ts": 1789898460000,
+              "input_tokens": 7,
+              "output_tokens": 1,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-2",
+              "ts": 1789898520000,
+              "input_tokens": 17,
+              "output_tokens": 2,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-3",
+              "ts": 1789898580000,
+              "input_tokens": 27,
+              "output_tokens": 3,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-4",
+              "ts": 1789898640000,
+              "input_tokens": 37,
+              "output_tokens": 4,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 4,
+              "input_tokens": 88
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905600000,
+              "size": 1028,
+              "fingerprint": null,
+              "last_offset": 1029,
+              "last_seq": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "seed": "D-no-state",
+      "cursor": null,
+      "expect": "no sync_state → full read from 0",
+      "resultEqual": true,
+      "eventsEqual": true,
+      "dailyEqual": true,
+      "syncEqual": true,
+      "equal": true,
+      "baseline": {
+        "result": {
+          "scanned": 1,
+          "newEvents": 4,
+          "failedFiles": []
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-1",
+              "ts": 1789898460000,
+              "input_tokens": 7,
+              "output_tokens": 1,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-2",
+              "ts": 1789898520000,
+              "input_tokens": 17,
+              "output_tokens": 2,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-3",
+              "ts": 1789898580000,
+              "input_tokens": 27,
+              "output_tokens": 3,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-4",
+              "ts": 1789898640000,
+              "input_tokens": 37,
+              "output_tokens": 4,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 4,
+              "input_tokens": 88
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905600000,
+              "size": 1028,
+              "fingerprint": null,
+              "last_offset": 1029,
+              "last_seq": null
+            }
+          ]
+        }
+      },
+      "candidate": {
+        "result": {
+          "scanned": 1,
+          "newEvents": 4,
+          "failedFiles": []
+        },
+        "state": {
+          "events": [
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-1",
+              "ts": 1789898460000,
+              "input_tokens": 7,
+              "output_tokens": 1,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-2",
+              "ts": 1789898520000,
+              "input_tokens": 17,
+              "output_tokens": 2,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-3",
+              "ts": 1789898580000,
+              "input_tokens": 27,
+              "output_tokens": 3,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            },
+            {
+              "data_source": "cc",
+              "session_id": "off1",
+              "dedup_key": "m-4",
+              "ts": 1789898640000,
+              "input_tokens": 37,
+              "output_tokens": 4,
+              "cache_read_tokens": 1,
+              "cache_write_tokens": 2
+            }
+          ],
+          "daily": [
+            {
+              "day": "2026-09-20",
+              "data_source": "cc",
+              "requests": 4,
+              "input_tokens": 88
+            }
+          ],
+          "sync": [
+            {
+              "mtime": 1789905600000,
+              "size": 1028,
+              "fingerprint": null,
+              "last_offset": 1029,
+              "last_seq": null
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "overall": true
+}

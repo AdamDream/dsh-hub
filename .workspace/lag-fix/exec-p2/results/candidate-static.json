@@ -1,0 +1,367 @@
+{
+  "findings": [
+    {
+      "assertion": "pre-image: the four audited anchors + `const copiedPrevious` all resolve to whole lines",
+      "status": "PASS",
+      "detail": "A1 line 9294, copiedPrevious 9324, A3 9327, gate 9340",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "S1: `const chainRowIds = new Set();` occurs exactly once in the candidate",
+      "status": "PASS",
+      "detail": "1 occurrence(s)",
+      "evidence": "executed",
+      "expected": 1,
+      "observed": 1
+    },
+    {
+      "assertion": "S2 (T1): the declaration line carries exactly 4 Tab (projectList method-body top level)",
+      "status": "PASS",
+      "detail": "indent = 4 Tab (0x09)",
+      "evidence": "executed",
+      "expected": 4,
+      "observed": 4
+    },
+    {
+      "assertion": "S3 (T1): the declaration sits in the SAME outermost block as `const copiedPrevious` (i.e. the projectList method body) — brace stack and indentation agree",
+      "status": "PASS",
+      "detail": "brace stack: declaration block opens at line 1; brace stack: copiedPrevious block opens at line 1; indentation: declaration opener = line 9272, 3 Tab, \"projectList() {\"; indentation: copiedPrevious opener = line 9272, 3 Tab",
+      "evidence": "executed",
+      "expected": "declaration opener == `projectList() {` at 3 Tab",
+      "observed": "3 Tab @line 9272"
+    },
+    {
+      "assertion": "S6 (T1): the declaration is NOT inside the `if (current !== …) {` block (5 Tab trap) and NOT inside the walk body (8 Tab trap)",
+      "status": "PASS",
+      "detail": "declaration outermost block starts at line 1; the if(current!==...) opener line's own block starts at line 1; the walk body's outermost block starts at line 1",
+      "evidence": "executed",
+      "expected": "declaration block == method body block",
+      "observed": "1"
+    },
+    {
+      "assertion": "S4: the declaration precedes BOTH the registration (`chainRowIds.add(childId);`, unique) and the reader (`chainRowIds.has(id)`)",
+      "status": "PASS",
+      "detail": "decl@341363 < add@341696, read@343164; add x1, read x1",
+      "evidence": "executed",
+      "expected": "declaration first",
+      "observed": "341363 < 341696, 343164"
+    },
+    {
+      "assertion": "S5 (T2): the declaration precedes `const copiedPrevious` AND the `if (current !== …) {` line (it is NOT anchored on copiedPrevious / after the walk)",
+      "status": "PASS",
+      "detail": "decl@341363 < copiedPrevious@342845, if@341413",
+      "evidence": "executed",
+      "expected": "declaration before the walk",
+      "observed": "341363 < 342845, 341413"
+    },
+    {
+      "assertion": "S4b (T1 regression guard): the registration is NOT inside the walk block that the OLD code eliminated",
+      "status": "PASS",
+      "detail": "registration sits immediately after `seen.add(childId);` inside the walk, as the audit requires",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "S7 (T3): the old prose comment is gone (0 occurrences, deleted whole line+newline)",
+      "status": "PASS",
+      "detail": "comment x0",
+      "evidence": "executed",
+      "expected": 0,
+      "observed": 0
+    },
+    {
+      "assertion": "S7b (T3): the candidate introduces NO orphan whitespace-only line at the edit site, and no 5/8 Tab orphan line anywhere (the residual-indent artefact of a text-only replacement)",
+      "status": "PASS",
+      "detail": "whitespace-only lines: whole file = 4 (tab depths 1957:0, 1965:0, 2000:0, 2008:0), inside the changed region = 0; pre-image has 4 such line(s) all outside the region",
+      "evidence": "executed",
+      "expected": "0 inside the changed region",
+      "observed": 0
+    },
+    {
+      "assertion": "S8 (T3/A3): the A3 comment head and the chain-scoped loop are adjacent lines at the measured 5 Tab depth",
+      "status": "PASS",
+      "detail": "head tabs=5, loop tabs=5, adjacent=true",
+      "evidence": "executed",
+      "expected": "5 / 5 adjacent",
+      "observed": "5 / 5"
+    },
+    {
+      "assertion": "S9: the blanket carry-forward and the old gate line are both gone; the chain filter and the membership gate each appear exactly once",
+      "status": "PASS",
+      "detail": "blanket=0, oldGate=0, chainFilter=1, memberGate=1",
+      "evidence": "executed",
+      "expected": "0 / 0 / 1 / 1"
+    },
+    {
+      "assertion": "S10: exactly 4 unit markers, and the P2 / B1-C1 markers were not rewritten",
+      "status": "PASS",
+      "detail": "p2ac-fix=4, P2 v1 2->2, P1 v1 1->1, dsh-lag-fix 0->0",
+      "evidence": "executed",
+      "expected": 4,
+      "observed": 4
+    },
+    {
+      "assertion": "S11: every identifier introduced by the patch is declared inside this same file (no reliance on an outer/global binding)",
+      "status": "PASS",
+      "detail": "chainRowIds decl/uses = 1/2; reusableByIdKeys decl/uses = 1/2",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "S12: outside ONE bounded 64-line window around the four splice sites the candidate is byte-identical to the pre-image, and the window contains all four audited edits",
+      "status": "PASS",
+      "detail": "common prefix 9293 lines, common suffix 1322 lines (both verified byte-equal); differing window: live 47 lines -> candidate 52 lines; window holds all four audited splice sites with their measured indentation: 4/4",
+      "evidence": "executed",
+      "expected": "prefix+suffix >= 10598 lines identical, window <= 64 lines",
+      "observed": "identical outside a 47-line window"
+    },
+    {
+      "assertion": "S13: `node --check` passes on the candidate (syntactically complete bundle)",
+      "status": "PASS",
+      "detail": "node --check passed",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "S14 control T1-five-tab: the deliberately broken form is caught (declaration indented 5 Tab (inside `if (current !== …) {`))",
+      "status": "PASS",
+      "detail": "caught by the static assertions",
+      "evidence": "executed",
+      "expected": "CAUGHT",
+      "observed": "CAUGHT"
+    },
+    {
+      "assertion": "S14 control T1-eight-tab: the deliberately broken form is caught (declaration indented 8 Tab (inside the walk body / an eliminated block))",
+      "status": "PASS",
+      "detail": "caught by the static assertions",
+      "evidence": "executed",
+      "expected": "CAUGHT",
+      "observed": "CAUGHT"
+    },
+    {
+      "assertion": "S14 control T3-text-only: the deliberately broken form is caught (old prose comment rewritten in place instead of deleted whole-line)",
+      "status": "PASS",
+      "detail": "caught by the static assertions",
+      "evidence": "executed",
+      "expected": "CAUGHT",
+      "observed": "CAUGHT"
+    },
+    {
+      "assertion": "S14 control no-chain-filter: the deliberately broken form is caught (A3 chain filter removed (blanket carry-forward kept))",
+      "status": "PASS",
+      "detail": "caught by the static assertions",
+      "evidence": "executed",
+      "expected": "CAUGHT",
+      "observed": "CAUGHT"
+    },
+    {
+      "assertion": "S14b control: the real candidate passes the very predicates the controls fail (same code path, no false positive)",
+      "status": "PASS",
+      "detail": "candidate: decl tabs=4, opener=3 Tab \"projectList() {\" (line 9272), orphan whitespace=0, old statement=0",
+      "evidence": "executed"
+    }
+  ],
+  "controls": [
+    {
+      "id": "T1-five-tab",
+      "injects": "declaration indented 5 Tab (inside `if (current !== …) {`)",
+      "observed": {
+        "declCount": 1,
+        "declLine": 9294,
+        "declTabs": 5,
+        "declOutermostBlockStartLine": 1,
+        "declOpenerLine": null,
+        "declOpenerTabs": null,
+        "a3OldStatementSurvives": false,
+        "oldCommentSurvives": false,
+        "orphanWhitespaceLines": 4,
+        "declBeforeCopiedPrevious": true
+      },
+      "verdict": "CAUGHT"
+    },
+    {
+      "id": "T1-eight-tab",
+      "injects": "declaration indented 8 Tab (inside the walk body / an eliminated block)",
+      "observed": {
+        "declCount": 1,
+        "declLine": 9294,
+        "declTabs": 9,
+        "declOutermostBlockStartLine": 1,
+        "declOpenerLine": null,
+        "declOpenerTabs": null,
+        "a3OldStatementSurvives": false,
+        "oldCommentSurvives": false,
+        "orphanWhitespaceLines": 4,
+        "declBeforeCopiedPrevious": true
+      },
+      "verdict": "CAUGHT"
+    },
+    {
+      "id": "T3-text-only",
+      "injects": "old prose comment rewritten in place instead of deleted whole-line",
+      "observed": {
+        "declCount": 1,
+        "declLine": 9294,
+        "declTabs": 4,
+        "declOutermostBlockStartLine": 1,
+        "declOpenerLine": null,
+        "declOpenerTabs": null,
+        "a3OldStatementSurvives": false,
+        "oldCommentSurvives": false,
+        "orphanWhitespaceLines": 4,
+        "declBeforeCopiedPrevious": true
+      },
+      "verdict": "CAUGHT"
+    },
+    {
+      "id": "no-chain-filter",
+      "injects": "A3 chain filter removed (blanket carry-forward kept)",
+      "observed": {
+        "declCount": 1,
+        "declLine": 9294,
+        "declTabs": 4,
+        "declOutermostBlockStartLine": 1,
+        "declOpenerLine": null,
+        "declOpenerTabs": null,
+        "a3OldStatementSurvives": true,
+        "oldCommentSurvives": false,
+        "orphanWhitespaceLines": 4,
+        "declBeforeCopiedPrevious": true
+      },
+      "verdict": "CAUGHT"
+    }
+  ],
+  "target": {
+    "path": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-runtime/lib/client.js",
+    "sha256": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+    "lines": 10662
+  },
+  "candidate": {
+    "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/candidate/client.js",
+    "sha256": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f",
+    "lines": 10667
+  },
+  "preimageSha256": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+  "lineMap": {
+    "candidate_chainRowIds_declaration": 9294,
+    "candidate_if_current_opener": 9295,
+    "candidate_copiedPrevious": 9326,
+    "candidate_copiedPrevious_block_owner": "window.__ModuleLoader__.load({"
+  },
+  "surgicalDiff": {
+    "commonPrefixLines": 9293,
+    "commonSuffixLines": 1322,
+    "windowLiveLines": [
+      "\t\t\t\tif (current !== void 0 && currentAddress !== void 0) {",
+      "\t\t\t\t\tconst seen = /* @__PURE__ */ new Set();",
+      "\t\t\t\t\tlet address = currentAddress;",
+      "\t\t\t\t\twhile (address !== void 0 && !seen.has(address.childSessionId)) {",
+      "\t\t\t\t\t\tconst childId = address.childSessionId;",
+      "\t\t\t\t\t\tseen.add(childId);",
+      "\t\t\t\t\t\tconst child = subagentsByParent[address.parentSessionId]?.entries.find((entry) => entry.kind === \"child\" && entry.id === childId);",
+      "\t\t\t\t\t\tif (child?.kind !== \"child\") break;",
+      "\t\t\t\t\t\tconst displayTitle = child.label ?? childId;",
+      "\t\t\t\t\t\tconst summary = byId[childId];",
+      "\t\t\t\t\t\tif (summary === void 0) byId[childId] = {",
+      "\t\t\t\t\t\t\tid: childId,",
+      "\t\t\t\t\t\t\tdisplayTitle,",
+      "\t\t\t\t\t\t\tparentId: address.parentSessionId,",
+      "\t\t\t\t\t\t\torigin: \"subagent\",",
+      "\t\t\t\t\t\t\trunning: child.activity === \"running\",",
+      "\t\t\t\t\t\t\tblank: false,",
+      "\t\t\t\t\t\t\tupdatedAt: 0",
+      "\t\t\t\t\t\t};",
+      "\t\t\t\t\t\telse if (summary.displayTitle !== displayTitle) byId[childId] = {",
+      "\t\t\t\t\t\t\t...summary,",
+      "\t\t\t\t\t\t\tdisplayTitle",
+      "\t\t\t\t\t\t};",
+      "\t\t\t\t\t\tconst parent = byId[address.parentSessionId];",
+      "\t\t\t\t\t\tif (parent !== void 0 && parent.origin !== \"subagent\") break;",
+      "\t\t\t\t\t\taddress = this.manager.navigationAddress(address.parentSessionId);",
+      "\t\t\t\t\t}",
+      "\t\t\t\t}",
+      "\t\t\t\t/* dsh-perf-fix P2 v1 */ /* projectList: reuse the previous projection object when content is unchanged. */",
+      "\t\t\t\tconst previousProjection = this.listProjection !== void 0 && this.listProjection === this.list.getSnapshot() ? this.listProjection : void 0;",
+      "\t\t\t\tconst copiedPrevious = previousProjection !== void 0 && sameIdList(previousProjection.ids, ids);",
+      "\t\t\t\tif (copiedPrevious) {",
+      "\t\t\t\t\t/* Carry the previous projection's extra rows (address-chain children) forward before diffing. */",
+      "\t\t\t\t\tfor (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0) byId[id] = previousProjection.byId[id];",
+      "\t\t\t\t}",
+      "\t\t\t\tconst liveKeys = Object.keys(byId);",
+      "\t\t\t\tconst stableIds = copiedPrevious ? previousProjection.ids : ids;",
+      "\t\t\t\tconst stableById = {};",
+      "\t\t\t\tlet reusedEntries = 0;",
+      "\t\t\t\tfor (const id of liveKeys) {",
+      "\t\t\t\t\tconst entry = byId[id];",
+      "\t\t\t\t\tconst previousEntry = previousProjection === void 0 ? void 0 : previousProjection.byId[id];",
+      "\t\t\t\t\tconst reusable = previousEntry !== void 0 && previousEntry.id === entry.id && previousEntry.displayTitle === entry.displayTitle && previousEntry.running === entry.running && previousEntry.completed === entry.completed && previousEntry.blank === entry.blank && previousEntry.updatedAt === entry.updatedAt && previousEntry.pendingInteraction === entry.pendingInteraction && previousEntry.projectionValues === entry.projectionValues && previousEntry.title === entry.title && previousEntry.cwd === entry.cwd && previousEntry.parentId === entry.parentId && previousEntry.origin === entry.origin && previousEntry.agentPreset === entry.agentPreset;",
+      "\t\t\t\t\tstableById[id] = reusable ? previousEntry : entry;",
+      "\t\t\t\t\tif (reusable) reusedEntries += 1;",
+      "\t\t\t\t}",
+      "\t\t\t\tconst nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length ? previousProjection.byId : stableById;"
+    ],
+    "windowCandidateLines": [
+      "\t\t\t\tconst chainRowIds = new Set(); /* p2ac-fix */",
+      "\t\t\t\tif (current !== void 0 && currentAddress !== void 0) {",
+      "\t\t\t\t\tconst seen = /* @__PURE__ */ new Set();",
+      "\t\t\t\t\tlet address = currentAddress;",
+      "\t\t\t\t\twhile (address !== void 0 && !seen.has(address.childSessionId)) {",
+      "\t\t\t\t\t\tconst childId = address.childSessionId;",
+      "\t\t\t\t\t\tseen.add(childId);",
+      "\t\t\t\t\t\tchainRowIds.add(childId); /* p2ac-fix */",
+      "\t\t\t\t\t\tconst child = subagentsByParent[address.parentSessionId]?.entries.find((entry) => entry.kind === \"child\" && entry.id === childId);",
+      "\t\t\t\t\t\tif (child?.kind !== \"child\") break;",
+      "\t\t\t\t\t\tconst displayTitle = child.label ?? childId;",
+      "\t\t\t\t\t\tconst summary = byId[childId];",
+      "\t\t\t\t\t\tif (summary === void 0) byId[childId] = {",
+      "\t\t\t\t\t\t\tid: childId,",
+      "\t\t\t\t\t\t\tdisplayTitle,",
+      "\t\t\t\t\t\t\tparentId: address.parentSessionId,",
+      "\t\t\t\t\t\t\torigin: \"subagent\",",
+      "\t\t\t\t\t\t\trunning: child.activity === \"running\",",
+      "\t\t\t\t\t\t\tblank: false,",
+      "\t\t\t\t\t\t\tupdatedAt: 0",
+      "\t\t\t\t\t\t};",
+      "\t\t\t\t\t\telse if (summary.displayTitle !== displayTitle) byId[childId] = {",
+      "\t\t\t\t\t\t\t...summary,",
+      "\t\t\t\t\t\t\tdisplayTitle",
+      "\t\t\t\t\t\t};",
+      "\t\t\t\t\t\tconst parent = byId[address.parentSessionId];",
+      "\t\t\t\t\t\tif (parent !== void 0 && parent.origin !== \"subagent\") break;",
+      "\t\t\t\t\t\taddress = this.manager.navigationAddress(address.parentSessionId);",
+      "\t\t\t\t\t}",
+      "\t\t\t\t}",
+      "\t\t\t\t/* dsh-perf-fix P2 v1 */ /* projectList: reuse the previous projection object when content is unchanged. */",
+      "\t\t\t\tconst previousProjection = this.listProjection !== void 0 && this.listProjection === this.list.getSnapshot() ? this.listProjection : void 0;",
+      "\t\t\t\tconst copiedPrevious = previousProjection !== void 0 && sameIdList(previousProjection.ids, ids);",
+      "\t\t\t\tif (copiedPrevious) {",
+      "\t\t\t\t\t/* p2ac-fix */ /* address-chain scoped carry-forward: only ids a visited chain step genuinely needs. */",
+      "\t\t\t\t\tfor (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0 && chainRowIds.has(id)) byId[id] = previousProjection.byId[id];",
+      "\t\t\t\t}",
+      "\t\t\t\tconst liveKeys = Object.keys(byId);",
+      "\t\t\t\tconst stableIds = copiedPrevious ? previousProjection.ids : ids;",
+      "\t\t\t\tconst stableById = {};",
+      "\t\t\t\tlet reusedEntries = 0;",
+      "\t\t\t\tfor (const id of liveKeys) {",
+      "\t\t\t\t\tconst entry = byId[id];",
+      "\t\t\t\t\tconst previousEntry = previousProjection === void 0 ? void 0 : previousProjection.byId[id];",
+      "\t\t\t\t\tconst reusable = previousEntry !== void 0 && previousEntry.id === entry.id && previousEntry.displayTitle === entry.displayTitle && previousEntry.running === entry.running && previousEntry.completed === entry.completed && previousEntry.blank === entry.blank && previousEntry.updatedAt === entry.updatedAt && previousEntry.pendingInteraction === entry.pendingInteraction && previousEntry.projectionValues === entry.projectionValues && previousEntry.title === entry.title && previousEntry.cwd === entry.cwd && previousEntry.parentId === entry.parentId && previousEntry.origin === entry.origin && previousEntry.agentPreset === entry.agentPreset;",
+      "\t\t\t\t\tstableById[id] = reusable ? previousEntry : entry;",
+      "\t\t\t\t\tif (reusable) reusedEntries += 1;",
+      "\t\t\t\t}",
+      "\t\t\t\t/* p2ac-fix */ /* key-set gate: reusing the whole previous byId object is only sound when its key set has no extra key. */",
+      "\t\t\t\t/* the previous key set is read AFTER the chain-scoped carry-forward, so it is compared against the same liveKeys. */",
+      "\t\t\t\tconst reusableByIdKeys = previousProjection !== void 0 ? Object.keys(previousProjection.byId) : void 0;",
+      "\t\t\t\tconst nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length && reusableByIdKeys.length === liveKeys.length && reusableByIdKeys.every((id) => Object.prototype.hasOwnProperty.call(byId, id)) ? previousProjection.byId : stableById;"
+    ]
+  },
+  "summary": {
+    "candidate_sha256": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f",
+    "preimage_sha256": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+    "static_assertions": {
+      "pass": 21,
+      "fail": 0
+    },
+    "T1_declaration_scope_ok": true,
+    "T2_anchor_position_ok": true,
+    "T3_whole_line_deletion_ok": true,
+    "reverse_controls_caught": true
+  }
+}

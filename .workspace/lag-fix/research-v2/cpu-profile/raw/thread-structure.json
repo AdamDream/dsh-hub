@@ -1,0 +1,93 @@
+{
+  "profiled": {
+    "requestedSec": 10,
+    "wallMs": 10164001,
+    "samples": 9495,
+    "nodes": 503
+  },
+  "timeDeltas": {
+    "n": 9495,
+    "sumUs": 10163362,
+    "sumMs": 10163.362,
+    "p50": 1054,
+    "p90": 1058,
+    "p99": 1071,
+    "max": 162475,
+    "min": 62
+  },
+  "derived": {
+    "totalMs": 10164.001,
+    "msPerSample_avg": 1070.4582411795682,
+    "cpuMsPerSec_of_capture": 1016.4001000000001,
+    "samplesAsMs_at_avg": 10164.001
+  },
+  "performanceMetrics": {
+    "ScriptDuration": 347.527,
+    "TaskDuration": 1015.0169999999998,
+    "RecalcStyleDuration": 353.28,
+    "LayoutDuration": 0,
+    "ThreadTime": 1056.667,
+    "Nodes": 772
+  },
+  "roots": [
+    {
+      "id": 1,
+      "fn": "(root)",
+      "url": "",
+      "samples": 9495,
+      "hitCount": 0
+    }
+  ],
+  "threads": [
+    {
+      "threadRootId": 1,
+      "root": {
+        "id": 1,
+        "fn": "(root)",
+        "url": "",
+        "line": 0
+      },
+      "samples": 9495,
+      "ms": 10164001,
+      "msPerS": 1016400.1,
+      "top5": [
+        {
+          "fn": "(idle) @:0",
+          "samples": 8685,
+          "ms": 9296929.824644549,
+          "msPerS": 929692.9824644548
+        },
+        {
+          "fn": "apply @client.js?rev=abdb7f55acba:366",
+          "samples": 306,
+          "ms": 327560.22180094785,
+          "msPerS": 32756.022180094784
+        },
+        {
+          "fn": "(program) @:0",
+          "samples": 149,
+          "ms": 159498.27793575567,
+          "msPerS": 15949.827793575567
+        },
+        {
+          "fn": "(garbage collector) @:0",
+          "samples": 46,
+          "ms": 49241.07909426014,
+          "msPerS": 4924.107909426014
+        },
+        {
+          "fn": "(anonymous) @client.js?rev=a0fb4bb225d3:8554",
+          "samples": 17,
+          "ms": 18197.790100052658,
+          "msPerS": 1819.7790100052657
+        },
+        {
+          "fn": "get @index-ClqxG24t.js:11",
+          "samples": 14,
+          "ms": 14986.415376513954,
+          "msPerS": 1498.6415376513955
+        }
+      ]
+    }
+  ]
+}

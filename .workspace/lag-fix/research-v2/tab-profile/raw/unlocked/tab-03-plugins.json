@@ -1,0 +1,1336 @@
+{
+ "id": "plugins",
+ "label": "插件",
+ "runs": [
+  {
+   "id": "plugins",
+   "label": "插件",
+   "repeat": 1,
+   "mode": "repeat",
+   "startedAt": "2026-09-21T06:57:56.259Z",
+   "nav": {
+    "status": "FOUND",
+    "index": 2,
+    "text": "插件",
+    "total": 8,
+    "strategy": "exact"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "openMs": 26.4,
+   "openMsClean": 17.8,
+   "panels": {
+    "before": {
+     "nodes": 97,
+     "activeLabel": "通用设置",
+     "textHead": "打开配置文件关闭Agent 预设对此后新建的会话生效。运行中的会话保持它开始时的预设。标准模式（子代理 deepseek-v4.1-flash）权限选择新会话的默认权限模式Workspace Write语言中文外观浅色深色跟随系统繁忙时 Enter 键行为仅在智能体运行时生效；Cmd/Ctrl+Enter 使用另一行为"
+    },
+    "arm": {
+     "hasDialog": true,
+     "hasNav": true,
+     "hasContent": true,
+     "contentNodes": 97,
+     "textLen": 314
+    },
+    "after": {
+     "nodes": 99,
+     "activeLabel": "插件",
+     "textHead": "打开配置文件关闭插件配置和查看本部署已安装的插件。插件配置插件列表终端限制 agent 运行的每一条命令。Agent 循环Agent 如何派发工具调用。网页搜索DeepSeek 搜索提供方。Token 用量 · dsh-usagedsh + Claude Code 双源统计（不计费）全部来源dshcc近 7 天近 30 天近 90 天自选不轮询5s 刷新30s 刷新60s 刷新加载中…状态加载中…口径：请求数 = 含 usage 的调用",
+     "dialogNodes": 170
+    }
+   },
+   "windows": [
+    {
+     "label": "plugins-r1-w1_10s",
+     "windowMs": 10001,
+     "seconds": 10.001,
+     "cdpRawStart": {
+      "at": 1789973876604,
+      "ScriptDuration": 10.367261,
+      "TaskDuration": 27.226995,
+      "RecalcStyleDuration": 12.281835,
+      "LayoutDuration": 0.072752,
+      "Nodes": 1316,
+      "JSEventListeners": 281,
+      "JSHeapUsedSize": 37827636,
+      "Documents": 4,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789973886605,
+      "ScriptDuration": 10.866309,
+      "TaskDuration": 28.841754,
+      "RecalcStyleDuration": 13.13197,
+      "LayoutDuration": 0.0767,
+      "Nodes": 1493,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 35615420,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 529,
+      "p50": 16.7,
+      "p95": 33.3,
+      "p99": 66.7,
+      "max": 116.6,
+      "mean": 18.871,
+      "over50": 13,
+      "over16_7": 213
+     },
+     "domNodes": 1025,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 1219,
+      "totalFramesSent": 0,
+      "recvBytes": 558212,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 1219,
+        "perSec": 121.888
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 1118,
+        "perSec": 111.789
+       },
+       "session/projection": {
+        "n": 101,
+        "perSec": 10.099
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 1083,
+        "perSec": 108.289
+       },
+       "event:tool/call": {
+        "n": 9,
+        "perSec": 0.9
+       },
+       "event:assistant/message": {
+        "n": 7,
+        "perSec": 0.7
+       },
+       "event:tool/result": {
+        "n": 7,
+        "perSec": 0.7
+       },
+       "event:step/end": {
+        "n": 6,
+        "perSec": 0.6
+       },
+       "event:step/start": {
+        "n": 6,
+        "perSec": 0.6
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 1118,
+        "perSec": 111.789
+       },
+       "mux:session/projection": {
+        "n": 101,
+        "perSec": 10.099
+       }
+      }
+     },
+     "http": {
+      "total": 9,
+      "usageSamples": [
+       {
+        "path": "/usage/summary",
+        "method": "summary",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 270
+       },
+       {
+        "path": "/usage/byDay",
+        "method": "byDay",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 932
+       },
+       {
+        "path": "/usage/timeseries",
+        "method": "timeseries",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 932
+       },
+       {
+        "path": "/usage/timeseries",
+        "method": "timeseries",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 775
+       },
+       {
+        "path": "/usage/heatmap",
+        "method": "heatmap",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 1390
+       },
+       {
+        "path": "/usage/status",
+        "method": "status",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 310
+       },
+       {
+        "path": "/usage/sessions",
+        "method": "sessions",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 53697
+       },
+       {
+        "path": "/usage/byModel",
+        "method": "byModel",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 950
+       },
+       {
+        "path": "/usage/byProject",
+        "method": "byProject",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 1041
+       }
+      ]
+     },
+     "_rawTaken": 529,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 499.048,
+      "TaskDuration": 1614.759,
+      "RecalcStyleDuration": 850.135,
+      "LayoutDuration": 3.948,
+      "Nodes": 1493,
+      "NodesDelta": 177,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 35615420,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "plugins-r1-w2_20s",
+     "windowMs": 20000,
+     "seconds": 20,
+     "cdpRawStart": {
+      "at": 1789973886633,
+      "ScriptDuration": 10.866323,
+      "TaskDuration": 28.843342,
+      "RecalcStyleDuration": 13.132087,
+      "LayoutDuration": 0.0767,
+      "Nodes": 1493,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 35733108,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789973906634,
+      "ScriptDuration": 11.991354,
+      "TaskDuration": 32.394448,
+      "RecalcStyleDuration": 15.062477,
+      "LayoutDuration": 0.0767,
+      "Nodes": 1679,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 34893856,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 1019,
+      "p50": 16.7,
+      "p95": 33.3,
+      "p99": 83.3,
+      "max": 200,
+      "mean": 19.61,
+      "over50": 25,
+      "over16_7": 449
+     },
+     "domNodes": 1025,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 2,
+      "totalMs": 117,
+      "maxMs": 59,
+      "entries": [
+       {
+        "start": 170602.9,
+        "duration": 59
+       },
+       {
+        "start": 170773.6,
+        "duration": 58
+       }
+      ]
+     },
+     "ws": {
+      "totalFramesRecv": 1727,
+      "totalFramesSent": 0,
+      "recvBytes": 715727,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 1727,
+        "perSec": 86.35
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 1528,
+        "perSec": 76.4
+       },
+       "session/projection": {
+        "n": 195,
+        "perSec": 9.75
+       },
+       "question/requested": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "host/session-status": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "session/queue": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "host/session-removed": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 1460,
+        "perSec": 73
+       },
+       "event:tool/result": {
+        "n": 14,
+        "perSec": 0.7
+       },
+       "event:step/end": {
+        "n": 14,
+        "perSec": 0.7
+       },
+       "event:step/start": {
+        "n": 13,
+        "perSec": 0.65
+       },
+       "event:tool/call": {
+        "n": 13,
+        "perSec": 0.65
+       },
+       "event:assistant/message": {
+        "n": 12,
+        "perSec": 0.6
+       },
+       "event:turn/end": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "event:agent/inbox/spliced": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 1528,
+        "perSec": 76.4
+       },
+       "mux:session/projection": {
+        "n": 195,
+        "perSec": 9.75
+       },
+       "mux:question/requested": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "host:host/session-status": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "mux:session/queue": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "host:host/session-removed": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 1019,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 1125.031,
+      "TaskDuration": 3551.106,
+      "RecalcStyleDuration": 1930.39,
+      "LayoutDuration": 0,
+      "Nodes": 1679,
+      "NodesDelta": 186,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 34893856,
+      "Documents": 3,
+      "Frames": 3
+     }
+    }
+   ],
+   "http": {
+    "requests": [
+     {
+      "kind": "request",
+      "path": "/usage/summary",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/timeseries",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/heatmap",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/byModel",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/byProject",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/byDay",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/timeseries",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/sessions",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/status",
+      "method": "POST"
+     },
+     {
+      "kind": "response",
+      "path": "/usage/summary",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 270,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/byDay",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 932,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/timeseries",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 932,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/timeseries",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 775,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/heatmap",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 1390,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/status",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 310,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/sessions",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 53697,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/byModel",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 950,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/byProject",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 1041,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     }
+    ],
+    "usageSamples": [
+     {
+      "path": "/usage/summary",
+      "rpcMethod": "summary",
+      "rpcId": "275ba074-df2f-4a3c-bf8d-dedd515587cd",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 270,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "from",
+       "to",
+       "dataSources"
+      ],
+      "granularity": null
+     },
+     {
+      "path": "/usage/byDay",
+      "rpcMethod": "byDay",
+      "rpcId": "138ab70c-d5d0-4550-996a-eecaa0be85bd",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 932,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "from",
+       "to",
+       "dataSources"
+      ],
+      "granularity": null
+     },
+     {
+      "path": "/usage/timeseries",
+      "rpcMethod": "timeseries",
+      "rpcId": "03ed1cb3-9551-469d-aa3c-3371c023c793",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 932,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "granularity",
+       "from",
+       "to",
+       "dataSources"
+      ],
+      "granularity": "day"
+     },
+     {
+      "path": "/usage/timeseries",
+      "rpcMethod": "timeseries",
+      "rpcId": "091eb081-f036-4925-b990-dec5f01488ac",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 775,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "granularity",
+       "from",
+       "to",
+       "dataSources"
+      ],
+      "granularity": "hour"
+     },
+     {
+      "path": "/usage/heatmap",
+      "rpcMethod": "heatmap",
+      "rpcId": "ef7cad03-db82-4c46-8149-67fdfab55eed",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 1390,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "year",
+       "dataSources"
+      ],
+      "granularity": null
+     },
+     {
+      "path": "/usage/status",
+      "rpcMethod": "status",
+      "rpcId": "16b95280-ada3-4589-9dae-f8ca1541d325",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 310,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [],
+      "granularity": null
+     },
+     {
+      "path": "/usage/sessions",
+      "rpcMethod": "sessions",
+      "rpcId": "803ef272-1d90-4396-af55-90f6f63faefe",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 53697,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "from",
+       "to",
+       "dataSources",
+       "limit"
+      ],
+      "granularity": null
+     },
+     {
+      "path": "/usage/byModel",
+      "rpcMethod": "byModel",
+      "rpcId": "ebcd36a5-167b-45bd-88c9-f2fdefcb8ee7",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 950,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "from",
+       "to",
+       "dataSources"
+      ],
+      "granularity": null
+     },
+     {
+      "path": "/usage/byProject",
+      "rpcMethod": "byProject",
+      "rpcId": "6b1f83ff-cf94-4fe4-8259-782062ae971d",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 1041,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "from",
+       "to",
+       "dataSources"
+      ],
+      "granularity": null
+     }
+    ]
+   },
+   "errors": [],
+   "parkedAt": {
+    "index": 0,
+    "label": "通用设置"
+   },
+   "openProbe": {
+    "firstMut": 144019.40000000596,
+    "firstMutClean": 144019.40000000596,
+    "firstText": 144028,
+    "clickT0": 144001.60000000894
+   },
+   "status": "PASS",
+   "wsSockets": [
+    "ws://127.0.0.1:3080/api/events.mux",
+    "ws://127.0.0.1:3080/api/events.host"
+   ]
+  },
+  {
+   "id": "plugins",
+   "label": "插件",
+   "repeat": 2,
+   "mode": "repeat",
+   "startedAt": "2026-09-21T06:58:26.652Z",
+   "nav": {
+    "status": "FOUND",
+    "index": 2,
+    "text": "插件",
+    "total": 8,
+    "strategy": "exact"
+   },
+   "valid": true,
+   "invalidReasons": [],
+   "openMs": 45,
+   "openMsClean": 22.5,
+   "panels": {
+    "before": {
+     "nodes": 97,
+     "activeLabel": "通用设置",
+     "textHead": "打开配置文件关闭Agent 预设对此后新建的会话生效。运行中的会话保持它开始时的预设。标准模式（子代理 deepseek-v4.1-flash）权限选择新会话的默认权限模式Workspace Write语言中文外观浅色深色跟随系统繁忙时 Enter 键行为仅在智能体运行时生效；Cmd/Ctrl+Enter 使用另一行为"
+    },
+    "arm": {
+     "hasDialog": true,
+     "hasNav": true,
+     "hasContent": true,
+     "contentNodes": 97,
+     "textLen": 314
+    },
+    "after": {
+     "nodes": 99,
+     "activeLabel": "插件",
+     "textHead": "打开配置文件关闭插件配置和查看本部署已安装的插件。插件配置插件列表终端限制 agent 运行的每一条命令。Agent 循环Agent 如何派发工具调用。网页搜索DeepSeek 搜索提供方。Token 用量 · dsh-usagedsh + Claude Code 双源统计（不计费）全部来源dshcc近 7 天近 30 天近 90 天自选不轮询5s 刷新30s 刷新60s 刷新加载中…状态加载中…口径：请求数 = 含 usage 的调用",
+     "dialogNodes": 170
+    }
+   },
+   "windows": [
+    {
+     "label": "plugins-r2-w1_10s",
+     "windowMs": 10000,
+     "seconds": 10,
+     "cdpRawStart": {
+      "at": 1789973908330,
+      "ScriptDuration": 12.163274,
+      "TaskDuration": 32.849718,
+      "RecalcStyleDuration": 15.271028,
+      "LayoutDuration": 0.088217,
+      "Nodes": 2066,
+      "JSEventListeners": 291,
+      "JSHeapUsedSize": 42093316,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789973918334,
+      "ScriptDuration": 12.933163,
+      "TaskDuration": 35.273421,
+      "RecalcStyleDuration": 16.518061,
+      "LayoutDuration": 0.092707,
+      "Nodes": 1769,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 40450732,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 201,
+      "p50": 16.7,
+      "p95": 133.3,
+      "p99": 183.4,
+      "max": 216.6,
+      "mean": 49.252,
+      "over50": 72,
+      "over16_7": 138
+     },
+     "domNodes": 1025,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 1,
+      "totalMs": 50,
+      "maxMs": 50,
+      "entries": [
+       {
+        "start": 179168.3,
+        "duration": 50
+       }
+      ]
+     },
+     "ws": {
+      "totalFramesRecv": 96,
+      "totalFramesSent": 0,
+      "recvBytes": 70327,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 96,
+        "perSec": 9.6
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/projection": {
+        "n": 72,
+        "perSec": 7.2
+       },
+       "session/event": {
+        "n": 24,
+        "perSec": 2.4
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:tool/result": {
+        "n": 6,
+        "perSec": 0.6
+       },
+       "event:step/end": {
+        "n": 5,
+        "perSec": 0.5
+       },
+       "event:step/start": {
+        "n": 5,
+        "perSec": 0.5
+       },
+       "event:assistant/message": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/projection": {
+        "n": 72,
+        "perSec": 7.2
+       },
+       "mux:session/event": {
+        "n": 24,
+        "perSec": 2.4
+       }
+      }
+     },
+     "http": {
+      "total": 7,
+      "usageSamples": [
+       {
+        "path": "/usage/byDay",
+        "method": "byDay",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 932
+       },
+       {
+        "path": "/usage/heatmap",
+        "method": "heatmap",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 1390
+       },
+       {
+        "path": "/usage/sessions",
+        "method": "sessions",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 53697
+       },
+       {
+        "path": "/usage/timeseries",
+        "method": "timeseries",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 775
+       },
+       {
+        "path": "/usage/byModel",
+        "method": "byModel",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 950
+       },
+       {
+        "path": "/usage/status",
+        "method": "status",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 310
+       },
+       {
+        "path": "/usage/byProject",
+        "method": "byProject",
+        "status": 200,
+        "wallMs": null,
+        "bodyBytes": 1041
+       }
+      ]
+     },
+     "_rawTaken": 201,
+     "reasons": [
+      "frame-count-low:201<299 (possible throttling)"
+     ],
+     "cdpDeltaMs": {
+      "ScriptDuration": 769.889,
+      "TaskDuration": 2423.703,
+      "RecalcStyleDuration": 1247.033,
+      "LayoutDuration": 4.49,
+      "Nodes": 1769,
+      "NodesDelta": -297,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 40450732,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "plugins-r2-w2_20s",
+     "windowMs": 20001,
+     "seconds": 20.001,
+     "cdpRawStart": {
+      "at": 1789973918361,
+      "ScriptDuration": 12.933163,
+      "TaskDuration": 35.277631,
+      "RecalcStyleDuration": 16.518061,
+      "LayoutDuration": 0.092707,
+      "Nodes": 1769,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 40503372,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789973938364,
+      "ScriptDuration": 14.440617,
+      "TaskDuration": 40.041784,
+      "RecalcStyleDuration": 19.188384,
+      "LayoutDuration": 0.09363,
+      "Nodes": 1499,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 36544300,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 860,
+      "p50": 16.7,
+      "p95": 66.7,
+      "p99": 116.7,
+      "max": 183.4,
+      "mean": 23.197,
+      "over50": 53,
+      "over16_7": 397
+     },
+     "domNodes": 1025,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 1,
+      "totalMs": 64,
+      "maxMs": 64,
+      "entries": [
+       {
+        "start": 189842.1,
+        "duration": 64
+       }
+      ]
+     },
+     "ws": {
+      "totalFramesRecv": 355,
+      "totalFramesSent": 0,
+      "recvBytes": 237043,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 355,
+        "perSec": 17.749
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/projection": {
+        "n": 264,
+        "perSec": 13.199
+       },
+       "session/event": {
+        "n": 90,
+        "perSec": 4.5
+       },
+       "session/queue": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:tool/result": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:step/end": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:step/start": {
+        "n": 18,
+        "perSec": 0.9
+       },
+       "event:assistant/message": {
+        "n": 17,
+        "perSec": 0.85
+       },
+       "event:tool/call": {
+        "n": 17,
+        "perSec": 0.85
+       },
+       "event:agent/inbox/spliced": {
+        "n": 1,
+        "perSec": 0.05
+       },
+       "event:user/message": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/projection": {
+        "n": 264,
+        "perSec": 13.199
+       },
+       "mux:session/event": {
+        "n": 90,
+        "perSec": 4.5
+       },
+       "mux:session/queue": {
+        "n": 1,
+        "perSec": 0.05
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 860,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 1507.454,
+      "TaskDuration": 4764.153,
+      "RecalcStyleDuration": 2670.323,
+      "LayoutDuration": 0.923,
+      "Nodes": 1499,
+      "NodesDelta": -270,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 36544300,
+      "Documents": 3,
+      "Frames": 3
+     }
+    }
+   ],
+   "http": {
+    "requests": [
+     {
+      "kind": "request",
+      "path": "/usage/summary",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/timeseries",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/heatmap",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/byModel",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/byProject",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/byDay",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/timeseries",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/sessions",
+      "method": "POST"
+     },
+     {
+      "kind": "request",
+      "path": "/usage/status",
+      "method": "POST"
+     },
+     {
+      "kind": "response",
+      "path": "/usage/summary",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 270,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/timeseries",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 932,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/byDay",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 932,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/heatmap",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 1390,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/sessions",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 53697,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/timeseries",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 775,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/byModel",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 950,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/status",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 310,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     },
+     {
+      "kind": "response",
+      "path": "/usage/byProject",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 1041,
+      "envelopeOk": true,
+      "bodyResultOk": true
+     }
+    ],
+    "usageSamples": [
+     {
+      "path": "/usage/summary",
+      "rpcMethod": "summary",
+      "rpcId": "8c44cb8b-0d7c-4ca9-83fb-75958f87a305",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 270,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "from",
+       "to",
+       "dataSources"
+      ],
+      "granularity": null
+     },
+     {
+      "path": "/usage/timeseries",
+      "rpcMethod": "timeseries",
+      "rpcId": "e94400e2-cc22-4fd8-be9d-61a9f16e3cf8",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 932,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "granularity",
+       "from",
+       "to",
+       "dataSources"
+      ],
+      "granularity": "day"
+     },
+     {
+      "path": "/usage/byDay",
+      "rpcMethod": "byDay",
+      "rpcId": "b21151c8-df26-4051-ba2f-cd9a26b793e3",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 932,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "from",
+       "to",
+       "dataSources"
+      ],
+      "granularity": null
+     },
+     {
+      "path": "/usage/heatmap",
+      "rpcMethod": "heatmap",
+      "rpcId": "c9873b16-55f8-4fca-8505-18c8f56e1526",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 1390,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "year",
+       "dataSources"
+      ],
+      "granularity": null
+     },
+     {
+      "path": "/usage/sessions",
+      "rpcMethod": "sessions",
+      "rpcId": "b95a29ee-c540-4549-9618-d4f9fd3e3de5",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 53697,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "from",
+       "to",
+       "dataSources",
+       "limit"
+      ],
+      "granularity": null
+     },
+     {
+      "path": "/usage/timeseries",
+      "rpcMethod": "timeseries",
+      "rpcId": "634bad16-f3c3-457c-a6ba-3c555235df09",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 775,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "granularity",
+       "from",
+       "to",
+       "dataSources"
+      ],
+      "granularity": "hour"
+     },
+     {
+      "path": "/usage/byModel",
+      "rpcMethod": "byModel",
+      "rpcId": "34637be7-d8cc-4b77-974f-fb10f9d5c58f",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 950,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "from",
+       "to",
+       "dataSources"
+      ],
+      "granularity": null
+     },
+     {
+      "path": "/usage/status",
+      "rpcMethod": "status",
+      "rpcId": "9d233f79-64b2-4993-ac5d-4d979e3574ca",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 310,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [],
+      "granularity": null
+     },
+     {
+      "path": "/usage/byProject",
+      "rpcMethod": "byProject",
+      "rpcId": "0261d20b-2f62-4c93-8939-8c042cb02597",
+      "status": 200,
+      "wallMs": null,
+      "bodyBytes": 1041,
+      "envelopeOk": true,
+      "bodyResultOk": true,
+      "payloadKeys": [
+       "from",
+       "to",
+       "dataSources"
+      ],
+      "granularity": null
+     }
+    ]
+   },
+   "errors": [],
+   "parkedAt": {
+    "index": 0,
+    "label": "通用设置"
+   },
+   "openProbe": {
+    "firstMut": 175642.60000000894,
+    "firstMutClean": 175642.60000000894,
+    "firstText": 175665.10000000894,
+    "clickT0": 175620.10000000894
+   },
+   "status": "PASS",
+   "wsSockets": [
+    "ws://127.0.0.1:3080/api/events.mux"
+   ]
+  }
+ ]
+}

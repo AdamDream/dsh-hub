@@ -1,0 +1,52 @@
+{
+  "suite": "wiring-assertions",
+  "lib": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/stage/lib-cand",
+  "rows": [
+    {
+      "id": "W1:timer-switch-defaults-OFF",
+      "ok": true,
+      "detail": "false"
+    },
+    {
+      "id": "W2:throwing-probe-removed-and-inject-used",
+      "ok": true,
+      "detail": "typeof-probe present=false; ctx.inject([\"timer\"]) present=true"
+    },
+    {
+      "id": "W3:rpc-waitIdle-only-on-refresh",
+      "ok": true,
+      "detail": "4 mention(s) of waitIdle in rpc.js, all BEFORE the status branch=true, AFTER the status branch (barrier leak)=0, refresh awaits waitIdle first=true"
+    },
+    {
+      "id": "W4:runner-created-after-dbPath-and-disposed",
+      "ok": true,
+      "detail": "createIngestRunner@11916 > dbPath=@11621; dispose=true"
+    },
+    {
+      "id": "W5a:refresh-awaits-waitIdle-and-not-ingest",
+      "ok": true,
+      "detail": "reply.ok=true waitIdle=1 ingest=0 channel=/usage authority={\"authority\":\"loopback\"}"
+    },
+    {
+      "id": "W5b:refresh-falls-back-to-ingest-without-waitIdle",
+      "ok": true,
+      "detail": "ingest calls +1"
+    },
+    {
+      "id": "W6:ten-concurrent-refresh-trigger-ONE-fold",
+      "ok": true,
+      "detail": "10 responses all ok=true; worker-side starts=1; runner runs=1"
+    },
+    {
+      "id": "W7:status-never-waits",
+      "ok": true,
+      "detail": "status responded in 0ms, waitIdle calls=0"
+    },
+    {
+      "id": "W8:data-endpoint-not-behind-a-barrier",
+      "ok": true,
+      "detail": "summary answered {\"code\":\"db-unavailable\",\"message\":\"usage: database not ready (first ingest pending)\",\"details\":{}} in 0ms with waitIdle calls=0"
+    }
+  ],
+  "pass": true
+}

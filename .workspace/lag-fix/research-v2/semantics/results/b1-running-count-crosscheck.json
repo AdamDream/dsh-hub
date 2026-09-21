@@ -1,0 +1,100 @@
+{
+  "host": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-host-apiproxy/lib/index.js",
+  "sha256": "1b9915f505996912c6f49b12b0c3f4a8261a74f26422f68f5d22cab2bc078a62",
+  "extraction": {
+    "annotate": {
+      "line": 1243,
+      "bytes": 1008
+    },
+    "finalCut": {
+      "line": 2287,
+      "bytes": 444
+    },
+    "attachedKeep": {
+      "line": 2234
+    },
+    "subagentListMaxEvaluated": 200
+  },
+  "checks": [
+    {
+      "label": "201 subagents, the 201st is running and parented to top-level p",
+      "rows_in": 202,
+      "subagent_rows_in": 201,
+      "rows_out": 201,
+      "subagent_rows_out": 200,
+      "dropped_subagent_ids": [
+        "s201_running"
+      ],
+      "top_level_runningSubagentCount_after_cut": 0,
+      "top_level_runningSubagentCount_without_cut": 1,
+      "evidence": "executed"
+    },
+    {
+      "label": "control: 201 subagents, the running one is the newest",
+      "rows_in": 202,
+      "subagent_rows_in": 201,
+      "rows_out": 201,
+      "subagent_rows_out": 200,
+      "dropped_subagent_ids": [
+        "t1"
+      ],
+      "top_level_runningSubagentCount_after_cut": 1,
+      "top_level_runningSubagentCount_without_cut": 1,
+      "evidence": "executed"
+    },
+    {
+      "label": "two-level: running grandchild c201_running is cut while its parent a survives",
+      "rows_in": 203,
+      "subagent_rows_in": 202,
+      "rows_out": 201,
+      "subagent_rows_out": 200,
+      "dropped_subagent_ids": [
+        "c1",
+        "c201_running"
+      ],
+      "top_level_runningSubagentCount_after_cut": 1,
+      "top_level_runningSubagentCount_without_cut": 2,
+      "evidence": "executed"
+    }
+  ],
+  "evidence": "executed",
+  "attachedKeep": {
+    "sliceLine": 2234,
+    "sliceSource": "const attachedSubagents = attachedSessions.filter((session) => session.header.origin === \"subagent\"); attachedSubagents.sort((a, b) => sessionListUpdatedAt(b.header, sessionListMetadata(b.events)) - sessionListUpdatedAt(a.header, sessionListMetadata(a.events))); const keep = new Set(); for (const session of attachedSessions) if (session.header.origin !== \"subagent\") keep.add(session.id); for (const session of attachedSubagents.slice(0, SUBAGENT_LIST_MAX)) keep.add(session.id);",
+    "evaluated": true,
+    "kept_ids": [
+      "top",
+      "new_a",
+      "new_b"
+    ],
+    "running_old_subagent_kept": false,
+    "note": "slice(0, SUBAGENT_LIST_MAX) takes the N most-recent attached subagents; the attached path has no running-exemption, so an old-but-running attached subagent can be dropped before items are built.",
+    "evidence": "executed"
+  },
+  "attachedKeepChannel": {
+    "kept_ids": [
+      "p",
+      "new_a",
+      "new_b"
+    ],
+    "dropped_ids": [
+      "old_running"
+    ],
+    "items_built": 3,
+    "top_level_runningSubagentCount": 0,
+    "running_dropped_session": "old_running",
+    "note": "the dropped session is live and reported running by ctx.sessions.list()/ctx.agents; the row never reaches items, so annotating before the final cut cannot see the edge either",
+    "evidence": "executed"
+  },
+  "verdict": {
+    "b2_undercount_confirmed": true,
+    "newest_running_control_ok": true,
+    "cause": "edges are built from the already-truncated rows (childrenOf), while live status comes from the full ctx.sessions.list()",
+    "attached_path_has_running_exemption": false,
+    "attached_keep_channel_undercounts": true,
+    "drop_channels": [
+      "final-cut overflow (items already built)",
+      "attached keep-set slice(0, SUBAGENT_LIST_MAX) (row never enters items)"
+    ]
+  }
+}

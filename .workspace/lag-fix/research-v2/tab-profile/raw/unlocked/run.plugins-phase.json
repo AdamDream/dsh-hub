@@ -1,0 +1,2007 @@
+{
+ "meta": {
+  "url": "http://127.0.0.1:3080",
+  "at": "2026-09-21T07:11:11.173Z",
+  "phase": "plugins",
+  "headless": true,
+  "viewport": "1440x900",
+  "windows": {
+   "openLatency": "in-page pointerdown -> first content textContent change",
+   "stay1_s": 10,
+   "stay2_s": 20,
+   "park_ms": 1500,
+   "pollWindow_s": 60
+  },
+  "cdpNote": "Performance.getMetrics returns cumulative counters; raw snapshots are recorded per window and all deltas are computed by this script.",
+  "wsNote": "WS frames classified by payload discriminator (MuxFrame/HostFrame type) and one level deeper for session/event - never by envelope type.",
+  "usageNote": "/usage/<method> is a real HTTP POST surface on the host origin (verified by recon), not an /api RPC path.",
+  "confounderNote": "The host is shared with a concurrently running agent session; ambient session/event traffic is measured as the closed-settings baseline and cannot be paused by this read-only probe.",
+  "elapsedMs": 90726
+ },
+ "tabMap": null,
+ "baseline": [],
+ "runs": [],
+ "plugins": {
+  "firstMount": {
+   "at": "2026-09-21T07:11:27.648Z",
+   "nav": {
+    "status": "FOUND",
+    "index": 2,
+    "text": "插件",
+    "total": 8,
+    "strategy": "exact"
+   },
+   "clicked": {
+    "ok": true,
+    "box": {
+     "x": 414,
+     "y": 222,
+     "w": 164,
+     "h": 40
+    }
+   },
+   "armRes": {
+    "hasDialog": true,
+    "hasNav": true,
+    "hasContent": true,
+    "contentNodes": 97,
+    "textLen": 314
+   },
+   "firstMountMs": 25.6,
+   "openProbe": {
+    "firstMut": 6344.20000000298,
+    "firstMutClean": 6344.20000000298,
+    "firstText": 6353,
+    "clickT0": 6327.4000000059605
+   },
+   "window": {
+    "label": "plugins-firstmount-w1_10s",
+    "windowMs": 10000,
+    "seconds": 10,
+    "cdpRawStart": {
+     "at": 1789974677639,
+     "ScriptDuration": 0.246046,
+     "TaskDuration": 0.759438,
+     "RecalcStyleDuration": 0.065891,
+     "LayoutDuration": 0.059879,
+     "Nodes": 1273,
+     "JSEventListeners": 287,
+     "JSHeapUsedSize": 34345488,
+     "Documents": 6,
+     "Frames": 3
+    },
+    "cdpRawEnd": {
+     "at": 1789974687640,
+     "ScriptDuration": 0.360744,
+     "TaskDuration": 1.191893,
+     "RecalcStyleDuration": 0.205631,
+     "LayoutDuration": 0.064904,
+     "Nodes": 1442,
+     "JSEventListeners": 256,
+     "JSHeapUsedSize": 28527060,
+     "Documents": 3,
+     "Frames": 3
+    },
+    "frames": {
+     "n": 581,
+     "p50": 16.7,
+     "p95": 16.8,
+     "p99": 33.3,
+     "max": 100,
+     "mean": 17.154,
+     "over50": 3,
+     "over16_7": 220
+    },
+    "domNodes": 1016,
+    "documentHidden": false,
+    "longtasks": {
+     "n": 0,
+     "totalMs": 0,
+     "maxMs": 0,
+     "entries": []
+    },
+    "ws": {
+     "totalFramesRecv": 22,
+     "totalFramesSent": 0,
+     "recvBytes": 12470,
+     "byEnvelopePerSec": {
+      "server-request": {
+       "n": 22,
+       "perSec": 2.2
+      }
+     },
+     "byPayloadTypePerSec": {
+      "session/projection": {
+       "n": 16,
+       "perSec": 1.6
+      },
+      "session/event": {
+       "n": 6,
+       "perSec": 0.6
+      }
+     },
+     "byPayloadSubTypePerSec": {
+      "event:tool/result": {
+       "n": 2,
+       "perSec": 0.2
+      },
+      "event:step/end": {
+       "n": 2,
+       "perSec": 0.2
+      },
+      "event:step/start": {
+       "n": 2,
+       "perSec": 0.2
+      }
+     },
+     "bySocketAndPayloadPerSec": {
+      "mux:session/projection": {
+       "n": 16,
+       "perSec": 1.6
+      },
+      "mux:session/event": {
+       "n": 6,
+       "perSec": 0.6
+      }
+     }
+    },
+    "http": {
+     "total": 8,
+     "usageSamples": [
+      {
+       "path": "/usage/timeseries",
+       "method": "timeseries",
+       "rpcId": "b2d78362-646c-44ba-93c3-86c216829fe3",
+       "granularity": "day",
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 57,
+       "wallToHeadersMs": 69.612,
+       "wallToBodyMs": 69.583,
+       "bodyBytes": 932,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/heatmap",
+       "method": "heatmap",
+       "rpcId": "97535591-ed4c-4287-af24-201e805feb5d",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 58,
+       "wallToHeadersMs": 69.849,
+       "wallToBodyMs": 69.834,
+       "bodyBytes": 1390,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/byModel",
+       "method": "byModel",
+       "rpcId": "9d24deac-ea72-4561-b888-120bd437459b",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 74,
+       "wallToHeadersMs": 85.381,
+       "wallToBodyMs": 85.363,
+       "bodyBytes": 950,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/byProject",
+       "method": "byProject",
+       "rpcId": "600ed11f-752a-4d18-8f67-5e39bdfa0615",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 97,
+       "wallToHeadersMs": 108.786,
+       "wallToBodyMs": 108.747,
+       "bodyBytes": 1041,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/timeseries",
+       "method": "timeseries",
+       "rpcId": "7ded25d3-fed6-42d8-a290-5a891d294220",
+       "granularity": "hour",
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 113,
+       "wallToHeadersMs": 123.527,
+       "wallToBodyMs": 123.503,
+       "bodyBytes": 775,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/sessions",
+       "method": "sessions",
+       "rpcId": "67be18c6-264a-4544-ae13-b61b5a2e3440",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 183,
+       "wallToHeadersMs": 193.68,
+       "wallToBodyMs": 193.727,
+       "bodyBytes": 53697,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/status",
+       "method": "status",
+       "rpcId": "2983dfe8-7fe0-4aed-90ca-8fbbf85a5f79",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 188,
+       "wallToHeadersMs": 197.703,
+       "wallToBodyMs": 197.662,
+       "bodyBytes": 310,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/byDay",
+       "method": "byDay",
+       "rpcId": "d935266a-2f0b-40ea-84c0-97237fc05825",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 239,
+       "wallToHeadersMs": 250.303,
+       "wallToBodyMs": 250.323,
+       "bodyBytes": 932,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      }
+     ]
+    },
+    "_rawTaken": 581,
+    "reasons": [],
+    "cdpDeltaMs": {
+     "ScriptDuration": 114.698,
+     "TaskDuration": 432.455,
+     "RecalcStyleDuration": 139.74,
+     "LayoutDuration": 5.025,
+     "Nodes": 1442,
+     "NodesDelta": 169,
+     "JSEventListeners": 256,
+     "JSHeapUsedSize": 28527060,
+     "Documents": 3,
+     "Frames": 3
+    }
+   },
+   "usageHttpRequests": [
+    {
+     "kind": "request",
+     "path": "/usage/summary",
+     "method": "POST",
+     "usage": "summary"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/timeseries",
+     "method": "POST",
+     "usage": "timeseries"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/heatmap",
+     "method": "POST",
+     "usage": "heatmap"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/byModel",
+     "method": "POST",
+     "usage": "byModel"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/byProject",
+     "method": "POST",
+     "usage": "byProject"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/byDay",
+     "method": "POST",
+     "usage": "byDay"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/timeseries",
+     "method": "POST",
+     "usage": "timeseries"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/sessions",
+     "method": "POST",
+     "usage": "sessions"
+    },
+    {
+     "kind": "request",
+     "path": "/usage/status",
+     "method": "POST",
+     "usage": "status"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/summary",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 270,
+     "usage": "summary"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/timeseries",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 932,
+     "usage": "timeseries"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/heatmap",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 1390,
+     "usage": "heatmap"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/byModel",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 950,
+     "usage": "byModel"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/byProject",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 1041,
+     "usage": "byProject"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/timeseries",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 775,
+     "usage": "timeseries"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/sessions",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 53697,
+     "usage": "sessions"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/status",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 310,
+     "usage": "status"
+    },
+    {
+     "kind": "response",
+     "path": "/usage/byDay",
+     "status": 200,
+     "wallMs": null,
+     "bodyBytes": 932,
+     "usage": "byDay"
+    }
+   ],
+   "usageSamples": [
+    {
+     "path": "/usage/summary",
+     "rpcMethod": "summary",
+     "rpcId": "a7e8d0b5-b713-4ef3-8f2c-4ebed27042e5",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 6,
+     "wallToHeadersMs": 19.24,
+     "wallToBodyMs": 18.45,
+     "bodyBytes": 270,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/timeseries",
+     "rpcMethod": "timeseries",
+     "rpcId": "b2d78362-646c-44ba-93c3-86c216829fe3",
+     "granularity": "day",
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 57,
+     "wallToHeadersMs": 69.612,
+     "wallToBodyMs": 69.583,
+     "bodyBytes": 932,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/heatmap",
+     "rpcMethod": "heatmap",
+     "rpcId": "97535591-ed4c-4287-af24-201e805feb5d",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 58,
+     "wallToHeadersMs": 69.849,
+     "wallToBodyMs": 69.834,
+     "bodyBytes": 1390,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byModel",
+     "rpcMethod": "byModel",
+     "rpcId": "9d24deac-ea72-4561-b888-120bd437459b",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 74,
+     "wallToHeadersMs": 85.381,
+     "wallToBodyMs": 85.363,
+     "bodyBytes": 950,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byProject",
+     "rpcMethod": "byProject",
+     "rpcId": "600ed11f-752a-4d18-8f67-5e39bdfa0615",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 97,
+     "wallToHeadersMs": 108.786,
+     "wallToBodyMs": 108.747,
+     "bodyBytes": 1041,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/timeseries",
+     "rpcMethod": "timeseries",
+     "rpcId": "7ded25d3-fed6-42d8-a290-5a891d294220",
+     "granularity": "hour",
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 113,
+     "wallToHeadersMs": 123.527,
+     "wallToBodyMs": 123.503,
+     "bodyBytes": 775,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/sessions",
+     "rpcMethod": "sessions",
+     "rpcId": "67be18c6-264a-4544-ae13-b61b5a2e3440",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 183,
+     "wallToHeadersMs": 193.68,
+     "wallToBodyMs": 193.727,
+     "bodyBytes": 53697,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/status",
+     "rpcMethod": "status",
+     "rpcId": "2983dfe8-7fe0-4aed-90ca-8fbbf85a5f79",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 188,
+     "wallToHeadersMs": 197.703,
+     "wallToBodyMs": 197.662,
+     "bodyBytes": 310,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byDay",
+     "rpcMethod": "byDay",
+     "rpcId": "d935266a-2f0b-40ea-84c0-97237fc05825",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 239,
+     "wallToHeadersMs": 250.303,
+     "wallToBodyMs": 250.323,
+     "bodyBytes": 932,
+     "contentLengthHeader": null,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    }
+   ],
+   "usageValidCount": 9,
+   "usageInvalidCount": 0,
+   "usageFailedRequests": [],
+   "invalidReasons": []
+  },
+  "poll60": {
+   "at": "2026-09-21T07:12:27.751Z",
+   "windowMs": 60101,
+   "subWindows": [
+    {
+     "label": "plugins-poll-10s-1",
+     "windowMs": 10001,
+     "seconds": 10.001,
+     "cdpRawStart": {
+      "at": 1789974687651,
+      "ScriptDuration": 0.360753,
+      "TaskDuration": 1.194196,
+      "RecalcStyleDuration": 0.205631,
+      "LayoutDuration": 0.064904,
+      "Nodes": 1442,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 28706148,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974697694,
+      "ScriptDuration": 0.582357,
+      "TaskDuration": 1.906232,
+      "RecalcStyleDuration": 0.524574,
+      "LayoutDuration": 0.067578,
+      "Nodes": 1507,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 30534920,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 525,
+      "p50": 16.7,
+      "p95": 33.4,
+      "p99": 50.1,
+      "max": 133.4,
+      "mean": 19.079,
+      "over50": 8,
+      "over16_7": 294
+     },
+     "domNodes": 1026,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 149,
+      "totalFramesSent": 0,
+      "recvBytes": 73075,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 149,
+        "perSec": 14.899
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 118,
+        "perSec": 11.799
+       },
+       "session/projection": {
+        "n": 28,
+        "perSec": 2.8
+       },
+       "session/queue": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "host/session-status": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 106,
+        "perSec": 10.599
+       },
+       "event:assistant/message": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:tool/call": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:agent/inbox/spliced": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:step/start": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:turn/start": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:user/message": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:tool/result": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:step/end": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 118,
+        "perSec": 11.799
+       },
+       "mux:session/projection": {
+        "n": 28,
+        "perSec": 2.8
+       },
+       "mux:session/queue": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "host:host/session-status": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 525,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 221.604,
+      "TaskDuration": 712.036,
+      "RecalcStyleDuration": 318.943,
+      "LayoutDuration": 2.674,
+      "Nodes": 1507,
+      "NodesDelta": 65,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 30534920,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "plugins-poll-10s-2",
+     "windowMs": 10004,
+     "seconds": 10.004,
+     "cdpRawStart": {
+      "at": 1789974697714,
+      "ScriptDuration": 0.583471,
+      "TaskDuration": 1.916101,
+      "RecalcStyleDuration": 0.524981,
+      "LayoutDuration": 0.067578,
+      "Nodes": 1507,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 30726628,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974707715,
+      "ScriptDuration": 0.729489,
+      "TaskDuration": 2.36944,
+      "RecalcStyleDuration": 0.72246,
+      "LayoutDuration": 0.070526,
+      "Nodes": 1447,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 27701488,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 568,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 66.7,
+      "max": 149.9,
+      "mean": 17.576,
+      "over50": 7,
+      "over16_7": 249
+     },
+     "domNodes": 1018,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 30,
+      "totalFramesSent": 0,
+      "recvBytes": 13745,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 30,
+        "perSec": 2.999
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/projection": {
+        "n": 20,
+        "perSec": 1.999
+       },
+       "session/event": {
+        "n": 9,
+        "perSec": 0.9
+       },
+       "host/session-status": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/message": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:step/end": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:assistant/chunk": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:turn/end": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:tool/call": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:tool/result": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:step/start": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/projection": {
+        "n": 20,
+        "perSec": 1.999
+       },
+       "mux:session/event": {
+        "n": 9,
+        "perSec": 0.9
+       },
+       "host:host/session-status": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 568,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 146.018,
+      "TaskDuration": 453.339,
+      "RecalcStyleDuration": 197.479,
+      "LayoutDuration": 2.948,
+      "Nodes": 1447,
+      "NodesDelta": -60,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 27701488,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "plugins-poll-10s-3",
+     "windowMs": 10001,
+     "seconds": 10.001,
+     "cdpRawStart": {
+      "at": 1789974707721,
+      "ScriptDuration": 0.729495,
+      "TaskDuration": 2.370431,
+      "RecalcStyleDuration": 0.72246,
+      "LayoutDuration": 0.070526,
+      "Nodes": 1447,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 27882452,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974717723,
+      "ScriptDuration": 0.88158,
+      "TaskDuration": 2.8239,
+      "RecalcStyleDuration": 0.913508,
+      "LayoutDuration": 0.070526,
+      "Nodes": 1450,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 27698760,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 580,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 33.4,
+      "max": 83.4,
+      "mean": 17.212,
+      "over50": 4,
+      "over16_7": 174
+     },
+     "domNodes": 1018,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 31,
+      "totalFramesSent": 0,
+      "recvBytes": 32133,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 31,
+        "perSec": 3.1
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/projection": {
+        "n": 23,
+        "perSec": 2.3
+       },
+       "session/event": {
+        "n": 8,
+        "perSec": 0.8
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:tool/result": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:step/end": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:step/start": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:assistant/message": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:tool/call": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/projection": {
+        "n": 23,
+        "perSec": 2.3
+       },
+       "mux:session/event": {
+        "n": 8,
+        "perSec": 0.8
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 580,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 152.085,
+      "TaskDuration": 453.469,
+      "RecalcStyleDuration": 191.048,
+      "LayoutDuration": 0,
+      "Nodes": 1450,
+      "NodesDelta": 3,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 27698760,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "plugins-poll-10s-4",
+     "windowMs": 10001,
+     "seconds": 10.001,
+     "cdpRawStart": {
+      "at": 1789974717728,
+      "ScriptDuration": 0.88158,
+      "TaskDuration": 2.824751,
+      "RecalcStyleDuration": 0.913508,
+      "LayoutDuration": 0.070526,
+      "Nodes": 1450,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 27867872,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974727729,
+      "ScriptDuration": 1.185741,
+      "TaskDuration": 3.846893,
+      "RecalcStyleDuration": 1.37159,
+      "LayoutDuration": 0.071627,
+      "Nodes": 1471,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 31920004,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 508,
+      "p50": 16.7,
+      "p95": 33.4,
+      "p99": 66.7,
+      "max": 66.8,
+      "mean": 19.652,
+      "over50": 12,
+      "over16_7": 176
+     },
+     "domNodes": 1026,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 485,
+      "totalFramesSent": 0,
+      "recvBytes": 182841,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 485,
+        "perSec": 48.495
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 431,
+        "perSec": 43.096
+       },
+       "session/projection": {
+        "n": 51,
+        "perSec": 5.099
+       },
+       "session/queue": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "host/session-status": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 411,
+        "perSec": 41.096
+       },
+       "event:step/start": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:assistant/message": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:tool/call": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:tool/result": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:step/end": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:agent/inbox/spliced": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "event:turn/start": {
+        "n": 1,
+        "perSec": 0.1
+       },
+       "event:user/message": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 431,
+        "perSec": 43.096
+       },
+       "mux:session/projection": {
+        "n": 51,
+        "perSec": 5.099
+       },
+       "mux:session/queue": {
+        "n": 2,
+        "perSec": 0.2
+       },
+       "host:host/session-status": {
+        "n": 1,
+        "perSec": 0.1
+       }
+      }
+     },
+     "http": {
+      "total": 0,
+      "usageSamples": []
+     },
+     "_rawTaken": 508,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 304.161,
+      "TaskDuration": 1022.142,
+      "RecalcStyleDuration": 458.082,
+      "LayoutDuration": 1.101,
+      "Nodes": 1471,
+      "NodesDelta": 21,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 31920004,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "plugins-poll-10s-5",
+     "windowMs": 10001,
+     "seconds": 10.001,
+     "cdpRawStart": {
+      "at": 1789974727737,
+      "ScriptDuration": 1.185785,
+      "TaskDuration": 3.848663,
+      "RecalcStyleDuration": 1.371644,
+      "LayoutDuration": 0.071627,
+      "Nodes": 1471,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 32061864,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974737738,
+      "ScriptDuration": 1.511233,
+      "TaskDuration": 4.988104,
+      "RecalcStyleDuration": 1.855823,
+      "LayoutDuration": 0.072558,
+      "Nodes": 1459,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 30585856,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 492,
+      "p50": 16.7,
+      "p95": 33.4,
+      "p99": 83.3,
+      "max": 133.3,
+      "mean": 20.29,
+      "over50": 9,
+      "over16_7": 189
+     },
+     "domNodes": 1026,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 1022,
+      "totalFramesSent": 0,
+      "recvBytes": 409017,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 1022,
+        "perSec": 102.19
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 974,
+        "perSec": 97.39
+       },
+       "session/projection": {
+        "n": 48,
+        "perSec": 4.8
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 957,
+        "perSec": 95.69
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/result": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:assistant/message": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:step/end": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:step/start": {
+        "n": 3,
+        "perSec": 0.3
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 974,
+        "perSec": 97.39
+       },
+       "mux:session/projection": {
+        "n": 48,
+        "perSec": 4.8
+       }
+      }
+     },
+     "http": {
+      "total": 11,
+      "usageSamples": [
+       {
+        "path": "/usage/summary",
+        "method": "summary",
+        "rpcId": "38fc7db6-73eb-4250-a840-196887ac2e5a",
+        "granularity": null,
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 21,
+        "wallToHeadersMs": 22.12,
+        "wallToBodyMs": 21.997,
+        "bodyBytes": 270,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       },
+       {
+        "path": "/usage/timeseries",
+        "method": "timeseries",
+        "rpcId": "736e42e5-3b18-48ad-9fd6-ea877ceb1134",
+        "granularity": "day",
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 82,
+        "wallToHeadersMs": 83.195,
+        "wallToBodyMs": 83.003,
+        "bodyBytes": 932,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       },
+       {
+        "path": "/usage/heatmap",
+        "method": "heatmap",
+        "rpcId": "78c46b63-f805-49e9-a73e-a47caf543201",
+        "granularity": null,
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 83,
+        "wallToHeadersMs": 84.348,
+        "wallToBodyMs": 84.276,
+        "bodyBytes": 1390,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       },
+       {
+        "path": "/usage/byModel",
+        "method": "byModel",
+        "rpcId": "e04d929a-98f4-4b6c-88b1-71ea8b7d055a",
+        "granularity": null,
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 100,
+        "wallToHeadersMs": 101.042,
+        "wallToBodyMs": 101.01,
+        "bodyBytes": 950,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       }
+      ]
+     },
+     "_rawTaken": 492,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 325.448,
+      "TaskDuration": 1139.441,
+      "RecalcStyleDuration": 484.179,
+      "LayoutDuration": 0.931,
+      "Nodes": 1459,
+      "NodesDelta": -12,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 30585856,
+      "Documents": 3,
+      "Frames": 3
+     }
+    },
+    {
+     "label": "plugins-poll-10s-6",
+     "windowMs": 10001,
+     "seconds": 10.001,
+     "cdpRawStart": {
+      "at": 1789974737744,
+      "ScriptDuration": 1.511305,
+      "TaskDuration": 4.989709,
+      "RecalcStyleDuration": 1.855823,
+      "LayoutDuration": 0.072558,
+      "Nodes": 1459,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 30723616,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "cdpRawEnd": {
+      "at": 1789974747745,
+      "ScriptDuration": 1.841124,
+      "TaskDuration": 6.199158,
+      "RecalcStyleDuration": 2.315128,
+      "LayoutDuration": 0.072807,
+      "Nodes": 1501,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 28712552,
+      "Documents": 3,
+      "Frames": 3
+     },
+     "frames": {
+      "n": 463,
+      "p50": 16.7,
+      "p95": 33.4,
+      "p99": 100,
+      "max": 150,
+      "mean": 21.562,
+      "over50": 14,
+      "over16_7": 139
+     },
+     "domNodes": 1026,
+     "documentHidden": false,
+     "longtasks": {
+      "n": 0,
+      "totalMs": 0,
+      "maxMs": 0,
+      "entries": []
+     },
+     "ws": {
+      "totalFramesRecv": 2808,
+      "totalFramesSent": 0,
+      "recvBytes": 1221854,
+      "byEnvelopePerSec": {
+       "server-request": {
+        "n": 2808,
+        "perSec": 280.772
+       }
+      },
+      "byPayloadTypePerSec": {
+       "session/event": {
+        "n": 2757,
+        "perSec": 275.672
+       },
+       "session/projection": {
+        "n": 51,
+        "perSec": 5.099
+       }
+      },
+      "byPayloadSubTypePerSec": {
+       "event:assistant/chunk": {
+        "n": 2740,
+        "perSec": 273.973
+       },
+       "event:assistant/message": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/call": {
+        "n": 4,
+        "perSec": 0.4
+       },
+       "event:tool/result": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:step/end": {
+        "n": 3,
+        "perSec": 0.3
+       },
+       "event:step/start": {
+        "n": 3,
+        "perSec": 0.3
+       }
+      },
+      "bySocketAndPayloadPerSec": {
+       "mux:session/event": {
+        "n": 2757,
+        "perSec": 275.672
+       },
+       "mux:session/projection": {
+        "n": 51,
+        "perSec": 5.099
+       }
+      }
+     },
+     "http": {
+      "total": 3,
+      "usageSamples": [
+       {
+        "path": "/usage/byProject",
+        "method": "byProject",
+        "rpcId": "063c6537-6683-4c6b-8312-5a82068408bc",
+        "granularity": null,
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 120,
+        "wallToHeadersMs": 120.683,
+        "wallToBodyMs": 120.634,
+        "bodyBytes": 1041,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       },
+       {
+        "path": "/usage/timeseries",
+        "method": "timeseries",
+        "rpcId": "44752c55-3031-4d69-b97e-edfafc368b14",
+        "granularity": "hour",
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 164,
+        "wallToHeadersMs": 163.954,
+        "wallToBodyMs": 163.804,
+        "bodyBytes": 775,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       },
+       {
+        "path": "/usage/byDay",
+        "method": "byDay",
+        "rpcId": "f335d7e9-b6de-41ad-b46e-c8a5972ae9e4",
+        "granularity": null,
+        "status": 200,
+        "wallMs": null,
+        "wallMsFallback": 241,
+        "wallToHeadersMs": 241.338,
+        "wallToBodyMs": 241.222,
+        "bodyBytes": 932,
+        "envelopeOk": true,
+        "bodyResultOk": true
+       }
+      ]
+     },
+     "_rawTaken": 463,
+     "reasons": [],
+     "cdpDeltaMs": {
+      "ScriptDuration": 329.819,
+      "TaskDuration": 1209.449,
+      "RecalcStyleDuration": 459.305,
+      "LayoutDuration": 0.249,
+      "Nodes": 1501,
+      "NodesDelta": 42,
+      "JSEventListeners": 256,
+      "JSHeapUsedSize": 28712552,
+      "Documents": 3,
+      "Frames": 3
+     }
+    }
+   ],
+   "usageSamples": [
+    {
+     "path": "/usage/summary",
+     "rpcMethod": "summary",
+     "rpcId": "38fc7db6-73eb-4250-a840-196887ac2e5a",
+     "granularity": null,
+     "atOffsetMs": 49994,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 21,
+     "wallToHeadersMs": 22.12,
+     "wallToBodyMs": 21.997,
+     "bodyBytes": 270,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/timeseries",
+     "rpcMethod": "timeseries",
+     "rpcId": "736e42e5-3b18-48ad-9fd6-ea877ceb1134",
+     "granularity": "day",
+     "atOffsetMs": 50055,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 82,
+     "wallToHeadersMs": 83.195,
+     "wallToBodyMs": 83.003,
+     "bodyBytes": 932,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/heatmap",
+     "rpcMethod": "heatmap",
+     "rpcId": "78c46b63-f805-49e9-a73e-a47caf543201",
+     "granularity": null,
+     "atOffsetMs": 50056,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 83,
+     "wallToHeadersMs": 84.348,
+     "wallToBodyMs": 84.276,
+     "bodyBytes": 1390,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byModel",
+     "rpcMethod": "byModel",
+     "rpcId": "e04d929a-98f4-4b6c-88b1-71ea8b7d055a",
+     "granularity": null,
+     "atOffsetMs": 50073,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 100,
+     "wallToHeadersMs": 101.042,
+     "wallToBodyMs": 101.01,
+     "bodyBytes": 950,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byProject",
+     "rpcMethod": "byProject",
+     "rpcId": "063c6537-6683-4c6b-8312-5a82068408bc",
+     "granularity": null,
+     "atOffsetMs": 50093,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 120,
+     "wallToHeadersMs": 120.683,
+     "wallToBodyMs": 120.634,
+     "bodyBytes": 1041,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/timeseries",
+     "rpcMethod": "timeseries",
+     "rpcId": "44752c55-3031-4d69-b97e-edfafc368b14",
+     "granularity": "hour",
+     "atOffsetMs": 50137,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 164,
+     "wallToHeadersMs": 163.954,
+     "wallToBodyMs": 163.804,
+     "bodyBytes": 775,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byDay",
+     "rpcMethod": "byDay",
+     "rpcId": "f335d7e9-b6de-41ad-b46e-c8a5972ae9e4",
+     "granularity": null,
+     "atOffsetMs": 50214,
+     "status": 200,
+     "wallMs": null,
+     "wallMsFallback": 241,
+     "wallToHeadersMs": 241.338,
+     "wallToBodyMs": 241.222,
+     "bodyBytes": 932,
+     "envelopeOk": true,
+     "bodyResultOk": true,
+     "invalidReasons": [],
+     "valid": true
+    }
+   ],
+   "usageValidCount": 7,
+   "usageInvalidCount": 0,
+   "windowCdpDeltaMs": {
+    "ScriptDuration": 1480.371,
+    "TaskDuration": 5004.962,
+    "RecalcStyleDuration": 2109.497,
+    "LayoutDuration": 7.903
+   }
+  },
+  "return": {
+   "at": "2026-09-21T07:12:41.827Z",
+   "armRes": {
+    "hasDialog": true,
+    "hasNav": true,
+    "hasContent": true,
+    "contentNodes": 97,
+    "textLen": 314
+   },
+   "clicked": {
+    "ok": true,
+    "box": {
+     "x": 414,
+     "y": 222,
+     "w": 164,
+     "h": 40
+    }
+   },
+   "returnMs": 26.1,
+   "openProbe": {
+    "firstMut": 80522.10000000894,
+    "firstMutClean": 80522.10000000894,
+    "firstText": 80529.70000000298,
+    "clickT0": 80503.60000000894
+   },
+   "window": {
+    "label": "plugins-return-w1_10s",
+    "windowMs": 10001,
+    "seconds": 10.001,
+    "cdpRawStart": {
+     "at": 1789974751820,
+     "ScriptDuration": 1.973253,
+     "TaskDuration": 6.749957,
+     "RecalcStyleDuration": 2.492647,
+     "LayoutDuration": 0.083979,
+     "Nodes": 1263,
+     "JSEventListeners": 274,
+     "JSHeapUsedSize": 28891768,
+     "Documents": 3,
+     "Frames": 3
+    },
+    "cdpRawEnd": {
+     "at": 1789974761822,
+     "ScriptDuration": 2.371279,
+     "TaskDuration": 8.090113,
+     "RecalcStyleDuration": 3.149968,
+     "LayoutDuration": 0.087468,
+     "Nodes": 1501,
+     "JSEventListeners": 256,
+     "JSHeapUsedSize": 28598740,
+     "Documents": 3,
+     "Frames": 3
+    },
+    "frames": {
+     "n": 532,
+     "p50": 16.7,
+     "p95": 33.3,
+     "p99": 66.6,
+     "max": 100,
+     "mean": 18.765,
+     "over50": 9,
+     "over16_7": 117
+    },
+    "domNodes": 1026,
+    "documentHidden": false,
+    "longtasks": {
+     "n": 0,
+     "totalMs": 0,
+     "maxMs": 0,
+     "entries": []
+    },
+    "ws": {
+     "totalFramesRecv": 547,
+     "totalFramesSent": 0,
+     "recvBytes": 235792,
+     "byEnvelopePerSec": {
+      "server-request": {
+       "n": 547,
+       "perSec": 54.695
+      }
+     },
+     "byPayloadTypePerSec": {
+      "session/event": {
+       "n": 470,
+       "perSec": 46.995
+      },
+      "session/projection": {
+       "n": 77,
+       "perSec": 7.699
+      }
+     },
+     "byPayloadSubTypePerSec": {
+      "event:assistant/chunk": {
+       "n": 442,
+       "perSec": 44.196
+      },
+      "event:tool/result": {
+       "n": 6,
+       "perSec": 0.6
+      },
+      "event:step/end": {
+       "n": 6,
+       "perSec": 0.6
+      },
+      "event:step/start": {
+       "n": 6,
+       "perSec": 0.6
+      },
+      "event:assistant/message": {
+       "n": 5,
+       "perSec": 0.5
+      },
+      "event:tool/call": {
+       "n": 5,
+       "perSec": 0.5
+      }
+     },
+     "bySocketAndPayloadPerSec": {
+      "mux:session/event": {
+       "n": 470,
+       "perSec": 46.995
+      },
+      "mux:session/projection": {
+       "n": 77,
+       "perSec": 7.699
+      }
+     }
+    },
+    "http": {
+     "total": 9,
+     "usageSamples": [
+      {
+       "path": "/usage/summary",
+       "method": "summary",
+       "rpcId": "8dc949c2-5666-49c9-9b06-5a7e00da10e6",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 14,
+       "wallToHeadersMs": 22.56,
+       "wallToBodyMs": 22.187,
+       "bodyBytes": 270,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/timeseries",
+       "method": "timeseries",
+       "rpcId": "5bcf786c-aa8e-4a17-919a-e81fa338d761",
+       "granularity": "day",
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 72,
+       "wallToHeadersMs": 82.494,
+       "wallToBodyMs": 82.417,
+       "bodyBytes": 932,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/timeseries",
+       "method": "timeseries",
+       "rpcId": "a9c18422-4364-441e-aaf2-55fc3e1d8819",
+       "granularity": "hour",
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 119,
+       "wallToHeadersMs": 129.349,
+       "wallToBodyMs": 129.312,
+       "bodyBytes": 775,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/byDay",
+       "method": "byDay",
+       "rpcId": "a838ce02-7a5e-481d-94d0-dc406b55d35a",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 169,
+       "wallToHeadersMs": 180.32,
+       "wallToBodyMs": 180.279,
+       "bodyBytes": 932,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/heatmap",
+       "method": "heatmap",
+       "rpcId": "134e9dbe-6758-48c0-b68d-a583fddbdb32",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 183,
+       "wallToHeadersMs": 195.089,
+       "wallToBodyMs": 195.021,
+       "bodyBytes": 1390,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/sessions",
+       "method": "sessions",
+       "rpcId": "0fa3102f-c1ea-47cf-ac20-80fbaa58b160",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 306,
+       "wallToHeadersMs": 316.676,
+       "wallToBodyMs": 316.609,
+       "bodyBytes": 53697,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/status",
+       "method": "status",
+       "rpcId": "f5221f31-223d-425d-a4e0-76df9fedbf81",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 311,
+       "wallToHeadersMs": 320.905,
+       "wallToBodyMs": 320.846,
+       "bodyBytes": 310,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/byModel",
+       "method": "byModel",
+       "rpcId": "b6797a6d-47a7-4efb-9ba9-2f70843d741e",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 328,
+       "wallToHeadersMs": 339.445,
+       "wallToBodyMs": 339.381,
+       "bodyBytes": 950,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      },
+      {
+       "path": "/usage/byProject",
+       "method": "byProject",
+       "rpcId": "886eddbf-28e6-4676-904a-0c7a987d4a5f",
+       "granularity": null,
+       "status": 200,
+       "wallMs": null,
+       "wallMsFallback": 349,
+       "wallToHeadersMs": 359.488,
+       "wallToBodyMs": 359.38,
+       "bodyBytes": 1041,
+       "envelopeOk": true,
+       "bodyResultOk": true
+      }
+     ]
+    },
+    "_rawTaken": 532,
+    "reasons": [],
+    "cdpDeltaMs": {
+     "ScriptDuration": 398.026,
+     "TaskDuration": 1340.156,
+     "RecalcStyleDuration": 657.321,
+     "LayoutDuration": 3.489,
+     "Nodes": 1501,
+     "NodesDelta": 238,
+     "JSEventListeners": 256,
+     "JSHeapUsedSize": 28598740,
+     "Documents": 3,
+     "Frames": 3
+    }
+   },
+   "usageWhileAway": [],
+   "usageOnReturn": [
+    {
+     "path": "/usage/summary",
+     "rpcMethod": "summary",
+     "rpcId": "8dc949c2-5666-49c9-9b06-5a7e00da10e6",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 22.56,
+     "wallToBodyMs": 22.187,
+     "bodyBytes": 270,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/timeseries",
+     "rpcMethod": "timeseries",
+     "rpcId": "5bcf786c-aa8e-4a17-919a-e81fa338d761",
+     "granularity": "day",
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 82.494,
+     "wallToBodyMs": 82.417,
+     "bodyBytes": 932,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/timeseries",
+     "rpcMethod": "timeseries",
+     "rpcId": "a9c18422-4364-441e-aaf2-55fc3e1d8819",
+     "granularity": "hour",
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 129.349,
+     "wallToBodyMs": 129.312,
+     "bodyBytes": 775,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byDay",
+     "rpcMethod": "byDay",
+     "rpcId": "a838ce02-7a5e-481d-94d0-dc406b55d35a",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 180.32,
+     "wallToBodyMs": 180.279,
+     "bodyBytes": 932,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/heatmap",
+     "rpcMethod": "heatmap",
+     "rpcId": "134e9dbe-6758-48c0-b68d-a583fddbdb32",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 195.089,
+     "wallToBodyMs": 195.021,
+     "bodyBytes": 1390,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/sessions",
+     "rpcMethod": "sessions",
+     "rpcId": "0fa3102f-c1ea-47cf-ac20-80fbaa58b160",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 316.676,
+     "wallToBodyMs": 316.609,
+     "bodyBytes": 53697,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/status",
+     "rpcMethod": "status",
+     "rpcId": "f5221f31-223d-425d-a4e0-76df9fedbf81",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 320.905,
+     "wallToBodyMs": 320.846,
+     "bodyBytes": 310,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byModel",
+     "rpcMethod": "byModel",
+     "rpcId": "b6797a6d-47a7-4efb-9ba9-2f70843d741e",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 339.445,
+     "wallToBodyMs": 339.381,
+     "bodyBytes": 950,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    },
+    {
+     "path": "/usage/byProject",
+     "rpcMethod": "byProject",
+     "rpcId": "886eddbf-28e6-4676-904a-0c7a987d4a5f",
+     "granularity": null,
+     "status": 200,
+     "wallMs": null,
+     "wallToHeadersMs": 359.488,
+     "wallToBodyMs": 359.38,
+     "bodyBytes": 1041,
+     "envelopeOk": true,
+     "invalidReasons": [],
+     "valid": true
+    }
+   ],
+   "remountRefetched": true,
+   "invalidReasons": []
+  }
+ },
+ "aborted": false
+}

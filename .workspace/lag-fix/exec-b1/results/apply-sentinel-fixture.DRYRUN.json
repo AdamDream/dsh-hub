@@ -1,0 +1,153 @@
+{
+  "at": "2026-09-21T08:39:05.548Z",
+  "mode": "DRYRUN",
+  "checks": [
+    {
+      "name": "fixture",
+      "ok": true,
+      "detail": "true"
+    },
+    {
+      "name": "fixture",
+      "ok": true,
+      "detail": "true"
+    },
+    {
+      "name": "sentinel",
+      "ok": true,
+      "detail": "true"
+    },
+    {
+      "name": "sentinel",
+      "ok": true,
+      "detail": "true"
+    },
+    {
+      "name": "sentinel",
+      "ok": true,
+      "detail": "true"
+    },
+    {
+      "name": "sentinel",
+      "ok": true,
+      "detail": "true"
+    },
+    {
+      "name": "control",
+      "ok": true,
+      "detail": "true"
+    },
+    {
+      "name": "dry-run",
+      "ok": true,
+      "detail": "true"
+    }
+  ],
+  "variantResults": {
+    "v2-candidate": {
+      "code": 0,
+      "verdict": "PASS",
+      "checks": [
+        {
+          "name": "定位聚合函数",
+          "ok": true,
+          "detail": "signature = function annotateRunningSubagentCounts(ctx, items)"
+        },
+        {
+          "name": "签名声明 ctx 形参",
+          "ok": true,
+          "detail": "function annotateRunningSubagentCounts(ctx, items)"
+        },
+        {
+          "name": "相A 正向：不注入 ctx 调用不抛错",
+          "ok": true,
+          "detail": "no throw"
+        },
+        {
+          "name": "相A 正向：runningSubagentCount 语义正确",
+          "ok": true,
+          "detail": "实得 {\"top1\":2,\"top2\":1} 期望 {\"top1\":2,\"top2\":1}"
+        },
+        {
+          "name": "相B 反向对照：旧签名必须抛 ReferenceError（探针有效性自证）",
+          "ok": true,
+          "detail": "ctx is not defined"
+        }
+      ],
+      "file": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/dryrun/index.js"
+    },
+    "deployed-v1": {
+      "code": 0,
+      "verdict": "PASS",
+      "checks": [
+        {
+          "name": "定位聚合函数",
+          "ok": true,
+          "detail": "signature = function annotateRunningSubagentCounts(ctx, items)"
+        },
+        {
+          "name": "签名声明 ctx 形参",
+          "ok": true,
+          "detail": "function annotateRunningSubagentCounts(ctx, items)"
+        },
+        {
+          "name": "相A 正向：不注入 ctx 调用不抛错",
+          "ok": true,
+          "detail": "no throw"
+        },
+        {
+          "name": "相A 正向：runningSubagentCount 语义正确",
+          "ok": true,
+          "detail": "实得 {\"top1\":2,\"top2\":1} 期望 {\"top1\":2,\"top2\":1}"
+        },
+        {
+          "name": "相B 反向对照：旧签名必须抛 ReferenceError（探针有效性自证）",
+          "ok": true,
+          "detail": "ctx is not defined"
+        }
+      ],
+      "file": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-host-apiproxy/lib/index.js"
+    },
+    "v1-fixture-vs-v2-candidate": {
+      "code": 1,
+      "verdict": "FAIL",
+      "checks": [
+        {
+          "name": "定位聚合函数",
+          "ok": true,
+          "detail": "signature = function annotateRunningSubagentCounts(ctx, items)"
+        },
+        {
+          "name": "签名声明 ctx 形参",
+          "ok": true,
+          "detail": "function annotateRunningSubagentCounts(ctx, items)"
+        },
+        {
+          "name": "相A 正向：不注入 ctx 调用不抛错",
+          "ok": false,
+          "detail": "Cannot read properties of undefined (reading 'parentSession')"
+        },
+        {
+          "name": "相B 反向对照：旧签名必须抛 ReferenceError（探针有效性自证）",
+          "ok": true,
+          "detail": "ctx is not defined"
+        }
+      ]
+    }
+  },
+  "outcome": "PASS",
+  "source": {
+    "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/probes/verify-b1-ctx-binding.mjs",
+    "sha256": "fe8cf12554f75b23647ff9bef7060e9818bedf579bb8590053d952facd74a4e3",
+    "bytes": 6551
+  },
+  "patchedSha": "9fd7763577a3d3b3815865d535e3979c98fc45dbfe8f12febe9ae676d4e2cd81",
+  "writes": [
+    {
+      "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/sentinel/verify-b1-ctx-binding.patched.mjs",
+      "sha256": "9fd7763577a3d3b3815865d535e3979c98fc45dbfe8f12febe9ae676d4e2cd81",
+      "dryRun": true
+    }
+  ],
+  "failures": 0
+}

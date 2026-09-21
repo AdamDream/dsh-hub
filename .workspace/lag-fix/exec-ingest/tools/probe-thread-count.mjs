@@ -1,0 +1,16 @@
+import { Worker } from "node:worker_threads";
+import { readdirSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+const tasks = () => readdirSync("/proc/self/task").length;
+const handles = () => process._getActiveHandles().length;
+const wf = join(process.cwd(), "scratch/probe-w2.mjs");
+writeFileSync(wf, `import { parentPort } from "node:worker_threads"; parentPort.postMessage("hi");`);
+const before = { tasks: tasks(), handles: handles() };
+const w1 = new Worker(wf, { type: "module" });
+const w2 = new Worker(wf, { type: "module" });
+await new Promise((r) => setTimeout(r, 300));
+const mid = { tasks: tasks(), handles: handles(), t1: w1.threadId, t2: w2.threadId };
+await w1.terminate(); w2.terminate();
+await new Promise((r) => setTimeout(r, 500));
+const after = { tasks: tasks(), handles: handles(), t1: w1.threadId, t2: w2.threadId };
+console.log(JSON.stringify({ before, mid, after }, null, 1));

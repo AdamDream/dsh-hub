@@ -1,0 +1,873 @@
+{
+  "target": {
+    "path": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-runtime/lib/client.js",
+    "sha256": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+    "lines": 10662
+  },
+  "candidate": {
+    "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/candidate/client.js",
+    "sha256": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f",
+    "lines": 10667
+  },
+  "measuredDepths": {
+    "top": 4,
+    "carry": 5,
+    "walk": 6,
+    "ifAddr": 4
+  },
+  "anchors": {
+    "a1InsertAbove": "\t\t\t\tif (current !== void 0 && currentAddress !== void 0) {",
+    "a2RegisterAfter": "\t\t\t\t\t\tseen.add(childId);",
+    "a3Replace": "\t\t\t\t\tfor (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0) byId[id] = previousProjection.byId[id];",
+    "gateReplace": "\t\t\t\tconst nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length ? previousProjection.byId : stableById;"
+  },
+  "emittedPatchText": {
+    "A1_BLOCK": "\t\t\t\tconst chainRowIds = new Set(); /* p2ac-fix */",
+    "A2_BLOCK": "\t\t\t\t\t\tchainRowIds.add(childId); /* p2ac-fix */",
+    "A3_BLOCK": "\t\t\t\t\t/* p2ac-fix */ /* address-chain scoped carry-forward: only ids a visited chain step genuinely needs. */\n\t\t\t\t\tfor (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0 && chainRowIds.has(id)) byId[id] = previousProjection.byId[id];",
+    "GATE_BLOCK": "\t\t\t\t/* p2ac-fix */ /* key-set gate: reusing the whole previous byId object is only sound when its key set has no extra key. */\n\t\t\t\t/* the previous key set is read AFTER the chain-scoped carry-forward, so it is compared against the same liveKeys. */\n\t\t\t\tconst reusableByIdKeys = previousProjection !== void 0 ? Object.keys(previousProjection.byId) : void 0;\n\t\t\t\tconst nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length && reusableByIdKeys.length === liveKeys.length && reusableByIdKeys.every((id) => Object.prototype.hasOwnProperty.call(byId, id)) ? previousProjection.byId : stableById;"
+  },
+  "surgicalDiff": {
+    "commonPrefixLines": 9293,
+    "commonSuffixLines": 1322,
+    "liveRegionLines": [
+      "\t\t\t\tif (current !== void 0 && currentAddress !== void 0) {",
+      "\t\t\t\t\tconst seen = /* @__PURE__ */ new Set();",
+      "\t\t\t\t\tlet address = currentAddress;",
+      "\t\t\t\t\twhile (address !== void 0 && !seen.has(address.childSessionId)) {",
+      "\t\t\t\t\t\tconst childId = address.childSessionId;",
+      "\t\t\t\t\t\tseen.add(childId);",
+      "\t\t\t\t\t\tconst child = subagentsByParent[address.parentSessionId]?.entries.find((entry) => entry.kind === \"child\" && entry.id === childId);",
+      "\t\t\t\t\t\tif (child?.kind !== \"child\") break;",
+      "\t\t\t\t\t\tconst displayTitle = child.label ?? childId;",
+      "\t\t\t\t\t\tconst summary = byId[childId];",
+      "\t\t\t\t\t\tif (summary === void 0) byId[childId] = {",
+      "\t\t\t\t\t\t\tid: childId,",
+      "\t\t\t\t\t\t\tdisplayTitle,",
+      "\t\t\t\t\t\t\tparentId: address.parentSessionId,",
+      "\t\t\t\t\t\t\torigin: \"subagent\",",
+      "\t\t\t\t\t\t\trunning: child.activity === \"running\",",
+      "\t\t\t\t\t\t\tblank: false,",
+      "\t\t\t\t\t\t\tupdatedAt: 0",
+      "\t\t\t\t\t\t};",
+      "\t\t\t\t\t\telse if (summary.displayTitle !== displayTitle) byId[childId] = {",
+      "\t\t\t\t\t\t\t...summary,",
+      "\t\t\t\t\t\t\tdisplayTitle",
+      "\t\t\t\t\t\t};",
+      "\t\t\t\t\t\tconst parent = byId[address.parentSessionId];",
+      "\t\t\t\t\t\tif (parent !== void 0 && parent.origin !== \"subagent\") break;",
+      "\t\t\t\t\t\taddress = this.manager.navigationAddress(address.parentSessionId);",
+      "\t\t\t\t\t}",
+      "\t\t\t\t}",
+      "\t\t\t\t/* dsh-perf-fix P2 v1 */ /* projectList: reuse the previous projection object when content is unchanged. */",
+      "\t\t\t\tconst previousProjection = this.listProjection !== void 0 && this.listProjection === this.list.getSnapshot() ? this.listProjection : void 0;",
+      "\t\t\t\tconst copiedPrevious = previousProjection !== void 0 && sameIdList(previousProjection.ids, ids);",
+      "\t\t\t\tif (copiedPrevious) {",
+      "\t\t\t\t\t/* Carry the previous projection's extra rows (address-chain children) forward before diffing. */",
+      "\t\t\t\t\tfor (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0) byId[id] = previousProjection.byId[id];",
+      "\t\t\t\t}",
+      "\t\t\t\tconst liveKeys = Object.keys(byId);",
+      "\t\t\t\tconst stableIds = copiedPrevious ? previousProjection.ids : ids;",
+      "\t\t\t\tconst stableById = {};",
+      "\t\t\t\tlet reusedEntries = 0;",
+      "\t\t\t\tfor (const id of liveKeys) {",
+      "\t\t\t\t\tconst entry = byId[id];",
+      "\t\t\t\t\tconst previousEntry = previousProjection === void 0 ? void 0 : previousProjection.byId[id];",
+      "\t\t\t\t\tconst reusable = previousEntry !== void 0 && previousEntry.id === entry.id && previousEntry.displayTitle === entry.displayTitle && previousEntry.running === entry.running && previousEntry.completed === entry.completed && previousEntry.blank === entry.blank && previousEntry.updatedAt === entry.updatedAt && previousEntry.pendingInteraction === entry.pendingInteraction && previousEntry.projectionValues === entry.projectionValues && previousEntry.title === entry.title && previousEntry.cwd === entry.cwd && previousEntry.parentId === entry.parentId && previousEntry.origin === entry.origin && previousEntry.agentPreset === entry.agentPreset;",
+      "\t\t\t\t\tstableById[id] = reusable ? previousEntry : entry;",
+      "\t\t\t\t\tif (reusable) reusedEntries += 1;",
+      "\t\t\t\t}",
+      "\t\t\t\tconst nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length ? previousProjection.byId : stableById;"
+    ],
+    "candidateRegionLines": [
+      "\t\t\t\tconst chainRowIds = new Set(); /* p2ac-fix */",
+      "\t\t\t\tif (current !== void 0 && currentAddress !== void 0) {",
+      "\t\t\t\t\tconst seen = /* @__PURE__ */ new Set();",
+      "\t\t\t\t\tlet address = currentAddress;",
+      "\t\t\t\t\twhile (address !== void 0 && !seen.has(address.childSessionId)) {",
+      "\t\t\t\t\t\tconst childId = address.childSessionId;",
+      "\t\t\t\t\t\tseen.add(childId);",
+      "\t\t\t\t\t\tchainRowIds.add(childId); /* p2ac-fix */",
+      "\t\t\t\t\t\tconst child = subagentsByParent[address.parentSessionId]?.entries.find((entry) => entry.kind === \"child\" && entry.id === childId);",
+      "\t\t\t\t\t\tif (child?.kind !== \"child\") break;",
+      "\t\t\t\t\t\tconst displayTitle = child.label ?? childId;",
+      "\t\t\t\t\t\tconst summary = byId[childId];",
+      "\t\t\t\t\t\tif (summary === void 0) byId[childId] = {",
+      "\t\t\t\t\t\t\tid: childId,",
+      "\t\t\t\t\t\t\tdisplayTitle,",
+      "\t\t\t\t\t\t\tparentId: address.parentSessionId,",
+      "\t\t\t\t\t\t\torigin: \"subagent\",",
+      "\t\t\t\t\t\t\trunning: child.activity === \"running\",",
+      "\t\t\t\t\t\t\tblank: false,",
+      "\t\t\t\t\t\t\tupdatedAt: 0",
+      "\t\t\t\t\t\t};",
+      "\t\t\t\t\t\telse if (summary.displayTitle !== displayTitle) byId[childId] = {",
+      "\t\t\t\t\t\t\t...summary,",
+      "\t\t\t\t\t\t\tdisplayTitle",
+      "\t\t\t\t\t\t};",
+      "\t\t\t\t\t\tconst parent = byId[address.parentSessionId];",
+      "\t\t\t\t\t\tif (parent !== void 0 && parent.origin !== \"subagent\") break;",
+      "\t\t\t\t\t\taddress = this.manager.navigationAddress(address.parentSessionId);",
+      "\t\t\t\t\t}",
+      "\t\t\t\t}",
+      "\t\t\t\t/* dsh-perf-fix P2 v1 */ /* projectList: reuse the previous projection object when content is unchanged. */",
+      "\t\t\t\tconst previousProjection = this.listProjection !== void 0 && this.listProjection === this.list.getSnapshot() ? this.listProjection : void 0;",
+      "\t\t\t\tconst copiedPrevious = previousProjection !== void 0 && sameIdList(previousProjection.ids, ids);",
+      "\t\t\t\tif (copiedPrevious) {",
+      "\t\t\t\t\t/* p2ac-fix */ /* address-chain scoped carry-forward: only ids a visited chain step genuinely needs. */",
+      "\t\t\t\t\tfor (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0 && chainRowIds.has(id)) byId[id] = previousProjection.byId[id];",
+      "\t\t\t\t}",
+      "\t\t\t\tconst liveKeys = Object.keys(byId);",
+      "\t\t\t\tconst stableIds = copiedPrevious ? previousProjection.ids : ids;",
+      "\t\t\t\tconst stableById = {};",
+      "\t\t\t\tlet reusedEntries = 0;",
+      "\t\t\t\tfor (const id of liveKeys) {",
+      "\t\t\t\t\tconst entry = byId[id];",
+      "\t\t\t\t\tconst previousEntry = previousProjection === void 0 ? void 0 : previousProjection.byId[id];",
+      "\t\t\t\t\tconst reusable = previousEntry !== void 0 && previousEntry.id === entry.id && previousEntry.displayTitle === entry.displayTitle && previousEntry.running === entry.running && previousEntry.completed === entry.completed && previousEntry.blank === entry.blank && previousEntry.updatedAt === entry.updatedAt && previousEntry.pendingInteraction === entry.pendingInteraction && previousEntry.projectionValues === entry.projectionValues && previousEntry.title === entry.title && previousEntry.cwd === entry.cwd && previousEntry.parentId === entry.parentId && previousEntry.origin === entry.origin && previousEntry.agentPreset === entry.agentPreset;",
+      "\t\t\t\t\tstableById[id] = reusable ? previousEntry : entry;",
+      "\t\t\t\t\tif (reusable) reusedEntries += 1;",
+      "\t\t\t\t}",
+      "\t\t\t\t/* p2ac-fix */ /* key-set gate: reusing the whole previous byId object is only sound when its key set has no extra key. */",
+      "\t\t\t\t/* the previous key set is read AFTER the chain-scoped carry-forward, so it is compared against the same liveKeys. */",
+      "\t\t\t\tconst reusableByIdKeys = previousProjection !== void 0 ? Object.keys(previousProjection.byId) : void 0;",
+      "\t\t\t\tconst nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length && reusableByIdKeys.length === liveKeys.length && reusableByIdKeys.every((id) => Object.prototype.hasOwnProperty.call(byId, id)) ? previousProjection.byId : stableById;"
+    ]
+  },
+  "scenarioVerdict": {
+    "unpatched": {
+      "observed": {
+        "S1": "stale",
+        "S2": "ok",
+        "S3": "ok",
+        "S4": "stale",
+        "S5": "cleared",
+        "IDENT": "same-ref",
+        "CUTOVER": "stale"
+      },
+      "byIdKeys": {
+        "S1": [
+          "p",
+          "child"
+        ],
+        "S2": [
+          "p",
+          "child"
+        ],
+        "S3": [
+          "p",
+          "child"
+        ],
+        "S4": [
+          "p",
+          "child2",
+          "child1"
+        ],
+        "S5": [
+          "p",
+          "q"
+        ],
+        "IDENT": [
+          "p",
+          "child"
+        ],
+        "CUTOVER": [
+          "p",
+          "child"
+        ]
+      },
+      "s1_ids": [
+        "p"
+      ],
+      "s1_eligible_child": false,
+      "s1_indexSubagentDescendants_for_p": {
+        "count": 1,
+        "runningCount": 1
+      },
+      "s2_displayTitle": "ChildRenamed",
+      "s3_displayTitle": "Child",
+      "s_ident_identical_reference": true,
+      "s_cutover_published1_byIdKeys": [
+        "p",
+        "child"
+      ]
+    },
+    "candidate-file": {
+      "observed": {
+        "S1": "fixed",
+        "S2": "ok",
+        "S3": "ok",
+        "S4": "fixed",
+        "S5": "cleared",
+        "IDENT": "same-ref",
+        "CUTOVER": "fixed"
+      },
+      "byIdKeys": {
+        "S1": [
+          "p"
+        ],
+        "S2": [
+          "p",
+          "child"
+        ],
+        "S3": [
+          "p",
+          "child"
+        ],
+        "S4": [
+          "p",
+          "child2"
+        ],
+        "S5": [
+          "p",
+          "q"
+        ],
+        "IDENT": [
+          "p",
+          "child"
+        ],
+        "CUTOVER": [
+          "p"
+        ]
+      },
+      "s1_ids": [
+        "p"
+      ],
+      "s1_eligible_child": false,
+      "s1_indexSubagentDescendants_for_p": null,
+      "s2_displayTitle": "ChildRenamed",
+      "s3_displayTitle": "Child",
+      "s_ident_identical_reference": true,
+      "s_cutover_published1_byIdKeys": [
+        "p",
+        "child"
+      ]
+    },
+    "derived-member-gate": {
+      "observed": {
+        "S1": "fixed",
+        "S2": "ok",
+        "S3": "ok",
+        "S4": "fixed",
+        "S5": "cleared",
+        "IDENT": "same-ref",
+        "CUTOVER": "fixed"
+      },
+      "byIdKeys": {
+        "S1": [
+          "p"
+        ],
+        "S2": [
+          "p",
+          "child"
+        ],
+        "S3": [
+          "p",
+          "child"
+        ],
+        "S4": [
+          "p",
+          "child2"
+        ],
+        "S5": [
+          "p",
+          "q"
+        ],
+        "IDENT": [
+          "p",
+          "child"
+        ],
+        "CUTOVER": [
+          "p"
+        ]
+      },
+      "s1_ids": [
+        "p"
+      ],
+      "s1_eligible_child": false,
+      "s1_indexSubagentDescendants_for_p": null,
+      "s2_displayTitle": "ChildRenamed",
+      "s3_displayTitle": "Child",
+      "s_ident_identical_reference": true,
+      "s_cutover_published1_byIdKeys": [
+        "p",
+        "child"
+      ]
+    },
+    "P-AC-count-gate": {
+      "observed": {
+        "S1": "fixed",
+        "S2": "ok",
+        "S3": "ok",
+        "S4": "fixed",
+        "S5": "cleared",
+        "IDENT": "same-ref",
+        "CUTOVER": "fixed"
+      },
+      "byIdKeys": {
+        "S1": [
+          "p"
+        ],
+        "S2": [
+          "p",
+          "child"
+        ],
+        "S3": [
+          "p",
+          "child"
+        ],
+        "S4": [
+          "p",
+          "child2"
+        ],
+        "S5": [
+          "p",
+          "q"
+        ],
+        "IDENT": [
+          "p",
+          "child"
+        ],
+        "CUTOVER": [
+          "p"
+        ]
+      },
+      "s1_ids": [
+        "p"
+      ],
+      "s1_eligible_child": false,
+      "s1_indexSubagentDescendants_for_p": null,
+      "s2_displayTitle": "ChildRenamed",
+      "s3_displayTitle": "Child",
+      "s_ident_identical_reference": true,
+      "s_cutover_published1_byIdKeys": [
+        "p",
+        "child"
+      ]
+    }
+  },
+  "controlVerdict": {
+    "ctl-T1-decl-inside-if-addr": {
+      "compiled": true,
+      "s1_stale": null,
+      "s3_kept": null,
+      "s1_throw": "chainRowIds is not defined",
+      "injects": "T1: `chainRowIds` declared INSIDE the `if (current !== ...) {` block (5 Tab) - the reader sits outside that block"
+    },
+    "ctl-T1-decl-inside-walk": {
+      "compiled": true,
+      "s1_stale": null,
+      "s3_kept": null,
+      "s1_throw": "Cannot access 'chainRowIds' before initialization",
+      "injects": "T1b: `chainRowIds` declared INSIDE the walk loop body (6 Tab) - the reader sits outside the loop"
+    },
+    "ctl-T2-decl-after-walk": {
+      "compiled": true,
+      "s1_stale": null,
+      "s3_kept": null,
+      "s1_throw": "Cannot access 'chainRowIds' before initialization",
+      "injects": "T2: declaration anchored on `const copiedPrevious` (after the walk) - the walk registers before the declaration exists"
+    },
+    "ctl-gate-only-no-chain-scope": {
+      "compiled": true,
+      "s1_byId": [
+        "p",
+        "child"
+      ],
+      "s1_stale": true,
+      "s3_kept": true,
+      "s1_throw": null,
+      "injects": "A3 chain filter removed: blanket carry-forward + membership gate only"
+    },
+    "ctl-no-gate-blanket-carry": {
+      "compiled": true,
+      "s1_byId": [
+        "p",
+        "child"
+      ],
+      "s1_stale": true,
+      "s3_kept": true,
+      "s1_throw": null,
+      "injects": "T-gate: blanket carry-forward, original gate (no key-set gate at all)"
+    }
+  },
+  "findings": [
+    {
+      "assertion": "L1: live bundle sha256 still equals the pinned pre-image d71a8ca5… (nothing wrote the target)",
+      "status": "PASS",
+      "detail": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+      "evidence": "executed",
+      "expected": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+      "observed": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b"
+    },
+    {
+      "assertion": "L2: candidate sha256 equals the value pinned by apply-P2AC.mjs / assert-candidate-static.js",
+      "status": "PASS",
+      "detail": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f",
+      "evidence": "executed",
+      "expected": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f",
+      "observed": "357f1703722464ee7fc40566f13e0ae4dd225131589862c8d1def67deb93d61f"
+    },
+    {
+      "assertion": "L2b: candidate differs from live (it really is a patched artifact)",
+      "status": "PASS",
+      "detail": "candidate 398569 B vs live 397957 B",
+      "evidence": "executed",
+      "expected": "different bytes",
+      "observed": "398569 B"
+    },
+    {
+      "assertion": "extraction: 10 pieces byte-identical to the live bundle (sha256 pinned)",
+      "status": "PASS",
+      "detail": "projectList @ line 9272, 6179 bytes",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "indentation measured from the live source (never assumed)",
+      "status": "PASS",
+      "detail": "methodBody(top)=4 carryGuardBody=5 walkBody=6 ifAddr=4",
+      "evidence": "executed",
+      "expected": {
+        "top": 4,
+        "carry": 5,
+        "walk": 6,
+        "ifAddr": 4
+      },
+      "observed": {
+        "top": 4,
+        "carry": 5,
+        "walk": 6,
+        "ifAddr": 4
+      }
+    },
+    {
+      "assertion": "L4/T2: the A1 anchor is `if (current !== void 0 && currentAddress !== void 0) {` — NOT `const copiedPrevious`",
+      "status": "PASS",
+      "detail": "A1 anchor at projectList line 23, copiedPrevious at 53",
+      "evidence": "executed",
+      "expected": "declaration lands BEFORE the walk",
+      "observed": "before (23 < 53)"
+    },
+    {
+      "assertion": "L4: A1 anchor is exactly 4 Tab (method-body top level) and unique in the whole live file",
+      "status": "PASS",
+      "detail": "4 tabs, 1 occurrence(s) file-wide",
+      "evidence": "executed",
+      "expected": "4 tabs / 1",
+      "observed": "4 / 1"
+    },
+    {
+      "assertion": "L4: `seen.add(childId);` is globally byte-unique (6 Tab) — the A2 registration point",
+      "status": "PASS",
+      "detail": "1 occurrence(s) file-wide, 6 tabs",
+      "evidence": "executed",
+      "expected": "1 / 6 tabs",
+      "observed": "1 / 6"
+    },
+    {
+      "assertion": "L4: the blanket carry-forward line and the gate line are each byte-unique",
+      "status": "PASS",
+      "detail": "carry=1, gate=1",
+      "evidence": "executed",
+      "expected": "1 / 1",
+      "observed": "1 / 1"
+    },
+    {
+      "assertion": "L4: the old prose comment sits immediately above the blanket loop, same 5 Tab depth (A3 must delete it whole)",
+      "status": "PASS",
+      "detail": "5 tabs; adjacent-above=true",
+      "evidence": "executed",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "assertion": "L3: the audit patch text is fully derivable from measured indentation (4/6/5/4 Tab), no space-indented insert",
+      "status": "PASS",
+      "detail": "A1=4 A2=6 A3=5 gate=4 (all Tab, no spaces)",
+      "evidence": "executed",
+      "expected": "4/6/5/4",
+      "observed": "4/6/5/4"
+    },
+    {
+      "assertion": "candidate hygiene: the 4 probe strings of the OLD state are all gone (0 occurrences each)",
+      "status": "PASS",
+      "detail": "carry=0 gate=0 comment=0",
+      "evidence": "executed",
+      "expected": "0/0/0",
+      "observed": "0/0/0"
+    },
+    {
+      "assertion": "candidate hygiene: exactly 4 `/* p2ac-fix */` markers, and no B1/C1 or dsh-perf-fix P2 marker was rewritten",
+      "status": "PASS",
+      "detail": "p2ac-fix=4, dsh-perf-fix P2 v1 live/cand=2/2, dsh-lag-fix live/cand=0/0",
+      "evidence": "executed",
+      "expected": "4 markers; P2/B1 markers unchanged",
+      "observed": "4"
+    },
+    {
+      "assertion": "L3: the four splice hunks all fall inside ONE bounded 64-line window, the window has exactly the expected line delta (+5), and the window contains all the audited old/new text",
+      "status": "PASS",
+      "detail": "differing window: live 47 lines -> candidate 52 lines (Δ+5 expected); every emitted block present=true; every old probe present=true",
+      "evidence": "executed",
+      "expected": "<= 64 live lines, +5 delta",
+      "observed": "47 -> 52"
+    },
+    {
+      "assertion": "L3: outside that region the candidate is byte-identical to live (no collateral rewrite anywhere else)",
+      "status": "PASS",
+      "detail": "common prefix 9293 lines + common suffix 1322 lines; live 10662 -> candidate 10667 lines (Δ5)",
+      "evidence": "executed",
+      "expected": "Δ lines = -5",
+      "observed": "Δ lines = 5"
+    },
+    {
+      "assertion": "L5: candidate projectList slice == \"live slice + audited member-gate patch\", byte for byte",
+      "status": "PASS",
+      "detail": "candidate slice 6791 B (line 9272) vs derived member-gate slice 6791 B",
+      "evidence": "executed",
+      "expected": "byte-identical",
+      "observed": "byte-identical"
+    },
+    {
+      "assertion": "L5b: candidate differ from the patched (control) forms — the gate really is the membership form",
+      "status": "PASS",
+      "detail": "differs from count-gate=true, differs from gate-only=true, hasOwnProperty x1",
+      "evidence": "executed",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "assertion": "both the candidate and the derived member-gate form compile (new Function on the slice)",
+      "status": "PASS",
+      "detail": "candidate + member + count + unpatched classes built",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "candidate runtime source text === candidate extracted slice (extraction fidelity)",
+      "status": "PASS",
+      "detail": "6788 bytes",
+      "evidence": "executed",
+      "expected": "equal",
+      "observed": true
+    },
+    {
+      "assertion": "the executed candidate class is not silently the live one",
+      "status": "PASS",
+      "detail": "candidate prototype source differs from the unpatched prototype source",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "unpatched / S1: observed=stale",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "stale",
+      "observed": "stale"
+    },
+    {
+      "assertion": "unpatched / S2: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "unpatched / S3: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "unpatched / S4: observed=stale",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child2\",\"child1\"]",
+      "evidence": "executed",
+      "expected": "stale",
+      "observed": "stale"
+    },
+    {
+      "assertion": "unpatched / S5: observed=cleared",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"q\"]",
+      "evidence": "executed",
+      "expected": "cleared",
+      "observed": "cleared"
+    },
+    {
+      "assertion": "unpatched / IDENT: observed=same-ref",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "same-ref",
+      "observed": "same-ref"
+    },
+    {
+      "assertion": "unpatched / CUTOVER: observed=stale",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "stale",
+      "observed": "stale"
+    },
+    {
+      "assertion": "candidate-file / S1: observed=fixed",
+      "status": "PASS",
+      "detail": "byId=[\"p\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "candidate-file / S2: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "candidate-file / S3: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "candidate-file / S4: observed=fixed",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child2\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "candidate-file / S5: observed=cleared",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"q\"]",
+      "evidence": "executed",
+      "expected": "cleared",
+      "observed": "cleared"
+    },
+    {
+      "assertion": "candidate-file / IDENT: observed=same-ref",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "same-ref",
+      "observed": "same-ref"
+    },
+    {
+      "assertion": "candidate-file / CUTOVER: observed=fixed",
+      "status": "PASS",
+      "detail": "byId=[\"p\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "derived-member-gate / S1: observed=fixed",
+      "status": "PASS",
+      "detail": "byId=[\"p\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "derived-member-gate / S2: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "derived-member-gate / S3: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "derived-member-gate / S4: observed=fixed",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child2\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "derived-member-gate / S5: observed=cleared",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"q\"]",
+      "evidence": "executed",
+      "expected": "cleared",
+      "observed": "cleared"
+    },
+    {
+      "assertion": "derived-member-gate / IDENT: observed=same-ref",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "same-ref",
+      "observed": "same-ref"
+    },
+    {
+      "assertion": "derived-member-gate / CUTOVER: observed=fixed",
+      "status": "PASS",
+      "detail": "byId=[\"p\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "P-AC-count-gate / S1: observed=fixed",
+      "status": "PASS",
+      "detail": "byId=[\"p\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "P-AC-count-gate / S2: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "P-AC-count-gate / S3: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "P-AC-count-gate / S4: observed=fixed",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child2\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "P-AC-count-gate / S5: observed=cleared",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"q\"]",
+      "evidence": "executed",
+      "expected": "cleared",
+      "observed": "cleared"
+    },
+    {
+      "assertion": "P-AC-count-gate / IDENT: observed=same-ref",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "same-ref",
+      "observed": "same-ref"
+    },
+    {
+      "assertion": "P-AC-count-gate / CUTOVER: observed=fixed",
+      "status": "PASS",
+      "detail": "byId=[\"p\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "candidate / S1: indexSubagentDescendants(byId) no longer fabricates a child count for p",
+      "status": "PASS",
+      "detail": "indexSubagentDescendants(byId).get(\"p\") = null",
+      "evidence": "executed",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "assertion": "unpatched / S1: the residual row is published while eligible(child) is false (projection/scope divergence reproduced)",
+      "status": "PASS",
+      "detail": "eligible(\"child\")=false",
+      "evidence": "executed",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "assertion": "candidate / S-IDENT: two identical-content rounds still publish the identical projection object (P2 reuse not weakened)",
+      "status": "PASS",
+      "detail": "published2 === published1 : true",
+      "evidence": "executed",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "assertion": "candidate / S-CUTOVER: round 0 (unpatched code) writes a stale `child` row, round 1 (candidate) drops it on the FIRST round",
+      "status": "PASS",
+      "detail": "round-0 (old code) byId=[\"p\",\"child\"] -> round-1 (candidate) byId=[\"p\"]",
+      "evidence": "executed",
+      "expected": "[\"p\",\"child\"] -> [\"p\"]",
+      "observed": "[\"p\"]"
+    },
+    {
+      "assertion": "reverse control ctl-T1-decl-inside-if-addr: the deliberately broken form is caught (T1: `chainRowIds` declared INSIDE the `if (current !== ...) {` block (5 Tab) - the reader sits outside that block)",
+      "status": "PASS",
+      "detail": "threw: chainRowIds is not defined",
+      "evidence": "executed",
+      "expected": "caught (throw or stale row or dropped S3 row)",
+      "observed": "ReferenceError"
+    },
+    {
+      "assertion": "reverse control ctl-T1-decl-inside-walk: the deliberately broken form is caught (T1b: `chainRowIds` declared INSIDE the walk loop body (6 Tab) - the reader sits outside the loop)",
+      "status": "PASS",
+      "detail": "threw: Cannot access 'chainRowIds' before initialization",
+      "evidence": "executed",
+      "expected": "caught (throw or stale row or dropped S3 row)",
+      "observed": "ReferenceError"
+    },
+    {
+      "assertion": "reverse control ctl-T2-decl-after-walk: the deliberately broken form is caught (T2: declaration anchored on `const copiedPrevious` (after the walk) - the walk registers before the declaration exists)",
+      "status": "PASS",
+      "detail": "threw: Cannot access 'chainRowIds' before initialization",
+      "evidence": "executed",
+      "expected": "caught (throw or stale row or dropped S3 row)",
+      "observed": "ReferenceError"
+    },
+    {
+      "assertion": "reverse control ctl-gate-only-no-chain-scope: the deliberately broken form is caught (A3 chain filter removed: blanket carry-forward + membership gate only)",
+      "status": "PASS",
+      "detail": "S1 byId=[\"p\",\"child\"] S3 kept=true",
+      "evidence": "executed",
+      "expected": "caught (throw or stale row or dropped S3 row)",
+      "observed": "stale=true, s3kept=true"
+    },
+    {
+      "assertion": "reverse control ctl-no-gate-blanket-carry: the deliberately broken form is caught (T-gate: blanket carry-forward, original gate (no key-set gate at all))",
+      "status": "PASS",
+      "detail": "S1 byId=[\"p\",\"child\"] S3 kept=true",
+      "evidence": "executed",
+      "expected": "caught (throw or stale row or dropped S3 row)",
+      "observed": "stale=true, s3kept=true"
+    },
+    {
+      "assertion": "reverse control `P-AC-count-gate` alone is NOT sufficient while the blanket carry-forward remains (S1 stays stale)",
+      "status": "PASS",
+      "detail": "the same conclusion as the audit: count-only reuse + blanket carry-forward leaves S1 stale (see audit matrix)",
+      "evidence": "executed",
+      "expected": "documented, not re-derived here"
+    }
+  ],
+  "summary": {
+    "candidate_matches_audited_patch": true,
+    "unpatched_reproduces_defect": true,
+    "candidate_file_is_full_fix": true,
+    "member_gate_is_full_fix": true,
+    "count_gate_is_full_fix": true,
+    "p2_identity_preserved": true,
+    "cutover_drops_preexisting_stale_row": true,
+    "reverse_controls_caught": true
+  }
+}

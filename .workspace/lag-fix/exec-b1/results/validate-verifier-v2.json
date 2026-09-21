@@ -1,0 +1,302 @@
+{
+  "at": "2026-09-21T08:39:04.536Z",
+  "groups": [
+    {
+      "name": "diff",
+      "v1": [
+        [
+          "function annotateRunningSubagentCounts(ctx, items) {",
+          1
+        ],
+        [
+          "return annotateRunningSubagentCounts(ctx, retained);",
+          1
+        ],
+        [
+          "const coldSubagentIds = new Set(cold",
+          1
+        ]
+      ],
+      "v2": [
+        [
+          "function annotateRunningSubagentCounts(ctx, items) {",
+          1
+        ],
+        [
+          "return annotateRunningSubagentCounts(ctx, retained);",
+          1
+        ],
+        [
+          "const coldSubagentIds = new Set(cold",
+          1
+        ],
+        [
+          "const liveSessions = ctx.sessions.list();",
+          1
+        ],
+        [
+          "const parentId = session.header.parentSession;",
+          1
+        ],
+        [
+          "const parentId = item.parentSessionId;",
+          0
+        ],
+        [
+          "(b.updatedAt ?? b.createdAt) - (a.updatedAt ?? a.createdAt)",
+          1
+        ],
+        [
+          "(a.id < b.id ? -1 : 1)",
+          1
+        ],
+        [
+          "b.updatedAt - a.updatedAt",
+          1
+        ]
+      ],
+      "added": [
+        [
+          "const liveSessions = ctx.sessions.list();",
+          1
+        ],
+        [
+          "const parentId = session.header.parentSession;",
+          1
+        ],
+        [
+          "const parentId = item.parentSessionId;",
+          0
+        ],
+        [
+          "(b.updatedAt ?? b.createdAt) - (a.updatedAt ?? a.createdAt)",
+          1
+        ],
+        [
+          "(a.id < b.id ? -1 : 1)",
+          1
+        ],
+        [
+          "b.updatedAt - a.updatedAt",
+          1
+        ]
+      ],
+      "removed": []
+    }
+  ],
+  "checks": [
+    {
+      "group": "premise",
+      "name": "[index.js] v1 规格重放 == 现行部署（审计 §0-E2）",
+      "ok": true,
+      "detail": "1b9915f505996912…"
+    },
+    {
+      "group": "premise",
+      "name": "[index.js] v2 规格重放 ≠ 现行部署（修订确实发生）",
+      "ok": true,
+      "detail": "96ad39b7c37e1e0a… vs 1b9915f505996912…"
+    },
+    {
+      "group": "premise",
+      "name": "[index.js] v1 规格重放 ≠ v2 规格重放",
+      "ok": true,
+      "detail": "两代规格产出的字节不同"
+    },
+    {
+      "group": "premise",
+      "name": "[types/api-proxy.js] v1 规格重放 == 现行部署（审计 §0-E2）",
+      "ok": true,
+      "detail": "f5c34a439043b9d5…"
+    },
+    {
+      "group": "premise",
+      "name": "[types/api-proxy.js] v2 规格重放 ≠ 现行部署（修订确实发生）",
+      "ok": true,
+      "detail": "f4752c39623f863f… vs f5c34a439043b9d5…"
+    },
+    {
+      "group": "premise",
+      "name": "[types/api-proxy.js] v1 规格重放 ≠ v2 规格重放",
+      "ok": true,
+      "detail": "两代规格产出的字节不同"
+    },
+    {
+      "group": "diff",
+      "name": "V1 新增计数断言「const liveSessions = ctx.sessions.list();」期望 1 次 —— 已由源码差分证实存在",
+      "ok": true,
+      "detail": "血缘边未改为 live 同源（或改了两处）"
+    },
+    {
+      "group": "diff",
+      "name": "V2a 新增计数断言「const parentId = session.header.parentSession;」期望 1 次 —— 已由源码差分证实存在",
+      "ok": true,
+      "detail": "B② 缺陷原形回归（边仍来自 items）"
+    },
+    {
+      "group": "diff",
+      "name": "V2b 新增计数断言「const parentId = item.parentSessionId;」期望 0 次 —— 已由源码差分证实存在",
+      "ok": true,
+      "detail": "B② 缺陷原形仍在"
+    },
+    {
+      "group": "diff",
+      "name": "V3a 新增计数断言「(b.updatedAt ?? b.createdAt) - (a.updatedAt ?? a.createdAt)」期望 1 次 —— 已由源码差分证实存在",
+      "ok": true,
+      "detail": "B① 修复被抹掉"
+    },
+    {
+      "group": "diff",
+      "name": "V3b 新增计数断言「(a.id < b.id ? -1 : 1)」期望 1 次 —— 已由源码差分证实存在",
+      "ok": true,
+      "detail": "B① tiebreak 被抹掉"
+    },
+    {
+      "group": "diff",
+      "name": "V4 新增计数断言「b.updatedAt - a.updatedAt」期望 1 次 —— 已由源码差分证实存在",
+      "ok": true,
+      "detail": "冷候选退回裸比较器 / 误改收口排序（撞车断言）"
+    },
+    {
+      "group": "diff",
+      "name": "V5/V6/V7（结构断言：函数体自由标识符 / 首形参 / 调用点 arity）在 v2 中新增，且 v1 中不存在",
+      "ok": true,
+      "detail": "v1 无、v2 有 ⇒ 确为本轮新增"
+    },
+    {
+      "group": "diff",
+      "name": "v2 **未删除** v1 的任何既有字面量计数断言（只增不减，防削弱）",
+      "ok": true,
+      "detail": "v1 3 条全部保留"
+    },
+    {
+      "group": "diff",
+      "name": "新增计数断言条数 == 审计 §3.3 所载（V1/V2×2/V3×2/V4 = 6 条）",
+      "ok": true,
+      "detail": "实得 6 条"
+    },
+    {
+      "group": "forward",
+      "name": "正向：v2 候选件 [index.js] verifyServerFilter 零失败",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "group": "forward",
+      "name": "正向：v2 候选件 [types/api-proxy.js] verifyServerFilter 零失败",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "group": "reverse",
+      "name": "M1 反向对照被拒绝：去掉 ctx 形参（2026-09-20 生产事故原形；node --check 查不出）",
+      "ok": true,
+      "detail": "变异生效=true 失败项=9 命中预期=true :: function annotateRunningSubagentCounts(ctx, items) {: 期望 1 实得 0 | return annotateRunningSubagentCounts(ctx, retained);: 期望 1 实得 0"
+    },
+    {
+      "group": "reverse",
+      "name": "M2 反向对照被拒绝：形参改名（函数体仍引用 ctx ⇒ 形参不匹配）",
+      "ok": true,
+      "detail": "变异生效=true 失败项=5 命中预期=true :: function annotateRunningSubagentCounts(ctx, items) {: 期望 1 实得 0 | 聚合函数体引用 ctx 但签名未接收 ctx"
+    },
+    {
+      "group": "reverse",
+      "name": "M3 反向对照被拒绝：冷候选比较器退回裸 b.updatedAt - a.updatedAt（B① 缺陷原形）",
+      "ok": true,
+      "detail": "变异生效=true 失败项=3 命中预期=true :: (b.updatedAt ?? b.createdAt) - (a.updatedAt ?? a.createdAt): 期望 1 实得 0 | (a.id < b.id ? -1 : 1): 期望 1 实得 0"
+    },
+    {
+      "group": "reverse",
+      "name": "M4 反向对照被拒绝：血缘边退回由已截断行构建（B② 缺陷原形）",
+      "ok": true,
+      "detail": "变异生效=true 失败项=2 命中预期=true :: const parentId = session.header.parentSession;: 期望 1 实得 0 | const parentId = item.parentSessionId;: 期望 0 实得 1"
+    },
+    {
+      "group": "reverse",
+      "name": "M5 反向对照被拒绝：调用点只传一个实参（arity 不符）",
+      "ok": true,
+      "detail": "变异生效=true 失败项=3 命中预期=true :: return annotateRunningSubagentCounts(ctx, retained);: 期望 1 实得 0 | 聚合函数调用点未传 ctx（会抛 ReferenceError）"
+    },
+    {
+      "group": "control",
+      "name": "W1 控制：无关的中性注释编辑不得新增失败（防误报）",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "group": "contrast",
+      "name": "C1 对照：现行 v1 部署 [index.js] 被判失败（verifier 对本轮修订确有区分力）",
+      "ok": true,
+      "detail": "6 项：const liveSessions = ctx.sessions.list();: 期望 1 实得 0 | const parentId = session.header.parentSession;: 期望 1 实得 0 | const parentId = item.parentSessionId;: 期望 0 实得 1"
+    },
+    {
+      "group": "contrast",
+      "name": "C1 对照：现行 v1 部署 [types/api-proxy.js] 被判失败（verifier 对本轮修订确有区分力）",
+      "ok": true,
+      "detail": "6 项：const liveSessions = ctx.sessions.list();: 期望 1 实得 0 | const parentId = session.header.parentSession;: 期望 1 实得 0 | const parentId = item.parentSessionId;: 期望 0 实得 1"
+    },
+    {
+      "group": "self-proof",
+      "name": "V1 破坏性自证：破坏该判据后，对应变异不再被这条判据拒绝（失败数 2 → 1）",
+      "ok": true,
+      "detail": "未破坏时对候选件失败数=0，破坏后=1"
+    },
+    {
+      "group": "self-proof",
+      "name": "V4 破坏性自证：破坏该判据后，对应变异不再被这条判据拒绝（失败数 3 → 2）",
+      "ok": true,
+      "detail": "未破坏时对候选件失败数=0，破坏后=1"
+    },
+    {
+      "group": "self-proof",
+      "name": "V6 破坏性自证：破坏该判据后，对应变异不再被这条判据拒绝（失败数 5 → 4）",
+      "ok": true,
+      "detail": "未破坏时对候选件失败数=0，破坏后=0"
+    },
+    {
+      "group": "self-proof",
+      "name": "V7 破坏性自证：破坏该判据后，对应变异不再被这条判据拒绝（失败数 3 → 2）",
+      "ok": true,
+      "detail": "未破坏时对候选件失败数=0，破坏后=0"
+    },
+    {
+      "group": "self-proof",
+      "name": "V5 破坏性自证：破坏该判据后，对应变异不再被这条判据拒绝（失败数 2 → 1）",
+      "ok": true,
+      "detail": "未破坏时对候选件失败数=0，破坏后=0"
+    }
+  ],
+  "outcome": "PASS",
+  "derived": {
+    "v1LiteralAssertions": 3,
+    "v2LiteralAssertions": 9,
+    "added": [
+      [
+        "const liveSessions = ctx.sessions.list();",
+        1
+      ],
+      [
+        "const parentId = session.header.parentSession;",
+        1
+      ],
+      [
+        "const parentId = item.parentSessionId;",
+        0
+      ],
+      [
+        "(b.updatedAt ?? b.createdAt) - (a.updatedAt ?? a.createdAt)",
+        1
+      ],
+      [
+        "(a.id < b.id ? -1 : 1)",
+        1
+      ],
+      [
+        "b.updatedAt - a.updatedAt",
+        1
+      ]
+    ],
+    "removed": []
+  },
+  "failures": 0
+}

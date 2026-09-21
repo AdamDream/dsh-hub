@@ -1,0 +1,188 @@
+{
+  "generatedAt": "2026-09-21T08:59:24.093Z",
+  "before": "raw/tmp/synth-fixed-before.json",
+  "after": "raw/tmp/synth-fixed-after.json",
+  "thresholds": {
+    "_source": "audit.md §4 (验收标准 4.1 P0 / 4.2 P1). Thresholds are copied verbatim from the audit; DO NOT relax them to make a run pass.",
+    "_baseline": {
+      "window": "cpuL (14 windows, measured under 3 foreign headless_shell instances — absolute values are NOT a clean baseline, which is why the audit compares same-window ratios)",
+      "applyPerS": {
+        "min": 3.6,
+        "max": 22.9
+      },
+      "applyMsPerS": {
+        "min": 114.9,
+        "max": 349.4
+      },
+      "busyMsPerS": {
+        "min": 75.4,
+        "max": 450.8
+      },
+      "recalcOverTask_total": 0.6,
+      "recalcOverTask_range": [
+        0.377,
+        0.736
+      ],
+      "applyShareOfBusy_range": [
+        0.503,
+        0.786
+      ],
+      "rafPerS_range": [
+        34.6,
+        60.3
+      ],
+      "rafP50": 16.7,
+      "rafP99_range": [
+        33.3,
+        133.4
+      ],
+      "rafOver50_per2windows_range": [
+        0,
+        82
+      ]
+    },
+    "p0": {
+      "_what": "mechanism verdicts — did the fix land on the target?",
+      "instances": {
+        "max": 1,
+        "note": "every scenario, every window; >1 is FAIL"
+      },
+      "applyPerS": {
+        "maxAbsolute": 5,
+        "dropMin": 0.5,
+        "note": "relative to the same-condition baseline, and below 5/s absolute"
+      },
+      "bodyStyleWritesPerS": {
+        "dropMin": 0.5
+      },
+      "themeChangePerS": {
+        "dropMin": 0.5,
+        "note": "derived: removes/s divided by instance count"
+      }
+    },
+    "p1": {
+      "_what": "CPU / frame-time verdicts, same-window comparison only",
+      "recalcOverTask": {
+        "max": 0.15,
+        "from": 0.6
+      },
+      "applyShareOfBusy": {
+        "max": 0.1,
+        "from": [
+          0.5,
+          0.8
+        ]
+      },
+      "applyMsPerS": {
+        "dropMin": 0.7,
+        "note": "settings scenarios"
+      },
+      "taskMsPerS": {
+        "dropMin": 0.4
+      },
+      "rafOver50": {
+        "maxPer2Windows": 10,
+        "from": [
+          42,
+          80
+        ]
+      },
+      "rafPerS": {
+        "min": 55,
+        "from": [
+          35.6,
+          49
+        ]
+      },
+      "rafP99": {
+        "max": 33,
+        "from": [
+          50,
+          133
+        ]
+      },
+      "rafP50": {
+        "sentinelMin": 16.6,
+        "sentinelMax": 16.8,
+        "note": "SENTINEL: the baseline is 16.7 ms everywhere. p50 must NOT get worse; a worse p50 is a FAIL even if p99 improves."
+      },
+      "reconcileRatio": {
+        "min": 0.9,
+        "max": 1.1,
+        "note": "instrument sanity, not a performance threshold"
+      },
+      "nodes": {
+        "maxRelativeDelta": 0.05,
+        "note": "a >5% DOM-node difference makes the windows incomparable (INCONCLUSIVE)"
+      }
+    },
+    "p2": {
+      "_what": "functional regression list — run WITHOUT any probe (no K-C, no K-C', no M-D)",
+      "R1_dark_to_light": "documentElement.style.colorScheme === \"light\" && !body.hasAttribute('data-ds-dark-theme') && the page visually brightens",
+      "R2_light_to_dark": "documentElement.style.colorScheme === \"dark\" && body.hasAttribute('data-ds-dark-theme') && the page darkens",
+      "R3_system_follow": "CDP Emulation.setEmulatedMedia prefers-color-scheme flip triggers an apply AND the attribute follows",
+      "R4_wallpaper_token": "body.style.getPropertyValue('--dsw-alias-bg-base') is byte-identical to the pre-fix value",
+      "R5_theme_color_meta": "meta[name=theme-color].content is non-empty and a legal CSS colour",
+      "R6_token_override_add_remove": "setting the wallpaper to none removes the token from body and the UI returns to the opaque base",
+      "R7_locale": "a language switch must not change colours, and must still work after the fix",
+      "R8_settings_row": "the Appearance row selection agrees with colorScheme / data-ds-dark-theme",
+      "R9_cold_start": "a reload paints the same first frame as before the fix"
+    }
+  },
+  "rows": [
+    {
+      "scenario": "home",
+      "windows": {
+        "before": 1,
+        "after": 1
+      },
+      "nodes": {
+        "before": 605,
+        "after": 605,
+        "sameScale": true
+      },
+      "applyPerS": {
+        "before": 11,
+        "after": 2
+      },
+      "applyMsPerS": {
+        "before": 0,
+        "after": 0
+      },
+      "busyMsPerS": {
+        "before": 0,
+        "after": 0
+      },
+      "recalcOverTask": {
+        "before": 0.604,
+        "after": 0.129
+      },
+      "applyOverBusy": {
+        "before": 0.813,
+        "after": 0.133
+      },
+      "rafOver50": {
+        "before": 0,
+        "after": 0
+      },
+      "rafP50": {
+        "before": 0,
+        "after": 0
+      },
+      "rafP99": {
+        "before": 0,
+        "after": 0
+      },
+      "instances": {
+        "before": 2,
+        "after": 1
+      },
+      "verdict": "FAIL",
+      "failures": [
+        "applyMs/busyMs 0.133 > 0.1",
+        "rafP50 0 outside the 16.6-16.8 sentinel band (the fix introduced or masked frame trouble)"
+      ]
+    }
+  ],
+  "verdict": "FAIL"
+}

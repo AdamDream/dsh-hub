@@ -1,0 +1,479 @@
+{
+  "target": {
+    "path": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-runtime/lib/client.js",
+    "sha256": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+    "lines": 10662
+  },
+  "auditMd": ".workspace/lag-fix/exec-audit/p2/audit.md",
+  "patchTextSource": "parsed from audit.md §2.2/§2.3 fenced blocks (not re-typed); indentation measured from the live source",
+  "measuredDepths": {
+    "top": 4,
+    "carry": 5,
+    "walk": 6,
+    "ifAddr": 4
+  },
+  "anchors": {
+    "a1InsertAbove": "\t\t\t\tif (current !== void 0 && currentAddress !== void 0) {",
+    "a2RegisterAfter": "\t\t\t\t\t\tseen.add(childId);",
+    "a3Replace": "for (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0) byId[id] = previousProjection.byId[id];",
+    "gateReplace": "const nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length ? previousProjection.byId : stableById;",
+    "walkRegistrationOccurrencesWholeFile": 1
+  },
+  "emittedPatchText": {
+    "A1_BLOCK": "\t\t\t\tconst chainRowIds = new Set(); /* p2ac-fix */",
+    "A2_BLOCK": "\t\t\t\t\t\tchainRowIds.add(childId); /* p2ac-fix */",
+    "A3_BLOCK": "\t\t\t\t\t/* p2ac-fix */ /* address-chain scoped carry-forward: only ids a visited chain step genuinely needs. */\n\t\t\t\t\tfor (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0 && chainRowIds.has(id)) byId[id] = previousProjection.byId[id];",
+    "GATE_BLOCK": "\t\t\t\t/* p2ac-fix */ /* key-set gate: reusing the whole previous byId object is only sound when its key set has no extra key. */\n\t\t\t\t/* the previous key set is read AFTER the chain-scoped carry-forward, so it is compared against the same liveKeys. */\n\t\t\t\tconst reusableByIdKeys = previousProjection !== void 0 ? Object.keys(previousProjection.byId) : void 0;\n\t\t\t\tconst nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length && reusableByIdKeys.length === liveKeys.length && reusableByIdKeys.every((id) => Object.prototype.hasOwnProperty.call(byId, id)) ? previousProjection.byId : stableById;"
+  },
+  "scenarioVerdict": {
+    "unpatched": {
+      "observed": {
+        "S1": "stale",
+        "S2": "ok",
+        "S3": "ok",
+        "S4": "stale",
+        "S5": "cleared",
+        "IDENT": "same-ref",
+        "CUTOVER": "stale"
+      },
+      "byIdKeys": {
+        "S1": [
+          "p",
+          "child"
+        ],
+        "S2": [
+          "p",
+          "child"
+        ],
+        "S3": [
+          "p",
+          "child"
+        ],
+        "S4": [
+          "p",
+          "child2",
+          "child1"
+        ],
+        "S5": [
+          "p",
+          "q"
+        ],
+        "CUTOVER": [
+          "p",
+          "child"
+        ]
+      },
+      "s1_ids": [
+        "p"
+      ],
+      "s1_eligible_child": false,
+      "s1_indexSubagentDescendants_for_p": {
+        "count": 1,
+        "runningCount": 1
+      },
+      "s2_displayTitle": "ChildRenamed",
+      "s3_displayTitle": "Child",
+      "s_ident_identical_reference": true
+    },
+    "P-AC-member-gate": {
+      "observed": {
+        "S1": "fixed",
+        "S2": "ok",
+        "S3": "ok",
+        "S4": "fixed",
+        "S5": "cleared",
+        "IDENT": "same-ref",
+        "CUTOVER": "fixed"
+      },
+      "byIdKeys": {
+        "S1": [
+          "p"
+        ],
+        "S2": [
+          "p",
+          "child"
+        ],
+        "S3": [
+          "p",
+          "child"
+        ],
+        "S4": [
+          "p",
+          "child2"
+        ],
+        "S5": [
+          "p",
+          "q"
+        ],
+        "CUTOVER": [
+          "p"
+        ]
+      },
+      "s1_ids": [
+        "p"
+      ],
+      "s1_eligible_child": false,
+      "s1_indexSubagentDescendants_for_p": null,
+      "s2_displayTitle": "ChildRenamed",
+      "s3_displayTitle": "Child",
+      "s_ident_identical_reference": true
+    },
+    "P-AC-count-gate": {
+      "observed": {
+        "S1": "fixed",
+        "S2": "ok",
+        "S3": "ok",
+        "S4": "fixed",
+        "S5": "cleared",
+        "IDENT": "same-ref",
+        "CUTOVER": "fixed"
+      },
+      "byIdKeys": {
+        "S1": [
+          "p"
+        ],
+        "S2": [
+          "p",
+          "child"
+        ],
+        "S3": [
+          "p",
+          "child"
+        ],
+        "S4": [
+          "p",
+          "child2"
+        ],
+        "S5": [
+          "p",
+          "q"
+        ],
+        "CUTOVER": [
+          "p"
+        ]
+      },
+      "s1_ids": [
+        "p"
+      ],
+      "s1_eligible_child": false,
+      "s1_indexSubagentDescendants_for_p": null,
+      "s2_displayTitle": "ChildRenamed",
+      "s3_displayTitle": "Child",
+      "s_ident_identical_reference": true
+    }
+  },
+  "findings": [
+    {
+      "assertion": "extraction: 10 pieces byte-identical to the live bundle (sha256 pinned)",
+      "status": "PASS",
+      "detail": "projectList @ line 9272, 6179 bytes",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "indentation measured from the source (never assumed)",
+      "status": "PASS",
+      "detail": "methodBody(top)=4 carryGuardBody=5 walkBody=6 ifAddrOpener=4",
+      "evidence": "executed",
+      "expected": {
+        "top": 4,
+        "carry": 5,
+        "walk": 6,
+        "ifAddr": 4
+      },
+      "observed": {
+        "top": 4,
+        "carry": 5,
+        "walk": 6,
+        "ifAddr": 4
+      }
+    },
+    {
+      "assertion": "the old prose comment sits immediately above the blanket loop at the same depth",
+      "status": "PASS",
+      "detail": "comment tabs=5; adjacent-above=true",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "anchor A (blanket carry-forward) is byte-unique in the live bundle",
+      "status": "PASS",
+      "detail": "1 occurrence(s)",
+      "evidence": "executed",
+      "expected": 1,
+      "observed": 1
+    },
+    {
+      "assertion": "anchor B (byId identity-reuse) is byte-unique in the live bundle",
+      "status": "PASS",
+      "detail": "1 occurrence(s)",
+      "evidence": "executed",
+      "expected": 1,
+      "observed": 1
+    },
+    {
+      "assertion": "B0 (`seen.add(childId);`) is globally byte-unique",
+      "status": "PASS",
+      "detail": "1 occurrence(s) in the whole file",
+      "evidence": "executed",
+      "expected": 1,
+      "observed": 1
+    },
+    {
+      "assertion": "A1 anchor (`if (current !== void 0 && currentAddress !== void 0) {`) is unique inside projectList",
+      "status": "PASS",
+      "detail": "1 occurrence(s) at 4 tabs",
+      "evidence": "executed",
+      "expected": 1,
+      "observed": 1
+    },
+    {
+      "assertion": "audit.md §2.2 parses as A1 (1 line) / A2 (1 line) / A3 (2 lines after sentinel removal)",
+      "status": "PASS",
+      "detail": "A1=\"const chainRowIds = new Set(); /* p2ac-fix */\", A2=\"chainRowIds.add(childId); /* p2ac-fix */\", A3=2 lines",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "audit.md §2.3 parses as a 4-line gate block with a well-formed comment head",
+      "status": "PASS",
+      "detail": "4 lines; /* = 3, */ = 3",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "patch texts re-indented to the measured depths",
+      "status": "PASS",
+      "detail": "A1=4 A2=6 A3=5 gate=4 (expect 4/6/5/4)",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "both patched variants compile (new Function on the patched slice)",
+      "status": "PASS",
+      "detail": "member + count forms",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "unpatched prototype source still equals the extracted slice (extraction fidelity)",
+      "status": "PASS",
+      "detail": "6176 bytes",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "patched prototypes differ from the unpatched one (patch really applied)",
+      "status": "PASS",
+      "detail": "member=6788 count=6491 bytes (unpatched 6176)",
+      "evidence": "executed"
+    },
+    {
+      "assertion": "marker hygiene: the pre-existing `/* dsh-perf-fix P2 v1 */` is untouched, no B1/C1 marker is touched, and the new marker is distinct",
+      "status": "PASS",
+      "detail": "dsh-perf-fix P2 v1 x1, dsh-lag-fix x0, p2ac-fix x4 (A2 + A3 head + gate head + gate note)",
+      "evidence": "executed",
+      "expected": "dsh-perf-fix x1 / dsh-lag-fix x0 / p2ac-fix x4"
+    },
+    {
+      "assertion": "unpatched / S1: observed=stale",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "stale",
+      "observed": "stale"
+    },
+    {
+      "assertion": "unpatched / S2: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "unpatched / S3: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "unpatched / S4: observed=stale",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child2\",\"child1\"]",
+      "evidence": "executed",
+      "expected": "stale",
+      "observed": "stale"
+    },
+    {
+      "assertion": "unpatched / S5: observed=cleared",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"q\"]",
+      "evidence": "executed",
+      "expected": "cleared",
+      "observed": "cleared"
+    },
+    {
+      "assertion": "unpatched / IDENT: observed=same-ref",
+      "status": "PASS",
+      "detail": "byId=null",
+      "evidence": "executed",
+      "expected": "same-ref",
+      "observed": "same-ref"
+    },
+    {
+      "assertion": "P-AC-member-gate / S1: observed=fixed",
+      "status": "PASS",
+      "detail": "byId=[\"p\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "P-AC-member-gate / S2: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "P-AC-member-gate / S3: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "P-AC-member-gate / S4: observed=fixed",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child2\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "P-AC-member-gate / S5: observed=cleared",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"q\"]",
+      "evidence": "executed",
+      "expected": "cleared",
+      "observed": "cleared"
+    },
+    {
+      "assertion": "P-AC-member-gate / IDENT: observed=same-ref",
+      "status": "PASS",
+      "detail": "byId=null",
+      "evidence": "executed",
+      "expected": "same-ref",
+      "observed": "same-ref"
+    },
+    {
+      "assertion": "P-AC-count-gate / S1: observed=fixed",
+      "status": "PASS",
+      "detail": "byId=[\"p\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "P-AC-count-gate / S2: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "P-AC-count-gate / S3: observed=ok",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "ok",
+      "observed": "ok"
+    },
+    {
+      "assertion": "P-AC-count-gate / S4: observed=fixed",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child2\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "P-AC-count-gate / S5: observed=cleared",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"q\"]",
+      "evidence": "executed",
+      "expected": "cleared",
+      "observed": "cleared"
+    },
+    {
+      "assertion": "P-AC-count-gate / IDENT: observed=same-ref",
+      "status": "PASS",
+      "detail": "byId=null",
+      "evidence": "executed",
+      "expected": "same-ref",
+      "observed": "same-ref"
+    },
+    {
+      "assertion": "P-AC-member-gate / S1: indexSubagentDescendants(byId) no longer fabricates a child count for p",
+      "status": "PASS",
+      "detail": "indexSubagentDescendants(byId).get(\"p\") = null",
+      "evidence": "executed",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "assertion": "unpatched / S1: the residual row is published while eligible(child) is false (projection/scope divergence)",
+      "status": "PASS",
+      "detail": "eligible(\"child\")=false",
+      "evidence": "executed",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "assertion": "cutover / unpatched: a stale row written by the OLD code survives into the next round (baseline defect)",
+      "status": "PASS",
+      "detail": "byId=[\"p\",\"child\"]",
+      "evidence": "executed",
+      "expected": "stale",
+      "observed": "stale"
+    },
+    {
+      "assertion": "cutover / P-AC-member-gate: a pre-existing stale row (written by the old code) is dropped on the first patched round",
+      "status": "PASS",
+      "detail": "byId=[\"p\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "P-AC-member-gate: P2 identity reuse NOT weakened — unchanged content republishes the identical projection object",
+      "status": "PASS",
+      "detail": "published2 === published1 : true",
+      "evidence": "executed",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "assertion": "cutover / P-AC-count-gate: a pre-existing stale row (written by the old code) is dropped on the first patched round",
+      "status": "PASS",
+      "detail": "byId=[\"p\"]",
+      "evidence": "executed",
+      "expected": "fixed",
+      "observed": "fixed"
+    },
+    {
+      "assertion": "P-AC-count-gate: P2 identity reuse NOT weakened — unchanged content republishes the identical projection object",
+      "status": "PASS",
+      "detail": "published2 === published1 : true",
+      "evidence": "executed",
+      "expected": true,
+      "observed": true
+    }
+  ],
+  "summary": {
+    "unpatched_reproduces_defect": true,
+    "member_gate_is_full_fix": true,
+    "count_gate_is_full_fix": true,
+    "p2_identity_preserved": true,
+    "cutover_drops_preexisting_stale_row": true
+  }
+}

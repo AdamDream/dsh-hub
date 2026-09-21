@@ -1,0 +1,22 @@
+(node:3348599) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:3348599) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+round 1 done
+(node:3348599) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+round 2 done
+
+### G1 (sandbox substitute) — lib=stage/lib-cand
+workload: dsh=/home/CNS2026495165/.dsh/sessions (present), cc=/home/CNS2026495165/.claude/projects (present)
+round 1 worker wall= 30212ms monitorMax=    11.07ms p99=  10.84ms heartbeatGap=     1ms
+round 1 sync   wall= 31440ms monitorMax= 31188.84ms p99=31188.84ms heartbeatGap= 31157ms
+round 2 worker wall= 31744ms monitorMax=    11.86ms p99=  10.87ms heartbeatGap=     2ms
+round 2 sync   wall= 30096ms monitorMax= 29829.89ms p99=29829.89ms heartbeatGap= 29809ms
+PASS  G1a:worker-pass-max-event-loop-delay<gate — worker max=11.86ms (gate <100ms) over 2 pass(es)
+PASS  G1b:heartbeat-independent-confirmation — worker worst 10ms-heartbeat gap=2ms
+PASS  G1c:sync-control-shows-the-defect — same pass, synchronous: max=31188.84ms / heartbeat gap=31157ms (this is the pre-fix behaviour the gate exists to rule out)
+PASS  G1d:worker-ratio — worker/sync max-delay ratio = 0.0004
+PASS  G1e:worker-actually-did-the-work — [{"dshScanned":880,"ccScanned":388,"dshEvents":54980,"ccEvents":22700,"dshFailed":0,"ccFailed":0},{"dshScanned":888,"ccScanned":388,"dshEvents":55084,"ccEvents":22700,"dshFailed":0,"ccFailed":0}]
+RESULT: PASS
+exit=0

@@ -1,0 +1,61 @@
+{
+  "at": "2026-09-21T08:39:05.650Z",
+  "b1Batch": "B1-fix2 (DU-B1-A..E)",
+  "authoritativeRollbackPoint": {
+    "dir": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/20260920-154039/lib",
+    "note": "唯一权威 pre-image；整文件还原即精确回滚 B1（不连带 C1/runtime/usage）",
+    "files": {
+      "index.js": {
+        "sha256": "142aac84e462173aeb6acc3e36d97b5c6aae2a31a087b91f99cffeff48378374",
+        "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/20260920-154039/lib/index.js"
+      },
+      "types/api-proxy.js": {
+        "sha256": "7f56fb805fe4d8afbdbd9dee0c3e641acaf2d9c9831de0b7ea018e92b9343036",
+        "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/20260920-154039/lib/types/api-proxy.js"
+      }
+    }
+  },
+  "deployedBeforePatch": {
+    "index.js": {
+      "sha256": "1b9915f505996912c6f49b12b0c3f4a8261a74f26422f68f5d22cab2bc078a62",
+      "path": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-host-apiproxy/lib/index.js"
+    },
+    "types/api-proxy.js": {
+      "sha256": "f5c34a439043b9d5771286a76c8b16210951c25d7d5873b168bcc947720eac0d",
+      "path": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-host-apiproxy/lib/types/api-proxy.js"
+    }
+  },
+  "expectedAfterPatch": {
+    "index.js": {
+      "sha256": "96ad39b7c37e1e0ab7ef07d991ee86f103c649b0ff595317ca32b6990a2c3310"
+    },
+    "types/api-proxy.js": {
+      "sha256": "f4752c39623f863f9e5c9e455d1226d933bc1950e7b8c12b92cce87658165734"
+    }
+  },
+  "notAPreImage": {
+    "file": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/b1fix-20260920-183319/index.buggy.js",
+    "sha256": "f568f8a9e67ef123b8f08e659a435bbdff09dfc895e12a9729426c6b30051434",
+    "why": "这是「B1 已打但 ctx 形参缺失」的中间故障态（2026-09-20 事故原状），不是 pre-image；回滚脚本必须只认 authoritativeRollbackPoint。",
+    "consequence": "若误用 index.buggy.js 回滚：宿主回到「聚合函数引用 ctx 但签名未声明 ctx」的状态 ⇒ 重启后 POST /api/session.list 抛 ReferenceError: ctx is not defined ⇒ HTTP 500 ⇒ GUI 会话列表全空白（2026-09-20 事故原状）。"
+  },
+  "rollbackCommand": [
+    "set -euo pipefail",
+    "L=\"/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-host-apiproxy/lib\"",
+    "B=\"/home/CNS2026495165/dsh/.workspace/lag-fix/backup/B1/server/20260920-154039/lib\"",
+    "STAMP=\"$(date +%Y%m%d-%H%M%S)\"",
+    "# 0) 先给\"当前态\"留命副本（回滚本身也可再回滚）",
+    "cp -p \"$L/index.js\"           \"$L/index.js.keep-$STAMP\"",
+    "cp -p \"$L/types/api-proxy.js\" \"$L/types/api-proxy.js.keep-$STAMP\"",
+    "# 1) 只还原 B1 这两个文件（-p 保留权限与 LF）",
+    "cp -p \"$B/index.js\"           \"$L/index.js\"",
+    "cp -p \"$B/types/api-proxy.js\" \"$L/types/api-proxy.js\"",
+    "# 2) 断言回滚到位",
+    "test \"$(sha256sum \"$L/index.js\" | cut -d\" \" -f1)\" = \"142aac84e462173aeb6acc3e36d97b5c6aae2a31a087b91f99cffeff48378374\"",
+    "test \"$(sha256sum \"$L/types/api-proxy.js\" | cut -d\" \" -f1)\" = \"7f56fb805fe4d8afbdbd9dee0c3e641acaf2d9c9831de0b7ea018e92b9343036\"",
+    "test \"$(grep -c 'dsh-lag-fix' \"$L/index.js\" || true)\" = \"0\"",
+    "test \"$(grep -c 'runningSubagentCount' \"$L/index.js\" || true)\" = \"0\"",
+    "# 3) 重启宿主（服务器侧改动双向都需要重启；不重启则回滚不生效）"
+  ],
+  "semanticConsequenceOfRollback": "session.list 回到未过滤全量（约 2361 行 / ~3.9 MB）⇒ 列表卡顿回归；runningSubagentCount 消失 ⇒ 客户端自动落 byId 兜底（client.js:171/286 的 typeof === \"number\" 三元），状态点仍可用但受 byId 截断影响（B② 缺陷回归）。"
+}

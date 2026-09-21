@@ -1,0 +1,265 @@
+{
+  "generatedAt": "2026-09-21T08:56:28.550Z",
+  "scope": [
+    "instances",
+    "signature",
+    "themeColor",
+    "overlay",
+    "wallpaperShade"
+  ],
+  "candidates": "candidates/optin",
+  "matrix": [
+    {
+      "scope": "signature",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scope": "themeColor",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scope": "signature+themeColor",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scope": "signature+themeColor+instances",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scope": "instances",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scope": "signature+themeColor+wallpaperShade",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scope": "signature+themeColor+instances+overlay+wallpaperShade",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scope": "signature+themeColor+instances+overlay+wallpaperShade+extra-unknown-unit",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "mutations": [
+    {
+      "id": "M1",
+      "name": "signature includes `revision` (the skip can never hit)",
+      "applied": true,
+      "rejected": true,
+      "problems": [
+        "revision in signature"
+      ]
+    },
+    {
+      "id": "M2",
+      "name": "landing guard dropped from the skip test",
+      "applied": true,
+      "rejected": true,
+      "problems": [
+        "signature test missing/ambiguous",
+        "landing guard missing"
+      ]
+    },
+    {
+      "id": "M3",
+      "name": "first call skips too (no `lastSignature === undefined` gate)",
+      "applied": true,
+      "rejected": true,
+      "problems": [
+        "signature test missing/ambiguous",
+        "extra first-call guard (shape drift)"
+      ]
+    },
+    {
+      "id": "M4",
+      "name": "frame deferral removed (back to the synchronous forced read)",
+      "applied": true,
+      "rejected": true,
+      "problems": [
+        "no frame deferral"
+      ]
+    },
+    {
+      "id": "M5",
+      "name": "wallpaper content comparison removed (echo not cut)",
+      "applied": true,
+      "rejected": true,
+      "problems": [
+        "wallpaper content comparison missing"
+      ]
+    },
+    {
+      "id": "M6",
+      "name": "ui-theme override comparison removed (producer echo not cut)",
+      "applied": true,
+      "rejected": true,
+      "problems": [
+        "ui-theme content comparison missing"
+      ]
+    }
+  ],
+  "results": [
+    {
+      "id": "V1",
+      "name": "every anchor matches exactly once in every scope of the matrix",
+      "verdict": "PASS",
+      "detail": "8 scopes"
+    },
+    {
+      "id": "V4:layout",
+      "name": "deployed pre-image matches the audit-recorded identity",
+      "verdict": "PASS",
+      "detail": "md5=af19ea709a1556b8c48bedfa8b31e785 (audit af19ea709a1556b8c48bedfa8b31e785) lines=455 (audit 455)"
+    },
+    {
+      "id": "V5:layout",
+      "name": "candidate on disk equals a fresh generation from the anchors",
+      "verdict": "PASS",
+      "detail": "md5 230bf663be0ca4b2374d42e683f5cb83 vs 230bf663be0ca4b2374d42e683f5cb83"
+    },
+    {
+      "id": "V2:layout",
+      "name": "node --check accepts the candidate",
+      "verdict": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "V3:layout",
+      "name": "introduced identifiers declared in-file (6)",
+      "verdict": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "V6:layout",
+      "name": "no vetoed pattern / no soft guard / no raw NUL byte",
+      "verdict": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "V4:uitheme",
+      "name": "deployed pre-image matches the audit-recorded identity",
+      "verdict": "PASS",
+      "detail": "md5=7b8efca68e0f6c45dfa4222974697eab (audit 7b8efca68e0f6c45dfa4222974697eab) lines=1354 (audit 1354)"
+    },
+    {
+      "id": "V5:uitheme",
+      "name": "candidate on disk equals a fresh generation from the anchors",
+      "verdict": "PASS",
+      "detail": "md5 25cad50ea097b54af319272fbe128eba vs 25cad50ea097b54af319272fbe128eba"
+    },
+    {
+      "id": "V2:uitheme",
+      "name": "node --check accepts the candidate",
+      "verdict": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "V3:uitheme",
+      "name": "introduced identifiers declared in-file (1)",
+      "verdict": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "V6:uitheme",
+      "name": "no vetoed pattern / no soft guard / no raw NUL byte",
+      "verdict": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "V4:wallpaper",
+      "name": "deployed pre-image matches the audit-recorded identity",
+      "verdict": "PASS",
+      "detail": "md5=b9cd4747f91084065d1227fba5aa7e61 (audit b9cd4747f91084065d1227fba5aa7e61) lines=597 (audit 597)"
+    },
+    {
+      "id": "V5:wallpaper",
+      "name": "candidate on disk equals a fresh generation from the anchors",
+      "verdict": "PASS",
+      "detail": "md5 885bde89e33c33fec4ef399ba00e907c vs 885bde89e33c33fec4ef399ba00e907c"
+    },
+    {
+      "id": "V2:wallpaper",
+      "name": "node --check accepts the candidate",
+      "verdict": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "V3:wallpaper",
+      "name": "introduced identifiers declared in-file (2)",
+      "verdict": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "V6:wallpaper",
+      "name": "no vetoed pattern / no soft guard / no raw NUL byte",
+      "verdict": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "M1",
+      "name": "mutation rejected: signature includes `revision` (the skip can never hit)",
+      "verdict": "PASS",
+      "detail": "revision in signature"
+    },
+    {
+      "id": "M2",
+      "name": "mutation rejected: landing guard dropped from the skip test",
+      "verdict": "PASS",
+      "detail": "signature test missing/ambiguous; landing guard missing"
+    },
+    {
+      "id": "M3",
+      "name": "mutation rejected: first call skips too (no `lastSignature === undefined` gate)",
+      "verdict": "PASS",
+      "detail": "signature test missing/ambiguous; extra first-call guard (shape drift)"
+    },
+    {
+      "id": "M4",
+      "name": "mutation rejected: frame deferral removed (back to the synchronous forced read)",
+      "verdict": "PASS",
+      "detail": "no frame deferral"
+    },
+    {
+      "id": "M5",
+      "name": "mutation rejected: wallpaper content comparison removed (echo not cut)",
+      "verdict": "PASS",
+      "detail": "wallpaper content comparison missing"
+    },
+    {
+      "id": "M6",
+      "name": "mutation rejected: ui-theme override comparison removed (producer echo not cut)",
+      "verdict": "PASS",
+      "detail": "ui-theme content comparison missing"
+    },
+    {
+      "id": "C:layout",
+      "name": "control — the pristine layout candidate is accepted",
+      "verdict": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "C:wallpaper",
+      "name": "control — the pristine wallpaper candidate is accepted",
+      "verdict": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "C:uitheme",
+      "name": "control — the pristine uitheme candidate is accepted",
+      "verdict": "PASS",
+      "detail": ""
+    }
+  ],
+  "failed": 0,
+  "verdict": "PASS"
+}

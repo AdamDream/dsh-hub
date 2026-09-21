@@ -1,0 +1,1339 @@
+{
+  "meta": {
+    "generatedAt": "2026-09-21T06:44:55.265Z",
+    "stamp": "smoke",
+    "url": "http://127.0.0.1:3080",
+    "viewport": "1440x900",
+    "headless": true,
+    "windowRequestedMs": 8000,
+    "reps": 2,
+    "scenariosRequested": "home-idle",
+    "longSession": "会话删除更新误删全部会话",
+    "openedProbe": null,
+    "profiler": "CDP Profiler.enable/setSamplingInterval(1000us)/start/stop via Playwright CDPSession",
+    "discipline": "read-only: no save/apply/delete/refresh clicks; single browser instance; browser closed at end",
+    "caveat": "rAF/rAF-interval only measurable while the profiled page is the frontmost tab; active-stream windows are concurrent host-session activity, labelled with observed inbound frames/s."
+  },
+  "runOrder": [
+    {
+      "label": "home-idle-w1",
+      "scenario": "home-idle",
+      "startISO": "2026-09-21T06:44:35.421Z",
+      "endISO": "2026-09-21T06:44:43.597Z",
+      "profiledSec": 8,
+      "state": "新会话",
+      "tab": null,
+      "nodes": 605,
+      "wsIn": 0,
+      "wsInPerS": 0,
+      "wsOut": 0,
+      "byRoot": {},
+      "scriptMsPerS": 0.056,
+      "taskMsPerS": 0.158,
+      "recalcMsPerS": 0.062,
+      "layoutMsPerS": 0,
+      "rafPerS": 58.5,
+      "rafOver50": 4,
+      "ltN": 0,
+      "ltMaxMs": null
+    },
+    {
+      "label": "home-idle-w2",
+      "scenario": "home-idle",
+      "startISO": "2026-09-21T06:44:43.610Z",
+      "endISO": "2026-09-21T06:44:51.666Z",
+      "profiledSec": 8.001,
+      "state": "新会话",
+      "tab": null,
+      "nodes": 605,
+      "wsIn": 0,
+      "wsInPerS": 0,
+      "wsOut": 0,
+      "byRoot": {},
+      "scriptMsPerS": 0.05,
+      "taskMsPerS": 0.126,
+      "recalcMsPerS": 0.052,
+      "layoutMsPerS": 0,
+      "rafPerS": 57.118,
+      "rafOver50": 4,
+      "ltN": 0,
+      "ltMaxMs": null
+    }
+  ],
+  "byScenario": {
+    "home-idle": {
+      "scenario": "home-idle",
+      "windows": 2,
+      "scriptMsPerS": [
+        0.056,
+        0.05
+      ],
+      "taskMsPerS": [
+        0.158,
+        0.126
+      ],
+      "recalcMsPerS": [
+        0.062,
+        0.052
+      ],
+      "layoutMsPerS": [
+        0,
+        0
+      ],
+      "rafPerS": [
+        58.5,
+        57.118
+      ],
+      "rafOver50": 8,
+      "rafOver100": 2,
+      "ltN": 0,
+      "ltMax": 0,
+      "wsInPerS": [
+        0,
+        0
+      ],
+      "nodes": [
+        605,
+        605
+      ],
+      "scriptMsPerS_avg": 0.053,
+      "taskMsPerS_avg": 0.142,
+      "recalcMsPerS_avg": 0.057,
+      "layoutMsPerS_avg": 0,
+      "rafPerS_avg": 57.809,
+      "wsInPerS_avg": 0,
+      "nodes_avg": 605,
+      "topFnsPerS": [
+        [
+          "(idle) @:0",
+          1745.182
+        ],
+        [
+          "apply @client.js?rev=abdb7f55acba:366",
+          107.765
+        ],
+        [
+          "(program) @:0",
+          43.344
+        ],
+        [
+          "buildListSnapshot @client.js?rev=a0fb4bb225d3:8553",
+          7.641
+        ],
+        [
+          "(garbage collector) @:0",
+          5.401
+        ],
+        [
+          "projectList @client.js?rev=a0fb4bb225d3:9272",
+          3.821
+        ],
+        [
+          "Xo @index-ClqxG24t.js:54",
+          2.899
+        ],
+        [
+          "flattenLineage @client.js?rev=a0fb4bb225d3:5603",
+          2.899
+        ],
+        [
+          "(anonymous) @client.js?rev=a0fb4bb225d3:8554",
+          2.635
+        ],
+        [
+          "p0 @index-ClqxG24t.js:56",
+          2.24
+        ],
+        [
+          "get @index-ClqxG24t.js:11",
+          2.239
+        ],
+        [
+          "J3 @index-ClqxG24t.js:56",
+          1.581
+        ]
+      ],
+      "bundlesPerS": [
+        [
+          "(no-url: native/vm)",
+          1795.639
+        ],
+        [
+          "ui:dsh-client-ui-layout",
+          107.765
+        ],
+        [
+          "ext:assets/index-ClqxG24t.js",
+          45.452
+        ],
+        [
+          "dsh-client-runtime",
+          24.504
+        ],
+        [
+          "ui:dsh-client-ui-workspace",
+          9.617
+        ],
+        [
+          "ui:dsh-client-ui-renderer",
+          4.611
+        ],
+        [
+          "dsh-client-connection",
+          3.162
+        ],
+        [
+          "dsh-workspace-enhancement(C2)",
+          2.767
+        ],
+        [
+          "ui:dsh-client-ui-conversation",
+          2.635
+        ],
+        [
+          "dsh-wallpaper",
+          2.372
+        ],
+        [
+          "dsh-client-locale",
+          0.791
+        ],
+        [
+          "ui:dsh-client-ui-theme",
+          0.527
+        ]
+      ]
+    }
+  },
+  "chainTotals": [
+    {
+      "chain": "buildListSnapshot",
+      "fn": "buildListSnapshot",
+      "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+      "line": 8553,
+      "windows": 2,
+      "selfMs": 61.132,
+      "perS": 7.641,
+      "scenarios": {
+        "home-idle": 7.641
+      }
+    },
+    {
+      "chain": "projectList",
+      "fn": "projectList",
+      "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+      "line": 9272,
+      "windows": 2,
+      "selfMs": 30.566,
+      "perS": 3.821,
+      "scenarios": {
+        "home-idle": 3.821
+      }
+    },
+    {
+      "chain": "flattenLineage",
+      "fn": "flattenLineage",
+      "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+      "line": 5603,
+      "windows": 2,
+      "selfMs": 23.188,
+      "perS": 2.899,
+      "scenarios": {
+        "home-idle": 2.899
+      }
+    }
+  ],
+  "windows": [
+    {
+      "label": "home-idle-w1",
+      "scenario": "home-idle",
+      "meta": {
+        "scenario": "home-idle",
+        "page": "home",
+        "session": null,
+        "activeStream": false,
+        "note": "fresh load, new session selected"
+      },
+      "window": {
+        "startEpochMs": 1789973075421,
+        "profStartEpochMs": 1789973075586,
+        "profStopEpochMs": 1789973083586,
+        "endEpochMs": 1789973083597,
+        "startISO": "2026-09-21T06:44:35.421Z",
+        "endISO": "2026-09-21T06:44:43.597Z",
+        "requestMs": 8000,
+        "profiledSec": 8
+      },
+      "state": {
+        "url": "http://127.0.0.1:3080/",
+        "nodes": 605,
+        "selectedRow": "新会话",
+        "sessionHeader": "",
+        "settingsOpen": false,
+        "activeSettingsTab": null,
+        "settingsTabs": [],
+        "bodyLen": 277
+      },
+      "ws": {
+        "frames": 0,
+        "dirs": {
+          "in": 0,
+          "out": 0
+        },
+        "bytesIn": 0,
+        "framesPerS": 0,
+        "inboundPerS": 0,
+        "byKind": {},
+        "byRoot": {},
+        "byPayloadType": {},
+        "byEnvelope": {},
+        "sockets": []
+      },
+      "cdp": {
+        "ScriptDuration": 0.444,
+        "TaskDuration": 1.262,
+        "RecalcStyleDuration": 0.492,
+        "LayoutDuration": 0,
+        "ScriptMsPerS": 0.056,
+        "TaskMsPerS": 0.158,
+        "RecalcMsPerS": 0.062,
+        "LayoutMsPerS": 0,
+        "Nodes": 770,
+        "NodesDelta": 0,
+        "JSEventListeners": 212,
+        "JSEventListenersDelta": 0,
+        "Documents": 2,
+        "Frames": 2,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 733
+      },
+      "raf": {
+        "count": 468,
+        "perS": 58.5,
+        "intervals": {
+          "n": 467,
+          "p50": 16.7,
+          "p95": 16.8,
+          "p99": 33.3,
+          "max": 150,
+          "over50": 4,
+          "over100": 1
+        }
+      },
+      "longtasks": {
+        "n": 0,
+        "totalMs": 0,
+        "maxMs": null,
+        "entries": []
+      },
+      "eventTiming": [],
+      "mutations": {
+        "total": 0,
+        "added": 0,
+        "removed": 0,
+        "attrs": 0,
+        "chars": 0
+      },
+      "profile": {
+        "intervalUs": 1054,
+        "msPerSample": 1.054,
+        "sampleCount": 7596,
+        "nodes": 479,
+        "selfTop": [
+          {
+            "fn": "(idle)",
+            "url": "",
+            "line": 0,
+            "col": 0,
+            "selfMs": 6911.078,
+            "selfPct": 86.322,
+            "samples": 6557,
+            "hitCount": 6557
+          },
+          {
+            "fn": "(program)",
+            "url": "",
+            "line": 0,
+            "col": 0,
+            "selfMs": 183.396,
+            "selfPct": 2.291,
+            "samples": 174,
+            "hitCount": 174
+          },
+          {
+            "fn": "apply",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+            "line": 366,
+            "col": 9,
+            "selfMs": 154.938,
+            "selfPct": 1.935,
+            "samples": 147,
+            "hitCount": 147
+          },
+          {
+            "fn": "apply",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+            "line": 366,
+            "col": 9,
+            "selfMs": 124.372,
+            "selfPct": 1.553,
+            "samples": 118,
+            "hitCount": 118
+          },
+          {
+            "fn": "apply",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+            "line": 366,
+            "col": 9,
+            "selfMs": 100.13,
+            "selfPct": 1.251,
+            "samples": 95,
+            "hitCount": 95
+          },
+          {
+            "fn": "apply",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+            "line": 366,
+            "col": 9,
+            "selfMs": 83.266,
+            "selfPct": 1.04,
+            "samples": 79,
+            "hitCount": 79
+          },
+          {
+            "fn": "buildListSnapshot",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+            "line": 8553,
+            "col": 21,
+            "selfMs": 29.512,
+            "selfPct": 0.369,
+            "samples": 28,
+            "hitCount": 27
+          },
+          {
+            "fn": "(garbage collector)",
+            "url": "",
+            "line": 0,
+            "col": 0,
+            "selfMs": 24.242,
+            "selfPct": 0.303,
+            "samples": 23,
+            "hitCount": 23
+          },
+          {
+            "fn": "projectList",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+            "line": 9272,
+            "col": 15,
+            "selfMs": 17.918,
+            "selfPct": 0.224,
+            "samples": 17,
+            "hitCount": 16
+          },
+          {
+            "fn": "Xo",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 54,
+            "col": 17111,
+            "selfMs": 13.702,
+            "selfPct": 0.171,
+            "samples": 13,
+            "hitCount": 13
+          },
+          {
+            "fn": "J3",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 56,
+            "col": 12579,
+            "selfMs": 12.648,
+            "selfPct": 0.158,
+            "samples": 12,
+            "hitCount": 12
+          },
+          {
+            "fn": "get",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 11,
+            "col": 3048,
+            "selfMs": 11.594,
+            "selfPct": 0.145,
+            "samples": 11,
+            "hitCount": 11
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+            "line": 8554,
+            "col": 39,
+            "selfMs": 11.594,
+            "selfPct": 0.145,
+            "samples": 11,
+            "hitCount": 11
+          },
+          {
+            "fn": "flattenLineage",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+            "line": 5603,
+            "col": 26,
+            "selfMs": 9.486,
+            "selfPct": 0.118,
+            "samples": 9,
+            "hitCount": 9
+          },
+          {
+            "fn": "p0",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 56,
+            "col": 40006,
+            "selfMs": 8.432,
+            "selfPct": 0.105,
+            "samples": 8,
+            "hitCount": 8
+          },
+          {
+            "fn": "F4",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 56,
+            "col": 14744,
+            "selfMs": 7.378,
+            "selfPct": 0.092,
+            "samples": 7,
+            "hitCount": 7
+          },
+          {
+            "fn": "nextSessionOrderAccount",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+            "line": 1103,
+            "col": 35,
+            "selfMs": 7.378,
+            "selfPct": 0.092,
+            "samples": 7,
+            "hitCount": 7
+          },
+          {
+            "fn": "f1",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 56,
+            "col": 41567,
+            "selfMs": 7.378,
+            "selfPct": 0.092,
+            "samples": 7,
+            "hitCount": 7
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+            "line": 8972,
+            "col": 28,
+            "selfMs": 6.324,
+            "selfPct": 0.079,
+            "samples": 6,
+            "hitCount": 6
+          },
+          {
+            "fn": "indexSubagentDescendants",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+            "line": 10355,
+            "col": 36,
+            "selfMs": 5.27,
+            "selfPct": 0.066,
+            "samples": 5,
+            "hitCount": 4
+          },
+          {
+            "fn": "H",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 54,
+            "col": 8137,
+            "selfMs": 5.27,
+            "selfPct": 0.066,
+            "samples": 5,
+            "hitCount": 5
+          },
+          {
+            "fn": "get",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 11,
+            "col": 3048,
+            "selfMs": 4.216,
+            "selfPct": 0.053,
+            "samples": 4,
+            "hitCount": 4
+          },
+          {
+            "fn": "get",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 11,
+            "col": 3048,
+            "selfMs": 4.216,
+            "selfPct": 0.053,
+            "samples": 4,
+            "hitCount": 4
+          },
+          {
+            "fn": "SshWorkspaceFlow",
+            "url": "http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b",
+            "line": 2787,
+            "col": 28,
+            "selfMs": 4.216,
+            "selfPct": 0.053,
+            "samples": 4,
+            "hitCount": 4
+          },
+          {
+            "fn": "handleMessage",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+            "line": 10289,
+            "col": 27,
+            "selfMs": 4.216,
+            "selfPct": 0.053,
+            "samples": 4,
+            "hitCount": 4
+          },
+          {
+            "fn": "groupByWorkspace",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+            "line": 147,
+            "col": 28,
+            "selfMs": 3.162,
+            "selfPct": 0.039,
+            "samples": 3,
+            "hitCount": 3
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+            "line": 1225,
+            "col": 25,
+            "selfMs": 3.162,
+            "selfPct": 0.039,
+            "samples": 3,
+            "hitCount": 3
+          },
+          {
+            "fn": "reconciledSessionOrder",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+            "line": 1078,
+            "col": 34,
+            "selfMs": 3.162,
+            "selfPct": 0.039,
+            "samples": 3,
+            "hitCount": 3
+          },
+          {
+            "fn": "q4",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 56,
+            "col": 39925,
+            "selfMs": 3.162,
+            "selfPct": 0.039,
+            "samples": 3,
+            "hitCount": 3
+          },
+          {
+            "fn": "deriveGroups",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+            "line": 191,
+            "col": 24,
+            "selfMs": 3.162,
+            "selfPct": 0.039,
+            "samples": 3,
+            "hitCount": 3
+          }
+        ],
+        "bundles": [
+          {
+            "bundle": "(no-url: native/vm)",
+            "selfMs": 7125.04,
+            "samples": 6760,
+            "fns": 7,
+            "urls": [
+              "(none)"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-layout",
+            "selfMs": 462.706,
+            "samples": 439,
+            "fns": 4,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba"
+            ]
+          },
+          {
+            "bundle": "ext:assets/index-ClqxG24t.js",
+            "selfMs": 200.26,
+            "samples": 190,
+            "fns": 109,
+            "urls": [
+              "http://127.0.0.1:3080/assets/index-ClqxG24t.js"
+            ]
+          },
+          {
+            "bundle": "dsh-client-runtime",
+            "selfMs": 106.454,
+            "samples": 101,
+            "fns": 23,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-workspace",
+            "selfMs": 33.728,
+            "samples": 32,
+            "fns": 13,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-renderer",
+            "selfMs": 20.026,
+            "samples": 19,
+            "fns": 16,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-renderer/client.js?rev=79b59d365f3b"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-conversation",
+            "selfMs": 13.702,
+            "samples": 13,
+            "fns": 9,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-conversation/client.js?rev=cf4575517765"
+            ]
+          },
+          {
+            "bundle": "dsh-workspace-enhancement(C2)",
+            "selfMs": 12.648,
+            "samples": 12,
+            "fns": 6,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b"
+            ]
+          },
+          {
+            "bundle": "dsh-client-connection",
+            "selfMs": 12.648,
+            "samples": 12,
+            "fns": 9,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6"
+            ]
+          },
+          {
+            "bundle": "dsh-wallpaper",
+            "selfMs": 10.54,
+            "samples": 10,
+            "fns": 8,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@local/dsh-wallpaper/client.js?rev=fb28faf9db9a"
+            ]
+          },
+          {
+            "bundle": "dsh-client-locale",
+            "selfMs": 2.108,
+            "samples": 2,
+            "fns": 1,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-locale/client.js?rev=2660ca3f6a00"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-model-selection",
+            "selfMs": 2.108,
+            "samples": 2,
+            "fns": 1,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-model-selection/client.js?rev=639da97bfe66"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-theme",
+            "selfMs": 2.108,
+            "samples": 2,
+            "fns": 2,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-theme/client.js?rev=e19c47b60a1c"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-commands",
+            "selfMs": 1.054,
+            "samples": 1,
+            "fns": 1,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-commands/client.js?rev=887c0ca028a4"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-agent-preset",
+            "selfMs": 1.054,
+            "samples": 1,
+            "fns": 1,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-agent-preset/client.js?rev=96dbaff92d41"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "home-idle-w2",
+      "scenario": "home-idle",
+      "meta": {
+        "scenario": "home-idle",
+        "page": "home",
+        "session": null,
+        "activeStream": false,
+        "note": "fresh load, new session selected"
+      },
+      "window": {
+        "startEpochMs": 1789973083610,
+        "profStartEpochMs": 1789973083658,
+        "profStopEpochMs": 1789973091659,
+        "endEpochMs": 1789973091666,
+        "startISO": "2026-09-21T06:44:43.610Z",
+        "endISO": "2026-09-21T06:44:51.666Z",
+        "requestMs": 8000,
+        "profiledSec": 8.001
+      },
+      "state": {
+        "url": "http://127.0.0.1:3080/",
+        "nodes": 605,
+        "selectedRow": "新会话",
+        "sessionHeader": "",
+        "settingsOpen": false,
+        "activeSettingsTab": null,
+        "settingsTabs": [],
+        "bodyLen": 277
+      },
+      "ws": {
+        "frames": 0,
+        "dirs": {
+          "in": 0,
+          "out": 0
+        },
+        "bytesIn": 0,
+        "framesPerS": 0,
+        "inboundPerS": 0,
+        "byKind": {},
+        "byRoot": {},
+        "byPayloadType": {},
+        "byEnvelope": {},
+        "sockets": []
+      },
+      "cdp": {
+        "ScriptDuration": 0.403,
+        "TaskDuration": 1.005,
+        "RecalcStyleDuration": 0.418,
+        "LayoutDuration": 0,
+        "ScriptMsPerS": 0.05,
+        "TaskMsPerS": 0.126,
+        "RecalcMsPerS": 0.052,
+        "LayoutMsPerS": 0,
+        "Nodes": 770,
+        "NodesDelta": 0,
+        "JSEventListeners": 212,
+        "JSEventListenersDelta": 0,
+        "Documents": 2,
+        "Frames": 2,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 663
+      },
+      "raf": {
+        "count": 457,
+        "perS": 57.118,
+        "intervals": {
+          "n": 456,
+          "p50": 16.7,
+          "p95": 16.8,
+          "p99": 33.4,
+          "max": 116.7,
+          "over50": 4,
+          "over100": 1
+        }
+      },
+      "longtasks": {
+        "n": 0,
+        "totalMs": 0,
+        "maxMs": null,
+        "entries": []
+      },
+      "eventTiming": [],
+      "mutations": {
+        "total": 0,
+        "added": 0,
+        "removed": 0,
+        "attrs": 0,
+        "chars": 0
+      },
+      "profile": {
+        "intervalUs": 1054,
+        "msPerSample": 1.054,
+        "sampleCount": 7594,
+        "nodes": 500,
+        "selfTop": [
+          {
+            "fn": "(idle)",
+            "url": "",
+            "line": 0,
+            "col": 0,
+            "selfMs": 7051.26,
+            "selfPct": 88.096,
+            "samples": 6690,
+            "hitCount": 6690
+          },
+          {
+            "fn": "apply",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+            "line": 366,
+            "col": 9,
+            "selfMs": 221.34,
+            "selfPct": 2.765,
+            "samples": 210,
+            "hitCount": 210
+          },
+          {
+            "fn": "apply",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba",
+            "line": 366,
+            "col": 9,
+            "selfMs": 178.126,
+            "selfPct": 2.225,
+            "samples": 169,
+            "hitCount": 169
+          },
+          {
+            "fn": "(program)",
+            "url": "",
+            "line": 0,
+            "col": 0,
+            "selfMs": 163.37,
+            "selfPct": 2.041,
+            "samples": 155,
+            "hitCount": 156
+          },
+          {
+            "fn": "buildListSnapshot",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+            "line": 8553,
+            "col": 21,
+            "selfMs": 31.62,
+            "selfPct": 0.395,
+            "samples": 30,
+            "hitCount": 30
+          },
+          {
+            "fn": "(garbage collector)",
+            "url": "",
+            "line": 0,
+            "col": 0,
+            "selfMs": 18.972,
+            "selfPct": 0.237,
+            "samples": 18,
+            "hitCount": 18
+          },
+          {
+            "fn": "flattenLineage",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+            "line": 5603,
+            "col": 26,
+            "selfMs": 13.702,
+            "selfPct": 0.171,
+            "samples": 13,
+            "hitCount": 13
+          },
+          {
+            "fn": "projectList",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+            "line": 9272,
+            "col": 15,
+            "selfMs": 12.648,
+            "selfPct": 0.158,
+            "samples": 12,
+            "hitCount": 12
+          },
+          {
+            "fn": "nextSessionOrderAccount",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+            "line": 1103,
+            "col": 35,
+            "selfMs": 11.594,
+            "selfPct": 0.145,
+            "samples": 11,
+            "hitCount": 10
+          },
+          {
+            "fn": "Xo",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 54,
+            "col": 17111,
+            "selfMs": 9.486,
+            "selfPct": 0.119,
+            "samples": 9,
+            "hitCount": 9
+          },
+          {
+            "fn": "p0",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 56,
+            "col": 40006,
+            "selfMs": 9.486,
+            "selfPct": 0.119,
+            "samples": 9,
+            "hitCount": 9
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+            "line": 8554,
+            "col": 39,
+            "selfMs": 9.486,
+            "selfPct": 0.119,
+            "samples": 9,
+            "hitCount": 9
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+            "line": 1225,
+            "col": 25,
+            "selfMs": 7.378,
+            "selfPct": 0.092,
+            "samples": 7,
+            "hitCount": 6
+          },
+          {
+            "fn": "(anonymous)",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+            "line": 8972,
+            "col": 28,
+            "selfMs": 7.378,
+            "selfPct": 0.092,
+            "samples": 7,
+            "hitCount": 7
+          },
+          {
+            "fn": "get",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 11,
+            "col": 3048,
+            "selfMs": 6.324,
+            "selfPct": 0.079,
+            "samples": 6,
+            "hitCount": 6
+          },
+          {
+            "fn": "remoteSessionIndex",
+            "url": "http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b",
+            "line": 4109,
+            "col": 30,
+            "selfMs": 6.324,
+            "selfPct": 0.079,
+            "samples": 6,
+            "hitCount": 6
+          },
+          {
+            "fn": "f1",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 56,
+            "col": 41567,
+            "selfMs": 6.324,
+            "selfPct": 0.079,
+            "samples": 6,
+            "hitCount": 6
+          },
+          {
+            "fn": "deriveGroups",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+            "line": 191,
+            "col": 24,
+            "selfMs": 5.27,
+            "selfPct": 0.066,
+            "samples": 5,
+            "hitCount": 5
+          },
+          {
+            "fn": "groupByWorkspace",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+            "line": 147,
+            "col": 28,
+            "selfMs": 5.27,
+            "selfPct": 0.066,
+            "samples": 5,
+            "hitCount": 4
+          },
+          {
+            "fn": "handleMessage",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+            "line": 10289,
+            "col": 27,
+            "selfMs": 5.27,
+            "selfPct": 0.066,
+            "samples": 5,
+            "hitCount": 5
+          },
+          {
+            "fn": "F4",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 56,
+            "col": 14744,
+            "selfMs": 5.27,
+            "selfPct": 0.066,
+            "samples": 5,
+            "hitCount": 5
+          },
+          {
+            "fn": "get",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 11,
+            "col": 3048,
+            "selfMs": 4.216,
+            "selfPct": 0.053,
+            "samples": 4,
+            "hitCount": 4
+          },
+          {
+            "fn": "H",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 54,
+            "col": 8137,
+            "selfMs": 4.216,
+            "selfPct": 0.053,
+            "samples": 4,
+            "hitCount": 4
+          },
+          {
+            "fn": "get",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 11,
+            "col": 3048,
+            "selfMs": 4.216,
+            "selfPct": 0.053,
+            "samples": 4,
+            "hitCount": 4
+          },
+          {
+            "fn": "get",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 11,
+            "col": 3048,
+            "selfMs": 4.216,
+            "selfPct": 0.053,
+            "samples": 4,
+            "hitCount": 4
+          },
+          {
+            "fn": "$e",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 54,
+            "col": 10521,
+            "selfMs": 3.162,
+            "selfPct": 0.04,
+            "samples": 3,
+            "hitCount": 3
+          },
+          {
+            "fn": "applyWallpaper",
+            "url": "http://127.0.0.1:3080/plugins/@local/dsh-wallpaper/client.js?rev=fb28faf9db9a",
+            "line": 225,
+            "col": 28,
+            "selfMs": 3.162,
+            "selfPct": 0.04,
+            "samples": 3,
+            "hitCount": 3
+          },
+          {
+            "fn": "J3",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 56,
+            "col": 12579,
+            "selfMs": 3.162,
+            "selfPct": 0.04,
+            "samples": 3,
+            "hitCount": 3
+          },
+          {
+            "fn": "renderOutletContent",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-renderer/client.js?rev=79b59d365f3b",
+            "line": 752,
+            "col": 31,
+            "selfMs": 3.162,
+            "selfPct": 0.04,
+            "samples": 3,
+            "hitCount": 3
+          },
+          {
+            "fn": "indexSubagentDescendants",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3",
+            "line": 10355,
+            "col": 36,
+            "selfMs": 3.162,
+            "selfPct": 0.04,
+            "samples": 3,
+            "hitCount": 3
+          }
+        ],
+        "bundles": [
+          {
+            "bundle": "(no-url: native/vm)",
+            "selfMs": 7240.98,
+            "samples": 6870,
+            "fns": 8,
+            "urls": [
+              "(none)"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-layout",
+            "selfMs": 399.466,
+            "samples": 379,
+            "fns": 2,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=abdb7f55acba"
+            ]
+          },
+          {
+            "bundle": "ext:assets/index-ClqxG24t.js",
+            "selfMs": 163.37,
+            "samples": 155,
+            "fns": 93,
+            "urls": [
+              "http://127.0.0.1:3080/assets/index-ClqxG24t.js"
+            ]
+          },
+          {
+            "bundle": "dsh-client-runtime",
+            "selfMs": 89.59,
+            "samples": 85,
+            "fns": 16,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=a0fb4bb225d3"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-workspace",
+            "selfMs": 43.214,
+            "samples": 41,
+            "fns": 15,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-renderer",
+            "selfMs": 16.864,
+            "samples": 16,
+            "fns": 13,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-renderer/client.js?rev=79b59d365f3b"
+            ]
+          },
+          {
+            "bundle": "dsh-client-connection",
+            "selfMs": 12.648,
+            "samples": 12,
+            "fns": 8,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6"
+            ]
+          },
+          {
+            "bundle": "dsh-workspace-enhancement(C2)",
+            "selfMs": 9.486,
+            "samples": 9,
+            "fns": 4,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b"
+            ]
+          },
+          {
+            "bundle": "dsh-wallpaper",
+            "selfMs": 8.432,
+            "samples": 8,
+            "fns": 4,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@local/dsh-wallpaper/client.js?rev=fb28faf9db9a"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-conversation",
+            "selfMs": 7.378,
+            "samples": 7,
+            "fns": 7,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-conversation/client.js?rev=cf4575517765"
+            ]
+          },
+          {
+            "bundle": "dsh-client-locale",
+            "selfMs": 4.216,
+            "samples": 4,
+            "fns": 3,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-locale/client.js?rev=2660ca3f6a00"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-agent-preset",
+            "selfMs": 2.108,
+            "samples": 2,
+            "fns": 2,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-agent-preset/client.js?rev=96dbaff92d41"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-theme",
+            "selfMs": 2.108,
+            "samples": 2,
+            "fns": 2,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-theme/client.js?rev=e19c47b60a1c"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-attachment",
+            "selfMs": 1.054,
+            "samples": 1,
+            "fns": 1,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-attachment/client.js?rev=5349ce7aa495"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-goal",
+            "selfMs": 1.054,
+            "samples": 1,
+            "fns": 1,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-goal/client.js?rev=31aac5c02463"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-trajectory",
+            "selfMs": 1.054,
+            "samples": 1,
+            "fns": 1,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-trajectory/client.js?rev=c4415b657c8b"
+            ]
+          },
+          {
+            "bundle": "ui:dsh-client-ui-model-selection",
+            "selfMs": 1.054,
+            "samples": 1,
+            "fns": 1,
+            "urls": [
+              "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-model-selection/client.js?rev=639da97bfe66"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "errors": []
+}

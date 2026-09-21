@@ -1,0 +1,120 @@
+{
+  "at": "2026-09-21T08:39:04.277Z",
+  "mode": "SANDBOX",
+  "steps": [
+    {
+      "id": "anchor-probe(audit-tool)",
+      "label": "审计锚点探针（40 锚点，0 失败）",
+      "cmd": "node /home/CNS2026495165/dsh/.workspace/lag-fix/exec-audit/b1/anchor-probe.cjs",
+      "exitCode": 0,
+      "ms": 27,
+      "tail": "index.js: params=[ctx,items] 变异后含 ctx=true (捕获到未声明 ctx: [\"ctx\"]) | types/api-proxy.js: params=[ctx,items] 变异后含 ctx=true (捕获到未声明 ctx: [\"ctx\"]) | failures=0"
+    },
+    {
+      "id": "fix-replay(audit-tool)",
+      "label": "审计回放（40 项，v2 规格 sha 自证）",
+      "cmd": "node /home/CNS2026495165/dsh/.workspace/lag-fix/exec-audit/b1/fix-replay.cjs",
+      "exitCode": 0,
+      "ms": 55,
+      "tail": "PASS  v2 规格重放 [types/api-proxy.js] verifyServerFilter 零失败  — [] |  | [verdict] PASS  failures=0  → results-fix-replay.json"
+    },
+    {
+      "id": "verify-v2-selfcheck(audit-tool)",
+      "label": "审计 9 项自证（M1–M5/W1/C1）",
+      "cmd": "node /home/CNS2026495165/dsh/.workspace/lag-fix/exec-audit/b1/verify-v2-selfcheck.cjs",
+      "exitCode": 0,
+      "ms": 50,
+      "tail": "PASS  C1 对照：现行已部署 v1 状态被判失败（verifier 对本轮修订确有区分力）  — 6 项：const liveSessions = ctx.sessions.list();: 期望 1 实得 0 | const parentId = session.header.parentSession;: 期望 1 实得 0 | const parentId = item.parentSessionId;: 期望 0 实得 1 |  | [self-check] PASS"
+    },
+    {
+      "id": "apply-B1-v2(DRYRUN)",
+      "label": "落地脚本 dry-run（三态 pin + 锚点闸门 + node --check）",
+      "cmd": "node /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/apply-B1-v2.mjs",
+      "exitCode": 0,
+      "ms": 108,
+      "tail": "[report] /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/results/apply-B1-v2.DRYRUN.json |  | [mode=DRYRUN] outcome=PASS  checks=36/36"
+    },
+    {
+      "id": "validate-verifier-v2",
+      "label": "V1–V7 差分提取 + 反向对照 + 破坏性自证",
+      "cmd": "node /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/validate-verifier-v2.mjs",
+      "exitCode": 0,
+      "ms": 92,
+      "tail": "PASS  [self-proof] V5 破坏性自证：破坏该判据后，对应变异不再被这条判据拒绝（失败数 2 → 1）  — 未破坏时对候选件失败数=0，破坏后=0 |  | [self-proof] PASS  失败 0 项 / 共 30 项  → /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/results/validate-verifier-v2.json"
+    },
+    {
+      "id": "probe-b1-counterfactual",
+      "label": "反事实几何（MAX=2 低成本 + 201 原始 + 零回归/冷行/环）",
+      "cmd": "node /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/probe-b1-counterfactual.mjs",
+      "exitCode": 0,
+      "ms": 23,
+      "tail": "PASS  [F7] fixed 比较器在冷 meta 上返回有限数（显式回落 createdAt）  — cmp=1 |  | [verdict] PASS  失败 0 项 / 共 18 项  → /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/results/probe-b1-counterfactual.json"
+    },
+    {
+      "id": "probe-b1-cold-order",
+      "label": "A6 冷路径集合等式（oracle 只解首帧 header）",
+      "cmd": "node /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/probe-b1-cold-order.mjs",
+      "exitCode": 0,
+      "ms": 898,
+      "tail": "PASS  [live] 弱判据（**单独不构成通过**，审计 §4.4）：连续两次调用入选集合相同  — 该断言在修订前也恒真 ⇒ 只能作辅助，不得冒充集合等式 |  | [verdict] PASS(offline A6; live A6 INCONCLUSIVE — 需重启后加 --expect-deployed 复验)  离线失败 0 项 / 共 11 项；A6 活体判定=INCONCLUSIVE  → /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/results/probe-b1-cold-order.json"
+    },
+    {
+      "id": "apply-sentinel-fixture(DRYRUN)",
+      "label": "哨兵夹具三向自证（dry-run）",
+      "cmd": "node /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/apply-sentinel-fixture.mjs",
+      "exitCode": 0,
+      "ms": 89,
+      "tail": "PASS  dry-run  — 未触碰 probes/verify-b1-ctx-binding.mjs（sha 与读入时一致） |  | [mode=DRYRUN] outcome=PASS  失败 0 项 / 共 8 项  → /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/results/apply-sentinel-fixture.DRYRUN.json"
+    },
+    {
+      "id": "du-E-rollback",
+      "label": "pre-image / 回滚固化（含 buggy 非 pre-image 负向钉死）",
+      "cmd": "node /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/du-E-rollback.mjs",
+      "exitCode": 0,
+      "ms": 31,
+      "tail": "PASS  机器可读清单已落盘（含权威回滚点 + 非-pre-image 警告 + 回滚命令 + 语义后果）  — /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/results/pre-image-manifest.json |  | [verdict] PASS  失败 0 项 / 共 15 项  → /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/results/du-E-rollback.json"
+    },
+    {
+      "id": "node --check candidates",
+      "label": "候选件 index.js 语法",
+      "cmd": "node --check /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/dryrun/index.js",
+      "exitCode": 0,
+      "ms": 15,
+      "tail": ""
+    },
+    {
+      "id": "node --check candidates(module)",
+      "label": "候选件 types/api-proxy.js 语法",
+      "cmd": "node --check /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/dryrun/types/api-proxy.js",
+      "exitCode": 0,
+      "ms": 14,
+      "tail": ""
+    },
+    {
+      "id": "node --check sentinel(patched)",
+      "label": "更新后哨兵脚本语法",
+      "cmd": "node --check /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/sentinel/verify-b1-ctx-binding.patched.mjs",
+      "exitCode": 0,
+      "ms": 14,
+      "tail": ""
+    },
+    {
+      "id": "node --check runner-scripts",
+      "label": "本脚本语法",
+      "cmd": "node --check /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/run-all.mjs",
+      "exitCode": 0,
+      "ms": 14,
+      "tail": ""
+    },
+    {
+      "id": "provenance",
+      "label": "自指纹 + 写入边界声明",
+      "cmd": "node /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/provenance.mjs",
+      "exitCode": 0,
+      "ms": 24,
+      "tail": "PASS  沙箱纪律：本档未使用 sandbox_permissions，未写 deployed / patches / probes / ~/.dsh  — 写入仅落在 exec-b1/** 与 apply 演练的 backup 目录 |  | [provenance] PASS  失败 0 项 / 共 14 项  → /home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/results/provenance.json"
+    }
+  ],
+  "outcome": "PASS",
+  "failed": 0
+}

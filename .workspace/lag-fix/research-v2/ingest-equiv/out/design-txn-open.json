@@ -1,0 +1,485 @@
+{
+  "label": "txn-open",
+  "tz": "UTC",
+  "holdMs": 700,
+  "timestamp": "2026-09-21T06:50:12.670Z",
+  "foldResult": {
+    "dshFirst": {
+      "scanned": 2,
+      "newEvents": 5,
+      "failedFiles": [
+        {
+          "file": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/ingest-equiv/fixture/_design/txn-open/root/dsh/sessions/sessC/session.jsonl.zstd",
+          "error": "corrupt Zstandard session log: invalid frame magic at byte 0"
+        }
+      ]
+    },
+    "ccFirst": {
+      "scanned": 2,
+      "newEvents": 1,
+      "failedFiles": []
+    },
+    "dshSecond": {
+      "scanned": 0,
+      "newEvents": 0,
+      "failedFiles": []
+    },
+    "ccSecond": {
+      "scanned": 0,
+      "newEvents": 0,
+      "failedFiles": []
+    },
+    "dshClean": {
+      "scanned": 0,
+      "newEvents": 0,
+      "failedFiles": []
+    },
+    "ccClean": {
+      "scanned": 0,
+      "newEvents": 0,
+      "failedFiles": []
+    }
+  },
+  "commitSnapshots": [
+    {
+      "index": 1,
+      "eventRows": 4,
+      "dailyRows": 0,
+      "eventsMinusDailyRequests": 4
+    },
+    {
+      "index": 2,
+      "eventRows": 4,
+      "dailyRows": 3,
+      "eventsMinusDailyRequests": 0
+    },
+    {
+      "index": 3,
+      "eventRows": 5,
+      "dailyRows": 3,
+      "eventsMinusDailyRequests": 1
+    },
+    {
+      "index": 4,
+      "eventRows": 5,
+      "dailyRows": 4,
+      "eventsMinusDailyRequests": 0
+    },
+    {
+      "index": 5,
+      "eventRows": 5,
+      "dailyRows": 4,
+      "eventsMinusDailyRequests": 0
+    },
+    {
+      "index": 6,
+      "eventRows": 6,
+      "dailyRows": 4,
+      "eventsMinusDailyRequests": 1
+    },
+    {
+      "index": 7,
+      "eventRows": 6,
+      "dailyRows": 5,
+      "eventsMinusDailyRequests": 0
+    }
+  ],
+  "finalState": {
+    "events": [
+      {
+        "data_source": "cc",
+        "session_id": "ccsess1",
+        "dedup_key": "msg-1",
+        "ts": 1789725900000,
+        "model": "claude-sonnet-4",
+        "provider": "claude",
+        "project": "/home/CNS2026495165/dsh",
+        "turn": null,
+        "step": null,
+        "is_subagent": 1,
+        "input_tokens": 11,
+        "output_tokens": 12,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0
+      },
+      {
+        "data_source": "dsh",
+        "session_id": "sessA",
+        "dedup_key": "t1:s1",
+        "ts": 1756000000000,
+        "model": "m-1",
+        "provider": "alpha",
+        "project": "/home/CNS2026495165/dsh",
+        "turn": 1,
+        "step": 1,
+        "is_subagent": 0,
+        "input_tokens": 10,
+        "output_tokens": 20,
+        "cache_read_tokens": 5,
+        "cache_write_tokens": 0
+      },
+      {
+        "data_source": "dsh",
+        "session_id": "sessA",
+        "dedup_key": "t1:s5",
+        "ts": 1756000000104,
+        "model": "m-1",
+        "provider": "alpha",
+        "project": "/home/CNS2026495165/dsh",
+        "turn": 1,
+        "step": 5,
+        "is_subagent": 0,
+        "input_tokens": 11,
+        "output_tokens": 22,
+        "cache_read_tokens": 3,
+        "cache_write_tokens": 0
+      },
+      {
+        "data_source": "dsh",
+        "session_id": "sessA",
+        "dedup_key": "t2:s1",
+        "ts": 1756000100000,
+        "model": "m-2",
+        "provider": "beta",
+        "project": "/home/CNS2026495165/dsh",
+        "turn": 2,
+        "step": 1,
+        "is_subagent": 0,
+        "input_tokens": 100,
+        "output_tokens": 200,
+        "cache_read_tokens": 30,
+        "cache_write_tokens": 0
+      },
+      {
+        "data_source": "dsh",
+        "session_id": "sessA",
+        "dedup_key": "t2:s2",
+        "ts": 1756000200000,
+        "model": "m-3",
+        "provider": "gamma",
+        "project": "/home/CNS2026495165/dsh",
+        "turn": 2,
+        "step": 2,
+        "is_subagent": 0,
+        "input_tokens": 8,
+        "output_tokens": 9,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0
+      },
+      {
+        "data_source": "dsh",
+        "session_id": "sessB",
+        "dedup_key": "t1:s1",
+        "ts": 1756001000000,
+        "model": "m-1",
+        "provider": "alpha",
+        "project": "/home/CNS2026495165/dsh/dsh-usage",
+        "turn": 1,
+        "step": 1,
+        "is_subagent": 0,
+        "input_tokens": 3,
+        "output_tokens": 4,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0
+      }
+    ],
+    "daily": [
+      {
+        "day": "2025-08-24",
+        "data_source": "dsh",
+        "model": "m-1",
+        "project": "/home/CNS2026495165/dsh",
+        "requests": 2,
+        "input_tokens": 21,
+        "output_tokens": 42,
+        "cache_read_tokens": 8,
+        "cache_write_tokens": 0
+      },
+      {
+        "day": "2025-08-24",
+        "data_source": "dsh",
+        "model": "m-1",
+        "project": "/home/CNS2026495165/dsh/dsh-usage",
+        "requests": 1,
+        "input_tokens": 3,
+        "output_tokens": 4,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0
+      },
+      {
+        "day": "2025-08-24",
+        "data_source": "dsh",
+        "model": "m-2",
+        "project": "/home/CNS2026495165/dsh",
+        "requests": 1,
+        "input_tokens": 100,
+        "output_tokens": 200,
+        "cache_read_tokens": 30,
+        "cache_write_tokens": 0
+      },
+      {
+        "day": "2025-08-24",
+        "data_source": "dsh",
+        "model": "m-3",
+        "project": "/home/CNS2026495165/dsh",
+        "requests": 1,
+        "input_tokens": 8,
+        "output_tokens": 9,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0
+      },
+      {
+        "day": "2026-09-18",
+        "data_source": "cc",
+        "model": "claude-sonnet-4",
+        "project": "/home/CNS2026495165/dsh",
+        "requests": 1,
+        "input_tokens": 11,
+        "output_tokens": 12,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0
+      }
+    ],
+    "sync": [
+      {
+        "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/ccsess1.jsonl",
+        "mtime": 1789905600000,
+        "size": 916,
+        "fingerprint": null,
+        "last_seq": null,
+        "last_offset": 917
+      },
+      {
+        "source": "cc:<ROOT>/cc/-home-CNS2026495165-dsh/subagents/agent-x.jsonl",
+        "mtime": 1789905600000,
+        "size": 224,
+        "fingerprint": null,
+        "last_seq": null,
+        "last_offset": 225
+      },
+      {
+        "source": "dsh:<ROOT>/dsh/sessions/sessA/session.jsonl.zstd",
+        "mtime": 1789905600000,
+        "size": 712,
+        "fingerprint": null,
+        "last_seq": null,
+        "last_offset": 712
+      },
+      {
+        "source": "dsh:<ROOT>/dsh/sessions/sessB/session.jsonl.zstd",
+        "mtime": 1789905600000,
+        "size": 268,
+        "fingerprint": "torn:211",
+        "last_seq": 1756001000000,
+        "last_offset": 211
+      },
+      {
+        "source": "dsh:<ROOT>/dsh/sessions/sessC/session.jsonl.zstd",
+        "mtime": 1789905600000,
+        "size": 31,
+        "fingerprint": "1789905600000:31",
+        "last_seq": null,
+        "last_offset": null
+      }
+    ]
+  },
+  "d2_dailyInsideTransaction": {
+    "daysRebuilt": [
+      "2025-08-24"
+    ],
+    "dailyEqual": false,
+    "eventsEqual": false,
+    "syncEqual": false,
+    "dailyAfterRebuild": [
+      {
+        "day": "2025-08-24",
+        "data_source": "dsh",
+        "model": "m-1",
+        "project": "/home/CNS2026495165/dsh",
+        "requests": 2,
+        "input_tokens": 21,
+        "output_tokens": 42,
+        "cache_read_tokens": 8,
+        "cache_write_tokens": 0
+      },
+      {
+        "day": "2025-08-24",
+        "data_source": "dsh",
+        "model": "m-2",
+        "project": "/home/CNS2026495165/dsh",
+        "requests": 1,
+        "input_tokens": 100,
+        "output_tokens": 200,
+        "cache_read_tokens": 30,
+        "cache_write_tokens": 0
+      },
+      {
+        "day": "2025-08-24",
+        "data_source": "dsh",
+        "model": "m-3",
+        "project": "/home/CNS2026495165/dsh",
+        "requests": 1,
+        "input_tokens": 8,
+        "output_tokens": 9,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0
+      }
+    ],
+    "dailyFinal": [
+      {
+        "day": "2025-08-24",
+        "data_source": "dsh",
+        "model": "m-1",
+        "project": "/home/CNS2026495165/dsh",
+        "requests": 2,
+        "input_tokens": 21,
+        "output_tokens": 42,
+        "cache_read_tokens": 8,
+        "cache_write_tokens": 0
+      },
+      {
+        "day": "2025-08-24",
+        "data_source": "dsh",
+        "model": "m-1",
+        "project": "/home/CNS2026495165/dsh/dsh-usage",
+        "requests": 1,
+        "input_tokens": 3,
+        "output_tokens": 4,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0
+      },
+      {
+        "day": "2025-08-24",
+        "data_source": "dsh",
+        "model": "m-2",
+        "project": "/home/CNS2026495165/dsh",
+        "requests": 1,
+        "input_tokens": 100,
+        "output_tokens": 200,
+        "cache_read_tokens": 30,
+        "cache_write_tokens": 0
+      },
+      {
+        "day": "2025-08-24",
+        "data_source": "dsh",
+        "model": "m-3",
+        "project": "/home/CNS2026495165/dsh",
+        "requests": 1,
+        "input_tokens": 8,
+        "output_tokens": 9,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0
+      },
+      {
+        "day": "2026-09-18",
+        "data_source": "cc",
+        "model": "claude-sonnet-4",
+        "project": "/home/CNS2026495165/dsh",
+        "requests": 1,
+        "input_tokens": 11,
+        "output_tokens": 12,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0
+      }
+    ],
+    "dailyDiff": {
+      "after": [
+        {
+          "day": "2025-08-24",
+          "data_source": "dsh",
+          "model": "m-1",
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 2,
+          "input_tokens": 21,
+          "output_tokens": 42,
+          "cache_read_tokens": 8,
+          "cache_write_tokens": 0
+        },
+        {
+          "day": "2025-08-24",
+          "data_source": "dsh",
+          "model": "m-2",
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1,
+          "input_tokens": 100,
+          "output_tokens": 200,
+          "cache_read_tokens": 30,
+          "cache_write_tokens": 0
+        },
+        {
+          "day": "2025-08-24",
+          "data_source": "dsh",
+          "model": "m-3",
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1,
+          "input_tokens": 8,
+          "output_tokens": 9,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ],
+      "final": [
+        {
+          "day": "2025-08-24",
+          "data_source": "dsh",
+          "model": "m-1",
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 2,
+          "input_tokens": 21,
+          "output_tokens": 42,
+          "cache_read_tokens": 8,
+          "cache_write_tokens": 0
+        },
+        {
+          "day": "2025-08-24",
+          "data_source": "dsh",
+          "model": "m-1",
+          "project": "/home/CNS2026495165/dsh/dsh-usage",
+          "requests": 1,
+          "input_tokens": 3,
+          "output_tokens": 4,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        {
+          "day": "2025-08-24",
+          "data_source": "dsh",
+          "model": "m-2",
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1,
+          "input_tokens": 100,
+          "output_tokens": 200,
+          "cache_read_tokens": 30,
+          "cache_write_tokens": 0
+        },
+        {
+          "day": "2025-08-24",
+          "data_source": "dsh",
+          "model": "m-3",
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1,
+          "input_tokens": 8,
+          "output_tokens": 9,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        {
+          "day": "2026-09-18",
+          "data_source": "cc",
+          "model": "claude-sonnet-4",
+          "project": "/home/CNS2026495165/dsh",
+          "requests": 1,
+          "input_tokens": 11,
+          "output_tokens": 12,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        }
+      ]
+    }
+  },
+  "d3_readDuringOpenTransaction": {
+    "sawEvents": 0,
+    "waitedMs": 0.140055,
+    "error": null
+  }
+}

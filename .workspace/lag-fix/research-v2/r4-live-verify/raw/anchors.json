@@ -1,0 +1,264 @@
+{
+  "at": "2026-09-21T06:54:48.611Z",
+  "files": {
+    "client.js": {
+      "path": "/home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-usage/lib/client.js",
+      "sourcePath": "/home/CNS2026495165/dsh/dsh-usage/lib/client.js",
+      "bytes": 72804,
+      "sourceBytes": 35294,
+      "markCount": 1,
+      "syntaxCheck": null
+    },
+    "index.js": {
+      "path": "/home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-usage/lib/index.js",
+      "sourcePath": "/home/CNS2026495165/dsh/dsh-usage/lib/index.js",
+      "bytes": 9546,
+      "sourceBytes": 8230,
+      "markCount": 2,
+      "syntaxCheck": null
+    }
+  },
+  "anchors": [
+    {
+      "id": "C1",
+      "file": "client.js",
+      "name": "refs + lifecycle effect",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": null,
+      "prePass": "n/a(插入型)",
+      "verdict": "PASS",
+      "sourceContract": "client.js: 同一 guard 块以 `// R4: RPC calls are not assumed cancellable...` 注释开头（英文），标识符与结构完全相同"
+    },
+    {
+      "id": "C2",
+      "file": "client.js",
+      "name": "loadAll 头部（代次 + 首次写入门控）",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": 0,
+      "prePass": true,
+      "verdict": "PASS",
+      "sourceContract": "source 同形（generation/current 两行 + `if (current())` 门控）逐字一致；但依赖数组不同 —— source `[rpcAvailable, rpc, payload, range.from, dataSource]`，deployed 多一个 `trendDay`（hourly 档位）。R4 补丁**未**改动依赖数组，deployed 的 `trendDay` 依赖被保住 ✓"
+    },
+    {
+      "id": "C3",
+      "file": "client.js",
+      "name": "loadAll 成功分支门控",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": 0,
+      "prePass": true,
+      "verdict": "PASS",
+      "sourceContract": "⚠️ **关键结构差异（超集保命点）**：deployed 的 loadAll 有 **7** 个 rpc.call —— 第 7 个是 hourly timeseries，且被**故意排除在全有全无闸门之外**（`.catch(() => null)`，注释明确：不支持 hourly 的宿主会 invalid-params，必须降级为日粒度曲线而不是让整卡报错）。所以 deployed 必须是 `calls.slice(0, 6).every(...)`；source 只有 6 个调用故用 `calls.every(...)`。R4 补丁只加 `current() &&` 前缀、**没有**照抄 source 的 `calls.every` —— 若整文件覆盖成 source，第 7 个 null 会让闸门失败 → 整卡报错空白。deployed 超集语义被正确保住 ✓"
+    },
+    {
+      "id": "C4",
+      "file": "client.js",
+      "name": "loadAll 失败分支门控",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": 0,
+      "prePass": true,
+      "verdict": "PASS",
+      "sourceContract": "⚠️ 同上：source 失败分支为 `calls.find(...)`（它只有 6 个调用）；deployed 必须 `calls.slice(0,6).find(...)` 才能把第 7 个 hourly 调用排除在「谁是失败者」的判定外。deployed 超集语义被保住 ✓"
+    },
+    {
+      "id": "C5",
+      "file": "client.js",
+      "name": "loadAll catch + finally 门控",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": 0,
+      "prePass": true,
+      "verdict": "PASS",
+      "sourceContract": "source 同形，逐字一致"
+    },
+    {
+      "id": "C6",
+      "file": "client.js",
+      "name": "loadSessions 头部",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": 0,
+      "prePass": true,
+      "verdict": "PASS",
+      "sourceContract": "source 同形，逐字一致"
+    },
+    {
+      "id": "C7",
+      "file": "client.js",
+      "name": "loadSessions 写入分支门控",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": 0,
+      "prePass": true,
+      "verdict": "PASS",
+      "sourceContract": "source 同形（`if (current()) setSessionRows` 嵌在 ok 分支内 + `else if (current())`），逐字一致"
+    },
+    {
+      "id": "C8",
+      "file": "client.js",
+      "name": "loadSessions catch 门控",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": 0,
+      "prePass": true,
+      "verdict": "PASS",
+      "sourceContract": "source 同形，逐字一致（含依赖数组未变）"
+    },
+    {
+      "id": "C9",
+      "file": "client.js",
+      "name": "loadStatus 头部",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": 0,
+      "prePass": true,
+      "verdict": "PASS",
+      "sourceContract": "source 同形，逐字一致"
+    },
+    {
+      "id": "C10",
+      "file": "client.js",
+      "name": "loadStatus 写入门控",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": 0,
+      "prePass": true,
+      "verdict": "PASS",
+      "sourceContract": "source 同形，逐字一致"
+    },
+    {
+      "id": "H1",
+      "file": "index.js",
+      "name": "disposed / 代次状态",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": null,
+      "prePass": "n/a(插入型)",
+      "verdict": "PASS",
+      "sourceContract": "source 有相同三个声明与 isActive，但**无** R4 注释横幅（source 侧无标记）"
+    },
+    {
+      "id": "H2",
+      "file": "index.js",
+      "name": "runIngest dispose 门控",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": 0,
+      "prePass": true,
+      "verdict": "PASS",
+      "sourceContract": "source 同形（`if (disposed || db === null) return;`），注释措辞略异，语义一致"
+    },
+    {
+      "id": "H3a",
+      "file": "index.js",
+      "name": "声明 bootstrapGeneration（deployed 原本缺此声明）",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": 0,
+      "prePass": true,
+      "verdict": "PASS",
+      "sourceContract": "source 本身就有 `const bootstrapGeneration = ++activationGeneration;`（这正是 H3a 要补回 deployed 的那一行）"
+    },
+    {
+      "id": "H3",
+      "file": "index.js",
+      "name": "bootstrap 全链路门控 + db 延迟发布",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": null,
+      "prePass": "n/a(插入型)",
+      "verdict": "PASS",
+      "sourceContract": "source 的 queueMicrotask 体与 deployed 补丁后结构一致（`void (async () =>`、openedDb、两处 isActive 复查 + close、ensureSchema 后发布、runIngest 前后复查、timer 安装后再复查并兜底 dispose）"
+    },
+    {
+      "id": "H4",
+      "file": "index.js",
+      "name": "disposer 先失效代次",
+      "postHits": 1,
+      "postPass": true,
+      "preHits": 0,
+      "prePass": true,
+      "verdict": "PASS",
+      "sourceContract": "source 同形（disposed = true; activationGeneration += 1; 在 disposeTimer?.( ) 之前），无 R4 注释横幅"
+    }
+  ],
+  "superset": [
+    {
+      "feature": "hourly 粒度",
+      "deployedHits": 2,
+      "sourceHits": 0,
+      "expectMin": 2,
+      "verdict": "PASS",
+      "note": "source 中不存在 → 纯 deployed 超集功能"
+    },
+    {
+      "feature": "hourly：3 小时 roll-up",
+      "deployedHits": 6,
+      "sourceHits": 0,
+      "expectMin": 2,
+      "verdict": "PASS",
+      "note": "source 中不存在 → 纯 deployed 超集功能"
+    },
+    {
+      "feature": "hourly：anchorHour / 04:00 使用日",
+      "deployedHits": 5,
+      "sourceHits": 0,
+      "expectMin": 2,
+      "verdict": "PASS",
+      "note": "source 中不存在 → 纯 deployed 超集功能"
+    },
+    {
+      "feature": "trend gear（24h 档）",
+      "deployedHits": 3,
+      "sourceHits": 0,
+      "expectMin": 2,
+      "verdict": "PASS",
+      "note": "source 中不存在 → 纯 deployed 超集功能"
+    },
+    {
+      "feature": "trend：--du-trend-line / fill 令牌",
+      "deployedHits": 9,
+      "sourceHits": 0,
+      "expectMin": 4,
+      "verdict": "PASS",
+      "note": "source 中不存在 → 纯 deployed 超集功能"
+    },
+    {
+      "feature": "settingsScope prop 接线",
+      "deployedHits": 16,
+      "sourceHits": 0,
+      "expectMin": 10,
+      "verdict": "PASS",
+      "note": "source 中不存在 → 纯 deployed 超集功能"
+    },
+    {
+      "feature": "peakRing",
+      "deployedHits": 9,
+      "sourceHits": 0,
+      "expectMin": 2,
+      "verdict": "PASS",
+      "note": "source 中不存在 → 纯 deployed 超集功能"
+    },
+    {
+      "feature": "heatmap peak 计算",
+      "deployedHits": 5,
+      "sourceHits": 0,
+      "expectMin": 3,
+      "verdict": "PASS",
+      "note": "source 中不存在 → 纯 deployed 超集功能"
+    }
+  ],
+  "summary": {
+    "anchorTotal": 15,
+    "anchorPostPass": 15,
+    "anchorPreClean": 12,
+    "anchorInsertOnly": 3,
+    "supersetTotal": 8,
+    "supersetPass": 8,
+    "anchorVerdict": "PASS",
+    "supersetVerdict": "PASS"
+  }
+}

@@ -1,0 +1,1518 @@
+{
+  "at": "2026-09-21T06:50:34.636Z",
+  "errors": [],
+  "tabs": [
+    {
+      "name": "通用设置",
+      "clicked": true,
+      "ms": 2503,
+      "newErrors": 0,
+      "panel": {
+        "textLen": 314,
+        "head": "打开配置文件关闭Agent 预设对此后新建的会话生效。运行中的会话保持它开始时的预设。标准模式（子代理 deepseek-v4.1-flash）权限选择新会话的默认权限模式Workspace Write语言中文外观浅色深色跟随系统繁忙时 E",
+        "controls": 18,
+        "usageCard": false
+      }
+    },
+    {
+      "name": "模型",
+      "clicked": true,
+      "ms": 2353,
+      "newErrors": 0,
+      "panel": {
+        "textLen": 81,
+        "head": "打开配置文件关闭模型填入各提供方的 API 密钥即可使用其模型。DeepSeek编辑opencode-go编辑删除adam自定义编辑删除添加提供方添加自定义提供方",
+        "controls": 9,
+        "usageCard": false
+      }
+    },
+    {
+      "name": "插件",
+      "clicked": true,
+      "ms": 3803,
+      "newErrors": 0,
+      "panel": {
+        "textLen": 2105,
+        "head": "打开配置文件关闭插件配置和查看本部署已安装的插件。插件配置插件列表终端限制 agent 运行的每一条命令。Agent 循环Agent 如何派发工具调用。网页搜索DeepSeek 搜索提供方。Token 用量 · dsh-usagedsh +",
+        "controls": 19,
+        "usageCard": true
+      }
+    },
+    {
+      "name": "Agent 预设",
+      "clicked": true,
+      "ms": 4605,
+      "newErrors": 0,
+      "panel": {
+        "textLen": 499,
+        "head": "打开配置文件关闭Agent 预设预设即一个会话的 Agent 所运行的插件组装 —— 它的工具、提示词与能力。复制一份既有预设改成自己的，或用「创造模式」让 Agent 帮你创建。内置标准模式内置功能完整的编码 Agent，支持文件编辑、S",
+        "controls": 19,
+        "usageCard": false
+      }
+    },
+    {
+      "name": "远程工作区",
+      "clicked": true,
+      "ms": 2775,
+      "newErrors": 0,
+      "panel": {
+        "textLen": 233,
+        "head": "打开配置文件关闭远程工作区（机器管理）维护多台 SSH 机器（密码 / 私钥 / 主机指纹信任 / 钥匙串）。路径在新建或选择工作区时选：「本机」走系统文件夹对话框；「远程」选一台机器在其远程目录中选择。已配置的机器还没有机器。在下方添加。",
+        "controls": 16,
+        "usageCard": false
+      }
+    },
+    {
+      "name": "分布式控制 · dsh-ssh-gui",
+      "clicked": true,
+      "ms": 2614,
+      "newErrors": 0,
+      "panel": {
+        "textLen": 340,
+        "head": "打开配置文件关闭分布式控制 · dsh-ssh-gui统一节点：SSH 主机 / 本地串口 / TCP 串口服务器（nodes.json 一张表）；终端交外部，本面板只做 连接管理/状态/命令/文件/目录浏览。侧栏「分布式节点」文件夹走官方",
+        "controls": 5,
+        "usageCard": false
+      }
+    },
+    {
+      "name": "vision-adam 识图设置",
+      "clicked": true,
+      "ms": 2376,
+      "newErrors": 0,
+      "panel": {
+        "textLen": 583,
+        "head": "打开配置文件关闭vision-adam 识图设置图片/视频转文本工具（analyze_image 与 btw 图片分析的视觉模型配置）。保存后写入 settings.yaml 的 vision-adam 段；键名与插件 Config 一致，",
+        "controls": 8,
+        "usageCard": false
+      }
+    },
+    {
+      "name": "子代理模型",
+      "clicked": true,
+      "ms": 2272,
+      "newErrors": 0,
+      "panel": {
+        "textLen": 1329,
+        "head": "打开配置文件关闭子代理模型subagent / subagent_fork 派发的默认 LLM 路由。保存后写入 settings.yaml 的 dsh-subagent 段，每次派发热读，立即生效（无需重启）；清空字段恢复 preset ",
+        "controls": 6,
+        "usageCard": false
+      }
+    }
+  ],
+  "card": {
+    "mounted": true,
+    "errorsAtMount": 0,
+    "snapshot": {
+      "statCount": 7,
+      "stats": [
+        {
+          "label": "请求数",
+          "value": "25439"
+        },
+        {
+          "label": "输入(未缓存)",
+          "value": "123.41m"
+        },
+        {
+          "label": "输出",
+          "value": "23.69m"
+        },
+        {
+          "label": "缓存读",
+          "value": "4.50b"
+        },
+        {
+          "label": "缓存写",
+          "value": "0"
+        },
+        {
+          "label": "命中率",
+          "value": "97%"
+        },
+        {
+          "label": "覆盖会话",
+          "value": "458"
+        }
+      ],
+      "selects": [
+        {
+          "value": "all",
+          "options": [
+            "全部来源",
+            "dsh",
+            "cc"
+          ],
+          "label": null
+        },
+        {
+          "value": "7",
+          "options": [
+            "近 7 天",
+            "近 30 天",
+            "近 90 天",
+            "自选"
+          ],
+          "label": null
+        },
+        {
+          "value": "60",
+          "options": [
+            "不轮询",
+            "5s 刷新",
+            "30s 刷新",
+            "60s 刷新"
+          ],
+          "label": null
+        },
+        {
+          "value": "hour",
+          "options": [
+            "24h 逐小时",
+            "按日"
+          ],
+          "label": null
+        },
+        {
+          "value": "total",
+          "options": [
+            "总 tokens",
+            "输入(未缓存)",
+            "输出",
+            "缓存读",
+            "缓存写"
+          ],
+          "label": null
+        },
+        {
+          "value": "area",
+          "options": [
+            "面积图",
+            "柱状图"
+          ],
+          "label": null
+        }
+      ],
+      "tabs": [
+        {
+          "text": "按模型",
+          "active": true
+        },
+        {
+          "text": "按项目",
+          "active": false
+        },
+        {
+          "text": "按日",
+          "active": false
+        },
+        {
+          "text": "会话明细",
+          "active": false
+        }
+      ],
+      "panels": [
+        "趋势（逐小时 09-21 04:00–09-22 04:00）",
+        "热力图（按日总量）"
+      ],
+      "svgCount": 2,
+      "tableRows": 6,
+      "noteTexts": [
+        "口径：请求数 = 含 usage 的调用（dsh 按 turn:step 并集去重，cc 按 message.id 去重）；输入 = 未缓存输入（cc 已扣除缓",
+        "单位 tokens/日 · 灰格 = 无数据 · 峰值 1.88b tokens/日（2026-08-11）",
+        "上次 ingest：2026-09-21 · 来源事件：dsh 89394 / cc 22700"
+      ],
+      "errorBox": null,
+      "nodeCount": 298
+    },
+    "internalTabs": [
+      "按模型",
+      "按项目",
+      "按日",
+      "会话明细"
+    ]
+  },
+  "filters": [
+    {
+      "kind": "range",
+      "set": "30",
+      "ms": 3509,
+      "newUsageReqs": [
+        {
+          "method": "summary",
+          "payload": {
+            "from": 1787414400000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "timeseries",
+          "payload": {
+            "granularity": "day",
+            "from": 1787414400000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "heatmap",
+          "payload": {
+            "year": 2026,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "byModel",
+          "payload": {
+            "from": 1787414400000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "byProject",
+          "payload": {
+            "from": 1787414400000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "byDay",
+          "payload": {
+            "from": 1787414400000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "timeseries",
+          "payload": {
+            "granularity": "hour",
+            "from": 1789934400000,
+            "to": 1790020800000,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "sessions",
+          "payload": {
+            "from": 1787414400000,
+            "to": 1790006399999,
+            "dataSources": "all",
+            "limit": 200
+          }
+        },
+        {
+          "method": "status",
+          "payload": {}
+        }
+      ],
+      "newErrors": 0,
+      "card": {
+        "statCount": 7,
+        "stats": [
+          {
+            "label": "请求数",
+            "value": "84922"
+          },
+          {
+            "label": "输入(未缓存)",
+            "value": "624.73m"
+          },
+          {
+            "label": "输出",
+            "value": "97.19m"
+          },
+          {
+            "label": "缓存读",
+            "value": "10.48b"
+          },
+          {
+            "label": "缓存写",
+            "value": "0"
+          },
+          {
+            "label": "命中率",
+            "value": "94%"
+          },
+          {
+            "label": "覆盖会话",
+            "value": "2310"
+          }
+        ],
+        "selects": [
+          {
+            "value": "all",
+            "options": [
+              "全部来源",
+              "dsh",
+              "cc"
+            ],
+            "label": null
+          },
+          {
+            "value": "30",
+            "options": [
+              "近 7 天",
+              "近 30 天",
+              "近 90 天",
+              "自选"
+            ],
+            "label": null
+          },
+          {
+            "value": "60",
+            "options": [
+              "不轮询",
+              "5s 刷新",
+              "30s 刷新",
+              "60s 刷新"
+            ],
+            "label": null
+          },
+          {
+            "value": "hour",
+            "options": [
+              "24h 逐小时",
+              "按日"
+            ],
+            "label": null
+          },
+          {
+            "value": "total",
+            "options": [
+              "总 tokens",
+              "输入(未缓存)",
+              "输出",
+              "缓存读",
+              "缓存写"
+            ],
+            "label": null
+          },
+          {
+            "value": "area",
+            "options": [
+              "面积图",
+              "柱状图"
+            ],
+            "label": null
+          }
+        ],
+        "tabs": [
+          {
+            "text": "按模型",
+            "active": true
+          },
+          {
+            "text": "按项目",
+            "active": false
+          },
+          {
+            "text": "按日",
+            "active": false
+          },
+          {
+            "text": "会话明细",
+            "active": false
+          }
+        ],
+        "panels": [
+          "趋势（逐小时 09-21 04:00–09-22 04:00）",
+          "热力图（按日总量）"
+        ],
+        "svgCount": 2,
+        "tableRows": 10,
+        "noteTexts": [
+          "口径：请求数 = 含 usage 的调用（dsh 按 turn:step 并集去重，cc 按 message.id 去重）；输入 = 未缓存输入（cc 已扣除缓",
+          "单位 tokens/日 · 灰格 = 无数据 · 峰值 1.88b tokens/日（2026-08-11）",
+          "上次 ingest：2026-09-21 · 来源事件：dsh 89394 / cc 22700"
+        ],
+        "errorBox": null,
+        "nodeCount": 326
+      }
+    },
+    {
+      "kind": "range",
+      "set": "90",
+      "ms": 3507,
+      "newUsageReqs": [
+        {
+          "method": "summary",
+          "payload": {
+            "from": 1782230400000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "timeseries",
+          "payload": {
+            "granularity": "day",
+            "from": 1782230400000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "heatmap",
+          "payload": {
+            "year": 2026,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "byModel",
+          "payload": {
+            "from": 1782230400000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "byProject",
+          "payload": {
+            "from": 1782230400000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "byDay",
+          "payload": {
+            "from": 1782230400000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "timeseries",
+          "payload": {
+            "granularity": "hour",
+            "from": 1789934400000,
+            "to": 1790020800000,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "sessions",
+          "payload": {
+            "from": 1782230400000,
+            "to": 1790006399999,
+            "dataSources": "all",
+            "limit": 200
+          }
+        },
+        {
+          "method": "status",
+          "payload": {}
+        }
+      ],
+      "newErrors": 0,
+      "card": {
+        "statCount": 7,
+        "stats": [
+          {
+            "label": "请求数",
+            "value": "112094"
+          },
+          {
+            "label": "输入(未缓存)",
+            "value": "3.38b"
+          },
+          {
+            "label": "输出",
+            "value": "115.15m"
+          },
+          {
+            "label": "缓存读",
+            "value": "12.33b"
+          },
+          {
+            "label": "缓存写",
+            "value": "42.53m"
+          },
+          {
+            "label": "命中率",
+            "value": "78%"
+          },
+          {
+            "label": "覆盖会话",
+            "value": "2485"
+          }
+        ],
+        "selects": [
+          {
+            "value": "all",
+            "options": [
+              "全部来源",
+              "dsh",
+              "cc"
+            ],
+            "label": null
+          },
+          {
+            "value": "90",
+            "options": [
+              "近 7 天",
+              "近 30 天",
+              "近 90 天",
+              "自选"
+            ],
+            "label": null
+          },
+          {
+            "value": "60",
+            "options": [
+              "不轮询",
+              "5s 刷新",
+              "30s 刷新",
+              "60s 刷新"
+            ],
+            "label": null
+          },
+          {
+            "value": "hour",
+            "options": [
+              "24h 逐小时",
+              "按日"
+            ],
+            "label": null
+          },
+          {
+            "value": "total",
+            "options": [
+              "总 tokens",
+              "输入(未缓存)",
+              "输出",
+              "缓存读",
+              "缓存写"
+            ],
+            "label": null
+          },
+          {
+            "value": "area",
+            "options": [
+              "面积图",
+              "柱状图"
+            ],
+            "label": null
+          }
+        ],
+        "tabs": [
+          {
+            "text": "按模型",
+            "active": true
+          },
+          {
+            "text": "按项目",
+            "active": false
+          },
+          {
+            "text": "按日",
+            "active": false
+          },
+          {
+            "text": "会话明细",
+            "active": false
+          }
+        ],
+        "panels": [
+          "趋势（逐小时 09-21 04:00–09-22 04:00）",
+          "热力图（按日总量）"
+        ],
+        "svgCount": 2,
+        "tableRows": 22,
+        "noteTexts": [
+          "口径：请求数 = 含 usage 的调用（dsh 按 turn:step 并集去重，cc 按 message.id 去重）；输入 = 未缓存输入（cc 已扣除缓",
+          "单位 tokens/日 · 灰格 = 无数据 · 峰值 1.88b tokens/日（2026-08-11）",
+          "上次 ingest：2026-09-21 · 来源事件：dsh 89394 / cc 22700"
+        ],
+        "errorBox": null,
+        "nodeCount": 410
+      }
+    },
+    {
+      "kind": "range",
+      "set": "7",
+      "ms": 3508,
+      "newUsageReqs": [
+        {
+          "method": "summary",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "timeseries",
+          "payload": {
+            "granularity": "day",
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "heatmap",
+          "payload": {
+            "year": 2026,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "byModel",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "byProject",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "byDay",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "timeseries",
+          "payload": {
+            "granularity": "hour",
+            "from": 1789934400000,
+            "to": 1790020800000,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "sessions",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "all",
+            "limit": 200
+          }
+        },
+        {
+          "method": "status",
+          "payload": {}
+        }
+      ],
+      "newErrors": 0,
+      "card": {
+        "statCount": 7,
+        "stats": [
+          {
+            "label": "请求数",
+            "value": "25439"
+          },
+          {
+            "label": "输入(未缓存)",
+            "value": "123.41m"
+          },
+          {
+            "label": "输出",
+            "value": "23.69m"
+          },
+          {
+            "label": "缓存读",
+            "value": "4.50b"
+          },
+          {
+            "label": "缓存写",
+            "value": "0"
+          },
+          {
+            "label": "命中率",
+            "value": "97%"
+          },
+          {
+            "label": "覆盖会话",
+            "value": "458"
+          }
+        ],
+        "selects": [
+          {
+            "value": "all",
+            "options": [
+              "全部来源",
+              "dsh",
+              "cc"
+            ],
+            "label": null
+          },
+          {
+            "value": "7",
+            "options": [
+              "近 7 天",
+              "近 30 天",
+              "近 90 天",
+              "自选"
+            ],
+            "label": null
+          },
+          {
+            "value": "60",
+            "options": [
+              "不轮询",
+              "5s 刷新",
+              "30s 刷新",
+              "60s 刷新"
+            ],
+            "label": null
+          },
+          {
+            "value": "hour",
+            "options": [
+              "24h 逐小时",
+              "按日"
+            ],
+            "label": null
+          },
+          {
+            "value": "total",
+            "options": [
+              "总 tokens",
+              "输入(未缓存)",
+              "输出",
+              "缓存读",
+              "缓存写"
+            ],
+            "label": null
+          },
+          {
+            "value": "area",
+            "options": [
+              "面积图",
+              "柱状图"
+            ],
+            "label": null
+          }
+        ],
+        "tabs": [
+          {
+            "text": "按模型",
+            "active": true
+          },
+          {
+            "text": "按项目",
+            "active": false
+          },
+          {
+            "text": "按日",
+            "active": false
+          },
+          {
+            "text": "会话明细",
+            "active": false
+          }
+        ],
+        "panels": [
+          "趋势（逐小时 09-21 04:00–09-22 04:00）",
+          "热力图（按日总量）"
+        ],
+        "svgCount": 2,
+        "tableRows": 6,
+        "noteTexts": [
+          "口径：请求数 = 含 usage 的调用（dsh 按 turn:step 并集去重，cc 按 message.id 去重）；输入 = 未缓存输入（cc 已扣除缓",
+          "单位 tokens/日 · 灰格 = 无数据 · 峰值 1.88b tokens/日（2026-08-11）",
+          "上次 ingest：2026-09-21 · 来源事件：dsh 89394 / cc 22700"
+        ],
+        "errorBox": null,
+        "nodeCount": 298
+      }
+    },
+    {
+      "kind": "dataSource",
+      "set": "dsh",
+      "newUsageReqs": [
+        {
+          "method": "summary",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "dsh"
+          }
+        },
+        {
+          "method": "timeseries",
+          "payload": {
+            "granularity": "day",
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "dsh"
+          }
+        },
+        {
+          "method": "heatmap",
+          "payload": {
+            "year": 2026,
+            "dataSources": "dsh"
+          }
+        },
+        {
+          "method": "byModel",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "dsh"
+          }
+        },
+        {
+          "method": "byProject",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "dsh"
+          }
+        },
+        {
+          "method": "byDay",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "dsh"
+          }
+        },
+        {
+          "method": "timeseries",
+          "payload": {
+            "granularity": "hour",
+            "from": 1789934400000,
+            "to": 1790020800000,
+            "dataSources": "dsh"
+          }
+        },
+        {
+          "method": "sessions",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "dsh",
+            "limit": 200
+          }
+        },
+        {
+          "method": "status",
+          "payload": {}
+        }
+      ],
+      "newErrors": 0,
+      "card": {
+        "statCount": 7,
+        "stats": [
+          {
+            "label": "请求数",
+            "value": "25439"
+          },
+          {
+            "label": "输入(未缓存)",
+            "value": "123.41m"
+          },
+          {
+            "label": "输出",
+            "value": "23.69m"
+          },
+          {
+            "label": "缓存读",
+            "value": "4.50b"
+          },
+          {
+            "label": "缓存写",
+            "value": "0"
+          },
+          {
+            "label": "命中率",
+            "value": "97%"
+          },
+          {
+            "label": "覆盖会话",
+            "value": "458"
+          }
+        ],
+        "selects": [
+          {
+            "value": "dsh",
+            "options": [
+              "全部来源",
+              "dsh",
+              "cc"
+            ],
+            "label": null
+          },
+          {
+            "value": "7",
+            "options": [
+              "近 7 天",
+              "近 30 天",
+              "近 90 天",
+              "自选"
+            ],
+            "label": null
+          },
+          {
+            "value": "60",
+            "options": [
+              "不轮询",
+              "5s 刷新",
+              "30s 刷新",
+              "60s 刷新"
+            ],
+            "label": null
+          },
+          {
+            "value": "hour",
+            "options": [
+              "24h 逐小时",
+              "按日"
+            ],
+            "label": null
+          },
+          {
+            "value": "total",
+            "options": [
+              "总 tokens",
+              "输入(未缓存)",
+              "输出",
+              "缓存读",
+              "缓存写"
+            ],
+            "label": null
+          },
+          {
+            "value": "area",
+            "options": [
+              "面积图",
+              "柱状图"
+            ],
+            "label": null
+          }
+        ],
+        "tabs": [
+          {
+            "text": "按模型",
+            "active": true
+          },
+          {
+            "text": "按项目",
+            "active": false
+          },
+          {
+            "text": "按日",
+            "active": false
+          },
+          {
+            "text": "会话明细",
+            "active": false
+          }
+        ],
+        "panels": [
+          "趋势（逐小时 09-21 04:00–09-22 04:00）",
+          "热力图（按日总量）"
+        ],
+        "svgCount": 2,
+        "tableRows": 6,
+        "noteTexts": [
+          "口径：请求数 = 含 usage 的调用（dsh 按 turn:step 并集去重，cc 按 message.id 去重）；输入 = 未缓存输入（cc 已扣除缓",
+          "单位 tokens/日 · 灰格 = 无数据 · 峰值 1.43b tokens/日（2026-09-12）",
+          "上次 ingest：2026-09-21 · 来源事件：dsh 89394 / cc 22700"
+        ],
+        "errorBox": null,
+        "nodeCount": 277
+      }
+    },
+    {
+      "kind": "dataSource",
+      "set": "cc",
+      "newUsageReqs": [
+        {
+          "method": "summary",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "cc"
+          }
+        },
+        {
+          "method": "timeseries",
+          "payload": {
+            "granularity": "day",
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "cc"
+          }
+        },
+        {
+          "method": "heatmap",
+          "payload": {
+            "year": 2026,
+            "dataSources": "cc"
+          }
+        },
+        {
+          "method": "byModel",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "cc"
+          }
+        },
+        {
+          "method": "byProject",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "cc"
+          }
+        },
+        {
+          "method": "byDay",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "cc"
+          }
+        },
+        {
+          "method": "timeseries",
+          "payload": {
+            "granularity": "hour",
+            "from": 1789934400000,
+            "to": 1790020800000,
+            "dataSources": "cc"
+          }
+        },
+        {
+          "method": "sessions",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "cc",
+            "limit": 200
+          }
+        },
+        {
+          "method": "status",
+          "payload": {}
+        }
+      ],
+      "newErrors": 0,
+      "card": {
+        "statCount": 7,
+        "stats": [
+          {
+            "label": "请求数",
+            "value": "0"
+          },
+          {
+            "label": "输入(未缓存)",
+            "value": "0"
+          },
+          {
+            "label": "输出",
+            "value": "0"
+          },
+          {
+            "label": "缓存读",
+            "value": "0"
+          },
+          {
+            "label": "缓存写",
+            "value": "0"
+          },
+          {
+            "label": "命中率",
+            "value": "0%"
+          },
+          {
+            "label": "覆盖会话",
+            "value": "0"
+          }
+        ],
+        "selects": [
+          {
+            "value": "cc",
+            "options": [
+              "全部来源",
+              "dsh",
+              "cc"
+            ],
+            "label": null
+          },
+          {
+            "value": "7",
+            "options": [
+              "近 7 天",
+              "近 30 天",
+              "近 90 天",
+              "自选"
+            ],
+            "label": null
+          },
+          {
+            "value": "60",
+            "options": [
+              "不轮询",
+              "5s 刷新",
+              "30s 刷新",
+              "60s 刷新"
+            ],
+            "label": null
+          },
+          {
+            "value": "hour",
+            "options": [
+              "24h 逐小时",
+              "按日"
+            ],
+            "label": null
+          },
+          {
+            "value": "total",
+            "options": [
+              "总 tokens",
+              "输入(未缓存)",
+              "输出",
+              "缓存读",
+              "缓存写"
+            ],
+            "label": null
+          },
+          {
+            "value": "area",
+            "options": [
+              "面积图",
+              "柱状图"
+            ],
+            "label": null
+          }
+        ],
+        "tabs": [
+          {
+            "text": "按模型",
+            "active": true
+          },
+          {
+            "text": "按项目",
+            "active": false
+          },
+          {
+            "text": "按日",
+            "active": false
+          },
+          {
+            "text": "会话明细",
+            "active": false
+          }
+        ],
+        "panels": [
+          "趋势（按日 · 宿主暂不支持小时粒度，重启后生效）",
+          "热力图（按日总量）"
+        ],
+        "svgCount": 1,
+        "tableRows": 0,
+        "noteTexts": [
+          "口径：请求数 = 含 usage 的调用（dsh 按 turn:step 并集去重，cc 按 message.id 去重）；输入 = 未缓存输入（cc 已扣除缓",
+          "暂无趋势数据",
+          "单位 tokens/日 · 灰格 = 无数据 · 峰值 1.88b tokens/日（2026-08-11）",
+          "暂无模型数据",
+          "上次 ingest：2026-09-21 · 来源事件：dsh 89394 / cc 22700"
+        ],
+        "errorBox": null,
+        "nodeCount": 188
+      }
+    },
+    {
+      "kind": "dataSource",
+      "set": "all",
+      "newUsageReqs": [
+        {
+          "method": "summary",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "timeseries",
+          "payload": {
+            "granularity": "day",
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "heatmap",
+          "payload": {
+            "year": 2026,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "byModel",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "byProject",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "byDay",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "timeseries",
+          "payload": {
+            "granularity": "hour",
+            "from": 1789934400000,
+            "to": 1790020800000,
+            "dataSources": "all"
+          }
+        },
+        {
+          "method": "sessions",
+          "payload": {
+            "from": 1789401600000,
+            "to": 1790006399999,
+            "dataSources": "all",
+            "limit": 200
+          }
+        },
+        {
+          "method": "status",
+          "payload": {}
+        }
+      ],
+      "newErrors": 0,
+      "card": {
+        "statCount": 7,
+        "stats": [
+          {
+            "label": "请求数",
+            "value": "25439"
+          },
+          {
+            "label": "输入(未缓存)",
+            "value": "123.41m"
+          },
+          {
+            "label": "输出",
+            "value": "23.69m"
+          },
+          {
+            "label": "缓存读",
+            "value": "4.50b"
+          },
+          {
+            "label": "缓存写",
+            "value": "0"
+          },
+          {
+            "label": "命中率",
+            "value": "97%"
+          },
+          {
+            "label": "覆盖会话",
+            "value": "458"
+          }
+        ],
+        "selects": [
+          {
+            "value": "all",
+            "options": [
+              "全部来源",
+              "dsh",
+              "cc"
+            ],
+            "label": null
+          },
+          {
+            "value": "7",
+            "options": [
+              "近 7 天",
+              "近 30 天",
+              "近 90 天",
+              "自选"
+            ],
+            "label": null
+          },
+          {
+            "value": "60",
+            "options": [
+              "不轮询",
+              "5s 刷新",
+              "30s 刷新",
+              "60s 刷新"
+            ],
+            "label": null
+          },
+          {
+            "value": "hour",
+            "options": [
+              "24h 逐小时",
+              "按日"
+            ],
+            "label": null
+          },
+          {
+            "value": "total",
+            "options": [
+              "总 tokens",
+              "输入(未缓存)",
+              "输出",
+              "缓存读",
+              "缓存写"
+            ],
+            "label": null
+          },
+          {
+            "value": "area",
+            "options": [
+              "面积图",
+              "柱状图"
+            ],
+            "label": null
+          }
+        ],
+        "tabs": [
+          {
+            "text": "按模型",
+            "active": true
+          },
+          {
+            "text": "按项目",
+            "active": false
+          },
+          {
+            "text": "按日",
+            "active": false
+          },
+          {
+            "text": "会话明细",
+            "active": false
+          }
+        ],
+        "panels": [
+          "趋势（逐小时 09-21 04:00–09-22 04:00）",
+          "热力图（按日总量）"
+        ],
+        "svgCount": 2,
+        "tableRows": 6,
+        "noteTexts": [
+          "口径：请求数 = 含 usage 的调用（dsh 按 turn:step 并集去重，cc 按 message.id 去重）；输入 = 未缓存输入（cc 已扣除缓",
+          "单位 tokens/日 · 灰格 = 无数据 · 峰值 1.88b tokens/日（2026-08-11）",
+          "上次 ingest：2026-09-21 · 来源事件：dsh 89394 / cc 22700"
+        ],
+        "errorBox": null,
+        "nodeCount": 298
+      }
+    },
+    {
+      "kind": "cardTab",
+      "set": "按模型",
+      "newErrors": 0,
+      "tableRows": 6
+    },
+    {
+      "kind": "cardTab",
+      "set": "按项目",
+      "newErrors": 0,
+      "tableRows": 6
+    },
+    {
+      "kind": "cardTab",
+      "set": "按日",
+      "newErrors": 0,
+      "tableRows": 6
+    },
+    {
+      "kind": "cardTab",
+      "set": "会话明细",
+      "newErrors": 0,
+      "tableRows": 200
+    }
+  ],
+  "drawer": {
+    "candidates": [
+      {
+        "tag": "BUTTON",
+        "text": "标准模式（子代理 deepseek-v4.1-flash）  即将开始的这个会话所用的 Agent 预设",
+        "cls": "cubgiG_seat"
+      }
+    ],
+    "dialogsBefore": 0,
+    "attempts": [
+      {
+        "candidate": "标准模式（子代理 deepseek-v4.1-flash）  即将开始的这个会话所用的 Agent 预设",
+        "clicked": true,
+        "newErrors": 0,
+        "after": {
+          "dialogs": 0,
+          "drawerish": 0,
+          "text": 962
+        }
+      }
+    ]
+  },
+  "summary": {
+    "tabCount": 8,
+    "tabsAllClicked": true,
+    "tabsWithErrors": [],
+    "tabsBlank": [],
+    "totalErrors": 0,
+    "cardMounted": true,
+    "cardStatCount": 7,
+    "cardHasErrorBox": false,
+    "usageReqCount": 72,
+    "distinctUsageMethods": [
+      "summary",
+      "timeseries",
+      "heatmap",
+      "byModel",
+      "byProject",
+      "byDay",
+      "sessions",
+      "status"
+    ]
+  },
+  "bootErrors": [],
+  "tabNames": [
+    "通用设置",
+    "模型",
+    "插件",
+    "Agent 预设",
+    "远程工作区",
+    "分布式控制 · dsh-ssh-gui",
+    "vision-adam 识图设置",
+    "子代理模型"
+  ],
+  "dataSourceOptions": [
+    "all",
+    "dsh",
+    "cc"
+  ]
+}
