@@ -1,0 +1,65 @@
+=== /etc/environment ===
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+##TEC_BEGIN##
+export ACCESSIBILITY_ENABLED=1
+export GNOME_ACCESSIBILITY=1
+##TEC_END##
+
+=== /etc/ld.so.preload ===
+cat: /etc/ld.so.preload: 没有那个文件或目录
+ls: 无法访问 '/etc/ld.so.preload': 没有那个文件或目录
+
+=== /etc/profile.d listing ===
+总计 64
+drwxr-xr-x   2 root root  4096  8月  6  2025 .
+drwxr-xr-x 156 root root 12288  9月 22 10:01 ..
+-rw-r--r--   1 root root    96  4月 22  2024 01-locale-fix.sh
+-rw-r--r--   1 root root   835  5月 21  2025 apps-bin-path.sh
+-rw-r--r--   1 root root   726  9月 18  2023 bash_completion.sh
+-rw-r--r--   1 root root  1003  4月 19  2024 cedilla-portuguese.sh
+lrwxrwxrwx   1 root root    46  8月  6  2025 debuginfod.csh -> /usr/share/libdebuginfod-common/debuginfod.csh
+lrwxrwxrwx   1 root root    45  8月  6  2025 debuginfod.sh -> /usr/share/libdebuginfod-common/debuginfod.sh
+-rw-r--r--   1 root root  1010  4月  9  2024 gnome-session_gnomerc.sh
+-rw-r--r--   1 root root   376  3月 20  2023 im-config_wayland.sh
+-rw-r--r--   1 root root  4213  6月 12  2024 vte-2.91.sh
+-rw-r--r--   1 root root   967  6月 12  2024 vte.csh
+-rw-r--r--   1 root root   954  4月  9  2024 xdg_dirs_desktop_session.sh
+-rwxr-xr-x   1 root root   841  6月 25  2025 Z99-cloudinit-warnings.sh
+-rwxr-xr-x   1 root root  3396  6月 25  2025 Z99-cloud-locale-test.sh
+
+=== grep LD_PRELOAD / watermark across /etc/profile.d and /etc/environment ===
+
+=== LAgentUser.sh ===
+#!/bin/sh
+
+# Try to enable the LAgentUser service
+systemctl --user import-environment  DISPLAY
+systemctl --user import-environment  WAYLAND_DISPLAY
+systemctl --user start LAgentUser.service > /dev/null
+systemctl --user status LAgentUser.service --no-pager > /dev/null
+if [ $? -eq 0 ]
+then
+	exit 0
+fi
+
+# If the activation fails, run LAgentUser directly
+LC_ALL=C /usr/local/.OCular/LAgentUser &
+
+exit
+
+=== LAgentUser.service ===
+[Unit]
+Description=LAgentUser
+[Service]
+Restart=always
+ExecStart=/usr/local/.OCular/LAgentUser
+Environment="LC_ALL=C"
+[Install]
+WantedBy=multi-user.target
+=== shell/ dir ===
+总计 20
+drwxr-xr-x  2 root root 4096  8月 10 16:38 .
+drwxrwxrwx 11 root root 4096  9月 22 10:02 ..
+-rwxr-xr-x  1 root root  836  5月  9 18:09 101-tbf.json
+-rwxr-xr-x  1 root root  721  5月  9 18:09 startLSDEfsSvr
+-rwxr-xr-x  1 root root  179  5月  9 18:09 startLSDEfsSvr.service

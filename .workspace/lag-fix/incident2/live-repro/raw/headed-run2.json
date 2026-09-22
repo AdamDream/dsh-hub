@@ -1,0 +1,117 @@
+{
+ "tag": "headed-run2",
+ "mode": "headed",
+ "run": 2,
+ "headed": true,
+ "clicks": 3,
+ "startedAt": "2026-09-22T02:37:44.336Z",
+ "hostPid": 10806,
+ "hostAlive": "node /home/CNS2026495165/.npm-global/bin/dsh web",
+ "lockPath": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/.probe.lock",
+ "censusStart": {
+  "at": "2026-09-22T02:37:44.341Z",
+  "mainInstancesTotal": 0,
+  "mainInstancesMine": 0,
+  "foreignMainInstances": 0,
+  "foreign": [],
+  "mine": [],
+  "helperProcs": 0,
+  "binaryKinds": {},
+  "lockDirPresent": true,
+  "lockOwner": "agent=incident2-theme-open | pid=96754 | started_at=2026-09-22T02:37:43.864Z",
+  "lockHeldByThisLine": false
+ },
+ "windows": [],
+ "marks": {},
+ "analysis": {},
+ "verdict": null,
+ "lock": {
+  "acquired": true,
+  "history": [
+   {
+    "at": "2026-09-22T02:37:44.341Z",
+    "result": "HELD:96754",
+    "waitedMs": 0
+   },
+   {
+    "at": "2026-09-22T02:37:48.592Z",
+    "result": "HELD:96754",
+    "waitedMs": 4251
+   },
+   {
+    "at": "2026-09-22T02:37:51.176Z",
+    "result": "HELD:96754",
+    "waitedMs": 6835
+   },
+   {
+    "at": "2026-09-22T02:37:55.431Z",
+    "result": "HELD:96754",
+    "waitedMs": 11090
+   },
+   {
+    "at": "2026-09-22T02:37:58.361Z",
+    "result": "HELD:96754",
+    "waitedMs": 14020
+   },
+   {
+    "at": "2026-09-22T02:38:02.748Z",
+    "result": "HELD:96754",
+    "waitedMs": 18407
+   },
+   {
+    "at": "2026-09-22T02:38:06.160Z",
+    "result": "HELD:96754",
+    "waitedMs": 21819
+   },
+   {
+    "at": "2026-09-22T02:38:10.106Z",
+    "result": "HELD:96754",
+    "waitedMs": 25765
+   },
+   {
+    "at": "2026-09-22T02:38:12.633Z",
+    "result": "STALE:96754",
+    "waitedMs": 28292
+   },
+   {
+    "at": "2026-09-22T02:38:12.634Z",
+    "result": "ACQUIRED",
+    "waitedMs": 28293
+   }
+  ],
+  "waitedMs": 28293
+ },
+ "censusBeforeLaunch": {
+  "at": "2026-09-22T02:38:12.638Z",
+  "mainInstancesTotal": 0,
+  "mainInstancesMine": 0,
+  "foreignMainInstances": 0,
+  "foreign": [],
+  "mine": [],
+  "helperProcs": 0,
+  "binaryKinds": {},
+  "lockDirPresent": true,
+  "lockOwner": "pid=146479 | ts=2026-09-22T02:38:12.634Z | owner=incident2-live-repro",
+  "lockHeldByThisLine": true
+ },
+ "fatal": {
+  "msg": "browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /home/CNS2026495165/.cache/ms-playwright/chromium-1148/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --no-sandbox --no-sandbox --disable-dev-shm-usage --disable-backgrounding-occluded-windows --disable-renderer-backgrounding --disable-background-timer-throttling --window-size=1440,900 --user-data-dir=/tmp/playwright_chromiumdev_profile-a1M3JB --remote-debugging-pipe --no-startup-window\n<launched> pid=154409\n[pid=154409][err] chrome_crashpad_handler: --database is required\n[pid=154409][err] Try 'chrome_crashpad_handler --help' for more information.\n[pid=154409][err] [154409:154409:0922/103812.688803:ERROR:socket.cc(120)] recvmsg: 连接被对方重置 (104)\nCall log:\n\u001b[2m  - <launching> /home/CNS2026495165/.cache/ms-playwright/chromium-1148/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --no-sandbox --no-sandbox --disable-dev-shm-usage --disable-backgrounding-occluded-windows --disable-renderer-backgrounding --disable-background-timer-throttling --window-size=1440,900 --user-data-dir=/tmp/playwright_chromiumdev_profile-a1M3JB --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=154409\u001b[22m\n\u001b[2m  - [pid=154409][err] chrome_crashpad_handler: --database is required\u001b[22m\n\u001b[2m  - [pid=154409][err] Try 'chrome_crashpad_handler --help' for more information.\u001b[22m\n\u001b[2m  - [pid=154409][err] [154409:154409:0922/103812.688803:ERROR:socket.cc(120)] recvmsg: 连接被对方重置 (104)\u001b[22m\n",
+  "stack": "browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /home/CNS2026495165/.cache/ms-playwright/chromium-1148/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --no-sandbox --no-sandbox --disable-dev-shm-usage --disable-backgrounding-occluded-windows --disable-renderer-backgrounding --disable-background-t"
+ },
+ "gateOutcome": "ERROR",
+ "censusEnd": {
+  "at": "2026-09-22T02:38:12.780Z",
+  "mainInstancesTotal": 0,
+  "mainInstancesMine": 0,
+  "foreignMainInstances": 0,
+  "foreign": [],
+  "mine": [],
+  "helperProcs": 0,
+  "binaryKinds": {},
+  "lockDirPresent": true,
+  "lockOwner": "pid=146479 | ts=2026-09-22T02:38:12.634Z | owner=incident2-live-repro",
+  "lockHeldByThisLine": true
+ },
+ "lockReleased": true,
+ "finishedAt": "2026-09-22T02:38:12.780Z"
+}

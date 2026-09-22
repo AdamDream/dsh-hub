@@ -1,0 +1,145 @@
+{
+  "condition": "env-default",
+  "rep": 1,
+  "mode": "headless",
+  "token": "ffm-headless-env-default-r1-1790046621184",
+  "rootPid": 386201,
+  "profileDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headless-env-default-r1",
+  "userJs": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headless-env-default-r1/user.js",
+  "homeDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headless-env-default-r1",
+  "envPassed": {
+    "ACCESSIBILITY_ENABLED": "1",
+    "GNOME_ACCESSIBILITY": "1",
+    "GTK_MODULES": "gail:atk-bridge"
+  },
+  "dbusSessionBusAddress": "unix:path=/run/user/1001/bus",
+  "gsettingsBackend": "memory",
+  "launchedAt": "2026-09-22T11:10:42+08:00",
+  "args": [
+    "--new-instance",
+    "--no-remote",
+    "--marionette",
+    "--profile",
+    "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headless-env-default-r1",
+    "--headless",
+    "http://127.0.0.1:44103/page?n=6000&m=3000&f=180&k=120&token=ffm-headless-env-default-r1-1790046621184"
+  ],
+  "logFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/logs/headless-env-default-r1.log",
+  "loadBefore": "4.84 5.01 4.58 2/3872 386201",
+  "loadavgDuringResult": "4.63 4.96 4.56 2/4306 387030",
+  "busWatch": [],
+  "atspi": null,
+  "rootAccessible": null,
+  "result": {
+    "token": "ffm-headless-env-default-r1-1790046621184",
+    "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+    "params": {
+      "n": 6000,
+      "m": 3000,
+      "f": 180,
+      "k": 120
+    },
+    "hardwareConcurrency": 32,
+    "visibilityState": "visible",
+    "phases": {
+      "build": 13,
+      "read1": 46,
+      "mutate": 5,
+      "animate": 2976,
+      "read2": 2
+    },
+    "frames": {
+      "totalMs": 2976,
+      "frames": 180,
+      "count": 180,
+      "mean": 16.533,
+      "p50": 17,
+      "p90": 18,
+      "p95": 18,
+      "p99": 18,
+      "max": 18,
+      "over33": 0,
+      "over50": 0,
+      "over100": 0
+    },
+    "longTasks": {
+      "count": 0,
+      "total": 0,
+      "max": 0
+    },
+    "errors": [],
+    "visibilityStateDuringAnimate": "visible",
+    "domNodes": 18009,
+    "ok": true,
+    "receivedAt": "2026-09-22T03:10:46.110Z"
+  },
+  "cpuAtResult": {
+    "cpuS": 2.4,
+    "procs": 10
+  },
+  "cpuAtEnd": {
+    "cpuS": 0,
+    "procs": 1
+  },
+  "wallMs": 7410,
+  "timedOut": false,
+  "notes": [],
+  "chromeReadback": {
+    "port": 2841,
+    "ok": true,
+    "error": null,
+    "result": {
+      "pref_force_disabled_err": "[Exception... \"Component returned failure code: 0x8000ffff (NS_ERROR_UNEXPECTED) [nsIPrefBranch.getBoolPref]\"  nsresult: \"0x8000ffff (NS_ERROR_UNEXPECTED)\"  location: \"JS frame :: [System Principal] :: <TOP_LEVEL> :: line 4\"  data: no]",
+      "a11yService": "REGISTERED",
+      "appName": "Firefox",
+      "appVersion": "155.0.1",
+      "env": {
+        "ACCESSIBILITY_ENABLED": "1",
+        "GNOME_ACCESSIBILITY": "1",
+        "GTK_MODULES": "gail:atk-bridge"
+      }
+    },
+    "chromeScopeTried": true,
+    "hello": {
+      "applicationType": "gecko",
+      "marionetteProtocol": 3
+    },
+    "session": {
+      "error": null,
+      "resultId": true
+    }
+  },
+  "busOnAfterRun": false,
+  "busName": null,
+  "effectivePrefs": {
+    "user_js": [],
+    "prefs_js": []
+  },
+  "ourExes": [
+    "/snap/firefox/8863/usr/lib/firefox/firefox"
+  ],
+  "leftoverPids": [],
+  "killWasScopedToOwnGroup": true,
+  "profileLeakProcs": [],
+  "censusAfter": 74,
+  "loadAfter": "4.63 4.96 4.56 1/4052 387077",
+  "censusBefore": 59,
+  "interlock": {
+    "foreignProbeBrowsersBefore": [
+      {
+        "pid": 384425,
+        "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --headless --no-remote --new-instance --profile /tmp/gvb-profiles/gvb-gvb-fir"
+      },
+      {
+        "pid": 385636,
+        "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --headless --no-remote --new-instance --profile /tmp/gvb-profiles/gvb-gvb-fir"
+      }
+    ],
+    "foreignWaitMs": 21094,
+    "noForeignProbeBrowser": false,
+    "lockStillOurs": true,
+    "lockToken": "CNS202649516",
+    "loadavgAtRun": "4.63 4.96 4.56 1/4052 387077"
+  },
+  "userBrowsersRunning": 67
+}

@@ -1,0 +1,29 @@
+CUMULATIVE CPU-SECONDS CONSUMED SINCE EACH PROCESS STARTED (current process table)
+total CPU-seconds across all live processes = 3285.6  (over uptime 33 min, 32 cores)
+
+CLASS               cpu_sec   %of_cpu    procs     rss_MB
+DSH_HOST             1515.5     46.1%        1       4252
+DSH_SUBAGENT           10.4      0.3%       59       2783
+USER                 1460.8     44.5%       47       9038
+SYSTEM                122.8      3.7%      570       4497
+THIRD_PARTY           176.1      5.4%       14        259
+
+--- top individual consumers by cumulative CPU ---
+     1515.5 cpu_sec  pid=10806   node               node /home/CNS2026495165/.npm-global/bin/dsh web
+      460.6 cpu_sec  pid=10350   Isolated Web Co    /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:510
+      309.9 cpu_sec  pid=9042    firefox            /snap/firefox/8863/usr/lib/firefox/firefox
+      197.9 cpu_sec  pid=4139    gnome-shell        /usr/bin/gnome-shell
+      149.4 cpu_sec  pid=10133   Isolated Web Co    /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:508
+      110.2 cpu_sec  pid=6458    update-manager     /usr/bin/python3 /usr/bin/update-manager --no-update --no-focus-on-map
+       96.2 cpu_sec  pid=4535    LAgentUser         /usr/local/.OCular/LAgentUser
+       67.8 cpu_sec  pid=3884    Xorg               /usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1001/gdm/Xauthority -nolisten tcp -b
+       64.5 cpu_sec  pid=4376    LSDHelper          /usr/local/bin/LSDHelper
+       32.8 cpu_sec  pid=5657    wechat             /usr/bin/wechat
+       32.3 cpu_sec  pid=9360    RDD Process        /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -parentBuildID 20260904071051 -p
+       24.5 cpu_sec  pid=6134    WeChatAppEx        /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=renderer --client_version=4067692808 -
+       19.4 cpu_sec  pid=10645   Isolated Web Co    /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:510
+       14.4 cpu_sec  pid=4758    tracker-miner-f    /usr/libexec/tracker-miner-fs-3
+       11.2 cpu_sec  pid=939     mt76-usb-rx phy0   
+       10.8 cpu_sec  pid=30300   feishu             /usr/bin/bytedance-feishu-stable --force-renderer-accessibility
+        9.3 cpu_sec  pid=30411   feishu             /opt/bytedance/feishu/feishu --aha-process-t=aha-service --type=backend --task-jssdk-ena
+        9.1 cpu_sec  pid=5775    WeChatAppEx        /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=gpu-process --no-sandbox --client_vers

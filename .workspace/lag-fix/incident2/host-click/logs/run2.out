@@ -1,0 +1,78 @@
+[lock] 初始 {"exists":true,"owner":"incident2-regression (first-open batch)","pid":"88615","line":"batch plan=base:3,tpoff-armed:3,p2ac-old:2,usage-nofetch:3,theme-sync:3","mine":false}
+[lock-wait] 0s attempts=1 owner=incident2-regression (first-open batch) pid=88615 alive=true
+[lock-wait] 11s attempts=40 owner=incident2-regression (first-open batch) pid=88615 alive=true
+[lock-wait] 22s attempts=80 owner=incident2-regression (first-open batch) pid=88615 alive=true
+[lock-wait] 33s attempts=120 owner=incident2-regression (first-open batch) pid=88615 alive=true
+[lock-wait] 45s attempts=160 owner=incident2-regression (first-open batch) pid=88615 alive=true
+[lock-wait] 56s attempts=200 owner=incident2-regression (raf-face theme-sync A/B) pid=92575 alive=true
+[lock-wait] 67s attempts=240 owner=incident2-regression (raf-face theme-sync A/B) pid=92575 alive=true
+[lock-wait] 77s attempts=280 owner=incident2-regression (raf-face theme-sync A/B) pid=92575 alive=true
+[lock-wait] 88s attempts=320 owner=incident2-regression (raf-face theme-sync A/B) pid=92575 alive=true
+[lock-wait] 98s attempts=360 owner=incident2-regression (raf-face theme-sync A/B) pid=92575 alive=true
+[lock-wait] 110s attempts=400 owner=incident2-regression (raf-face theme-sync A/B) pid=92575 alive=true
+[lock-wait] 121s attempts=440 owner=incident2-regression (raf-face theme-sync A/B) pid=92575 alive=true
+[lock-wait] 132s attempts=480 owner=incident2-regression (raf-face theme-sync A/B) pid=92575 alive=true
+[lock-wait] 143s attempts=520 owner=incident2-regression (raf-face theme-sync A/B) pid=92575 alive=true
+[lock-wait] 154s attempts=560 owner=incident2-regression (raf-face theme-sync A/B) pid=92575 alive=true
+[lock-wait] 165s attempts=600 owner=incident2-regression (raf-face theme-sync A/B) pid=92575 alive=true
+[lock-wait] 176s attempts=640 owner=incident2-regression (raf-face theme-sync A/B) pid=92575 alive=true
+[lock] 原子取得（attempt 663, 182s）
+[nav] domcontentloaded at +340ms
+[settle] quiet after 3603ms (nav->settle 3943ms)
+[clock] page.timeOrigin=1790044404032.4 node.timeOrigin=1790044222031.7 Δ=182000.7ms  evalRTT=0.6ms ⇒ 换算误差界 ±0.3ms
+[pre] 3000ms 结束：累计拍数=61（循环是否在跑=true）
+[click] anchor=1790044411028.5 来源=pointerdown-captured(页内捕获) 不确定度=±0.0ms  夹逼宽=45.6ms err=none
+[STALL] seq=108 /api/host.describe 122.7ms (phase=pending)
+[diag] beats=122 首拍 t0-anchor=-3038.6 末拍 t0-anchor=3010.6
+[diag] 窗内拍数 pre=60 click±500=20 post=60；探针自我饿住 idleExcess p50=0.0 max=0.0
+[diag] 点击→设置面板可见 = 未采到（INCONCLUSIVE）；页内可见性轮询最大间隔=n/ams；页内 rpcTimeline=0 条
+[summary pre]           n=60 p50=12.4 p95=53.4 max=73.6
+[summary click±500ms]   n=20 p50=14.9 p95=65.9 max=72.6
+[summary post3s]        n=60 p50=15.3 p95=72.8 max=122.7
+[stalls>=100ms in click window] 0
+[out] raw/click-run2.json
+[lock] 释放跳过：owner=incident2-regression (raf-face theme-sync A/B)（不是本线，绝不清理他人记账）
+[lock] 初始 {"exists":true,"owner":"incident2-conditions","pid":null,"line":"conditions-matrix","mine":false}
+[lock-wait] 0s attempts=1 owner=incident2-conditions pid=null alive=false
+[lock-wait] 10s attempts=40 owner=incident2-conditions pid=null alive=false
+[lock-wait] 21s attempts=80 owner=incident2-conditions pid=null alive=false
+[lock] 已由本线持有（30s）
+[nav] domcontentloaded at +5704ms
+[settle] quiet after 7206ms (nav->settle 12911ms)
+[clock] page.timeOrigin=1790045154066.1 node.timeOrigin=1790045124100.6 Δ=29965.5ms  evalRTT=0.7ms ⇒ 换算误差界 ±0.4ms
+[STALL] seq=5 /usage/status 619.7ms (phase=pending)
+[STALL] seq=6 /api/host.describe 303.5ms (phase=pending)
+[STALL] seq=7 /usage/status 248.2ms (phase=pending)
+[STALL] seq=8 /api/host.describe 206.8ms (phase=pending)
+[STALL] seq=9 /usage/status 212.3ms (phase=pending)
+[STALL] seq=10 /api/host.describe 191.8ms (phase=pending)
+[STALL] seq=11 /usage/status 191.0ms (phase=pending)
+[STALL] seq=12 /api/host.describe 191.4ms (phase=pending)
+[STALL] seq=13 /usage/status 120.1ms (phase=pending)
+[STALL] seq=14 /api/host.describe 151.5ms (phase=pending)
+[STALL] seq=16 /api/host.describe 101.6ms (phase=pending)
+[pre] 3000ms 结束：累计拍数=19（循环是否在跑=true）
+[click] anchor=1790045170031.1 来源=pointerdown-captured(页内捕获) 不确定度=±0.0ms  夹逼宽=46.8ms err=none
+[STALL] seq=21 /usage/status 419.4ms (phase=pending)
+[STALL] seq=22 /api/host.describe 361.1ms (phase=pending)
+[STALL] seq=23 /usage/status 276.4ms (phase=pending)
+[STALL] seq=24 /api/host.describe 224.2ms (phase=pending)
+[STALL] seq=25 /usage/status 159.5ms (phase=pending)
+[STALL] seq=26 /api/host.describe 100.1ms (phase=pending)
+[STALL] seq=32 /api/host.describe 163.6ms (phase=pending)
+[STALL] seq=33 /usage/status 112.1ms (phase=pending)
+[STALL] seq=34 /api/host.describe 115.6ms (phase=pending)
+[STALL] seq=35 /usage/status 106.1ms (phase=pending)
+[STALL] seq=40 /api/host.describe 109.8ms (phase=pending)
+[STALL] seq=41 /usage/status 108.8ms (phase=pending)
+[STALL] seq=42 /api/host.describe 105.6ms (phase=pending)
+[STALL] seq=43 /usage/status 178.1ms (phase=pending)
+[diag] beats=44 首拍 t0-anchor=-3040.2 末拍 t0-anchor=3011.6
+[diag] 窗内拍数 pre=20 click±500=9 post=22；探针自我饿住 idleExcess p50=0.0 max=0.0
+[diag] 点击→设置面板可见 = 未采到（INCONCLUSIVE）；页内可见性轮询最大间隔=n/ams；页内 rpcTimeline=0 条；墙钟残差=-0.7ms
+[summary pre]           n=20 p50=110.9 p95=319.3 max=619.7
+[summary click±500ms]   n=9 p50=97.8 p95=396.1 max=419.4
+[summary post3s]        n=22 p50=105.9 p95=356.9 max=419.4
+[stalls>=100ms in click window] 4
+[out] raw/click-run2.json
+[lock] 已释放

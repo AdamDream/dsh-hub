@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DSH 点击设置卡顿 · 一次性取证工具（纯前端 / 只读）</title>
+<style>
+  :root{--bg:#0f1115;--fg:#e6e8ee;--dim:#98a0b3;--card:#171a21;--line:#2a2f3a;--ok:#3ddc97;--warn:#ffb454;--bad:#ff6b6b;--acc:#4c9aff}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.6 -apple-system,"Segoe UI","Noto Sans CJK SC","Microsoft YaHei",sans-serif}
+  header{padding:18px 22px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#1b2030,#0f1115)}
+  h1{margin:0 0 4px;font-size:19px}
+  h2{font-size:15px;margin:0 0 10px;color:#fff}
+  .sub{color:var(--dim);font-size:12.5px}
+  main{max-width:1080px;margin:0 auto;padding:18px 22px 60px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:0 0 16px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  button{background:#232936;color:var(--fg);border:1px solid #3a4252;border-radius:7px;padding:8px 14px;font-size:13.5px;cursor:pointer}
+  button:hover:not(:disabled){background:#2c3444}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  button.primary{background:var(--acc);border-color:var(--acc);color:#06111f;font-weight:600}
+  button.ok{background:#1f5c41;border-color:#2c7a58;color:#d8ffee}
+  button.bad{background:#5c2020;border-color:#8a3232;color:#ffdede}
+  input,select{background:#11141b;color:var(--fg);border:1px solid #3a4252;border-radius:6px;padding:7px 9px;font:13px ui-monospace,Menlo,Consolas,monospace}
+  label{font-size:12.5px;color:var(--dim);display:block;margin:0 0 4px}
+  code,pre{font-family:ui-monospace,Menlo,Consolas,monospace}
+  pre{background:#0b0e13;border:1px solid var(--line);border-radius:8px;padding:12px;overflow:auto;font-size:12.5px;white-space:pre-wrap;word-break:break-all}
+  .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin:12px 0 0}
+  .kpi div{background:#11141b;border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+  .kpi span{display:block;color:var(--dim);font-size:11.5px}
+  .kpi b{font-size:18px;font-weight:600}
+  .tag{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:99px;border:1px solid}
+  .ok{color:var(--ok);border-color:#2c7a58}.warn{color:var(--warn);border-color:#7a5a2c}.bad{color:var(--bad);border-color:#8a3232}.dim{color:var(--dim);border-color:#3a4252}
+  table{border-collapse:collapse;width:100%;font-size:12.5px}
+  th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+  th{color:var(--dim);font-weight:500}
+  ol,ul{margin:6px 0 6px 18px;padding:0}
+  li{margin:4px 0}
+  details{margin-top:8px}
+  summary{cursor:pointer;color:var(--acc);font-size:13px}
+  .pull{display:flex;gap:8px;flex-direction:column}
+  .pull textarea{width:100%;height:260px;background:#0b0e13;color:#cfe3ff;border:1px solid var(--line);border-radius:8px;padding:12px;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;resize:vertical}
+  .step{border-left:2px solid #2c3444;padding-left:12px;margin:12px 0}
+  .step b{color:#fff}
+  hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+  .pill{font-size:11px;background:#11141b;border:1px solid var(--line);border-radius:99px;padding:2px 8px;color:var(--dim)}
+</style>
+</head>
+<body>
+<header>
+  <h1>DSH「点击设置卡顿」一次性取证工具</h1>
+  <div class="sub">纯前端 · 只读 · 零安装 · 不改动被观测页面 · 不依赖任何 DSH 源码，不写任何服务端</div>
+</header>
+
+<main>
+  <div class="card">
+    <h2>0. 环境自检</h2>
+    <div id="caps"></div>
+    <div class="sub" style="margin-top:8px">若「长任务/LoAF」显示不可用，仍可使用方案 C（iframe 模式），只是拿不到页内长任务明细。</div>
+  </div>
+
+  <div class="card">
+    <h2>1. 目标页 rev 检测（只读 HTTP 抓取，不修改目标页）</h2>
+    <div class="row">
+      <div><label>目标地址</label><input id="targetUrl" size="34" value="http://127.0.0.1:3080/"></div>
+      <button id="btnRev" class="primary">检测 rev</button>
+      <span id="revState" class="tag dim">未检测</span>
+    </div>
+    <pre id="revOut">点上面的按钮。这里显示目标页当前下发的各插件 rev（sha1 前 12 位）。</pre>
+    <div class="sub">判据：<code>ui-layout/client.js?rev=82cca1a6178a</code> 表示已含「帧内 rAF 合并」修复；<code>dsh-client-runtime/client.js?rev=5559de4ce28c</code> 表示已含 runtime 修复。与这两个值不同 ⇒ 你看到的是未修复的旧页面，请先按 F5 强刷（Ctrl+Shift+R）再录。</div>
+  </div>
+
+  <div class="card">
+    <h2>2. 模式选择</h2>
+    <div class="row">
+      <label style="margin:0"><input type="radio" name="mode" value="iframe" checked> 模式 A：iframe 内嵌目标页（本页自动测，最省事，可测跨标签争抢）</label>
+    </div>
+    <div class="row" style="margin-top:6px">
+      <label style="margin:0"><input type="radio" name="mode" value="inpage"> 模式 B：把探针脚本粘到目标页控制台（最精确，能拿到页内长任务/LoAF/CPU 归属）</label>
+    </div>
+    <div id="modeBody" style="margin-top:14px"></div>
+  </div>
+
+  <div class="card">
+    <h2>3. 实时状态</h2>
+    <div class="row">
+      <span id="recState" class="tag dim">未开始</span>
+      <span id="recElapsed" class="pill">0.0 s</span>
+      <span id="recCount" class="pill">帧 0 / 长任务 0 / LoAF 0 / 交互 0</span>
+    </div>
+    <div class="kpi" id="liveKpi"></div>
+  </div>
+
+  <div class="card">
+    <h2>4. 导出</h2>
+    <div class="row">
+      <button id="btnCopy" class="ok" disabled>复制结果 JSON 到剪贴板</button>
+      <button id="btnDownload" disabled>下载 JSON 文件</button>
+      <button id="btnParse" disabled>本地解析（帧分布 / 长任务 top10）</button>
+      <button id="btnReset">清空重来</button>
+    </div>
+    <div class="sub" style="margin-top:8px">下载文件名形如 <code>dsh-jank-capture-&lt;session&gt;.json</code>。把该文件路径交给 DSH 侧的 <code>parse-trace.mjs</code> 即可。剪贴板内容与文件内容完全一致。</div>
+    <pre id="exportHint" style="display:none"></pre>
+  </div>
+
+  <div class="card">
+    <h2>5. 本地解析结果</h2>
+    <pre id="parseOut">点「本地解析」后显示。</pre>
+  </div>
+</main>
+
+<script>
+"use strict";
+/* =====================================================================
+   一次性取证工具 —— 纯前端、只读、单文件。
+   共享数据契约：schema = "dsh-user-capture/v1"
+   与 parse-trace.mjs 的输入契约严格一致。
+   ===================================================================== */
+
+/* ---------- 1) 探针源码（既是本页运行的实现，也是可复制到目标页控制台的脚本） ---------- */
+function RECORDER_SOURCE() {
+  return String(function () {
+    const cfg = (typeof window !== "undefined" && window.__DSH_CAPTURE_CFG__) || {};
+    const OUT = (typeof window !== "undefined" ? window : globalThis);
+    const SCHEMA = "dsh-user-capture/v1";
+    const SESSION = cfg.sessionId || (Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8));
+    const T0 = performance.now();
+
+    const S = {
+      schema: SCHEMA,
+      source: cfg.source || "inpage",
+      sessionId: SESSION,
+      startedAtWallClock: new Date().toISOString(),
+      startedAtEpochMs: Date.now(),
+      startedAtPerfNow: T0,
+      meta: {
+        userAgent: navigator.userAgent,
+        uaData: (navigator.userAgentData ? { brands: navigator.userAgentData.brands, mobile: navigator.userAgentData.mobile, platform: navigator.userAgentData.platform } : null),
+        hardwareConcurrency: navigator.hardwareConcurrency || null,
+        deviceMemory: navigator.deviceMemory || null,
+        devicePixelRatio: OUT.devicePixelRatio || null,
+        viewport: { w: OUT.innerWidth || 0, h: OUT.innerHeight || 0 },
+        href: (OUT.location && OUT.location.href) || null,
+        visibilityState: (typeof document !== "undefined" && document.visibilityState) || null,
+        targetUrl: cfg.targetUrl || null,
+        reducers: cfg.reducers || null,
+      },
+      apiSupport: {},
+      targetRev: cfg.targetRev || null,
+      frames: [],        // {t: ms since T0, gap: ms}
+      longTasks: [],     // v1 style: {name,startTime,duration,attribution[]}
+      loaf: [],          // v1 style: {startTime,duration,blockingDuration,renderStart,styleAndLayoutStart,scripts[]}
+      events: [],        // event-timing entries
+      interactions: [],  // {t,type,label,isSettings}
+      marks: [],
+      counts: {},
+      truncated: false,
+      stoppedAtPerfNow: null,
+      durationMs: null,
+      capMs: cfg.capMs || 120000,
+    };
+
+    const CAPS = { frames: 6000, longTasks: 1500, loaf: 800, events: 3000, interactions: 600 };
+    function push(arr, cap, item) { if (arr.length < cap) arr.push(item); else S.truncated = true; }
+
+    function supported(t) {
+      try { return typeof PerformanceObserver !== "undefined" && (PerformanceObserver.supportedEntryTypes || []).indexOf(t) >= 0; }
+      catch (e) { return false; }
+    }
+    S.apiSupport = {
+      longtask: supported("longtask"),
+      loaf: supported("long-animation-frame"),
+      eventTiming: supported("event"),
+      elementTiming: supported("element"),
+      layoutShift: supported("layout-shift"),
+      requestIdleCallback: typeof OUT.requestIdleCallback === "function",
+      memory: !!(performance && performance.memory),
+      observersUsed: [],
+    };
+
+    const observers = [];
+    function observe(type, cb) {
+      if (!supported(type)) return false;
+      try {
+        const po = new PerformanceObserver(function (list) { cb(list.getEntries()); });
+        po.observe({ type: type, buffered: true });
+        observers.push(po); S.apiSupport.observersUsed.push(type); return true;
+      } catch (e) { return false; }
+    }
+
+    // ---- rAF 采样：帧间隔 / 掉帧 ----
+    let rafId = 0, framesAlive = true, last = T0, frameCount = 0;
+    function frame(now) {
+      if (!framesAlive) return;
+      const gap = now - last; last = now; frameCount++;
+      push(S.frames, CAPS.frames, { t: +(now - T0).toFixed(3), gap: +gap.toFixed(3) });
+      S.counts.frames = frameCount;
+      rafId = requestAnimationFrame(frame);
+    }
+    rafId = requestAnimationFrame(frame);
+
+    // ---- 长任务（v1 归因接口）----
+    observe("longtask", function (entries) {
+      for (const e of entries) {
+        const attribution = [];
+        if (e.attribution) for (const a of e.attribution) attribution.push({ name: a.name || null, entryType: a.entryType || null, containerType: a.containerType || null, containerSrc: a.containerSrc || null, containerId: a.containerId || null, containerName: a.containerName || null });
+        push(S.longTasks, CAPS.longTasks, { name: e.name || "longtask", startTime: +(+e.startTime).toFixed(3), duration: +(+e.duration).toFixed(3), attribution: attribution });
+      }
+      S.counts.longTasks = S.longTasks.length; render();
+    });
+
+    // ---- LoAF（Chrome 123+，含阻塞时长与脚本归因）----
+    observe("long-animation-frame", function (entries) {
+      for (const e of entries) {
+        const scripts = [];
+        if (e.scripts) for (const s of e.scripts) scripts.push({ name: s.name || null, entryType: s.entryType || null, startTime: +(+(s.startTime || 0)).toFixed(3), duration: +(+(s.duration || 0)).toFixed(3), invoker: s.invoker || null, invokerType: s.invokerType || null, sourceURL: s.sourceURL || null, sourceFunctionName: s.sourceFunctionName || null, sourceCharPosition: (s.sourceCharPosition === undefined ? null : s.sourceCharPosition), pauseDuration: +(+(s.pauseDuration || 0)).toFixed(3), forcedStyleAndLayoutDuration: +(+(s.forcedStyleAndLayoutDuration || 0)).toFixed(3) });
+        push(S.loaf, CAPS.loaf, { startTime: +(+e.startTime).toFixed(3), duration: +(+e.duration).toFixed(3), blockingDuration: +(+(e.blockingDuration || 0)).toFixed(3), renderStart: +(+(e.renderStart || 0)).toFixed(3), styleAndLayoutStart: +(+(e.styleAndLayoutStart || 0)).toFixed(3), firstUIEventTimestamp: +(+(e.firstUIEventTimestamp || 0)).toFixed(3), scripts: scripts });
+      }
+      S.counts.loaf = S.loaf.length; render();
+    });
+
+    // ---- event timing：点击事件自身的处理时长 ----
+    observe("event", function (entries) {
+      for (const e of entries) {
+        if (e.duration < 16) continue;
+        push(S.events, CAPS.events, { name: e.name, entryType: e.entryType, startTime: +(+e.startTime).toFixed(3), duration: +(+e.duration).toFixed(3), processingStart: +(+(e.processingStart || 0)).toFixed(3), processingEnd: +(+(e.processingEnd || 0)).toFixed(3), interactionId: e.interactionId || 0 });
+      }
+      S.counts.events = S.events.length; render();
+    });
+
+    // ---- 交互锚点：捕获任意点击/按键 ----
+    const SETTINGS_RE = /设置|settings|设置页|偏好|preferences/i;
+    function describe(el) {
+      if (!el || !el.tagName) return null;
+      const bits = [el.tagName.toLowerCase()];
+      if (el.id) bits.push("#" + el.id);
+      if (el.getAttribute) {
+        const aria = el.getAttribute("aria-label"); if (aria) bits.push('[aria-label="' + aria + '"]');
+        const title = el.getAttribute("title"); if (title) bits.push('[title="' + title + '"]');
+        const role = el.getAttribute("role"); if (role) bits.push('[role="' + role + '"]');
+        const dt = el.getAttribute("data-testid") || el.getAttribute("data-test-id"); if (dt) bits.push('[data-testid="' + dt + '"]');
+      }
+      let txt = (el.textContent || "").replace(/\s+/g, " ").trim();
+      if (txt.length > 40) txt = txt.slice(0, 40) + "…";
+      if (txt) bits.push('"' + txt + '"');
+      return bits.join("");
+    }
+    function labelOf(el) {
+      if (!el || !el.getAttribute) return "";
+      return [el.getAttribute && el.getAttribute("aria-label"), el.getAttribute && el.getAttribute("title"), (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 40)].filter(Boolean).join(" | ");
+    }
+    let clickSeq = 0;
+    function onInteraction(ev) {
+      const t = performance.now() - T0;
+      const el = ev.target;
+      const label = labelOf(el);
+      const isSettings = SETTINGS_RE.test(label);
+      push(S.interactions, CAPS.interactions, { t: +t.toFixed(3), type: ev.type, isSettings: isSettings, label: label, selector: describe(el), clickSeq: (ev.type === "click" ? ++clickSeq : null) });
+      try {
+        performance.mark("dsh-capture-interaction-" + S.interactions.length);
+        S.marks.push({ name: "dsh-capture-interaction-" + S.interactions.length, t: +t.toFixed(3) });
+      } catch (e) {}
+      S.counts.interactions = S.interactions.length;
+      if (isSettings && S.anchorT == null) S.anchorT = t;
+      render();
+    }
+    OUT.addEventListener("click", onInteraction, true);
+    OUT.addEventListener("pointerdown", onInteraction, true);
+    OUT.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") onInteraction(ev); }, true);
+
+    /* ---------- 渲染（仅本页 UI 模式使用；控制台模式无 UI 时自动跳过） ---------- */
+    let renderFn = null;
+    function render() { if (renderFn) { try { renderFn(); } catch (e) {} } }
+
+    /* ---------- 停止 / 快照 ---------- */
+    function stop() {
+      if (!framesAlive) return S;
+      framesAlive = false;
+      if (rafId) { try { cancelAnimationFrame(rafId); } catch (e) {} }
+      for (const po of observers) { try { po.disconnect(); } catch (e) {} }
+      try {
+        if (typeof performance.getEntriesByType === "function") {
+          const lt = performance.getEntriesByType("longtask");
+          if (lt && lt.length && S.longTasks.length === 0) for (const e of lt) push(S.longTasks, CAPS.longTasks, { name: e.name || "longtask", startTime: +(+e.startTime).toFixed(3), duration: +(+e.duration).toFixed(3), attribution: (e.attribution ? Array.prototype.map.call(e.attribution, function (a) { return { name: a.name || null, entryType: a.entryType || null, containerType: a.containerType || null }; }) : []) });
+        }
+      } catch (e) {}
+      S.stoppedAtPerfNow = performance.now();
+      S.durationMs = +(S.stoppedAtPerfNow - T0).toFixed(3);
+      S.counts = {
+        frames: S.frames.length, longTasks: S.longTasks.length, loaf: S.loaf.length,
+        events: S.events.length, interactions: S.interactions.length,
+      };
+      S.limits = {
+        truncated: S.truncated,
+        caps: { frames: CAPS.frames, longTasks: CAPS.longTasks, loaf: CAPS.loaf, events: CAPS.events, interactions: CAPS.interactions },
+      };
+      if (S.truncated) S.warnings = ["部分数组已达容量上限被截断，见 limits.caps"];
+      S.anchor = (S.anchorOverride != null)
+        ? { t: +Number(S.anchorOverride.t).toFixed(3), how: S.anchorOverride.how || "manual" }
+        : (S.anchorT != null)
+          ? { t: +S.anchorT.toFixed(3), how: "click-on-settings-like-control" }
+          : (function () {
+            const firstClick = S.interactions.filter(function (i) { return i.type === "click"; })[0];
+            if (firstClick) return { t: firstClick.t, how: "first-click" };
+            if (S.interactions.length) return { t: S.interactions[0].t, how: "first-interaction" };
+            return { t: 0, how: "session-start" };
+          })();
+      S.settingsHits = S.interactions.filter(function (i) { return i.isSettings; })
+        .map(function (i) { return { t: i.t, type: i.type, label: i.label, selector: i.selector }; });
+      S.clicks = S.interactions.filter(function (i) { return i.type === "click"; }).length;
+      if (!S.anchorT && S.interactions.length && S.settingsHits.length === 0) {
+        S.warnings = (S.warnings || []).concat(["未识别到「设置」入口的点击（isSettings 全为 false），解析将退化为 " + S.anchor.how + " 锚点；需要精确锚点时在采集结束后执行 __DSH_CAPTURE__.setAnchor(相对毫秒, 'manual') 再重新导出。"]);
+      }
+      S.finalUrl = (OUT.location && OUT.location.href) || null;
+      OUT.removeEventListener("click", onInteraction, true);
+      render();
+      return S;
+    }
+    // 兜底：达到时间上限自动停止（防止忘记点停止导致内存膨胀）
+    const autoStop = setTimeout(function () { if (framesAlive) { S.autoStopped = true; stop(); render(); } }, S.capMs);
+
+    const API = {
+      schema: SCHEMA, sessionId: SESSION,
+      start: T0, snapshot: function () { return S; },
+      stop: function () { clearTimeout(autoStop); return stop(); },
+      state: function () { return S; },
+      /** 在「先点了设置、再粘贴脚本」的情况下，手动把锚点时间设成相对会话起点 */
+      setAnchor: function (tMs, how) {
+        S.anchorT = Number(tMs); S.anchorOverride = { t: Number(tMs), how: how || "manual" }; return S;
+      },
+      /** 用 performance.now() 的绝对时间戳设锚点（配合 performance.getEntriesByType('mark') 使用） */
+      setAnchorAbsolute: function (absMs, how) {
+        S.anchorT = Number(absMs) - T0; S.anchorOverride = { t: S.anchorT, how: how || "manual-absolute" }; return S;
+      },
+      _setRenderer: function (fn) { renderFn = fn; },
+      _S: S,
+    };
+    OUT.__DSH_CAPTURE__ = API;
+    return API;
+  });
+}
+
+/* ---------- 2) 本页实例化探针 ---------- */
+let REC = null;                 // 本页探针 API
+let lastSnapshot = null;
+let startedAt = 0;
+const $ = (id) => document.getElementById(id);
+
+function collectRevFromHtml(text) {
+  const out = {};
+  const re = /([@a-z0-9_.\/-]+)\/client\.js\?rev=([a-f0-9]{6,40})/gi;
+  let m;
+  while ((m = re.exec(text)) !== null) { const k = m[1].replace(/^.*\//, ""); if (!out[k]) out[k] = m[2].slice(0, 12); }
+  const uiLayout = out["dsh-client-ui-layout"] || null;
+  const runtime = out["dsh-client-runtime"] || null;
+  const usage = out["dsh-usage"] || null;
+  const wallpaper = out["dsh-wallpaper"] || null;
+  return {
+    all: out, uiLayout: uiLayout, runtime: runtime, usage: usage, wallpaper: wallpaper,
+    hypothesis: {
+      "ui-layout:366": uiLayout === "82cca1a6178a" ? "PRESENT (rev matches fixed build)" : (uiLayout ? "ABSENT-OR-OLDER (rev=" + uiLayout + ")" : "UNKNOWN (no ui-layout rev in HTML)"),
+      "runtime": runtime === "5559de4ce28c" ? "PRESENT (rev matches fixed build)" : (runtime ? "ABSENT-OR-OLDER (rev=" + runtime + ")" : "UNKNOWN"),
+      "usage": usage ? "rev=" + usage + " (compare with deployed 4536b91ed282)" : "UNKNOWN (not in served HTML)",
+      "wallpaper": wallpaper ? "rev=" + wallpaper : "UNKNOWN",
+    },
+  };
+}
+
+function renderCaps() {
+  const el = $("caps");
+  const rows = [];
+  const has = (fn) => { try { return fn(); } catch (e) { return false; } };
+  const o = (fn) => { try { return PerformanceObserver.supportedEntryTypes || []; } catch (e) { return []; } };
+  const types = o();
+  const chk = (label, ok, note) => rows.push('<tr><td>' + label + '</td><td><span class="tag ' + (ok ? "ok" : "warn") + '">' + (ok ? "可用" : "不可用") + '</span></td><td class="sub">' + (note || "") + '</td></tr>');
+  chk("longtask（长任务 ≥50ms）", types.indexOf("longtask") >= 0, types.indexOf("longtask") >= 0 ? "页面自身的长任务归因" : "跨源 iframe 内不可用（同源限制）");
+  chk("long-animation-frame（LoAF，Chrome 123+）", types.indexOf("long-animation-frame") >= 0, types.indexOf("long-animation-frame") >= 0 ? "含阻塞时长 + 脚本归属，最有价值" : "需 Chrome/Edge ≥ 123");
+  chk("event（Event Timing）", types.indexOf("event") >= 0, "点击事件自身处理时长");
+  chk("layout-shift", types.indexOf("layout-shift") >= 0, "");
+  chk("requestIdleCallback", typeof requestIdleCallback === "function", "");
+  chk("performance.memory", !!(performance && performance.memory), "仅 Chromium 且非精确定量");
+  el.innerHTML = '<table><tr><th>能力</th><th>状态</th><th>说明</th></tr>' + rows.join("") + '</table>' +
+    '<div class="sub" style="margin-top:6px">UA：' + navigator.userAgent + ' · CPU 核数：' + (navigator.hardwareConcurrency || "?") +
+    ' · DPR：' + (devicePixelRatio || "?") + ' · 视口：' + innerWidth + '×' + innerHeight + '</div>' +
+    '<div class="sub" style="margin-top:4px">本页是否被跨源隔离：crossOriginIsolated=' + (typeof crossOriginIsolated !== "undefined" ? crossOriginIsolated : "?") + '</div>';
+}
+
+/* ---------- rev 检测 ---------- */
+async function detectRev() {
+  const url = $("targetUrl").value.trim();
+  $("revState").textContent = "检测中…"; $("revState").className = "tag dim";
+  try {
+    const res = await fetch(url, { cache: "no-store", credentials: "omit" });
+    const text = await res.text();
+    const rev = collectRevFromHtml(text);
+    $("revState").textContent = "HTTP " + res.status + " · 抓到 " + Object.keys(rev.all).length + " 个 rev";
+    $("revState").className = "tag " + (rev.uiLayout ? "ok" : "warn");
+    $("revOut").textContent =
+      "ui-layout : " + (rev.uiLayout || "(HTML 中未出现)") + "\n" +
+      "runtime   : " + (rev.runtime || "(未出现)") + "\n" +
+      "usage     : " + (rev.usage || "(未出现)") + "\n" +
+      "wallpaper : " + (rev.wallpaper || "(未出现)") + "\n\n" +
+      "已知修复项判定：\n" +
+      "  ui-layout:366  → " + rev.hypothesis["ui-layout:366"] + "\n" +
+      "  runtime        → " + rev.hypothesis["runtime"] + "\n" +
+      "  usage          → " + rev.hypothesis["usage"] + "\n\n" +
+      "全部 rev（" + Object.keys(rev.all).length + "）：\n" + JSON.stringify(rev.all, null, 1);
+    REC && REC.state() && (REC.state().targetRev = rev);
+    window.__REV = rev;
+    return rev;
+  } catch (e) {
+    $("revState").textContent = "检测失败";
+    $("revState").className = "tag bad";
+    $("revOut").textContent = "浏览器拦截了这次跨源读取（这不算致命，录制不受影响）：\n" + (e && e.message ? e.message : String(e)) +
+      "\n\n⚠ 已实测确认：DSH 的 GUI 服务（127.0.0.1:3080）不下发任何 CORS 响应头" +
+      "\n   （无 Access-Control-Allow-Origin），因此**只有当本页与目标页同源时**自动检测才可能成功；" +
+      "\n   从 file:// 或别的端口打开时，这条读取必然失败 —— 这是浏览器的安全规则，不是本工具的 bug，也无法绕过。" +
+      "\n   ⇒ rev 请用下面任一「手动」办法取得（都只读、都不需要安装任何东西）。" +
+      "\n\n手动取 rev（任选）：\n" +
+      "  1) 在 DSH 标签页地址栏打开 " + url + "settings ，右键「查看页面源代码」（Ctrl+U），" +
+      "\n     在源码里搜 client.js?rev= ，记下各插件后的 12 位十六进制值；\n" +
+      "  2) 在 DSH 标签页按 F12 → Console 执行：\n" +
+      "       performance.getEntriesByType('resource').map(r=>r.name).filter(n=>/rev=/.test(n)&&/ui-layout|runtime|usage|wallpaper/.test(n))\n" +
+      "  3) 直接继续录制 —— rev 只是判据、不是必需品。拿到结果后把它填进去再导出即可：\n" +
+      "       __DSH_CAPTURE__.state().targetRev = {all:{'dsh-client-ui-layout':'…','dsh-client-runtime':'…'}}\n" +
+      "\n对照基准（我方已落地修复的终态 rev）：ui-layout=82cca1a6178a · runtime=5559de4ce28c · usage=4536b91ed282 · wallpaper=826d9217a8fc" +
+      "\n若你的值与这些不同 ⇒ 你跑的是旧构建，请先在 DSH 页面按 Ctrl+Shift+R 强刷再录。";
+    return null;
+  }
+}
+
+/* ---------- 模式 UI ---------- */
+function mountMode(mode) {
+  const body = $("modeBody");
+  if (mode === "iframe") {
+    body.innerHTML = [
+      '<div class="step"><b>模式 A 用法（30 秒）</b>',
+      '<ol>',
+      '<li>点下面 <b>「打开目标页并开始录制」</b>。下方 iframe 会加载 DSH 界面，同时开始记录本页 rAF 帧间隔。</li>',
+      '<li>在 iframe 里点一次 <b>「设置」</b>（就是你平时卡的那个入口）。</li>',
+      '<li>等 3~5 秒，点 <b>「停止录制」</b>，再点 <b>「下载 JSON 文件」</b>。</li>',
+      '</ol>',
+      '<div class="sub"><b>优点</b>：零安装、零粘贴，跨源也照样能用。<b>局限</b>：iframe 是独立渲染进程之外的同进程帧，跨源隔离下<b>只能</b>测到本页（宿主页）的 rAF 帧间隔与掉帧；iframe 内部的长任务不会上报给本页，因此拿不到函数级归属。要函数级归属请用<b>模式 B</b>。</div></div>',
+      '<div id="iframeWrap" style="margin-top:10px"></div>',
+      '<div class="row" style="margin-top:10px">',
+      '<button id="btnIframeStart" class="primary">打开目标页并开始录制</button>',
+      '<button id="btnIframeStop" class="bad" disabled>停止录制</button>',
+      '</div>',
+      '<div class="sub" style="margin-top:8px" id="iframeNote"></div>'
+    ].join("");
+    $("btnIframeStart").onclick = () => {
+      const url = $("targetUrl").value.trim();
+      $("iframeWrap").innerHTML = '<iframe id="tf" src="' + url + '" style="width:100%;height:min(70vh,760px);border:1px solid #2a2f3a;border-radius:8px;background:#000"></iframe>';
+      $("iframeNote").innerHTML = 'iframe 正在加载（跨源，本页无法读取其内部 DOM —— 这正是「不修改被观测页面」的保证）。' +
+        '<br>已实测：目标页 <b>未</b>设置 <code>X-Frame-Options</code> 也未设置 <code>frame-ancestors</code> CSP，因此 iframe 能正常加载。' +
+        '若你看到空白，多半只是加载慢，等 5~10 秒；仍空白则改用<b>模式 B</b>。';
+      startRecorder({ source: "iframe", url: url });
+      $("btnIframeStart").disabled = true; $("btnIframeStop").disabled = false;
+    };
+    $("btnIframeStop").onclick = () => { stopRecorder(); $("btnIframeStart").disabled = false; $("btnIframeStop").disabled = true; };
+  } else {
+    body.innerHTML = [
+      '<div class="step"><b>模式 B 用法（60 秒，推荐用于拿函数级归属）</b>',
+      '<ol>',
+      '<li>在你的 <b>DSH 标签页</b> 里先按 <b>F12</b> 打开 DevTools，切到 <b>Console</b>。</li>',
+      '<li>点下面 <b>「复制探针脚本」</b>，粘贴到那个 Console 里，回车。（Console 首次粘贴可能要求你输入 <code>allow pasting</code> 确认，照做即可。）</li>',
+      '<li>回到 DSH 界面，点一次 <b>「设置」</b>，感受卡顿，等 3~5 秒。</li>',
+      '<li>在 Console 执行：<code>__DSH_CAPTURE__.stop()</code></li>',
+      '<li>再执行：<code>copy(JSON.stringify(__DSH_CAPTURE__.snapshot()))</code> —— 结果已在剪贴板。</li>',
+      '<li>把剪贴板内容粘贴到一个新文件里，保存为 <code>dsh-jank-inpage.json</code>，然后把路径告诉我。</li>',
+      '</ol>',
+      '<div class="sub">如果 <code>copy()</code> 不可用，执行下面这条，会直接下载 JSON 文件：</div>',
+      '<pre>var d=JSON.stringify(__DSH_CAPTURE__.snapshot());var b=new Blob([d],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dsh-jank-inpage.json";a.click();</pre>',
+      '<div class="sub"><b>优点</b>：探针跑在目标页自己的进程/主线程里，能拿到 <b>longtask + LoAF（阻塞时长、脚本 URL、函数名）+ Event Timing</b>，这是函数级定位的关键。<b>缺点</b>：需要粘贴一次脚本（只读探针，不修改页面任何 DOM/样式/数据，停止后自动断开所有 observer）。</div>',
+      '<div class="sub"><b>没抓到锚点？</b>如果你先点了设置才粘贴脚本，录到的交互可能为 0。此时在 Console 里补一句手动锚点（相对本次录制起点，单位毫秒）：<code>__DSH_CAPTURE__.setAnchor(0, "manual")</code>，或直接用 <code>__DSH_CAPTURE__.setAnchorAbsolute(performance.now(), "manual-now")</code> 把锚点定在此刻。</div></div>',
+      '<div class="row"><button id="btnCopyProbe" class="primary">复制探针脚本</button><button id="btnProbeSelfTest">在本页试跑探针（自检）</button></div>',
+      '<pre id="probeOut" style="display:none"></pre>',
+      '<div class="sub" style="margin-top:6px">脚本是纯函数式探针：只读 <code>performance</code> 时间线 + 捕获阶段监听 click/keydown（不 preventDefault、不 stopPropagation），不改任何页面内容。</div>'
+    ].join("");
+    const buildProbe = () => {
+      const rev = window.__REV || null;
+      const cfgLine = 'window.__DSH_CAPTURE_CFG__ = ' + JSON.stringify({
+        source: "inpage", sessionId: Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8),
+        targetUrl: $("targetUrl").value.trim(), targetRev: rev, capMs: 120000,
+      }) + ';';
+      return "/* DSH jank probe v1 (read-only) */\n" + cfgLine + "\n(" + RECORDER_SOURCE() + ")();";
+    };
+    $("btnCopyProbe").onclick = async () => {
+      const src = buildProbe();
+      try { await navigator.clipboard.writeText(src); $("btnCopyProbe").textContent = "已复制 ✓"; }
+      catch (e) {
+        $("probeOut").style.display = "block";
+        $("probeOut").textContent = "剪贴板被拒绝（非 https/localhost 常见）。请从下面文本框全选复制：\n\n" + src;
+        $("btnCopyProbe").textContent = "复制失败，见下方文本框";
+      }
+      setTimeout(() => { $("btnCopyProbe").textContent = "复制探针脚本"; }, 2500);
+    };
+    $("btnProbeSelfTest").onclick = () => {
+      $("probeOut").style.display = "block";
+      $("probeOut").textContent = "自检：在本页启动探针 3 秒…";
+      REC = new Function("return (" + RECORDER_SOURCE() + ")();")();
+      setTimeout(() => {
+        const s = REC.stop();
+        $("probeOut").textContent = "自检完成（探针在本页能跑通）：\n" + JSON.stringify({
+          schema: s.schema, frames: s.frames.length, longTasks: s.longTasks.length,
+          loaf: s.loaf.length, events: s.events.length, interactions: s.interactions.length, durationMs: s.durationMs,
+          apiSupport: s.apiSupport,
+        }, null, 1);
+        REC = null;
+      }, 3000);
+    };
+  }
+}
+
+/* ---------- 录制控制 ---------- */
+function startRecorder(opts) {
+  if (REC) { try { REC.stop(); } catch (e) {} }
+  window.__DSH_CAPTURE_CFG__ = {
+    source: opts.source, sessionId: Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8),
+    targetUrl: opts.url, targetRev: window.__REV || null, capMs: 120000,
+  };
+  REC = new Function("return (" + RECORDER_SOURCE() + ")();")();
+  REC._setRenderer(refreshLive);
+  startedAt = performance.now();
+  $("recState").textContent = "录制中…"; $("recState").className = "tag ok";
+  $("btnCopy").disabled = true; $("btnDownload").disabled = true; $("btnParse").disabled = true;
+  lastSnapshot = null;
+  clearInterval(tickTimer);
+  tickTimer = setInterval(refreshLive, 250);
+}
+let tickTimer = 0;
+
+function refreshLive() {
+  if (!REC) return;
+  const s = REC.state();
+  $("recElapsed").textContent = ((performance.now() - startedAt) / 1000).toFixed(1) + " s";
+  const c = s.counts || {};
+  $("recCount").textContent = "帧 " + (c.frames || 0) + " / 长任务 " + (c.longTasks || 0) + " / LoAF " + (c.loaf || 0) + " / 交互 " + (c.interactions || 0);
+  const gaps = s.frames.map(f => f.gap).filter(g => g > 0);
+  const fps = gaps.length ? 1000 / (gaps.reduce((a, b) => a + b, 0) / gaps.length) : 0;
+  const janky = gaps.filter(g => g > 50).length;
+  const worst = gaps.length ? Math.max.apply(null, gaps) : 0;
+  const ltSum = s.longTasks.reduce((a, b) => a + b.duration, 0);
+  const loafBlock = s.loaf.reduce((a, b) => a + (b.blockingDuration || 0), 0);
+  $("liveKpi").innerHTML = [
+    ["平均 FPS", fps.toFixed(1)], ["掉帧(>50ms)", janky], ["最长帧间隔", worst.toFixed(1) + " ms"],
+    ["长任务数", s.longTasks.length], ["长任务合计", ltSum.toFixed(0) + " ms"],
+    ["LoAF 阻塞合计", loafBlock.toFixed(0) + " ms"], ["交互事件", s.interactions.length],
+  ].map(([k, v]) => '<div><span>' + k + '</span><b>' + v + '</b></div>').join("");
+}
+
+function stopRecorder() {
+  if (!REC) return null;
+  clearInterval(tickTimer);
+  const s = REC.stop();
+  lastSnapshot = s;
+  $("recState").textContent = "已停止（" + (s.durationMs / 1000).toFixed(1) + " s）";
+  $("recState").className = "tag warn";
+  $("btnCopy").disabled = false; $("btnDownload").disabled = false; $("btnParse").disabled = false;
+  refreshLive();
+  return s;
+}
+
+/* ---------- 导出 ---------- */
+function snapshotOrWarn() {
+  let s = lastSnapshot;
+  if (!s && REC) s = REC.state();
+  return s;
+}
+$("btnCopy").onclick = async () => {
+  const s = snapshotOrWarn(); if (!s) return;
+  const txt = JSON.stringify(s);
+  try {
+    await navigator.clipboard.writeText(txt);
+    $("btnCopy").textContent = "已复制 ✓（" + (txt.length / 1024).toFixed(0) + " KB）";
+  } catch (e) {
+    $("btnCopy").textContent = "剪贴板被拒 → 已改走下载";
+    download(s);
+  }
+  setTimeout(() => { $("btnCopy").textContent = "复制结果 JSON 到剪贴板"; }, 3000);
+};
+function download(s) {
+  const blob = new Blob([JSON.stringify(s, null, 0)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "dsh-jank-capture-" + (s.sessionId || Date.now()) + ".json";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  $("exportHint").style.display = "block";
+  $("exportHint").textContent = "已触发下载：" + a.download + "（通常落在你的「下载」目录）。把该文件的绝对路径交给 DSH 侧即可。";
+}
+$("btnDownload").onclick = () => { const s = snapshotOrWarn(); if (s) download(s); };
+$("btnReset").onclick = () => {
+  try { REC && REC.stop(); } catch (e) {}
+  REC = null; lastSnapshot = null; clearInterval(tickTimer);
+  $("recState").textContent = "未开始"; $("recState").className = "tag dim";
+  $("btnCopy").disabled = true; $("btnDownload").disabled = true; $("btnParse").disabled = true;
+  $("liveKpi").innerHTML = ""; $("parseOut").textContent = "点「本地解析」后显示。";
+  $("exportHint").style.display = "none";
+  mountMode(document.querySelector('input[name=mode]:checked').value);
+};
+
+/* ---------- 本地解析（与 parse-trace.mjs 同口径的简化版，便于当场判读） ---------- */
+$("btnParse").onclick = () => {
+  const s = snapshotOrWarn(); if (!s) return;
+  const anchor = (s.anchor && typeof s.anchor.t === "number") ? s.anchor.t : 0;
+  const win = (a, b) => ({ from: a, to: b });
+  const W = win(anchor - 3000, anchor + 3000);
+  const inWin = (t) => t >= W.from && t <= W.to;
+  const gaps = s.frames.filter(f => inWin(f.t)).map(f => f.gap).filter(g => g > 0).sort((x, y) => x - y);
+  const q = (p) => gaps.length ? gaps[Math.min(gaps.length - 1, Math.floor(gaps.length * p))] : 0;
+  const buckets = { "<16.7": 0, "16.7-33": 0, "33-50": 0, "50-100": 0, "100-250": 0, ">250": 0 };
+  for (const g of gaps) {
+    if (g < 16.7) buckets["<16.7"]++;
+    else if (g < 33) buckets["16.7-33"]++;
+    else if (g < 50) buckets["33-50"]++;
+    else if (g < 100) buckets["50-100"]++;
+    else if (g < 250) buckets["100-250"]++;
+    else buckets[">250"]++;
+  }
+  const tasks = s.longTasks.filter(t => inWin(t.startTime || 0)).slice().sort((a, b) => b.duration - a.duration).slice(0, 10);
+  const loaf = s.loaf.filter(t => inWin(t.startTime || 0)).slice().sort((a, b) => b.blockingDuration - a.blockingDuration).slice(0, 10);
+  const lines = [];
+  lines.push("=== 窗口：锚点 " + anchor.toFixed(0) + " ms ± 3000 ms（来源：" + (s.anchor ? s.anchor.how : "n/a") + "）===");
+  lines.push("会话时长 " + (s.durationMs / 1000).toFixed(1) + " s · 来源 " + s.source + " · sessionId " + s.sessionId);
+  lines.push("帧数 " + gaps.length + " · FPS≈" + (gaps.length ? (1000 / (gaps.reduce((a, b) => a + b, 0) / gaps.length)).toFixed(1) : "?") +
+    " · p50 " + q(0.5).toFixed(1) + " · p95 " + q(0.95).toFixed(1) + " · p99 " + q(0.99).toFixed(1) + " · max " + q(0.999999).toFixed(1));
+  lines.push("帧间隔分布：" + JSON.stringify(buckets));
+  lines.push("");
+  lines.push("--- 窗口内最长的长任务 top10 ---");
+  if (!tasks.length) lines.push("（无；跨源 iframe 模式下这是预期结果）");
+  tasks.forEach((t, i) => {
+    const at = (t.attribution && t.attribution[0]) || {};
+    lines.push((i + 1) + ". " + t.duration.toFixed(1) + " ms @ " + (t.startTime || 0).toFixed(0) + " ms · " + (at.name || t.name || "?") +
+      (at.containerType ? " [" + at.containerType + "]" : "") + (at.containerName ? " " + at.containerName : "") + (at.containerSrc ? " " + at.containerSrc : ""));
+  });
+  lines.push("");
+  lines.push("--- 窗口内 LoAF 阻塞 top10（含脚本归属）---");
+  if (!loaf.length) lines.push("（无）");
+  loaf.forEach((t, i) => {
+    lines.push((i + 1) + ". 阻塞 " + t.blockingDuration.toFixed(1) + " ms · 总时长 " + t.duration.toFixed(1) + " ms @ " + t.startTime.toFixed(0) + " ms");
+    (t.scripts || []).slice().sort((a, b) => b.duration - a.duration).slice(0, 3).forEach(sc => {
+      lines.push("     · " + (sc.duration || 0).toFixed(1) + " ms " + (sc.sourceFunctionName || sc.name || "?") +
+        (sc.sourceURL ? "  " + sc.sourceURL : "") + (sc.forcedStyleAndLayoutDuration ? "  [forcedStyleAndLayout " + sc.forcedStyleAndLayoutDuration.toFixed(1) + "ms]" : ""));
+    });
+  });
+  lines.push("");
+  lines.push("--- 交互 ---");
+  s.interactions.forEach(i => lines.push("  " + i.t.toFixed(0) + " ms " + i.type + (i.isSettings ? " ★设置" : "") + " " + (i.selector || "")));
+  lines.push("");
+  lines.push("--- rev 判定 ---");
+  lines.push(JSON.stringify((s.targetRev && s.targetRev.hypothesis) || window.__REV && window.__REV.hypothesis || "未检测到 rev", null, 1));
+  lines.push("");
+  lines.push("提示：要拿到含 Script/Recalc/Layout/Paint 分项与函数级 CPU 归属的报告，请把导出的 JSON 交给 parse-trace.mjs。");
+  $("parseOut").textContent = lines.join("\n");
+};
+
+/* ---------- 启动 ---------- */
+document.querySelectorAll('input[name=mode]').forEach(r => r.addEventListener("change", () => mountMode(r.value)));
+renderCaps();
+mountMode("iframe");
+$("btnRev").onclick = detectRev;
+setInterval(() => { if (REC && !lastSnapshot) refreshLive(); }, 1000);
+</script>
+</body>
+</html>

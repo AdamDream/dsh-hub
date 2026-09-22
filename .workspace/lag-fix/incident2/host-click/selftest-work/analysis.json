@@ -1,0 +1,236 @@
+{
+  "kind": "host-click-analysis",
+  "generatedAt": "2026-09-22T02:43:42.069Z",
+  "stallThresholdMs": 100,
+  "perRun": [
+    {
+      "file": "click-runSELFTEST.json",
+      "run": "selftest",
+      "anchor": {
+        "clickAnchor": 1000000,
+        "source": "pointerdown-captured(页内捕获)",
+        "uncertaintyMs": 0,
+        "nodeBracket": {
+          "tSend": 999998,
+          "tDone": 1000020,
+          "widthMs": 22
+        }
+      },
+      "clickError": null,
+      "condition": {
+        "n": 0,
+        "label": "UNKNOWN（哨兵无样本）"
+      },
+      "windows": {
+        "pre": {
+          "n": 61,
+          "nValid": 61,
+          "p50": 5,
+          "p95": 5,
+          "p99": 5,
+          "max": 5,
+          "min": 5,
+          "stalls100": 0,
+          "idleMaxExcess": 0,
+          "nWithIdleBefore": 0,
+          "schedSkewMax": 0
+        },
+        "plusMinus500": {
+          "n": 21,
+          "nValid": 21,
+          "p50": 5,
+          "p95": 5,
+          "p99": 401.00000000000034,
+          "max": 500,
+          "min": 5,
+          "stalls100": 1,
+          "idleMaxExcess": 0,
+          "nWithIdleBefore": 0,
+          "schedSkewMax": 0,
+          "stalls100_afterClick": 1
+        },
+        "post": {
+          "n": 60,
+          "nValid": 60,
+          "p50": 5,
+          "p95": 5,
+          "p99": 207.9499999999983,
+          "max": 500,
+          "min": 5,
+          "stalls100": 1,
+          "idleMaxExcess": 0,
+          "nWithIdleBefore": 0,
+          "schedSkewMax": 0
+        }
+      },
+      "httpInWindow": [],
+      "cdpInWindow": [],
+      "excess": {
+        "p50": 0,
+        "p95": 0,
+        "max": 495,
+        "ratioP95": 1
+      },
+      "stalls": [
+        {
+          "seq": 1000150,
+          "t0": 1000150,
+          "iso": "1970-01-01T00:16:40.150Z",
+          "endpoint": "/usage/status",
+          "ms": 500,
+          "dtFromClickMs": 150,
+          "inPlusMinus500": true,
+          "rpcInFlight": [],
+          "note": "该拍期间无页内 RPC 在飞 ⇒ 更可能是宿主自身/其它线的负载，而非本次点击"
+        }
+      ],
+      "bigGaps": [],
+      "gapStallIdentityConsistent": true,
+      "rpcInWindow": [
+        {
+          "t": 1000010,
+          "method": "settings.describe",
+          "rpcId": "r1",
+          "url": "/api/settings.describe",
+          "reqBytes": 120,
+          "dtFromClickMs": 10,
+          "respT": 1000090,
+          "respMs": 80,
+          "respBytes": 4000,
+          "raw": "{\"method\":\"settings.describe\"}",
+          "attribution": "click-direct（点击后 300ms 内·设置路径）"
+        },
+        {
+          "t": 1000900,
+          "method": "session.list",
+          "rpcId": "r2",
+          "url": "/api/session.list",
+          "reqBytes": 80,
+          "dtFromClickMs": 900,
+          "respT": 1000940,
+          "respMs": 40,
+          "respBytes": 9000,
+          "raw": "{\"method\":\"session.list\"}",
+          "attribution": "incidental（既有后台轮询）"
+        }
+      ],
+      "attributionBuckets": {
+        "click-direct": 1,
+        "incidental": 1
+      },
+      "rpcWindows": [
+        {
+          "method": "settings.describe",
+          "sentDt": 10,
+          "respDt": 90,
+          "respMs": 80,
+          "respBytes": 4000,
+          "heartbeatsDuring": 1,
+          "beatMaxDuring": 5,
+          "beatP50During": 5,
+          "beatStalls100": 0
+        }
+      ],
+      "settingsCalls": [
+        {
+          "t": 1000010,
+          "method": "settings.describe",
+          "rpcId": "r1",
+          "url": "/api/settings.describe",
+          "reqBytes": 120,
+          "dtFromClickMs": 10,
+          "respT": 1000090,
+          "respMs": 80,
+          "respBytes": 4000,
+          "raw": "{\"method\":\"settings.describe\"}",
+          "attribution": "click-direct（点击后 300ms 内·设置路径）"
+        }
+      ],
+      "align": {
+        "clickAnchor": 1000000,
+        "anchorSource": "pointerdown-captured(页内捕获)",
+        "anchorUncertaintyMs": 0,
+        "panelVisibleAt": 1000400,
+        "msClickToPanelVisible": 400,
+        "contentAt": 1000380,
+        "msClickToContent": 380,
+        "conversionErrorBoundMs": 1.5,
+        "pageNodeTimeOriginDeltaMs": 0,
+        "stallsOverlappingClickToPanel": [
+          {
+            "seq": 1000150,
+            "t0": 1000150,
+            "iso": "1970-01-01T00:16:40.150Z",
+            "endpoint": "/usage/status",
+            "ms": 500,
+            "dtFromClickMs": 150,
+            "inPlusMinus500": true,
+            "rpcInFlight": [],
+            "note": "该拍期间无页内 RPC 在飞 ⇒ 更可能是宿主自身/其它线的负载，而非本次点击"
+          }
+        ],
+        "verdictHostStallInsideClickWindow": true
+      },
+      "longtasksNearClick": [
+        {
+          "t": 1000200,
+          "dur": 120
+        },
+        {
+          "t": 1002500,
+          "dur": 30
+        }
+      ],
+      "frames": {
+        "n": 100,
+        "p50": 16,
+        "p95": 33,
+        "max": 90,
+        "over50": 2
+      },
+      "clock": {
+        "nodeTimeOrigin": 0,
+        "pageTimeOrigin": 0,
+        "deltaTimeOriginMs": 0,
+        "skewBoundMs": 1.5
+      },
+      "pageVisMaxPollGap": 22
+    }
+  ],
+  "repeat": {
+    "nRuns": 1,
+    "perRunMax": [
+      {
+        "run": "selftest",
+        "file": "click-runSELFTEST.json",
+        "maxMs": 500,
+        "maxInPlusMinus500": 500,
+        "stalls100_post": 1,
+        "stalls100_pm500": 1,
+        "stalls100_afterClick": 1,
+        "hit": true,
+        "msClickToPanel": 400
+      }
+    ],
+    "anyOver100": true,
+    "hitRate": 1
+  },
+  "ambient": null,
+  "verdict": {
+    "T1_heartbeat_reported": "PASS",
+    "T1_host_stall_over_100ms_AFTER_click": [
+      1
+    ],
+    "T1_host_stall_over_100ms_in_pm500_window": "YES(±500ms 窗内存在停顿，但见 AFTER 列判断是否在点击之后)",
+    "T2_requests_recorded": "PASS",
+    "T2_settings_direct_calls": [
+      1
+    ],
+    "T3_alignment_reported": "PASS",
+    "T3_host_stall_inside_click_to_panel": [
+      true
+    ],
+    "T4_runs": 1,
+    "T4_repeatability": "INCONCLUSIVE(运行次数<3)"
+  }
+}

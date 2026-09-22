@@ -1,0 +1,75 @@
+### ARM aba2k 2560x1440 reps2 ablate=aba 11:37:28
+[11:37:28] run=aba2k order=A reps=2 browser=chrome-headless vp=2560x1440@2 sections=nav trace=true ablate=aba
+[11:37:28] loadavg=7.18 6.68 5.52 9/3349 489248
+[11:37:28] pre-census: total=0 own=0 foreign=0
+[11:37:28] lock: exclusive
+[11:37:28] quiet gate: quiet=true waited=4ms foreign=0
+[11:37:29] launched chrome-headless version=153.0.8010.52
+[11:37:32] rep1 ready 3192ms channels={"longtask":"on","loaf":"on","event":"on"}
+[11:37:35]   IDLE_BASE              c2f=null max=33.3 >50=0 LT=1/56 rpc=host.describe,settings.describe,dynamicCordisRunner/syncInspectManifest,session.list,workspace.list pw=0
+[11:37:45] rep1 ERROR: TimeoutError: locator.waitFor: Timeout 10000ms exceeded. | Call log: | [2m  - waiting for locator('div[class$="_settingsArea"] button[aria-haspopup="dialog"]').first() to be visible[22m | 
+[11:37:48] rep2 ready 2219ms channels={"longtask":"on","loaf":"on","event":"on"}
+[11:37:51]   IDLE_BASE              c2f=null max=66.7 >50=1 LT=2/73 rpc=settings.describe,dynamicCordisRunner/syncInspectManifest,host.describe,session.list,workspace.list,settings.describe,dynamicCordisRunner/syncInspectManifest,dynamicCordisRunner/inventory,credentials.describe,dynamicCordisRunner/inventory,agentPreset.list pw=1138
+[11:37:53]   OPEN                   c2f=12.5 max=66.7 >50=2 LT=0/0 rpc=agentPreset.list pw=1419
+[11:37:53] rep2 nav has 8 sections: ["通用设置","模型","插件","Agent 预设","远程工作区","分布式控制 · dsh-ssh-gui","vision-adam 识图设置","子代理模型"] (active at open: 通用设置)
+[11:37:56]   SEC_1_first_view       c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:37:58]   SCROLL_first           c2f=null max=66.7 >50=2 LT=0/0 rpc=- pw=246
+[11:38:01]   SEC_S2_模型              c2f=3.5 max=66.7 >50=1 LT=0/0 rpc=llm.providers pw=412
+[11:38:01]   SCROLL_S2_模型           c2f=null max=16.8 >50=0 LT=0/0 rpc=credentials.describe pw=0
+[11:38:04]   SEC_S3_插件              c2f=18.7 max=83.3 >50=2 LT=0/0 rpc=- pw=686
+[11:38:06]   SCROLL_S3_插件           c2f=null max=116.6 >50=9 LT=0/0 rpc=- pw=672
+[11:38:06]   插件 tabs: ["插件配置","插件列表","按项目","按日","会话明细"]
+[11:38:09]   TAB_S3_插件::tab:插件配置_active c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:38:11]   SCROLL_tab_S3_插件::tab:插件配置 c2f=null max=100 >50=14 LT=0/0 rpc=- pw=0
+[11:38:14]   TAB_S3_插件::tab:插件列表    c2f=2.1 max=83.3 >50=2 LT=0/0 rpc=pluginInventory/list pw=1882
+[11:38:16]   SCROLL_tab_S3_插件::tab:插件列表 c2f=null max=83.4 >50=12 LT=0/0 rpc=- pw=9716
+[11:38:19]   TAB_S3_插件::tab:按项目     c2f=1.6 max=66.6 >50=1 LT=0/0 rpc=- pw=7574
+[11:38:21]   SCROLL_tab_S3_插件::tab:按项目 c2f=null max=66.7 >50=5 LT=0/0 rpc=- pw=6860
+[11:38:23]   TAB_S3_插件::tab:按日      c2f=1.4 max=66.7 >50=1 LT=0/0 rpc=- pw=714
+[11:38:26]   SCROLL_tab_S3_插件::tab:按日 c2f=null max=83.5 >50=9 LT=0/0 rpc=- pw=0
+[11:38:28]   TAB_S3_插件::tab:会话明细    c2f=5.9 max=83.4 >50=1 LT=0/0 rpc=- pw=716
+[11:38:31]   SCROLL_tab_S3_插件::tab:会话明细 c2f=null max=83.3 >50=11 LT=0/0 rpc=- pw=0
+[11:38:33]   SEC_S4_Agent 预设        c2f=11.7 max=66.6 >50=1 LT=0/0 rpc=agentPreset.list pw=311
+[11:38:34]   SCROLL_S4_Agent 预设     c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:38:37]   SEC_S5_远程工作区           c2f=3.3 max=66.7 >50=1 LT=0/0 rpc=- pw=155
+[11:38:38]   SCROLL_S5_远程工作区        c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:38:40]   SEC_S6_分布式控制 · dsh-ssh-gui c2f=14.4 max=66.7 >50=2 LT=0/0 rpc=- pw=303
+[11:38:41]   SCROLL_S6_分布式控制 · dsh-ssh-gui c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:38:44]   SEC_S7_vision-adam 识图设置 c2f=19.1 max=66.7 >50=2 LT=0/0 rpc=- pw=303
+[11:38:44]   SCROLL_S7_vision-adam 识图设置 c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:38:47]   SEC_S8_子代理模型           c2f=17.2 max=83.3 >50=2 LT=0/0 rpc=- pw=303
+[11:38:48]   SCROLL_S8_子代理模型        c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:38:50]   SEC_back_first         c2f=5.2 max=66.6 >50=1 LT=0/0 rpc=agentPreset.list pw=709
+[11:38:53]   SEC_plugins_REVISIT    c2f=20.3 max=83.4 >50=2 LT=0/0 rpc=- pw=533
+[11:38:56]   TAB_plugins_REVISIT_list c2f=1.3 max=66.7 >50=1 LT=0/0 rpc=pluginInventory/list pw=541
+[11:38:58]   CLOSE                  c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=127
+[11:38:58] rep2 ablation ABA: NORMAL -> ABLATED(mask) -> NORMAL2
+[11:39:01]   FOCUS_NORMAL_open      c2f=4.5 max=66.7 >50=1 LT=0/0 rpc=- pw=1186
+[11:39:03]   FOCUS_NORMAL_navPlugins c2f=17.2 max=66.7 >50=2 LT=0/0 rpc=- pw=890
+[11:39:06]   FOCUS_NORMAL_tabList   c2f=1.6 max=66.7 >50=2 LT=0/0 rpc=pluginInventory/list pw=1734
+[11:39:08]   FOCUS_NORMAL_scrollList c2f=null max=66.8 >50=16 LT=0/0 rpc=- pw=0
+[11:39:10]   FOCUS_NORMAL_navGeneral c2f=8.5 max=66.6 >50=1 LT=0/0 rpc=agentPreset.list pw=1091
+[11:39:12]   FOCUS_NORMAL_scrollGeneral c2f=null max=66.6 >50=1 LT=0/0 rpc=- pw=0
+[11:39:15]   FOCUS_NORMAL_close     c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=1350
+[11:39:18]   FOCUS_ABLATED_open     c2f=7.1 max=83.4 >50=1 LT=0/0 rpc=agentPreset.list pw=2787
+[11:39:20]   FOCUS_ABLATED_navPlugins c2f=17.5 max=16.8 >50=0 LT=0/0 rpc=- pw=1289
+[11:39:23]   FOCUS_ABLATED_tabList  c2f=1.4 max=33.4 >50=0 LT=0/0 rpc=pluginInventory/list pw=94724
+[11:39:25]   FOCUS_ABLATED_scrollList c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=22631
+[11:39:27]   FOCUS_ABLATED_navGeneral c2f=6.8 max=16.8 >50=0 LT=0/0 rpc=agentPreset.list pw=14829
+[11:39:29]   FOCUS_ABLATED_scrollGeneral c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=10591
+[11:39:32]   FOCUS_ABLATED_close    c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=127
+[11:39:34]   FOCUS_NORMAL2_open     c2f=6.7 max=66.6 >50=1 LT=0/0 rpc=- pw=7229
+[11:39:37]   FOCUS_NORMAL2_navPlugins c2f=17.9 max=66.7 >50=2 LT=0/0 rpc=- pw=5969
+[11:39:39]   FOCUS_NORMAL2_tabList  c2f=2.7 max=100 >50=2 LT=0/0 rpc=pluginInventory/list pw=30881
+[11:39:42]   FOCUS_NORMAL2_scrollList c2f=null max=83.4 >50=10 LT=0/0 rpc=- pw=2411
+[11:39:44]   FOCUS_NORMAL2_navGeneral c2f=8.4 max=66.6 >50=1 LT=0/0 rpc=agentPreset.list pw=12251
+[11:39:46]   FOCUS_NORMAL2_scrollGeneral c2f=null max=83.2 >50=2 LT=0/0 rpc=- pw=10367
+[11:39:49]   FOCUS_NORMAL2_close    c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=3966
+[11:39:50]   POSCTL_pre             c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=3911
+[11:39:52]   POSCTL_120             c2f=null max=99.9 >50=1 LT=0/0 rpc=- pw=0
+[11:39:54]   POSCTL_120_inpanel     c2f=null max=99.9 >50=1 LT=0/0 rpc=- pw=5901
+[11:40:00] rep2 trace sliced 56/56 phases; stamps=112 keptEvents=63502
+[11:40:00] rep2 done: phases=56 traceEvents=63502 net=25 frames=7498 longtasks=3
+[11:40:00] wrote /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/why-these-two/raw/panel-aba2k-A-chrome-headless.json
+[11:40:00] lock released
+### ABA2K DONE 11:40:00

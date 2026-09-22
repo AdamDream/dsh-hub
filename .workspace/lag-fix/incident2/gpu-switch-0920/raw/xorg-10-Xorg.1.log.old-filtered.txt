@@ -1,0 +1,648 @@
+3:[   130.097] (--) Log file renamed from "/home/CNS2026495165/.local/share/xorg/Xorg.pid-3931.log" to "/home/CNS2026495165/.local/share/xorg/Xorg.1.log"
+5:X.Org X Server 1.21.1.11
+6:X Protocol Version 11, Revision 0
+7:[   130.097] Current Operating System: Linux CNS202649516533 6.14.0-27-generic #27~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Jul 22 17:38:49 UTC 2 x86_64
+8:[   130.097] Kernel command line: BOOT_IMAGE=/boot/vmlinuz-6.14.0-27-generic root=UUID=38c1adbf-c111-44ca-bb6b-7c041bea3a19 ro quiet splash vt.handoff=7
+9:[   130.097] xorg-server 2:21.1.12-1ubuntu1.4 (For technical support please see http://www.ubuntu.com/support) 
+14:	(++) from command line, (!!) notice, (II) informational,
+15:	(WW) warning, (EE) error, (NI) not implemented, (??) unknown.
+16:[   130.097] (==) Log file: "/home/CNS2026495165/.local/share/xorg/Xorg.1.log", Time: Sun Sep 20 11:12:48 2026
+19:[   130.098] (==) ServerLayout "layout"
+31:[   130.098] (WW) The directory "/usr/share/fonts/X11/cyrillic" does not exist.
+33:[   130.098] (WW) The directory "/usr/share/fonts/X11/100dpi/" does not exist.
+35:[   130.098] (WW) The directory "/usr/share/fonts/X11/75dpi/" does not exist.
+37:[   130.098] (WW) The directory "/usr/share/fonts/X11/100dpi" does not exist.
+39:[   130.098] (WW) The directory "/usr/share/fonts/X11/75dpi" does not exist.
+57:[   130.100] (II) xfree86: Adding drm device (/dev/dri/card1)
+58:[   130.100] (II) Platform probe for /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1
+59:[   130.100] (II) systemd-logind: got fd for /dev/dri/card1 226:1 fd 15 paused 0
+60:[   130.100] (II) xfree86: Adding drm device (/dev/dri/card2)
+61:[   130.100] (II) Platform probe for /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2
+62:[   130.100] (II) systemd-logind: got fd for /dev/dri/card2 226:2 fd 16 paused 0
+63:[   130.101] (**) OutputClass "nvidia" ModulePath extended to "/usr/lib/x86_64-linux-gnu/nvidia/xorg,/usr/lib/xorg/modules"
+64:[   130.102] (--) PCI: (1@0:0:0) 10de:2684:10de:16f3 rev 161, Mem @ 0xdd000000/16777216, 0xf000000000/34359738368, 0xf800000000/33554432, I/O @ 0x0000f000/128, BIOS @ 0x????????/524288
+65:[   130.102] (--) PCI:*(115@0:0:0) 1002:13c0:1458:d000 rev 193, Mem @ 0xf810000000/268435456, 0xde200000/2097152, 0xde700000/524288, I/O @ 0x0000e000/256
+78:[   130.103] (II) Applying OutputClass "AMDgpu" to /dev/dri/card2
+79:[   130.103] 	loading driver: amdgpu
+80:[   130.103] (II) Applying OutputClass "nvidia" to /dev/dri/card1
+81:[   130.103] 	loading driver: nvidia
+82:[   130.566] (==) Matched amdgpu as autoconfigured driver 0
+84:[   130.566] (==) Matched nvidia as autoconfigured driver 2
+86:[   130.566] (==) Matched modesetting as autoconfigured driver 4
+87:[   130.566] (==) Matched fbdev as autoconfigured driver 5
+90:[   130.566] (II) LoadModule: "amdgpu"
+91:[   130.566] (II) Loading /usr/lib/xorg/modules/drivers/amdgpu_drv.so
+92:[   130.566] (II) Module amdgpu: vendor="X.Org Foundation"
+97:[   130.566] (II) Loading /usr/lib/xorg/modules/drivers/ati_drv.so
+103:[   130.797] (II) Loading /usr/lib/xorg/modules/drivers/radeon_drv.so
+108:[   130.797] (II) LoadModule: "nvidia"
+109:[   130.797] (II) Loading /usr/lib/x86_64-linux-gnu/nvidia/xorg/nvidia_drv.so
+110:[   130.798] (II) Module nvidia: vendor="NVIDIA Corporation"
+114:[   130.798] (II) Loading /usr/lib/xorg/modules/drivers/nouveau_drv.so
+119:[   130.798] (II) LoadModule: "modesetting"
+120:[   130.798] (II) Loading /usr/lib/xorg/modules/drivers/modesetting_drv.so
+121:[   130.798] (II) Module modesetting: vendor="X.Org Foundation"
+125:[   130.798] (II) LoadModule: "fbdev"
+126:[   130.798] (II) Loading /usr/lib/xorg/modules/drivers/fbdev_drv.so
+127:[   130.798] (II) Module fbdev: vendor="X.Org Foundation"
+132:[   130.798] (II) Loading /usr/lib/xorg/modules/drivers/vesa_drv.so
+137:[   130.798] (II) AMDGPU: Driver for AMD Radeon:
+138:	All GPUs supported by the amdgpu kernel driver
+262:[   130.799] (II) NVIDIA dlloader X Driver  595.84  Wed Jun 10 20:51:08 UTC 2026
+263:[   130.799] (II) NVIDIA Unified Driver for all Supported NVIDIA GPUs
+265:[   130.799] (II) NOUVEAU driver for NVIDIA chipset families :
+283:[   130.799] (II) modesetting: Driver for Modesetting Kernel Drivers: kms
+284:[   130.799] (II) FBDEV: driver for framebuffer: fbdev
+287:[   130.801] (WW) Falling back to old probe method for modesetting
+288:[   130.801] (EE) open /dev/dri/card0: No such file or directory
+289:[   130.801] (WW) Falling back to old probe method for fbdev
+290:[   130.801] (II) Loading sub module "fbdevhw"
+291:[   130.801] (II) LoadModule: "fbdevhw"
+292:[   130.801] (II) Loading /usr/lib/xorg/modules/libfbdevhw.so
+293:[   130.801] (II) Module fbdevhw: vendor="X.Org Foundation"
+296:[   130.801] (EE) open /dev/fb0: Permission denied
+307:[   130.802] (WW) VGA arbiter: cannot open kernel arbiter, no multi-card support
+308:[   130.802] (II) AMDGPU(0): Creating default Display subsection in Screen section
+310:[   130.802] (==) AMDGPU(0): Depth 24, (--) framebuffer bpp 32
+311:[   130.802] (II) AMDGPU(0): Pixel depth = 24 bits stored in 4 bytes (32 bpp pixmaps)
+312:[   130.802] (==) AMDGPU(0): Default visual is TrueColor
+313:[   130.802] (II) Applying OutputClass "AMDgpu" options to /dev/dri/card2
+314:[   130.802] (==) AMDGPU(0): RGB weight 888
+315:[   130.802] (II) AMDGPU(0): Using 8 bits per RGB (8 bit DAC)
+316:[   130.802] (--) AMDGPU(0): Chipset: "AMD Ryzen 9 9950X 16-Core Processor" (ChipID = 0x13c0)
+323:[   130.818] (II) Loading sub module "glamoregl"
+324:[   130.818] (II) LoadModule: "glamoregl"
+325:[   130.818] (II) Loading /usr/lib/xorg/modules/libglamoregl.so
+326:[   130.819] (II) Module glamoregl: vendor="X.Org Foundation"
+329:[   130.828] (II) AMDGPU(0): glamor X acceleration enabled on AMD Ryzen 9 9950X 16-Core Processor (radeonsi, raphael_mendocino, LLVM 20.1.2, DRM 3.61, 6.14.0-27-generic)
+330:[   130.828] (II) AMDGPU(0): glamor detected, initialising EGL layer.
+331:[   130.828] (==) AMDGPU(0): TearFree property default: auto
+332:[   130.828] (==) AMDGPU(0): VariableRefresh: disabled
+333:[   130.828] (==) AMDGPU(0): AsyncFlipSecondaries: disabled
+334:[   130.828] (II) AMDGPU(0): KMS Pageflipping: enabled
+335:[   130.828] (II) AMDGPU(0): Output HDMI-A-1 has no monitor section
+336:[   130.829] (II) AMDGPU(0): Output HDMI-A-2 has no monitor section
+337:[   130.829] (II) AMDGPU(0): Output DisplayPort-3 has no monitor section
+338:[   130.829] (II) AMDGPU(0): Output DisplayPort-4 has no monitor section
+339:[   130.830] (II) AMDGPU(0): EDID for output HDMI-A-1
+340:[   130.831] (II) AMDGPU(0): EDID for output HDMI-A-2
+341:[   130.831] (II) AMDGPU(0): Manufacturer: GSM  Model: 5cbb  Serial#: 631582
+342:[   130.831] (II) AMDGPU(0): Year: 2026  Week: 6
+343:[   130.831] (II) AMDGPU(0): EDID Version: 1.3
+344:[   130.831] (II) AMDGPU(0): Digital Display Input
+345:[   130.831] (II) AMDGPU(0): Max Image Size [cm]: horiz.: 60  vert.: 34
+346:[   130.831] (II) AMDGPU(0): Gamma: 2.20
+347:[   130.831] (II) AMDGPU(0): DPMS capabilities: StandBy Suspend Off
+348:[   130.831] (II) AMDGPU(0): Supported color encodings: RGB 4:4:4 YCrCb 4:4:4 
+349:[   130.831] (II) AMDGPU(0): First detailed timing is preferred mode
+350:[   130.831] (II) AMDGPU(0): redX: 0.684 redY: 0.313   greenX: 0.280 greenY: 0.664
+351:[   130.831] (II) AMDGPU(0): blueX: 0.150 blueY: 0.060   whiteX: 0.313 whiteY: 0.329
+352:[   130.831] (II) AMDGPU(0): Supported established timings:
+353:[   130.831] (II) AMDGPU(0): 640x480@60Hz
+354:[   130.831] (II) AMDGPU(0): 800x600@60Hz
+355:[   130.831] (II) AMDGPU(0): 1024x768@60Hz
+356:[   130.831] (II) AMDGPU(0): Manufacturer's mask: 0
+357:[   130.831] (II) AMDGPU(0): Supported standard timings:
+358:[   130.831] (II) AMDGPU(0): #0: hsize: 1920  vsize 1080  refresh: 60  vid: 49361
+359:[   130.831] (II) AMDGPU(0): #1: hsize: 1024  vsize 768  refresh: 60  vid: 16481
+360:[   130.831] (II) AMDGPU(0): #2: hsize: 800  vsize 600  refresh: 60  vid: 16453
+361:[   130.831] (II) AMDGPU(0): Supported detailed timing:
+362:[   130.831] (II) AMDGPU(0): clock: 594.0 MHz   Image Size:  600 x 340 mm
+363:[   130.831] (II) AMDGPU(0): h_active: 3840  h_sync: 4016  h_sync_end 4104 h_blank_end 4400 h_border: 0
+364:[   130.831] (II) AMDGPU(0): v_active: 2160  v_sync: 2168  v_sync_end 2178 v_blanking: 2250 v_border: 0
+365:[   130.831] (II) AMDGPU(0): Ranges: V min: 40 V max: 60 Hz, H min: 30 H max: 135 kHz, PixClock max 605 MHz
+366:[   130.831] (II) AMDGPU(0): Monitor name: LG ULTRAFINE
+367:[   130.831] (II) AMDGPU(0): Serial No: 606NTUWJK582
+368:[   130.831] (II) AMDGPU(0): Supported detailed timing:
+369:[   130.831] (II) AMDGPU(0): clock: 297.0 MHz   Image Size:  600 x 340 mm
+370:[   130.831] (II) AMDGPU(0): h_active: 3840  h_sync: 4016  h_sync_end 4104 h_blank_end 4400 h_border: 0
+371:[   130.831] (II) AMDGPU(0): v_active: 2160  v_sync: 2168  v_sync_end 2178 v_blanking: 2250 v_border: 0
+372:[   130.831] (II) AMDGPU(0): Supported detailed timing:
+373:[   130.831] (II) AMDGPU(0): clock: 241.5 MHz   Image Size:  600 x 340 mm
+374:[   130.831] (II) AMDGPU(0): h_active: 2560  h_sync: 2608  h_sync_end 2640 h_blank_end 2720 h_border: 0
+375:[   130.831] (II) AMDGPU(0): v_active: 1440  v_sync: 1443  v_sync_end 1448 v_blanking: 1481 v_border: 0
+376:[   130.831] (II) AMDGPU(0): Supported detailed timing:
+377:[   130.831] (II) AMDGPU(0): clock: 138.5 MHz   Image Size:  600 x 340 mm
+378:[   130.831] (II) AMDGPU(0): h_active: 1920  h_sync: 1962  h_sync_end 2000 h_blank_end 2080 h_border: 0
+379:[   130.831] (II) AMDGPU(0): v_active: 1080  v_sync: 1083  v_sync_end 1088 v_blanking: 1111 v_border: 0
+380:[   130.831] (II) AMDGPU(0): Number of EDID sections to follow: 1
+381:[   130.831] (II) AMDGPU(0): EDID (in hex):
+382:[   130.831] (II) AMDGPU(0): 	00ffffffffffff001e6dbb5c1ea30900
+383:[   130.831] (II) AMDGPU(0): 	06240103803c2278ea1c95af5047aa26
+384:[   130.831] (II) AMDGPU(0): 	0f5054210800d1c06140454001010101
+385:[   130.831] (II) AMDGPU(0): 	01010101010108e80030f2705a80b058
+386:[   130.831] (II) AMDGPU(0): 	8a0058542100001e000000fd00283c1e
+387:[   130.831] (II) AMDGPU(0): 	873c000a202020202020000000fc004c
+388:[   130.831] (II) AMDGPU(0): 	4720554c54524146494e450a000000ff
+389:[   130.831] (II) AMDGPU(0): 	003630364e5455574a4b3538320a0158
+390:[   130.831] (II) AMDGPU(0): 	0203427223090707830100004d010304
+391:[   130.831] (II) AMDGPU(0): 	10121f202261605f5e5d6d030c001000
+392:[   130.831] (II) AMDGPU(0): 	b83c20006001020367d85dc401788003
+393:[   130.831] (II) AMDGPU(0): 	e30f0003e2006ae305c000e606058160
+394:[   130.831] (II) AMDGPU(0): 	605004740030f2705a80b0588a005854
+395:[   130.831] (II) AMDGPU(0): 	2100001e565e00a0a0a0295030203500
+396:[   130.831] (II) AMDGPU(0): 	58542100001a1a3680a070381f402a26
+397:[   130.831] (II) AMDGPU(0): 	350058542100001a000000000000004c
+398:[   130.831] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+399:[   130.831] (II) AMDGPU(0): Printing probed modes for output HDMI-A-2
+400:[   130.831] (II) AMDGPU(0): Modeline "3840x2160"x60.0  594.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (135.0 kHz eP)
+401:[   130.831] (II) AMDGPU(0): Modeline "3840x2160"x50.0  594.00  3840 4896 4984 5280  2160 2168 2178 2250 +hsync +vsync (112.5 kHz e)
+402:[   130.831] (II) AMDGPU(0): Modeline "3840x2160"x59.9  593.41  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (134.9 kHz e)
+403:[   130.831] (II) AMDGPU(0): Modeline "3840x2160"x30.0  297.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (67.5 kHz e)
+404:[   130.831] (II) AMDGPU(0): Modeline "3840x2160"x25.0  297.00  3840 4896 4984 5280  2160 2168 2178 2250 +hsync +vsync (56.2 kHz e)
+405:[   130.831] (II) AMDGPU(0): Modeline "3840x2160"x24.0  297.00  3840 5116 5204 5500  2160 2168 2178 2250 +hsync +vsync (54.0 kHz e)
+406:[   130.831] (II) AMDGPU(0): Modeline "3840x2160"x30.0  296.70  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (67.4 kHz e)
+407:[   130.831] (II) AMDGPU(0): Modeline "3840x2160"x24.0  296.70  3840 5116 5204 5500  2160 2168 2178 2250 +hsync +vsync (53.9 kHz e)
+408:[   130.831] (II) AMDGPU(0): Modeline "2560x1440"x60.0  241.50  2560 2608 2640 2720  1440 1443 1448 1481 +hsync -vsync (88.8 kHz e)
+409:[   130.831] (II) AMDGPU(0): Modeline "1920x1200"x60.0  594.00  1920 4016 4104 4400  1200 2168 2178 2250 +hsync +vsync (135.0 kHz e)
+410:[   130.831] (II) AMDGPU(0): Modeline "1920x1080"x60.0  148.50  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (67.5 kHz e)
+411:[   130.831] (II) AMDGPU(0): Modeline "1920x1080"x50.0  148.50  1920 2448 2492 2640  1080 1084 1089 1125 +hsync +vsync (56.2 kHz e)
+412:[   130.831] (II) AMDGPU(0): Modeline "1920x1080"x59.9  148.35  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (67.4 kHz e)
+413:[   130.831] (II) AMDGPU(0): Modeline "1920x1080"x59.9  138.50  1920 1962 2000 2080  1080 1083 1088 1111 +hsync -vsync (66.6 kHz e)
+414:[   130.831] (II) AMDGPU(0): Modeline "1920x1080"x30.0   74.25  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (33.8 kHz e)
+415:[   130.831] (II) AMDGPU(0): Modeline "1920x1080"x24.0   74.25  1920 2558 2602 2750  1080 1084 1089 1125 +hsync +vsync (27.0 kHz e)
+416:[   130.831] (II) AMDGPU(0): Modeline "1920x1080"x30.0   74.18  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (33.7 kHz e)
+417:[   130.831] (II) AMDGPU(0): Modeline "1920x1080"x24.0   74.18  1920 2558 2602 2750  1080 1084 1089 1125 +hsync +vsync (27.0 kHz e)
+418:[   130.831] (II) AMDGPU(0): Modeline "1600x1200"x60.0  594.00  1600 4016 4104 4400  1200 2168 2178 2250 +hsync +vsync (135.0 kHz e)
+419:[   130.831] (II) AMDGPU(0): Modeline "1680x1050"x60.0  594.00  1680 4016 4104 4400  1050 2168 2178 2250 +hsync +vsync (135.0 kHz e)
+420:[   130.831] (II) AMDGPU(0): Modeline "1280x1024"x60.0  594.00  1280 4016 4104 4400  1024 2168 2178 2250 +hsync +vsync (135.0 kHz e)
+421:[   130.831] (II) AMDGPU(0): Modeline "1440x900"x60.0  594.00  1440 4016 4104 4400  900 2168 2178 2250 +hsync +vsync (135.0 kHz e)
+422:[   130.831] (II) AMDGPU(0): Modeline "1280x800"x60.0  594.00  1280 4016 4104 4400  800 2168 2178 2250 +hsync +vsync (135.0 kHz e)
+423:[   130.831] (II) AMDGPU(0): Modeline "1280x720"x60.0   74.25  1280 1390 1430 1650  720 725 730 750 +hsync +vsync (45.0 kHz e)
+424:[   130.831] (II) AMDGPU(0): Modeline "1280x720"x59.9   74.18  1280 1390 1430 1650  720 725 730 750 +hsync +vsync (45.0 kHz e)
+425:[   130.831] (II) AMDGPU(0): Modeline "1024x768"x60.0   65.00  1024 1048 1184 1344  768 771 777 806 -hsync -vsync (48.4 kHz e)
+426:[   130.831] (II) AMDGPU(0): Modeline "800x600"x60.3   40.00  800 840 968 1056  600 601 605 628 +hsync +vsync (37.9 kHz e)
+427:[   130.831] (II) AMDGPU(0): Modeline "720x576"x50.0   27.00  720 732 796 864  576 581 586 625 -hsync -vsync (31.2 kHz e)
+428:[   130.831] (II) AMDGPU(0): Modeline "720x480"x60.0   27.03  720 736 798 858  480 489 495 525 -hsync -vsync (31.5 kHz e)
+429:[   130.831] (II) AMDGPU(0): Modeline "720x480"x59.9   27.00  720 736 798 858  480 489 495 525 -hsync -vsync (31.5 kHz e)
+430:[   130.831] (II) AMDGPU(0): Modeline "640x480"x60.0   25.20  640 656 752 800  480 490 492 525 -hsync -vsync (31.5 kHz e)
+431:[   130.831] (II) AMDGPU(0): Modeline "640x480"x59.9   25.18  640 656 752 800  480 490 492 525 -hsync -vsync (31.5 kHz e)
+432:[   130.831] (II) AMDGPU(0): EDID for output DisplayPort-3
+433:[   130.831] (II) AMDGPU(0): EDID for output DisplayPort-4
+434:[   130.831] (II) AMDGPU(0): Output HDMI-A-1 disconnected
+435:[   130.831] (II) AMDGPU(0): Output HDMI-A-2 connected
+436:[   130.831] (II) AMDGPU(0): Output DisplayPort-3 disconnected
+437:[   130.831] (II) AMDGPU(0): Output DisplayPort-4 disconnected
+438:[   130.831] (II) AMDGPU(0): Using exact sizes for initial modes
+439:[   130.831] (II) AMDGPU(0): Output HDMI-A-2 using initial mode 3840x2160 +0+0
+440:[   130.831] (II) AMDGPU(0): mem size init: gart size :78d174000 vram size: s:7e851000 visible:7e851000
+441:[   130.831] (==) AMDGPU(0): DPI set to (96, 96)
+442:[   130.831] (==) AMDGPU(0): Using gamma correction (1.0, 1.0, 1.0)
+446:[   130.831] (==) NVIDIA(G0): Depth 24, (==) framebuffer bpp 32
+447:[   130.831] (==) NVIDIA(G0): RGB weight 888
+448:[   130.831] (==) NVIDIA(G0): Default visual is TrueColor
+449:[   130.831] (==) NVIDIA(G0): Using gamma correction (1.0, 1.0, 1.0)
+450:[   130.831] (**) Option "AllowNVIDIAGpuScreens"
+451:[   130.831] (II) Applying OutputClass "nvidia" options to /dev/dri/card1
+452:[   130.831] (**) NVIDIA(G0): Option "AllowEmptyInitialConfiguration"
+453:[   130.831] (**) NVIDIA(G0): Enabling 2D acceleration
+454:[   130.831] (II) Loading sub module "glxserver_nvidia"
+455:[   130.831] (II) LoadModule: "glxserver_nvidia"
+456:[   130.831] (II) Loading /usr/lib/x86_64-linux-gnu/nvidia/xorg/libglxserver_nvidia.so
+457:[   130.836] (II) Module glxserver_nvidia: vendor="NVIDIA Corporation"
+460:[   130.836] (II) NVIDIA GLX Module  595.84  Wed Jun 10 20:51:44 UTC 2026
+461:[   130.836] (II) NVIDIA: The X server supports PRIME Render Offload.
+462:[   130.840] (--) NVIDIA(0): Valid display device(s) on GPU-0 at PCI:1:0:0
+463:[   130.840] (--) NVIDIA(0):     DFP-0
+464:[   130.840] (--) NVIDIA(0):     DFP-1
+465:[   130.840] (--) NVIDIA(0):     DFP-2
+466:[   130.840] (--) NVIDIA(0):     DFP-3
+467:[   130.840] (--) NVIDIA(0):     DFP-4
+468:[   130.840] (--) NVIDIA(0):     DFP-5
+469:[   130.840] (--) NVIDIA(0):     DFP-6
+470:[   130.850] (II) NVIDIA(G0): NVIDIA GPU NVIDIA GeForce RTX 4090 (AD102-A) at PCI:1:0:0
+471:[   130.850] (II) NVIDIA(G0):     (GPU-0)
+472:[   130.850] (--) NVIDIA(G0): Memory: 25153536 kBytes
+473:[   130.850] (--) NVIDIA(G0): VideoBIOS: 95.02.3c.00.02
+474:[   130.850] (II) NVIDIA(G0): Detected PCI Express Link width: 16X
+475:[   130.850] (--) NVIDIA(GPU-0): DFP-0: disconnected
+476:[   130.850] (--) NVIDIA(GPU-0): DFP-0: Internal TMDS
+477:[   130.850] (--) NVIDIA(GPU-0): DFP-0: 165.0 MHz maximum pixel clock
+478:[   130.850] (--) NVIDIA(GPU-0): 
+479:[   130.850] (--) NVIDIA(GPU-0): DFP-1: disconnected
+480:[   130.850] (--) NVIDIA(GPU-0): DFP-1: Internal DisplayPort
+481:[   130.850] (--) NVIDIA(GPU-0): DFP-1: 2670.0 MHz maximum pixel clock
+482:[   130.850] (--) NVIDIA(GPU-0): 
+483:[   130.851] (--) NVIDIA(GPU-0): DFP-2: disconnected
+484:[   130.851] (--) NVIDIA(GPU-0): DFP-2: Internal TMDS
+485:[   130.851] (--) NVIDIA(GPU-0): DFP-2: 165.0 MHz maximum pixel clock
+486:[   130.851] (--) NVIDIA(GPU-0): 
+487:[   130.851] (--) NVIDIA(GPU-0): DFP-3: disconnected
+488:[   130.851] (--) NVIDIA(GPU-0): DFP-3: Internal DisplayPort
+489:[   130.851] (--) NVIDIA(GPU-0): DFP-3: 2670.0 MHz maximum pixel clock
+490:[   130.851] (--) NVIDIA(GPU-0): 
+491:[   130.851] (--) NVIDIA(GPU-0): DFP-4: disconnected
+492:[   130.851] (--) NVIDIA(GPU-0): DFP-4: Internal TMDS
+493:[   130.851] (--) NVIDIA(GPU-0): DFP-4: 165.0 MHz maximum pixel clock
+494:[   130.851] (--) NVIDIA(GPU-0): 
+495:[   130.851] (--) NVIDIA(GPU-0): DFP-5: disconnected
+496:[   130.851] (--) NVIDIA(GPU-0): DFP-5: Internal DisplayPort
+497:[   130.851] (--) NVIDIA(GPU-0): DFP-5: 2670.0 MHz maximum pixel clock
+498:[   130.851] (--) NVIDIA(GPU-0): 
+499:[   130.852] (--) NVIDIA(GPU-0): DFP-6: disconnected
+500:[   130.852] (--) NVIDIA(GPU-0): DFP-6: Internal TMDS
+501:[   130.852] (--) NVIDIA(GPU-0): DFP-6: 165.0 MHz maximum pixel clock
+502:[   130.852] (--) NVIDIA(GPU-0): 
+503:[   130.856] (II) NVIDIA(G0): Validated MetaModes:
+504:[   130.856] (II) NVIDIA(G0):     "NULL"
+505:[   130.856] (II) NVIDIA(G0): Virtual screen size determined to be 640 x 480
+506:[   130.856] (WW) NVIDIA(G0): Unable to get display device for DPI computation.
+507:[   130.856] (==) NVIDIA(G0): DPI set to (75, 75); computed from built-in default
+512:[   130.857] (II) UnloadModule: "modesetting"
+513:[   130.857] (II) Unloading modesetting
+514:[   130.857] (II) UnloadModule: "fbdev"
+515:[   130.857] (II) Unloading fbdev
+516:[   130.857] (II) UnloadSubModule: "fbdevhw"
+517:[   130.857] (II) Unloading fbdevhw
+520:[   130.857] (II) AMDGPU(0): [DRI2] Setup complete
+521:[   130.857] (II) AMDGPU(0): [DRI2]   DRI driver: radeonsi
+522:[   130.857] (II) AMDGPU(0): [DRI2]   VDPAU driver: radeonsi
+523:[   130.857] (II) AMDGPU(0): Front buffer pitch: 15360 bytes
+524:[   130.857] (II) AMDGPU(0): SYNC extension fences enabled
+525:[   130.857] (II) AMDGPU(0): Present extension enabled
+526:[   130.857] (==) AMDGPU(0): DRI3 enabled
+527:[   130.857] (==) AMDGPU(0): Backing store enabled
+528:[   130.857] (II) AMDGPU(0): Direct rendering enabled
+529:[   130.861] (II) AMDGPU(0): Use GLAMOR acceleration.
+530:[   130.861] (II) AMDGPU(0): Acceleration enabled
+531:[   130.861] (==) AMDGPU(0): DPMS enabled
+532:[   130.861] (==) AMDGPU(0): Silken mouse enabled
+533:[   130.861] (II) AMDGPU(0): Set up textured video (glamor)
+534:[   130.861] (WW) AMDGPU(0): Option "HotplugDriver" is not used
+535:[   130.861] (WW) NVIDIA: Failed to bind sideband socket to
+536:[   130.861] (WW) NVIDIA:     '/var/run/nvidia-xdriver-ed35db4a' Permission denied
+537:[   130.863] (II) NVIDIA: Reserving 24576.00 MB of virtual memory for indirect memory
+538:[   130.863] (II) NVIDIA:     access.
+539:[   130.875] (II) NVIDIA(G0): ACPI: failed to connect to the ACPI event daemon; the daemon
+540:[   130.875] (II) NVIDIA(G0):     may not be running or the "AcpidSocketPath" X
+541:[   130.875] (II) NVIDIA(G0):     configuration option may not be set correctly.  When the
+542:[   130.875] (II) NVIDIA(G0):     ACPI event daemon is available, the NVIDIA X driver will
+543:[   130.875] (II) NVIDIA(G0):     try to use it to receive ACPI event notifications.  For
+544:[   130.875] (II) NVIDIA(G0):     details, please see the "ConnectToAcpid" and
+545:[   130.875] (II) NVIDIA(G0):     "AcpidSocketPath" X configuration options in Appendix B: X
+546:[   130.875] (II) NVIDIA(G0):     Config Options in the README.
+547:[   130.884] (II) NVIDIA(G0): Setting mode "NULL"
+548:[   130.904] (==) NVIDIA(G0): Disabling shared memory pixmaps
+549:[   130.904] (==) NVIDIA(G0): Backing store enabled
+550:[   130.904] (==) NVIDIA(G0): Silken mouse enabled
+551:[   130.904] (==) NVIDIA(G0): DPMS enabled
+555:[   130.904] (II) NVIDIA(G0): [DRI2] Setup complete
+556:[   130.904] (II) NVIDIA(G0): [DRI2]   VDPAU driver: nvidia
+577:[   130.905] (II) Initializing extension DRI3
+586:[   130.908] (II) AIGLX: Loaded and initialized radeonsi
+587:[   130.908] (II) GLX: Initialized DRI2 GL provider for screen 0
+590:[   130.908] (II) Initializing extension XFree86-DRI
+591:[   130.908] (II) Initializing extension DRI2
+594:[   130.909] (II) AMDGPU(0): Setting screen physical size to 1016 x 571
+598:[   130.972] (II) Loading /usr/lib/xorg/modules/input/libinput_drv.so
+604:[   130.972] (II) systemd-logind: got fd for /dev/input/event1 13:65 fd 41 paused 0
+619:[   130.975] (II) systemd-logind: got fd for /dev/input/event2 13:66 fd 44 paused 0
+634:[   130.976] (II) systemd-logind: got fd for /dev/input/event0 13:64 fd 45 paused 0
+646:[   130.978] (II) config/udev: Adding input device HDA NVidia HDMI/DP,pcm=3 (/dev/input/event13)
+649:[   130.978] (II) config/udev: Adding input device HDA NVidia HDMI/DP,pcm=7 (/dev/input/event14)
+652:[   130.978] (II) config/udev: Adding input device HDA NVidia HDMI/DP,pcm=8 (/dev/input/event15)
+655:[   130.978] (II) config/udev: Adding input device HDA NVidia HDMI/DP,pcm=9 (/dev/input/event16)
+661:[   130.979] (II) systemd-logind: got fd for /dev/input/event21 13:85 fd 46 paused 0
+679:[   130.982] (II) systemd-logind: got fd for /dev/input/event23 13:87 fd 47 paused 0
+694:[   130.984] (II) systemd-logind: got fd for /dev/input/event24 13:88 fd 48 paused 0
+715:[   130.987] (II) systemd-logind: got fd for /dev/input/event26 13:90 fd 49 paused 0
+730:[   130.990] (II) systemd-logind: got fd for /dev/input/event27 13:91 fd 50 paused 0
+759:[   130.994] (II) systemd-logind: got fd for /dev/input/event3 13:67 fd 51 paused 0
+774:[   130.997] (II) systemd-logind: got fd for /dev/input/event4 13:68 fd 52 paused 0
+800:[   131.000] (II) systemd-logind: got fd for /dev/input/event6 13:70 fd 53 paused 0
+818:[   131.002] (II) systemd-logind: got fd for /dev/input/event7 13:71 fd 54 paused 0
+833:[   131.005] (II) config/udev: Adding input device HD-Audio Generic HDMI/DP,pcm=7 (/dev/input/event10)
+836:[   131.005] (II) config/udev: Adding input device HD-Audio Generic HDMI/DP,pcm=8 (/dev/input/event11)
+839:[   131.005] (II) config/udev: Adding input device HD-Audio Generic HDMI/DP,pcm=9 (/dev/input/event12)
+842:[   131.006] (II) config/udev: Adding input device HD-Audio Generic HDMI/DP,pcm=3 (/dev/input/event9)
+877:[   131.024] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+878:[   131.024] (II) AMDGPU(0): Using EDID range info for horizontal sync
+879:[   131.024] (II) AMDGPU(0): Using EDID range info for vertical refresh
+880:[   131.024] (II) AMDGPU(0): Printing DDC gathered Modelines:
+881:[   131.024] (II) AMDGPU(0): Modeline "3840x2160"x0.0  594.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (135.0 kHz eP)
+882:[   131.024] (II) AMDGPU(0): Modeline "3840x2160"x0.0  297.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (67.5 kHz e)
+883:[   131.024] (II) AMDGPU(0): Modeline "2560x1440"x0.0  241.50  2560 2608 2640 2720  1440 1443 1448 1481 +hsync -vsync (88.8 kHz e)
+884:[   131.024] (II) AMDGPU(0): Modeline "1920x1080"x0.0  138.50  1920 1962 2000 2080  1080 1083 1088 1111 +hsync -vsync (66.6 kHz e)
+885:[   131.024] (II) AMDGPU(0): Modeline "640x480"x0.0   25.18  640 656 752 800  480 490 492 525 -hsync -vsync (31.5 kHz e)
+886:[   131.024] (II) AMDGPU(0): Modeline "720x480"x0.0   27.00  720 736 798 858  480 489 495 525 -hsync -vsync (31.5 kHz e)
+887:[   131.024] (II) AMDGPU(0): Modeline "1280x720"x0.0   74.25  1280 1390 1430 1650  720 725 730 750 +hsync +vsync (45.0 kHz e)
+888:[   131.024] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (67.5 kHz e)
+889:[   131.024] (II) AMDGPU(0): Modeline "720x576"x0.0   27.00  720 732 796 864  576 581 586 625 -hsync -vsync (31.2 kHz e)
+890:[   131.024] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2448 2492 2640  1080 1084 1089 1125 +hsync +vsync (56.2 kHz e)
+891:[   131.024] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2558 2602 2750  1080 1084 1089 1125 +hsync +vsync (27.0 kHz e)
+892:[   131.024] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (33.8 kHz e)
+893:[   131.024] (II) AMDGPU(0): Modeline "800x600"x0.0   40.00  800 840 968 1056  600 601 605 628 +hsync +vsync (37.9 kHz e)
+894:[   131.024] (II) AMDGPU(0): Modeline "1024x768"x0.0   65.00  1024 1048 1184 1344  768 771 777 806 -hsync -vsync (48.4 kHz e)
+895:[   131.024] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+896:[   131.027] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+897:[   131.027] (II) AMDGPU(0): Using hsync ranges from config file
+898:[   131.027] (II) AMDGPU(0): Using vrefresh ranges from config file
+899:[   131.027] (II) AMDGPU(0): Printing DDC gathered Modelines:
+900:[   131.027] (II) AMDGPU(0): Modeline "3840x2160"x0.0  594.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (135.0 kHz eP)
+901:[   131.027] (II) AMDGPU(0): Modeline "3840x2160"x0.0  297.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (67.5 kHz e)
+902:[   131.027] (II) AMDGPU(0): Modeline "2560x1440"x0.0  241.50  2560 2608 2640 2720  1440 1443 1448 1481 +hsync -vsync (88.8 kHz e)
+903:[   131.027] (II) AMDGPU(0): Modeline "1920x1080"x0.0  138.50  1920 1962 2000 2080  1080 1083 1088 1111 +hsync -vsync (66.6 kHz e)
+904:[   131.027] (II) AMDGPU(0): Modeline "640x480"x0.0   25.18  640 656 752 800  480 490 492 525 -hsync -vsync (31.5 kHz e)
+905:[   131.027] (II) AMDGPU(0): Modeline "720x480"x0.0   27.00  720 736 798 858  480 489 495 525 -hsync -vsync (31.5 kHz e)
+906:[   131.027] (II) AMDGPU(0): Modeline "1280x720"x0.0   74.25  1280 1390 1430 1650  720 725 730 750 +hsync +vsync (45.0 kHz e)
+907:[   131.027] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (67.5 kHz e)
+908:[   131.027] (II) AMDGPU(0): Modeline "720x576"x0.0   27.00  720 732 796 864  576 581 586 625 -hsync -vsync (31.2 kHz e)
+909:[   131.027] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2448 2492 2640  1080 1084 1089 1125 +hsync +vsync (56.2 kHz e)
+910:[   131.027] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2558 2602 2750  1080 1084 1089 1125 +hsync +vsync (27.0 kHz e)
+911:[   131.027] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (33.8 kHz e)
+912:[   131.027] (II) AMDGPU(0): Modeline "800x600"x0.0   40.00  800 840 968 1056  600 601 605 628 +hsync +vsync (37.9 kHz e)
+913:[   131.027] (II) AMDGPU(0): Modeline "1024x768"x0.0   65.00  1024 1048 1184 1344  768 771 777 806 -hsync -vsync (48.4 kHz e)
+914:[   131.027] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+915:[   131.028] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+916:[   131.028] (II) AMDGPU(0): Using hsync ranges from config file
+917:[   131.028] (II) AMDGPU(0): Using vrefresh ranges from config file
+918:[   131.028] (II) AMDGPU(0): Printing DDC gathered Modelines:
+919:[   131.028] (II) AMDGPU(0): Modeline "3840x2160"x0.0  594.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (135.0 kHz eP)
+920:[   131.028] (II) AMDGPU(0): Modeline "3840x2160"x0.0  297.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (67.5 kHz e)
+921:[   131.028] (II) AMDGPU(0): Modeline "2560x1440"x0.0  241.50  2560 2608 2640 2720  1440 1443 1448 1481 +hsync -vsync (88.8 kHz e)
+922:[   131.028] (II) AMDGPU(0): Modeline "1920x1080"x0.0  138.50  1920 1962 2000 2080  1080 1083 1088 1111 +hsync -vsync (66.6 kHz e)
+923:[   131.028] (II) AMDGPU(0): Modeline "640x480"x0.0   25.18  640 656 752 800  480 490 492 525 -hsync -vsync (31.5 kHz e)
+924:[   131.028] (II) AMDGPU(0): Modeline "720x480"x0.0   27.00  720 736 798 858  480 489 495 525 -hsync -vsync (31.5 kHz e)
+925:[   131.028] (II) AMDGPU(0): Modeline "1280x720"x0.0   74.25  1280 1390 1430 1650  720 725 730 750 +hsync +vsync (45.0 kHz e)
+926:[   131.028] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (67.5 kHz e)
+927:[   131.028] (II) AMDGPU(0): Modeline "720x576"x0.0   27.00  720 732 796 864  576 581 586 625 -hsync -vsync (31.2 kHz e)
+928:[   131.028] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2448 2492 2640  1080 1084 1089 1125 +hsync +vsync (56.2 kHz e)
+929:[   131.028] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2558 2602 2750  1080 1084 1089 1125 +hsync +vsync (27.0 kHz e)
+930:[   131.028] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (33.8 kHz e)
+931:[   131.028] (II) AMDGPU(0): Modeline "800x600"x0.0   40.00  800 840 968 1056  600 601 605 628 +hsync +vsync (37.9 kHz e)
+932:[   131.028] (II) AMDGPU(0): Modeline "1024x768"x0.0   65.00  1024 1048 1184 1344  768 771 777 806 -hsync -vsync (48.4 kHz e)
+933:[   131.028] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+934:[   131.029] (--) NVIDIA(GPU-0): DFP-0: disconnected
+935:[   131.029] (--) NVIDIA(GPU-0): DFP-0: Internal TMDS
+936:[   131.029] (--) NVIDIA(GPU-0): DFP-0: 165.0 MHz maximum pixel clock
+937:[   131.029] (--) NVIDIA(GPU-0): 
+938:[   131.029] (--) NVIDIA(GPU-0): DFP-1: disconnected
+939:[   131.029] (--) NVIDIA(GPU-0): DFP-1: Internal DisplayPort
+940:[   131.029] (--) NVIDIA(GPU-0): DFP-1: 2670.0 MHz maximum pixel clock
+941:[   131.029] (--) NVIDIA(GPU-0): 
+942:[   131.029] (--) NVIDIA(GPU-0): DFP-2: disconnected
+943:[   131.029] (--) NVIDIA(GPU-0): DFP-2: Internal TMDS
+944:[   131.029] (--) NVIDIA(GPU-0): DFP-2: 165.0 MHz maximum pixel clock
+945:[   131.029] (--) NVIDIA(GPU-0): 
+946:[   131.029] (--) NVIDIA(GPU-0): DFP-3: disconnected
+947:[   131.029] (--) NVIDIA(GPU-0): DFP-3: Internal DisplayPort
+948:[   131.029] (--) NVIDIA(GPU-0): DFP-3: 2670.0 MHz maximum pixel clock
+949:[   131.029] (--) NVIDIA(GPU-0): 
+950:[   131.029] (--) NVIDIA(GPU-0): DFP-4: disconnected
+951:[   131.029] (--) NVIDIA(GPU-0): DFP-4: Internal TMDS
+952:[   131.029] (--) NVIDIA(GPU-0): DFP-4: 165.0 MHz maximum pixel clock
+953:[   131.029] (--) NVIDIA(GPU-0): 
+954:[   131.029] (--) NVIDIA(GPU-0): DFP-5: disconnected
+955:[   131.029] (--) NVIDIA(GPU-0): DFP-5: Internal DisplayPort
+956:[   131.029] (--) NVIDIA(GPU-0): DFP-5: 2670.0 MHz maximum pixel clock
+957:[   131.029] (--) NVIDIA(GPU-0): 
+958:[   131.030] (--) NVIDIA(GPU-0): DFP-6: disconnected
+959:[   131.030] (--) NVIDIA(GPU-0): DFP-6: Internal TMDS
+960:[   131.030] (--) NVIDIA(GPU-0): DFP-6: 165.0 MHz maximum pixel clock
+961:[   131.030] (--) NVIDIA(GPU-0): 
+962:[   131.030] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+963:[   131.030] (II) AMDGPU(0): Using hsync ranges from config file
+964:[   131.030] (II) AMDGPU(0): Using vrefresh ranges from config file
+965:[   131.030] (II) AMDGPU(0): Printing DDC gathered Modelines:
+966:[   131.030] (II) AMDGPU(0): Modeline "3840x2160"x0.0  594.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (135.0 kHz eP)
+967:[   131.030] (II) AMDGPU(0): Modeline "3840x2160"x0.0  297.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (67.5 kHz e)
+968:[   131.030] (II) AMDGPU(0): Modeline "2560x1440"x0.0  241.50  2560 2608 2640 2720  1440 1443 1448 1481 +hsync -vsync (88.8 kHz e)
+969:[   131.030] (II) AMDGPU(0): Modeline "1920x1080"x0.0  138.50  1920 1962 2000 2080  1080 1083 1088 1111 +hsync -vsync (66.6 kHz e)
+970:[   131.031] (II) AMDGPU(0): Modeline "640x480"x0.0   25.18  640 656 752 800  480 490 492 525 -hsync -vsync (31.5 kHz e)
+971:[   131.031] (II) AMDGPU(0): Modeline "720x480"x0.0   27.00  720 736 798 858  480 489 495 525 -hsync -vsync (31.5 kHz e)
+972:[   131.031] (II) AMDGPU(0): Modeline "1280x720"x0.0   74.25  1280 1390 1430 1650  720 725 730 750 +hsync +vsync (45.0 kHz e)
+973:[   131.031] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (67.5 kHz e)
+974:[   131.031] (II) AMDGPU(0): Modeline "720x576"x0.0   27.00  720 732 796 864  576 581 586 625 -hsync -vsync (31.2 kHz e)
+975:[   131.031] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2448 2492 2640  1080 1084 1089 1125 +hsync +vsync (56.2 kHz e)
+976:[   131.031] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2558 2602 2750  1080 1084 1089 1125 +hsync +vsync (27.0 kHz e)
+977:[   131.031] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (33.8 kHz e)
+978:[   131.031] (II) AMDGPU(0): Modeline "800x600"x0.0   40.00  800 840 968 1056  600 601 605 628 +hsync +vsync (37.9 kHz e)
+979:[   131.031] (II) AMDGPU(0): Modeline "1024x768"x0.0   65.00  1024 1048 1184 1344  768 771 777 806 -hsync -vsync (48.4 kHz e)
+980:[   131.031] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+981:[   131.033] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+982:[   131.033] (II) AMDGPU(0): Using hsync ranges from config file
+983:[   131.033] (II) AMDGPU(0): Using vrefresh ranges from config file
+984:[   131.033] (II) AMDGPU(0): Printing DDC gathered Modelines:
+985:[   131.033] (II) AMDGPU(0): Modeline "3840x2160"x0.0  594.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (135.0 kHz eP)
+986:[   131.034] (II) AMDGPU(0): Modeline "3840x2160"x0.0  297.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (67.5 kHz e)
+987:[   131.034] (II) AMDGPU(0): Modeline "2560x1440"x0.0  241.50  2560 2608 2640 2720  1440 1443 1448 1481 +hsync -vsync (88.8 kHz e)
+988:[   131.034] (II) AMDGPU(0): Modeline "1920x1080"x0.0  138.50  1920 1962 2000 2080  1080 1083 1088 1111 +hsync -vsync (66.6 kHz e)
+989:[   131.034] (II) AMDGPU(0): Modeline "640x480"x0.0   25.18  640 656 752 800  480 490 492 525 -hsync -vsync (31.5 kHz e)
+990:[   131.034] (II) AMDGPU(0): Modeline "720x480"x0.0   27.00  720 736 798 858  480 489 495 525 -hsync -vsync (31.5 kHz e)
+991:[   131.034] (II) AMDGPU(0): Modeline "1280x720"x0.0   74.25  1280 1390 1430 1650  720 725 730 750 +hsync +vsync (45.0 kHz e)
+992:[   131.034] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (67.5 kHz e)
+993:[   131.034] (II) AMDGPU(0): Modeline "720x576"x0.0   27.00  720 732 796 864  576 581 586 625 -hsync -vsync (31.2 kHz e)
+994:[   131.034] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2448 2492 2640  1080 1084 1089 1125 +hsync +vsync (56.2 kHz e)
+995:[   131.034] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2558 2602 2750  1080 1084 1089 1125 +hsync +vsync (27.0 kHz e)
+996:[   131.034] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (33.8 kHz e)
+997:[   131.034] (II) AMDGPU(0): Modeline "800x600"x0.0   40.00  800 840 968 1056  600 601 605 628 +hsync +vsync (37.9 kHz e)
+998:[   131.034] (II) AMDGPU(0): Modeline "1024x768"x0.0   65.00  1024 1048 1184 1344  768 771 777 806 -hsync -vsync (48.4 kHz e)
+999:[   131.034] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+1000:[   131.037] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+1001:[   131.037] (II) AMDGPU(0): Using hsync ranges from config file
+1002:[   131.037] (II) AMDGPU(0): Using vrefresh ranges from config file
+1003:[   131.037] (II) AMDGPU(0): Printing DDC gathered Modelines:
+1004:[   131.037] (II) AMDGPU(0): Modeline "3840x2160"x0.0  594.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (135.0 kHz eP)
+1005:[   131.037] (II) AMDGPU(0): Modeline "3840x2160"x0.0  297.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (67.5 kHz e)
+1006:[   131.037] (II) AMDGPU(0): Modeline "2560x1440"x0.0  241.50  2560 2608 2640 2720  1440 1443 1448 1481 +hsync -vsync (88.8 kHz e)
+1007:[   131.037] (II) AMDGPU(0): Modeline "1920x1080"x0.0  138.50  1920 1962 2000 2080  1080 1083 1088 1111 +hsync -vsync (66.6 kHz e)
+1008:[   131.037] (II) AMDGPU(0): Modeline "640x480"x0.0   25.18  640 656 752 800  480 490 492 525 -hsync -vsync (31.5 kHz e)
+1009:[   131.037] (II) AMDGPU(0): Modeline "720x480"x0.0   27.00  720 736 798 858  480 489 495 525 -hsync -vsync (31.5 kHz e)
+1010:[   131.037] (II) AMDGPU(0): Modeline "1280x720"x0.0   74.25  1280 1390 1430 1650  720 725 730 750 +hsync +vsync (45.0 kHz e)
+1011:[   131.037] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (67.5 kHz e)
+1012:[   131.037] (II) AMDGPU(0): Modeline "720x576"x0.0   27.00  720 732 796 864  576 581 586 625 -hsync -vsync (31.2 kHz e)
+1013:[   131.037] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2448 2492 2640  1080 1084 1089 1125 +hsync +vsync (56.2 kHz e)
+1014:[   131.037] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2558 2602 2750  1080 1084 1089 1125 +hsync +vsync (27.0 kHz e)
+1015:[   131.037] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (33.8 kHz e)
+1016:[   131.037] (II) AMDGPU(0): Modeline "800x600"x0.0   40.00  800 840 968 1056  600 601 605 628 +hsync +vsync (37.9 kHz e)
+1017:[   131.037] (II) AMDGPU(0): Modeline "1024x768"x0.0   65.00  1024 1048 1184 1344  768 771 777 806 -hsync -vsync (48.4 kHz e)
+1018:[   131.037] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+1019:[   131.038] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+1020:[   131.038] (II) AMDGPU(0): Using hsync ranges from config file
+1021:[   131.038] (II) AMDGPU(0): Using vrefresh ranges from config file
+1022:[   131.038] (II) AMDGPU(0): Printing DDC gathered Modelines:
+1023:[   131.038] (II) AMDGPU(0): Modeline "3840x2160"x0.0  594.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (135.0 kHz eP)
+1024:[   131.038] (II) AMDGPU(0): Modeline "3840x2160"x0.0  297.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (67.5 kHz e)
+1025:[   131.038] (II) AMDGPU(0): Modeline "2560x1440"x0.0  241.50  2560 2608 2640 2720  1440 1443 1448 1481 +hsync -vsync (88.8 kHz e)
+1026:[   131.038] (II) AMDGPU(0): Modeline "1920x1080"x0.0  138.50  1920 1962 2000 2080  1080 1083 1088 1111 +hsync -vsync (66.6 kHz e)
+1027:[   131.038] (II) AMDGPU(0): Modeline "640x480"x0.0   25.18  640 656 752 800  480 490 492 525 -hsync -vsync (31.5 kHz e)
+1028:[   131.038] (II) AMDGPU(0): Modeline "720x480"x0.0   27.00  720 736 798 858  480 489 495 525 -hsync -vsync (31.5 kHz e)
+1029:[   131.038] (II) AMDGPU(0): Modeline "1280x720"x0.0   74.25  1280 1390 1430 1650  720 725 730 750 +hsync +vsync (45.0 kHz e)
+1030:[   131.038] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (67.5 kHz e)
+1031:[   131.038] (II) AMDGPU(0): Modeline "720x576"x0.0   27.00  720 732 796 864  576 581 586 625 -hsync -vsync (31.2 kHz e)
+1032:[   131.038] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2448 2492 2640  1080 1084 1089 1125 +hsync +vsync (56.2 kHz e)
+1033:[   131.038] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2558 2602 2750  1080 1084 1089 1125 +hsync +vsync (27.0 kHz e)
+1034:[   131.038] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (33.8 kHz e)
+1035:[   131.038] (II) AMDGPU(0): Modeline "800x600"x0.0   40.00  800 840 968 1056  600 601 605 628 +hsync +vsync (37.9 kHz e)
+1036:[   131.038] (II) AMDGPU(0): Modeline "1024x768"x0.0   65.00  1024 1048 1184 1344  768 771 777 806 -hsync -vsync (48.4 kHz e)
+1037:[   131.038] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+1038:[   131.038] (--) NVIDIA(GPU-0): DFP-0: disconnected
+1039:[   131.038] (--) NVIDIA(GPU-0): DFP-0: Internal TMDS
+1040:[   131.038] (--) NVIDIA(GPU-0): DFP-0: 165.0 MHz maximum pixel clock
+1041:[   131.038] (--) NVIDIA(GPU-0): 
+1042:[   131.038] (--) NVIDIA(GPU-0): DFP-1: disconnected
+1043:[   131.038] (--) NVIDIA(GPU-0): DFP-1: Internal DisplayPort
+1044:[   131.038] (--) NVIDIA(GPU-0): DFP-1: 2670.0 MHz maximum pixel clock
+1045:[   131.038] (--) NVIDIA(GPU-0): 
+1046:[   131.039] (--) NVIDIA(GPU-0): DFP-2: disconnected
+1047:[   131.039] (--) NVIDIA(GPU-0): DFP-2: Internal TMDS
+1048:[   131.039] (--) NVIDIA(GPU-0): DFP-2: 165.0 MHz maximum pixel clock
+1049:[   131.039] (--) NVIDIA(GPU-0): 
+1050:[   131.039] (--) NVIDIA(GPU-0): DFP-3: disconnected
+1051:[   131.039] (--) NVIDIA(GPU-0): DFP-3: Internal DisplayPort
+1052:[   131.039] (--) NVIDIA(GPU-0): DFP-3: 2670.0 MHz maximum pixel clock
+1053:[   131.039] (--) NVIDIA(GPU-0): 
+1054:[   131.039] (--) NVIDIA(GPU-0): DFP-4: disconnected
+1055:[   131.039] (--) NVIDIA(GPU-0): DFP-4: Internal TMDS
+1056:[   131.039] (--) NVIDIA(GPU-0): DFP-4: 165.0 MHz maximum pixel clock
+1057:[   131.039] (--) NVIDIA(GPU-0): 
+1058:[   131.039] (--) NVIDIA(GPU-0): DFP-5: disconnected
+1059:[   131.039] (--) NVIDIA(GPU-0): DFP-5: Internal DisplayPort
+1060:[   131.039] (--) NVIDIA(GPU-0): DFP-5: 2670.0 MHz maximum pixel clock
+1061:[   131.039] (--) NVIDIA(GPU-0): 
+1062:[   131.039] (--) NVIDIA(GPU-0): DFP-6: disconnected
+1063:[   131.039] (--) NVIDIA(GPU-0): DFP-6: Internal TMDS
+1064:[   131.039] (--) NVIDIA(GPU-0): DFP-6: 165.0 MHz maximum pixel clock
+1065:[   131.039] (--) NVIDIA(GPU-0): 
+1066:[   131.344] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+1067:[   131.344] (II) AMDGPU(0): Using hsync ranges from config file
+1068:[   131.344] (II) AMDGPU(0): Using vrefresh ranges from config file
+1069:[   131.344] (II) AMDGPU(0): Printing DDC gathered Modelines:
+1070:[   131.344] (II) AMDGPU(0): Modeline "3840x2160"x0.0  594.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (135.0 kHz eP)
+1071:[   131.344] (II) AMDGPU(0): Modeline "3840x2160"x0.0  297.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (67.5 kHz e)
+1072:[   131.344] (II) AMDGPU(0): Modeline "2560x1440"x0.0  241.50  2560 2608 2640 2720  1440 1443 1448 1481 +hsync -vsync (88.8 kHz e)
+1073:[   131.344] (II) AMDGPU(0): Modeline "1920x1080"x0.0  138.50  1920 1962 2000 2080  1080 1083 1088 1111 +hsync -vsync (66.6 kHz e)
+1074:[   131.344] (II) AMDGPU(0): Modeline "640x480"x0.0   25.18  640 656 752 800  480 490 492 525 -hsync -vsync (31.5 kHz e)
+1075:[   131.344] (II) AMDGPU(0): Modeline "720x480"x0.0   27.00  720 736 798 858  480 489 495 525 -hsync -vsync (31.5 kHz e)
+1076:[   131.344] (II) AMDGPU(0): Modeline "1280x720"x0.0   74.25  1280 1390 1430 1650  720 725 730 750 +hsync +vsync (45.0 kHz e)
+1077:[   131.344] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (67.5 kHz e)
+1078:[   131.344] (II) AMDGPU(0): Modeline "720x576"x0.0   27.00  720 732 796 864  576 581 586 625 -hsync -vsync (31.2 kHz e)
+1079:[   131.344] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2448 2492 2640  1080 1084 1089 1125 +hsync +vsync (56.2 kHz e)
+1080:[   131.344] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2558 2602 2750  1080 1084 1089 1125 +hsync +vsync (27.0 kHz e)
+1081:[   131.344] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (33.8 kHz e)
+1082:[   131.344] (II) AMDGPU(0): Modeline "800x600"x0.0   40.00  800 840 968 1056  600 601 605 628 +hsync +vsync (37.9 kHz e)
+1083:[   131.344] (II) AMDGPU(0): Modeline "1024x768"x0.0   65.00  1024 1048 1184 1344  768 771 777 806 -hsync -vsync (48.4 kHz e)
+1084:[   131.344] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+1085:[   131.345] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+1086:[   131.345] (II) AMDGPU(0): Using hsync ranges from config file
+1087:[   131.345] (II) AMDGPU(0): Using vrefresh ranges from config file
+1088:[   131.345] (II) AMDGPU(0): Printing DDC gathered Modelines:
+1089:[   131.345] (II) AMDGPU(0): Modeline "3840x2160"x0.0  594.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (135.0 kHz eP)
+1090:[   131.345] (II) AMDGPU(0): Modeline "3840x2160"x0.0  297.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (67.5 kHz e)
+1091:[   131.345] (II) AMDGPU(0): Modeline "2560x1440"x0.0  241.50  2560 2608 2640 2720  1440 1443 1448 1481 +hsync -vsync (88.8 kHz e)
+1092:[   131.345] (II) AMDGPU(0): Modeline "1920x1080"x0.0  138.50  1920 1962 2000 2080  1080 1083 1088 1111 +hsync -vsync (66.6 kHz e)
+1093:[   131.345] (II) AMDGPU(0): Modeline "640x480"x0.0   25.18  640 656 752 800  480 490 492 525 -hsync -vsync (31.5 kHz e)
+1094:[   131.345] (II) AMDGPU(0): Modeline "720x480"x0.0   27.00  720 736 798 858  480 489 495 525 -hsync -vsync (31.5 kHz e)
+1095:[   131.345] (II) AMDGPU(0): Modeline "1280x720"x0.0   74.25  1280 1390 1430 1650  720 725 730 750 +hsync +vsync (45.0 kHz e)
+1096:[   131.345] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (67.5 kHz e)
+1097:[   131.345] (II) AMDGPU(0): Modeline "720x576"x0.0   27.00  720 732 796 864  576 581 586 625 -hsync -vsync (31.2 kHz e)
+1098:[   131.345] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2448 2492 2640  1080 1084 1089 1125 +hsync +vsync (56.2 kHz e)
+1099:[   131.345] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2558 2602 2750  1080 1084 1089 1125 +hsync +vsync (27.0 kHz e)
+1100:[   131.345] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (33.8 kHz e)
+1101:[   131.345] (II) AMDGPU(0): Modeline "800x600"x0.0   40.00  800 840 968 1056  600 601 605 628 +hsync +vsync (37.9 kHz e)
+1102:[   131.345] (II) AMDGPU(0): Modeline "1024x768"x0.0   65.00  1024 1048 1184 1344  768 771 777 806 -hsync -vsync (48.4 kHz e)
+1103:[   131.345] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+1104:[   131.345] (--) NVIDIA(GPU-0): DFP-0: disconnected
+1105:[   131.345] (--) NVIDIA(GPU-0): DFP-0: Internal TMDS
+1106:[   131.345] (--) NVIDIA(GPU-0): DFP-0: 165.0 MHz maximum pixel clock
+1107:[   131.345] (--) NVIDIA(GPU-0): 
+1108:[   131.345] (--) NVIDIA(GPU-0): DFP-1: disconnected
+1109:[   131.345] (--) NVIDIA(GPU-0): DFP-1: Internal DisplayPort
+1110:[   131.345] (--) NVIDIA(GPU-0): DFP-1: 2670.0 MHz maximum pixel clock
+1111:[   131.345] (--) NVIDIA(GPU-0): 
+1112:[   131.345] (--) NVIDIA(GPU-0): DFP-2: disconnected
+1113:[   131.345] (--) NVIDIA(GPU-0): DFP-2: Internal TMDS
+1114:[   131.345] (--) NVIDIA(GPU-0): DFP-2: 165.0 MHz maximum pixel clock
+1115:[   131.345] (--) NVIDIA(GPU-0): 
+1116:[   131.345] (--) NVIDIA(GPU-0): DFP-3: disconnected
+1117:[   131.345] (--) NVIDIA(GPU-0): DFP-3: Internal DisplayPort
+1118:[   131.345] (--) NVIDIA(GPU-0): DFP-3: 2670.0 MHz maximum pixel clock
+1119:[   131.345] (--) NVIDIA(GPU-0): 
+1120:[   131.346] (--) NVIDIA(GPU-0): DFP-4: disconnected
+1121:[   131.346] (--) NVIDIA(GPU-0): DFP-4: Internal TMDS
+1122:[   131.346] (--) NVIDIA(GPU-0): DFP-4: 165.0 MHz maximum pixel clock
+1123:[   131.346] (--) NVIDIA(GPU-0): 
+1124:[   131.346] (--) NVIDIA(GPU-0): DFP-5: disconnected
+1125:[   131.346] (--) NVIDIA(GPU-0): DFP-5: Internal DisplayPort
+1126:[   131.346] (--) NVIDIA(GPU-0): DFP-5: 2670.0 MHz maximum pixel clock
+1127:[   131.346] (--) NVIDIA(GPU-0): 
+1128:[   131.346] (--) NVIDIA(GPU-0): DFP-6: disconnected
+1129:[   131.346] (--) NVIDIA(GPU-0): DFP-6: Internal TMDS
+1130:[   131.346] (--) NVIDIA(GPU-0): DFP-6: 165.0 MHz maximum pixel clock
+1131:[   131.346] (--) NVIDIA(GPU-0): 
+1132:[   131.592] (II) AMDGPU(0): Allocate new frame buffer 5120x2880
+1133:[   131.592] (II) AMDGPU(0):  => pitch 20480 bytes
+1134:[   131.685] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+1135:[   131.685] (II) AMDGPU(0): Using hsync ranges from config file
+1136:[   131.685] (II) AMDGPU(0): Using vrefresh ranges from config file
+1137:[   131.685] (II) AMDGPU(0): Printing DDC gathered Modelines:
+1138:[   131.685] (II) AMDGPU(0): Modeline "3840x2160"x0.0  594.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (135.0 kHz eP)
+1139:[   131.685] (II) AMDGPU(0): Modeline "3840x2160"x0.0  297.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (67.5 kHz e)
+1140:[   131.685] (II) AMDGPU(0): Modeline "2560x1440"x0.0  241.50  2560 2608 2640 2720  1440 1443 1448 1481 +hsync -vsync (88.8 kHz e)
+1141:[   131.685] (II) AMDGPU(0): Modeline "1920x1080"x0.0  138.50  1920 1962 2000 2080  1080 1083 1088 1111 +hsync -vsync (66.6 kHz e)
+1142:[   131.685] (II) AMDGPU(0): Modeline "640x480"x0.0   25.18  640 656 752 800  480 490 492 525 -hsync -vsync (31.5 kHz e)
+1143:[   131.685] (II) AMDGPU(0): Modeline "720x480"x0.0   27.00  720 736 798 858  480 489 495 525 -hsync -vsync (31.5 kHz e)
+1144:[   131.685] (II) AMDGPU(0): Modeline "1280x720"x0.0   74.25  1280 1390 1430 1650  720 725 730 750 +hsync +vsync (45.0 kHz e)
+1145:[   131.685] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (67.5 kHz e)
+1146:[   131.685] (II) AMDGPU(0): Modeline "720x576"x0.0   27.00  720 732 796 864  576 581 586 625 -hsync -vsync (31.2 kHz e)
+1147:[   131.685] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2448 2492 2640  1080 1084 1089 1125 +hsync +vsync (56.2 kHz e)
+1148:[   131.685] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2558 2602 2750  1080 1084 1089 1125 +hsync +vsync (27.0 kHz e)
+1149:[   131.685] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (33.8 kHz e)
+1150:[   131.685] (II) AMDGPU(0): Modeline "800x600"x0.0   40.00  800 840 968 1056  600 601 605 628 +hsync +vsync (37.9 kHz e)
+1151:[   131.685] (II) AMDGPU(0): Modeline "1024x768"x0.0   65.00  1024 1048 1184 1344  768 771 777 806 -hsync -vsync (48.4 kHz e)
+1152:[   131.685] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+1153:[   131.686] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+1154:[   131.686] (II) AMDGPU(0): Using hsync ranges from config file
+1155:[   131.686] (II) AMDGPU(0): Using vrefresh ranges from config file
+1156:[   131.686] (II) AMDGPU(0): Printing DDC gathered Modelines:
+1157:[   131.686] (II) AMDGPU(0): Modeline "3840x2160"x0.0  594.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (135.0 kHz eP)
+1158:[   131.686] (II) AMDGPU(0): Modeline "3840x2160"x0.0  297.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (67.5 kHz e)
+1159:[   131.686] (II) AMDGPU(0): Modeline "2560x1440"x0.0  241.50  2560 2608 2640 2720  1440 1443 1448 1481 +hsync -vsync (88.8 kHz e)
+1160:[   131.686] (II) AMDGPU(0): Modeline "1920x1080"x0.0  138.50  1920 1962 2000 2080  1080 1083 1088 1111 +hsync -vsync (66.6 kHz e)
+1161:[   131.686] (II) AMDGPU(0): Modeline "640x480"x0.0   25.18  640 656 752 800  480 490 492 525 -hsync -vsync (31.5 kHz e)
+1162:[   131.686] (II) AMDGPU(0): Modeline "720x480"x0.0   27.00  720 736 798 858  480 489 495 525 -hsync -vsync (31.5 kHz e)
+1163:[   131.686] (II) AMDGPU(0): Modeline "1280x720"x0.0   74.25  1280 1390 1430 1650  720 725 730 750 +hsync +vsync (45.0 kHz e)
+1164:[   131.686] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (67.5 kHz e)
+1165:[   131.686] (II) AMDGPU(0): Modeline "720x576"x0.0   27.00  720 732 796 864  576 581 586 625 -hsync -vsync (31.2 kHz e)
+1166:[   131.686] (II) AMDGPU(0): Modeline "1920x1080"x0.0  148.50  1920 2448 2492 2640  1080 1084 1089 1125 +hsync +vsync (56.2 kHz e)
+1167:[   131.686] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2558 2602 2750  1080 1084 1089 1125 +hsync +vsync (27.0 kHz e)
+1168:[   131.686] (II) AMDGPU(0): Modeline "1920x1080"x0.0   74.25  1920 2008 2052 2200  1080 1084 1089 1125 +hsync +vsync (33.8 kHz e)
+1169:[   131.686] (II) AMDGPU(0): Modeline "800x600"x0.0   40.00  800 840 968 1056  600 601 605 628 +hsync +vsync (37.9 kHz e)
+1170:[   131.686] (II) AMDGPU(0): Modeline "1024x768"x0.0   65.00  1024 1048 1184 1344  768 771 777 806 -hsync -vsync (48.4 kHz e)
+1171:[   131.686] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+1172:[   131.686] (--) NVIDIA(GPU-0): DFP-0: disconnected
+1173:[   131.686] (--) NVIDIA(GPU-0): DFP-0: Internal TMDS
+1174:[   131.686] (--) NVIDIA(GPU-0): DFP-0: 165.0 MHz maximum pixel clock
+1175:[   131.686] (--) NVIDIA(GPU-0): 
+1176:[   131.686] (--) NVIDIA(GPU-0): DFP-1: disconnected
+1177:[   131.686] (--) NVIDIA(GPU-0): DFP-1: Internal DisplayPort
+1178:[   131.686] (--) NVIDIA(GPU-0): DFP-1: 2670.0 MHz maximum pixel clock
+1179:[   131.686] (--) NVIDIA(GPU-0): 
+1180:[   131.687] (--) NVIDIA(GPU-0): DFP-2: disconnected
+1181:[   131.687] (--) NVIDIA(GPU-0): DFP-2: Internal TMDS
+1182:[   131.687] (--) NVIDIA(GPU-0): DFP-2: 165.0 MHz maximum pixel clock
+1183:[   131.687] (--) NVIDIA(GPU-0): 
+1184:[   131.687] (--) NVIDIA(GPU-0): DFP-3: disconnected
+1185:[   131.687] (--) NVIDIA(GPU-0): DFP-3: Internal DisplayPort
+1186:[   131.687] (--) NVIDIA(GPU-0): DFP-3: 2670.0 MHz maximum pixel clock
+1187:[   131.687] (--) NVIDIA(GPU-0): 
+1188:[   131.687] (--) NVIDIA(GPU-0): DFP-4: disconnected
+1189:[   131.687] (--) NVIDIA(GPU-0): DFP-4: Internal TMDS
+1190:[   131.687] (--) NVIDIA(GPU-0): DFP-4: 165.0 MHz maximum pixel clock
+1191:[   131.687] (--) NVIDIA(GPU-0): 
+1192:[   131.687] (--) NVIDIA(GPU-0): DFP-5: disconnected
+1193:[   131.687] (--) NVIDIA(GPU-0): DFP-5: Internal DisplayPort
+1194:[   131.687] (--) NVIDIA(GPU-0): DFP-5: 2670.0 MHz maximum pixel clock
+1195:[   131.687] (--) NVIDIA(GPU-0): 
+1196:[   131.687] (--) NVIDIA(GPU-0): DFP-6: disconnected
+1197:[   131.687] (--) NVIDIA(GPU-0): DFP-6: Internal TMDS
+1198:[   131.687] (--) NVIDIA(GPU-0): DFP-6: 165.0 MHz maximum pixel clock
+1199:[   131.687] (--) NVIDIA(GPU-0): 
+1206:[ 10841.614] (II) systemd-logind: got fd for /dev/input/event30 13:94 fd 91 paused 0
+1231:[ 10841.617] (WW) Option "xkb_variant" requires a string value
+1232:[ 10841.617] (WW) Option "xkb_options" requires a string value
+1236:[ 10841.725] (II) systemd-logind: got fd for /dev/input/event29 13:93 fd 92 paused 0
+1320:[114833.311] (II) NVIDIA(GPU-0): Deleting GPU-0
+1321:[114833.351] (WW) xf86CloseConsole: KDSETMODE failed: Input/output error
+1322:[114833.351] (WW) xf86CloseConsole: VT_GETMODE failed: Input/output error
+1323:[114833.352] (II) Server terminated successfully (0). Closing log file.

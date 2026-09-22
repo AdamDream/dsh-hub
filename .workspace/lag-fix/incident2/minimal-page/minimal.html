@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>minimal-lag-page (zero DSH code)</title>
+<!--
+  ============================================================================
+  最小复现页 / minimal repro page — 参照物 (control page)
+  ============================================================================
+  目的：判定"光标悬停展开托盘 + 跟随鼠标的波纹动效"这类交互在本机的帧率表现。
+  本文件不引用、不加载、不依赖任何 DSH / React / 框架代码：纯 HTML+CSS+原生 JS，
+  单文件自包含（file:// 直接打开即可），因此任何卡顿都只能归因于浏览器/系统/硬件，
+  不能归因于 DSH。
+
+  两类交互（对应用户描述）：
+    1) 悬停托盘 : hover 卡片 -> 托盘带 transition 展开；移出 -> 收起。
+    2) 跟手波纹 : mousemove 在光标处生成波纹/粒子 + 一个每帧 lerp 跟随光标的
+                  光晕("跟手动画"，即使鼠标静止也在逐帧动画)。
+
+  参数（URL query，全部可选，默认值见 DEFAULTS）：
+    n=24           卡片数量（同时决定可 hover 的托盘数量）
+    impl=dom       dom | canvas        波纹实现方式
+    pos=transform  transform | lefttop DOM 波纹的定位/动画方式
+                                      (lefttop = 逐帧改 left/top/width/height，
+                                       强制 Recalc+Layout+Paint)
+    willchange=1   1|0                是否给波纹元素加 will-change:transform,opacity
+    follower=1     1|0                跟手光晕
+    blur=0         1|0                托盘是否用 backdrop-filter（毛玻璃）
+    tray=height    height | transform 托盘展开动画方式
+    rate=1         每 N 个 mousemove 事件生成 1 个波纹（1=每事件都生成）
+    dur=600        波纹生命周期 ms
+    particles=8    canvas 实现下每个波纹的粒子数
+    size=56        波纹基准尺寸 px
+    alwaysloop=0   1|0                canvans/无波纹时是否仍持续 rAF 空转
+    hud=1          1|0               左上角 HUD（关掉可去掉 HUD 的自身开销）
+
+  驱动接口（供测量脚本使用，均为只读/轻量）：
+    window.MMP.ready        初始化完成
+    window.MMP.config       生效配置
+    window.MMP.zones        {hover:{x,y,w,h}, ripple:{x,y,w,h}} 鼠标路径区域
+    window.MMP.frames       最近一次 reset 之后的 rAF 时间戳数组（ms, performance.now）
+    window.MMP.reset()      清空 frames
+    window.MMP.longtasks    长任务条目（PerformanceObserver longtask）
+    window.MMP.loafs        长动画帧条目（LoAF，若浏览器支持）
+    window.MMP.counters     {moves, ripplesSpawned, ripplesAlive, trayOpens}
+  ============================================================================
+-->
+<style>
+  :root{ color-scheme: dark; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
+  body{
+    background:#0e1117; color:#e6edf3;
+    font:13px/1.35 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans CJK SC",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- 悬停区：卡片网格 + 托盘 ---------- */
+  #cards{
+    position:absolute; left:0; top:0; right:0; height:40%;
+    display:grid; gap:6px; padding:8px;
+    grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+    grid-auto-rows:min-content;
+    align-content:start;
+    overflow:hidden;
+  }
+  .card{
+    position:relative;
+    background:#161b22; border:1px solid #26303d; border-radius:8px;
+    padding:6px 8px; cursor:pointer;
+    transition:background 160ms ease, border-color 160ms ease;
+  }
+  .card.open{ background:#1c2530; border-color:#3b82f6; }
+  .card-title{ font-size:12px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .card-sub{ font-size:10px; color:#8b98a5; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  /* 托盘：默认收起。height 模式会逐帧改高度（强制 Layout）；transform 模式只动合成层 */
+  .tray{
+    overflow:hidden; margin-top:6px; border-radius:6px; background:#101720;
+    border:1px solid #223041;
+  }
+  .tray-inner{ padding:6px 8px; font-size:11px; color:#a9b6c3; }
+  .tray-row{ display:flex; justify-content:space-between; gap:8px; padding:1px 0; }
+  .tray-row b{ color:#dbe6f2; font-weight:500; }
+
+  html[data-tray="height"] .tray{ height:0; transition:height 240ms cubic-bezier(.2,.8,.2,1); }
+  html[data-tray="height"] .card.open .tray{ height:var(--trayh,104px); }
+
+  html[data-tray="transform"] .tray{
+    height:var(--trayh,104px);
+    transform:scaleY(0); transform-origin:top center;
+    transition:transform 240ms cubic-bezier(.2,.8,.2,1), opacity 240ms linear;
+    opacity:0;
+  }
+  html[data-tray="transform"] .card.open .tray{ transform:scaleY(1); opacity:1; }
+
+  html[data-blur="1"] .tray{ backdrop-filter:blur(10px) saturate(140%); -webkit-backdrop-filter:blur(10px) saturate(140%); background:rgba(16,23,32,.55); }
+
+  /* ---------- 波纹层（全局覆盖，pointer-events:none 不挡 hover） ---------- */
+  #fx{ position:fixed; inset:0; pointer-events:none; z-index:50; overflow:hidden; }
+  #cv{ position:fixed; inset:0; pointer-events:none; z-index:50; display:none; }
+  html[data-impl="canvas"] #fx{ display:none; }
+  html[data-impl="canvas"] #cv{ display:block; }
+
+  /* transform 模式：元素固定在光标点，动画只改 transform/opacity（可合成） */
+  .rip-t{
+    position:absolute; left:0; top:0; border-radius:50%;
+    border:2px solid rgba(96,165,250,.85);
+    background:radial-gradient(circle at 50% 50%, rgba(59,130,246,.28), rgba(59,130,246,0) 70%);
+    animation:mmRipT var(--dur,600ms) cubic-bezier(.15,.7,.25,1) forwards;
+  }
+  @keyframes mmRipT{
+    from{ transform:translate3d(var(--x),var(--y),0) translate(-50%,-50%) scale(.12); opacity:.95; }
+    to  { transform:translate3d(var(--x),var(--y),0) translate(-50%,-50%) scale(1);    opacity:0; }
+  }
+  /* left/top 模式：逐帧改 left/top/width/height -> 强制 Recalc + Layout + Paint */
+  .rip-lt{
+    position:absolute; border-radius:50%;
+    border:2px solid rgba(96,165,250,.85);
+    background:radial-gradient(circle at 50% 50%, rgba(59,130,246,.28), rgba(59,130,246,0) 70%);
+    animation:mmRipLT var(--dur,600ms) cubic-bezier(.15,.7,.25,1) forwards;
+  }
+  @keyframes mmRipLT{
+    from{ left:var(--x); top:var(--y); width:4px; height:4px; opacity:.95; }
+    to  { left:calc(var(--x) - var(--half)); top:calc(var(--y) - var(--half));
+          width:var(--size); height:var(--size); opacity:0; }
+  }
+
+  /* 跟手光晕：每帧 lerp 逼近光标，独立于 mousemove 事件（保证连续逐帧动画） */
+  #follow{
+    position:fixed; left:0; top:0; width:120px; height:120px; border-radius:50%;
+    pointer-events:none; z-index:49;
+    background:radial-gradient(circle at 50% 50%, rgba(56,189,248,.42), rgba(56,189,248,0) 68%);
+    filter:blur(6px); opacity:.9;
+  }
+  html[data-follower="0"] #follow{ display:none; }
+
+  /* ---------- HUD ---------- */
+  #hud{
+    position:fixed; left:8px; bottom:8px; z-index:60;
+    font:11px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    color:#9fb0c0; background:rgba(8,12,18,.72); border:1px solid #22303f;
+    border-radius:6px; padding:6px 8px; max-width:min(720px,92vw);
+    pointer-events:none; white-space:pre-wrap;
+  }
+</style>
+</head>
+<body>
+  <div id="cards"></div>
+  <div id="fx"></div>
+  <canvas id="cv"></canvas>
+  <div id="follow"></div>
+  <div id="hud"></div>
+
+<script>
+"use strict";
+(function(){
+  // ---------------------------------------------------------------- config
+  const q = new URLSearchParams(location.search);
+  const num = (k, d) => { const v = q.get(k); const n = v == null ? NaN : Number(v); return Number.isFinite(n) ? n : d; };
+  const str = (k, d) => { const v = q.get(k); return v == null || v === '' ? d : v; };
+  const bool = (k, d) => { const v = q.get(k); return v == null || v === '' ? d : (v === '1' || v === 'true'); };
+
+  const CFG = {
+    n:            Math.max(0, Math.min(400, Math.round(num('n', 24)))),
+    impl:         str('impl', 'dom') === 'canvas' ? 'canvas' : 'dom',
+    pos:          str('pos', 'transform') === 'lefttop' ? 'lefttop' : 'transform',
+    willchange:   bool('willchange', true),
+    follower:     bool('follower', true),
+    blur:         bool('blur', false),
+    tray:         str('tray', 'height') === 'transform' ? 'transform' : 'height',
+    rate:         Math.max(1, Math.round(num('rate', 1))),          // 每 N 个 mousemove 生成 1 个波纹
+    dur:          Math.max(80, Math.round(num('dur', 600))),        // 波纹生命周期 ms
+    particles:    Math.max(0, Math.round(num('particles', 8))),     // canvas: 每波纹粒子数
+    size:         Math.max(8, Math.round(num('size', 56))),         // 波纹基准尺寸 px
+    alwaysloop:   bool('alwaysloop', false),
+    hud:          bool('hud', true),
+  };
+
+  const root = document.documentElement;
+  root.dataset.impl = CFG.impl;
+  root.dataset.pos = CFG.pos;
+  root.dataset.tray = CFG.tray;
+  root.dataset.blur = CFG.blur ? '1' : '0';
+  root.dataset.follower = CFG.follower ? '1' : '0';
+
+  const MMP = window.MMP = {
+    ready: false, config: CFG, frames: [], longtasks: [], loafs: [],
+    counters: { moves: 0, ripplesSpawned: 0, ripplesAlive: 0, trayOpens: 0, trayCloses: 0 },
+    zones: null, dpr: window.devicePixelRatio || 1,
+    reset(){ MMP.frames.length = 0; },
+  };
+
+  // ------------------------------------------------------------ 卡片 + 托盘
+  const cardsEl = document.getElementById('cards');
+  const frag = document.createDocumentFragment();
+  const cards = [];
+  for (let i = 0; i < CFG.n; i++) {
+    const c = document.createElement('div');
+    c.className = 'card';
+    c.dataset.i = String(i);
+    const rows = [];
+    for (let r = 0; r < 5; r++) {
+      rows.push('<div class="tray-row"><span>item ' + (i * 5 + r) + '</span><b>' + ((i * 7 + r * 3) % 97) + 'ms</b></div>');
+    }
+    c.innerHTML =
+      '<div class="card-title">Card ' + i + '</div>' +
+      '<div class="card-sub">hover 展开托盘</div>' +
+      '<div class="tray"><div class="tray-inner">' + rows.join('') + '</div></div>';
+    frag.appendChild(c);
+    cards.push(c);
+  }
+  cardsEl.appendChild(frag);
+
+  // hover 走 CSS :hover + 一次性事件监听（不逐帧改状态）
+  cardsEl.addEventListener('mouseover', function(e){
+    const c = e.target.closest ? e.target.closest('.card') : null;
+    if (c && !c.classList.contains('open')) { c.classList.add('open'); MMP.counters.trayOpens++; }
+  });
+  cardsEl.addEventListener('mouseout', function(e){
+    const c = e.target.closest ? e.target.closest('.card') : null;
+    if (!c) return;
+    const to = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest('.card') : null;
+    if (to !== c && c.classList.contains('open')) { c.classList.remove('open'); MMP.counters.trayCloses++; }
+  });
+
+  // ------------------------------------------------------------------ 波纹层
+  const fxEl = document.getElementById('fx');
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d', { alpha: true });
+
+  function sizeCanvas(){
+    const w = window.innerWidth, h = window.innerHeight, d = MMP.dpr;
+    cv.width = Math.max(1, Math.round(w * d));
+    cv.height = Math.max(1, Math.round(h * d));
+    cv.style.width = w + 'px'; cv.style.height = h + 'px';
+    ctx.setTransform(d, 0, 0, d, 0, 0);
+  }
+  sizeCanvas();
+  window.addEventListener('resize', sizeCanvas);
+
+  /* ---- DOM 实现 ---- */
+  let domAlive = 0;
+  function spawnDom(x, y){
+    const el = document.createElement('div');
+    el.className = CFG.pos === 'lefttop' ? 'rip-lt' : 'rip-t';
+    el.style.setProperty('--x', x + 'px');
+    el.style.setProperty('--y', y + 'px');
+    el.style.setProperty('--dur', CFG.dur + 'ms');
+    if (CFG.pos === 'lefttop') {
+      el.style.setProperty('--size', CFG.size + 'px');
+      el.style.setProperty('--half', (CFG.size / 2) + 'px');
+    } else {
+      el.style.width = CFG.size + 'px';
+      el.style.height = CFG.size + 'px';
+      if (CFG.willchange) el.style.willChange = 'transform,opacity';
+    }
+    fxEl.appendChild(el);
+    domAlive++; MMP.counters.ripplesAlive = domAlive;
+    let done = false;
+    const kill = () => {
+      if (done) return; done = true;
+      if (el.parentNode) el.parentNode.removeChild(el);
+      domAlive--; MMP.counters.ripplesAlive = domAlive;
+    };
+    el.addEventListener('animationend', kill, { once: true });
+    setTimeout(kill, CFG.dur + 120);   // 兜底（标签页不可见时 animationend 可能延迟）
+  }
+
+  /* ---- canvas 实现 ---- */
+  const parts = [];   // {x,y,vx,vy,life}
+  const rings = [];   // {x,y,t0,r0,r1}
+  function spawnCanvas(x, y){
+    const now = performance.now();
+    rings.push({ x: x, y: y, t0: now, r0: CFG.size * 0.06, r1: CFG.size * (0.9 + Math.random() * 0.5) });
+    for (let i = 0; i < CFG.particles; i++) {
+      const a = Math.random() * Math.PI * 2, sp = 0.25 + Math.random() * 1.1;
+      parts.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 1 });
+    }
+    MMP.counters.ripplesAlive = rings.length;
+  }
+  function drawCanvas(dt){
+    const w = window.innerWidth, h = window.innerHeight;
+    ctx.clearRect(0, 0, w, h);
+    const now = performance.now(), dur = CFG.dur;
+    for (let i = rings.length - 1; i >= 0; i--) {
+      const r = rings[i];
+      const p = (now - r.t0) / dur;
+      if (p >= 1) { rings.splice(i, 1); continue; }
+      const rad = r.r0 + (r.r1 - r.r0) * (1 - Math.pow(1 - p, 2.2));
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(96,165,250,' + (0.85 * (1 - p)).toFixed(3) + ')';
+      ctx.lineWidth = 2;
+      ctx.arc(r.x, r.y, rad, 0, Math.PI * 2);
+      ctx.stroke();
+      const g = ctx.createRadialGradient(r.x, r.y, 0, r.x, r.y, rad * 0.9);
+      g.addColorStop(0, 'rgba(59,130,246,' + (0.26 * (1 - p)).toFixed(3) + ')');
+      g.addColorStop(1, 'rgba(59,130,246,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(r.x, r.y, rad * 0.9, 0, Math.PI * 2); ctx.fill();
+    }
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      p.x += p.vx * dt * 0.06; p.y += p.vy * dt * 0.06;
+      p.life -= dt / dur;
+      if (p.life <= 0) { parts.splice(i, 1); continue; }
+      ctx.globalAlpha = Math.max(0, p.life) * 0.9;
+      ctx.fillStyle = 'rgba(147,197,253,1)';
+      ctx.fillRect(p.x, p.y, 2, 2);
+      ctx.globalAlpha = 1;
+    }
+    MMP.counters.ripplesAlive = rings.length;
+  }
+
+  /* ---- 跟手光晕（DOM 元素，每帧 lerp） ---- */
+  const followEl = document.getElementById('follow');
+  let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+  let fx = mx, fy = my;
+
+  // --------------------------------------------------------------- rAF 循环
+  let last = 0;
+  function loop(ts){
+    if (last === 0) last = ts;
+    const dt = Math.min(64, ts - last); last = ts;
+    MMP.frames.push(ts);
+    if (CFG.framesCap && MMP.frames.length > CFG.framesCap) MMP.frames.shift();
+
+    // lerp 跟手：与 mousemove 事件解耦，保证即使鼠标不动也逐帧动画
+    if (CFG.follower) {
+      fx += (mx - fx) * 0.18;
+      fy += (my - fy) * 0.18;
+      if (CFG.impl === 'canvas') {
+        // canvas 模式下光晕画在 canvas 上（见下）
+      } else {
+        followEl.style.transform = 'translate3d(' + (fx - 60).toFixed(2) + 'px,' + (fy - 60).toFixed(2) + 'px,0)';
+      }
+    }
+
+    if (CFG.impl === 'canvas') {
+      if (CFG.follower) {
+        const w = window.innerWidth, h = window.innerHeight;
+        const g = ctx.createRadialGradient(fx, fy, 0, fx, fy, 70);
+        g.addColorStop(0, 'rgba(56,189,248,.40)');
+        g.addColorStop(1, 'rgba(56,189,248,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(fx, fy, 70, 0, Math.PI * 2); ctx.fill();
+      }
+      drawCanvas(dt);
+    }
+
+    if (CFG.alwaysloop || rings.length || parts.length || CFG.follower) requestAnimationFrame(loop);
+    else { pendingLoop = false; }
+  }
+  let pendingLoop = true;
+  function ensureLoop(){
+    if (!pendingLoop) { pendingLoop = true; requestAnimationFrame(loop); }
+  }
+  requestAnimationFrame(loop);
+
+  // ------------------------------------------------------------------ 输入
+  window.addEventListener('mousemove', function(e){
+    mx = e.clientX; my = e.clientY;
+    MMP.counters.moves++;
+    if (MMP.counters.moves % CFG.rate !== 0) return;
+    if (CFG.impl === 'canvas') spawnCanvas(mx, my);
+    else spawnDom(mx, my);
+    MMP.counters.ripplesSpawned++;
+    ensureLoop();
+  }, { passive: true });
+
+  // ------------------------------------------------------- 观测（longtask/LoAF）
+  try {
+    new PerformanceObserver(function(list){
+      for (const en of list.getEntries()) {
+        MMP.longtasks.push({ start: en.startTime, dur: en.duration, name: en.name });
+      }
+    }).observe({ entryTypes: ['longtask'] });
+  } catch (e) { /* unsupported */ }
+  try {
+    new PerformanceObserver(function(list){
+      for (const en of list.getEntries()) {
+        MMP.loafs.push({
+          start: en.startTime, dur: en.duration,
+          blocking: en.blockingDuration != null ? en.blockingDuration : null,
+          scripts: (en.scripts || []).map(function(s){
+            return { name: s.name, dur: s.duration, invoker: s.invoker, source: s.sourceFunctionName,
+                     styleAndLayout: s.styleAndLayoutStart != null ? (s.startTime + s.duration - s.styleAndLayoutStart) : null,
+                     forcedStyleAndLayout: s.forcedStyleAndLayoutDuration != null ? s.forcedStyleAndLayoutDuration : null };
+          })
+        });
+      }
+    }).observe({ type: 'long-animation-frame', buffered: true });
+  } catch (e) { /* unsupported (Chrome < 123) */ }
+
+  // ------------------------------------------------------------------- HUD
+  const hudEl = document.getElementById('hud');
+  if (CFG.hud) {
+    let lastHud = 0, lastCount = 0;
+    setInterval(function(){
+      const now = performance.now();
+      const fps = lastHud ? (MMP.frames.length - lastCount) * 1000 / (now - lastHud) : 0;
+      lastHud = now; lastCount = MMP.frames.length;
+      hudEl.textContent =
+        'impl=' + CFG.impl + '  pos=' + CFG.pos + '  n=' + CFG.n + '  willchange=' + (CFG.willchange ? 1 : 0) +
+        '  tray=' + CFG.tray + '  blur=' + (CFG.blur ? 1 : 0) + '  follower=' + (CFG.follower ? 1 : 0) +
+        '  rate=' + CFG.rate + '  particles=' + CFG.particles + '\n' +
+        'cards=' + cards.length + '  moves=' + MMP.counters.moves + '  ripples=' + MMP.counters.ripplesSpawned +
+        '  alive=' + MMP.counters.ripplesAlive + '  trayOpen=' + MMP.counters.trayOpens + '\n' +
+        'fps(≈1s)=' + fps.toFixed(1) + '  frames=' + MMP.frames.length;
+    }, 250);
+  } else {
+    hudEl.style.display = 'none';
+  }
+
+  // --------------------------------------------------------------- 导出区域
+  function publish(){
+    const r = cardsEl.getBoundingClientRect();
+    MMP.zones = {
+      hover:  { x: r.left + 4, y: r.top + 4, w: Math.max(1, r.width - 8), h: Math.max(1, r.height - 8) },
+      ripple: { x: 8, y: Math.min(window.innerHeight - 8, r.bottom + 8),
+                w: Math.max(1, window.innerWidth - 16), h: Math.max(1, window.innerHeight - r.bottom - 16) },
+      viewport: { w: window.innerWidth, h: window.innerHeight },
+    };
+    MMP.ready = true;
+  }
+  publish();
+  window.addEventListener('resize', publish);
+  // 供 __MM_DEBUG__ 校验：页面确实不含任何外部依赖
+  MMP.zeroExternalDeps = (function(){
+    return document.querySelectorAll('script[src],link[href],img[src],iframe').length === 0;
+  })();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+{
+ "collectedAt": "2026-09-22T02:40:17.788Z",
+ "host": {
+  "hostname": "CNS202649516533",
+  "platform": "linux",
+  "release": "6.14.0-27-generic",
+  "kernel": "Linux version 6.14.0-27-generic (buildd@lcy02-amd64-120) (x86_64-linux-gnu-gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #27~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Jul 22 17:38:49 UTC 2",
+  "bootTime": "2026-09-22T02:01:47.000Z",
+  "cpuCount": 32,
+  "cpuModel": "AMD Ryzen 9 9950X 16-Core Processor",
+  "memTotalKb": 63371020,
+  "memAvailableKb": 48573528,
+  "swapTotalKb": 8388604,
+  "swapFreeKb": 8387836,
+  "loadAvg": {
+   "l1": 5.55,
+   "l5": 5.72,
+   "l15": 5.15
+  }
+ },
+ "psi": {
+  "cpu": "some avg10=0.00 avg60=0.00 avg300=0.00 total=4116662\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0",
+  "io": "some avg10=0.00 avg60=0.03 avg300=0.06 total=14037208\nfull avg10=0.00 avg60=0.03 avg300=0.06 total=13207467",
+  "memory": "some avg10=0.00 avg60=0.00 avg300=0.00 total=85905\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=84671"
+ },
+ "procAccess": {
+  "ptraceScope": "1",
+  "readlinkExeOnOwnChild": {
+   "pid": 161937,
+   "stdout": "/usr/bin/sleep",
+   "stderr": "",
+   "note": "same readlink call, own descendant -> readable, while the foreign pid above -> EACCES"
+  },
+  "readlinkExeOnForeign": {
+   "pid": 145454,
+   "ident": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+   "cmd": "readlink -v /proc/145454/exe",
+   "stdout": "",
+   "stderr": "readlink: /proc/145454/exe: 权限不够",
+   "status": 1
+  },
+  "note": "readlinkExeOnForeign is measured live below against whichever foreign browser process exists",
+  "selfReadlink": "/usr/bin/readlink"
+ },
+ "display": {
+  "DISPLAY": ":1",
+  "XDG_SESSION_TYPE": "x11",
+  "WAYLAND_DISPLAY": null,
+  "XAUTHORITY": "/run/user/1001/gdm/Xauthority",
+  "xorgCmdline": {
+   "pid": 3884,
+   "comm": "Xorg",
+   "cmdline": "/usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1001/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3"
+  }
+ },
+ "gpu": {
+  "drmCards": [
+   "card1",
+   "card1-DP-1",
+   "card1-DP-2",
+   "card1-DP-3",
+   "card1-HDMI-A-1",
+   "card2",
+   "card2-DP-4",
+   "card2-DP-5",
+   "card2-HDMI-A-2",
+   "card2-HDMI-A-3",
+   "card2-Writeback-1"
+  ],
+  "lspciVga": "01:00.0 VGA compatible controller [0300]: NVIDIA Corporation AD102 [GeForce RTX 4090] [10de:2684] (rev a1)\n73:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Device [1002:13c0] (rev c1)",
+  "renderNodes": [
+   "by-path",
+   "card1",
+   "card2",
+   "renderD128",
+   "renderD129"
+  ],
+  "note": "the authoritative GPU/renderer answer for each measured run is in raw/*.json gpuInfo (CDP SystemInfo.getInfo)"
+ },
+ "cpuFreq": {
+  "cpus": 32,
+  "governor": "performance",
+  "curFreqKhz": "5610386"
+ },
+ "concurrencySnapshot": {
+  "at": 1790044817804,
+  "ptraceScope": 1,
+  "exeReadEaccesCount": 676,
+  "exeReadOtherErrCount": 0,
+  "identifyMethodMix": {
+   "proc-exe": 0,
+   "cmdline-argv0": 6,
+   "comm": 1
+  },
+  "browserProcTotal": 7,
+  "instanceTotal": 2,
+  "mineInstanceTotal": 0,
+  "mineProcTotal": 0,
+  "foreignInstanceTotal": 2,
+  "foreignProcTotal": 7,
+  "foreignInstances": [
+   {
+    "pid": 145454,
+    "ident": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+    "method": "cmdline-argv0",
+    "headless": true,
+    "userDataDir": "/tmp/playwright_chromiumdev_profile-12gCOx",
+    "startedEpoch": 1790044651.83
+   },
+   {
+    "pid": 27904,
+    "ident": "chrome",
+    "method": "comm",
+    "headless": false,
+    "userDataDir": null,
+    "startedEpoch": 1790043235.12
+   }
+  ],
+  "mineInstances": []
+ },
+ "otherResearchLinesVisible": [
+  {
+   "pid": 121825,
+   "line": "incident2",
+   "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/gc-residual; MAX_WAIT=2700 bash tools/run-locked.sh gcrun-1100 both 2>&1 "
+  },
+  {
+   "pid": 121829,
+   "line": "incident2",
+   "cmd": "bash /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/gc-residual/tools/probe-lock.sh acquire gc-residual 121826 "
+  },
+  {
+   "pid": 145285,
+   "line": "incident2",
+   "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/headed-vs-headless; N=3 SHARED_LOCK_WAIT=150 DISPLAY_TO_USE=:1 timeout 560 bash run-ca"
+  },
+  {
+   "pid": 145389,
+   "line": "incident2",
+   "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/display-input/page && rm -f raw/raw-SMOKE* raw/SUMMARY-SMOKE*.json && NODE_PATH=/home/"
+  },
+  {
+   "pid": 157087,
+   "line": "incident2",
+   "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/theme-open && node theme-open-ab.mjs --all --settle 5000 --gatewait 45000 --maxforeign"
+  },
+  {
+   "pid": 157475,
+   "line": "incident2",
+   "cmd": "bash -c sleep 200; ls -la /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/theme-open/raw/ 2>/dev/null | tail -6 "
+  },
+  {
+   "pid": 160629,
+   "line": "incident2",
+   "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/live-repro && node --check scripts/headed-diag.mjs && echo \"SYNTAX OK\" && timeout 600 "
+  },
+  {
+   "pid": 160675,
+   "line": "incident2",
+   "cmd": "bash -c sleep 58; cd /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/regression; tail -5 logs/raf-face-campaign.log "
+  },
+  {
+   "pid": 160785,
+   "line": "incident2",
+   "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/conditions && node matrix.mjs --cells BASE,D3-wait60 --reps 2 --label m1b --lock-retry"
+  },
+  {
+   "pid": 160985,
+   "line": "incident2",
+   "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/minimal-page && timeout 5400 node campaign.mjs --phases=smoke,matrix,trace,gpu --tag=m"
+  },
+  {
+   "pid": 161332,
+   "line": "incident2",
+   "cmd": "bash -c sleep 150; tail -16 /tmp/run-headless.log; echo \"--- json count:\"; ls /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/display-input/page/"
+  },
+  {
+   "pid": 161792,
+   "line": "incident2",
+   "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/minimal-page && node env-evidence.mjs 2>&1 | grep -A6 'readlinkOwnChild'; echo \"=== ca"
+  },
+  {
+   "pid": 68107,
+   "line": "incident2",
+   "cmd": "bash -c cd /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/regression\n{\necho \"=== START $(date -Is) ===\"\necho \"--- repro (shared stub theme-sync "
+  },
+  {
+   "pid": 70196,
+   "line": "incident2",
+   "cmd": "bash -c D=/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/host-click; cd $D && nohup node host-drift.mjs --duration-s 10800 --interval-ms 500 --t"
+  }
+ ]
+}

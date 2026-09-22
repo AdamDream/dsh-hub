@@ -1,0 +1,97 @@
+=== autostart desktop files referencing these agents ===
+总计 168
+-rw-r--r-- 1 root root   193  4月  8  2024 at-spi-dbus-bus.desktop
+-rw-r--r-- 1 root root   227  4月  8  2024 geoclue-demo-agent.desktop
+-rw-r--r-- 1 root root   357  7月  9  2025 gnome-initial-setup-copy-worker.desktop
+-rw-r--r-- 1 root root   454  7月  9  2025 gnome-initial-setup-first-login.desktop
+-rw-r--r-- 1 root root   349  3月 31  2024 gnome-keyring-pkcs11.desktop
+-rw-r--r-- 1 root root   342  3月 31  2024 gnome-keyring-secrets.desktop
+-rw-r--r-- 1 root root   309  3月 31  2024 gnome-keyring-ssh.desktop
+-rw-r--r-- 1 root root   165  7月 21  2023 im-launch.desktop
+-rwxr-xr-x 1 root root   208  5月  9 18:09 LAgentUser.desktop
+-rwxr-xr-x 1 root root   208  8月 10 16:38 LSDHelper.desktop
+-rw-r--r-- 1 root root   255  3月 31  2024 nm-applet.desktop
+-rw-r--r-- 1 root root   242 10月  1  2025 nvidia-settings-autostart.desktop
+-rw-r--r-- 1 root root   301  4月  3  2024 orca-autostart.desktop
+-rw-r--r-- 1 root root   343  6月 28  2024 org.gnome.Evolution-alarm-notify.desktop
+-rw-r--r-- 1 root root   299  4月 18  2024 org.gnome.SettingsDaemon.A11ySettings.desktop
+-rw-r--r-- 1 root root   294  4月 18  2024 org.gnome.SettingsDaemon.Color.desktop
+-rw-r--r-- 1 root root   292  4月 18  2024 org.gnome.SettingsDaemon.Datetime.desktop
+-rw-r--r-- 1 root root   246  3月 31  2024 org.gnome.SettingsDaemon.DiskUtilityNotify.desktop
+-rw-r--r-- 1 root root   314  4月 18  2024 org.gnome.SettingsDaemon.Housekeeping.desktop
+-rw-r--r-- 1 root root   303  4月 18  2024 org.gnome.SettingsDaemon.Keyboard.desktop
+-rw-r--r-- 1 root root   301  4月 18  2024 org.gnome.SettingsDaemon.MediaKeys.desktop
+-rw-r--r-- 1 root root   294  4月 18  2024 org.gnome.SettingsDaemon.Power.desktop
+-rw-r--r-- 1 root root   313  4月 18  2024 org.gnome.SettingsDaemon.PrintNotifications.desktop
+-rw-r--r-- 1 root root   293  4月 18  2024 org.gnome.SettingsDaemon.Rfkill.desktop
+-rw-r--r-- 1 root root   313  4月 18  2024 org.gnome.SettingsDaemon.ScreensaverProxy.desktop
+-rw-r--r-- 1 root root   292  4月 18  2024 org.gnome.SettingsDaemon.Sharing.desktop
+-rw-r--r-- 1 root root   291  4月 18  2024 org.gnome.SettingsDaemon.Smartcard.desktop
+-rw-r--r-- 1 root root   298  4月 18  2024 org.gnome.SettingsDaemon.Sound.desktop
+-rw-r--r-- 1 root root   301  4月 18  2024 org.gnome.SettingsDaemon.UsbProtection.desktop
+-rw-r--r-- 1 root root   298  4月 18  2024 org.gnome.SettingsDaemon.Wacom.desktop
+-rw-r--r-- 1 root root   289  4月 18  2024 org.gnome.SettingsDaemon.Wwan.desktop
+-rw-r--r-- 1 root root   291  4月 18  2024 org.gnome.SettingsDaemon.XSettings.desktop
+-rw-r--r-- 1 root root   228  5月 21  2025 snap-userd-autostart.desktop
+-rw-r--r-- 1 root root   191  4月  7  2024 spice-vdagent.desktop
+-rw-r--r-- 1 root root   405  4月  1  2024 tracker-miner-fs-3.desktop
+-rw-r--r-- 1 root root  4057  4月  2  2025 ubuntu-advantage-notification.desktop
+-rw-r--r-- 1 root root   153  4月  8  2024 ubuntu-report-on-upgrade.desktop
+-rw-r--r-- 1 root root 11025  4月  2  2025 update-notifier.desktop
+-rw-r--r-- 1 root root   303  4月  1  2024 user-dirs-update-gtk.desktop
+
+--- LAgentUser.desktop ---
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Exec=/usr/local/bin/LAgentUser.sh
+Name=LAgentUser
+# KDE bug 190522: KDE does not autostart items with NoDisplay=tru...
+# NoDisplay=true
+X-KDE-autostart-phase=1
+
+--- LSDHelper.desktop ---
+[Desktop Entry]
+Type=Application
+Name=LSDHelper
+Comment=this is LSDHelper Tool
+Icon=/usr/local/bin/LSDHelper.png
+Exec=/usr/local/bin/LSDHelper
+Terminal=false
+Categories=Development;IDE;
+Name[en_HK]=LSDHelper
+
+=== /usr/local/.OCular contents ===
+总计 206468
+drwxrwxrwx 11 root root     4096  9月 22 10:02 .
+drwxr-xr-x 11 root root     4096  8月 10 16:38 ..
+-rwxrwxrwx  1 root root      155  5月  9 18:09 10-udisks-tec.pkla
+-rwxrwxrwx  1 root root      138  5月 18 14:48 Agent.xml
+-rwxrwxrwx  1 root root    11184  5月  9 18:09 authbash
+-rwxrwxrwx  1 root root   297320  5月  9 18:09 authbash2
+-rwxrwxrwx  1 root root     2778  5月  9 18:09 authbash_completion
+drwxr-xr-x  4 root root     4096  8月 10 16:38 caja_extension
+-rwxrwxrwx  1 root root   172168  5月  9 18:09 certutil
+drwxr-xr-x  2 root root     4096  5月  9 18:09 Codecs
+-rwxrwxrwx  1 root root      654  5月 18 14:48 config.xml
+-rwxrwxrwx  1 root root 34528656  5月  9 18:09 ContentMatch.so
+drwxr-xr-x  2 root root     4096  5月  9 18:09 DependLibs
+-rwxrwxrwx  1 root root  3244032  5月  9 18:09 DtSSLFrame64.so
+drwxr-xr-x  2 root root     4096  8月 10 16:38 dylib
+-rwxrwxrwx  1 root root    62432  5月 14 15:24 FilezillaLogProcessor
+-rwxr-xr-x  1 root root      309  5月  9 18:09 IPG_Agent.xml
+-rwxr-xr-x  1 root root      310  8月 10 16:38 ko.xml
+-rwxrwxrwx  1 root root 11167056  5月 14 15:10 LAgent
+-rwxrwxrwx  1 root root  7254200  5月 14 15:29 LAgentExInfo
+-rwxrwxrwx  1 root root  8274536  5月 14 15:23 LAgentUser
+-rwxrwxrwx  1 root root      208  5月  9 18:09 LAgentUser.desktop
+-rwxrwxrwx  1 root root      226  5月  9 18:09 LAgentUser_PreLogin.desktop
+-rwxrwxrwx  1 root root      222  5月  9 18:09 LAgentUser_PreLogin.service
+-rwxrwxrwx  1 root root      341  5月  9 18:09 LAgentUser_PreLogin.sh
+-rwxrwxrwx  1 root root      161  5月  9 18:09 LAgentUser.service
+-rwxrwxrwx  1 root root      399  5月  9 18:09 LAgentUser.sh
+-rwxrwxrwx  1 root root    51680  5月 14 15:24 LGetXServerInfo
+-rwxrwxrwx  1 root root   361768  5月 14 15:24 libControlDevice.so
+
+=== systemd units for these ===
+  startLSDEfsSvr.service                                                                                                        loaded    active   running   LMonitor

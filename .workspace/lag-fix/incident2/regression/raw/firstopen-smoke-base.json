@@ -1,0 +1,158 @@
+{
+  "cond": "base",
+  "label": "smoke-base",
+  "ts": "2026-09-22T02:13:54.027Z",
+  "nav": {
+    "domcontentloadedMs": 36,
+    "settleMs": 2500,
+    "clicked": true,
+    "closed": true,
+    "clickWallMs": 42,
+    "dwellMs": 3000,
+    "wallS": 3.045
+  },
+  "stub": {
+    "spec": "base",
+    "effective": true,
+    "mountProof": {
+      "mechanism": "control: read-only counters only",
+      "expected": "counters 变化即证明观测生效",
+      "effective": true,
+      "counters": {
+        "tpSignatureChecks": 0,
+        "tpSkipTake": 0,
+        "tpForcedReplay": 0,
+        "tpTokenReadbacks": 0,
+        "tpBodyWrites": 1,
+        "tcRafScheduled": 3,
+        "tcSyncInvoked": 0,
+        "tcRefreshRan": 0,
+        "tcComputedReads": 2,
+        "usageRequestsSeen": 0,
+        "usageRequestsBlocked": 0,
+        "usageByMethod": {},
+        "p2acOldCarryHits": 0,
+        "p2acKeyGateActive": 0,
+        "fetchSeen": 23,
+        "xhrSeen": 0,
+        "wsFramesSeen": 246
+      },
+      "stubLog": [
+        [
+          1790043227379,
+          "installed",
+          "base"
+        ]
+      ]
+    },
+    "clickProof": {
+      "mechanism": "control: read-only counters only",
+      "expected": "counters 变化即证明观测生效",
+      "effective": true,
+      "counters": {
+        "tpSignatureChecks": 0,
+        "tpSkipTake": 0,
+        "tpForcedReplay": 0,
+        "tpTokenReadbacks": 0,
+        "tpBodyWrites": 1,
+        "tcRafScheduled": 187,
+        "tcSyncInvoked": 0,
+        "tcRefreshRan": 0,
+        "tcComputedReads": 2,
+        "usageRequestsSeen": 0,
+        "usageRequestsBlocked": 0,
+        "usageByMethod": {},
+        "p2acOldCarryHits": 0,
+        "p2acKeyGateActive": 0,
+        "fetchSeen": 24,
+        "xhrSeen": 0,
+        "wsFramesSeen": 430
+      },
+      "stubLog": [
+        [
+          1790043227379,
+          "installed",
+          "base"
+        ]
+      ]
+    },
+    "routeHits": null
+  },
+  "phaseMount": {
+    "ScriptDuration": 0.16,
+    "RecalcStyleDuration": 0.021,
+    "TaskDuration": 0.49,
+    "RecalcStyleCount": 127
+  },
+  "phaseClick": {
+    "ScriptDuration": 0.244,
+    "RecalcStyleDuration": 0.013,
+    "LayoutDuration": 0.005,
+    "TaskDuration": 0.303,
+    "RecalcStyleCount": 191,
+    "ScriptMsPerS": 0.08,
+    "RecalcMsPerS": 0.004,
+    "TaskMsPerS": 0.1
+  },
+  "rafClick": {
+    "n": 183,
+    "min": 6.862,
+    "p50": 16.7,
+    "p90": 16.7,
+    "p99": 16.8,
+    "max": 16.8,
+    "mean": 16.612,
+    "over50": 0,
+    "over100": 0
+  },
+  "longtasks": {
+    "n": 0,
+    "totalMs": 0,
+    "maxMs": null
+  },
+  "ws": {
+    "total": 430,
+    "byType": {
+      "server-request": 430
+    }
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "concurrency": {
+    "gateOutcome": "EXCLUSIVE",
+    "gateWaitedMs": 8171,
+    "foreignSeenDuringGate": [
+      "27256@00:03",
+      "27256@00:04",
+      "27256@00:05",
+      "27256@00:06",
+      "27256@00:07",
+      "27256@00:08",
+      "27256@00:09",
+      "27256@00:10"
+    ],
+    "censusStart": {
+      "at": "2026-09-22T02:13:47.254Z",
+      "instances": 0,
+      "mineCount": 0,
+      "foreignCount": 0,
+      "foreign": [],
+      "lockOwner": "agent: incident2-regression (first-open A/B) line: cond=base pid: 27401",
+      "lockHeldByMyLine": true
+    },
+    "censusEnd": {
+      "at": "2026-09-22T02:13:54.027Z",
+      "instances": 0,
+      "mineCount": 0,
+      "foreignCount": 0,
+      "foreign": [],
+      "lockOwner": null,
+      "lockHeldByMyLine": false
+    },
+    "exclusiveThroughout": true
+  },
+  "lock": {
+    "heldAtStart": true,
+    "released": true
+  }
+}

@@ -1,0 +1,41 @@
+=== xinput --help (to confirm test-xi2 semantics) ===
+usage:
+	xinput get-feedbacks <device name>
+	xinput set-ptr-feedback <device name> <threshold> <num> <denom>
+	xinput set-integer-feedback <device name> <feedback id> <value>
+	xinput get-button-map <device name>
+	xinput set-button-map <device name> <map button 1> [<map button 2> [...]]
+	xinput set-pointer <device name> [<x index> <y index>]
+	xinput set-mode <device name> ABSOLUTE|RELATIVE
+	xinput list [--short || --long || --name-only || --id-only] [<device name>...]
+	xinput query-state <device name>
+	xinput test [-proximity] <device name>
+	xinput create-master <id> [<sendCore (dflt:1)>] [<enable (dflt:1)>]
+	xinput remove-master <id> [Floating|AttachToMaster (dflt:Floating)] [<returnPointer>] [<returnKeyboard>]
+	xinput reattach <id> <master>
+	xinput float <id>
+	xinput set-cp <window> <device>
+	xinput test-xi2 [--root] <device>
+	xinput map-to-output <device> <output name>|all
+	xinput list-props <device> [<device> ...]
+	xinput set-int-prop <device> <property> <format (8, 16, 32)> <val> [<val> ...]
+	xinput set-float-prop <device> <property> <val> [<val> ...]
+	xinput set-atom-prop <device> <property> <val> [<val> ...]
+	xinput watch-props <device>
+	xinput delete-prop <device> <property>
+	xinput set-prop <device> [--type=atom|float|int] [--format=8|16|32] <property> <val> [<val> ...]
+	xinput disable <device>
+	xinput enable <device>
+
+=== python X11 bindings available? ===
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'Xlib'
+=== ldconfig libX11 ===
+	libX11.so.6 (libc6,x86-64) => /lib/x86_64-linux-gnu/libX11.so.6
+	libX11.so (libc6,x86-64) => /lib/x86_64-linux-gnu/libX11.so
+	libXtst.so.6 (libc6,x86-64) => /lib/x86_64-linux-gnu/libXtst.so.6
+=== xdotool? ===
+xdotool NOT installed
+=== xev? ===
+/usr/bin/xev

@@ -1,0 +1,63 @@
+=== lsusb ===
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 258a:027b SINOWEALTH VGN V87 V2 2.4G Dongle
+Bus 001 Device 003: ID 3554:fb50 VGN VGN DragonFly F1 SE
+Bus 001 Device 004: ID 04e2:1410 Exar Corp. XR21V1410 USB-UART IC
+Bus 001 Device 005: ID 048d:5711 Integrated Technology Express, Inc. GIGABYTE Device 
+Bus 001 Device 006: ID 0bda:8922 Realtek Semiconductor Corp. Bluetooth Radio
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 006 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 007 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 007 Device 002: ID 0bda:5411 Realtek Semiconductor Corp. RTS5411 Hub
+Bus 008 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 008 Device 002: ID 0bda:0411 Realtek Semiconductor Corp. Hub
+Bus 008 Device 003: ID 0e8d:7961 MediaTek Inc. Wireless_Device
+Bus 009 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 009 Device 002: ID 05e3:0608 Genesys Logic, Inc. Hub
+Bus 009 Device 003: ID 046d:c08b Logitech, Inc. G502 SE HERO Gaming Mouse
+Bus 010 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+
+=== USB input-ish kernel messages ===
+9月 22 10:01:55 CNS202649516533 kernel: input: Power Button as /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0C:00/input/input0
+9月 22 10:01:55 CNS202649516533 kernel: input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input1
+9月 22 10:01:55 CNS202649516533 kernel: input: Video Bus as /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:20/LNXVIDEO:00/input/input2
+9月 22 10:01:55 CNS202649516533 kernel: usb 9-1.3: Product: G502 HERO Gaming Mouse
+9月 22 10:01:55 CNS202649516533 kernel: usbcore: registered new interface driver usbhid
+9月 22 10:01:55 CNS202649516533 kernel: usbhid: USB HID core driver
+9月 22 10:01:55 CNS202649516533 kernel: input: SINOWEALTH VGN V87 V2 2.4G Dongle as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-2/1-2:1.0/0003:258A:027B.0001/input/input3
+9月 22 10:01:55 CNS202649516533 kernel: hid-generic 0003:258A:027B.0001: input,hidraw0: USB HID v1.11 Keyboard [SINOWEALTH VGN V87 V2 2.4G Dongle] on usb-0000:0d:00.0-2/input0
+9月 22 10:01:55 CNS202649516533 kernel: input: SINOWEALTH VGN V87 V2 2.4G Dongle as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-2/1-2:1.1/0003:258A:027B.0002/input/input4
+9月 22 10:01:55 CNS202649516533 kernel: input: SINOWEALTH VGN V87 V2 2.4G Dongle System Control as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-2/1-2:1.1/0003:258A:027B.0002/input/input5
+9月 22 10:01:55 CNS202649516533 kernel: input: SINOWEALTH VGN V87 V2 2.4G Dongle Consumer Control as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-2/1-2:1.1/0003:258A:027B.0002/input/input6
+9月 22 10:01:55 CNS202649516533 kernel: input: SINOWEALTH VGN V87 V2 2.4G Dongle as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-2/1-2:1.1/0003:258A:027B.0002/input/input7
+9月 22 10:01:55 CNS202649516533 kernel: input: SINOWEALTH VGN V87 V2 2.4G Dongle Keyboard as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-2/1-2:1.1/0003:258A:027B.0002/input/input8
+9月 22 10:01:55 CNS202649516533 kernel: input: SINOWEALTH VGN V87 V2 2.4G Dongle Mouse as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-2/1-2:1.1/0003:258A:027B.0002/input/input9
+9月 22 10:01:55 CNS202649516533 kernel: input: SINOWEALTH VGN V87 V2 2.4G Dongle System Multi Axis as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-2/1-2:1.1/0003:258A:027B.0002/input/input10
+9月 22 10:01:55 CNS202649516533 kernel: hid-generic 0003:258A:027B.0002: input,hiddev0,hidraw1: USB HID v1.11 Keyboard [SINOWEALTH VGN V87 V2 2.4G Dongle] on usb-0000:0d:00.0-2/input1
+9月 22 10:01:55 CNS202649516533 kernel: input: Logitech G502 HERO Gaming Mouse as /devices/pci0000:00/0000:00:08.3/0000:74:00.0/usb9/9-1/9-1.3/9-1.3:1.0/0003:046D:C08B.0003/input/input11
+9月 22 10:01:55 CNS202649516533 kernel: hid-generic 0003:046D:C08B.0003: input,hidraw2: USB HID v1.11 Mouse [Logitech G502 HERO Gaming Mouse] on usb-0000:74:00.0-1.3/input0
+9月 22 10:01:55 CNS202649516533 kernel: input: Logitech G502 HERO Gaming Mouse Keyboard as /devices/pci0000:00/0000:00:08.3/0000:74:00.0/usb9/9-1/9-1.3/9-1.3:1.1/0003:046D:C08B.0004/input/input12
+9月 22 10:01:55 CNS202649516533 kernel: hid-generic 0003:046D:C08B.0004: input,hiddev1,hidraw3: USB HID v1.11 Keyboard [Logitech G502 HERO Gaming Mouse] on usb-0000:74:00.0-1.3/input1
+9月 22 10:01:55 CNS202649516533 kernel: input: VGN VGN DragonFly F1 SE as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-3/1-3:1.0/0003:3554:FB50.0005/input/input15
+9月 22 10:01:55 CNS202649516533 kernel: hid-generic 0003:3554:FB50.0005: input,hidraw4: USB HID v1.11 Keyboard [VGN VGN DragonFly F1 SE] on usb-0000:0d:00.0-3/input0
+9月 22 10:01:55 CNS202649516533 kernel: input: VGN VGN DragonFly F1 SE Mouse as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-3/1-3:1.1/0003:3554:FB50.0006/input/input16
+9月 22 10:01:55 CNS202649516533 kernel: input: VGN VGN DragonFly F1 SE as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-3/1-3:1.1/0003:3554:FB50.0006/input/input17
+9月 22 10:01:55 CNS202649516533 kernel: input: VGN VGN DragonFly F1 SE Consumer Control as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-3/1-3:1.1/0003:3554:FB50.0006/input/input18
+9月 22 10:01:55 CNS202649516533 kernel: input: VGN VGN DragonFly F1 SE System Control as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-3/1-3:1.1/0003:3554:FB50.0006/input/input19
+9月 22 10:01:55 CNS202649516533 kernel: input: VGN VGN DragonFly F1 SE as /devices/pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1/1-3/1-3:1.1/0003:3554:FB50.0006/input/input20
+9月 22 10:01:55 CNS202649516533 kernel: hid-generic 0003:3554:FB50.0006: input,hiddev2,hidraw5: USB HID v1.11 Mouse [VGN VGN DragonFly F1 SE] on usb-0000:0d:00.0-3/input1
+9月 22 10:01:55 CNS202649516533 kernel: hid-generic 0003:048D:5711.0007: hiddev3,hidraw6: USB HID v1.10 Device [ITE Tech. Inc. GIGABYTE Device ] on usb-0000:0d:00.0-6/input0
+9月 22 10:01:55 CNS202649516533 kernel: hid-generic 0003:048D:5711.0008: hiddev4,hidraw7: USB HID v1.10 Device [ITE Tech. Inc. GIGABYTE Device ] on usb-0000:0d:00.0-6/input1
+9月 22 10:01:55 CNS202649516533 kernel: input: HDA NVidia HDMI/DP,pcm=3 as /devices/pci0000:00/0000:00:01.1/0000:01:00.1/sound/card0/input25
+9月 22 10:01:55 CNS202649516533 kernel: input: HDA NVidia HDMI/DP,pcm=7 as /devices/pci0000:00/0000:00:01.1/0000:01:00.1/sound/card0/input26
+9月 22 10:01:55 CNS202649516533 kernel: input: HDA NVidia HDMI/DP,pcm=8 as /devices/pci0000:00/0000:00:01.1/0000:01:00.1/sound/card0/input27
+9月 22 10:01:55 CNS202649516533 kernel: input: HDA NVidia HDMI/DP,pcm=9 as /devices/pci0000:00/0000:00:01.1/0000:01:00.1/sound/card0/input28
+9月 22 10:01:55 CNS202649516533 kernel: input: HD-Audio Generic HDMI/DP,pcm=3 as /devices/pci0000:00/0000:00:08.1/0000:73:00.1/sound/card1/input21
+9月 22 10:01:55 CNS202649516533 kernel: input: HD-Audio Generic HDMI/DP,pcm=7 as /devices/pci0000:00/0000:00:08.1/0000:73:00.1/sound/card1/input22
+9月 22 10:01:55 CNS202649516533 kernel: input: HD-Audio Generic HDMI/DP,pcm=8 as /devices/pci0000:00/0000:00:08.1/0000:73:00.1/sound/card1/input23
+9月 22 10:01:55 CNS202649516533 kernel: input: HD-Audio Generic HDMI/DP,pcm=9 as /devices/pci0000:00/0000:00:08.1/0000:73:00.1/sound/card1/input24
+9月 22 10:01:55 CNS202649516533 kernel: input: HD-Audio Generic Rear Mic as /devices/pci0000:00/0000:00:08.1/0000:73:00.6/sound/card2/input29
+9月 22 10:01:55 CNS202649516533 kernel: input: HD-Audio Generic Front Mic as /devices/pci0000:00/0000:00:08.1/0000:73:00.6/sound/card2/input30

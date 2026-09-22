@@ -1,0 +1,36 @@
+### SOURCE: /home/CNS2026495165/snap/firefox/common/.mozilla/firefox/g05ps3km.default/prefs.js   (read-only copy; 230 user_pref lines)
+### EXACT COMMAND: grep -nE '^user_pref\("(gfx|layers|webgl|apz|widget|dom\.webgpu|general\.smoothScroll|mousewheel|ui\.|browser\.display|layout\.css)"' prefs.js
+### RESULT: NO MATCHES (exit 1) -- zero graphics user_prefs; ALL graphics prefs are at build defaults
+
+### prefix histogram of all 230 user_pref keys:
+     67 services
+     61 browser
+     22 extensions
+     12 media
+     11 app
+      7 privacy
+      6 toolkit
+      6 sidebar
+      5 nimbus
+      4 devtools
+      4 datareporting
+      3 storage
+      3 pdfjs
+      3 distribution
+      2 signon
+      2 network
+      2 dom
+      2 doh-rollout
+      2 captchadetection
+      1 trailhead
+      1 places
+      1 messaging-system-action
+      1 idle
+      1 gecko
+      1 accessibility
+
+### the only widget.* / a11y-ish / dom.* keys that DO exist:
+12:user_pref("accessibility.typeaheadfind.flashBar", 0);
+100:user_pref("dom.forms.autocomplete.formautofill", true);
+101:user_pref("dom.push.userAgentID", "8040f97cee8c430897fd24ab6a8a7bad");
+124:user_pref("gecko.handlerService.defaultHandlersVersion", 1);

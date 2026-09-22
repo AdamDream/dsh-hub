@@ -1,0 +1,534 @@
+{
+  "meta": {
+    "task": "read-only static forensics: served-bytes vs disk-bytes vs HTML rev, plus unique in-page-detectable fix markers",
+    "generatedAtUtc": "2026-09-22T02:13:41Z",
+    "generatedAtLocal": "2026-09-22 10:13:41 +0800",
+    "mode": "READ-ONLY (no product file modified, no browser launched, no sandbox escalation used)",
+    "server": {
+      "url": "http://127.0.0.1:3080/",
+      "pid": 10806,
+      "cmdline": "node /home/CNS2026495165/.npm-global/bin/dsh web"
+    },
+    "serverCacheHeader": "cache-control: no-cache (all four bundles)",
+    "revParamIsNotAPin": "Server ignores the ?rev= value for content selection: requesting ?rev=deadbeef0000 still returned HTTP 200 with the identical 31803 bytes. The rev is a browser cache-buster only."
+  },
+  "overallVerdict": {
+    "packagesChecked": 4,
+    "servedEqualsDiskEqualsHtmlRev": "4/4 PASS",
+    "packageWithNoUsableMarker": "none - all four packages have at least one marker present in the deployed file and completely absent from its pre-image"
+  },
+
+  "packages": [
+    {
+      "order": 1,
+      "package": "@deepseek-ai/dsh-client-ui-layout",
+      "verdict": "PASS",
+      "disk": {
+        "pathAsGiven": "/home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/client.js",
+        "realpath": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/client.js",
+        "isSymlink": true,
+        "symlinkTarget": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-layout",
+        "sha1_12": "82cca1a6178a",
+        "bytes": 24988,
+        "md5": "684622de7914eaae058985fbeca09076",
+        "mtimeLocal": "2026-09-21 17:21:48.043705818 +0800"
+      },
+      "http": {
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a",
+        "status": 200,
+        "sha1_12": "82cca1a6178a",
+        "bytes": 24988,
+        "savedTo": "sub-static/curl/_deepseek-ai_dsh-client-ui-layout.js",
+        "matchesDisk": true
+      },
+      "htmlRev": {
+        "lineInIndexHtml": "/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a",
+        "rev": "82cca1a6178a",
+        "equalsDiskSha1_12": true
+      },
+      "expectationFromTask": "82cca1a6178a",
+      "expectationMatches": true,
+      "preImage": {
+        "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-theme/backup/20260921092148./layout.preimage.js",
+        "sha1_12": "abdb7f55acba",
+        "bytes": 19364,
+        "md5": "af19ea709a1556b8c48bedfa8b31e785",
+        "pairingProof": "exec-theme/backup/20260921092148./layout.meta.json records preImageMd5=af19ea709a1556b8c48bedfa8b31e785 and postImageMd5=684622de7914eaae058985fbeca09076. The pre-image md5 equals preImageMd5 and the CURRENTLY DEPLOYED file md5 equals postImageMd5, so this is the exact immediate BEFORE of the deployed bytes (not a stale earlier generation).",
+        "corroboratingCopies": [
+          {
+            "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions/raw/plugins/_deepseek-ai_dsh-client-ui-layout.js",
+            "sha1_12": "abdb7f55acba",
+            "bytes": 19364,
+            "identical": true
+          }
+        ],
+        "isMinified": false,
+        "minificationNote": "max line length 2015 chars, 9 readable 'function ' declarations, ThemePresenter class and doc comments intact => NOT minified, identifier comparison is sound"
+      },
+      "markers": [
+        {
+          "rank": "primary",
+          "marker": "scheduleThemeColorRefresh",
+          "kind": "identifier",
+          "occurrencesDeployed": 3,
+          "occurrencesPreImage": 0,
+          "uniqueAcrossProfile": true,
+          "verifyUserClaim": "VERIFIED as a real fix marker, with a count CORRECTION: it is 3 occurrences, not 7. 7 is the combined count of scheduleThemeColorRefresh|lastSignature (3+4).",
+          "excerpt": [
+            "356-\t\t * @param win - the window the presenter writes into.",
+            "357-\t\t * @param presenter - the presenter to refresh.",
+            "358-\t\t */",
+            "359:\t\tfunction scheduleThemeColorRefresh(win, presenter) {",
+            "360-\t\t\tconst winRef = win ?? globalThis;",
+            "361-\t\t\tconst request = winRef.requestAnimationFrame;",
+            "362-\t\t\tif (typeof request !== \"function\") {",
+            "363-\t\t\t\tpresenter.refreshThemeColor();"
+          ],
+          "callSiteExcerpt": [
+            "446-\t\t\t\t * after all writers are done, while still observing the state this apply",
+            "447-\t\t\t\t * wrote. When the host cannot schedule frames it runs inline.",
+            "448-\t\t\t\t */",
+            "449:\t\t\t\tthis.pendingTokenSignature = tokenSignature(entries);",
+            "450-\t\t\t\tscheduleThemeColorRefresh(this.themeColorMeta.ownerDocument?.defaultView, this);"
+          ]
+        },
+        {
+          "rank": "secondary",
+          "marker": "lastSignature",
+          "kind": "identifier",
+          "occurrencesDeployed": 4,
+          "occurrencesPreImage": 0,
+          "uniqueAcrossProfile": true,
+          "verifyUserClaim": "VERIFIED as a real fix marker (4 occurrences).",
+          "excerpt": [
+            "353-\t\t\t/** Token names this presenter wrote in the last apply (its retraction set). */",
+            "354-\t\t\tappliedTokens = [];",
+            "355-\t\t\t/** Token names the previous apply wrote; the profile an unchanged snapshot must still satisfy. */",
+            "356-\t\t\tlastTokens = [];",
+            "357-\t\t\t/** Content signature of the last applied snapshot, or undefined before the first apply. */",
+            "358-\t\t\tlastSignature;"
+          ]
+        },
+        {
+          "rank": "alternate",
+          "marker": "themeColorRefreshQueue",
+          "kind": "identifier",
+          "occurrencesDeployed": 4,
+          "occurrencesPreImage": 0,
+          "uniqueAcrossProfile": true,
+          "note": "More collision-proof than the generic-sounding lastSignature; recommended when the check must be unambiguous."
+        },
+        {
+          "rank": "alternate",
+          "marker": "landingIntact",
+          "kind": "identifier",
+          "occurrencesDeployed": 2,
+          "occurrencesPreImage": 0,
+          "uniqueAcrossProfile": true
+        },
+        {
+          "rank": "alternate-nonidentifier",
+          "marker": "Provably idempotent replay",
+          "kind": "comment text (literal)",
+          "occurrencesDeployed": 1,
+          "occurrencesPreImage": 0,
+          "note": "Comment survives because the server serves the file verbatim (no minification on the wire); useful if a future build ever mangles identifiers."
+        }
+      ],
+      "fixSummary": "Theme replay skip + rAF-coalesced refresh: ThemePresenter.apply() now computes a content-only signature (colorScheme plus order-independent token pairs) and returns early when it equals the last applied signature AND landingIntact() proves the document still holds exactly that state, so provably-idempotent snapshot replays no longer re-write every CSS variable. In addition the expensive getComputedStyle(body).backgroundColor read (which forces a synchronous document-wide style recalculation) is moved out of the synchronous publish dispatch into a requestAnimationFrame callback, merged across a whole dispatch round and all presenters into a single read, with an inline fallback when the host cannot schedule frames."
+    },
+
+    {
+      "order": 2,
+      "package": "@local/dsh-wallpaper",
+      "verdict": "PASS",
+      "disk": {
+        "pathAsGiven": "/home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-wallpaper/lib/client.js",
+        "realpath": "/home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-wallpaper/lib/client.js",
+        "isSymlink": false,
+        "sha1_12": "826d9217a8fc",
+        "bytes": 31803,
+        "md5": "885bde89e33c33fec4ef399ba00e907c",
+        "mtimeLocal": "2026-09-21 17:21:48.044705843 +0800"
+      },
+      "http": {
+        "url": "http://127.0.0.1:3080/plugins/@local/dsh-wallpaper/client.js?rev=826d9217a8fc",
+        "status": 200,
+        "sha1_12": "826d9217a8fc",
+        "bytes": 31803,
+        "savedTo": "sub-static/curl/_local_dsh-wallpaper.js",
+        "matchesDisk": true
+      },
+      "htmlRev": {
+        "lineInIndexHtml": "/plugins/@local/dsh-wallpaper/client.js?rev=826d9217a8fc",
+        "rev": "826d9217a8fc",
+        "equalsDiskSha1_12": true
+      },
+      "expectationFromTask": "826d9217a8fc",
+      "expectationMatches": true,
+      "preImage": {
+        "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-theme/backup/20260921092148./wallpaper.preimage.js",
+        "sha1_12": "fb28faf9db9a",
+        "bytes": 31079,
+        "md5": "b9cd4747f91084065d1227fba5aa7e61",
+        "pairingProof": "exec-theme/backup/20260921092148./wallpaper.meta.json records preImageMd5=b9cd4747f91084065d1227fba5aa7e61 and postImageMd5=885bde89e33c33fec4ef399ba00e907c; pre-image md5 == preImageMd5 and deployed md5 == postImageMd5, so this is the exact immediate BEFORE.",
+        "corroboratingCopies": [
+          {
+            "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/root-subscriptions/raw/plugins/_local_dsh-wallpaper.js",
+            "sha1_12": "fb28faf9db9a",
+            "bytes": 31079,
+            "identical": true
+          }
+        ],
+        "isMinified": false,
+        "minificationNote": "max line length 294 chars, 28 readable 'function ' declarations => NOT minified"
+      },
+      "markers": [
+        {
+          "rank": "primary",
+          "marker": "sameShadedTokens",
+          "kind": "identifier",
+          "occurrencesDeployed": 2,
+          "occurrencesPreImage": 0,
+          "uniqueAcrossProfile": true,
+          "excerpt": [
+            "178-    }",
+            "179-    // Content of the override layer shadeTokens last handed to ui-theme.",
+            "180-    let shadedTokens;",
+            "181:    function sameShadedTokens(left, right) {",
+            "182-      if (left === void 0) return false;",
+            "183-      return left[\"--dsw-alias-bg-base\"].light === right[\"--dsw-alias-bg-base\"].light &&",
+            "184-        left[\"--dsw-alias-bg-base\"].dark === right[\"--dsw-alias-bg-base\"].dark;",
+            "185-    }"
+          ],
+          "callSiteExcerpt": [
+            "201-        // The source and this layer are rebuilt byte-identically on every theme change;",
+            "202-        // re-stacking identical content only re-enters every theme/change listener, so",
+            "203-        // the existing layer is kept and its redundant publish is skipped.",
+            "204:        if (sameShadedTokens(shadedTokens, next)) return;",
+            "205-        shadedTokens = next;",
+            "206-        overrideDispose?.();",
+            "207-        overrideDispose = ctx.theme.overrideTokens(OVERRIDE_SOURCE, next);"
+          ]
+        },
+        {
+          "rank": "secondary",
+          "marker": "shadedTokens",
+          "kind": "identifier",
+          "occurrencesDeployed": 3,
+          "occurrencesPreImage": 0,
+          "uniqueAcrossProfile": true
+        },
+        {
+          "rank": "alternate-nonidentifier",
+          "marker": "rebuilt byte-identically on every theme change",
+          "kind": "comment text (literal)",
+          "occurrencesDeployed": 1,
+          "occurrencesPreImage": 0
+        }
+      ],
+      "fixSummary": "Wallpaper content comparison for the shading override layer: the overrideTokens payload is now built into a local 'next' object and compared field-by-field against the tokens last handed to ui-theme (shadedTokens / sameShadedTokens). When the shade content is unchanged - which it is on every theme change because the layer is rebuilt byte-identically - the function returns early, keeping the existing override layer and skipping the dispose + re-register cycle that re-enters every theme/change listener (the source of the redundant publish storm).",
+      "negativeControl": {
+        "marker": "shading = true",
+        "occurrencesDeployed": 1,
+        "occurrencesPreImage": 1,
+        "note": "Present in both - correct as a negative control proving the diff is scoped to the fix, not a wholesale file swap."
+      }
+    },
+
+    {
+      "order": 3,
+      "package": "@deepseek-ai/dsh-client-runtime",
+      "verdict": "PASS",
+      "disk": {
+        "pathAsGiven": "/home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-runtime/lib/client.js",
+        "realpath": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-runtime/lib/client.js",
+        "isSymlink": true,
+        "symlinkTarget": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-runtime",
+        "secondCopyAtNpmGlobal": {
+          "path": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-runtime/lib/client.js",
+          "sha1_12": "5559de4ce28c",
+          "bytes": 398569,
+          "identical": true,
+          "note": "Same inode as the symlink target - both copies ARE the fixed file. Also carries 4 occurrences of p2ac-fix."
+        },
+        "sha1_12": "5559de4ce28c",
+        "bytes": 398569,
+        "mtimeLocal": "2026-09-21 16:55:10.193010252 +0800"
+      },
+      "http": {
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+        "status": 200,
+        "sha1_12": "5559de4ce28c",
+        "bytes": 398569,
+        "savedTo": "sub-static/curl/_deepseek-ai_dsh-client-runtime.js",
+        "matchesDisk": true
+      },
+      "htmlRev": {
+        "lineInIndexHtml": "/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+        "rev": "5559de4ce28c",
+        "equalsDiskSha1_12": true,
+        "note": "The runtime bundle URL appears TWICE in index.html (both occurrences carry rev=5559de4ce28c)."
+      },
+      "expectationFromTask": "5559de4ce28c",
+      "expectationMatches": true,
+      "preImage": {
+        "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/exec-p2/preimage/20260921-165510/client.js",
+        "sha1_12": "a0fb4bb225d3",
+        "bytes": 397957,
+        "sha256": "d71a8ca524307aa35b74c5504ce396458cd6cdd38bd2759be8e16bd1b783d69b",
+        "pairingProof": "exec-p2/preimage/20260921-165510/META.txt declares marker='/* p2ac-fix */' and pre_sha256=d71a8ca5...; the file's sha256 matches that record, and the sibling exec-p2/candidate/client.js sha1 equals the deployed sha1 (5559de4ce28c). Four identical pre-image stamps exist: 20260921-165036, -165043, -165159, -165510 (all sha1 a0fb4bb225d3); CANONICAL.txt names 20260921-165510.",
+        "canonicalStamp": "20260921-165510",
+        "duplicateStampsAllIdentical": true,
+        "isMinified": false,
+        "minificationNote": "max line length 646 chars, 270 readable 'function ' declarations => NOT minified"
+      },
+      "markers": [
+        {
+          "rank": "primary",
+          "marker": "p2ac-fix",
+          "kind": "comment text (literal) - the INTENDED marker, declared in exec-p2/preimage/.../META.txt as marker='/* p2ac-fix */'",
+          "occurrencesDeployed": 4,
+          "occurrencesPreImage": 0,
+          "uniqueAcrossProfile": true,
+          "excerpt": [
+            "9293-\t\t\t\t}",
+            "9294:\t\t\t\tconst chainRowIds = new Set(); /* p2ac-fix */",
+            "9295-\t\t\t\tif (current !== void 0 && currentAddress !== void 0) {",
+            "9296-\t\t\t\t\tconst seen = /* @__PURE__ */ new Set();",
+            "9299-\t\t\t\t\t\tconst childId = address.childSessionId;",
+            "9300-\t\t\t\t\t\tseen.add(childId);",
+            "9301:\t\t\t\t\t\tchainRowIds.add(childId); /* p2ac-fix */"
+          ],
+          "secondSiteExcerpt": [
+            "9327-\t\t\t\tif (copiedPrevious) {",
+            "9328:\t\t\t\t\t/* p2ac-fix */ /* address-chain scoped carry-forward: only ids a visited chain step genuinely needs. */",
+            "9329-\t\t\t\t\tfor (const id of Object.keys(previousProjection.byId)) if (byId[id] === void 0 && chainRowIds.has(id)) byId[id] = previousProjection.byId[id];",
+            "9330-\t\t\t\t}"
+          ],
+          "thirdSiteExcerpt": [
+            "9341-\t\t\t\t}",
+            "9342:\t\t\t\t/* p2ac-fix */ /* key-set gate: reusing the whole previous byId object is only sound when its key set has no extra key. */",
+            "9343-\t\t\t\t/* the previous key set is read AFTER the chain-scoped carry-forward, so it is compared against the same liveKeys. */",
+            "9344-\t\t\t\tconst reusableByIdKeys = previousProjection !== void 0 ? Object.keys(previousProjection.byId) : void 0;",
+            "9345-\t\t\t\tconst nextById = previousProjection !== void 0 && reusedEntries === liveKeys.length && reusableByIdKeys.length === liveKeys.length && reusableByIdKeys.every((id) => Object.prototype.hasOwnProperty.call(byId, id)) ? previousProjection.byId : stableById;"
+          ]
+        },
+        {
+          "rank": "secondary",
+          "marker": "chainRowIds",
+          "kind": "identifier",
+          "occurrencesDeployed": 3,
+          "occurrencesPreImage": 0,
+          "uniqueAcrossProfile": true
+        },
+        {
+          "rank": "secondary",
+          "marker": "reusableByIdKeys",
+          "kind": "identifier",
+          "occurrencesDeployed": 3,
+          "occurrencesPreImage": 0,
+          "uniqueAcrossProfile": true
+        }
+      ],
+      "fixSummary": "Subagent-projection carry-forward narrowing + key-set gate (P2-AC). The previous projection's extra byId rows are now carried forward only for ids that a visited address-chain step genuinely needs (chainRowIds), instead of every extra key; and whole-object reuse of the previous byId is only taken when the previous key set has exactly the same length as the live key set and every live key is present. This prevents stale subagent rows from being resurrected and prevents an unsound byId object identity reuse that left the UI projection inconsistent.",
+      "negativeControl": {
+        "marker": "dsh-perf-fix P2 v1",
+        "occurrencesDeployed": 2,
+        "occurrencesPreImage": 2,
+        "note": "Present in both - this earlier P2 marker is NOT usable as a fix discriminator; only p2ac-fix is. Reported because the task warned about misleading candidates."
+      }
+    },
+
+    {
+      "order": 4,
+      "package": "@local/dsh-usage",
+      "verdict": "PASS",
+      "disk": {
+        "pathAsGiven": "/home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-usage/lib/client.js",
+        "realpath": "/home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-usage/lib/client.js",
+        "isSymlink": false,
+        "sha1_12": "4536b91ed282",
+        "bytes": 72804,
+        "sha256": "cdbd87b6d97e393342c1f9460cd3d2a53c6952f29c01bb3c9fe4bfd21f81b78e",
+        "mtimeLocal": "2026-09-21 14:30:32.999481943 +0800",
+        "fileMode": "-rw------- (owner-only read; readable by this session's user)"
+      },
+      "http": {
+        "url": "http://127.0.0.1:3080/plugins/@local/dsh-usage/client.js?rev=4536b91ed282",
+        "status": 200,
+        "sha1_12": "4536b91ed282",
+        "bytes": 72804,
+        "savedTo": "sub-static/curl/_local_dsh-usage.js",
+        "matchesDisk": true
+      },
+      "htmlRev": {
+        "lineInIndexHtml": "/plugins/@local/dsh-usage/client.js?rev=4536b91ed282",
+        "rev": "4536b91ed282",
+        "equalsDiskSha1_12": true
+      },
+      "expectationFromTask": "4536b91ed282",
+      "expectationMatches": true,
+      "preImage": {
+        "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/R4-20260921-115821/deployed/client.js",
+        "sha1_12": "cc6c7fb56693",
+        "bytes": 71490,
+        "sha256": "eeb5dcf2f4bd638bdbab44fe249f24f2742a660db6aa4deb4532489a71031cc3",
+        "pairingProof": "sha256 equals the value recorded for client.js in backup/R4-20260921-115821/SHA256SUMS (eeb5dcf2f4bd638b...). A second identical copy exists at backup/R4-deployed-20260921063032./pre-client.js (named 'pre-client.js'), sha1 cc6c7fb56693. It is the immediate BEFORE of the deployed file: the deployed mtime is 2026-09-21 14:30:32 and the R4 apply ran at ~14:30, while this baseline was captured 11:58.",
+        "corroboratingCopies": [
+          {
+            "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup/R4-deployed-20260921063032./pre-client.js",
+            "sha1_12": "cc6c7fb56693",
+            "bytes": 71490,
+            "identical": true
+          }
+        ],
+        "olderPreImageGenerationAlsoPresent": {
+          "path": "/home/CNS2026495165/dsh/.workspace/lag-fix/backup-usage/deployed/backup-20260920-154018/client.js",
+          "sha1_12": "30ea5722bcd8",
+          "bytes": 66967,
+          "sha256": "a4f5a529f391a6d8517a98c31961c1f5d1de4a092e031efd1670ab1e17ce3b48",
+          "note": "This is the ORIGINAL 2026-09-20 pre-image (equals MANIFEST client_pre). It is an EARLIER generation than the R4 baseline, not the immediate BEFORE. Do not use it as the comparator for the deployed bytes: it lacks both the 2026-09-20 A-gating-fix and the 2026-09-21 R4 fix."
+        },
+        "baselineStabilityProof": "The file was unchanged between 2026-09-20 15:40 and the R4 apply: backup-usage/.../POST_SHA256SUMS records client.js = eeb5dcf2f4bd638b..., which is byte-identical to this pre-image. So exactly one change separates pre-image from deployed.",
+        "notInR4DeliveryDir": "r4-delivery/backup-pre/ contains ONLY index.js (sha1 b85853ef32e7, 8082 bytes) - it has NO client.js. The usage client pre-image lives under backup/, not under r4-delivery/.",
+        "isMinified": false,
+        "minificationNote": "max line length 5866 chars (one long JSX/className literal), 34 readable 'function ' declarations, Chinese audit comments intact => NOT minified"
+      },
+      "markers": [
+        {
+          "rank": "primary",
+          "marker": "dsh-perf-fix R4 v1",
+          "kind": "comment text (literal)",
+          "occurrencesDeployed": 1,
+          "occurrencesPreImage": 0,
+          "uniqueWithinPackageClientBundle": true,
+          "alsoInHostHalf": "The string also appears in @local/dsh-usage/lib/index.js (host half) - irrelevant for a client-bundle URL check, but noted for completeness.",
+          "excerpt": [
+            "834-\t\t\tconst [sessionTo, setSessionTo] = react.useState(\"\");",
+            "835-\t\t\tconst rpcAvailable = rpc && typeof rpc.call === \"function\";",
+            "836-\t\t\tconst loadAllRef = react.useRef(null);",
+            "837:\t\t\t/* dsh-perf-fix R4 v1: 旧响应/卸载保护。RPC 不假设可取消：用单调代次 + alive",
+            "838-\t\t\t   标志丢弃过期响应；setup 重新置 alive 以兼容 StrictMode 的 setup→cleanup→setup",
+            "839-\t\t\t   与真实 remount；cleanup 递增代次，使上一轮在飞请求在重挂载后也无法复活。 */",
+            "840-\t\t\tconst aliveRef = react.useRef(true);",
+            "841-\t\t\tconst allGenerationRef = react.useRef(0);",
+            "842-\t\t\tconst sessionsGenerationRef = react.useRef(0);",
+            "843-\t\t\tconst statusGenerationRef = react.useRef(0);"
+          ]
+        },
+        {
+          "rank": "secondary",
+          "marker": "allGenerationRef",
+          "kind": "identifier",
+          "occurrencesDeployed": 4,
+          "occurrencesPreImage": 0,
+          "uniqueAcrossProfile": true,
+          "excerpt": [
+            "888-\t\t\tconst loadAll = react.useCallback(async () => {",
+            "889:\t\t\t\tconst generation = ++allGenerationRef.current;",
+            "890-\t\t\t\tconst current = () => aliveRef.current && generation === allGenerationRef.current;"
+          ]
+        },
+        {
+          "rank": "secondary",
+          "marker": "aliveRef",
+          "kind": "identifier",
+          "occurrencesDeployed": 6,
+          "occurrencesPreImage": 0,
+          "uniqueAcrossProfile": true
+        },
+        {
+          "rank": "secondary",
+          "marker": "sessionsGenerationRef",
+          "kind": "identifier",
+          "occurrencesDeployed": 4,
+          "occurrencesPreImage": 0
+        },
+        {
+          "rank": "secondary",
+          "marker": "statusGenerationRef",
+          "kind": "identifier",
+          "occurrencesDeployed": 4,
+          "occurrencesPreImage": 0
+        }
+      ],
+      "fixSummary": "Usage/R4 lifecycle hardening against stale async responses. A monotonic per-loader generation counter plus an aliveRef unmount flag are added; every RPC completion is now gated by current() = aliveRef.current && generation === <thatLoader>GenerationRef.current, so responses from a superseded request round, and any response arriving after unmount/remount, are discarded instead of calling setState. The effect re-arms aliveRef on setup (StrictMode setup->cleanup->setup safe) and cleanup bumps all three generations so an in-flight request from the previous mount can never resurrect state.",
+      "negativeControl": {
+        "marker": "loadAllRef",
+        "occurrencesDeployed": 2,
+        "occurrencesPreImage": 2,
+        "note": "Present in both - confirms the diff is scoped to the R4 fix, not a wholesale file replacement."
+      }
+    }
+  ],
+
+  "discrepancies": [
+    {
+      "id": "D1",
+      "severity": "info",
+      "title": "Two of the four 'disk paths' given in the task are symlinks, not real files",
+      "detail": "@deepseek-ai/dsh-client-ui-layout and @deepseek-ai/dsh-client-runtime under /home/CNS2026495165/.dsh/profiles/node_modules/ are SYMLINKS into /home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/. The real files are under .npm-global. The other two (@local/*) are real directories. No hash impact: symlink and target are the same inode, and both copies of the runtime are the identical fixed file (sha1 5559de4ce28c).",
+      "practicalImpact": "This is why exec-p2/preimage/.../META.txt lists the target as the .npm-global path while the task named the .dsh/profiles path - both describe the same file. Also explains why a recursive grep over profiles/node_modules without -L silently skips these two packages.",
+      "verified": true
+    },
+    {
+      "id": "D2",
+      "severity": "info",
+      "title": "CORRECTION to the task's stated marker count for ui-layout",
+      "detail": "The task says scheduleThemeColorRefresh and lastSignature 'look like good candidates (7 hits)'. Verified as genuine fix markers, but the count is 3 hits for scheduleThemeColorRefresh and 4 for lastSignature; 7 is the COMBINED count (3+4, and also the 7 matching lines under grep -E). No marker has 7 individual occurrences.",
+      "verified": true
+    },
+    {
+      "id": "D3",
+      "severity": "info",
+      "title": "?rev= is a browser cache-buster only; the server ignores it for content selection",
+      "detail": "Requesting /plugins/@local/dsh-wallpaper/client.js?rev=deadbeef0000 returned HTTP 200 with the identical 31803 bytes. All four bundles are served with 'cache-control: no-cache' (no ETag, no immutable/max-age).",
+      "practicalImpact": "Stale-serving is not prevented by the rev string server-side; it is prevented by no-cache forcing revalidation. Since served bytes == on-disk bytes == the fixed file, there is no stale-content risk at the HTTP layer right now. A browser could still hold a previously-executed module in memory until reload, which is what the in-page markers below are designed to detect.",
+      "verified": true
+    },
+    {
+      "id": "D4",
+      "severity": "info",
+      "title": "No pre-image exists under r4-delivery/backup-pre/ for the usage client bundle",
+      "detail": "r4-delivery/backup-pre/ contains only index.js. The task's expectation of a backup under r4-delivery/ is not met for the client half. The correct usage client pre-image is backup/R4-20260921-115821/deployed/client.js (cc6c7fb56693, 71490 bytes), duplicated as backup/R4-deployed-20260921063032./pre-client.js.",
+      "resolved": true,
+      "resolution": "Pre-image located elsewhere in the tree; no gap in evidence."
+    },
+    {
+      "id": "D5",
+      "severity": "info",
+      "title": "TWO generations of usage pre-image exist - using the wrong one gives a misleading diff",
+      "detail": "The 2026-09-20 original is backup-usage/deployed/backup-20260920-154018/client.js (30ea5722bcd8, 66967 bytes); the immediate R4 BEFORE is cc6c7fb56693 (71490 bytes). Diffing deployed against the older file yields 6 changed hunks instead of the correct 4, because it also carries the earlier 2026-09-20 A-gating-fix and selector cleanups.",
+      "guidance": "Use cc6c7fb56693 as the marker comparator for @local/dsh-usage."
+    },
+    {
+      "id": "D6",
+      "severity": "none",
+      "title": "No hash mismatch, no rev mismatch, no unreadable file",
+      "detail": "All four packages: served sha1-12 == disk sha1-12 == rev in index.html, and byte counts match exactly. All four pre-images are readable and non-minified, so identifier-name comparison is valid for every package (the task's minification caveat did not materialise here). No file required escalation, and no product file was modified.",
+      "verified": true
+    }
+  ],
+
+  "method": {
+    "diskHash": "sha1sum / stat -c %s, resolving symlinks with realpath",
+    "httpBytes": "curl -s -o <file> -w '%{http_code}' then sha1sum on the saved file",
+    "htmlRev": "curl http://127.0.0.1:3080/ to sub-static/http/index.html, then grep -o '/plugins/[^\"]*client\\.js?rev=[0-9a-f]*'",
+    "markerCounting": "grep -oF '<marker>' | wc -l for occurrence counts (and grep -c for line counts)",
+    "uniquenessCheck": "find -L <profiles>/node_modules -type f -name '*.js' | xargs grep -lF (with -L to dereference the package symlinks)",
+    "crossCheck": "cmp against the earlier independent captures in incident2/live-repro/raw/ - all four byte-identical"
+  },
+
+  "evidenceFilesWritten": [
+    "sub-static/forensics.json",
+    "sub-static/report.md",
+    "sub-static/http/index.html",
+    "sub-static/curl/_deepseek-ai_dsh-client-ui-layout.js",
+    "sub-static/curl/_local_dsh-wallpaper.js",
+    "sub-static/curl/_deepseek-ai_dsh-client-runtime.js",
+    "sub-static/curl/_local_dsh-usage.js",
+    "sub-static/runtime.diff",
+    "sub-static/usage.diff"
+  ]
+}

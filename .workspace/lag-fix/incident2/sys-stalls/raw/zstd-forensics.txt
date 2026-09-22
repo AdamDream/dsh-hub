@@ -1,0 +1,92 @@
+############ zstd in DSH session tooling ############
+--- scan_sessions.sh zstd lines ---
+6:  f=$(ls "$d"/session.jsonl.zstd "$d"/session.v3.jsonl.zstd 2>/dev/null | head -1)
+11:  counts=$(zstdcat -q "$f" 2>/dev/null | awk '
+--- census-subagent.mjs zstd lines ---
+2:// Reads only the first zstd frame's first line (the session header) per session dir.
+25:    const f = join(d.dir, 'session.jsonl.zstd');
+30:  // One zstd -dc per file; head -c 4000 keeps only the header line, then zstd exits on SIGPIPE.
+32:    files.map(f => `printf '%s\\t' ${JSON.stringify(f.file)}; zstd -dc ${JSON.stringify(f.file)} 2>/dev/null | head -c 4000 | head -n 1`).join('\n')
+--- DIAGNOSIS.md zstd context ---
+174-
+175-| 说法 | 裁定 | 依据 |
+176-|---|---|---|
+177:| "45s 同步 ingest（`zstdDecompressSync` + 逐行 JSON.parse）阻塞宿主 924ms" | **未在运行宿主上复现** | `measure9.mjs`：150s（≈3 个 45s 周期）、设置全程关闭，宿主延迟 中位数 1.9ms / p99 6.8ms / **最大 7.9ms / >100ms 停顿 0 次**。该 924ms 是审计对**代码路径的独立测量**，非活动宿主的实测停顿，故不作为成因 |
+178-| "打开设置触发设置面板重渲染，是卡顿来源" | **细化（v1 结论修正）** | 安静态 A/B：打开设置 264ms vs 关闭 326ms，面板子树 **0 次 DOM 变更** → 面板逻辑不是热源，是**无 memo 的被动放大器** |
+179-| "sessions/ 1.2G、skills/ 116M、profiles/ 424M 体积导致卡顿" | **否证** | 均不在设置页读取路径上：默认标签零磁盘读（`settings.describe` 2.8ms）；skills 全量枚举 45ms 且无 settings 槽；sessions 唯一遍历者 45s ingest 实测 30.9ms |
+180-| "`session_projcache.json` 8.71MB 解析慢" | **否证为成因** | 仅启动时解析一次（42.5ms），此后常驻内存 Map，零 I/O |
+
+############ any .zst files (session compression artifacts) ############
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-Dexterous_Hand_23Dof-Dexterous_Hand_23Dof-RBS_core-joint-api--/session-fcbd2f41-9506-45ab-99b8-90edcaa01585/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/77afe626-d7e9-4ed8-9772-5499d38d03a0/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/72cb1837-ab57-42db-99cc-7e2994d84c3b/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/ab3acc6c-3fbf-4358-9d63-9674f6277f10/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/c236ea81-b617-4be6-a3ac-5cf4e4312ff9/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/50ed969b-cf3d-4513-af39-7876ef8f8bf1/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/d98a608e-eec6-43bd-89d7-694a754f8354/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/a2411c46-7bb5-4044-b1a4-97a2955b6e10/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/83bd1bbf-2954-41df-90c9-2f053643bfd5/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/01f1e375-2229-44d8-8a9f-18616b86e905/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/3c3a2230-7487-49a0-8b9e-63095abc145c/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/ed4e4ca0-2535-44ad-a4cb-3c0778e044ae/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/8ebc64c4-b0b1-4385-b400-847034049fc6/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/01c40bf8-d9ee-486b-a179-b1446f1a0028/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/1219cd0d-e641-4d30-aa3d-8ff8b4db2f88/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/09c52fcb-d1c2-4247-b6ca-315c3ce417a2/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/e4c999e2-cc0d-4122-bc82-81b16d289b74/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/session-15fa19d8-0533-455f-9666-7cff404e2693/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/c84a7a14-d0f2-421b-8102-7a73b602e55d/session.jsonl.zstd
+/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/bac72a7e-be65-4327-a747-b0bed44b79cb/session.jsonl.zstd
+count:
+1115
+
+--- dsh package: zstd spawn/exec sites (excluding node_modules docs) ---
+32:// The Codex backend accepts zstd-compressed request bodies on the SSE responses
+120:// Returns the zstd-compressed body bytes, or null when compression is
+125:    if (!zlib || typeof zlib.zstdCompressSync !== "function") {
+129:        const compressed = zlib.zstdCompressSync(bodyJson, {
+244:            // decodes Content-Encoding: zstd; the WebSocket transport above sends the
+248:                sseHeaders.set("content-encoding", "zstd");
+
+############ is there a zstd BINARY on the system? ############
+/usr/bin/zstd
+/usr/bin/unzstd
+ii  libzstd-dev:amd64                                1.5.5+dfsg2-2build1.1                    amd64        fast lossless compression algorithm -- development files
+ii  libzstd1:amd64                                   1.5.5+dfsg2-2build1.1                    amd64        fast lossless compression algorithm
+ii  ros-jazzy-rosbag2-compression-zstd               0.26.11-1noble.20260616.082522           amd64        Zstandard compression library implementation of rosbag2_compression
+ii  ros-jazzy-zstd-image-transport                   4.0.7-1noble.20260615.173013             amd64        zstd_image_transport provides a plugin to image_transport for transparently sending images encoded as zstd blobs
+ii  ros-jazzy-zstd-vendor                            0.26.11-1noble.20260603.150731           amd64        Zstd compression vendor package, providing a dependency for Zstd.
+ii  zstd                                             1.5.5+dfsg2-2build1.1                    amd64        fast lossless compression algorithm -- CLI tool
+
+############ DSH session store layout (compression?) ############
+总计 104
+drwx------ 16 CNS2026495165 CNS2026495165  4096  9月 21 18:57 .
+drwxr-x--- 56 CNS2026495165 CNS2026495165  4096  9月 21 19:04 ..
+drwxrwxr-x  3 CNS2026495165 CNS2026495165  4096  8月 28 10:51 .agent-presets
+-rw-------  1 CNS2026495165 CNS2026495165 10176  9月 17 17:38 AGENTS.md
+-rw-rw-r--  1 CNS2026495165 CNS2026495165    37  8月 19 14:42 .anonymous-user-id
+drwx------  3 CNS2026495165 CNS2026495165  4096  8月 20 09:32 attachments
+drwxrwxr-x  3 CNS2026495165 CNS2026495165  4096  9月 17 18:33 backups
+drwxrwxr-x  2 CNS2026495165 CNS2026495165  4096  9月 22 10:23 btw
+-rw-------  1 CNS2026495165 CNS2026495165   414  9月 12 18:20 .credentials.yaml
+-rwx--x--x  1 CNS2026495165 CNS2026495165  1087  8月 21 13:58 install-plugins.sh
+drwxrwxr-x  5 CNS2026495165 CNS2026495165  4096  9月 15 10:54 profiles
+drwxrwxr-x  3 CNS2026495165 CNS2026495165  4096  9月 15 10:54 profiles-archive
+drwx------  2 CNS2026495165 CNS2026495165  4096  9月 15 17:56 remote-workspaces
+drwxrwxr-x  3 CNS2026495165 CNS2026495165  4096  9月 12 16:55 session-board
+drwx------ 21 CNS2026495165 CNS2026495165  4096  9月 21 14:01 sessions
+-rw-------  1 CNS2026495165 CNS2026495165  6255  9月 21 18:57 settings.yaml
+-rw-------  1 CNS2026495165 CNS2026495165  4297  9月 15 11:56 settings.yaml.bak-ssh-gui-20260915115645
+drwxrwxr-x  4 CNS2026495165 CNS2026495165  4096  9月 14 14:58 skills
+drwx------  4 CNS2026495165 CNS2026495165  4096  9月 22 10:32 storages
+561M	/home/CNS2026495165/.dsh/sessions
+总计 236
+drwx------  21 CNS2026495165 CNS2026495165  4096  9月 21 14:01 .
+drwx------  16 CNS2026495165 CNS2026495165  4096  9月 21 18:57 ..
+drwx------   4 CNS2026495165 CNS2026495165  4096  8月 24 14:08 --home-CNS2026495165-~4E0B~8F7D-motor-debugging-tool-master-Linux-x86_64--
+drwx------   7 CNS2026495165 CNS2026495165  4096  9月 20 16:16 --home-CNS2026495165-~4F5C~4E1A--
+drwx------   4 CNS2026495165 CNS2026495165  4096  9月 21 13:59 --home-CNS2026495165-~684C~9762--
+drwx------   3 CNS2026495165 CNS2026495165  4096  9月 20 15:32 --home-CNS2026495165-~89E6~89C9~4EA7~54C1~8D44~6599--
+drwx------  52 CNS2026495165 CNS2026495165  4096  9月 21 18:54 --home-CNS2026495165-~9762~8BD5--
+drwx------   3 CNS2026495165 CNS2026495165  4096  9月 20 15:45 --home-CNS2026495165-blender--
+drwx------ 430 CNS2026495165 CNS2026495165 40960  9月 22 10:18 --home-CNS2026495165-Dexterous_Hand_23Dof--

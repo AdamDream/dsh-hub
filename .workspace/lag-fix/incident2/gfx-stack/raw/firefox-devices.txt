@@ -1,0 +1,110 @@
+=== id ===
+uid=1001(CNS2026495165) gid=1001(CNS2026495165) 组=1001(CNS2026495165),4(adm),20(dialout),24(cdrom),27(sudo),30(dip),46(plugdev),100(users),114(lpadmin)
+=== ls -la /dev/dri ===
+总计 0
+drwxr-xr-x   3 root root        140  9月 22 10:01 .
+drwxr-xr-x  20 root root       5020  9月 22 10:07 ..
+drwxr-xr-x   2 root root        120  9月 22 10:01 by-path
+crw-rw----+  1 root video  226,   1  9月 22 10:01 card1
+crw-rw----+  1 root video  226,   2  9月 22 10:01 card2
+crw-rw----+  1 root render 226, 128  9月 22 10:01 renderD128
+crw-rw----+  1 root render 226, 129  9月 22 10:01 renderD129
+=== ls -la /dev/nvidia* ===
+crw-rw-rw- 1 root root 195,   0  9月 22 10:01 /dev/nvidia0
+crw-rw-rw- 1 root root 195, 255  9月 22 10:01 /dev/nvidiactl
+crw-rw-rw- 1 root root 195, 254  9月 22 10:01 /dev/nvidia-modeset
+crw-rw-rw- 1 root root 508,   0  9月 22 10:01 /dev/nvidia-uvm
+crw-rw-rw- 1 root root 508,   1  9月 22 10:01 /dev/nvidia-uvm-tools
+=== stat each dri node ===
+drwxr-xr-x root root 0:0 /dev/dri/by-path
+crw-rw---- root video e2:1 /dev/dri/card1
+crw-rw---- root video e2:2 /dev/dri/card2
+crw-rw---- root render e2:80 /dev/dri/renderD128
+crw-rw---- root render e2:81 /dev/dri/renderD129
+=== /sys/class/drm enumeration ===
+总计 0
+drwxr-xr-x  2 root root    0  9月 22 10:28 .
+drwxr-xr-x 84 root root    0  9月 22 10:28 ..
+lrwxrwxrwx  1 root root    0  9月 22 10:01 card1 -> ../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1
+lrwxrwxrwx  1 root root    0  9月 22 10:01 card1-DP-1 -> ../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1/card1-DP-1
+lrwxrwxrwx  1 root root    0  9月 22 10:01 card1-DP-2 -> ../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1/card1-DP-2
+lrwxrwxrwx  1 root root    0  9月 22 10:01 card1-DP-3 -> ../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1/card1-DP-3
+lrwxrwxrwx  1 root root    0  9月 22 10:01 card1-HDMI-A-1 -> ../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1/card1-HDMI-A-1
+lrwxrwxrwx  1 root root    0  9月 22 10:01 card2 -> ../../devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2
+lrwxrwxrwx  1 root root    0  9月 22 10:01 card2-DP-4 -> ../../devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2/card2-DP-4
+lrwxrwxrwx  1 root root    0  9月 22 10:01 card2-DP-5 -> ../../devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2/card2-DP-5
+lrwxrwxrwx  1 root root    0  9月 22 10:01 card2-HDMI-A-2 -> ../../devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2/card2-HDMI-A-2
+lrwxrwxrwx  1 root root    0  9月 22 10:01 card2-HDMI-A-3 -> ../../devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2/card2-HDMI-A-3
+lrwxrwxrwx  1 root root    0  9月 22 10:01 card2-Writeback-1 -> ../../devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2/card2-Writeback-1
+lrwxrwxrwx  1 root root    0  9月 22 10:01 renderD128 -> ../../devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/renderD128
+lrwxrwxrwx  1 root root    0  9月 22 10:01 renderD129 -> ../../devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/renderD129
+-r--r--r--  1 root root 4096  9月 22 10:28 version
+=== card mapping (vendor/device) ===
+--- card1 ---
+  vendor: 0x10de
+  device: 0x2684
+  driver: /sys/bus/pci/drivers/nvidia
+  pci:    /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0
+--- card1-DP-1 ---
+  vendor: cat: /sys/class/drm/card1-DP-1/device/vendor: 没有那个文件或目录
+  device: cat: /sys/class/drm/card1-DP-1/device/device: 是一个目录
+  driver: /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1/driver
+  pci:    /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1
+--- card1-DP-2 ---
+  vendor: cat: /sys/class/drm/card1-DP-2/device/vendor: 没有那个文件或目录
+  device: cat: /sys/class/drm/card1-DP-2/device/device: 是一个目录
+  driver: /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1/driver
+  pci:    /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1
+--- card1-DP-3 ---
+  vendor: cat: /sys/class/drm/card1-DP-3/device/vendor: 没有那个文件或目录
+  device: cat: /sys/class/drm/card1-DP-3/device/device: 是一个目录
+  driver: /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1/driver
+  pci:    /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1
+--- card1-HDMI-A-1 ---
+  vendor: cat: /sys/class/drm/card1-HDMI-A-1/device/vendor: 没有那个文件或目录
+  device: cat: /sys/class/drm/card1-HDMI-A-1/device/device: 是一个目录
+  driver: /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1/driver
+  pci:    /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1
+--- card2 ---
+  vendor: 0x1002
+  device: 0x13c0
+  driver: /sys/bus/pci/drivers/amdgpu
+  pci:    /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0
+--- card2-DP-4 ---
+  vendor: cat: /sys/class/drm/card2-DP-4/device/vendor: 没有那个文件或目录
+  device: cat: /sys/class/drm/card2-DP-4/device/device: 是一个目录
+  driver: /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2/driver
+  pci:    /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2
+--- card2-DP-5 ---
+  vendor: cat: /sys/class/drm/card2-DP-5/device/vendor: 没有那个文件或目录
+  device: cat: /sys/class/drm/card2-DP-5/device/device: 是一个目录
+  driver: /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2/driver
+  pci:    /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2
+--- card2-HDMI-A-2 ---
+  vendor: cat: /sys/class/drm/card2-HDMI-A-2/device/vendor: 没有那个文件或目录
+  device: cat: /sys/class/drm/card2-HDMI-A-2/device/device: 是一个目录
+  driver: /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2/driver
+  pci:    /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2
+--- card2-HDMI-A-3 ---
+  vendor: cat: /sys/class/drm/card2-HDMI-A-3/device/vendor: 没有那个文件或目录
+  device: cat: /sys/class/drm/card2-HDMI-A-3/device/device: 是一个目录
+  driver: /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2/driver
+  pci:    /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2
+--- card2-Writeback-1 ---
+  vendor: cat: /sys/class/drm/card2-Writeback-1/device/vendor: 没有那个文件或目录
+  device: cat: /sys/class/drm/card2-Writeback-1/device/device: 是一个目录
+  driver: /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2/driver
+  pci:    /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2
+=== connector status ===
+/sys/class/drm/card1-DP-1/status = disconnected
+/sys/class/drm/card1-DP-2/status = disconnected
+/sys/class/drm/card1-DP-3/status = disconnected
+/sys/class/drm/card1-HDMI-A-1/status = disconnected
+/sys/class/drm/card2-DP-4/status = disconnected
+/sys/class/drm/card2-DP-5/status = disconnected
+/sys/class/drm/card2-HDMI-A-2/status = disconnected
+/sys/class/drm/card2-HDMI-A-3/status = connected
+/sys/class/drm/card2-Writeback-1/status = unknown
+=== card2-HDMI-A-2 detail ===
+disconnected
+disabled

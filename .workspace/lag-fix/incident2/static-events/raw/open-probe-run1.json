@@ -1,0 +1,680 @@
+{
+  "at": "2026-09-22T02:14:43.767Z",
+  "tz": "Asia/Shanghai",
+  "base": "http://127.0.0.1:3080",
+  "window_ms": 2000,
+  "errors": [],
+  "lock": {
+    "lastSeen": "pid=28451 ts=2026-09-22T02:14:28.128Z owner=incident2-live-repro line=full-new-page first-open 设置 click path (frame/LoF/CDP) headless vs headed dir=/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/live-repro scope: write only incident2/live-repro/ ; host read-only ; no restart/pkill/product edits browser: single instance, serialised ",
+    "acquired": true,
+    "owner": "pid=29503\nts=2026-09-22T02:15:28.828Z\nowner=incident2-static-events\nline=static-events-audit\n"
+  },
+  "host": {
+    "webProcs": [
+      "10806 node /home/CNS2026495165/.npm-global/bin/dsh web"
+    ],
+    "pid10806": "present"
+  },
+  "runs": [],
+  "selfTest": {
+    "fired": 4,
+    "deltaKeys": [
+      "layout.read.gcs",
+      "layout.read.offsetHeight",
+      "layout.read.rect",
+      "listener.add",
+      "listener.remove",
+      "mut.addedNodes",
+      "mut.attr.style",
+      "mut.attrLayout.style",
+      "mut.attributes",
+      "mut.childList",
+      "mut.total",
+      "raf.callback",
+      "raf.request",
+      "raf.selfChain",
+      "style.append.style",
+      "ws.message",
+      "ws.message.server-request"
+    ],
+    "delta": {
+      "mut.total": 202,
+      "mut.childList": 2,
+      "mut.addedNodes": 2,
+      "mut.attributes": 200,
+      "mut.attr.style": 200,
+      "mut.attrLayout.style": 200,
+      "listener.add": 1,
+      "listener.remove": 1,
+      "style.append.style": 1,
+      "raf.request": 4,
+      "raf.callback": 4,
+      "layout.read.gcs": 1,
+      "ws.message": 30,
+      "ws.message.server-request": 30,
+      "layout.read.offsetHeight": 200,
+      "layout.read.rect": 200,
+      "raf.selfChain": 3
+    },
+    "mutationObserverReady": true,
+    "longtaskObserverReady": true,
+    "readPatchMiss": null
+  },
+  "quietWindow": {
+    "label": "面板关闭 · 2s 基线",
+    "delta": {
+      "mut.total": 15,
+      "mut.childList": 15,
+      "mut.addedNodes": 8,
+      "mut.removedNodes": 7,
+      "timer.setTimeout": 3,
+      "ws.message": 528,
+      "ws.message.server-request": 528
+    },
+    "frames": 0
+  },
+  "trigger": {
+    "x": 140,
+    "y": 919,
+    "w": 260,
+    "h": 42,
+    "cls": "VOzbGW_trigger",
+    "expanded": "false",
+    "dialogs": 0
+  },
+  "openWindow": {
+    "label": "点击设置 → 2000ms 窗口",
+    "armAt": 14120.70000000007,
+    "delta": {
+      "mut.total": 10,
+      "mut.childList": 2,
+      "mut.addedNodes": 2,
+      "mut.attributes": 5,
+      "mut.characterData": 3,
+      "listener.add": 9,
+      "timer.setTimeout": 3,
+      "fetch.call": 1,
+      "mut.attr.lang": 1,
+      "ws.message": 60,
+      "ws.message.server-request": 60,
+      "timer.clearTimeout": 1,
+      "layout.read.rect": 1,
+      "mut.attr.aria-expanded": 1,
+      "mut.attr.disabled": 2,
+      "ARM": 1,
+      "mut.attr.src": 1
+    },
+    "roster": {
+      "listeners": [
+        {
+          "type": "invalid",
+          "target": "select",
+          "at": 5,
+          "stack": "    at B2 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:32634) |     at Me (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:31975) |     at F4 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:17528) |     at C0 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:40188)"
+        },
+        {
+          "type": "error",
+          "target": "img",
+          "at": 5,
+          "stack": "    at B2 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:32634) |     at Me (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:31975) |     at F4 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:17296) |     at C0 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:40188)"
+        },
+        {
+          "type": "load",
+          "target": "img",
+          "at": 5,
+          "stack": "    at B2 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:32634) |     at Me (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:31975) |     at F4 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:17310) |     at C0 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:40188)"
+        },
+        {
+          "type": "invalid",
+          "target": "input",
+          "at": 5,
+          "stack": "    at B2 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:32634) |     at Me (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:31975) |     at F4 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:17402) |     at C0 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:40188)"
+        },
+        {
+          "type": "invalid",
+          "target": "input",
+          "at": 5,
+          "stack": "    at B2 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:32634) |     at Me (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:31975) |     at F4 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:17402) |     at C0 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:40188)"
+        },
+        {
+          "type": "invalid",
+          "target": "input",
+          "at": 5,
+          "stack": "    at B2 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:32634) |     at Me (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:31975) |     at F4 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:17402) |     at C0 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:40188)"
+        },
+        {
+          "type": "invalid",
+          "target": "input",
+          "at": 5,
+          "stack": "    at B2 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:32634) |     at Me (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:31975) |     at F4 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:17402) |     at C0 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:40188)"
+        },
+        {
+          "type": "invalid",
+          "target": "input",
+          "at": 6,
+          "stack": "    at B2 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:32634) |     at Me (http://127.0.0.1:3080/assets/index-ClqxG24t.js:53:31975) |     at F4 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:17402) |     at C0 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:40188)"
+        },
+        {
+          "type": "keydown",
+          "target": "document",
+          "at": 6,
+          "stack": "    at http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-settings-general/client.js?rev=f733efde3f2f:103:14 |     at ui (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:24408) |     at f1 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:42687) |     at G4 (http://127.0.0.1:3080/assets/index-ClqxG24t.js:56:41485)"
+        }
+      ],
+      "timers": [
+        {
+          "ms": 127,
+          "at": 343.79999999993015,
+          "stack": "    at scheduleScan (http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b:4407:19) |     at onChange (http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b:4415:5) |     at http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c:4750:38"
+        },
+        {
+          "ms": 120,
+          "at": 869.5,
+          "stack": "    at scheduleScan (http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b:4407:19) |     at onChange (http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b:4415:5) |     at http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c:4750:38"
+        },
+        {
+          "ms": 120,
+          "at": 1841.5,
+          "stack": "    at scheduleScan (http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b:4407:19) |     at onChange (http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b:4415:5) |     at http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c:4750:38"
+        }
+      ],
+      "intervals": [],
+      "observers": [],
+      "sockets": [],
+      "fetches": [
+        {
+          "url": "",
+          "at": 6
+        }
+      ],
+      "styleTags": []
+    },
+    "console": [],
+    "longtasks": [
+      {
+        "start": 42.3,
+        "dur": 106
+      },
+      {
+        "start": 161.5,
+        "dur": 52
+      },
+      {
+        "start": 399.9,
+        "dur": 75
+      }
+    ],
+    "reflowEvents": [],
+    "observeEvents": [],
+    "styleCreateEvents": [
+      {
+        "t": 22.4,
+        "k": "styleCreate",
+        "tag": "link"
+      },
+      {
+        "t": 195.3,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 196.6,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 209.4,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 209.9,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 210.4,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 213.3,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 213.3,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 213.5,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 213.5,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 213.5,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 215.9,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 216,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 216,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 216.1,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 228.6,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 229.5,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 229.6,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 229.6,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 229.7,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 229.7,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 230.6,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 230.8,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 230.8,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 230.8,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 232.8,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 233,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 233.1,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 233.1,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 240.6,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 240.8,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 240.8,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 240.9,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.1,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.1,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.2,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.2,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.2,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.4,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.4,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.4,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.4,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.5,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.6,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.7,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.7,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.7,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 241.7,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 256.6,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 259.9,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 260.8,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 261.9,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 263.1,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 263.2,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 263.3,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 265.8,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 266,
+        "k": "styleCreate",
+        "tag": "style"
+      },
+      {
+        "t": 266,
+        "k": "styleCreate",
+        "tag": "style"
+      }
+    ],
+    "samples": [
+      {
+        "t": 13704.4,
+        "nodes": 601,
+        "styles": 93
+      },
+      {
+        "t": 13800.4,
+        "nodes": 601,
+        "styles": 93
+      },
+      {
+        "t": 13900.3,
+        "nodes": 601,
+        "styles": 93
+      },
+      {
+        "t": 14000.3,
+        "nodes": 601,
+        "styles": 93
+      },
+      {
+        "t": 14100.4,
+        "nodes": 601,
+        "styles": 93
+      },
+      {
+        "t": 14200.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 14300.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 14400.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 14500.3,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 14600.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 14700.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 14800.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 14900.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 15000.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 15100.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 15200.3,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 15300.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 15400.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 15500.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 15600.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 15700.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 15800.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 15900.3,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 16000.4,
+        "nodes": 772,
+        "styles": 93
+      },
+      {
+        "t": 16100.4,
+        "nodes": 772,
+        "styles": 93
+      }
+    ],
+    "meta": {
+      "rafInFlight": 0,
+      "rafSelfChain": 3
+    },
+    "dialog": {
+      "dialogPresent": true,
+      "dialogSections": [
+        "通用设置",
+        "模型",
+        "插件",
+        "Agent 预设",
+        "远程工作区",
+        "分布式控制 · dsh-ssh-gui",
+        "vision-adam 识图设置",
+        "子代理模型",
+        "打开配置文件",
+        "关闭",
+        "标准模式（子代理 deepseek-v4.1-flash）",
+        "Workspace Write",
+        "中文",
+        "浅色",
+        "深色",
+        "跟随系统",
+        "排队发送",
+        "选择图片",
+        "移除壁纸",
+        "应用"
+      ],
+      "activeSectionTitle": "设置",
+      "triggerExpanded": "true",
+      "domNodes": 772,
+      "styleTags": 93,
+      "optionsTextLen": 306
+    },
+    "frameCount": 0,
+    "quietFrameCount": 0
+  },
+  "closeState": {
+    "dialogCount": 0,
+    "triggerExpanded": "false",
+    "domNodes": 601
+  }
+}

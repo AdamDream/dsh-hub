@@ -1,0 +1,169 @@
+{
+  "cond": "p2ac-old",
+  "label": "reg-p2ac-old-r1",
+  "ts": "2026-09-22T02:26:19.429Z",
+  "nav": {
+    "domcontentloadedMs": 1470,
+    "settleMs": 6000,
+    "clicked": true,
+    "closed": true,
+    "clickWallMs": 46,
+    "dwellMs": 6000,
+    "wallS": 10.975
+  },
+  "stub": {
+    "spec": "p2ac-old",
+    "mechanism": "in-flight route rewrite of client.js (disk untouched)",
+    "effective": null,
+    "mountEffective": null,
+    "pathReachableClick": {
+      "themeApplyRan": true,
+      "themeApplyRanInClick": false,
+      "themeRefreshRan": true,
+      "metaContentWrites": 2,
+      "metaContentWritesInClick": 0,
+      "bodyWrites": 1,
+      "bodyWritesInClick": 0,
+      "computedReadsInClick": 0,
+      "usageSeen": 0,
+      "usageSeenInClick": 0
+    },
+    "pathReachableMount": {
+      "themeApplyRan": true,
+      "themeApplyRanInClick": false,
+      "themeRefreshRan": true,
+      "metaContentWrites": 2,
+      "metaContentWritesInClick": 0,
+      "bodyWrites": 1,
+      "bodyWritesInClick": 0,
+      "computedReadsInClick": 0,
+      "usageSeen": 0,
+      "usageSeenInClick": 0
+    },
+    "routeHits": {
+      "carry": 1,
+      "keygate": 1,
+      "bytes": 398395,
+      "bad": []
+    }
+  },
+  "phaseMount": {
+    "ScriptDuration": 0.054,
+    "RecalcStyleDuration": 0.029,
+    "TaskDuration": 0.444,
+    "RecalcStyleCount": 63
+  },
+  "phaseClick": {
+    "ScriptDuration": 0.123,
+    "RecalcStyleDuration": 0.003,
+    "LayoutDuration": 0.006,
+    "TaskDuration": 0.21,
+    "RecalcStyleCount": 9,
+    "ScriptMsPerS": 0.011,
+    "RecalcMsPerS": 0,
+    "TaskMsPerS": 0.019
+  },
+  "taskBusyPct": 1.913,
+  "rafClick": {
+    "n": 363,
+    "min": 16.5,
+    "p50": 16.7,
+    "p90": 16.7,
+    "p99": 16.8,
+    "max": 16.8,
+    "mean": 16.666,
+    "over50": 0,
+    "over100": 0
+  },
+  "longtasks": {
+    "n": 0,
+    "totalMs": 0,
+    "maxMs": null
+  },
+  "overlay": {
+    "firstVisibleAt": 12443.3,
+    "clickDispatchAt": 12428.8,
+    "msToVisible": 14.5,
+    "firstBox": {
+      "area": 921600,
+      "w": 1280,
+      "h": 720,
+      "t": 12443.300000000047
+    },
+    "nowBox": {
+      "area": 921600,
+      "w": 1280,
+      "h": 720,
+      "t": 18445.5
+    },
+    "clickBox": {
+      "x": 10,
+      "y": 668,
+      "w": 260,
+      "h": 42
+    }
+  },
+  "http": {
+    "/": {
+      "n": 13,
+      "totalMs": 6585.6,
+      "p50": 375.4,
+      "p99": 2282.9,
+      "max": 2282.9
+    },
+    "/dsh-wallpaper/media/cleanup": {
+      "n": 1,
+      "totalMs": 206.1,
+      "p50": 206.1,
+      "p99": 206.1,
+      "max": 206.1
+    }
+  },
+  "httpInClick": {
+    "/": {
+      "n": 1,
+      "totalMs": 825.9,
+      "p50": 825.9,
+      "p99": 825.9,
+      "max": 825.9
+    }
+  },
+  "ws": {
+    "total": 546,
+    "byType": {
+      "server-request": 546
+    }
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "concurrency": {
+    "gateOutcome": "EXCLUSIVE",
+    "batchGateWaitedMs": 23590,
+    "censusBefore": {
+      "at": "2026-09-22T02:26:00.898Z",
+      "instances": 1,
+      "foreignCount": 0,
+      "foreign": [],
+      "lockOwner": "agent: incident2-regression (raf-face theme-sync A/B) line: label=raf-repro-sharedstub-theme-sync pid: 68109",
+      "lockHeldByMyLine": true
+    },
+    "censusAfter": {
+      "at": "2026-09-22T02:26:19.429Z",
+      "instances": 2,
+      "foreignCount": 1,
+      "foreign": [
+        {
+          "pid": 70083,
+          "etime": "00:00"
+        }
+      ],
+      "lockOwner": "agent: incident2-regression (raf-face theme-sync A/B) line: label=raf-repro-sharedstub-theme-sync pid: 68109",
+      "lockHeldByMyLine": true
+    },
+    "exclusiveThroughout": false
+  },
+  "lock": {
+    "heldAtStart": true,
+    "releasedAtEnd": null
+  }
+}

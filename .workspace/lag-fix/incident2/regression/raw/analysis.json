@@ -1,0 +1,2200 @@
+{
+  "generatedAt": "2026-09-22T02:39:54.397Z",
+  "metrics": [
+    "点设置→面板可见 (ms)",
+    "点击调用墙钟 (ms)",
+    "点击相位脚本 ms/s",
+    "点击相位样式重算 ms/s",
+    "点击相位任务占用 ms/s",
+    "点击窗口主线程占用 %",
+    "rAF 间隔 p99 (ms)",
+    "rAF >50ms 帧数",
+    "最长长任务 (ms)",
+    "长任务数",
+    "首挂载脚本 (ms)",
+    "首挂载样式重算 (ms)",
+    "首挂载重算次数"
+  ],
+  "conditions": {
+    "base": {
+      "windows": 16,
+      "accepted": 14,
+      "labels": [
+        "b2-base-r1",
+        "b2-base-r2",
+        "b2-base-r3",
+        "base-r1",
+        "base-r2",
+        "p2ac-base-r1",
+        "p2ac-base-r2",
+        "p2ac-base-r3",
+        "probe-base",
+        "raf-base-r1",
+        "raf-base-r2",
+        "raf-base-r3",
+        "reg-base-r1",
+        "reg-base-r2",
+        "reg-base-r3",
+        "smoke-base"
+      ],
+      "stubEffective": 14,
+      "metrics": {
+        "msToVisible": {
+          "allMedian": 16.6,
+          "allRange": [
+            13.2,
+            22.7
+          ],
+          "acceptedMedian": 16.6,
+          "acceptedRange": [
+            13.2,
+            22.7
+          ],
+          "n": 13
+        },
+        "clickWallMs": {
+          "allMedian": 54,
+          "allRange": [
+            42,
+            62
+          ],
+          "acceptedMedian": 54,
+          "acceptedRange": [
+            42,
+            62
+          ],
+          "n": 14
+        },
+        "clickScriptMsPerS": {
+          "allMedian": 0.021,
+          "allRange": [
+            0.005,
+            0.08
+          ],
+          "acceptedMedian": 0.021,
+          "acceptedRange": [
+            0.005,
+            0.08
+          ],
+          "n": 14
+        },
+        "clickRecalcMsPerS": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0.004
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0.004
+          ],
+          "n": 14
+        },
+        "clickTaskMsPerS": {
+          "allMedian": 0.038,
+          "allRange": [
+            0.009,
+            0.1
+          ],
+          "acceptedMedian": 0.038,
+          "acceptedRange": [
+            0.009,
+            0.1
+          ],
+          "n": 14
+        },
+        "taskBusyPct": {
+          "allMedian": 3.696,
+          "allRange": [
+            0.86,
+            5.541
+          ],
+          "acceptedMedian": 3.696,
+          "acceptedRange": [
+            0.86,
+            5.541
+          ],
+          "n": 13
+        },
+        "rafP99": {
+          "allMedian": 16.8,
+          "allRange": [
+            16.8,
+            16.8
+          ],
+          "acceptedMedian": 16.8,
+          "acceptedRange": [
+            16.8,
+            16.8
+          ],
+          "n": 14
+        },
+        "rafOver50": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0
+          ],
+          "n": 14
+        },
+        "ltMax": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "ltN": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0
+          ],
+          "n": 14
+        },
+        "mountScriptMs": {
+          "allMedian": 0.057,
+          "allRange": [
+            0.038,
+            0.16
+          ],
+          "acceptedMedian": 0.057,
+          "acceptedRange": [
+            0.038,
+            0.16
+          ],
+          "n": 14
+        },
+        "mountRecalcMs": {
+          "allMedian": 0.021,
+          "allRange": [
+            0.018,
+            0.028
+          ],
+          "acceptedMedian": 0.021,
+          "acceptedRange": [
+            0.018,
+            0.028
+          ],
+          "n": 14
+        },
+        "mountRecalcCount": {
+          "allMedian": 56,
+          "allRange": [
+            35,
+            127
+          ],
+          "acceptedMedian": 56,
+          "acceptedRange": [
+            35,
+            127
+          ],
+          "n": 14
+        }
+      },
+      "pathReachableClickAnyWindow": {
+        "themeApplyRan": 13,
+        "themeApplyRanInClick": 0,
+        "themeRefreshRan": 13,
+        "metaContentWrites": 0,
+        "metaContentWritesInClick": 0,
+        "bodyWrites": 0,
+        "bodyWritesInClick": 0,
+        "computedReadsInClick": 0,
+        "usageSeen": 0,
+        "usageSeenInClick": 0,
+        "themeDeferScheduledByProd": 1,
+        "themeDeferScheduledByProdInClick": 0
+      },
+      "routeHits": [],
+      "httpEndpoints": {
+        "/": {
+          "n": 86,
+          "maxMs": 8712.7,
+          "worst": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 109,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "session.list"
+          },
+          "perWindowMax": [
+            351.4,
+            306.2,
+            8712.7,
+            3416,
+            3312.1,
+            3977.3
+          ]
+        },
+        "/dsh-wallpaper/media/cleanup": {
+          "n": 6,
+          "maxMs": 1512.1,
+          "worst": null,
+          "perWindowMax": [
+            33.9,
+            70.1,
+            35.7,
+            218.7,
+            1512.1,
+            92.7
+          ]
+        }
+      }
+    },
+    "p2ac-old": {
+      "windows": 7,
+      "accepted": 7,
+      "labels": [
+        "b2-p2ac-old-r1",
+        "b2-p2ac-old-r2",
+        "p2ac-old-r1",
+        "p2ac-old-r2",
+        "p2ac-old-r3",
+        "reg-p2ac-old-r1",
+        "reg-p2ac-old-r2"
+      ],
+      "stubEffective": 0,
+      "metrics": {
+        "msToVisible": {
+          "allMedian": 17.2,
+          "allRange": [
+            14,
+            23
+          ],
+          "acceptedMedian": 17.2,
+          "acceptedRange": [
+            14,
+            23
+          ],
+          "n": 7
+        },
+        "clickWallMs": {
+          "allMedian": 53,
+          "allRange": [
+            42,
+            68
+          ],
+          "acceptedMedian": 53,
+          "acceptedRange": [
+            42,
+            68
+          ],
+          "n": 7
+        },
+        "clickScriptMsPerS": {
+          "allMedian": 0.018,
+          "allRange": [
+            0.011,
+            0.097
+          ],
+          "acceptedMedian": 0.018,
+          "acceptedRange": [
+            0.011,
+            0.097
+          ],
+          "n": 7
+        },
+        "clickRecalcMsPerS": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0.001
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0.001
+          ],
+          "n": 7
+        },
+        "clickTaskMsPerS": {
+          "allMedian": 0.033,
+          "allRange": [
+            0.019,
+            0.115
+          ],
+          "acceptedMedian": 0.033,
+          "acceptedRange": [
+            0.019,
+            0.115
+          ],
+          "n": 7
+        },
+        "taskBusyPct": {
+          "allMedian": 3.283,
+          "allRange": [
+            1.913,
+            11.495
+          ],
+          "acceptedMedian": 3.283,
+          "acceptedRange": [
+            1.913,
+            11.495
+          ],
+          "n": 7
+        },
+        "rafP99": {
+          "allMedian": 16.8,
+          "allRange": [
+            16.8,
+            16.8
+          ],
+          "acceptedMedian": 16.8,
+          "acceptedRange": [
+            16.8,
+            16.8
+          ],
+          "n": 7
+        },
+        "rafOver50": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0
+          ],
+          "n": 7
+        },
+        "ltMax": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "ltN": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0
+          ],
+          "n": 7
+        },
+        "mountScriptMs": {
+          "allMedian": 0.073,
+          "allRange": [
+            0.054,
+            0.172
+          ],
+          "acceptedMedian": 0.073,
+          "acceptedRange": [
+            0.054,
+            0.172
+          ],
+          "n": 7
+        },
+        "mountRecalcMs": {
+          "allMedian": 0.028,
+          "allRange": [
+            0.015,
+            0.032
+          ],
+          "acceptedMedian": 0.028,
+          "acceptedRange": [
+            0.015,
+            0.032
+          ],
+          "n": 7
+        },
+        "mountRecalcCount": {
+          "allMedian": 60,
+          "allRange": [
+            45,
+            74
+          ],
+          "acceptedMedian": 60,
+          "acceptedRange": [
+            45,
+            74
+          ],
+          "n": 7
+        }
+      },
+      "pathReachableClickAnyWindow": {
+        "themeApplyRan": 7,
+        "themeApplyRanInClick": 0,
+        "themeRefreshRan": 7,
+        "metaContentWrites": 0,
+        "metaContentWritesInClick": 0,
+        "bodyWrites": 0,
+        "bodyWritesInClick": 0,
+        "computedReadsInClick": 0,
+        "usageSeen": 0,
+        "usageSeenInClick": 0
+      },
+      "routeHits": [
+        {
+          "carry": 1,
+          "keygate": 1,
+          "bytes": 398395,
+          "bad": []
+        },
+        {
+          "carry": 1,
+          "keygate": 1,
+          "bytes": 398395,
+          "bad": []
+        },
+        {
+          "carry": 1,
+          "keygate": 1,
+          "bytes": 398395,
+          "bad": []
+        },
+        {
+          "carry": 1,
+          "keygate": 1,
+          "bytes": 398395,
+          "bad": []
+        },
+        {
+          "carry": 1,
+          "keygate": 1,
+          "bytes": 398395,
+          "bad": []
+        },
+        {
+          "carry": 1,
+          "keygate": 1,
+          "bytes": 398395,
+          "bad": []
+        },
+        {
+          "carry": 1,
+          "keygate": 1,
+          "bytes": 398395,
+          "bad": []
+        }
+      ],
+      "httpEndpoints": {
+        "/": {
+          "n": 70,
+          "maxMs": 5750.6,
+          "worst": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 109,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "session.list"
+          },
+          "perWindowMax": [
+            4670.4,
+            5750.6,
+            2282.9,
+            824.5
+          ]
+        },
+        "/dsh-wallpaper/media/cleanup": {
+          "n": 4,
+          "maxMs": 407.8,
+          "worst": {
+            "method": "POST",
+            "url": "/dsh-wallpaper/media/cleanup",
+            "bodyLen": 53,
+            "bodyKeys": [
+              "keep"
+            ],
+            "bodyMethod": null
+          },
+          "perWindowMax": [
+            60,
+            407.8,
+            206.1,
+            287.5
+          ]
+        }
+      }
+    },
+    "theme-sync": {
+      "windows": 5,
+      "accepted": 5,
+      "labels": [
+        "b2-theme-sync-r1",
+        "b2-theme-sync-r2",
+        "b2-theme-sync-r3",
+        "raf-theme-sync-r1",
+        "raf-theme-sync-r2"
+      ],
+      "stubEffective": 5,
+      "metrics": {
+        "msToVisible": {
+          "allMedian": 15.4,
+          "allRange": [
+            12.9,
+            18.1
+          ],
+          "acceptedMedian": 15.4,
+          "acceptedRange": [
+            12.9,
+            18.1
+          ],
+          "n": 5
+        },
+        "clickWallMs": {
+          "allMedian": 45,
+          "allRange": [
+            43,
+            50
+          ],
+          "acceptedMedian": 45,
+          "acceptedRange": [
+            43,
+            50
+          ],
+          "n": 5
+        },
+        "clickScriptMsPerS": {
+          "allMedian": 0.019,
+          "allRange": [
+            0.014,
+            0.06
+          ],
+          "acceptedMedian": 0.019,
+          "acceptedRange": [
+            0.014,
+            0.06
+          ],
+          "n": 5
+        },
+        "clickRecalcMsPerS": {
+          "allMedian": 0.001,
+          "allRange": [
+            0,
+            0.005
+          ],
+          "acceptedMedian": 0.001,
+          "acceptedRange": [
+            0,
+            0.005
+          ],
+          "n": 5
+        },
+        "clickTaskMsPerS": {
+          "allMedian": 0.035,
+          "allRange": [
+            0.023,
+            0.08
+          ],
+          "acceptedMedian": 0.035,
+          "acceptedRange": [
+            0.023,
+            0.08
+          ],
+          "n": 5
+        },
+        "taskBusyPct": {
+          "allMedian": 3.512,
+          "allRange": [
+            2.346,
+            7.992
+          ],
+          "acceptedMedian": 3.512,
+          "acceptedRange": [
+            2.346,
+            7.992
+          ],
+          "n": 5
+        },
+        "rafP99": {
+          "allMedian": 16.7,
+          "allRange": [
+            16.6,
+            16.8
+          ],
+          "acceptedMedian": 16.7,
+          "acceptedRange": [
+            16.6,
+            16.8
+          ],
+          "n": 5
+        },
+        "rafOver50": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0
+          ],
+          "n": 5
+        },
+        "ltMax": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "ltN": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0
+          ],
+          "n": 5
+        },
+        "mountScriptMs": {
+          "allMedian": 0.065,
+          "allRange": [
+            0.045,
+            0.302
+          ],
+          "acceptedMedian": 0.065,
+          "acceptedRange": [
+            0.045,
+            0.302
+          ],
+          "n": 5
+        },
+        "mountRecalcMs": {
+          "allMedian": 0.019,
+          "allRange": [
+            0.015,
+            0.037
+          ],
+          "acceptedMedian": 0.019,
+          "acceptedRange": [
+            0.015,
+            0.037
+          ],
+          "n": 5
+        },
+        "mountRecalcCount": {
+          "allMedian": 48,
+          "allRange": [
+            32,
+            148
+          ],
+          "acceptedMedian": 48,
+          "acceptedRange": [
+            32,
+            148
+          ],
+          "n": 5
+        }
+      },
+      "pathReachableClickAnyWindow": {
+        "themeApplyRan": 5,
+        "themeApplyRanInClick": 0,
+        "themeRefreshRan": 5,
+        "metaContentWrites": 0,
+        "metaContentWritesInClick": 0,
+        "bodyWrites": 0,
+        "bodyWritesInClick": 0,
+        "computedReadsInClick": 0,
+        "usageSeen": 0,
+        "usageSeenInClick": 0,
+        "themeDeferScheduledByProd": 2,
+        "themeDeferScheduledByProdInClick": 0
+      },
+      "routeHits": [],
+      "httpEndpoints": {
+        "/": {
+          "n": 70,
+          "maxMs": 10262.5,
+          "worst": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 109,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "session.list"
+          },
+          "perWindowMax": [
+            4679.5,
+            1755.8,
+            10262.5
+          ]
+        },
+        "/dsh-wallpaper/media/cleanup": {
+          "n": 3,
+          "maxMs": 63.8,
+          "worst": {
+            "method": "POST",
+            "url": "/dsh-wallpaper/media/cleanup",
+            "bodyLen": 53,
+            "bodyKeys": [
+              "keep"
+            ],
+            "bodyMethod": null
+          },
+          "perWindowMax": [
+            29.1,
+            36.5,
+            63.8
+          ]
+        }
+      }
+    },
+    "tpoff-armed": {
+      "windows": 3,
+      "accepted": 3,
+      "labels": [
+        "b2-tpoff-armed-r1",
+        "b2-tpoff-armed-r2",
+        "b2-tpoff-armed-r3"
+      ],
+      "stubEffective": 0,
+      "metrics": {
+        "msToVisible": {
+          "allMedian": 15.9,
+          "allRange": [
+            15.5,
+            16.3
+          ],
+          "acceptedMedian": 15.9,
+          "acceptedRange": [
+            15.5,
+            16.3
+          ],
+          "n": 3
+        },
+        "clickWallMs": {
+          "allMedian": 43,
+          "allRange": [
+            43,
+            56
+          ],
+          "acceptedMedian": 43,
+          "acceptedRange": [
+            43,
+            56
+          ],
+          "n": 3
+        },
+        "clickScriptMsPerS": {
+          "allMedian": 0.038,
+          "allRange": [
+            0.038,
+            0.045
+          ],
+          "acceptedMedian": 0.038,
+          "acceptedRange": [
+            0.038,
+            0.045
+          ],
+          "n": 3
+        },
+        "clickRecalcMsPerS": {
+          "allMedian": 0.001,
+          "allRange": [
+            0.001,
+            0.001
+          ],
+          "acceptedMedian": 0.001,
+          "acceptedRange": [
+            0.001,
+            0.001
+          ],
+          "n": 3
+        },
+        "clickTaskMsPerS": {
+          "allMedian": 0.051,
+          "allRange": [
+            0.049,
+            0.061
+          ],
+          "acceptedMedian": 0.051,
+          "acceptedRange": [
+            0.049,
+            0.061
+          ],
+          "n": 3
+        },
+        "taskBusyPct": {
+          "allMedian": 5.142,
+          "allRange": [
+            4.891,
+            6.1
+          ],
+          "acceptedMedian": 5.142,
+          "acceptedRange": [
+            4.891,
+            6.1
+          ],
+          "n": 3
+        },
+        "rafP99": {
+          "allMedian": 16.8,
+          "allRange": [
+            16.8,
+            16.8
+          ],
+          "acceptedMedian": 16.8,
+          "acceptedRange": [
+            16.8,
+            16.8
+          ],
+          "n": 3
+        },
+        "rafOver50": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0
+          ],
+          "n": 3
+        },
+        "ltMax": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "ltN": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0
+          ],
+          "n": 3
+        },
+        "mountScriptMs": {
+          "allMedian": 0.059,
+          "allRange": [
+            0.04,
+            0.127
+          ],
+          "acceptedMedian": 0.059,
+          "acceptedRange": [
+            0.04,
+            0.127
+          ],
+          "n": 3
+        },
+        "mountRecalcMs": {
+          "allMedian": 0.019,
+          "allRange": [
+            0.016,
+            0.023
+          ],
+          "acceptedMedian": 0.019,
+          "acceptedRange": [
+            0.016,
+            0.023
+          ],
+          "n": 3
+        },
+        "mountRecalcCount": {
+          "allMedian": 50,
+          "allRange": [
+            35,
+            52
+          ],
+          "acceptedMedian": 50,
+          "acceptedRange": [
+            35,
+            52
+          ],
+          "n": 3
+        }
+      },
+      "pathReachableClickAnyWindow": {
+        "themeApplyRan": 3,
+        "themeApplyRanInClick": 0,
+        "themeRefreshRan": 3,
+        "metaContentWrites": 0,
+        "metaContentWritesInClick": 0,
+        "bodyWrites": 0,
+        "bodyWritesInClick": 0,
+        "computedReadsInClick": 0,
+        "usageSeen": 0,
+        "usageSeenInClick": 0
+      },
+      "routeHits": [],
+      "httpEndpoints": {
+        "/": {
+          "n": 66,
+          "maxMs": 7213.3,
+          "worst": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 109,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "session.list"
+          },
+          "perWindowMax": [
+            7213.3,
+            3612.1,
+            5309.5
+          ]
+        },
+        "/dsh-wallpaper/media/cleanup": {
+          "n": 3,
+          "maxMs": 138.5,
+          "worst": {
+            "method": "POST",
+            "url": "/dsh-wallpaper/media/cleanup",
+            "bodyLen": 53,
+            "bodyKeys": [
+              "keep"
+            ],
+            "bodyMethod": null
+          },
+          "perWindowMax": [
+            13.4,
+            138.5,
+            16.3
+          ]
+        }
+      }
+    },
+    "usage-nofetch": {
+      "windows": 6,
+      "accepted": 6,
+      "labels": [
+        "b2-usage-nofetch-r1",
+        "b2-usage-nofetch-r2",
+        "b2-usage-nofetch-r3",
+        "reg-usage-nofetch-r1",
+        "reg-usage-nofetch-r2",
+        "reg-usage-nofetch-r3"
+      ],
+      "stubEffective": 0,
+      "metrics": {
+        "msToVisible": {
+          "allMedian": 14.55,
+          "allRange": [
+            13.6,
+            18.7
+          ],
+          "acceptedMedian": 14.55,
+          "acceptedRange": [
+            13.6,
+            18.7
+          ],
+          "n": 6
+        },
+        "clickWallMs": {
+          "allMedian": 46,
+          "allRange": [
+            44,
+            58
+          ],
+          "acceptedMedian": 46,
+          "acceptedRange": [
+            44,
+            58
+          ],
+          "n": 6
+        },
+        "clickScriptMsPerS": {
+          "allMedian": 0.03,
+          "allRange": [
+            0.01,
+            0.055
+          ],
+          "acceptedMedian": 0.03,
+          "acceptedRange": [
+            0.01,
+            0.055
+          ],
+          "n": 6
+        },
+        "clickRecalcMsPerS": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0.001
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0.001
+          ],
+          "n": 6
+        },
+        "clickTaskMsPerS": {
+          "allMedian": 0.042,
+          "allRange": [
+            0.018,
+            0.073
+          ],
+          "acceptedMedian": 0.042,
+          "acceptedRange": [
+            0.018,
+            0.073
+          ],
+          "n": 6
+        },
+        "taskBusyPct": {
+          "allMedian": 4.147,
+          "allRange": [
+            1.837,
+            7.256
+          ],
+          "acceptedMedian": 4.147,
+          "acceptedRange": [
+            1.837,
+            7.256
+          ],
+          "n": 6
+        },
+        "rafP99": {
+          "allMedian": 16.8,
+          "allRange": [
+            16.8,
+            16.8
+          ],
+          "acceptedMedian": 16.8,
+          "acceptedRange": [
+            16.8,
+            16.8
+          ],
+          "n": 6
+        },
+        "rafOver50": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0
+          ],
+          "n": 6
+        },
+        "ltMax": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "ltN": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0
+          ],
+          "n": 6
+        },
+        "mountScriptMs": {
+          "allMedian": 0.094,
+          "allRange": [
+            0.047,
+            0.35
+          ],
+          "acceptedMedian": 0.094,
+          "acceptedRange": [
+            0.047,
+            0.35
+          ],
+          "n": 6
+        },
+        "mountRecalcMs": {
+          "allMedian": 0.022,
+          "allRange": [
+            0.015,
+            0.027
+          ],
+          "acceptedMedian": 0.022,
+          "acceptedRange": [
+            0.015,
+            0.027
+          ],
+          "n": 6
+        },
+        "mountRecalcCount": {
+          "allMedian": 50.5,
+          "allRange": [
+            37,
+            55
+          ],
+          "acceptedMedian": 50.5,
+          "acceptedRange": [
+            37,
+            55
+          ],
+          "n": 6
+        }
+      },
+      "pathReachableClickAnyWindow": {
+        "themeApplyRan": 6,
+        "themeApplyRanInClick": 0,
+        "themeRefreshRan": 6,
+        "metaContentWrites": 0,
+        "metaContentWritesInClick": 0,
+        "bodyWrites": 0,
+        "bodyWritesInClick": 0,
+        "computedReadsInClick": 0,
+        "usageSeen": 0,
+        "usageSeenInClick": 0
+      },
+      "routeHits": [],
+      "httpEndpoints": {
+        "/": {
+          "n": 111,
+          "maxMs": 2973.8,
+          "worst": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 109,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "session.list"
+          },
+          "perWindowMax": [
+            2049.4,
+            1450.8,
+            2973.8,
+            1259,
+            1219.1,
+            564.3
+          ]
+        },
+        "/dsh-wallpaper/media/cleanup": {
+          "n": 6,
+          "maxMs": 196.7,
+          "worst": null,
+          "perWindowMax": [
+            11.2,
+            14.4,
+            109.5,
+            196.7,
+            124.7,
+            121.3
+          ]
+        }
+      }
+    },
+    "repro": {
+      "windows": 1,
+      "accepted": 0,
+      "labels": [
+        "raf-repro-sharedstub-theme-sync"
+      ],
+      "stubEffective": 0,
+      "metrics": {
+        "msToVisible": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "clickWallMs": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "clickScriptMsPerS": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "clickRecalcMsPerS": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "clickTaskMsPerS": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "taskBusyPct": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "rafP99": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "rafOver50": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "ltMax": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "ltN": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "mountScriptMs": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "mountRecalcMs": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "mountRecalcCount": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        }
+      },
+      "pathReachableClickAnyWindow": {},
+      "routeHits": [],
+      "httpEndpoints": {}
+    },
+    "tp-off": {
+      "windows": 5,
+      "accepted": 5,
+      "labels": [
+        "reg-tp-off-r1",
+        "reg-tp-off-r2",
+        "reg-tp-off-r3",
+        "smoke-tpoff",
+        "smoke-tpoff2"
+      ],
+      "stubEffective": 0,
+      "metrics": {
+        "msToVisible": {
+          "allMedian": 19.2,
+          "allRange": [
+            19,
+            21.1
+          ],
+          "acceptedMedian": 19.2,
+          "acceptedRange": [
+            19,
+            21.1
+          ],
+          "n": 3
+        },
+        "clickWallMs": {
+          "allMedian": 47,
+          "allRange": [
+            44,
+            60
+          ],
+          "acceptedMedian": 47,
+          "acceptedRange": [
+            44,
+            60
+          ],
+          "n": 5
+        },
+        "clickScriptMsPerS": {
+          "allMedian": 0.01,
+          "allRange": [
+            0.005,
+            0.289
+          ],
+          "acceptedMedian": 0.01,
+          "acceptedRange": [
+            0.005,
+            0.289
+          ],
+          "n": 5
+        },
+        "clickRecalcMsPerS": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0.006
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0.006
+          ],
+          "n": 5
+        },
+        "clickTaskMsPerS": {
+          "allMedian": 0.016,
+          "allRange": [
+            0.008,
+            0.325
+          ],
+          "acceptedMedian": 0.016,
+          "acceptedRange": [
+            0.008,
+            0.325
+          ],
+          "n": 5
+        },
+        "taskBusyPct": {
+          "allMedian": 1.639,
+          "allRange": [
+            0.818,
+            1.646
+          ],
+          "acceptedMedian": 1.639,
+          "acceptedRange": [
+            0.818,
+            1.646
+          ],
+          "n": 3
+        },
+        "rafP99": {
+          "allMedian": 16.8,
+          "allRange": [
+            16.8,
+            50
+          ],
+          "acceptedMedian": 16.8,
+          "acceptedRange": [
+            16.8,
+            50
+          ],
+          "n": 5
+        },
+        "rafOver50": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0
+          ],
+          "n": 5
+        },
+        "ltMax": {
+          "allMedian": null,
+          "allRange": [
+            null,
+            null
+          ],
+          "acceptedMedian": null,
+          "acceptedRange": [
+            null,
+            null
+          ],
+          "n": 0
+        },
+        "ltN": {
+          "allMedian": 0,
+          "allRange": [
+            0,
+            0
+          ],
+          "acceptedMedian": 0,
+          "acceptedRange": [
+            0,
+            0
+          ],
+          "n": 5
+        },
+        "mountScriptMs": {
+          "allMedian": 0.066,
+          "allRange": [
+            0.06,
+            0.543
+          ],
+          "acceptedMedian": 0.066,
+          "acceptedRange": [
+            0.06,
+            0.543
+          ],
+          "n": 5
+        },
+        "mountRecalcMs": {
+          "allMedian": 0.022,
+          "allRange": [
+            0.011,
+            0.027
+          ],
+          "acceptedMedian": 0.022,
+          "acceptedRange": [
+            0.011,
+            0.027
+          ],
+          "n": 5
+        },
+        "mountRecalcCount": {
+          "allMedian": 62,
+          "allRange": [
+            29,
+            87
+          ],
+          "acceptedMedian": 62,
+          "acceptedRange": [
+            29,
+            87
+          ],
+          "n": 5
+        }
+      },
+      "pathReachableClickAnyWindow": {
+        "themeApplyRan": 4,
+        "themeApplyRanInClick": 0,
+        "themeRefreshRan": 4,
+        "metaContentWrites": 0,
+        "metaContentWritesInClick": 0,
+        "bodyWrites": 0,
+        "bodyWritesInClick": 0,
+        "computedReadsInClick": 0,
+        "usageSeen": 0,
+        "usageSeenInClick": 0
+      },
+      "routeHits": [],
+      "httpEndpoints": {
+        "/": {
+          "n": 39,
+          "maxMs": 5408.7,
+          "worst": null,
+          "perWindowMax": [
+            2196.6,
+            5408.7,
+            4567.1
+          ]
+        },
+        "/dsh-wallpaper/media/cleanup": {
+          "n": 3,
+          "maxMs": 447.1,
+          "worst": null,
+          "perWindowMax": [
+            442.5,
+            425.2,
+            447.1
+          ]
+        }
+      }
+    }
+  },
+  "verdicts": {
+    "base": {
+      "verdict": "REFERENCE",
+      "reason": [
+        "对照组"
+      ]
+    },
+    "p2ac-old": {
+      "verdict": "INCONCLUSIVE",
+      "reason": [
+        "stub 未自证生效（0/7 窗口 effective=true）"
+      ],
+      "deltas": {
+        "msToVisible": {
+          "base": 16.6,
+          "cond": 17.2,
+          "pct": 3.6,
+          "label": "点设置→面板可见 (ms)"
+        },
+        "clickWallMs": {
+          "base": 54,
+          "cond": 53,
+          "pct": -1.9,
+          "label": "点击调用墙钟 (ms)"
+        },
+        "clickScriptMsPerS": {
+          "base": 0.021,
+          "cond": 0.018,
+          "pct": -14.3,
+          "label": "点击相位脚本 ms/s"
+        },
+        "clickRecalcMsPerS": {
+          "base": 0,
+          "cond": 0,
+          "pct": null
+        },
+        "clickTaskMsPerS": {
+          "base": 0.038,
+          "cond": 0.033,
+          "pct": -13.2,
+          "label": "点击相位任务占用 ms/s"
+        },
+        "taskBusyPct": {
+          "base": 3.696,
+          "cond": 3.283,
+          "pct": -11.2,
+          "label": "点击窗口主线程占用 %"
+        },
+        "rafP99": {
+          "base": 16.8,
+          "cond": 16.8,
+          "pct": 0,
+          "label": "rAF 间隔 p99 (ms)"
+        },
+        "rafOver50": {
+          "base": 0,
+          "cond": 0,
+          "pct": null
+        },
+        "ltMax": {
+          "base": null,
+          "cond": null,
+          "pct": null
+        },
+        "ltN": {
+          "base": 0,
+          "cond": 0,
+          "pct": null
+        },
+        "mountScriptMs": {
+          "base": 0.057,
+          "cond": 0.073,
+          "pct": 28.1,
+          "label": "首挂载脚本 (ms)"
+        },
+        "mountRecalcMs": {
+          "base": 0.021,
+          "cond": 0.028,
+          "pct": 33.3,
+          "label": "首挂载样式重算 (ms)"
+        },
+        "mountRecalcCount": {
+          "base": 56,
+          "cond": 60,
+          "pct": 7.1,
+          "label": "首挂载重算次数"
+        }
+      },
+      "keyMetric": {
+        "name": "msToVisible",
+        "base": 16.6,
+        "cond": 17.2,
+        "pct": 3.6,
+        "label": "点设置→面板可见 (ms)",
+        "rangeOverlap": true
+      }
+    },
+    "theme-sync": {
+      "verdict": "FAIL",
+      "reason": [],
+      "deltas": {
+        "msToVisible": {
+          "base": 16.6,
+          "cond": 15.4,
+          "pct": -7.2,
+          "label": "点设置→面板可见 (ms)"
+        },
+        "clickWallMs": {
+          "base": 54,
+          "cond": 45,
+          "pct": -16.7,
+          "label": "点击调用墙钟 (ms)"
+        },
+        "clickScriptMsPerS": {
+          "base": 0.021,
+          "cond": 0.019,
+          "pct": -9.5,
+          "label": "点击相位脚本 ms/s"
+        },
+        "clickRecalcMsPerS": {
+          "base": 0,
+          "cond": 0.001,
+          "pct": null
+        },
+        "clickTaskMsPerS": {
+          "base": 0.038,
+          "cond": 0.035,
+          "pct": -7.9,
+          "label": "点击相位任务占用 ms/s"
+        },
+        "taskBusyPct": {
+          "base": 3.696,
+          "cond": 3.512,
+          "pct": -5,
+          "label": "点击窗口主线程占用 %"
+        },
+        "rafP99": {
+          "base": 16.8,
+          "cond": 16.7,
+          "pct": -0.6,
+          "label": "rAF 间隔 p99 (ms)"
+        },
+        "rafOver50": {
+          "base": 0,
+          "cond": 0,
+          "pct": null
+        },
+        "ltMax": {
+          "base": null,
+          "cond": null,
+          "pct": null
+        },
+        "ltN": {
+          "base": 0,
+          "cond": 0,
+          "pct": null
+        },
+        "mountScriptMs": {
+          "base": 0.057,
+          "cond": 0.065,
+          "pct": 14,
+          "label": "首挂载脚本 (ms)"
+        },
+        "mountRecalcMs": {
+          "base": 0.021,
+          "cond": 0.019,
+          "pct": -9.5,
+          "label": "首挂载样式重算 (ms)"
+        },
+        "mountRecalcCount": {
+          "base": 56,
+          "cond": 48,
+          "pct": -14.3,
+          "label": "首挂载重算次数"
+        }
+      },
+      "keyMetric": {
+        "name": "msToVisible",
+        "base": 16.6,
+        "cond": 15.4,
+        "pct": -7.2,
+        "label": "点设置→面板可见 (ms)",
+        "rangeOverlap": true
+      }
+    },
+    "tpoff-armed": {
+      "verdict": "INCONCLUSIVE",
+      "reason": [
+        "stub 未自证生效（0/3 窗口 effective=true）"
+      ],
+      "deltas": {
+        "msToVisible": {
+          "base": 16.6,
+          "cond": 15.9,
+          "pct": -4.2,
+          "label": "点设置→面板可见 (ms)"
+        },
+        "clickWallMs": {
+          "base": 54,
+          "cond": 43,
+          "pct": -20.4,
+          "label": "点击调用墙钟 (ms)"
+        },
+        "clickScriptMsPerS": {
+          "base": 0.021,
+          "cond": 0.038,
+          "pct": 81,
+          "label": "点击相位脚本 ms/s"
+        },
+        "clickRecalcMsPerS": {
+          "base": 0,
+          "cond": 0.001,
+          "pct": null
+        },
+        "clickTaskMsPerS": {
+          "base": 0.038,
+          "cond": 0.051,
+          "pct": 34.2,
+          "label": "点击相位任务占用 ms/s"
+        },
+        "taskBusyPct": {
+          "base": 3.696,
+          "cond": 5.142,
+          "pct": 39.1,
+          "label": "点击窗口主线程占用 %"
+        },
+        "rafP99": {
+          "base": 16.8,
+          "cond": 16.8,
+          "pct": 0,
+          "label": "rAF 间隔 p99 (ms)"
+        },
+        "rafOver50": {
+          "base": 0,
+          "cond": 0,
+          "pct": null
+        },
+        "ltMax": {
+          "base": null,
+          "cond": null,
+          "pct": null
+        },
+        "ltN": {
+          "base": 0,
+          "cond": 0,
+          "pct": null
+        },
+        "mountScriptMs": {
+          "base": 0.057,
+          "cond": 0.059,
+          "pct": 3.5,
+          "label": "首挂载脚本 (ms)"
+        },
+        "mountRecalcMs": {
+          "base": 0.021,
+          "cond": 0.019,
+          "pct": -9.5,
+          "label": "首挂载样式重算 (ms)"
+        },
+        "mountRecalcCount": {
+          "base": 56,
+          "cond": 50,
+          "pct": -10.7,
+          "label": "首挂载重算次数"
+        }
+      },
+      "keyMetric": {
+        "name": "msToVisible",
+        "base": 16.6,
+        "cond": 15.9,
+        "pct": -4.2,
+        "label": "点设置→面板可见 (ms)",
+        "rangeOverlap": true
+      }
+    },
+    "usage-nofetch": {
+      "verdict": "INCONCLUSIVE",
+      "reason": [
+        "stub 未自证生效（0/6 窗口 effective=true）"
+      ],
+      "deltas": {
+        "msToVisible": {
+          "base": 16.6,
+          "cond": 14.55,
+          "pct": -12.3,
+          "label": "点设置→面板可见 (ms)"
+        },
+        "clickWallMs": {
+          "base": 54,
+          "cond": 46,
+          "pct": -14.8,
+          "label": "点击调用墙钟 (ms)"
+        },
+        "clickScriptMsPerS": {
+          "base": 0.021,
+          "cond": 0.03,
+          "pct": 42.9,
+          "label": "点击相位脚本 ms/s"
+        },
+        "clickRecalcMsPerS": {
+          "base": 0,
+          "cond": 0,
+          "pct": null
+        },
+        "clickTaskMsPerS": {
+          "base": 0.038,
+          "cond": 0.042,
+          "pct": 10.5,
+          "label": "点击相位任务占用 ms/s"
+        },
+        "taskBusyPct": {
+          "base": 3.696,
+          "cond": 4.147,
+          "pct": 12.2,
+          "label": "点击窗口主线程占用 %"
+        },
+        "rafP99": {
+          "base": 16.8,
+          "cond": 16.8,
+          "pct": 0,
+          "label": "rAF 间隔 p99 (ms)"
+        },
+        "rafOver50": {
+          "base": 0,
+          "cond": 0,
+          "pct": null
+        },
+        "ltMax": {
+          "base": null,
+          "cond": null,
+          "pct": null
+        },
+        "ltN": {
+          "base": 0,
+          "cond": 0,
+          "pct": null
+        },
+        "mountScriptMs": {
+          "base": 0.057,
+          "cond": 0.094,
+          "pct": 64.9,
+          "label": "首挂载脚本 (ms)"
+        },
+        "mountRecalcMs": {
+          "base": 0.021,
+          "cond": 0.022,
+          "pct": 4.8,
+          "label": "首挂载样式重算 (ms)"
+        },
+        "mountRecalcCount": {
+          "base": 56,
+          "cond": 50.5,
+          "pct": -9.8,
+          "label": "首挂载重算次数"
+        }
+      },
+      "keyMetric": {
+        "name": "msToVisible",
+        "base": 16.6,
+        "cond": 14.55,
+        "pct": -12.3,
+        "label": "点设置→面板可见 (ms)",
+        "rangeOverlap": true
+      }
+    },
+    "repro": {
+      "verdict": "INCONCLUSIVE",
+      "reason": [
+        "stub 未自证生效（0/1 窗口 effective=true）",
+        "有 1 个窗口非 EXCLUSIVE"
+      ],
+      "deltas": {
+        "msToVisible": {
+          "base": 16.6,
+          "cond": null,
+          "pct": null
+        },
+        "clickWallMs": {
+          "base": 54,
+          "cond": null,
+          "pct": null
+        },
+        "clickScriptMsPerS": {
+          "base": 0.021,
+          "cond": null,
+          "pct": null
+        },
+        "clickRecalcMsPerS": {
+          "base": 0,
+          "cond": null,
+          "pct": null
+        },
+        "clickTaskMsPerS": {
+          "base": 0.038,
+          "cond": null,
+          "pct": null
+        },
+        "taskBusyPct": {
+          "base": 3.696,
+          "cond": null,
+          "pct": null
+        },
+        "rafP99": {
+          "base": 16.8,
+          "cond": null,
+          "pct": null
+        },
+        "rafOver50": {
+          "base": 0,
+          "cond": null,
+          "pct": null
+        },
+        "ltMax": {
+          "base": null,
+          "cond": null,
+          "pct": null
+        },
+        "ltN": {
+          "base": 0,
+          "cond": null,
+          "pct": null
+        },
+        "mountScriptMs": {
+          "base": 0.057,
+          "cond": null,
+          "pct": null
+        },
+        "mountRecalcMs": {
+          "base": 0.021,
+          "cond": null,
+          "pct": null
+        },
+        "mountRecalcCount": {
+          "base": 56,
+          "cond": null,
+          "pct": null
+        }
+      },
+      "keyMetric": {
+        "name": "msToVisible",
+        "base": 16.6,
+        "cond": null,
+        "pct": null,
+        "rangeOverlap": null
+      }
+    },
+    "tp-off": {
+      "verdict": "INCONCLUSIVE",
+      "reason": [
+        "stub 未自证生效（0/5 窗口 effective=true）"
+      ],
+      "deltas": {
+        "msToVisible": {
+          "base": 16.6,
+          "cond": 19.2,
+          "pct": 15.7,
+          "label": "点设置→面板可见 (ms)"
+        },
+        "clickWallMs": {
+          "base": 54,
+          "cond": 47,
+          "pct": -13,
+          "label": "点击调用墙钟 (ms)"
+        },
+        "clickScriptMsPerS": {
+          "base": 0.021,
+          "cond": 0.01,
+          "pct": -52.4,
+          "label": "点击相位脚本 ms/s"
+        },
+        "clickRecalcMsPerS": {
+          "base": 0,
+          "cond": 0,
+          "pct": null
+        },
+        "clickTaskMsPerS": {
+          "base": 0.038,
+          "cond": 0.016,
+          "pct": -57.9,
+          "label": "点击相位任务占用 ms/s"
+        },
+        "taskBusyPct": {
+          "base": 3.696,
+          "cond": 1.639,
+          "pct": -55.7,
+          "label": "点击窗口主线程占用 %"
+        },
+        "rafP99": {
+          "base": 16.8,
+          "cond": 16.8,
+          "pct": 0,
+          "label": "rAF 间隔 p99 (ms)"
+        },
+        "rafOver50": {
+          "base": 0,
+          "cond": 0,
+          "pct": null
+        },
+        "ltMax": {
+          "base": null,
+          "cond": null,
+          "pct": null
+        },
+        "ltN": {
+          "base": 0,
+          "cond": 0,
+          "pct": null
+        },
+        "mountScriptMs": {
+          "base": 0.057,
+          "cond": 0.066,
+          "pct": 15.8,
+          "label": "首挂载脚本 (ms)"
+        },
+        "mountRecalcMs": {
+          "base": 0.021,
+          "cond": 0.022,
+          "pct": 4.8,
+          "label": "首挂载样式重算 (ms)"
+        },
+        "mountRecalcCount": {
+          "base": 56,
+          "cond": 62,
+          "pct": 10.7,
+          "label": "首挂载重算次数"
+        }
+      },
+      "keyMetric": {
+        "name": "msToVisible",
+        "base": 16.6,
+        "cond": 19.2,
+        "pct": 15.7,
+        "label": "点设置→面板可见 (ms)",
+        "rangeOverlap": true
+      }
+    }
+  },
+  "notes": []
+}

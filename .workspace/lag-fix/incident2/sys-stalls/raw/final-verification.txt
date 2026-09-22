@@ -1,0 +1,50 @@
+############ did the runaway bash 81808 end? ############
+    PID    PPID ELAPSED %CPU STAT CMD
+PID 81808 GONE (exited)
+
+--- any *other* 90%+ CPU process right now ---
+  10806 CNS2026+  20   0   30.3g   4.1g  72584 R 103.0   6.7  25:32.59 node
+  10350 CNS2026+  20   0 4009500   1.0g 171332 S  28.7   1.7   7:43.97 Isolated Web Co
+
+--- identify the display-input investigation agent still active? ---
+
+############ Modeline burst timeline (post-10:28 events = my session window) ############
+   1339 22 10
+
+############ dc: who called RandR? xrandr clients in journal/session ############
+9月 22 10:02:01 CNS202649516533 /usr/libexec/gdm-x-session[2661]: (II) Initializing extension RANDR
+9月 22 10:02:01 CNS202649516533 /usr/libexec/gdm-x-session[2867]:   Major opcode of failed request:  141 (RANDR)
+9月 22 10:02:18 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (II) Initializing extension RANDR
+9月 22 10:02:18 CNS202649516533 /usr/libexec/gdm-x-session[3959]:   Major opcode of failed request:  141 (RANDR)
+9月 22 10:02:18 CNS202649516533 gnome-shell[4139]: Enabling experimental feature 'x11-randr-fractional-scaling'
+
+############ CONFIRM: dsh host cgroup cpu usage share vs subagents ############
+host pid 10806 cgroup:
+0::/user.slice/user-1001.slice/user@1001.service/app.slice/vte-spawn-3ed82525-bd47-418d-9112-fe18fb86ea1b.scope
+--- cgroup cpu usage_usec for vte-spawn scope (host+its children) ---
+/sys/fs/cgroup/user.slice/user-1001.slice/user@1001.service/app.slice/app-gnome-bytedance\x2dfeishu-30300.scope/cpu.stat
+usage_usec 32649575
+user_usec 27077211
+system_usec 5572363
+/sys/fs/cgroup/user.slice/user-1001.slice/user@1001.service/app.slice/app-gnome-CC\x20Switch-4348.scope/cpu.stat
+usage_usec 2295360
+user_usec 1421795
+system_usec 873565
+/sys/fs/cgroup/user.slice/user-1001.slice/user@1001.service/app.slice/app-gnome-LSDHelper-4376.scope/cpu.stat
+usage_usec 68000532
+user_usec 22241146
+system_usec 45759385
+/sys/fs/cgroup/user.slice/user-1001.slice/user@1001.service/app.slice/app-gnome-org.gnome.Evolution\x2dalarm\x2dnotify-4337.scope/cpu.stat
+usage_usec 74363
+user_usec 64920
+system_usec 9442
+/sys/fs/cgroup/user.slice/user-1001.slice/user@1001.service/app.slice/app-gnome-org.gnome.SettingsDaemon.DiskUtilityNotify-4390.scope/cpu.stat
+usage_usec 2557
+user_usec 1917
+system_usec 639
+
+############ final zombie check ############
+  27904 Zl   [chrome] <defunct>
+zombies: 1
+R: 3  D: 5
+5.83 6.00 4.97 3/3136 127658

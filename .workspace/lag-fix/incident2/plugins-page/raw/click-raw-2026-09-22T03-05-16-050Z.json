@@ -1,0 +1,79 @@
+{
+  "base": "http://127.0.0.1:3080",
+  "tag": "2026-09-22T03-05-16-050Z",
+  "scenarios": {
+    "A": {
+      "condition": {
+        "at": "2026-09-22T03:05:16.173Z",
+        "loadavg": [
+          5.48,
+          3.71,
+          4.08
+        ],
+        "cpus": 32,
+        "freeMemMB": 48527,
+        "totalMemMB": 61886
+      },
+      "env": {
+        "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+        "dpr": 1,
+        "viewport": {
+          "w": 1440,
+          "h": 900
+        },
+        "lang": "zh-CN"
+      },
+      "error": "Error: page.evaluate: TypeError: Cannot read properties of undefined (reading 'counts')\n    at eval (eval at evaluate (:234:30), <anonymous>:1:21)\n    at UtilityScript.evaluate (<anonymous>:236:17)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+    },
+    "B": {
+      "condition": {
+        "at": "2026-09-22T03:05:18.996Z",
+        "loadavg": [
+          5.44,
+          3.74,
+          4.09
+        ],
+        "cpus": 32,
+        "freeMemMB": 49120,
+        "totalMemMB": 61886
+      },
+      "error": "Error: page.evaluate: TypeError: Cannot read properties of undefined (reading 'arm')\n    at eval (eval at evaluate (:234:30), <anonymous>:1:22)\n    at UtilityScript.evaluate (<anonymous>:236:17)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+    },
+    "C": {
+      "condition": {
+        "at": "2026-09-22T03:05:21.782Z",
+        "loadavg": [
+          5.44,
+          3.74,
+          4.09
+        ],
+        "cpus": 32,
+        "freeMemMB": 49261,
+        "totalMemMB": 61886
+      },
+      "error": "Error: page.evaluate: TypeError: Cannot read properties of undefined (reading 'arm')\n    at eval (eval at evaluate (:234:30), <anonymous>:1:21)\n    at UtilityScript.evaluate (<anonymous>:236:17)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+    }
+  },
+  "conditionStart": {
+    "at": "2026-09-22T03:05:16.050Z",
+    "loadavg": [
+      5.48,
+      3.71,
+      4.08
+    ],
+    "cpus": 32,
+    "freeMemMB": 48400,
+    "totalMemMB": 61886
+  },
+  "conditionEnd": {
+    "at": "2026-09-22T03:05:26.945Z",
+    "loadavg": [
+      5.08,
+      3.69,
+      4.07
+    ],
+    "cpus": 32,
+    "freeMemMB": 49101,
+    "totalMemMB": 61886
+  }
+}

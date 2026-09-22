@@ -1,0 +1,347 @@
+##### journalctl --list-boots #####
+IDX BOOT ID                          FIRST ENTRY                 LAST ENTRY
+ -7 17fdd96951904deb8c686206be330907 Tue 2026-08-11 01:02:43 CST Mon 2026-08-10 16:34:56 CST
+ -6 931459915d9d4f35834bfdbfa86213da Mon 2026-08-10 16:35:20 CST Mon 2026-08-10 16:38:41 CST
+ -5 63193cf90bc0480b9f7adfccd6b284e6 Mon 2026-08-10 16:39:07 CST Mon 2026-08-10 16:40:36 CST
+ -4 f616da0885b84078a06fa69518c7fd7e Mon 2026-08-10 17:08:04 CST Wed 2026-08-12 10:57:17 CST
+ -3 20e0dfcb80f449da8634f410fa7e3569 Wed 2026-08-12 10:58:37 CST Sat 2026-09-12 14:53:53 CST
+ -2 d59100c8c10a40378f251a9cebb15267 Sat 2026-09-12 14:54:44 CST Fri 2026-09-18 17:42:05 CST
+ -1 dbe2fd5614244921b1dac5a2246c633b Sun 2026-09-20 11:10:42 CST Mon 2026-09-21 19:04:34 CST
+  0 993b7879fa064c6e97c9d3df3d19a157 Tue 2026-09-22 10:01:55 CST Tue 2026-09-22 11:10:18 CST
+
+##### systemd-analyze / boot times #####
+9月 20 11:10:42 CNS202649516533 kernel: Linux version 6.14.0-27-generic (buildd@lcy02-amd64-120) (x86_64-linux-gnu-gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #27~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Jul 22 17:38:49 UTC 2 (Ubuntu 6.14.0-27.27~24.04.1-generic 6.14.6)
+9月 20 11:10:42 CNS202649516533 kernel: Command line: BOOT_IMAGE=/boot/vmlinuz-6.14.0-27-generic root=UUID=38c1adbf-c111-44ca-bb6b-7c041bea3a19 ro quiet splash vt.handoff=7
+9月 20 11:10:42 CNS202649516533 kernel: KERNEL supported cpus:
+...
+##### journal 2026-09-20 17:10 .. 17:25 FULL #####
+9月 20 17:10:02 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:10:05 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:10:08 CNS202649516533 systemd[1]: Starting sysstat-collect.service - system activity accounting tool...
+9月 20 17:10:08 CNS202649516533 systemd[1]: sysstat-collect.service: Deactivated successfully.
+9月 20 17:10:08 CNS202649516533 systemd[1]: Finished sysstat-collect.service - system activity accounting tool.
+9月 20 17:10:08 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-46 noise=9999 txrate=573500
+9月 20 17:10:11 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:10:14 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-47 noise=9999 txrate=573500
+9月 20 17:10:17 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-47 noise=9999 txrate=573500
+9月 20 17:10:20 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:10:23 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:10:26 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:10:29 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:10:32 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:10:35 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-47 noise=9999 txrate=573500
+9月 20 17:10:38 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:10:41 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:10:44 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:10:47 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:10:50 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:10:53 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-47 noise=9999 txrate=573500
+9月 20 17:10:56 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:10:59 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:11:02 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:11:05 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:11:08 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:11:11 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:11:14 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:11:17 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:11:20 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:11:23 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:11:26 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:11:29 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:11:32 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:11:35 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:11:38 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:11:41 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:11:44 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:11:47 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:11:50 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:11:53 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:11:56 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:11:59 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:12:02 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:12:05 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=458800
+9月 20 17:12:08 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:12:11 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:12:14 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:12:17 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:12:20 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:12:23 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:12:26 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:12:29 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:12:30 CNS202649516533 tracker-miner-fs-3[705579]: (tracker-extract-3:705579): GLib-GIO-WARNING **: 17:12:30.392: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:12:32 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:12:35 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:12:38 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:12:41 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=458800
+9月 20 17:12:42 CNS202649516533 tracker-miner-fs-3[705640]: (tracker-extract-3:705640): GLib-GIO-WARNING **: 17:12:42.399: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:12:44 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:12:47 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:12:50 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:12:53 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=344100
+9月 20 17:12:56 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:12:59 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:13:02 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=458800
+9月 20 17:13:05 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:13:08 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:13:11 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:13:14 CNS202649516533 tracker-miner-fs-3[705899]: (tracker-extract-3:705899): GLib-GIO-WARNING **: 17:13:14.420: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:13:14 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:13:17 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:13:20 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:13:23 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:13:24 CNS202649516533 tracker-miner-fs-3[705955]: (tracker-extract-3:705955): GLib-GIO-WARNING **: 17:13:24.955: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:13:26 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:13:29 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:13:32 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:13:35 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:13:38 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:13:41 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:13:44 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:13:47 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-47 noise=9999 txrate=573500
+9月 20 17:13:50 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:13:53 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:13:56 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:13:59 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:14:02 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:14:05 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:14:08 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:14:11 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:14:14 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=344100
+9月 20 17:14:17 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:14:20 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:14:23 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:14:26 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=344100
+9月 20 17:14:29 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:14:32 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:14:35 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:14:38 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-47 noise=9999 txrate=573500
+9月 20 17:14:41 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:14:44 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=458800
+9月 20 17:14:47 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=458800
+9月 20 17:14:50 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:14:53 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:14:55 CNS202649516533 tracker-miner-fs-3[706513]: (tracker-extract-3:706513): GLib-GIO-WARNING **: 17:14:55.236: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:14:56 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:14:59 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:15:01 CNS202649516533 CRON[706568]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+9月 20 17:15:01 CNS202649516533 CRON[706569]: (root) CMD (command -v debian-sa1 > /dev/null && debian-sa1 1 1)
+9月 20 17:15:01 CNS202649516533 CRON[706568]: pam_unix(cron:session): session closed for user root
+9月 20 17:15:02 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:15:05 CNS202649516533 tracker-miner-fs-3[706596]: (tracker-extract-3:706596): GLib-GIO-WARNING **: 17:15:05.943: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:15:06 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=458800
+9月 20 17:15:09 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=344100
+9月 20 17:15:12 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:15:15 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:15:18 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:15:18 CNS202649516533 tracker-miner-fs-3[706667]: (tracker-extract-3:706667): GLib-GIO-WARNING **: 17:15:18.922: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:15:21 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=344100
+9月 20 17:15:24 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:15:27 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:15:28 CNS202649516533 tracker-miner-fs-3[706727]: (tracker-extract-3:706727): GLib-GIO-WARNING **: 17:15:28.926: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:15:30 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:15:33 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:15:36 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:15:39 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:15:42 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=206400
+9月 20 17:15:45 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=458800
+9月 20 17:15:48 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:15:51 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:15:54 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:15:57 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:16:00 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:16:03 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=458800
+9月 20 17:16:06 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=344100
+9月 20 17:16:09 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:16:12 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=344100
+9月 20 17:16:15 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:16:18 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:16:21 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:16:24 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:16:27 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:16:30 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:16:33 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:16:36 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:16:39 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:16:42 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:16:45 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:16:48 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:16:51 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:16:54 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:16:57 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:17:00 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:17:01 CNS202649516533 CRON[707282]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+9月 20 17:17:01 CNS202649516533 CRON[707283]: (root) CMD (cd / && run-parts --report /etc/cron.hourly)
+9月 20 17:17:01 CNS202649516533 CRON[707282]: pam_unix(cron:session): session closed for user root
+9月 20 17:17:03 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:17:06 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:17:09 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:17:12 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:17:15 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:17:18 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:17:21 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:17:24 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:17:27 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:17:30 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=458800
+9月 20 17:17:33 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:17:36 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:17:39 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:17:42 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:17:45 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:17:48 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:17:51 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:17:54 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:17:57 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:18:00 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:18:03 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:18:06 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:18:09 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:18:12 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:18:13 CNS202649516533 tracker-miner-fs-3[707719]: (tracker-extract-3:707719): GLib-GIO-WARNING **: 17:18:13.025: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:18:15 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:18:18 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:18:21 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:18:24 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:18:27 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:18:30 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:18:33 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:18:36 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:18:39 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:18:42 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:18:45 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:18:45 CNS202649516533 tracker-miner-fs-3[708036]: (tracker-extract-3:708036): GLib-GIO-WARNING **: 17:18:45.677: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:18:48 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:18:51 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:18:54 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:18:56 CNS202649516533 tracker-miner-fs-3[708175]: (tracker-extract-3:708175): GLib-GIO-WARNING **: 17:18:56.386: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:18:57 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:19:00 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=458800
+9月 20 17:19:03 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:19:06 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:19:09 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:19:12 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=458800
+9月 20 17:19:15 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:19:18 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=344100
+9月 20 17:19:21 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=344100
+9月 20 17:19:24 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:19:27 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:19:30 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:19:33 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:19:36 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:19:39 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:19:42 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:19:45 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:19:48 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:19:51 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:19:54 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:19:57 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:20:00 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:20:03 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:20:06 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:20:09 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:20:12 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:20:15 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:20:16 CNS202649516533 tracker-miner-fs-3[708601]: (tracker-extract-3:708601): GLib-GIO-WARNING **: 17:20:16.879: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:20:18 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:20:20 CNS202649516533 systemd[1]: Starting sysstat-collect.service - system activity accounting tool...
+9月 20 17:20:20 CNS202649516533 systemd[1]: sysstat-collect.service: Deactivated successfully.
+9月 20 17:20:20 CNS202649516533 systemd[1]: Finished sysstat-collect.service - system activity accounting tool.
+9月 20 17:20:21 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:20:24 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:20:26 CNS202649516533 tracker-miner-fs-3[708662]: (tracker-extract-3:708662): GLib-GIO-WARNING **: 17:20:26.887: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:20:27 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:20:30 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:20:33 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=458800
+9月 20 17:20:36 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:20:39 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:20:42 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:20:45 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:20:48 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:20:51 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=458800
+9月 20 17:20:54 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:20:57 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:00 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:03 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:06 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:21:09 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:12 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:15 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:18 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:21:21 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=206400
+9月 20 17:21:24 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:27 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:30 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:33 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:21:36 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:39 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:21:42 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:45 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:21:48 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:51 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:54 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:21:57 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=458800
+9月 20 17:22:00 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:22:03 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:22:06 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:22:09 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:22:12 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=51600
+9月 20 17:22:15 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=51600
+9月 20 17:22:18 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:22:21 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:22:24 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=458800
+9月 20 17:22:27 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:22:30 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:22:33 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:22:36 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:22:39 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=458800
+9月 20 17:22:42 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:22:45 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:22:48 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:22:51 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:22:54 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:22:57 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:23:00 CNS202649516533 tracker-miner-fs-3[709658]: (tracker-extract-3:709658): GLib-GIO-WARNING **: 17:23:00.114: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:23:00 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:23:03 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:23:06 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:23:09 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:23:10 CNS202649516533 tracker-miner-fs-3[709720]: (tracker-extract-3:709720): GLib-GIO-WARNING **: 17:23:10.830: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:23:12 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:23:15 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:23:18 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:23:21 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-52 noise=9999 txrate=573500
+9月 20 17:23:24 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:23:27 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:23:30 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=458800
+9月 20 17:23:33 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:23:36 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:23:39 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-50 noise=9999 txrate=573500
+9月 20 17:23:42 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:23:45 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:23:45 CNS202649516533 tracker-miner-fs-3[709891]: (tracker-extract-3:709891): GLib-GIO-WARNING **: 17:23:45.803: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:23:48 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:23:51 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=344100
+9月 20 17:23:54 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:23:55 CNS202649516533 tracker-miner-fs-3[709959]: (tracker-extract-3:709959): GLib-GIO-WARNING **: 17:23:55.813: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:23:57 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=458800
+9月 20 17:24:00 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:24:03 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:24:06 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=458800
+9月 20 17:24:09 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-47 noise=9999 txrate=458800
+9月 20 17:24:12 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-47 noise=9999 txrate=573500
+9月 20 17:24:15 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-47 noise=9999 txrate=458800
+9月 20 17:24:17 CNS202649516533 tracker-miner-fs-3[710087]: (tracker-extract-3:710087): GLib-GIO-WARNING **: 17:24:17.195: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:24:18 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:24:21 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:24:24 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:24:27 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=458800
+9月 20 17:24:27 CNS202649516533 tracker-miner-fs-3[710178]: (tracker-extract-3:710178): GLib-GIO-WARNING **: 17:24:27.918: Error creating IO channel for /proc/self/mountinfo: 无效的参数 (g-io-error-quark, 13)
+9月 20 17:24:30 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:24:33 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:24:36 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-51 noise=9999 txrate=573500
+9月 20 17:24:39 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:24:42 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:24:45 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:24:48 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:24:51 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500
+9月 20 17:24:54 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-49 noise=9999 txrate=573500
+9月 20 17:24:57 CNS202649516533 wpa_supplicant[1588]: wlx90de803e9a5f: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-48 noise=9999 txrate=573500

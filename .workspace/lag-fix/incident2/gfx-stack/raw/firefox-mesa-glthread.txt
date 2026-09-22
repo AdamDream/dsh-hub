@@ -1,0 +1,210 @@
+=== gpu-2404-provider-wrapper (mesa-2404) ===
+#!/bin/bash
+set -euo pipefail
+
+# The second content element is mounted at "${content_target}-2"
+COMPONENT_PATH="$( cd -- "$(dirname "$0")"/.. ; pwd -P )-2"
+
+# Use the component mangler to bootstrap the environment
+if [ -f ${COMPONENT_PATH}/kernel-gpu-2404-sentinel ]; then
+  . ${COMPONENT_PATH}/kernel-gpu-2404-provider-mangler
+fi
+
+SELF_BASE="$( cd -- "$(dirname "$0")/.." ; pwd -P )"
+SELF=${SELF_BASE}/usr
+ARCH_TRIPLETS=( x86_64-linux-gnu i386-linux-gnu )
+
+# VDPAU_DRIVER_PATH only supports a single path, rely on LD_LIBRARY_PATH instead
+for arch in ${ARCH_TRIPLETS[@]}; do
+  GBM_BACKENDS_PATH=${GBM_BACKENDS_PATH:+$GBM_BACKENDS_PATH:}${SELF}/lib/${arch}/gbm
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}${SELF}/lib/${arch}:${SELF}/lib/${arch}/dri:${SELF}/lib/${arch}/vdpau
+  LIBVA_DRIVERS_PATH=${LIBVA_DRIVERS_PATH:+$LIBVA_DRIVERS_PATH:}${SELF}/lib/${arch}/dri
+done
+__EGL_VENDOR_LIBRARY_DIRS=${__EGL_VENDOR_LIBRARY_DIRS:+$__EGL_VENDOR_LIBRARY_DIRS:}${SELF}/share/glvnd/egl_vendor.d
+__EGL_EXTERNAL_PLATFORM_CONFIG_DIRS=${__EGL_EXTERNAL_PLATFORM_CONFIG_DIRS:+$__EGL_EXTERNAL_PLATFORM_CONFIG_DIRS:}${SELF}/share/egl/egl_external_platform.d
+DRIRC_CONFIGDIR=$( cd -- "$(dirname "$0")/../drirc.d" ; pwd -P )
+VK_LAYER_PATH=${VK_LAYER_PATH:+$VK_LAYER_PATH:}${SELF}/share/vulkan/implicit_layer.d/:${SELF}/share/vulkan/explicit_layer.d
+XDG_DATA_DIRS=${XDG_DATA_DIRS:+$XDG_DATA_DIRS:}${SELF}/share
+XLOCALEDIR=${SELF}/share/X11/locale
+
+# These are in the default LD_LIBRARY_PATH, but in case the snap dropped it inadvertently
+if [ -d "/var/lib/snapd/lib/gl" ] && [[ ! ${LD_LIBRARY_PATH} =~ (^|:)/var/lib/snapd/lib/gl(:|$) ]]; then
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/var/lib/snapd/lib/gl
+fi
+
+if [ -d "/var/lib/snapd/lib/gl32" ] && [[ ! ${LD_LIBRARY_PATH} =~ (^|:)/var/lib/snapd/lib/gl32(:|$) ]]; then
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/var/lib/snapd/lib/gl32
+fi
+
+if [ -d "/var/lib/snapd/lib/glvnd/egl_vendor.d" ]; then
+  # This needs to be prepended, as glvnd goes depth-first on these
+  # TODO maybe collect the JSONs into a separate location so their ordering matters,
+  #  and not the dir order
+  __EGL_VENDOR_LIBRARY_DIRS=/var/lib/snapd/lib/glvnd/egl_vendor.d:${__EGL_VENDOR_LIBRARY_DIRS}
+fi
+
+if [ -d "/var/lib/snapd/lib/vulkan/icd.d" ]; then
+  XDG_DATA_DIRS=${XDG_DATA_DIRS}:/var/lib/snapd/lib
+fi
+
+if [ -d "/var/lib/snapd/lib/gl/vdpau" ]; then
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/var/lib/snapd/lib/gl/vdpau
+fi
+
+if [ -d "/var/lib/snapd/lib/gl32/vdpau" ]; then
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/var/lib/snapd/lib/gl32/vdpau
+fi
+
+if [ -d "/var/lib/snapd/lib/gl/gbm" ]; then
+  GBM_BACKENDS_PATH=${GBM_BACKENDS_PATH}:/var/lib/snapd/lib/gl/gbm
+fi
+
+if [ -d "/var/lib/snapd/lib/gl32/gbm" ]; then
+  GBM_BACKENDS_PATH=${GBM_BACKENDS_PATH}:/var/lib/snapd/lib/gl32/gbm
+fi
+
+export GBM_BACKENDS_PATH
+export LD_LIBRARY_PATH
+if [ "${__NV_PRIME_RENDER_OFFLOAD:-}" != 1 ]; then
+  # Prevent picking VA-API (Intel/AMD) over NVIDIA VDPAU
+  # https://download.nvidia.com/XFree86/Linux-x86_64/510.54/README/primerenderoffload.html#configureapplications
+  export LIBVA_DRIVERS_PATH
+fi
+export __EGL_VENDOR_LIBRARY_DIRS
+export __EGL_EXTERNAL_PLATFORM_CONFIG_DIRS
+export DRIRC_CONFIGDIR
+export VK_LAYER_PATH
+export XDG_DATA_DIRS
+export XLOCALEDIR
+
+# Make use of the https://gitlab.freedesktop.org/mesa/libdrm/-/merge_requests/273 patch
+# in libdrm to find the amdgpu.ids file in other places
+export AMDGPU_ASIC_ID_TABLE_PATHS=${AMDGPU_ASIC_ID_TABLE_PATHS:+$AMDGPU_ASIC_ID_TABLE_PATHS:}${SELF_BASE}/libdrm
+
+exec "$@"
+
+=== does it set mesa_glthread / env vars? grep ===
+18:  GBM_BACKENDS_PATH=${GBM_BACKENDS_PATH:+$GBM_BACKENDS_PATH:}${SELF}/lib/${arch}/gbm
+22:__EGL_VENDOR_LIBRARY_DIRS=${__EGL_VENDOR_LIBRARY_DIRS:+$__EGL_VENDOR_LIBRARY_DIRS:}${SELF}/share/glvnd/egl_vendor.d
+23:__EGL_EXTERNAL_PLATFORM_CONFIG_DIRS=${__EGL_EXTERNAL_PLATFORM_CONFIG_DIRS:+$__EGL_EXTERNAL_PLATFORM_CONFIG_DIRS:}${SELF}/share/egl/egl_external_platform.d
+25:VK_LAYER_PATH=${VK_LAYER_PATH:+$VK_LAYER_PATH:}${SELF}/share/vulkan/implicit_layer.d/:${SELF}/share/vulkan/explicit_layer.d
+42:  __EGL_VENDOR_LIBRARY_DIRS=/var/lib/snapd/lib/glvnd/egl_vendor.d:${__EGL_VENDOR_LIBRARY_DIRS}
+58:  GBM_BACKENDS_PATH=${GBM_BACKENDS_PATH}:/var/lib/snapd/lib/gl/gbm
+62:  GBM_BACKENDS_PATH=${GBM_BACKENDS_PATH}:/var/lib/snapd/lib/gl32/gbm
+65:export GBM_BACKENDS_PATH
+66:export LD_LIBRARY_PATH
+70:  export LIBVA_DRIVERS_PATH
+72:export __EGL_VENDOR_LIBRARY_DIRS
+73:export __EGL_EXTERNAL_PLATFORM_CONFIG_DIRS
+74:export DRIRC_CONFIGDIR
+75:export VK_LAYER_PATH
+76:export XDG_DATA_DIRS
+77:export XLOCALEDIR
+79:# Make use of the https://gitlab.freedesktop.org/mesa/libdrm/-/merge_requests/273 patch
+81:export AMDGPU_ASIC_ID_TABLE_PATHS=${AMDGPU_ASIC_ID_TABLE_PATHS:+$AMDGPU_ASIC_ID_TABLE_PATHS:}${SELF_BASE}/libdrm
+
+=== search snap files for mesa_glthread ===
+/snap/mesa-2404/1839/drirc.d/00-mesa-defaults.conf
+/snap/mesa-2404/1839/usr/lib/i386-linux-gnu/libgallium-25.2.8-0ubuntu0.24.04.2.so
+/snap/mesa-2404/1839/usr/lib/i386-linux-gnu/libvulkan_lvp.so
+/snap/mesa-2404/1839/usr/lib/x86_64-linux-gnu/libgallium-25.2.8-0ubuntu0.24.04.2.so
+/snap/mesa-2404/1839/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so
+/snap/firefox/8863/usr/lib/firefox/libxul.so
+--- drirc.d contents ---
+总计 79
+drwxr-xr-x 2 root root    73  6月 30 17:25 .
+drwxr-xr-x 9 root root   113  6月 30 17:25 ..
+-rw-r--r-- 1 root root 69597 12月  4  2025 00-mesa-defaults.conf
+-rw-r--r-- 1 root root 10977 12月  4  2025 00-radv-defaults.conf
+### /snap/mesa-2404/1839/drirc.d/00-mesa-defaults.conf ###
+<?xml version="1.0" standalone="yes"?>
+<!--
+
+============================================
+Application bugs worked around in this file:
+============================================
+
+* Unigine Heaven 3.0 and older contain too many bugs and can't be supported
+  by drivers that want to be compliant.
+
+* Various Unigine products don't use the #version and #extension GLSL
+  directives, meaning they only get GLSL 1.10 and no extensions for their
+  shaders.
+  Enabling all extensions for Unigine fixes most issues, but the GLSL version
+  is still 1.10.
+
+* If ARB_sample_shading is supported, Unigine Heaven 4.0 and Valley 1.0 uses
+  an #extension directive in the middle of its shaders, which is illegal
+  in GLSL.
+
+* Dying Light and Dead Island Definitive Edition redeclare vertex shader
+  built-ins (specifically gl_VertexID), which causes the vertex shaders to fail
+  to compile.
+
+* Applications that are not suitable for adapative sync are denylisted here.
+
+TODO: document the other workarounds.
+
+-->
+
+<!DOCTYPE driconf [
+   <!ELEMENT driconf      (device+)>
+   <!ELEMENT device       (application | engine)+>
+   <!ATTLIST device       driver CDATA #IMPLIED
+                          device CDATA #IMPLIED>
+   <!ELEMENT application  (option+)>
+   <!ATTLIST application  name CDATA #REQUIRED
+                          executable CDATA #IMPLIED
+                          executable_regexp CDATA #IMPLIED
+                          sha1 CDATA #IMPLIED
+### /snap/mesa-2404/1839/drirc.d/00-radv-defaults.conf ###
+<?xml version="1.0" standalone="yes"?>
+<!--
+
+============================================
+Application bugs worked around in this file:
+============================================
+
+-->
+
+<!DOCTYPE driconf [
+   <!ELEMENT driconf      (device+)>
+   <!ELEMENT device       (application | engine)+>
+   <!ATTLIST device       driver CDATA #IMPLIED
+                          device CDATA #IMPLIED>
+   <!ELEMENT application  (option+)>
+   <!ATTLIST application  name CDATA #REQUIRED
+                          executable CDATA #IMPLIED
+                          executable_regexp CDATA #IMPLIED
+                          sha1 CDATA #IMPLIED
+                          application_name_match CDATA #IMPLIED
+                          application_versions CDATA #IMPLIED>
+   <!ELEMENT engine       (option+)>
+
+   <!-- engine_name_match: A regexp matching the engine name -->
+   <!-- engine_versions: A version in range format
+             (version 1 to 4 : "1:4") -->
+
+   <!ATTLIST engine       engine_name_match CDATA #REQUIRED
+                          engine_versions CDATA #IMPLIED>
+
+   <!ELEMENT option       EMPTY>
+   <!ATTLIST option       name CDATA #REQUIRED
+                          value CDATA #REQUIRED>
+]>
+
+<!-- NOTE: `executable` shouldn't be used for shader based drirc workarounds
+     because they aren't applied when replaying with Fossilize for precompilation. -->
+<driconf>
+    <device driver="radv">
+        <!-- Engine workarounds -->
+
+=== host drirc ===
+ls: 无法访问 '/etc/drirc': 没有那个文件或目录
+ls: 无法访问 '/home/CNS2026495165/.drirc': 没有那个文件或目录
+cat: /etc/drirc: 没有那个文件或目录
+
+=== env of our own shell for mesa_glthread ===
+(none in our shell)
+
+=== DRI_PRIME / device selection env anywhere in snap wrapper chain ===

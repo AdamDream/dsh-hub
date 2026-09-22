@@ -1,0 +1,31 @@
+##### counts #####
+hogged                     4
+blocked for more than      0
+hung task                  0
+flip_done                  0
+Page flip                  0
+page flip                  0
+atomic                     3
+timeout                    1
+amdgpu.*ERROR              0
+GPU reset                  0
+ring gfx                   2
+ring sdma                  1
+workqueue                  4
+
+##### ALL 'hogged' lines with timestamps #####
+9月 22 10:12:23 CNS202649516533 kernel: workqueue: pm_runtime_work hogged CPU for >10000us 4 times, consider switching to WQ_UNBOUND
+9月 22 10:17:24 CNS202649516533 kernel: workqueue: pm_runtime_work hogged CPU for >10000us 5 times, consider switching to WQ_UNBOUND
+9月 22 10:27:26 CNS202649516533 kernel: workqueue: pm_runtime_work hogged CPU for >10000us 7 times, consider switching to WQ_UNBOUND
+9月 22 10:31:03 CNS202649516533 kernel: workqueue: pm_runtime_work hogged CPU for >10000us 11 times, consider switching to WQ_UNBOUND
+
+##### 'blocked for more than' #####
+
+##### amdgpu ERROR/WARN level #####
+9月 22 10:01:55 CNS202649516533 kernel: nvidia: loading out-of-tree module taints kernel.
+9月 22 10:01:55 CNS202649516533 kernel: NVRM: loading NVIDIA UNIX Open Kernel Module for x86_64  595.84  Release Build  (dvs-builder@U22-I3-AM25-26-2)  Wed Jun 10 21:06:37 UTC 2026
+9月 22 10:01:58 CNS202649516533 kernel: amdgpu 0000:73:00.0: [drm] REG_WAIT timeout 1us * 100000 tries - optc31_disable_crtc line:145
+9月 22 10:30:15 CNS202649516533 kernel: [drm] Unknown EDID CEA parser results
+9月 22 10:30:15 CNS202649516533 kernel: [drm] Unknown EDID CEA parser results
+9月 22 10:30:36 CNS202649516533 kernel: [drm] Unknown EDID CEA parser results
+9月 22 10:32:15 CNS202649516533 kernel: [drm] Unknown EDID CEA parser results

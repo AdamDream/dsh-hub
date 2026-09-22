@@ -1,0 +1,406 @@
+================================================================================
+ ACCESSIBILITY FORCE-ON ENV STRINGS: PRESENCE/ABSENCE + NEIGHBOUR CONTEXT
+ host: Ubuntu 24.04 / X11 / uid 1001 / user CNS2026495165
+ date: 2026-09-22T11:09:32+08:00
+ method: strings -a -t x <binary>; literal fixed-string grep; neighbours = first
+         match dump line +/- 4 lines (9 lines total)
+ dumps:
+   /tmp/a11y/libxul.strings  1869601 lines  from /snap/firefox/8863/usr/lib/firefox/libxul.so
+   /tmp/a11y/chrome.strings  1982581 lines  from /opt/google/chrome/chrome
+ [NOTE: /tmp/a11y/ is worker-owned scratch holding ONLY these derived dumps;
+  every deliverable is written under the raw/ output directory.]
+================================================================================
+
+################################################################################
+# BINARY 1: /snap/firefox/8863/usr/lib/firefox/libxul.so  (Gecko, Firefox 155.0.1)
+################################################################################
+
+--- TABLE 1a: libxul.so ---
+PATTERN                        | verdict  | exact   | substr | ci        | first-offset (of substr match)
+-------------------------------------------------------------------------------------------------------
+ACCESSIBILITY_ENABLED          | ABSENT   | 0       | 0      | 0         | -
+GNOME_ACCESSIBILITY            | EXACT    | 1       | 1      | 1         | 0x130e8c0
+QT_ACCESSIBILITY               | ABSENT   | 0       | 0      | 0         | -
+GTK_MODULES                    | ABSENT   | 0       | 0      | 0         | -
+atk-bridge                     | SUBSTR   | 0       | 1      | 1         | 0x1dee95
+gail                           | EXACT    | 1       | 1      | 1         | 0x13f45da
+force_disabled                 | SUBSTR   | 0       | 1      | 2         | 0x1def0c
+force-renderer-accessibility   | ABSENT   | 0       | 0      | 0         | -
+force_renderer_accessibility   | ABSENT   | 0       | 0      | 0         | -
+accessibility.force_disabled   | EXACT    | 1       | 1      | 1         | 0x1def0c
+atspi                          | CI-ONLY  | 0       | 0      | 3821      | -
+AT_SPI_BUS                     | ABSENT   | 0       | 0      | 0         | -
+org.a11y.Bus                   | EXACT    | 1       | 2      | 2         | 0x1dee88
+screen-reader                  | ABSENT   | 0       | 0      | 0         | -
+accessibilitySupportEnabled    | ABSENT   | 0       | 0      | 0         | -
+enable-accessibility           | ABSENT   | 0       | 0      | 0         | -
+screen_reader                  | ABSENT   | 0       | 0      | 0         | -
+atk_bridge                     | SUBSTR   | 0       | 1      | 1         | 0x17f923
+libatk-bridge                  | SUBSTR   | 0       | 1      | 1         | 0x1dee95
+IsAccessibilityEnabled         | ABSENT   | 0       | 0      | 0         | -
+ax_mode                        | CI-ONLY  | 0       | 0      | 1         | -
+verdict: EXACT = that exact string is a literal in the binary | SUBSTR = only occurs inside a longer
+         string | CI-ONLY = only different capitalisation | ABSENT = not present in any form
+
+--- TABLE 1a-ii: libxul.so, what the SUBSTR hits really are ---
+PATTERN (SUBSTR only)          | distinct host strings containing it (up to 3)
+-------------------------------------------------------------------------------------------
+atk-bridge                     | libatk-bridge-2.0.so.0
+force_disabled                 | accessibility.force_disabled
+atk_bridge                     | atk_bridge_adaptor_init
+libatk-bridge                  | libatk-bridge-2.0.so.0
+
+--- CONTEXT 1a: libxul.so, 9 dump lines around first occurrence of each PRESENT pattern ---
+
+=== pattern: "GNOME_ACCESSIBILITY" ===
+  --- first occurrence at dump line 205716 (match line shown in [ ]) ---
+   205712  130e100 chrome://global/locale/appstrings.properties
+   205713  130e17e %8Vi
+   205714  130e890 libatk-1.0.so.0
+   205715  130e8a0 atk_hyperlink_impl_get_type
+  [205716] 130e8c0 GNOME_ACCESSIBILITY
+   205717  130edd0 unknown
+   205718  130edf8 show
+   205719  130ee20 hide
+   205720  130ee48 reorder
+
+=== pattern: "atk-bridge" ===
+  --- first occurrence at dump line 50721 (match line shown in [ ]) ---
+   50717   1dee2f IsThirdPartyWindow
+   50718   1dee42 ChildSHistory::Go(%d), current index = %d
+   50719   1dee6c text_changed::delete:system
+   50720   1dee88 org.a11y.Bus
+  [50721]  1dee95 libatk-bridge-2.0.so.0
+   50722   1deeac mRelocations
+   50723   1deeb9 NotificationController::WillRefresh
+   50724   1deedd mathml style
+   50725   1deeea landmark
+
+=== pattern: "gail" ===
+  --- first occurrence at dump line 239726 (match line shown in [ ]) ---
+   239722  13f4555 sApasfut
+   239723  13f4566 lmaimontess
+   239724  13f4575 -new-ener
+   239725  13f4586 Ylay
+  [239726] 13f45da gail
+   239727  13f45e5 ennesymphon
+   239728  13f45fd inggumremova
+   239729  13f4615 ychas
+   239730  13f4637 ^Ewo
+
+=== pattern: "force_disabled" ===
+  --- first occurrence at dump line 50728 (match line shown in [ ]) ---
+   50724   1deedd mathml style
+   50725   1deeea landmark
+   50726   1deef3 label for
+   50727   1deefd controller for
+  [50728]  1def0c accessibility.force_disabled
+   50729   1def29 DocAccessible::ProcessQueuedCacheUpdates
+   50730   1def52 browser.formfill.enable
+   50731   1def6a Attempt to split show with detached root
+   50732   1def93 failed to attach pending show child
+
+=== pattern: "accessibility.force_disabled" ===
+  --- first occurrence at dump line 50728 (match line shown in [ ]) ---
+   50724   1deedd mathml style
+   50725   1deeea landmark
+   50726   1deef3 label for
+   50727   1deefd controller for
+  [50728]  1def0c accessibility.force_disabled
+   50729   1def29 DocAccessible::ProcessQueuedCacheUpdates
+   50730   1def52 browser.formfill.enable
+   50731   1def6a Attempt to split show with detached root
+   50732   1def93 failed to attach pending show child
+
+=== pattern: "org.a11y.Bus" ===
+  --- first occurrence at dump line 50720 (match line shown in [ ]) ---
+   50716   1dee17 CurrentOrientationAngle
+   50717   1dee2f IsThirdPartyWindow
+   50718   1dee42 ChildSHistory::Go(%d), current index = %d
+   50719   1dee6c text_changed::delete:system
+  [50720]  1dee88 org.a11y.Bus
+   50721   1dee95 libatk-bridge-2.0.so.0
+   50722   1deeac mRelocations
+   50723   1deeb9 NotificationController::WillRefresh
+   50724   1deedd mathml style
+
+=== pattern: "atk_bridge" ===
+  --- first occurrence at dump line 39601 (match line shown in [ ]) ---
+   39597   17f8b5  * Speech use
+   39598   17f8c3 {marker.data.url} blocked by {marker.data.blockedBy}
+   39599   17f8f8 AutoplayPermission
+   39600   17f90b atk_table_cell_get_type
+  [39601]  17f923 atk_bridge_adaptor_init
+   39602   17f93b listbox option
+   39603   17f94a note
+   39604   17f94f mathml identifier
+   39605   17f961 mathml sup
+
+=== pattern: "libatk-bridge" ===
+  --- first occurrence at dump line 50721 (match line shown in [ ]) ---
+   50717   1dee2f IsThirdPartyWindow
+   50718   1dee42 ChildSHistory::Go(%d), current index = %d
+   50719   1dee6c text_changed::delete:system
+   50720   1dee88 org.a11y.Bus
+  [50721]  1dee95 libatk-bridge-2.0.so.0
+   50722   1deeac mRelocations
+   50723   1deeb9 NotificationController::WillRefresh
+   50724   1deedd mathml style
+   50725   1deeea landmark
+
+################################################################################
+# BINARY 2: /opt/google/chrome/chrome  (Google Chrome 153.0.8010.52)
+################################################################################
+
+--- TABLE 1b: chrome ---
+PATTERN                        | verdict  | exact   | substr | ci        | first-offset (of substr match)
+-------------------------------------------------------------------------------------------------------
+ACCESSIBILITY_ENABLED          | EXACT    | 1       | 1      | 1         | 0x1e82cb1
+GNOME_ACCESSIBILITY            | EXACT    | 1       | 1      | 1         | 0x1e31198
+QT_ACCESSIBILITY               | EXACT    | 1       | 1      | 1         | 0x1e31173
+GTK_MODULES                    | ABSENT   | 0       | 0      | 0         | -
+atk-bridge                     | SUBSTR   | 0       | 1      | 1         | 0x103ff
+gail                           | ABSENT   | 0       | 0      | 0         | -
+force_disabled                 | ABSENT   | 0       | 0      | 0         | -
+force-renderer-accessibility   | EXACT    | 1       | 1      | 1         | 0x2c25520
+force_renderer_accessibility   | ABSENT   | 0       | 0      | 0         | -
+accessibility.force_disabled   | ABSENT   | 0       | 0      | 0         | -
+atspi                          | SUBSTR   | 0       | 24     | 8876      | 0xe778
+AT_SPI_BUS                     | ABSENT   | 0       | 0      | 0         | -
+org.a11y.Bus                   | EXACT    | 1       | 1      | 1         | 0x1a9fd1a
+screen-reader                  | ABSENT   | 0       | 0      | 0         | -
+accessibilitySupportEnabled    | ABSENT   | 0       | 0      | 0         | -
+enable-accessibility           | SUBSTR   | 0       | 21     | 21        | 0x1a1292d
+screen_reader                  | CI-ONLY  | 0       | 0      | 1         | -
+atk_bridge                     | SUBSTR   | 0       | 1      | 1         | 0xe296
+libatk-bridge                  | SUBSTR   | 0       | 1      | 1         | 0x103ff
+IsAccessibilityEnabled         | ABSENT   | 0       | 0      | 0         | -
+ax_mode                        | SUBSTR   | 0       | 2      | 4         | 0x1cee573
+verdict: EXACT = that exact string is a literal in the binary | SUBSTR = only occurs inside a longer
+         string | CI-ONLY = only different capitalisation | ABSENT = not present in any form
+
+--- TABLE 1b-ii: chrome, what the SUBSTR hits really are ---
+PATTERN (SUBSTR only)          | distinct host strings containing it (up to 3)
+-------------------------------------------------------------------------------------------
+atk-bridge                     | libatk-bridge-2.0.so.0
+atspi                          | atspi_accessible_get_application atspi_accessible_get_attributes;atspi_accessible_get_child_at_index
+enable-accessibility           | enable-accessibility-accelerator enable-accessibility-captions-on-braille-display;enable-accessibility-disable-touchpad
+atk_bridge                     | atk_bridge_adaptor_init
+libatk-bridge                  | libatk-bridge-2.0.so.0
+ax_mode                        | ax-ax_mode ax-last_ax_mode
+
+--- CONTEXT 1b: chrome, 9 dump lines around first occurrence of each PRESENT pattern ---
+
+=== pattern: "ACCESSIBILITY_ENABLED" ===
+  --- first occurrence at dump line 163205 (match line shown in [ ]) ---
+   163201  1e82c2e DEMUXER_ERROR_PROGRESSIVE_DISABLED
+   163202  1e82c51 SH_ENACT_CANDIDATE_FEATURE_DISABLED
+   163203  1e82c75 IS_PREFERRED_DISABLED
+   163204  1e82c8b SH_ENACT_CANDIDATE_HEURISTIC_DISABLED
+  [163205] 1e82cb1 ACCESSIBILITY_ENABLED
+   163206  1e82cc7 GL_VERTEX_ATTRIB_ARRAY_ENABLED
+   163207  1e82ce6 CAPTURE_NOT_ENABLED
+   163208  1e82cfa AUTOMATICALLY_CONNECT_ENABLED
+   163209  1e82d18 VERIFY_REV_CHECKING_ENABLED
+
+=== pattern: "GNOME_ACCESSIBILITY" ===
+  --- first occurrence at dump line 150047 (match line shown in [ ]) ---
+   150043  1e31151 NEGATIVE_INFINITY
+   150044  1e31163 PROCESS_UTILITY
+   150045  1e31173 QT_ACCESSIBILITY
+   150046  1e31184 TOUCH_ACCESSIBILITY
+  [150047] 1e31198 GNOME_ACCESSIBILITY
+   150048  1e311ac WAITING_FOR_TARGET_AVAILABILITY
+   150049  1e311cc GET_APP_AVAILABILITY
+   150050  1e311e1 IN_DEPENDENT_LOCALITY
+   150051  1e311f7 ADDRESS_HOME_DEPENDENT_LOCALITY
+
+=== pattern: "QT_ACCESSIBILITY" ===
+  --- first occurrence at dump line 150045 (match line shown in [ ]) ---
+   150041  1e31139 UNITY
+   150042  1e3113f POSITIVE_INFINITY
+   150043  1e31151 NEGATIVE_INFINITY
+   150044  1e31163 PROCESS_UTILITY
+  [150045] 1e31173 QT_ACCESSIBILITY
+   150046  1e31184 TOUCH_ACCESSIBILITY
+   150047  1e31198 GNOME_ACCESSIBILITY
+   150048  1e311ac WAITING_FOR_TARGET_AVAILABILITY
+   150049  1e311cc GET_APP_AVAILABILITY
+
+=== pattern: "atk-bridge" ===
+  --- first occurrence at dump line 1524 (match line shown in [ ]) ---
+   1520    103bf libgobject-2.0.so.0
+   1521    103d3 libnspr4.so
+   1522    103df libgio-2.0.so.0
+   1523    103ef libatk-1.0.so.0
+  [1524]   103ff libatk-bridge-2.0.so.0
+   1525    10416 libcups.so.2
+   1526    10423 libexpat.so.1
+   1527    10431 libxcb.so.1
+   1528    1043d libgbm.so.1
+
+=== pattern: "force-renderer-accessibility" ===
+  --- first occurrence at dump line 300287 (match line shown in [ ]) ---
+   300283  2c25413 	type
+   300284  2c2541c  !#$&'()+,-.0123456789;=@[]_abcdefghijklmnopqrstuvwxyz~
+   300285  2c254c0 enable-experimental-accessibility-labels-debugging
+   300286  2c25500 disable-renderer-accessibility
+  [300287] 2c25520 force-renderer-accessibility
+   300288  2c26a33 	EUC-JP
+   300289  2c26a3b Shift_JIS
+   300290  2c26a45 EUC-KR
+   300291  2c26a4c ISO-2022-JP
+
+=== pattern: "atspi" ===
+  --- first occurrence at dump line 1109 (match line shown in [ ]) ---
+   1105     e712 g_strdup_value_contents
+   1106     e72a atk_object_ref_state_set
+   1107     e743 atk_state_set_contains_state
+   1108     e760 atk_state_type_get_name
+  [1109]    e778 atspi_init
+   1110     e783 atspi_event_listener_new
+   1111     e79c atspi_event_listener_register
+   1112     e7ba g_clear_error
+   1113     e7c8 atspi_event_listener_deregister
+
+=== pattern: "org.a11y.Bus" ===
+  --- first occurrence at dump line 32794 (match line shown in [ ]) ---
+   32790  1a9fcbd first_read_time_us
+   32791  1a9fcd0 delta_time_largest_observed_us
+   32792  1a9fcef /org/freedesktop/DBus
+   32793  1a9fd05 org.freedesktop.DBus
+  [32794] 1a9fd1a org.a11y.Bus
+   32795  1a9fd27 Video Bus
+   32796  1a9fd31 bestmail.us
+   32797  1a9fd3d fastmail.us
+   32798  1a9fd49 fastemail.us
+
+=== pattern: "enable-accessibility" ===
+  --- first occurrence at dump line 11980 (match line shown in [ ]) ---
+   11976  1a128f8 closedby
+   11977  1a12901 kDialogClosedby
+   11978  1a12911 aria-labelledby
+   11979  1a12921 installedby
+  [11980] 1a1292d enable-accessibility-labeledby
+   11981  1a1294c aria-labeledby
+   11982  1a1295b aria-describedby
+   11983  1a1296c contacted_by
+   11984  1a12979 curated_by
+
+=== pattern: "atk_bridge" ===
+  --- first occurrence at dump line 1051 (match line shown in [ ]) ---
+   1047     e240 g_dbus_connection_call_sync
+   1048     e25c g_variant_get_boolean
+   1049     e272 g_type_class_unref
+   1050     e285 g_type_class_ref
+  [1051]    e296 atk_bridge_adaptor_init
+   1052     e2ae g_type_register_static_simple
+   1053     e2cc atk_util_get_type
+   1054     e2de g_intern_static_string
+   1055     e2f5 g_type_class_adjust_private_offset
+
+=== pattern: "libatk-bridge" ===
+  --- first occurrence at dump line 1524 (match line shown in [ ]) ---
+   1520    103bf libgobject-2.0.so.0
+   1521    103d3 libnspr4.so
+   1522    103df libgio-2.0.so.0
+   1523    103ef libatk-1.0.so.0
+  [1524]   103ff libatk-bridge-2.0.so.0
+   1525    10416 libcups.so.2
+   1526    10423 libexpat.so.1
+   1527    10431 libxcb.so.1
+   1528    1043d libgbm.so.1
+
+=== pattern: "ax_mode" ===
+  --- first occurrence at dump line 117691 (match line shown in [ ]) ---
+   117687  1cee524 efficiency_mode
+   117688  1cee534 privacy_mode
+   117689  1cee541 user_display_mode
+   117690  1cee553 crbug396028223-app_display_mode
+  [117691] 1cee573 ax-last_ax_mode
+   117692  1cee583 ax-ax_mode
+   117693  1cee58e texture_env_mode
+   117694  1cee59f dev_mode
+   117695  1cee5a8 cpu_mode
+
+################################################################################
+# ATTRIBUTION: which OTHER binaries on this host actually carry these names?
+# (answers 'consumed where' - neither browser binary hosts GTK_MODULES or
+#  ACCESSIBILITY_ENABLED; the GTK/AT-SPI stack does)
+################################################################################
+
+BINARY (path)                                             |GTK_MODULES |ACCESSIBILITY_ENABLED|GNOME_ACCESSIBILITY  |atk-bridge |gail  |atspi
+------------------------------------------------------------------------------------------------------------------------------
+/snap/gnome-46-2404/164/usr/lib/x86_64-linux-gnu/libgtk-3.so.0|1           |0                    |0                    |2          |10    |0
+/snap/gnome-42-2204/263/usr/lib/x86_64-linux-gnu/libgtk-3.so.0|1           |0                    |0                    |2          |10    |0
+/usr/lib/x86_64-linux-gnu/libgtk-3.so.0                   |1           |0                    |0                    |2          |10    |0
+/usr/lib/x86_64-linux-gnu/libgtk-4.so.1                   |0           |0                    |0                    |0          |0     |29
+/usr/lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0          |0           |0                    |0                    |11         |0     |101
+/usr/libexec/at-spi2-registryd                            |0           |0                    |0                    |0          |0     |25
+/usr/libexec/at-spi-bus-launcher                          |0           |0                    |0                    |0          |0     |0
+/usr/bin/gnome-shell                                      |0           |0                    |0                    |2          |0     |0
+/usr/libexec/gnome-session-binary                         |0           |0                    |0                    |0          |0     |0
+
+NOTE: snap firefox does NOT bundle GTK; its GTK3 comes from the gnome-46-2404 platform snap,
+      which is why GTK_MODULES consumption shows up there and not in libxul.so.
+
+################################################################################
+# CAVEATS / IDENTIFIED FALSE POSITIVES  (read before using the tables above)
+################################################################################
+
+ (1) libxul.so "atspi" CI-ONLY count=3821 is a TOOL ARTEFACT, not strings.
+     Every one of those hits is an x86-64 opcode byte run that happens to be
+     printable, e.g. "AWAVATSPI" / "UAWAVAUATSPI" (0x41 'A' = REX prefix,
+     0x54/0x53/0x50 = push %rsp/%rbx/%rax). Proof:
+        grep -F 'ATSPI' /tmp/a11y/libxul.strings | head
+     Case-SENSITIVE "atspi" is ABSENT from libxul.so. Firefox has no atspi_*
+     string; it reaches AT-SPI through libatk-bridge-2.0.so.0 (see (3)).
+     => treat libxul "atspi" as ABSENT.
+
+ (2) libxul.so "gail" EXACT=1 at 0x13f45da is a FALSE POSITIVE.
+     A bare 4-char run inside a random data blob; its neighbours are gibberish
+     ("sApasfut", "lmaimontess", "-new-ener", "Ylay", "ennesymphon"). It is NOT
+     the GTK accessibility module name. Firefox's GTK3 (the snap platform snap's)
+     does carry the real "gail"/"atk-bridge" module names - see the ATTRIBUTION
+     table at the end.
+
+ (3) libxul.so "atk-bridge" / "libatk-bridge" are SUBSTR-only: the host string is
+     "libatk-bridge-2.0.so.0". The standalone module name "atk-bridge" is ABSENT
+     from libxul.so (it exists in GTK3, which is where GTK_MODULES is consumed).
+
+ (4) chrome "ACCESSIBILITY_ENABLED" (EXACT=1) is NOT an environment-variable
+     lookup site. It sits inside a pool of constant NAMES ending in
+     _ENABLED/_DISABLED (USER_DISABLED, PROXY_OPTION_DISABLED,
+     GL_VERTEX_ATTRIB_ARRAY_ENABLED, ATSPI_STATE_ENABLED, ...). Presence of the
+     literal therefore does NOT establish that Chrome reads an env var of that
+     name. Same for "SCREEN_READER", whose only hit is one entry inside a
+     concatenated ui::AXMode flag-name blob:
+       ANNOTATE_MAIN_NODE EXTENDED_PROPERTIES FROM_PLATFORM HTML HTML_METADATA
+       INLINE_TEXT_BOXES LABEL_IMAGES NATIVE_APIS PDF_OCR PDF_PRINTING
+       SCREEN_READER WEB_CONTENTS
+     "screen-reader" (hyphenated) is ABSENT in chrome entirely.
+
+ (5) chrome "GNOME_ACCESSIBILITY" / "QT_ACCESSIBILITY" (EXACT=1 each) lie in an
+     ALPHABETICALLY SORTED merged constant pool (UNITY, POSITIVE_INFINITY,
+     NEGATIVE_INFINITY, PROCESS_UTILITY, TOUCH_ACCESSIBILITY, ...
+     _NET_WM_WINDOW_OPACITY, ADDRESS_HOME_*). A sorted merged pool is the normal
+     result of linker string deduplication, so adjacency here is NOT evidence of
+     an env-var read. Their role is recorded as INCONCLUSIVE, not proven.
+
+ (6) chrome stores switch names WITHOUT the leading "--". That is why
+     "force-renderer-accessibility" is EXACT=1 at 0x2c25520 while
+     "--force-renderer-accessibility" is ABSENT. Chromium matches "--<name>" at
+     runtime; the switch table neighbours are
+     "enable-experimental-accessibility-labels-debugging" and
+     "disable-renderer-accessibility", i.e. this IS the content-switches table.
+
+ (7) GENERAL LIMIT: in a merged .rodata string pool, string adjacency is only a
+     WEAK signal. It is treated as decisive here ONLY where neighbouring strings
+     are semantically clustered and self-identifying: the Chromium switch table
+     (0x2c254c0-0x2c25520), the nsIXULAppInfo attribute-name table in libxul.so
+     (processType/processID/uniqueProcessID/is64Bit/accessibilityEnabled/
+     accessibilityInstantiator at 0x11ea6f3-0x11ea75c), and the dlopen/DT_NEEDED
+     library-name list (libatk-1.0.so.0, libatk-bridge-2.0.so.0, libgobject-2.0.so.0).
+
+================================================================================
+================================================================================

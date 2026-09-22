@@ -1,0 +1,69 @@
+{
+  "artifact": "gecko-headless-probe.json",
+  "step": "STEP 2 - Headless Gecko probe",
+  "status": "NOT_RUN",
+  "not_run_reason_short": "No Playwright Firefox build exists on this host. The gating condition of STEP 2 ('ONLY if a Playwright Firefox exists') is false, so per task instructions the browser part was stopped and no browser was launched.",
+  "not_run_reason_detail": {
+    "expected_playwright_firefox_path": "/home/CNS2026495165/.cache/ms-playwright/firefox-1466/firefox/firefox",
+    "expected_path_exists": false,
+    "how_established": "node -e \"require('playwright').firefox.executablePath()\" executed from /home/CNS2026495165/playwright_scratch with playwright 1.49.1 (the only usable playwright install). It returned the expected registry path, and fs.existsSync() on that path returned false.",
+    "installed_ms_playwright_builds": [
+      "chromium-1148",
+      "chromium_headless_shell-1148",
+      "ffmpeg-1010"
+    ],
+    "note": "playwright 1.49.1 pins firefox-1466; only chromium builds were ever downloaded. No firefox-* directory exists under any ms-playwright cache."
+  },
+  "measurements_requested_by_task": {
+    "browser.version()": null,
+    "navigator.userAgent": null,
+    "navigator.hardwareConcurrency": null,
+    "window.devicePixelRatio": null,
+    "screen.width": null,
+    "screen.height": null,
+    "matchMedia_prefers_reduced_motion_reduce": null,
+    "matchMedia_prefers_reduced_motion_no_preference": null,
+    "matchMedia_prefers_color_scheme_dark": null,
+    "webgl1_context_created": null,
+    "webgl2_context_created": null,
+    "gl_VERSION": null,
+    "gl_RENDERER": null,
+    "gl_VENDOR": null,
+    "gl_SHADING_LANGUAGE_VERSION": null,
+    "WEBGL_debug_renderer_info_UNMASKED_RENDERER_WEBGL": null,
+    "WEBGL_debug_renderer_info_UNMASKED_VENDOR_WEBGL": null,
+    "gl_getContextAttributes_exact": null,
+    "canvas2d_context_available": null,
+    "about_support_body_innerText_captured": false,
+    "about_gpu_result": null
+  },
+  "_measurements_note": "Every field above is null because NO Gecko instance was launched. These are NOT failed or empty measurements - they were never attempted. Do not read null as 'unsupported' or 'false'.",
+  "artifacts_not_produced": [
+    {
+      "path": "about-support-headless.txt",
+      "produced": false,
+      "why": "No Gecko instance was launched, so there was no about:support document to dump. File deliberately NOT created so that its absence is unambiguous rather than being confused with an empty/blank capture."
+    }
+  ],
+  "corroborating_evidence_found_on_disk": {
+    "claim": "A peer agent DID launch an independent headless Gecko through the snap's own RemoteAgent/WebDriver BiDi - NOT through Playwright - proving that headless Gecko is reachable on this host by a different mechanism.",
+    "peer_artifact": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/gecko-vs-blink/logs/ff-smoke.log",
+    "peer_script": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/gecko-vs-blink/scripts/smoke-gecko.mjs",
+    "peer_script_header_line_2": "/* Gecko smoke test: can we launch snap Firefox headless, drive it over BiDi,",
+    "verbatim_log_lines": [
+      "[307734] Sandbox: CanCreateUserNamespace() unshare(CLONE_NEWPID): EPERM",
+      "*** You are running in headless mode.",
+      "WebDriver BiDi listening on ws://127.0.0.1:18831",
+      "1790045971683\tRemoteAgent\tINFO\tPerform WebSocket upgrade for incoming connection from 127.0.0.1:37704",
+      "Crash Annotation GraphicsCriticalError: |[0][GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt (t=0.553111) [GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt"
+    ],
+    "significance": "The GFX1 line shows headless Gecko falling back to RenderCompositorSWGL (software WebRender compositor) and failing to map a backbuffer. This matches the static fingerprint (RenderCompositorSWGL x6, SoftwareVsyncThread x1). It also confirms the headless rendering path is categorically different from the user's live GPU path and cannot stand in for it."
+  },
+  "gates_that_would_apply_to_any_future_browser_launch": {
+    "single_browser_ownership_lock": "/home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/.probe.lock",
+    "lock_state_observed_at_2026-09-22T11:00": "FREE (directory exists, empty, no owner.txt inside)",
+    "peer_owner_protocol_example": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/gecko-vs-blink/logs/preempted-owner-284598.txt (states: 'single browser at a time; releases with rm owner.txt && rmdir; hard cap 30min')",
+    "bidi_or_remote_port_currently_listening": "none (checked 18831 and 9222 - no listener)"
+  },
+  "permission_note": "This subagent was explicitly forbidden to run 'snap run firefox', to launch the user's Firefox, to launch any GUI application, and to perform any write outside its sub-playwright/ output directory. Downloading a Playwright Firefox via 'npx playwright install firefox' would write ~90MB into ~/.cache/ms-playwright (outside the permitted output dir), so it was NOT attempted. The snap-Firefox-headless + BiDi route is a different, already-demonstrated mechanism, but it launches the user's own Firefox binary and was likewise out of scope for this subagent. Both routes require explicit authorisation from the orchestrating agent."
+}

@@ -1,0 +1,66 @@
+{
+  "line": "incident2/regression",
+  "produced_by": "二级 subagent「面2：P2AC」",
+  "face": "面2 P2AC — 全新页面 → 点设置（A/B 对照）",
+  "verdict": "PASS",
+  "one_line": "该路径上 P2AC 无可测收益，也未引入新成本；恢复旧行为不会变差，靶点在成本意义上不可达。",
+  "blocker": "none",
+  "artifacts": {
+    "raw": [
+      "raw/firstopen-p2ac-base-r1.json",
+      "raw/firstopen-p2ac-base-r2.json",
+      "raw/firstopen-p2ac-base-r3.json",
+      "raw/firstopen-p2ac-old-r1.json",
+      "raw/firstopen-p2ac-old-r2.json",
+      "raw/firstopen-p2ac-old-r3.json"
+    ],
+    "summary": "raw/p2ac-face-summary.json",
+    "report": "sub/p2ac-face.md",
+    "excluded": [
+      "raw/superseded/firstopen-p2ac-base-r1-tool-v1.json",
+      "raw/superseded/firstopen-p2ac-old-r1-tool-v1.json"
+    ],
+    "excluded_reason": "v1 器械窗口，器械版本与最终 6 窗口不一致，不纳入中位数",
+    "frozen_instrument": "tools/frozen-20260922T1023/",
+    "driver": "tools/p2ac-face-frozen-run.sh",
+    "summarizer": "tools/p2ac-face-summarize.py",
+    "log": "logs/p2ac-face-run.log"
+  },
+  "window_verdicts": {
+    "p2ac-base-r1": { "gate": "EXCLUSIVE", "stub_effective": true, "routeHits": null, "clickWallMs": 54, "ScriptMsPerS": 0.021, "RecalcMsPerS": 0, "TaskMsPerS": 0.04, "rafP99": 16.8, "longtasksMaxMs": null, "verdict": "PASS" },
+    "p2ac-base-r2": { "gate": "EXCLUSIVE", "stub_effective": true, "routeHits": null, "clickWallMs": 55, "ScriptMsPerS": 0.021, "RecalcMsPerS": 0, "TaskMsPerS": 0.037, "rafP99": 16.8, "longtasksMaxMs": null, "verdict": "PASS" },
+    "p2ac-base-r3": { "gate": "EXCLUSIVE", "stub_effective": true, "routeHits": null, "clickWallMs": 47, "ScriptMsPerS": 0.023, "RecalcMsPerS": 0, "TaskMsPerS": 0.039, "rafP99": 16.8, "longtasksMaxMs": null, "verdict": "PASS" },
+    "p2ac-old-r1": { "gate": "EXCLUSIVE", "stub_effective": null, "routeHits": { "carry": 1, "keygate": 1, "bytes": 398395, "bad": [] }, "clickWallMs": 43, "ScriptMsPerS": 0.018, "RecalcMsPerS": 0, "TaskMsPerS": 0.03, "rafP99": 16.8, "longtasksMaxMs": null, "verdict": "PASS" },
+    "p2ac-old-r2": { "gate": "EXCLUSIVE", "stub_effective": null, "routeHits": { "carry": 1, "keygate": 1, "bytes": 398395, "bad": [] }, "clickWallMs": 56, "ScriptMsPerS": 0.016, "RecalcMsPerS": 0, "TaskMsPerS": 0.033, "rafP99": 16.8, "longtasksMaxMs": null, "verdict": "PASS" },
+    "p2ac-old-r3": { "gate": "EXCLUSIVE", "stub_effective": null, "routeHits": { "carry": 1, "keygate": 1, "bytes": 398395, "bad": [] }, "clickWallMs": 68, "ScriptMsPerS": 0.097, "RecalcMsPerS": 0.001, "TaskMsPerS": 0.115, "rafP99": 16.8, "longtasksMaxMs": null, "verdict": "PASS", "note": "宿主背景负载离群样本（闸门等待 63.6 s，taskBusyPct 11.5% vs 其余 ~3%）" }
+  },
+  "medians": {
+    "base": { "clickWallMs": 54, "ScriptMsPerS": 0.021, "RecalcMsPerS": 0, "TaskMsPerS": 0.039, "rafP99": 16.8, "longtasksN": 0 },
+    "p2ac-old": { "clickWallMs": 56, "ScriptMsPerS": 0.018, "RecalcMsPerS": 0, "TaskMsPerS": 0.033, "rafP99": 16.8, "longtasksN": 0 },
+    "relPct": { "clickWallMs": 3.7, "ScriptMsPerS": -14.29, "RecalcMsPerS": null, "TaskMsPerS": -15.38, "rafP99": 0.0, "longtasksN": null }
+  },
+  "answers": {
+    "a_contribution": "恢复旧行为（P2AC 失效）不会变差：clickWall 54→56 ms（+2 ms / +3.7%，落在噪声内），rafP99 / RecalcStyleCount / longtasks 完全相同；单一离群样本可归因宿主负载；同机负载相当的 4 窗口方向甚至偏向旧行为更轻。",
+    "b_reachability": "P2AC 在该路径上无可测收益，也未引入新成本 —— 靶点在成本意义上不可达。改写确已生效并执行（carry==1&&keygate==1&&bad==[]，字节差自洽），而整条点击相位只有 ScriptDuration≈0.11 s/6 s、RecalcMsPerS=0、RecalcStyleCount=9、longtask=0、rafP99=16.8 ms（满帧）；关掉两个靶点后零可测差异 ⇒ 否证『靶点可达且成本显著』。"
+  },
+  "measurement_limits": [
+    "页内 stub 无 P2AC 靶点自增计数器（p2acOldCarryHits / p2acKeyGateActive 恒 0，无自增点），stub.effective 对 p2ac-old 按设计为 null；故不能主张『靶点严格执行 0 次』，只能主张『成本意义上不可达』。",
+    "点击相位内 fetch/XHR 只拦到 \"/\" 一条（httpInClick={\"/\":1}），产品流量走 WebSocket（942–1333 帧），桩只记帧类型不记内容 ⇒ 无法判定点击设置是否触发一次 projectList RPC。",
+    "升级为『精确 0 次可达』需再对 client.js 做一处只读计数器插桩（同 route 机制，磁盘零改动），不在本次授权范围内，未实施。"
+  ],
+  "instrument_drift_note": {
+    "issue": "共享 tools/firstopen-ab.mjs 与 tools/stubs.js 在本面开跑期间被并行编辑（v1→v2→…），混用会导致两条件器械不一致",
+    "action": "冻结 tools/frozen-20260922T1023/ 并用冻结副本跑完全部 6 窗口",
+    "frozen_hashes": { "firstopen-ab.mjs": "5222550b852c6603d0d664c186754dfed1d73efe", "stubs.js": "da064bf012043e06fbdaabf365e518da50b2d852" },
+    "live_hashes_at_1032": { "firstopen-ab.mjs": "814fe6ac5eedeb5f444ddc222c212cf5803cab39", "stubs.js": "db7214b84ea0cb8d45319029193b197f424b5ea9" }
+  },
+  "environment": {
+    "host_pid": 10806,
+    "host_untouched": true,
+    "browser": "playwright chromium headless (--no-sandbox --disable-dev-shm-usage)",
+    "params": { "settleMs": 6000, "dwellMs": 6000, "gateMaxMs": 180000 },
+    "gate_waits_ms": { "p2ac-base-r1": 15349, "p2ac-base-r2": 23, "p2ac-base-r3": 23, "p2ac-old-r1": 23, "p2ac-old-r2": 22, "p2ac-old-r3": 63583 },
+    "all_windows_feature_clean": "clicked=true closed=true pageErrors=0 consoleErrors=0 (6/6)",
+    "aborted_attempt": "logs/p2ac-face-run-aborted-1016.log（base-r2 首次尝试：闸门 CONTENDED 等满 180 s + page.goto 超时，未落盘；已由冻结器械重跑成功）"
+  }
+}

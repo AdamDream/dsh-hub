@@ -1,0 +1,44 @@
+=== ns ids firefox vs self ===
+mnt     firefox=                       self=mnt:[4026531841]
+user    firefox=                       self=user:[4026531837]
+pid     firefox=                       self=pid:[4026531836]
+ipc     firefox=                       self=ipc:[4026531839]
+uts     firefox=                       self=uts:[4026531838]
+cgroup  firefox=                       self=cgroup:[4026531835]
+net     firefox=                       self=net:[4026531840]
+
+=== firefox ns /dev listing ===
+ls: 无法访问 '/proc/9042/root/dev/': 权限不够
+
+=== firefox ns /dev/dri ===
+ls: 无法访问 '/proc/9042/root/dev/dri/': 权限不够
+
+=== firefox ns /dev/nvidia* ===
+ls: 无法访问 '/proc/9042/root/dev/nvidia*': 权限不够
+
+=== firefox ns getfacl /dev/dri/renderD128 + renderD129 ===
+getfacl: /proc/9042/root/dev/dri/renderD128: 权限不够
+getfacl: /proc/9042/root/dev/dri/renderD129: 权限不够
+
+=== firefox ns mounts matching drm/dri/nvidia/gpu/mesa (dedup paths) ===
+/dev
+/dev/hugepages
+/dev/mqueue
+/dev/ptmx
+/dev/pts
+/dev/shm
+/snap/firefox/8863/gpu-2404
+/snap/firefox/8863/gpu-2404-2
+/snap/mesa-2404/1839
+/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0
+/usr/share/libdrm
+/usr/share/nvidia
+/var/lib/snapd/hostfs/snap/mesa-2404/1839
+
+=== gpu-2404 tree top level ===
+ls: 无法访问 '/proc/9042/root/snap/firefox/8863/gpu-2404-2/': 权限不够
+--- gpu-2404 lib ---
+ls: 无法访问 '/proc/9042/root/snap/firefox/8863/gpu-2404-2/lib/': 权限不够
+--- gpu-2404 dri drivers (where libEGL looks) ---
+ls: 无法访问 '/proc/9042/root/snap/firefox/8863/gpu-2404-2/lib/dri/': 权限不够
+--- gpu-2404 for nvidia ---

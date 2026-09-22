@@ -1,0 +1,196 @@
+{
+  "label": "engine-dpr-r1",
+  "ts": "2026-09-22T03:15:26.333Z",
+  "gate": {
+    "outcome": "CONTENDED",
+    "waitedMs": 15396,
+    "foreignSeen": [
+      "384425@04:48",
+      "385636@04:25",
+      "389847@03:05",
+      "396728@00:40",
+      "384425@04:49",
+      "385636@04:26",
+      "389847@03:06",
+      "396728@00:41",
+      "384425@04:50",
+      "385636@04:27",
+      "389847@03:07",
+      "396728@00:42",
+      "384425@04:51",
+      "385636@04:28",
+      "389847@03:08",
+      "396728@00:43",
+      "384425@04:52",
+      "385636@04:29",
+      "389847@03:10",
+      "396728@00:44",
+      "384425@04:53",
+      "385636@04:30",
+      "389847@03:11",
+      "396728@00:45",
+      "384425@04:54",
+      "385636@04:31",
+      "389847@03:12",
+      "396728@00:46",
+      "384425@04:55",
+      "385636@04:32",
+      "389847@03:13",
+      "396728@00:47",
+      "384425@04:56",
+      "385636@04:33",
+      "389847@03:14",
+      "396728@00:48",
+      "384425@04:57",
+      "385636@04:34",
+      "389847@03:15",
+      "396728@00:49",
+      "384425@04:58",
+      "385636@04:35",
+      "389847@03:16",
+      "396728@00:50",
+      "384425@04:59",
+      "385636@04:36",
+      "389847@03:17",
+      "384425@05:00",
+      "385636@04:37",
+      "389847@03:18",
+      "384425@05:01",
+      "385636@04:38",
+      "389847@03:19",
+      "384425@05:02",
+      "385636@04:39",
+      "389847@03:20"
+    ]
+  },
+  "lock": {
+    "heldAtStart": true,
+    "released": true
+  },
+  "loadavg": {
+    "start": "5.21 4.94 4.64 2/4034 399354",
+    "end": "5.03 4.91 4.63 9/4228 399799"
+  },
+  "concurrent": {
+    "concurrentWith": null,
+    "lockHeldForMs": null,
+    "lockHeldOver3Min": false,
+    "foreignBrowsersAtStart": 3,
+    "loadavgAtStart": "5.21 4.94 4.64 2/4034 399354",
+    "note": "并发已获协调者授权（等锁超 3 分钟）；判定一律用运行内相对比较，不用绝对阈值。",
+    "loadavgAtEnd": "5.03 4.91 4.63 9/4228 399799"
+  },
+  "concurrency": {
+    "censusStart": {
+      "at": "2026-09-22T03:15:18.500Z",
+      "instances": 3,
+      "foreignCount": 3,
+      "foreign": [
+        {
+          "pid": 384425,
+          "etime": "05:03"
+        },
+        {
+          "pid": 385636,
+          "etime": "04:40"
+        },
+        {
+          "pid": 389847,
+          "etime": "03:21"
+        }
+      ],
+      "lockOwner": "agent: incident2-regression (engine/DPR self-proof) line: label=engine-dpr-r1 pid: 398968",
+      "lockHeldByMyLine": true
+    },
+    "censusEnd": {
+      "at": "2026-09-22T03:15:26.333Z",
+      "instances": 4,
+      "foreignCount": 4,
+      "foreign": [
+        {
+          "pid": 384425,
+          "etime": "05:11"
+        },
+        {
+          "pid": 385636,
+          "etime": "04:48"
+        },
+        {
+          "pid": 389847,
+          "etime": "03:29"
+        },
+        {
+          "pid": 399641,
+          "etime": "00:00"
+        }
+      ],
+      "lockOwner": null,
+      "lockHeldByMyLine": false
+    },
+    "exclusiveThroughout": false
+  },
+  "identity": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
+    "devicePixelRatio": 1,
+    "innerWidth": 1280,
+    "innerHeight": 720,
+    "screenW": 1280,
+    "screenH": 720,
+    "canvasAttr": {
+      "w": 100,
+      "h": 50
+    },
+    "canvasCss": {
+      "w": 100,
+      "h": 50
+    },
+    "canvasBackingVsCssRatio": {
+      "w": 1,
+      "h": 1
+    },
+    "visualViewportScale": 1,
+    "longtaskSupportedProbe": true,
+    "loafSupportedProbe": true
+  },
+  "longtaskControl": {
+    "obsErr": null,
+    "blockRequested": 150,
+    "blockActual": 150,
+    "longtask": [
+      {
+        "start": 4194.5,
+        "d": 150
+      }
+    ],
+    "loaf": [
+      {
+        "start": 4194.5,
+        "d": 150
+      }
+    ],
+    "loafErr": null
+  },
+  "verdict": {
+    "longtaskPositiveControl": {
+      "pass": true,
+      "observed": 1,
+      "blockActualMs": 150,
+      "detail": [
+        {
+          "start": 4194.5,
+          "d": 150
+        }
+      ]
+    },
+    "loafObserved": 1,
+    "engine": "Blink",
+    "dprReadback": {
+      "devicePixelRatio": 1,
+      "canvasBackingVsCssRatio": {
+        "w": 1,
+        "h": 1
+      }
+    }
+  },
+  "pageErrors": []
+}

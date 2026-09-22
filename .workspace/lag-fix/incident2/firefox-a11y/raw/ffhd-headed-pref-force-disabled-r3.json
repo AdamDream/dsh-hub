@@ -1,0 +1,149 @@
+{
+  "condition": "pref-force-disabled",
+  "rep": 3,
+  "mode": "headed",
+  "token": "ffhd-headed-pref-force-disabled-r3-1790049195219",
+  "rootPid": 537726,
+  "profileDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-pref-force-disabled-r3",
+  "userJs": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-pref-force-disabled-r3/user.js",
+  "homeDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-pref-force-disabled-r3",
+  "envPassed": {
+    "ACCESSIBILITY_ENABLED": "1",
+    "GNOME_ACCESSIBILITY": "1",
+    "GTK_MODULES": "gail:atk-bridge"
+  },
+  "dbusSessionBusAddress": "unix:path=/run/user/1001/bus",
+  "gsettingsBackend": "memory",
+  "launchedAt": "2026-09-22T11:53:36+08:00",
+  "args": [
+    "--new-instance",
+    "--no-remote",
+    "--marionette",
+    "--profile",
+    "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-pref-force-disabled-r3",
+    "http://127.0.0.1:45285/page?n=15000&m=10000&f=120&k=1000&t=3000&batch=400&token=ffhd-headed-pref-force-disabled-r3-1790049195219"
+  ],
+  "logFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/logs/headed-pref-force-disabled-r3.log",
+  "loadBefore": "6.01 6.18 5.98 5/3266 537726",
+  "loadavgDuringResult": "6.00 6.17 5.98 3/3282 538633",
+  "busWatch": [],
+  "atspi": null,
+  "rootAccessible": null,
+  "result": {
+    "token": "ffhd-headed-pref-force-disabled-r3-1790049195219",
+    "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+    "params": {
+      "n": 15000,
+      "m": 10000,
+      "f": 120,
+      "k": 1000,
+      "t": 3000,
+      "batch": 400
+    },
+    "hardwareConcurrency": 32,
+    "visibilityState": "visible",
+    "phases": {
+      "build": 42,
+      "read1": 117,
+      "mutate": 21,
+      "animate": 2257,
+      "read2": 9
+    },
+    "frames": {
+      "totalMs": 2257,
+      "frames": 120,
+      "count": 120,
+      "mean": 18.767,
+      "p50": 17,
+      "p90": 22,
+      "p95": 39,
+      "p99": 48,
+      "max": 58,
+      "over33": 8,
+      "over50": 1,
+      "over100": 0
+    },
+    "longTasks": {
+      "count": 0,
+      "total": 0,
+      "max": 0
+    },
+    "errors": [],
+    "visibilityStateDuringAnimate": "visible",
+    "throughput": {
+      "ms": 3000,
+      "iterations": 2047200,
+      "batches": 5118,
+      "perSec": 682400
+    },
+    "reflow": {
+      "ms": 3001,
+      "iterations": 202800,
+      "batches": 507,
+      "perSec": 67577,
+      "sink": 167310000
+    },
+    "domNodes": 45009,
+    "ok": true,
+    "receivedAt": "2026-09-22T03:53:46.121Z"
+  },
+  "cpuAtResult": {
+    "cpuS": 0,
+    "procs": 1
+  },
+  "cpuAtEnd": {
+    "cpuS": 0,
+    "procs": 1
+  },
+  "wallMs": 13248,
+  "timedOut": false,
+  "notes": [
+    "sigterm: ESRCH"
+  ],
+  "procEnviron": {
+    "root": {
+      "readable": false,
+      "error": "ENOENT"
+    },
+    "children": []
+  },
+  "chromeReadback": {
+    "port": 3080,
+    "ok": false,
+    "error": "timeout",
+    "result": null,
+    "chromeScopeTried": true,
+    "hello": null
+  },
+  "busOnAfterRun": false,
+  "busName": null,
+  "effectivePrefs": {
+    "user_js": [
+      "user_pref(\"accessibility.force_disabled\", 1);"
+    ],
+    "prefs_js": [
+      "user_pref(\"accessibility.force_disabled\", 1);"
+    ]
+  },
+  "ourExes": [],
+  "leftoverPids": [],
+  "killWasScopedToOwnGroup": true,
+  "profileLeakProcs": [],
+  "censusAfter": 43,
+  "loadAfter": "5.76 6.12 5.96 5/3293 538829",
+  "censusBefore": 43,
+  "interlock": {
+    "foreignProbeBrowsersBefore": [
+      {
+        "pid": 495445,
+        "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --new-instance --no-remote --marionette --profile /home/CNS2026495165/dsh/.wo"
+      }
+    ],
+    "foreignWaitMs": 21178,
+    "noForeignProbeBrowser": false,
+    "lockStillOurs": false,
+    "lockToken": "NOLOCK-50783",
+    "loadavgAtRun": "5.76 6.12 5.96 5/3293 538829"
+  },
+  "userBrowsersRunning": 42
+}

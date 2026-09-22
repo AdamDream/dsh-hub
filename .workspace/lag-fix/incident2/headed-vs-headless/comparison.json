@@ -1,0 +1,1261 @@
+{
+ "generated_at": "2026-09-22T10:44:24.128917+08:00",
+ "protocol": "research-v2/measure-hardening/docs/PROTOCOL.md v1 (endpoints: frames_over_50ms_ratio<=0.02, long_task_total_ms_per_s<=100, click-to-paint <=100ms secondary)",
+ "harness_v2": "measure-v2.mjs (same file for every arm)",
+ "arms": {
+  "A": {
+   "n_reps": 3,
+   "per_rep": {
+    "v2-A-r1.json": {
+     "click_to_panel_visible_frame_ms": 48.4,
+     "click_to_next_frame_ms": 15.1,
+     "frame_p50": 16.7,
+     "frame_p95": 16.8,
+     "frame_p99": 16.8,
+     "frame_max": 33.3,
+     "frames_n": 241,
+     "frames_over_50ms": 0,
+     "frames_over_50ms_ratio": 0,
+     "threshold_over50_ratio": 0.02,
+     "longtask_n": 3,
+     "longtask_max_ms": 95,
+     "longtask_total_ms": 230,
+     "longtask_ms_per_s": 57.4,
+     "longtask_window": "document lifetime up to the post-settle snapshot (dominated by page-load tasks, NOT the click window)",
+     "longtask_entries": [
+      {
+       "start_ms": 38.5,
+       "dur_ms": 95
+      },
+      {
+       "start_ms": 137.1,
+       "dur_ms": 54
+      },
+      {
+       "start_ms": 589.8,
+       "dur_ms": 81
+      }
+     ],
+     "click_at_ms": 3279.4,
+     "longtasks_after_click_n": 0,
+     "ScriptDuration_ms": 153,
+     "TaskDuration_ms": 255,
+     "RecalcStyleDuration_ms": 22,
+     "LayoutDuration_ms": 5,
+     "LayoutCount": 3,
+     "RecalcStyleCount": 253,
+     "Paint_present": false,
+     "Paint_value": null,
+     "CompositeLayers_present": false,
+     "CompositeLayers_value": null,
+     "devicePixelRatio": 1,
+     "viewport": "1440x900",
+     "screen_refreshRate": null,
+     "invalid_reasons": []
+    },
+    "v2-A-r2.json": {
+     "click_to_panel_visible_frame_ms": 48.3,
+     "click_to_next_frame_ms": 15.1,
+     "frame_p50": 16.7,
+     "frame_p95": 16.8,
+     "frame_p99": 33.3,
+     "frame_max": 83.4,
+     "frames_n": 230,
+     "frames_over_50ms": 2,
+     "frames_over_50ms_ratio": 0.009,
+     "threshold_over50_ratio": 0.02,
+     "longtask_n": 3,
+     "longtask_max_ms": 94,
+     "longtask_total_ms": 218,
+     "longtask_ms_per_s": 54.337,
+     "longtask_window": "document lifetime up to the post-settle snapshot (dominated by page-load tasks, NOT the click window)",
+     "longtask_entries": [
+      {
+       "start_ms": 40,
+       "dur_ms": 94
+      },
+      {
+       "start_ms": 136,
+       "dur_ms": 58
+      },
+      {
+       "start_ms": 272.1,
+       "dur_ms": 66
+      }
+     ],
+     "click_at_ms": 2999,
+     "longtasks_after_click_n": 0,
+     "ScriptDuration_ms": 576,
+     "TaskDuration_ms": 678,
+     "RecalcStyleDuration_ms": 23,
+     "LayoutDuration_ms": 4,
+     "LayoutCount": 2,
+     "RecalcStyleCount": 242,
+     "Paint_present": false,
+     "Paint_value": null,
+     "CompositeLayers_present": false,
+     "CompositeLayers_value": null,
+     "devicePixelRatio": 1,
+     "viewport": "1440x900",
+     "screen_refreshRate": null,
+     "invalid_reasons": []
+    },
+    "v2-A-r3.json": {
+     "click_to_panel_visible_frame_ms": 51.9,
+     "click_to_next_frame_ms": 2,
+     "frame_p50": 16.7,
+     "frame_p95": 16.7,
+     "frame_p99": 16.8,
+     "frame_max": 16.8,
+     "frames_n": 243,
+     "frames_over_50ms": 0,
+     "frames_over_50ms_ratio": 0,
+     "threshold_over50_ratio": 0.02,
+     "longtask_n": 3,
+     "longtask_max_ms": 99,
+     "longtask_total_ms": 219,
+     "longtask_ms_per_s": 54.654,
+     "longtask_window": "document lifetime up to the post-settle snapshot (dominated by page-load tasks, NOT the click window)",
+     "longtask_entries": [
+      {
+       "start_ms": 48,
+       "dur_ms": 99
+      },
+      {
+       "start_ms": 160,
+       "dur_ms": 52
+      },
+      {
+       "start_ms": 309.7,
+       "dur_ms": 68
+      }
+     ],
+     "click_at_ms": 3037,
+     "longtasks_after_click_n": 0,
+     "ScriptDuration_ms": 303,
+     "TaskDuration_ms": 421,
+     "RecalcStyleDuration_ms": 26,
+     "LayoutDuration_ms": 4,
+     "LayoutCount": 2,
+     "RecalcStyleCount": 254,
+     "Paint_present": false,
+     "Paint_value": null,
+     "CompositeLayers_present": false,
+     "CompositeLayers_value": null,
+     "devicePixelRatio": 1,
+     "viewport": "1440x900",
+     "screen_refreshRate": null,
+     "invalid_reasons": []
+    }
+   },
+   "median": {
+    "click_to_panel_visible_frame_ms": 48.4,
+    "click_to_next_frame_ms": 15.1,
+    "frame_p50": 16.7,
+    "frame_p95": 16.8,
+    "frame_p99": 16.8,
+    "frame_max": 33.3,
+    "frames_over_50ms": 0,
+    "frames_over_50ms_ratio": 0,
+    "longtask_n": 3,
+    "longtask_max_ms": 95,
+    "longtask_ms_per_s": 54.654,
+    "ScriptDuration_ms": 303,
+    "TaskDuration_ms": 421,
+    "RecalcStyleDuration_ms": 23,
+    "LayoutDuration_ms": 4,
+    "LayoutCount": 2,
+    "RecalcStyleCount": 253
+   },
+   "range": {
+    "click_to_panel_visible_frame_ms": [
+     48.3,
+     51.9
+    ],
+    "click_to_next_frame_ms": [
+     2,
+     15.1
+    ],
+    "frame_p50": [
+     16.7,
+     16.7
+    ],
+    "frame_p95": [
+     16.7,
+     16.8
+    ],
+    "frame_p99": [
+     16.8,
+     33.3
+    ],
+    "frame_max": [
+     16.8,
+     83.4
+    ],
+    "frames_over_50ms": [
+     0,
+     2
+    ],
+    "frames_over_50ms_ratio": [
+     0,
+     0.009
+    ],
+    "longtask_n": [
+     3,
+     3
+    ],
+    "longtask_max_ms": [
+     94,
+     99
+    ],
+    "longtask_ms_per_s": [
+     54.337,
+     57.4
+    ],
+    "ScriptDuration_ms": [
+     153,
+     576
+    ],
+    "TaskDuration_ms": [
+     255,
+     678
+    ],
+    "RecalcStyleDuration_ms": [
+     22,
+     26
+    ],
+    "LayoutDuration_ms": [
+     4,
+     5
+    ],
+    "LayoutCount": [
+     2,
+     3
+    ],
+    "RecalcStyleCount": [
+     242,
+     254
+    ]
+   },
+   "Paint_present_all": [
+    "False"
+   ],
+   "CompositeLayers_present_all": [
+    "False"
+   ],
+   "startup_longtasks": [
+    [
+     {
+      "start_ms": 38.5,
+      "dur_ms": 95
+     },
+     {
+      "start_ms": 137.1,
+      "dur_ms": 54
+     },
+     {
+      "start_ms": 589.8,
+      "dur_ms": 81
+     }
+    ],
+    [
+     {
+      "start_ms": 40,
+      "dur_ms": 94
+     },
+     {
+      "start_ms": 136,
+      "dur_ms": 58
+     },
+     {
+      "start_ms": 272.1,
+      "dur_ms": 66
+     }
+    ],
+    [
+     {
+      "start_ms": 48,
+      "dur_ms": 99
+     },
+     {
+      "start_ms": 160,
+      "dur_ms": 52
+     },
+     {
+      "start_ms": 309.7,
+      "dur_ms": 68
+     }
+    ]
+   ]
+  },
+  "C-gpu": {
+   "n_reps": 3,
+   "per_rep": {
+    "v2-C-gpu-r1.json": {
+     "click_to_panel_visible_frame_ms": 48.5,
+     "click_to_next_frame_ms": 15.2,
+     "frame_p50": 16.7,
+     "frame_p95": 16.8,
+     "frame_p99": 16.8,
+     "frame_max": 50,
+     "frames_n": 238,
+     "frames_over_50ms": 0,
+     "frames_over_50ms_ratio": 0,
+     "threshold_over50_ratio": 0.02,
+     "longtask_n": 3,
+     "longtask_max_ms": 90,
+     "longtask_total_ms": 213,
+     "longtask_ms_per_s": 53.184,
+     "longtask_window": "document lifetime up to the post-settle snapshot (dominated by page-load tasks, NOT the click window)",
+     "longtask_entries": [
+      {
+       "start_ms": 33.6,
+       "dur_ms": 90
+      },
+      {
+       "start_ms": 136.5,
+       "dur_ms": 55
+      },
+      {
+       "start_ms": 288.4,
+       "dur_ms": 68
+      }
+     ],
+     "click_at_ms": 2985.4,
+     "longtasks_after_click_n": 0,
+     "ScriptDuration_ms": 469,
+     "TaskDuration_ms": 624,
+     "RecalcStyleDuration_ms": 20,
+     "LayoutDuration_ms": 10,
+     "LayoutCount": 6,
+     "RecalcStyleCount": 133,
+     "Paint_present": false,
+     "Paint_value": null,
+     "CompositeLayers_present": false,
+     "CompositeLayers_value": null,
+     "devicePixelRatio": 1,
+     "viewport": "1440x900",
+     "screen_refreshRate": null,
+     "invalid_reasons": []
+    },
+    "v2-C-gpu-r2.json": {
+     "click_to_panel_visible_frame_ms": 48.4,
+     "click_to_next_frame_ms": 15.2,
+     "frame_p50": 16.7,
+     "frame_p95": 16.8,
+     "frame_p99": 16.8,
+     "frame_max": 50,
+     "frames_n": 240,
+     "frames_over_50ms": 0,
+     "frames_over_50ms_ratio": 0,
+     "threshold_over50_ratio": 0.02,
+     "longtask_n": 3,
+     "longtask_max_ms": 87,
+     "longtask_total_ms": 208,
+     "longtask_ms_per_s": 51.909,
+     "longtask_window": "document lifetime up to the post-settle snapshot (dominated by page-load tasks, NOT the click window)",
+     "longtask_entries": [
+      {
+       "start_ms": 90.7,
+       "dur_ms": 87
+      },
+      {
+       "start_ms": 189.5,
+       "dur_ms": 55
+      },
+      {
+       "start_ms": 323.1,
+       "dur_ms": 66
+      }
+     ],
+     "click_at_ms": 3048.7,
+     "longtasks_after_click_n": 0,
+     "ScriptDuration_ms": 590,
+     "TaskDuration_ms": 739,
+     "RecalcStyleDuration_ms": 36,
+     "LayoutDuration_ms": 5,
+     "LayoutCount": 3,
+     "RecalcStyleCount": 253,
+     "Paint_present": false,
+     "Paint_value": null,
+     "CompositeLayers_present": false,
+     "CompositeLayers_value": null,
+     "devicePixelRatio": 1,
+     "viewport": "1440x900",
+     "screen_refreshRate": null,
+     "invalid_reasons": []
+    },
+    "v2-C-gpu-r3.json": {
+     "click_to_panel_visible_frame_ms": 48,
+     "click_to_next_frame_ms": 14.7,
+     "frame_p50": 16.7,
+     "frame_p95": 16.8,
+     "frame_p99": 49.9,
+     "frame_max": 66.7,
+     "frames_n": 227,
+     "frames_over_50ms": 2,
+     "frames_over_50ms_ratio": 0.009,
+     "threshold_over50_ratio": 0.02,
+     "longtask_n": 3,
+     "longtask_max_ms": 87,
+     "longtask_total_ms": 224,
+     "longtask_ms_per_s": 55.874,
+     "longtask_window": "document lifetime up to the post-settle snapshot (dominated by page-load tasks, NOT the click window)",
+     "longtask_entries": [
+      {
+       "start_ms": 35.9,
+       "dur_ms": 87
+      },
+      {
+       "start_ms": 135.6,
+       "dur_ms": 57
+      },
+      {
+       "start_ms": 1886.1,
+       "dur_ms": 80
+      }
+     ],
+     "click_at_ms": 4629.8,
+     "longtasks_after_click_n": 0,
+     "ScriptDuration_ms": 706,
+     "TaskDuration_ms": 836,
+     "RecalcStyleDuration_ms": 32,
+     "LayoutDuration_ms": 6,
+     "LayoutCount": 3,
+     "RecalcStyleCount": 238,
+     "Paint_present": false,
+     "Paint_value": null,
+     "CompositeLayers_present": false,
+     "CompositeLayers_value": null,
+     "devicePixelRatio": 1,
+     "viewport": "1440x900",
+     "screen_refreshRate": null,
+     "invalid_reasons": []
+    }
+   },
+   "median": {
+    "click_to_panel_visible_frame_ms": 48.4,
+    "click_to_next_frame_ms": 15.2,
+    "frame_p50": 16.7,
+    "frame_p95": 16.8,
+    "frame_p99": 16.8,
+    "frame_max": 50,
+    "frames_over_50ms": 0,
+    "frames_over_50ms_ratio": 0,
+    "longtask_n": 3,
+    "longtask_max_ms": 87,
+    "longtask_ms_per_s": 53.184,
+    "ScriptDuration_ms": 590,
+    "TaskDuration_ms": 739,
+    "RecalcStyleDuration_ms": 32,
+    "LayoutDuration_ms": 6,
+    "LayoutCount": 3,
+    "RecalcStyleCount": 238
+   },
+   "range": {
+    "click_to_panel_visible_frame_ms": [
+     48,
+     48.5
+    ],
+    "click_to_next_frame_ms": [
+     14.7,
+     15.2
+    ],
+    "frame_p50": [
+     16.7,
+     16.7
+    ],
+    "frame_p95": [
+     16.8,
+     16.8
+    ],
+    "frame_p99": [
+     16.8,
+     49.9
+    ],
+    "frame_max": [
+     50,
+     66.7
+    ],
+    "frames_over_50ms": [
+     0,
+     2
+    ],
+    "frames_over_50ms_ratio": [
+     0,
+     0.009
+    ],
+    "longtask_n": [
+     3,
+     3
+    ],
+    "longtask_max_ms": [
+     87,
+     90
+    ],
+    "longtask_ms_per_s": [
+     51.909,
+     55.874
+    ],
+    "ScriptDuration_ms": [
+     469,
+     706
+    ],
+    "TaskDuration_ms": [
+     624,
+     836
+    ],
+    "RecalcStyleDuration_ms": [
+     20,
+     36
+    ],
+    "LayoutDuration_ms": [
+     5,
+     10
+    ],
+    "LayoutCount": [
+     3,
+     6
+    ],
+    "RecalcStyleCount": [
+     133,
+     253
+    ]
+   },
+   "Paint_present_all": [
+    "False"
+   ],
+   "CompositeLayers_present_all": [
+    "False"
+   ],
+   "startup_longtasks": [
+    [
+     {
+      "start_ms": 33.6,
+      "dur_ms": 90
+     },
+     {
+      "start_ms": 136.5,
+      "dur_ms": 55
+     },
+     {
+      "start_ms": 288.4,
+      "dur_ms": 68
+     }
+    ],
+    [
+     {
+      "start_ms": 90.7,
+      "dur_ms": 87
+     },
+     {
+      "start_ms": 189.5,
+      "dur_ms": 55
+     },
+     {
+      "start_ms": 323.1,
+      "dur_ms": 66
+     }
+    ],
+    [
+     {
+      "start_ms": 35.9,
+      "dur_ms": 87
+     },
+     {
+      "start_ms": 135.6,
+      "dur_ms": 57
+     },
+     {
+      "start_ms": 1886.1,
+      "dur_ms": 80
+     }
+    ]
+   ]
+  },
+  "C-nogpu": {
+   "n_reps": 3,
+   "per_rep": {
+    "v2-C-nogpu-r1.json": {
+     "click_to_panel_visible_frame_ms": 48.6,
+     "click_to_next_frame_ms": 15.2,
+     "frame_p50": 16.7,
+     "frame_p95": 16.8,
+     "frame_p99": 16.8,
+     "frame_max": 16.8,
+     "frames_n": 242,
+     "frames_over_50ms": 0,
+     "frames_over_50ms_ratio": 0,
+     "threshold_over50_ratio": 0.02,
+     "longtask_n": 3,
+     "longtask_max_ms": 88,
+     "longtask_total_ms": 217,
+     "longtask_ms_per_s": 54.196,
+     "longtask_window": "document lifetime up to the post-settle snapshot (dominated by page-load tasks, NOT the click window)",
+     "longtask_entries": [
+      {
+       "start_ms": 40.1,
+       "dur_ms": 88
+      },
+      {
+       "start_ms": 130.6,
+       "dur_ms": 55
+      },
+      {
+       "start_ms": 268.6,
+       "dur_ms": 74
+      }
+     ],
+     "click_at_ms": 2983.7,
+     "longtasks_after_click_n": 0,
+     "ScriptDuration_ms": 189,
+     "TaskDuration_ms": 281,
+     "RecalcStyleDuration_ms": 25,
+     "LayoutDuration_ms": 4,
+     "LayoutCount": 2,
+     "RecalcStyleCount": 253,
+     "Paint_present": false,
+     "Paint_value": null,
+     "CompositeLayers_present": false,
+     "CompositeLayers_value": null,
+     "devicePixelRatio": 1,
+     "viewport": "1440x900",
+     "screen_refreshRate": null,
+     "invalid_reasons": []
+    },
+    "v2-C-nogpu-r2.json": {
+     "click_to_panel_visible_frame_ms": 48,
+     "click_to_next_frame_ms": 14.7,
+     "frame_p50": 16.7,
+     "frame_p95": 16.8,
+     "frame_p99": 16.8,
+     "frame_max": 16.8,
+     "frames_n": 242,
+     "frames_over_50ms": 0,
+     "frames_over_50ms_ratio": 0,
+     "threshold_over50_ratio": 0.02,
+     "longtask_n": 2,
+     "longtask_max_ms": 93,
+     "longtask_total_ms": 169,
+     "longtask_ms_per_s": 42.176,
+     "longtask_window": "document lifetime up to the post-settle snapshot (dominated by page-load tasks, NOT the click window)",
+     "longtask_entries": [
+      {
+       "start_ms": 28.2,
+       "dur_ms": 93
+      },
+      {
+       "start_ms": 457.1,
+       "dur_ms": 76
+      }
+     ],
+     "click_at_ms": 3157.2,
+     "longtasks_after_click_n": 0,
+     "ScriptDuration_ms": 188,
+     "TaskDuration_ms": 305,
+     "RecalcStyleDuration_ms": 16,
+     "LayoutDuration_ms": 9,
+     "LayoutCount": 7,
+     "RecalcStyleCount": 139,
+     "Paint_present": false,
+     "Paint_value": null,
+     "CompositeLayers_present": false,
+     "CompositeLayers_value": null,
+     "devicePixelRatio": 1,
+     "viewport": "1440x900",
+     "screen_refreshRate": null,
+     "invalid_reasons": []
+    },
+    "v2-C-nogpu-r3.json": {
+     "click_to_panel_visible_frame_ms": 49,
+     "click_to_next_frame_ms": 15.7,
+     "frame_p50": 16.7,
+     "frame_p95": 16.8,
+     "frame_p99": 16.8,
+     "frame_max": 50,
+     "frames_n": 238,
+     "frames_over_50ms": 0,
+     "frames_over_50ms_ratio": 0,
+     "threshold_over50_ratio": 0.02,
+     "longtask_n": 3,
+     "longtask_max_ms": 93,
+     "longtask_total_ms": 218,
+     "longtask_ms_per_s": 54.446,
+     "longtask_window": "document lifetime up to the post-settle snapshot (dominated by page-load tasks, NOT the click window)",
+     "longtask_entries": [
+      {
+       "start_ms": 40.9,
+       "dur_ms": 93
+      },
+      {
+       "start_ms": 136.5,
+       "dur_ms": 55
+      },
+      {
+       "start_ms": 270.3,
+       "dur_ms": 70
+      }
+     ],
+     "click_at_ms": 2981.8,
+     "longtasks_after_click_n": 0,
+     "ScriptDuration_ms": 264,
+     "TaskDuration_ms": 348,
+     "RecalcStyleDuration_ms": 20,
+     "LayoutDuration_ms": 4,
+     "LayoutCount": 2,
+     "RecalcStyleCount": 249,
+     "Paint_present": false,
+     "Paint_value": null,
+     "CompositeLayers_present": false,
+     "CompositeLayers_value": null,
+     "devicePixelRatio": 1,
+     "viewport": "1440x900",
+     "screen_refreshRate": null,
+     "invalid_reasons": []
+    }
+   },
+   "median": {
+    "click_to_panel_visible_frame_ms": 48.6,
+    "click_to_next_frame_ms": 15.2,
+    "frame_p50": 16.7,
+    "frame_p95": 16.8,
+    "frame_p99": 16.8,
+    "frame_max": 16.8,
+    "frames_over_50ms": 0,
+    "frames_over_50ms_ratio": 0,
+    "longtask_n": 3,
+    "longtask_max_ms": 93,
+    "longtask_ms_per_s": 54.196,
+    "ScriptDuration_ms": 189,
+    "TaskDuration_ms": 305,
+    "RecalcStyleDuration_ms": 20,
+    "LayoutDuration_ms": 4,
+    "LayoutCount": 2,
+    "RecalcStyleCount": 249
+   },
+   "range": {
+    "click_to_panel_visible_frame_ms": [
+     48,
+     49
+    ],
+    "click_to_next_frame_ms": [
+     14.7,
+     15.7
+    ],
+    "frame_p50": [
+     16.7,
+     16.7
+    ],
+    "frame_p95": [
+     16.8,
+     16.8
+    ],
+    "frame_p99": [
+     16.8,
+     16.8
+    ],
+    "frame_max": [
+     16.8,
+     50
+    ],
+    "frames_over_50ms": [
+     0,
+     0
+    ],
+    "frames_over_50ms_ratio": [
+     0,
+     0
+    ],
+    "longtask_n": [
+     2,
+     3
+    ],
+    "longtask_max_ms": [
+     88,
+     93
+    ],
+    "longtask_ms_per_s": [
+     42.176,
+     54.446
+    ],
+    "ScriptDuration_ms": [
+     188,
+     264
+    ],
+    "TaskDuration_ms": [
+     281,
+     348
+    ],
+    "RecalcStyleDuration_ms": [
+     16,
+     25
+    ],
+    "LayoutDuration_ms": [
+     4,
+     9
+    ],
+    "LayoutCount": [
+     2,
+     7
+    ],
+    "RecalcStyleCount": [
+     139,
+     253
+    ]
+   },
+   "Paint_present_all": [
+    "False"
+   ],
+   "CompositeLayers_present_all": [
+    "False"
+   ],
+   "startup_longtasks": [
+    [
+     {
+      "start_ms": 40.1,
+      "dur_ms": 88
+     },
+     {
+      "start_ms": 130.6,
+      "dur_ms": 55
+     },
+     {
+      "start_ms": 268.6,
+      "dur_ms": 74
+     }
+    ],
+    [
+     {
+      "start_ms": 28.2,
+      "dur_ms": 93
+     },
+     {
+      "start_ms": 457.1,
+      "dur_ms": 76
+     }
+    ],
+    [
+     {
+      "start_ms": 40.9,
+      "dur_ms": 93
+     },
+     {
+      "start_ms": 136.5,
+      "dur_ms": 55
+     },
+     {
+      "start_ms": 270.3,
+      "dur_ms": 70
+     }
+    ]
+   ]
+  }
+ },
+ "startup_control_probe": {
+  "startup-A.json": {
+   "probe": "startup+control",
+   "arm": "A",
+   "at": "2026-09-22T02:42:30.839Z",
+   "steps": [
+    {
+     "step": "load-phase (no interaction, 6s)",
+     "longtasks": [
+      {
+       "s": 104,
+       "d": 95
+      },
+      {
+       "s": 201.9,
+       "d": 52
+      },
+      {
+       "s": 354.6,
+       "d": 69
+      }
+     ],
+     "longtask_total_ms": 216,
+     "raf_count": 348
+    },
+    {
+     "step": "CONTROL: deliberate 120ms main-thread block",
+     "control_span_ms": 120,
+     "frames_during_window": 75,
+     "interval_stats_around_control": {
+      "n": 74,
+      "p50": 16.7,
+      "p95": 16.7,
+      "p99": 16.8,
+      "max": 100,
+      "over50": 1,
+      "over100": 0
+     },
+     "interval_at_spike": 16.6,
+     "control_task_delta_ms": 458.079,
+     "control_script_delta_ms": 300.14,
+     "longtasks_observed": []
+    },
+    {
+     "step": "settings click -> visible (tight CDP delta)",
+     "click_to_visible_frame_ms": 50.1,
+     "delta_window_ms": 95.645,
+     "ScriptDuration_ms": 44.155,
+     "TaskDuration_ms": 67.518,
+     "RecalcStyleDuration_ms": 3.439,
+     "LayoutDuration_ms": 5.559,
+     "LayoutCount": 2,
+     "RecalcStyleCount": 12,
+     "longtasks_at_click": [],
+     "interval_stats_after_click": {
+      "n": 4,
+      "p50": 16.6,
+      "p95": 16.7,
+      "p99": 16.7,
+      "max": 33.4,
+      "over50": 0,
+      "over100": 0
+     },
+     "raf_frames": 5,
+     "click_frame_delta": null,
+     "wall_click_epoch_ms": 1790044960068
+    },
+    {
+     "step": "idle 3s window",
+     "Paint_delta": "ABSENT",
+     "CompositeLayers_delta": "ABSENT",
+     "TaskDuration_ms": 353.258,
+     "ScriptDuration_ms": 290.233,
+     "RecalcStyleCount": 181,
+     "LayoutCount": 0,
+     "raf_frames": 185
+    }
+   ],
+   "paint_presence": {
+    "Paint": false,
+    "CompositeLayers": false
+   },
+   "metric_names": [
+    "AdSubframes",
+    "ArrayBufferContents",
+    "AudioHandlers",
+    "AudioWorkletProcessors",
+    "ContextLifecycleStateObservers",
+    "DetachedScriptStates",
+    "DevToolsCommandDuration",
+    "Documents",
+    "DomContentLoaded",
+    "FirstMeaningfulPaint",
+    "Frames",
+    "JSEventListeners",
+    "JSHeapTotalSize",
+    "JSHeapUsedSize",
+    "LayoutCount",
+    "LayoutDuration",
+    "LayoutObjects",
+    "MediaKeySessions",
+    "MediaKeys",
+    "NavigationStart",
+    "Nodes",
+    "ProcessTime",
+    "RTCPeerConnections",
+    "RecalcStyleCount",
+    "RecalcStyleDuration",
+    "ResourceFetchers",
+    "Resources",
+    "ScriptDuration",
+    "TaskDuration",
+    "TaskOtherDuration",
+    "ThreadTime",
+    "Timestamp",
+    "UACSSResources",
+    "V8CompileDuration",
+    "V8PerContextDatas",
+    "WorkerGlobalScopes"
+   ]
+  },
+  "startup-C-nogpu.json": {
+   "probe": "startup+control",
+   "arm": "C-nogpu",
+   "at": "2026-09-22T02:42:56.599Z",
+   "steps": [
+    {
+     "step": "load-phase (no interaction, 6s)",
+     "longtasks": [
+      {
+       "s": 45,
+       "d": 93
+      },
+      {
+       "s": 140.7,
+       "d": 53
+      },
+      {
+       "s": 538.1,
+       "d": 70
+      }
+     ],
+     "longtask_total_ms": 216,
+     "raf_count": 353
+    },
+    {
+     "step": "CONTROL: deliberate 120ms main-thread block",
+     "control_span_ms": 120,
+     "frames_during_window": 73,
+     "interval_stats_around_control": {
+      "n": 72,
+      "p50": 16.7,
+      "p95": 16.7,
+      "p99": 33.3,
+      "max": 100,
+      "over50": 1,
+      "over100": 0
+     },
+     "interval_at_spike": null,
+     "control_task_delta_ms": 290.247,
+     "control_script_delta_ms": 154.047,
+     "longtasks_observed": []
+    },
+    {
+     "step": "settings click -> visible (tight CDP delta)",
+     "click_to_visible_frame_ms": 48.9,
+     "delta_window_ms": 71.132,
+     "ScriptDuration_ms": 5.839,
+     "TaskDuration_ms": 23.61,
+     "RecalcStyleDuration_ms": 2.382,
+     "LayoutDuration_ms": 4.188,
+     "LayoutCount": 3,
+     "RecalcStyleCount": 9,
+     "longtasks_at_click": [],
+     "interval_stats_after_click": {
+      "n": 2,
+      "p50": 16.6,
+      "p95": 16.6,
+      "p99": 16.6,
+      "max": 16.7,
+      "over50": 0,
+      "over100": 0
+     },
+     "raf_frames": 4,
+     "click_frame_delta": 16.7,
+     "wall_click_epoch_ms": 1790044985668
+    },
+    {
+     "step": "idle 3s window",
+     "Paint_delta": "ABSENT",
+     "CompositeLayers_delta": "ABSENT",
+     "TaskDuration_ms": 487.449,
+     "ScriptDuration_ms": 447.054,
+     "RecalcStyleCount": 0,
+     "LayoutCount": 0,
+     "raf_frames": 185
+    }
+   ],
+   "paint_presence": {
+    "Paint": false,
+    "CompositeLayers": false
+   },
+   "metric_names": [
+    "AdSubframes",
+    "ArrayBufferContents",
+    "AudioHandlers",
+    "AudioWorkletProcessors",
+    "ContextLifecycleStateObservers",
+    "DetachedScriptStates",
+    "DevToolsCommandDuration",
+    "Documents",
+    "DomContentLoaded",
+    "FirstMeaningfulPaint",
+    "Frames",
+    "JSEventListeners",
+    "JSHeapTotalSize",
+    "JSHeapUsedSize",
+    "LayoutCount",
+    "LayoutDuration",
+    "LayoutObjects",
+    "MediaKeySessions",
+    "MediaKeys",
+    "NavigationStart",
+    "Nodes",
+    "ProcessTime",
+    "RTCPeerConnections",
+    "RecalcStyleCount",
+    "RecalcStyleDuration",
+    "ResourceFetchers",
+    "Resources",
+    "ScriptDuration",
+    "TaskDuration",
+    "TaskOtherDuration",
+    "ThreadTime",
+    "Timestamp",
+    "UACSSResources",
+    "V8CompileDuration",
+    "V8PerContextDatas",
+    "WorkerGlobalScopes"
+   ]
+  }
+ },
+ "harness_v1_superseded": {
+  "note": "v1 files kept for provenance only; v1 had three defects (readiness predicate false-negatives, unwired click->visible marker, marker installed after the rAF loop was registered). All numbers quoted in audit.md come from harness v2.",
+  "arms": {
+   "A": [
+    "A-r1.json",
+    "A-r2.json",
+    "A-r3.json"
+   ]
+  }
+ },
+ "baseline_status": {
+  "status": "contended",
+  "usable_as_baseline": false,
+  "statement": "Measurement windows ran while 2 foreign headless_shell instances belonging to a sibling line were present (protocol section 0bis concurrency gate: foreign_instances=2 in every window); loadavg ~5.5. Absolute values (ms, ms/s, fps, p95/p99, over-threshold ratios) therefore must NOT be used as a baseline or for percentage attribution; only the protocol, the gates, the recomputation, and relative/zero/paired comparisons within the same window are usable.",
+  "shared_probe_lock": "not held - shared lock .workspace/lag-fix/research-v2/.probe.lock was held continuously by sibling line incident2-live-repro; our runner waited and then proceeded, recording every window"
+ },
+ "hover_pointer_ablation": {
+  "note": "pinned --blink-settings vs natural capabilities; both report any-hover:true / any-pointer:fine => the pin does not downgrade capability on Chromium 131; not a source of headless/headed divergence",
+  "runs": {
+   "hoverless-r1": {
+    "capabilities": {
+     "anyHover": true,
+     "anyHoverNone": false,
+     "hoverHover": true,
+     "anyPointerFine": true,
+     "anyPointerCoarse": false,
+     "anyPointerNone": false,
+     "primaryPointerFine": true,
+     "maxTouchPoints": 0
+    },
+    "pre_click_strict_hits": 0,
+    "c2v": 40.8,
+    "frames_between": 3,
+    "frame_p95": 16.7,
+    "over50": 0,
+    "longtask_max_ms": 0,
+    "recalc_ms": 2.386,
+    "recalc_n": 8,
+    "layout_n": 2
+   },
+   "hoverless-r2": {
+    "capabilities": {
+     "anyHover": true,
+     "anyHoverNone": false,
+     "hoverHover": true,
+     "anyPointerFine": true,
+     "anyPointerCoarse": false,
+     "anyPointerNone": false,
+     "primaryPointerFine": true,
+     "maxTouchPoints": 0
+    },
+    "pre_click_strict_hits": 0,
+    "c2v": 38.9,
+    "frames_between": 3,
+    "frame_p95": 16.7,
+    "over50": 0,
+    "longtask_max_ms": 0,
+    "recalc_ms": 2.426,
+    "recalc_n": 8,
+    "layout_n": 2
+   },
+   "hoverless-r3": {
+    "capabilities": {
+     "anyHover": true,
+     "anyHoverNone": false,
+     "hoverHover": true,
+     "anyPointerFine": true,
+     "anyPointerCoarse": false,
+     "anyPointerNone": false,
+     "primaryPointerFine": true,
+     "maxTouchPoints": 0
+    },
+    "pre_click_strict_hits": 0,
+    "c2v": 40.8,
+    "frames_between": 2,
+    "frame_p95": 16.7,
+    "over50": 0,
+    "longtask_max_ms": 0,
+    "recalc_ms": 2.325,
+    "recalc_n": 8,
+    "layout_n": 2
+   },
+   "natural-r1": {
+    "capabilities": {
+     "anyHover": true,
+     "anyHoverNone": false,
+     "hoverHover": true,
+     "anyPointerFine": true,
+     "anyPointerCoarse": false,
+     "anyPointerNone": false,
+     "primaryPointerFine": true,
+     "maxTouchPoints": 0
+    },
+    "pre_click_strict_hits": 0,
+    "c2v": -32.9,
+    "frames_between": 0,
+    "frame_p95": 16.7,
+    "over50": 0,
+    "longtask_max_ms": 0,
+    "recalc_ms": 2.903,
+    "recalc_n": 8,
+    "layout_n": 2
+   },
+   "natural-r2": {
+    "capabilities": {
+     "anyHover": true,
+     "anyHoverNone": false,
+     "hoverHover": true,
+     "anyPointerFine": true,
+     "anyPointerCoarse": false,
+     "anyPointerNone": false,
+     "primaryPointerFine": true,
+     "maxTouchPoints": 0
+    },
+    "pre_click_strict_hits": 0,
+    "c2v": 37.3,
+    "frames_between": 2,
+    "frame_p95": 16.7,
+    "over50": 0,
+    "longtask_max_ms": 0,
+    "recalc_ms": 2.839,
+    "recalc_n": 7,
+    "layout_n": 2
+   },
+   "natural-r3": {
+    "capabilities": {
+     "anyHover": true,
+     "anyHoverNone": false,
+     "hoverHover": true,
+     "anyPointerFine": true,
+     "anyPointerCoarse": false,
+     "anyPointerNone": false,
+     "primaryPointerFine": true,
+     "maxTouchPoints": 0
+    },
+    "pre_click_strict_hits": 0,
+    "c2v": 35.8,
+    "frames_between": 2,
+    "frame_p95": 16.7,
+    "over50": 0,
+    "longtask_max_ms": 0,
+    "recalc_ms": 2.345,
+    "recalc_n": 7,
+    "layout_n": 2
+   }
+  }
+ },
+ "headed_block": {
+  "verdict": "BLOCKED",
+  "artifacts": [
+   "v2-B-display1.json",
+   "v2-B-display2.json",
+   "v2-B-display9.json"
+  ],
+  "fatal_identical": false,
+  "displays_tried": [
+   ":1 (real GPU X desktop)",
+   ":2 (Xephyr nested X)",
+   ":9 (nonexistent)"
+  ],
+  "signal": "SIGTRAP si_code=SI_KERNEL, exit 133, 6/6 deterministic",
+  "repro": "node measure-v2.mjs --arm B --rep 1 --display :1",
+  "fatal_identical_raw": false,
+  "fatal_signature_note": "three artifacts are equal length (3595 B) and identical except the temp profile name and PID (first differing offset ~1492); failure signature is display-independent"
+ }
+}

@@ -1,0 +1,115 @@
+############ systemctl list-timers --all ############
+NEXT                                 LEFT LAST                           PASSED UNIT                           ACTIVATES
+Tue 2026-09-22 10:32:45 CST      1min 59s Tue 2026-09-22 10:06:57 CST 23min ago anacron.timer                  anacron.service
+Tue 2026-09-22 10:35:04 CST      4min 17s Mon 2026-09-21 18:09:13 CST         - fwupd-refresh.timer            fwupd-refresh.service
+Tue 2026-09-22 10:40:00 CST          9min Tue 2026-09-22 10:30:12 CST   34s ago sysstat-collect.timer          sysstat-collect.service
+Tue 2026-09-22 10:51:44 CST         20min Mon 2026-09-21 06:36:12 CST         - apt-daily-upgrade.timer        apt-daily-upgrade.service
+Tue 2026-09-22 11:01:54 CST         31min -                                   - apport-autoreport.timer        apport-autoreport.service
+Tue 2026-09-22 12:02:34 CST      1h 31min Mon 2026-09-21 08:19:41 CST         - apt-daily.timer                apt-daily.service
+Tue 2026-09-22 18:27:19 CST            7h Mon 2026-09-21 03:06:48 CST         - man-db.timer                   man-db.service
+Tue 2026-09-22 20:33:34 CST           10h Mon 2026-09-21 09:56:50 CST         - motd-news.timer                motd-news.service
+Wed 2026-09-23 00:00:00 CST           13h Tue 2026-09-22 10:01:58 CST 28min ago dpkg-db-backup.timer           dpkg-db-backup.service
+Wed 2026-09-23 00:00:00 CST           13h Tue 2026-09-22 10:01:58 CST 28min ago logrotate.timer                logrotate.service
+Wed 2026-09-23 00:07:00 CST           13h -                                   - sysstat-summary.timer          sysstat-summary.service
+Wed 2026-09-23 10:06:57 CST           23h Tue 2026-09-22 10:06:57 CST 23min ago update-notifier-download.timer update-notifier-download.service
+Wed 2026-09-23 10:16:54 CST           23h Tue 2026-09-22 10:16:54 CST 13min ago systemd-tmpfiles-clean.timer   systemd-tmpfiles-clean.service
+Sun 2026-09-27 03:10:04 CST        4 days Sun 2026-09-20 11:11:20 CST         - e2scrub_all.timer              e2scrub_all.service
+Mon 2026-09-28 00:26:16 CST        5 days Mon 2026-09-21 00:35:44 CST         - fstrim.timer                   fstrim.service
+Wed 2026-09-30 01:15:12 CST 1 week 0 days Sun 2026-09-20 23:50:54 CST         - update-notifier-motd.timer     update-notifier-motd.service
+-                                       - -                                   - snapd.snap-repair.timer        snapd.snap-repair.service
+-                                       - -                                   - ua-timer.timer                 ua-timer.service
+
+18 timers listed.
+
+############ crontab -l (user) ############
+crontabs/CNS2026495165/: fopen: 权限不够
+
+############ /etc/crontab ############
+SHELL=/bin/sh
+17 *	* * *	root	cd / && run-parts --report /etc/cron.hourly
+25 6	* * *	root	test -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.daily; }
+47 6	* * 7	root	test -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.weekly; }
+52 6	1 * *	root	test -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.monthly; }
+
+############ /etc/cron.d ############
+总计 32
+drwxr-xr-x   2 root root  4096  8月  6  2025 .
+drwxr-xr-x 156 root root 12288  9月 22 10:01 ..
+-rw-r--r--   1 root root   219 11月 17  2023 anacron
+-rw-r--r--   1 root root   201  4月  8  2024 e2scrub_all
+-rw-r--r--   1 root root   102  3月 31  2024 .placeholder
+-rw-r--r--   1 root root   396  1月 10  2024 sysstat
+--- /etc/cron.d/anacron
+SHELL=/bin/sh
+30 7-23 * * *   root	[ -x /etc/init.d/anacron ] && if [ ! -d /run/systemd/system ]; then /usr/sbin/invoke-rc.d anacron start >/dev/null; fi
+--- /etc/cron.d/e2scrub_all
+30 3 * * 0 root test -e /run/systemd/system || SERVICE_MODE=1 /usr/lib/x86_64-linux-gnu/e2fsprogs/e2scrub_all_cron
+10 3 * * * root test -e /run/systemd/system || SERVICE_MODE=1 /sbin/e2scrub_all -A -r
+--- /etc/cron.d/sysstat
+PATH=/usr/lib/sysstat:/usr/sbin:/usr/sbin:/usr/bin:/sbin:/bin
+5-55/10 * * * * root command -v debian-sa1 > /dev/null && debian-sa1 1 1
+59 23 * * * root command -v debian-sa1 > /dev/null && debian-sa1 60 2
+
+############ /etc/cron.hourly|daily|weekly|monthly ############
+--- hourly
+drwxr-xr-x   2 root root  4096  8月  6  2025 .
+drwxr-xr-x 156 root root 12288  9月 22 10:01 ..
+-rw-r--r--   1 root root   102  3月 31  2024 .placeholder
+--- daily
+drwxr-xr-x   2 root root  4096  8月 10 16:32 .
+drwxr-xr-x 156 root root 12288  9月 22 10:01 ..
+-rwxr-xr-x   1 root root   311  9月 25  2023 0anacron
+-rwxr-xr-x   1 root root   376  7月  8  2025 apport
+-rwxr-xr-x   1 root root  1478  3月 22  2024 apt-compat
+-rwxr-xr-x   1 root root   123  2月  5  2024 dpkg
+-rwxr-xr-x   1 root root   377  4月  9  2024 logrotate
+-rwxr-xr-x   1 root root  1395  3月 30  2024 man-db
+-rw-r--r--   1 root root   102  3月 31  2024 .placeholder
+-rwxr-xr-x   1 root root   518  1月 10  2024 sysstat
+--- weekly
+drwxr-xr-x   2 root root  4096  8月  6  2025 .
+drwxr-xr-x 156 root root 12288  9月 22 10:01 ..
+-rwxr-xr-x   1 root root   312  9月 25  2023 0anacron
+-rwxr-xr-x   1 root root  1055  3月 30  2024 man-db
+-rw-r--r--   1 root root   102  3月 31  2024 .placeholder
+--- monthly
+drwxr-xr-x   2 root root  4096  8月  6  2025 .
+drwxr-xr-x 156 root root 12288  9月 22 10:01 ..
+-rwxr-xr-x   1 root root   313  9月 25  2023 0anacron
+-rw-r--r--   1 root root   102  3月 31  2024 .placeholder
+
+############ anacron ############
+SHELL=/bin/sh
+HOME=/root
+LOGNAME=root
+1	5	cron.daily	run-parts --report /etc/cron.daily
+7	10	cron.weekly	run-parts --report /etc/cron.weekly
+@monthly	15	cron.monthly	run-parts --report /etc/cron.monthly
+
+############ systemd timers enabled state ############
+  UNIT                           LOAD   ACTIVE   SUB     DESCRIPTION
+  anacron.timer                  loaded active   waiting Trigger anacron every hour
+  apport-autoreport.timer        loaded active   waiting Process error reports when automatic reporting is enabled (timer based)
+  apt-daily-upgrade.timer        loaded active   waiting Daily apt upgrade and clean activities
+  apt-daily.timer                loaded active   waiting Daily apt download activities
+  dpkg-db-backup.timer           loaded active   waiting Daily dpkg database backup timer
+  e2scrub_all.timer              loaded active   waiting Periodic ext4 Online Metadata Check for All Filesystems
+  fstrim.timer                   loaded active   waiting Discard unused filesystem blocks once a week
+  fwupd-refresh.timer            loaded active   waiting Refresh fwupd metadata regularly
+  logrotate.timer                loaded active   waiting Daily rotation of log files
+  man-db.timer                   loaded active   waiting Daily man-db regeneration
+  motd-news.timer                loaded active   waiting Message of the Day
+  snapd.snap-repair.timer        loaded inactive dead    Timer to automatically fetch and run repair assertions
+  sysstat-collect.timer          loaded active   waiting Run system activity accounting tool every 10 minutes
+  sysstat-summary.timer          loaded active   waiting Generate summary of yesterday's process accounting
+  systemd-tmpfiles-clean.timer   loaded active   waiting Daily Cleanup of Temporary Directories
+  ua-timer.timer                 loaded inactive dead    Ubuntu Pro Timer for running repeated jobs
+  update-notifier-download.timer loaded active   waiting Download data for packages that failed at package install time
+  update-notifier-motd.timer     loaded active   waiting Check to see whether there is a new version of Ubuntu available
+
+Legend: LOAD   → Reflects whether the unit definition was properly loaded.
+        ACTIVE → The high-level unit activation state, i.e. generalization of SUB.
+        SUB    → The low-level unit activation state, values depend on unit type.
+
+18 loaded units listed.
+To show all installed unit files use 'systemctl list-unit-files'.

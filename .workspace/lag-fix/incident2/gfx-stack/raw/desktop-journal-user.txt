@@ -1,0 +1,110 @@
+##### journalctl --user -b : gnome-shell/mutter frame-latency #####
+9月 22 10:02:18 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (II) FBDEV: driver for framebuffer: fbdev
+9月 22 10:02:18 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (==) AMDGPU(0): Depth 24, (--) framebuffer bpp 32
+9月 22 10:02:18 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (==) NVIDIA(G0): Depth 24, (==) framebuffer bpp 32
+9月 22 10:02:18 CNS202649516533 gnome-shell[4139]: Running GNOME Shell (using mutter 46.2) as a X11 window and compositing manager
+9月 22 10:02:18 CNS202649516533 gnome-shell[4139]: Enabling experimental feature 'x11-randr-fractional-scaling'
+9月 22 10:02:19 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (II) AMDGPU(0): Allocate new frame buffer 5120x2880
+9月 22 10:02:19 CNS202649516533 at-spi-bus-launcher[4063]: dbus-daemon[4063]: Activating service name='org.a11y.atspi.Registry' requested by ':1.1' (uid=1001 pid=4139 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Unset XDG_SESSION_ID, getCurrentSessionProxy() called outside a user session. Asking logind directly.
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Will monitor session 2
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating service name='org.gnome.Shell.Screencast' requested by ':1.46' (uid=1001 pid=4139 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating service name='org.gnome.Shell.CalendarServer' requested by ':1.46' (uid=1001 pid=4139 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='org.gnome.evolution.dataserver.Sources5' unit='evolution-source-registry.service' requested by ':1.50' (uid=1001 pid=4218 comm="/usr/libexec/gnome-shell-calendar-server" label="unconfined")
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='ca.desrt.dconf' unit='dconf.service' requested by ':1.46' (uid=1001 pid=4139 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating service name='org.gnome.Shell.Notifications' requested by ':1.46' (uid=1001 pid=4139 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Unable to connect to ibus: 给定的地址为空
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Gio.UnixInputStream has been moved to a separate platform-specific library. Please update your code to use GioUnix.InputStream instead.
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Error looking up permission: GDBus.Error:org.freedesktop.portal.Error.NotFound: No entry for geolocation
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='org.gtk.vfs.UDisks2VolumeMonitor' unit='gvfs-udisks2-volume-monitor.service' requested by ':1.46' (uid=1001 pid=4139 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='org.gtk.vfs.AfcVolumeMonitor' unit='gvfs-afc-volume-monitor.service' requested by ':1.46' (uid=1001 pid=4139 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='org.gnome.evolution.dataserver.Calendar8' unit='evolution-calendar-factory.service' requested by ':1.50' (uid=1001 pid=4218 comm="/usr/libexec/gnome-shell-calendar-server" label="unconfined")
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='org.gtk.vfs.GPhoto2VolumeMonitor' unit='gvfs-gphoto2-volume-monitor.service' requested by ':1.46' (uid=1001 pid=4139 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='org.gtk.vfs.MTPVolumeMonitor' unit='gvfs-mtp-volume-monitor.service' requested by ':1.46' (uid=1001 pid=4139 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='org.gtk.vfs.GoaVolumeMonitor' unit='gvfs-goa-volume-monitor.service' requested by ':1.46' (uid=1001 pid=4139 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Failed to import DBusMenu, quicklists are not available: Error: Requiring Dbusmenu, version none: Typelib file for namespace 'Dbusmenu' (any version) not found
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Failed to import DBusMenu, quicklists are not available: Error: Requiring Dbusmenu, version none: Typelib file for namespace 'Dbusmenu' (any version) not found
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Failed to import DBusMenu, quicklists are not available: Error: Requiring Dbusmenu, version none: Typelib file for namespace 'Dbusmenu' (any version) not found
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating service name='org.freedesktop.FileManager1' requested by ':1.46' (uid=1001 pid=4139 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 34 with keysym 34 (keycode d).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 36 with keysym 36 (keycode f).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 34 with keysym 34 (keycode d).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 39 with keysym 39 (keycode 12).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 35 with keysym 35 (keycode e).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 38 with keysym 38 (keycode 11).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 37 with keysym 37 (keycode 10).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 31 with keysym 31 (keycode a).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 38 with keysym 38 (keycode 11).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 37 with keysym 37 (keycode 10).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 31 with keysym 31 (keycode a).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 33 with keysym 33 (keycode c).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 33 with keysym 33 (keycode c).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 32 with keysym 32 (keycode b).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 36 with keysym 36 (keycode f).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 32 with keysym 32 (keycode b).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 39 with keysym 39 (keycode 12).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Window manager warning: Overwriting existing binding of keysym 35 with keysym 35 (keycode e).
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Can't update stage views actor panelBox [StBoxLayout] is on because it needs an allocation.
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Can't update stage views actor panel [Gjs_ui_panel_Panel] is on because it needs an allocation.
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Can't update stage views actor panelRight [StBoxLayout] is on because it needs an allocation.
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Can't update stage views actor unnamed [StBin] is on because it needs an allocation.
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Can't update stage views actor unnamed [Gjs_ubuntu-appindicators_ubuntu_com_indicatorStatusIcon_IndicatorTrayIcon] is on because it needs an allocation.
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Can't update stage views actor unnamed [ShellTrayIcon] is on because it needs an allocation.
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Can't update stage views actor unnamed [MetaWindowGroup] is on because it needs an allocation.
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Can't update stage views actor unnamed [MetaWindowActorX11] is on because it needs an allocation.
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Can't update stage views actor unnamed [MetaSurfaceActorX11] is on because it needs an allocation.
+9月 22 10:02:20 CNS202649516533 gnome-shell[4139]: GNOME Shell started at Tue Sep 22 2026 10:02:19 GMT+0800 (中国标准时间)
+9月 22 10:02:20 CNS202649516533 gnome-shell[4139]: Registering session with GDM
+9月 22 10:02:20 CNS202649516533 gnome-shell[4139]: Launching DING process
+9月 22 10:02:20 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='org.gtk.vfs.Metadata' unit='gvfs-metadata.service' requested by ':1.99' (uid=1001 pid=4856 comm="gjs /usr/share/gnome-shell/extensions/ding@rasters" label="desktop-icons-ng (unconfined)")
+9月 22 10:02:20 CNS202649516533 gnome-shell[4139]: DING: Detected async api for thumbnails
+
+##### counts of key terms (user journal) #####
+Missed       0
+frame        4
+latency      0
+dropped      0
+jank         0
+
+##### journalctl --user -b : WARNING/ERROR/CRITICAL lines #####
+9月 22 10:02:17 CNS202649516533 systemd-xdg-autostart-generator[3745]: Configuration file /etc/xdg/autostart/LAgentUser.desktop is marked executable. Please remove executable permission bits. Proceeding anyway.
+9月 22 10:02:17 CNS202649516533 systemd-xdg-autostart-generator[3745]: Configuration file /etc/xdg/autostart/LSDHelper.desktop is marked executable. Please remove executable permission bits. Proceeding anyway.
+9月 22 10:02:17 CNS202649516533 systemd[3736]: snap.snapd-desktop-integration.snapd-desktop-integration.service: Ignoring invalid environment assignment 'export ACCESSIBILITY_ENABLED=1': /etc/environment
+9月 22 10:02:17 CNS202649516533 systemd[3736]: snap.snapd-desktop-integration.snapd-desktop-integration.service: Ignoring invalid environment assignment 'export GNOME_ACCESSIBILITY=1': /etc/environment
+9月 22 10:02:17 CNS202649516533 pipewire[3754]: mod.jackdbus-detect: Failed to receive jackdbus reply: org.freedesktop.DBus.Error.ServiceUnknown: The name org.jackaudio.service was not provided by any .service files
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: _XSERVTransSocketUNIXCreateListener: ...SocketCreateListener() failed
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: _XSERVTransMakeAllCOTSServerListeners: server already running
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (--) Log file renamed from "/home/CNS2026495165/.local/share/xorg/Xorg.pid-3884.log" to "/home/CNS2026495165/.local/share/xorg/Xorg.1.log"
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: X.Org X Server 1.21.1.11
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: X Protocol Version 11, Revision 0
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: Current Operating System: Linux CNS202649516533 6.14.0-27-generic #27~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Jul 22 17:38:49 UTC 2 x86_64
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: Kernel command line: BOOT_IMAGE=/boot/vmlinuz-6.14.0-27-generic root=UUID=38c1adbf-c111-44ca-bb6b-7c041bea3a19 ro quiet splash vt.handoff=7
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: xorg-server 2:21.1.12-1ubuntu1.4 (For technical support please see http://www.ubuntu.com/support)
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: Current version of pixman: 0.42.2
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]:         Before reporting problems, check http://wiki.x.org
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]:         to make sure that you have the latest version.
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: Markers: (--) probed, (**) from config file, (==) default setting,
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]:         (++) from command line, (!!) notice, (II) informational,
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]:         (WW) warning, (EE) error, (NI) not implemented, (??) unknown.
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (==) Log file: "/home/CNS2026495165/.local/share/xorg/Xorg.1.log", Time: Tue Sep 22 10:02:17 2026
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (==) Using config directory: "/etc/X11/xorg.conf.d"
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (==) Using system config directory "/usr/share/X11/xorg.conf.d"
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (==) ServerLayout "layout"
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (==) No screen section available. Using defaults.
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (**) |-->Screen "Default Screen Section" (0)
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (**) |   |-->Monitor "<default monitor>"
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (==) No monitor specified for screen "Default Screen Section".
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]:         Using a default monitor configuration.
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (**) Allowing byte-swapped clients
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (==) Automatically adding devices
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (==) Automatically enabling devices
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (==) Automatically adding GPU devices
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (==) Automatically binding GPU devices
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (==) Max clients allowed: 256, resource mask: 0x1fffff
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (WW) The directory "/usr/share/fonts/X11/cyrillic" does not exist.
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]:         Entry deleted from font path.
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (WW) The directory "/usr/share/fonts/X11/100dpi/" does not exist.
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]:         Entry deleted from font path.
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]: (WW) The directory "/usr/share/fonts/X11/75dpi/" does not exist.
+9月 22 10:02:17 CNS202649516533 /usr/libexec/gdm-x-session[3884]:         Entry deleted from font path.

@@ -1,0 +1,181 @@
+{
+  "cond": "tp-off",
+  "label": "reg-tp-off-r1",
+  "ts": "2026-09-22T02:25:19.093Z",
+  "nav": {
+    "domcontentloadedMs": 1056,
+    "settleMs": 6000,
+    "clicked": true,
+    "closed": true,
+    "clickWallMs": 60,
+    "dwellMs": 6000,
+    "wallS": 11.473
+  },
+  "stub": {
+    "spec": "tp-off",
+    "mechanism": "landingIntact forced false via body getPropertyValue readback",
+    "effective": false,
+    "mountEffective": false,
+    "pathReachableClick": {
+      "themeApplyRan": true,
+      "themeApplyRanInClick": false,
+      "themeRefreshRan": true,
+      "metaContentWrites": 2,
+      "metaContentWritesInClick": 0,
+      "bodyWrites": 1,
+      "bodyWritesInClick": 0,
+      "computedReadsInClick": 0,
+      "usageSeen": 0,
+      "usageSeenInClick": 0
+    },
+    "pathReachableMount": {
+      "themeApplyRan": true,
+      "themeApplyRanInClick": false,
+      "themeRefreshRan": true,
+      "metaContentWrites": 2,
+      "metaContentWritesInClick": 0,
+      "bodyWrites": 1,
+      "bodyWritesInClick": 0,
+      "computedReadsInClick": 0,
+      "usageSeen": 0,
+      "usageSeenInClick": 0
+    },
+    "routeHits": null
+  },
+  "phaseMount": {
+    "ScriptDuration": 0.061,
+    "RecalcStyleDuration": 0.022,
+    "TaskDuration": 0.452,
+    "RecalcStyleCount": 62
+  },
+  "phaseClick": {
+    "ScriptDuration": 0.116,
+    "RecalcStyleDuration": 0.004,
+    "LayoutDuration": 0.009,
+    "TaskDuration": 0.188,
+    "RecalcStyleCount": 9,
+    "ScriptMsPerS": 0.01,
+    "RecalcMsPerS": 0,
+    "TaskMsPerS": 0.016
+  },
+  "taskBusyPct": 1.639,
+  "rafClick": {
+    "n": 363,
+    "min": 16.5,
+    "p50": 16.7,
+    "p90": 16.7,
+    "p99": 16.8,
+    "max": 16.8,
+    "mean": 16.666,
+    "over50": 0,
+    "over100": 0
+  },
+  "longtasks": {
+    "n": 0,
+    "totalMs": 0,
+    "maxMs": null
+  },
+  "overlay": {
+    "firstVisibleAt": 12525.7,
+    "clickDispatchAt": 12504.6,
+    "msToVisible": 21.1,
+    "firstBox": {
+      "area": 921600,
+      "w": 1280,
+      "h": 720,
+      "t": 12525.700000000186
+    },
+    "nowBox": {
+      "area": 921600,
+      "w": 1280,
+      "h": 720,
+      "t": 18529.800000000047
+    },
+    "clickBox": {
+      "x": 10,
+      "y": 668,
+      "w": 260,
+      "h": 42
+    }
+  },
+  "http": {
+    "/": {
+      "n": 13,
+      "totalMs": 8642,
+      "p50": 658,
+      "p99": 2196.6,
+      "max": 2196.6
+    },
+    "/dsh-wallpaper/media/cleanup": {
+      "n": 1,
+      "totalMs": 442.5,
+      "p50": 442.5,
+      "p99": 442.5,
+      "max": 442.5
+    }
+  },
+  "httpInClick": {
+    "/": {
+      "n": 1,
+      "totalMs": 2196.6,
+      "p50": 2196.6,
+      "p99": 2196.6,
+      "max": 2196.6
+    }
+  },
+  "ws": {
+    "total": 693,
+    "byType": {
+      "server-request": 693
+    }
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "concurrency": {
+    "gateOutcome": "EXCLUSIVE",
+    "batchGateWaitedMs": 23590,
+    "censusBefore": {
+      "at": "2026-09-22T02:25:00.480Z",
+      "instances": 4,
+      "foreignCount": 3,
+      "foreign": [
+        {
+          "pid": 66860,
+          "etime": "00:43"
+        },
+        {
+          "pid": 67649,
+          "etime": "00:08"
+        },
+        {
+          "pid": 67807,
+          "etime": "00:04"
+        }
+      ],
+      "lockOwner": "agent: incident2-regression (first-open batch) line: batch plan=base:3,tp-off:3,p2ac-old:2,usage-nofetch:3,theme-sync:3 pid: 65663",
+      "lockHeldByMyLine": true
+    },
+    "censusAfter": {
+      "at": "2026-09-22T02:25:19.093Z",
+      "instances": 3,
+      "foreignCount": 2,
+      "foreign": [
+        {
+          "pid": 66860,
+          "etime": "01:02"
+        },
+        {
+          "pid": 68387,
+          "etime": "00:00"
+        }
+      ],
+      "lockOwner": "agent: incident2-regression (raf-face theme-sync A/B) line: label=raf-repro-sharedstub-theme-sync pid: 68109",
+      "lockHeldByMyLine": true
+    },
+    "exclusiveThroughout": false
+  },
+  "lock": {
+    "heldAtStart": true,
+    "releasedAtEnd": null
+  }
+}

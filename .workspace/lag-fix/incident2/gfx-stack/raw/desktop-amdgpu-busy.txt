@@ -1,0 +1,28 @@
+=== AMD iGPU sysfs path ===
+/sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0
+--- gpu_busy_percent ---
+99
+--- mem_busy_percent --- (not readable)
+--- mem_info_vram_used ---
+1830010880
+--- mem_info_vis_vram_used ---
+1830010880
+--- pp_dpm_sclk ---
+0: 600Mhz 
+1: 700Mhz 
+2: 2200Mhz *
+--- pp_dpm_mclk ---
+0: 1000Mhz 
+1: 2400Mhz *
+2: 2400Mhz *
+--- power_dpm_force_performance_level ---
+auto
+
+=== 10x gpu_busy_percent sample @1s ===
+0 100 99 0 100 0 100 99 0 100 
+=== 5x mem_busy_percent sample @1s ===
+     
+=== pp_dpm_sclk after ===
+0: 600Mhz 
+1: 700Mhz 
+2: 2200Mhz *

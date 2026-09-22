@@ -1,0 +1,10 @@
+agent: incident2-minimal-page (single-hold campaign)
+line: label=m1 phases=smoke+matrix+trace+gpu
+purpose: one bounded hold covering the whole minimal-page measurement matrix
+owner_pid: 284598   # this probe process; preemption checks THIS
+pid: 284598
+host_pid: 10806   # node dsh web (read-only reference; never restarted, not the owner)
+started_at: 2026-09-22T10:53:58+08:00
+started_epoch: 1790045638
+token: CNS202649516533-284598-k68k76s5
+note: single browser at a time; releases with rm owner.txt && rmdir; hard cap 30min

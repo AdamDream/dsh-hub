@@ -1,0 +1,423 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>anim-costmodel</title>
+<style>
+  html,body{margin:0;padding:0;overflow:hidden;background:#0b0b0f;color:#fff;
+            font:14px/1.2 system-ui,sans-serif}
+  #cv{position:absolute;left:0;top:0;display:none}
+  #tray{position:absolute;left:50%;top:50%;margin:0;
+        transform:translate(-50%,-50%);
+        transform-origin:center center;
+        background:rgba(38,78,140,.80);
+        border:1px solid #6cf;
+        border-radius:12px;
+        display:none;
+        align-items:center;justify-content:center;flex-wrap:wrap;
+        overflow:hidden;
+        will-change:width,height,transform,opacity,box-shadow,backdrop-filter}
+  #tray .chip{background:rgba(255,255,255,.18);margin:5px;padding:7px 11px;
+              border-radius:7px;white-space:nowrap}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="tray"></div>
+<script>
+'use strict';
+const cv  = document.getElementById('cv');
+const ctx = cv.getContext('2d', { alpha: false });
+const tray = document.getElementById('tray');
+
+/* ---- tray children (force real layout work inside the tray) ---- */
+function buildChips(){
+  let h = '';
+  for (let i = 0; i < 24; i++) h += '<div class="chip">tray-item-' + i + '</div>';
+  tray.innerHTML = h;
+}
+buildChips();
+
+function resetStage(){
+  tray.style.display = 'none';
+  cv.style.display    = 'none';
+  tray.style.width = tray.style.height = '';
+  tray.style.transform = 'translate(-50%,-50%)';
+  tray.style.opacity = '1';
+  tray.style.boxShadow = '';
+  tray.style.backdropFilter = '';
+  tray.style.filter = '';
+  tray.style.background = 'rgba(38,78,140,.80)';
+  tray.style.border = '1px solid #6cf';
+  tray.style.borderRadius = '12px';
+  tray.style.willChange = 'width,height,transform,opacity,box-shadow,backdrop-filter';
+  tray.style.zIndex = '';
+  buildChips();
+  cv.style.position = 'absolute';
+  cv.style.left = '0'; cv.style.top = '0';
+  cv.style.width = ''; cv.style.height = '';
+  cv.style.transform = '';
+  cv.style.willChange = '';
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.clearRect(0,0,cv.width,cv.height);
+}
+
+function useCanvas(){
+  resetStage();
+  if (cv.width !== Math.floor(innerWidth) || cv.height !== Math.floor(innerHeight)) {
+    cv.width  = Math.floor(innerWidth);
+    cv.height = Math.floor(innerHeight);
+  }
+  cv.style.display = 'block';
+  ctx.fillStyle = '#0b0b0f';
+  ctx.fillRect(0,0,cv.width,cv.height);
+  return cv;
+}
+
+function useTray(w,h){
+  resetStage();
+  cv.width = cv.width; // no-op
+  cv.style.display = 'none';
+  tray.style.display = 'flex';
+  tray.style.width  = w + 'px';
+  tray.style.height = h + 'px';
+}
+
+/* ---------------- animation bodies (returned per variant) ---------------- */
+
+function makeRipple(r, fullClear){
+  useCanvas();
+  const W = cv.width, H = cv.height;
+  const lw = Math.max(2, r * 0.22);
+  const box = 2 * (r + lw) + 4;             // dirty box of the animated ring
+  let cx = W/2, cy = H/2;
+  return function(f){
+    // synthetic pointer path (cursor-following ripple)
+    const t = f / 60;
+    cx = W/2 + Math.cos(t * 2.1) * W * 0.18;
+    cy = H/2 + Math.sin(t * 1.7) * H * 0.18;
+    const rr = Math.max(1, r * (0.35 + 0.65 * ((f % 45) / 45)));
+
+    if (fullClear) ctx.clearRect(0, 0, cv.width, cv.height);
+    else           ctx.clearRect(cx - box/2, cy - box/2, box, box);
+
+    // glow disc touching ~pi*r^2 pixels
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(1, r));
+    g.addColorStop(0, 'rgba(120,200,255,0.25)');
+    g.addColorStop(1, 'rgba(120,200,255,0.00)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(cx, cy, Math.max(1, r), 0, Math.PI*2); ctx.fill();
+
+    // ring stroke
+    ctx.beginPath();
+    ctx.arc(cx, cy, rr, 0, Math.PI*2);
+    ctx.lineWidth   = lw;
+    ctx.strokeStyle = 'rgba(120,200,255,0.55)';
+    ctx.stroke();
+  };
+}
+
+function makeBaseline(){ useCanvas(); return function(){}; }
+
+function makeTrayLayout(forced){
+  const W = Math.floor(innerWidth), H = Math.floor(innerHeight);
+  const w0 = W*0.30, h0 = H*0.16, w1 = W*0.46, h1 = H*0.26;
+  useTray(w0, h0);
+  return function(f){
+    const p  = 0.5 - 0.5*Math.cos((f % 60) / 60 * Math.PI*2); // 0..1..0
+    tray.style.width  = (w0 + (w1-w0)*p) + 'px';
+    tray.style.height = (h0 + (h1-h0)*p) + 'px';
+    tray.style.boxShadow = '0 6px ' + (6 + 30*p) + 'px rgba(0,0,0,.5)';
+    if (forced){
+      // pathological: write-then-read => forced synchronous layout each frame
+      void tray.offsetWidth;
+      void tray.offsetHeight;
+    }
+  };
+}
+
+function makeTrayTransform(){
+  const W = Math.floor(innerWidth), H = Math.floor(innerHeight);
+  const w0 = W*0.30, h0 = H*0.16;
+  useTray(w0, h0);
+  return function(f){
+    const p = 0.5 - 0.5*Math.cos((f % 60) / 60 * Math.PI*2);
+    tray.style.transform = 'translate(-50%,-50%) scale(' + (1 + 0.5*p) + ')';
+    tray.style.opacity   = (0.55 + 0.45*p).toFixed(3);
+  };
+}
+
+function makeTrayBackdrop(blurPx){
+  const W = Math.floor(innerWidth), H = Math.floor(innerHeight);
+  const w0 = W*0.30, h0 = H*0.16;
+  useTray(w0, h0);
+  tray.style.backdropFilter = 'blur(' + blurPx + 'px)';
+  tray.style.background = 'rgba(38,78,140,.45)';
+  return function(f){
+    const p = 0.5 - 0.5*Math.cos((f % 60) / 60 * Math.PI*2);
+    tray.style.transform = 'translate(-50%,-50%) scale(' + (1 + 0.5*p) + ')';
+    tray.style.opacity   = (0.55 + 0.45*p).toFixed(3);
+  };
+}
+
+function makeTrayFrost(){
+  const W = Math.floor(innerWidth), H = Math.floor(innerHeight);
+  const w0 = W*0.30, h0 = H*0.16;
+  useTray(w0, h0);
+  tray.style.background = 'rgba(38,78,140,.55)';
+  return function(f){
+    const p = 0.5 - 0.5*Math.cos((f % 60) / 60 * Math.PI*2);
+    tray.style.boxShadow = '0 ' + (4+24*p) + 'px ' + (10+60*p) + 'px ' +
+                           (2+10*p) + 'px rgba(0,0,0,0.65)';
+    tray.style.filter = 'blur(' + (1.5*p).toFixed(2) + 'px)';
+    tray.style.transform = 'translate(-50%,-50%) scale(' + (1 + 0.5*p) + ')';
+  };
+}
+
+/* ------------------------------ timing loop ------------------------------ */
+
+function quantile(sorted, q){
+  if (!sorted.length) return NaN;
+  const i = (sorted.length - 1) * q;
+  const lo = Math.floor(i), hi = Math.ceil(i);
+  if (lo === hi) return sorted[lo];
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo);
+}
+
+function runFrames(body, ms, minFrames, maxFrames, maxWall){
+  return new Promise(function(resolve){
+    const deltas = [], work = [];
+    let last = null, f = 0;
+    const t0 = performance.now();
+    function step(ts){
+      if (last !== null) deltas.push(ts - last);
+      last = ts;
+      const a = performance.now();
+      body(f);
+      work.push(performance.now() - a);
+      f++;
+      const elapsed = performance.now() - t0;
+      if ((elapsed < ms && f < maxFrames) || f < minFrames) {
+        if (elapsed < maxWall && f < maxFrames) { requestAnimationFrame(step); return; }
+      }
+      resolve({ deltas, work });
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+function summarize(name, r, wallMs){
+  const d = r.deltas.slice().sort(function(a,b){return a-b;});
+  const w = r.work.slice().sort(function(a,b){return a-b;});
+  const n = d.length;
+  const dropped = d.filter(function(x){ return x > 16.67 * 1.5; }).length;
+  const sum = d.reduce(function(a,b){return a+b;}, 0);
+  return {
+    variant: name,
+    frames: n,
+    wall_ms: +wallMs.toFixed(1),
+    delta_p50: +quantile(d,0.50).toFixed(3),
+    delta_p95: +quantile(d,0.95).toFixed(3),
+    delta_max: +(n ? d[n-1] : 0).toFixed(3),
+    delta_mean: +(n ? sum/n : 0).toFixed(3),
+    work_p50: +quantile(w,0.50).toFixed(3),
+    work_p95: +quantile(w,0.95).toFixed(3),
+    work_max: +(w.length ? w[w.length-1] : 0).toFixed(3),
+    dropped: dropped,
+    dropped_pct: +(n ? (100*dropped/n) : 0).toFixed(1),
+    fps_effective: +(n && sum > 0 ? (1000/(sum/n)) : 0).toFixed(2),
+    long_frames_gt33: d.filter(function(x){return x>33.3;}).length
+  };
+}
+
+// backdrop-filter blur while animating LAYOUT (forces re-snapshot + re-blur per frame)
+function makeTrayBackdropLayout(blurPx){
+  const W = Math.floor(innerWidth), H = Math.floor(innerHeight);
+  const w0 = W*0.30, h0 = H*0.16, w1 = W*0.46, h1 = H*0.26;
+  useTray(w0, h0);
+  tray.style.backdropFilter = 'blur(' + blurPx + 'px)';
+  tray.style.background = 'rgba(38,78,140,.45)';
+  return function(f){
+    const p = 0.5 - 0.5*Math.cos((f % 60) / 60 * Math.PI*2);
+    tray.style.width  = (w0 + (w1-w0)*p) + 'px';
+    tray.style.height = (h0 + (h1-h0)*p) + 'px';
+    tray.style.boxShadow = '0 6px ' + (6 + 30*p) + 'px rgba(0,0,0,.5)';
+  };
+}
+
+// backdrop-filter over ANIMATED content behind it (backdrop changes every frame
+// => the blur cannot be cached; this is the real "frosted tray over live UI" case)
+function makeTrayBackdropAnimatedBg(blurPx){
+  useCanvas();
+  cv.style.display = 'block';
+  const W = Math.floor(innerWidth), H = Math.floor(innerHeight);
+  const w0 = W*0.30, h0 = H*0.16;
+  tray.style.display = 'flex';
+  tray.style.width = w0 + 'px';
+  tray.style.height = h0 + 'px';
+  tray.style.backdropFilter = 'blur(' + blurPx + 'px)';
+  tray.style.background = 'rgba(38,78,140,.35)';
+  tray.style.transform = 'translate(-50%,-50%) scale(1)';
+  tray.style.zIndex = '5';
+  return function(f){
+    // animated backdrop content behind the tray
+    ctx.clearRect(0,0,cv.width,cv.height);
+    const t = f/60;
+    for (let i = 0; i < 6; i++){
+      const x = W*(0.15 + 0.7*((i/6 + t*0.13) % 1));
+      const y = H*(0.5 + 0.35*Math.sin(t*1.6 + i));
+      const g = ctx.createRadialGradient(x,y,0,x,y,W*0.12);
+      g.addColorStop(0,'rgba(255,180,80,0.85)');
+      g.addColorStop(1,'rgba(255,180,80,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(x,y,W*0.12,0,Math.PI*2); ctx.fill();
+    }
+    // tray still animates (hover-expand)
+    const p = 0.5 - 0.5*Math.cos((f % 60) / 60 * Math.PI*2);
+    tray.style.transform = 'translate(-50%,-50%) scale(' + (1 + 0.35*p) + ')';
+  };
+}
+
+// box-shadow (drop-shadow blur) while animating layout -> shadow re-rastered per frame
+function makeTrayFrostLayout(){
+  const W = Math.floor(innerWidth), H = Math.floor(innerHeight);
+  const w0 = W*0.30, h0 = H*0.16, w1 = W*0.46, h1 = H*0.26;
+  useTray(w0, h0);
+  tray.style.background = 'rgba(38,78,140,.55)';
+  return function(f){
+    const p = 0.5 - 0.5*Math.cos((f % 60) / 60 * Math.PI*2);
+    tray.style.width  = (w0 + (w1-w0)*p) + 'px';
+    tray.style.height = (h0 + (h1-h0)*p) + 'px';
+    tray.style.boxShadow = '0 ' + (4+24*p) + 'px ' + (10+60*p) + 'px ' +
+                           (2+10*p) + 'px rgba(0,0,0,0.65)';
+  };
+}
+
+// SMALL canvas sized to the ripple bbox and moved with transform (the cheap way)
+function makeRippleSmallCanvas(r){
+  resetStage();
+  const lw  = Math.max(2, r * 0.22);
+  const box = Math.ceil(2 * (r + lw) + 8);
+  cv.style.display = 'block';
+  cv.width = box; cv.height = box;
+  cv.style.width = box + 'px'; cv.style.height = box + 'px';
+  cv.style.position = 'absolute';
+  cv.style.left = '0'; cv.style.top = '0';
+  cv.style.willChange = 'transform';
+  const W = Math.floor(innerWidth), H = Math.floor(innerHeight);
+  return function(f){
+    const t = f / 60;
+    const cx = W/2 + Math.cos(t * 2.1) * W * 0.18;
+    const cy = H/2 + Math.sin(t * 1.7) * H * 0.18;
+    const rr = Math.max(1, r * (0.35 + 0.65 * ((f % 45) / 45)));
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    const g = ctx.createRadialGradient(box/2, box/2, 0, box/2, box/2, Math.max(1, r));
+    g.addColorStop(0, 'rgba(120,200,255,0.25)');
+    g.addColorStop(1, 'rgba(120,200,255,0.00)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(box/2, box/2, Math.max(1, r), 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(box/2, box/2, rr, 0, Math.PI*2);
+    ctx.lineWidth = lw; ctx.strokeStyle = 'rgba(120,200,255,0.55)'; ctx.stroke();
+    cv.style.transform = 'translate(' + Math.round(cx - box/2) + 'px,' +
+                                         Math.round(cy - box/2) + 'px)';
+  };
+}
+
+// PURE DOM ripple: border-radius disc + transform scale (no canvas at all)
+function makeRippleDom(r){
+  resetStage();
+  cv.style.display = 'none';
+  tray.style.display = 'block';
+  const d = 2 * r;
+  tray.style.width = tray.style.height = d + 'px';
+  tray.style.borderRadius = '50%';
+  tray.style.background = 'radial-gradient(circle, rgba(120,200,255,.35) 0%, rgba(120,200,255,0) 70%)';
+  tray.style.border = 'none';
+  tray.innerHTML = '';
+  tray.style.willChange = 'transform,opacity';
+  const W = Math.floor(innerWidth), H = Math.floor(innerHeight);
+  return function(f){
+    const t = f / 60;
+    const cx = W/2 + Math.cos(t * 2.1) * W * 0.18;
+    const cy = H/2 + Math.sin(t * 1.7) * H * 0.18;
+    const rr = (0.35 + 0.65 * ((f % 45) / 45));
+    tray.style.transform = 'translate(' + Math.round(cx - r) + 'px,' +
+                                          Math.round(cy - r) + 'px) scale(' + rr.toFixed(3) + ')';
+  };
+}
+
+const BODIES = {
+  'baseline':           function(){ return makeBaseline(); },
+  'ripple-r50':         function(){ return makeRipple(50,   false); },
+  'ripple-r100':        function(){ return makeRipple(100,  false); },
+  'ripple-r200':        function(){ return makeRipple(200,  false); },
+  'ripple-r400':        function(){ return makeRipple(400,  false); },
+  'ripple-r800':        function(){ return makeRipple(800,  false); },
+  'ripple-r1600':       function(){ return makeRipple(1600, false); },
+  'ripple-fullclear':   function(){ return makeRipple(800,  true ); },
+  'tray-layout':        function(){ return makeTrayLayout(false); },
+  'tray-layout-forced': function(){ return makeTrayLayout(true ); },
+  'tray-transform':     function(){ return makeTrayTransform(); },
+  'tray-backdrop':      function(){ return makeTrayBackdrop(20); },
+  'tray-backdrop-40':   function(){ return makeTrayBackdrop(40); },
+  'tray-frost':         function(){ return makeTrayFrost(); },
+  'tray-backdrop-layout':    function(){ return makeTrayBackdropLayout(20); },
+  'tray-backdrop-animbg':    function(){ return makeTrayBackdropAnimatedBg(20); },
+  'tray-frost-layout':       function(){ return makeTrayFrostLayout(); },
+  'ripple-smallcanvas-r400': function(){ return makeRippleSmallCanvas(400); },
+  'ripple-smallcanvas-r800': function(){ return makeRippleSmallCanvas(800); },
+  'ripple-dom-r400':         function(){ return makeRippleDom(400); },
+  'ripple-dom-r800':         function(){ return makeRippleDom(800); }
+};
+
+window.__glInfo = function(){
+  const c = document.createElement('canvas');
+  const gl = c.getContext('webgl2') || c.getContext('webgl') ||
+             c.getContext('experimental-webgl');
+  if (!gl) return { ok:false, reason:'no webgl context' };
+  const out = {
+    ok: true,
+    vendor:   gl.getParameter(gl.VENDOR),
+    renderer: gl.getParameter(gl.RENDERER),
+    version:  gl.getParameter(gl.VERSION)
+  };
+  const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+  if (dbg){
+    out.unmaskedVendor   = gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL);
+    out.unmaskedRenderer = gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL);
+  }
+  return out;
+};
+
+window.__env = function(){
+  return {
+    innerWidth: innerWidth, innerHeight: innerHeight,
+    devicePixelRatio: devicePixelRatio,
+    screenW: screen.width, screenH: screen.height,
+    cores: navigator.hardwareConcurrency,
+    ua: navigator.userAgent
+  };
+};
+
+window.__bench = async function(variant, opts){
+  opts = opts || {};
+  const ms        = opts.ms        || 1200;
+  const minFrames = opts.minFrames || 15;
+  const maxFrames = opts.maxFrames || 150;
+  const maxWall   = opts.maxWall   || 7000;
+  const mk = BODIES[variant];
+  if (!mk) throw new Error('unknown variant ' + variant);
+  // let the stage settle one frame before measuring
+  await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
+  const body = mk();
+  const t0 = performance.now();
+  const r  = await runFrames(body, ms, minFrames, maxFrames, maxWall);
+  const wall = performance.now() - t0;
+  const out = summarize(variant, r, wall);
+  out.viewport = innerWidth + 'x' + innerHeight;
+  resetStage();
+  return out;
+};
+</script>
+</body>
+</html>

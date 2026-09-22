@@ -1,0 +1,173 @@
+############ snap changes (last 30) ############
+ID   状态    生成                  就绪                  摘要
+74   Done  今天 10:07（美国山区标准时间）  今天 10:07（美国山区标准时间）  自动刷新 snap "firmware-updater"
+
+
+############ snapd service state ############
+● snapd.service - Snap Daemon
+     Loaded: loaded (/usr/lib/systemd/system/snapd.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-09-22 10:01:59 CST; 28min ago
+TriggeredBy: ● snapd.socket
+   Main PID: 1569 (snapd)
+      Tasks: 34 (limit: 73997)
+     Memory: 114.7M (peak: 247.6M)
+        CPU: 3.285s
+     CGroup: /system.slice/snapd.service
+             └─1569 /usr/lib/snapd/snapd
+
+9月 22 10:02:05 CNS202649516533 snapd[1569]: autorepair.go:177: WARNING: the system booted with an old initrd without unlocked status reporting
+9月 22 10:02:06 CNS202649516533 snapd[1569]: hotplug.go:206: hotplug device add event ignored, enable experimental.hotplug
+9月 22 10:07:07 CNS202649516533 snapd[1569]: storehelpers.go:919: cannot refresh: snap has no updates available: "bare", "core22", "core24", "firefox", "ghostty", "gnome-42-2204", "gnome-46-2404", "gtk-common-themes", "mesa-2404", "snap-store", "snapd", "snapd-desktop-integration"
+9月 22 10:07:22 CNS202649516533 snapd[1569]: cache.go:320: removed 0 entries/    0 from downloads cache
+9月 22 10:07:24 CNS202649516533 snapd[1569]: services.go:1167: RemoveSnapServices - disabling snap.firmware-updater.firmware-updater-app.service
+9月 22 10:07:24 CNS202649516533 snapd[1569]: services.go:1157: RemoveSnapServices - timer snap.firmware-updater.firmware-notifier.timer
+9月 22 10:07:24 CNS202649516533 snapd[1569]: services.go:1167: RemoveSnapServices - disabling snap.firmware-updater.firmware-notifier.service
+9月 22 10:07:25 CNS202649516533 snapd[1569]: spec.go:312: renaming mount entry for directory "/snap/firmware-updater/258/gpu-2404" to "/snap/firmware-updater/258/gpu-2404-2" to avoid a clash
+9月 22 10:07:25 CNS202649516533 snapd[1569]: backend.go:285: reloading profiles of snap-confine provided by the system snap
+############ snap refresh timers ############
+NEXT LEFT LAST PASSED UNIT                    ACTIVATES
+-       - -         - snapd.snap-repair.timer snapd.snap-repair.service
+
+1 timers listed.
+
+############ unattended-upgrades ############
+● unattended-upgrades.service - Unattended Upgrades Shutdown
+     Loaded: loaded (/usr/lib/systemd/system/unattended-upgrades.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-09-22 10:01:59 CST; 28min ago
+       Docs: man:unattended-upgrade(8)
+   Main PID: 2605 (unattended-upgr)
+      Tasks: 2 (limit: 73997)
+     Memory: 12.2M (peak: 12.8M)
+        CPU: 29ms
+     CGroup: /system.slice/unattended-upgrades.service
+             └─2605 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+
+9月 22 10:01:59 CNS202649516533 systemd[1]: Started unattended-upgrades.service - Unattended Upgrades Shutdown.
+总计 8
+drwxr-x---  2 root adm    4096  8月 11 01:02 .
+drwxrwxr-x 17 root syslog 4096  9月 22 10:02 ..
+-rw-r--r--  1 root root      0  8月 11 01:02 unattended-upgrades-shutdown.log
+--- apt history recent ---
+
+Start-Date: 2026-09-01  16:49:00
+Commandline: apt install pi
+Requested-By: CNS2026495165 (1001)
+Install: libcln6:amd64 (1.3.7-1, automatic), pi:amd64 (1.3.7-1)
+End-Date: 2026-09-01  16:49:01
+
+Start-Date: 2026-09-01  17:00:20
+Commandline: apt remove pi
+Requested-By: CNS2026495165 (1001)
+Remove: pi:amd64 (1.3.7-1)
+End-Date: 2026-09-01  17:00:20
+
+Start-Date: 2026-09-03  17:03:36
+Commandline: apt install htop
+Requested-By: CNS2026495165 (1001)
+Install: htop:amd64 (3.3.0-4build1)
+End-Date: 2026-09-03  17:03:37
+
+Start-Date: 2026-09-11  11:50:59
+Commandline: packagekit role='install-files'
+Requested-By: CNS2026495165 (1001)
+Install: libatkmm-1.6-1v5:amd64 (2.28.4-1build4, automatic), libgtkmm-2.4-1t64:amd64 (1:2.24.5-5.2build2, automatic), libglibmm-2.4-1t64:amd64 (2.66.7-1build1, automatic), libcairomm-1.0-1v5:amd64 (1.14.5-1build1, automatic), libpangomm-1.4-1v5:amd64 (2.46.4-1build3, automatic), baidunetdisk:amd64 (8.7.0), libsigc++-2.0-0v5:amd64 (2.12.1-2, automatic)
+End-Date: 2026-09-11  11:51:15
+
+Start-Date: 2026-09-15  14:47:30
+Commandline: apt-get install -y libxcb-cursor0 libxkbcommon-x11-0
+Requested-By: CNS2026495165 (1001)
+Install: libxcb-cursor0:amd64 (0.1.4-1build1)
+End-Date: 2026-09-15  14:47:31
+
+Start-Date: 2026-09-21  11:56:35
+Commandline: packagekit role='install-files'
+Requested-By: CNS2026495165 (1001)
+Install: chatgpt:amd64 (26.915.31945)
+End-Date: 2026-09-21  11:56:41
+
+############ indexers / sync clients running? ############
+   4758    3736  0.5    1708 /usr/libexec/tracker-miner-fs-3
+  66169    4758  0.7     412 /usr/libexec/tracker-extract-3 --socket-fd 3
+
+############ kernel housekeeping threads activity ############
+    192  0.0 I<   [kworker/28:0H-kblockd]
+    221  0.0 S    [kcompactd0]
+    222  0.0 SN   [ksmd]
+    225  0.0 I<   [kworker/R-kblockd]
+    231  0.0 I<   [kworker/R-md]
+    232  0.0 I<   [kworker/R-md_bitmap]
+    238  0.0 I<   [kworker/0:1H-kblockd]
+    242  0.0 S    [kswapd0]
+    251  0.0 I<   [kworker/18:1H-kblockd]
+    318  0.0 I<   [kworker/1:1H-kblockd]
+    322  0.0 I<   [kworker/15:1H-kblockd]
+    323  0.0 I<   [kworker/3:1H-kblockd]
+    345  0.0 I<   [kworker/7:1H-kblockd]
+    353  0.0 I<   [kworker/5:1H-kblockd]
+    354  0.0 I<   [kworker/4:1H-kblockd]
+    363  0.0 I<   [kworker/19:1H-kblockd]
+    364  0.0 I<   [kworker/2:1H-kblockd]
+    365  0.0 I<   [kworker/21:1H-kblockd]
+    366  0.0 I<   [kworker/17:1H-kblockd]
+    367  0.0 I<   [kworker/22:1H-kblockd]
+    368  0.0 I<   [kworker/23:1H-kblockd]
+    369  0.0 I<   [kworker/24:1H-kblockd]
+    370  0.0 I<   [kworker/14:1H-kblockd]
+    371  0.0 I<   [kworker/30:1H-kblockd]
+    372  0.0 I<   [kworker/8:1H-kblockd]
+    373  0.0 I<   [kworker/11:1H-kblockd]
+    374  0.0 I<   [kworker/25:1H-kblockd]
+    376  0.0 I<   [kworker/10:1H-kblockd]
+    377  0.0 I<   [kworker/29:1H-kblockd]
+    379  0.0 I<   [kworker/20:1H-kblockd]
+    391  0.0 I<   [kworker/13:1H-kblockd]
+    392  0.0 I<   [kworker/16:1H-kblockd]
+    393  0.0 I<   [kworker/12:1H-kblockd]
+    394  0.0 I<   [kworker/31:1H-kblockd]
+    396  0.0 I<   [kworker/26:1H-kblockd]
+    404  0.0 I<   [kworker/9:1H-kblockd]
+    407  0.0 I<   [kworker/6:1H-kblockd]
+    409  0.0 I<   [kworker/27:1H-kblockd]
+    521  0.0 S    [jbd2/nvme0n1p2-8]
+    572  0.0 S<s  /usr/lib/systemd/systemd-journald
+    627  0.0 Ss   /usr/lib/systemd/systemd-udevd
+    707  0.0 I    [kworker/u130:6-flush-259:0]
+    944  0.0 I<   [kworker/R-amdgpu-reset-dev]
+   1292  0.0 I<   [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+   1293  0.0 I<   [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+   1294  0.0 I<   [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+   1295  0.0 I<   [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+   1296  0.0 I<   [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+   1530  0.0 Ss   /usr/lib/systemd/systemd-oomd
+   1531  0.0 Ss   /usr/lib/systemd/systemd-resolved
+   1532  0.0 Ssl  /usr/lib/systemd/systemd-timesyncd
+   1543  0.0 Ss   @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+   1589  0.0 Ss   /usr/lib/systemd/systemd-logind
+   2756  0.0 S<   [krfcommd]
+   3736  0.0 Ss   /usr/lib/systemd/systemd --user
+   3772  0.1 Ss   /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+   4110  0.0 Ssl  /usr/libexec/gnome-session-binary --systemd-service --session=ubuntu
+   5672  0.0 Sl   /opt/wechat/crashpad_handler --no-rate-limit --database=/home/CNS2026495165/.xwechat/crashinfo --annotation=ext_info={"app_call_name":"wechat","app_name":"wechat","app_path":"/opt/wechat/wechat","build_ver":"1","crash_notify":"1","input_action":2,"main_thread_id":"5657","major_ver":"4","minor_ver":"1","module_name":"xwechat_linux","modules_dir":"/opt","patch_ver":"8","product":"wechat","report_type":"9999","restart_app_cmd":"","version":"4067692808"} --annotation=product=wechat --initial-client-fd=10 --shared-client-connection
+   5749  0.0 Sl   /opt/wechat/RadiumWMPF/runtime/crashpad_handler --no-rate-limit --database=/home/CNS2026495165/.xwechat/crashinfo --annotation=ext_info={"app_call_name":"WeChatAppEx","app_name":"WeChatAppEx","app_path":"/opt/wechat/RadiumWMPF/runtime/WeChatAppEx","crash_notify":"0","main_thread_id":"5739","module_name":"XWeb_linux","modules_dir":"/opt/wechat/RadiumWMPF/runtime","product":"WeChatAppEx","report_type":"9999","restart_app_cmd":"/opt/wechat/RadiumWMPF/runtime/WeChatAppEx --log-level=2 --lang=zh-CN --wechat-files-path=/home/CNS2026495165/文档/xwechat_files --product-id=1002 --wechat-sub-user-agent=MicroMessenger/7.0.20.1781(0x6700143B) WindowsWechat(0x63090a13) UnifiedPCLinuxWechat(0xf2741108) --web-translate --client_version=4067692808 --wmpf_root_dir=/home/CNS2026495165/.xwechat/radium --enable-applet-v3 --wmpf-drm-plugin-path --no-preload --mojo-platform-channel-handle=3 --disable-notifications --enable-crash-reporter --enable-features=,OverlayScrollbar,XWorker,NetworkServiceMemoryCache --disable-features=DigitalGoodsApi,NotificationTriggers,PeriodicBackgroundSync,BackForwardCache,TFLiteLanguageDetectionEnabled,WebOTP,HardwareMediaKeyHandling,AudioServiceOutOfProcess,Vulkan,AutoupgradeMixedContent --wmpf_root_dir=/home/CNS2026495165/.xwechat/radium","version":"4067692808"} --annotation=product=WeChatAppEx --initial-client-fd=101 --shared-client-connection
+  89673  1.7 Ssl  /home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --enable-precise-memory-info --user-data-dir=/tmp/playwright_chromiumdev_profile-y53w8Q --remote-debugging-pipe --no-startup-window
+  90501  0.0 R    ps -eo pid,pcpu,stat,cmd
+
+############ zstd forensics: units/logs referencing zstd ############
+--- journal mentions of zstd in 40min ---
+9月 22 10:01:55 CNS202649516533 systemd[1]: systemd 255.4-1ubuntu8.17 running in system mode (+PAM +AUDIT +SELINUX +APPARMOR +IMA +SMACK +SECCOMP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +IPTC +KMOD +LIBCRYPTSETUP +LIBFDISK +PCRE2 -PWQUALITY +P11KIT +QRENCODE +TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD -BPF_FRAMEWORK -XKBCOMMON +UTMP +SYSVINIT default-hierarchy=unified)
+9月 22 10:01:55 CNS202649516533 kernel: pstore: Using crash dump compression: deflate
+--- dsh/npm logs mentioning zstd ---
+--- process accounting available? ---
+inactive
+active
+总计 14812
+drwxr-xr-x  2 root root      4096  9月 22 10:01 .
+drwxrwxr-x 17 root syslog    4096  9月 22 10:02 ..
+-rw-r--r--  1 root root    920392  9月 13 23:50 sa13
+-rw-r--r--  1 root root    920392  9月 14 23:50 sa14
+-rw-r--r--  1 root root    920392  9月 15 23:50 sa15
+-rw-r--r--  1 root root    920392  9月 16 23:50 sa16
+-rw-r--r--  1 root root    924952  9月 17 23:50 sa17
+-rw-r--r--  1 root root    692744  9月 18 17:40 sa18
+-rw-r--r--  1 root root    491884  9月 20 23:50 sa20
+ls: 无法访问 '/var/log/account/': 没有那个文件或目录

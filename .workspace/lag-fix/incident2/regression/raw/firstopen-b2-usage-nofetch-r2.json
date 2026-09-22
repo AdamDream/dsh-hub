@@ -1,0 +1,456 @@
+{
+  "cond": "usage-nofetch",
+  "label": "b2-usage-nofetch-r2",
+  "ts": "2026-09-22T02:36:38.060Z",
+  "nav": {
+    "domcontentloadedMs": 87,
+    "settleMs": 5000,
+    "clicked": true,
+    "closed": true,
+    "clickWallMs": 52,
+    "dwellMs": 5000,
+    "wallS": 5.66
+  },
+  "stub": {
+    "spec": "usage-nofetch",
+    "mechanism": "usage RPC family blocked at fetch/xhr",
+    "effective": false,
+    "mountEffective": false,
+    "pathReachableClick": {
+      "themeApplyRan": true,
+      "themeApplyRanInClick": false,
+      "themeRefreshRan": true,
+      "metaContentWrites": 2,
+      "metaContentWritesInClick": 0,
+      "bodyWrites": 1,
+      "bodyWritesInClick": 0,
+      "computedReadsInClick": 0,
+      "usageSeen": 0,
+      "usageSeenInClick": 0
+    },
+    "pathReachableMount": {
+      "themeApplyRan": true,
+      "themeApplyRanInClick": false,
+      "themeRefreshRan": true,
+      "metaContentWrites": 2,
+      "metaContentWritesInClick": 0,
+      "bodyWrites": 1,
+      "bodyWritesInClick": 0,
+      "computedReadsInClick": 0,
+      "usageSeen": 0,
+      "usageSeenInClick": 0
+    },
+    "routeHits": null
+  },
+  "phaseMount": {
+    "ScriptDuration": 0.135,
+    "RecalcStyleDuration": 0.015,
+    "TaskDuration": 0.469,
+    "RecalcStyleCount": 37
+  },
+  "phaseClick": {
+    "ScriptDuration": 0.266,
+    "RecalcStyleDuration": 0.003,
+    "LayoutDuration": 0.006,
+    "TaskDuration": 0.353,
+    "RecalcStyleCount": 10,
+    "ScriptMsPerS": 0.047,
+    "RecalcMsPerS": 0.001,
+    "TaskMsPerS": 0.062
+  },
+  "taskBusyPct": 6.237,
+  "rafClick": {
+    "n": 303,
+    "min": 16.5,
+    "p50": 16.7,
+    "p90": 16.7,
+    "p99": 16.8,
+    "max": 16.8,
+    "mean": 16.666,
+    "over50": 0,
+    "over100": 0
+  },
+  "longtasks": {
+    "n": 0,
+    "totalMs": 0,
+    "maxMs": null
+  },
+  "overlay": {
+    "firstVisibleAt": 5745.9,
+    "clickDispatchAt": 5732,
+    "msToVisible": 13.9,
+    "firstBox": {
+      "area": 921600,
+      "w": 1280,
+      "h": 720,
+      "t": 5745.90000000014
+    },
+    "nowBox": {
+      "area": 921600,
+      "w": 1280,
+      "h": 720,
+      "t": 10747.600000000093
+    },
+    "clickBox": {
+      "x": 10,
+      "y": 668,
+      "w": 260,
+      "h": 42
+    }
+  },
+  "http": {
+    "/": {
+      "n": 25,
+      "totalMs": 4285.8,
+      "p50": 24.8,
+      "p99": 1450.8,
+      "max": 1450.8,
+      "detail": {
+        "method": "POST",
+        "url": "",
+        "bodyLen": 114,
+        "bodyKeys": [
+          "type",
+          "rpcId",
+          "method",
+          "payload"
+        ],
+        "bodyMethod": "settings.describe"
+      },
+      "worstDetail": {
+        "method": "POST",
+        "url": "",
+        "bodyLen": 113,
+        "bodyKeys": [
+          "type",
+          "rpcId",
+          "method",
+          "payload"
+        ],
+        "bodyMethod": "agentPreset.list"
+      },
+      "samples": [
+        {
+          "ms": 37,
+          "d": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 114,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "settings.describe"
+          }
+        },
+        {
+          "ms": 27.5,
+          "d": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 2765,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "dynamicCordisRunner/syncInspectManifest"
+          }
+        },
+        {
+          "ms": 16.9,
+          "d": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 110,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "host.describe"
+          }
+        },
+        {
+          "ms": 18.1,
+          "d": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 135,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "dynamicCordisRunner/inventory"
+          }
+        },
+        {
+          "ms": 68.2,
+          "d": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 111,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "workspace.list"
+          }
+        },
+        {
+          "ms": 68,
+          "d": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 135,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "dynamicCordisRunner/inventory"
+          }
+        },
+        {
+          "ms": 85.7,
+          "d": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 114,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "settings.describe"
+          }
+        },
+        {
+          "ms": 86,
+          "d": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 2765,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "dynamicCordisRunner/syncInspectManifest"
+          }
+        },
+        {
+          "ms": 97.1,
+          "d": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 144,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "credentials.describe"
+          }
+        },
+        {
+          "ms": 24.1,
+          "d": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 144,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "credentials.describe"
+          }
+        },
+        {
+          "ms": 163.5,
+          "d": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 113,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "agentPreset.list"
+          }
+        },
+        {
+          "ms": 23.6,
+          "d": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 107,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "nodes.list"
+          }
+        }
+      ]
+    },
+    "/dsh-wallpaper/media/cleanup": {
+      "n": 1,
+      "totalMs": 14.4,
+      "p50": 14.4,
+      "p99": 14.4,
+      "max": 14.4,
+      "detail": {
+        "method": "POST",
+        "url": "/dsh-wallpaper/media/cleanup",
+        "bodyLen": 53,
+        "bodyKeys": [
+          "keep"
+        ],
+        "bodyMethod": null
+      },
+      "worstDetail": {
+        "method": "POST",
+        "url": "/dsh-wallpaper/media/cleanup",
+        "bodyLen": 53,
+        "bodyKeys": [
+          "keep"
+        ],
+        "bodyMethod": null
+      },
+      "samples": [
+        {
+          "ms": 14.4,
+          "d": {
+            "method": "POST",
+            "url": "/dsh-wallpaper/media/cleanup",
+            "bodyLen": 53,
+            "bodyKeys": [
+              "keep"
+            ],
+            "bodyMethod": null
+          }
+        }
+      ]
+    }
+  },
+  "httpInClick": {
+    "/": {
+      "n": 1,
+      "totalMs": 1450.8,
+      "p50": 1450.8,
+      "p99": 1450.8,
+      "max": 1450.8,
+      "detail": {
+        "method": "POST",
+        "url": "",
+        "bodyLen": 113,
+        "bodyKeys": [
+          "type",
+          "rpcId",
+          "method",
+          "payload"
+        ],
+        "bodyMethod": "agentPreset.list"
+      },
+      "worstDetail": {
+        "method": "POST",
+        "url": "",
+        "bodyLen": 113,
+        "bodyKeys": [
+          "type",
+          "rpcId",
+          "method",
+          "payload"
+        ],
+        "bodyMethod": "agentPreset.list"
+      },
+      "samples": [
+        {
+          "ms": 1450.8,
+          "d": {
+            "method": "POST",
+            "url": "",
+            "bodyLen": 113,
+            "bodyKeys": [
+              "type",
+              "rpcId",
+              "method",
+              "payload"
+            ],
+            "bodyMethod": "agentPreset.list"
+          }
+        }
+      ]
+    }
+  },
+  "ws": {
+    "total": 1590,
+    "byType": {
+      "server-request": 1590
+    }
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "concurrency": {
+    "gateOutcome": "EXCLUSIVE",
+    "batchGateWaitedMs": 264157,
+    "censusBefore": {
+      "at": "2026-09-22T02:36:27.238Z",
+      "instances": 3,
+      "foreignCount": 2,
+      "foreign": [
+        {
+          "pid": 139419,
+          "etime": "00:02"
+        },
+        {
+          "pid": 139624,
+          "etime": "00:00"
+        }
+      ],
+      "lockOwner": "agent=incident2-host-click pid=102170 line=host-click",
+      "lockHeldByMyLine": false
+    },
+    "censusAfter": {
+      "at": "2026-09-22T02:36:38.060Z",
+      "instances": 3,
+      "foreignCount": 2,
+      "foreign": [
+        {
+          "pid": 139419,
+          "etime": "00:12"
+        },
+        {
+          "pid": 139624,
+          "etime": "00:11"
+        }
+      ],
+      "lockOwner": "agent: incident2-regression (raf-face theme-sync A/B) line: label=raf-base-r3 pid: 139886",
+      "lockHeldByMyLine": true
+    },
+    "exclusiveThroughout": false
+  },
+  "lock": {
+    "heldAtStart": true,
+    "releasedAtEnd": null
+  }
+}

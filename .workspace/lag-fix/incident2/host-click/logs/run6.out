@@ -1,0 +1,22 @@
+[lock] 初始 {"exists":true,"owner":"incident2-conditions","pid":null,"line":"conditions-matrix","mine":false}
+[lock-wait] 0s attempts=1 owner=incident2-conditions pid=null alive=false
+[lock-wait] 11s attempts=40 owner=incident2-conditions pid=null alive=false
+[lock-wait] 22s attempts=80 owner=incident2-conditions pid=null alive=false
+[lock-wait] 33s attempts=120 owner=incident2-theme-open pid=287771 alive=true
+[lock] 原子取得（attempt 130, 36s）
+[concurrency] EXCLUSIVE  loadavg=4.51 4.83 5.13 4/3004 298353  外来 chromium=2  chromium/PID 27881 (rss 2176kB) | chromium/PID 27882 (rss 1039972kB)
+[nav] domcontentloaded at +148ms
+[settle] quiet after 2802ms (nav->settle 2950ms)
+[clock] page.timeOrigin=1790045499501.4 node.timeOrigin=1790045463672.0 Δ=35829.4ms  evalRTT=0.6ms ⇒ 换算误差界 ±0.3ms
+[STALL] seq=35 /usage/status 996.5ms (phase=pending)
+[pre] 3000ms 结束：累计拍数=44（循环是否在跑=true）
+[click] anchor=1790045505519.0 来源=pointerdown-captured(页内捕获) 不确定度=±0.0ms  夹逼宽=62.9ms err=none
+[diag] beats=122 首拍 t0-anchor=-3050.9 末拍 t0-anchor=2998.4
+[diag] 窗内拍数 pre=46 click±500=36 post=74；探针自我饿住 idleExcess p50=0.0 max=0.0
+[diag] 点击→设置面板可见 = 未采到（INCONCLUSIVE）；页内可见性轮询最大间隔=n/ams；页内 rpcTimeline=0 条；墙钟残差=-1.1ms
+[summary pre]           n=46 p50=8.9 p95=66.2 max=996.5
+[summary click±500ms]   n=36 p50=11.2 p95=67.6 max=71.4
+[summary post3s]        n=74 p50=8.3 p95=48.0 max=74.3
+[stalls>=100ms in click window] 0
+[out] raw/click-run6.json
+[lock] 已释放

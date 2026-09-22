@@ -1,0 +1,272 @@
+================================================================================
+ FIREFOX 155 about:support  ->  "Accessibility" SECTION: SOURCE EVIDENCE
+ host: Ubuntu 24.04 / uid 1001 / 2026-09-22T11:07:42+08:00
+ jars (both read with unzip -p only; nothing extracted to disk):
+   /snap/firefox/8863/usr/lib/firefox/omni.ja   (44498482 bytes, 2525 members)
+   /snap/firefox/8863/usr/lib/firefox/browser/omni.ja   (55875800 bytes, 5345 members)
+================================================================================
+ NOTE: unzip prints a warning such as
+   '44252698 extra bytes at beginning or within zipfile ... Compensating...'
+ for these jars. That is EXPECTED and benign: Firefox ships omni.ja in an
+ optimized form (central directory relocated / entries ordered for mmap).
+ unzip still reads the members correctly, which is why the quotes below are
+ reproduced verbatim. Sizes/member counts come from unzip -Z1 / stat.
+================================================================================
+
+################################################################################
+# 1. MEMBERS THAT CONTAIN THE RELEVANT NAMES (full-jar grep over every member)
+#    command: for each member: unzip -p <jar> <member> | grep -n -E '...'
+#    pattern: forceDisabled|accessibility\.force_disabled|accessibilityEnabled|
+#             a11y-activated|a11y-force-disabled|force_disabled
+################################################################################
+########## JAR: /snap/firefox/8863/usr/lib/firefox/omni.ja ##########
+=== MEMBER: greprefs.js ===
+220:pref("accessibility.force_disabled", 0);
+=== MEMBER: modules/TelemetryEnvironment.sys.mjs ===
+225:  ["accessibility.force_disabled", { what: RECORD_PREF_VALUE }],
+=== MEMBER: localization/en-US/toolkit/about/aboutSupport.ftl ===
+122:a11y-activated = Activated
+123:a11y-force-disabled = Prevent Accessibility
+=== MEMBER: modules/Troubleshoot.sys.mjs ===
+924:    data.isActive = Services.appinfo.accessibilityEnabled;
+927:      data.forceDisabled = Services.prefs.getIntPref(
+928:        "accessibility.force_disabled"
+=== MEMBER: chrome/toolkit/content/global/aboutSupport.js ===
+1468:    $("a11y-activated").textContent = data.isActive;
+1469:    $("a11y-force-disabled").textContent = data.forceDisabled || 0;
+=== MEMBER: chrome/toolkit/content/global/aboutSupport.xhtml ===
+670:            <th class="column" data-l10n-id="a11y-activated"/>
+672:            <td id="a11y-activated">
+676:            <th class="column" data-l10n-id="a11y-force-disabled"/>
+678:            <td id="a11y-force-disabled">
+########## JAR: /snap/firefox/8863/usr/lib/firefox/browser/omni.ja ##########
+=== MEMBER: modules/policies/policies-schema.json ===
+3042:          "accessibility.force_disabled": {
+=== MEMBER: chrome/devtools/modules/devtools/server/actors/accessibility/accessibility.js ===
+57:    return Services.appinfo.accessibilityEnabled;
+=== MEMBER: chrome/devtools/modules/devtools/server/actors/accessibility/parent-accessibility.js ===
+12:const PREF_ACCESSIBILITY_FORCE_DISABLED = "accessibility.force_disabled";
+72:    return Services.appinfo.accessibilityEnabled;
+=== MEMBER: chrome/devtools/modules/devtools/server/actors/accessibility/walker.js ===
+508:    if (!Services.appinfo.accessibilityEnabled) {
+=== MEMBER: chrome/devtools/modules/devtools/server/actors/utils/accessibility.js ===
+37:  if (!Services.appinfo.accessibilityEnabled) {
+SCAN_DONE
+
+################################################################################
+# 2. THE PRODUCER: modules/Troubleshoot.sys.mjs  (root omni.ja)
+#    this is where the data object for the about:support a11y block is built
+################################################################################
+
+--- firefox/omni.ja :: modules/Troubleshoot.sys.mjs  (lines 918-934) ---
+   918	
+   919	    done(data);
+   920	  },
+   921	
+   922	  accessibility: function accessibility(done) {
+   923	    let data = {};
+   924	    data.isActive = Services.appinfo.accessibilityEnabled;
+   925	    // eslint-disable-next-line mozilla/use-default-preference-values
+   926	    try {
+   927	      data.forceDisabled = Services.prefs.getIntPref(
+   928	        "accessibility.force_disabled"
+   929	      );
+   930	    } catch (e) {}
+   931	    data.instantiator = Services.appinfo.accessibilityInstantiator;
+   932	    done(data);
+   933	  },
+   934	
+
+  >>> EXACT PROPERTY NAMES READ (verbatim, lines 924 / 927-929 / 931):
+warning [/snap/firefox/8863/usr/lib/firefox/omni.ja]:  44252698 extra bytes at beginning or within zipfile
+  (attempting to process anyway)
+error [/snap/firefox/8863/usr/lib/firefox/omni.ja]:  reported length of central directory is
+  -44252698 bytes too long (Atari STZip zipfile?  J.H.Holm ZIPSPLIT 1.1
+  zipfile?).  Compensating...
+      3:    data.isActive = Services.appinfo.accessibilityEnabled;
+      6:      data.forceDisabled = Services.prefs.getIntPref(
+      10:    data.instantiator = Services.appinfo.accessibilityInstantiator;
+
+  >>> Interpretation:
+      data.isActive      <- Services.appinfo.accessibilityEnabled      (boolean, nsIXULAppInfo)
+      data.forceDisabled <- Services.prefs.getIntPref("accessibility.force_disabled")
+                            (int; wrapped in try/catch, so a missing pref leaves it undefined)
+      data.instantiator  <- Services.appinfo.accessibilityInstantiator (string)
+
+################################################################################
+# 3. THE CONSUMER: chrome/toolkit/content/global/aboutSupport.js  (root omni.ja)
+#    this is the function that writes the values into the page
+################################################################################
+
+--- firefox/omni.ja :: chrome/toolkit/content/global/aboutSupport.js  (lines 1462-1478) ---
+  1462	        data.failedSignatureVerification;
+  1463	      $("content-analysis-request-count").textContent = data.requestCount;
+  1464	    }
+  1465	  },
+  1466	
+  1467	  accessibility(data) {
+  1468	    $("a11y-activated").textContent = data.isActive;
+  1469	    $("a11y-force-disabled").textContent = data.forceDisabled || 0;
+  1470	
+  1471	    const instantiator = data.instantiator;
+  1472	    if (instantiator) {
+  1473	      $("a11y-instantiator").hidden = false;
+  1474	      $("a11y-instantiator").querySelector("td").textContent = instantiator;
+  1475	    }
+  1476	  },
+  1477	
+  1478	  startupCache(data) {
+
+################################################################################
+# 4. THE MARKUP: chrome/toolkit/content/global/aboutSupport.xhtml
+################################################################################
+
+--- firefox/omni.ja :: chrome/toolkit/content/global/aboutSupport.xhtml  (lines 662-684) ---
+   662	      </table>
+   663	
+   664	      <!-- - - - - - - - - - - - - - - - - - - - - -->
+   665	      <h2 class="major-section" id="a11y" data-l10n-id="a11y-title"/>
+   666	
+   667	      <table>
+   668	        <tbody>
+   669	          <tr>
+   670	            <th class="column" data-l10n-id="a11y-activated"/>
+   671	
+   672	            <td id="a11y-activated">
+   673	            </td>
+   674	          </tr>
+   675	          <tr>
+   676	            <th class="column" data-l10n-id="a11y-force-disabled"/>
+   677	
+   678	            <td id="a11y-force-disabled">
+   679	            </td>
+   680	          </tr>
+   681	        </tbody>
+   682	      </table>
+   683	
+   684	      <!-- - - - - - - - - - - - - - - - - - - - - -->
+
+  >>> NOTE: the shipped xhtml declares only two rows (a11y-activated,
+      a11y-force-disabled). There is NO 'a11y-instantiator' element in this
+      member, so the JS branch that un-hides it (line 1473) only runs when
+      accessibilityInstantiator is non-empty (a Windows/UIA-oriented field).
+
+################################################################################
+# 5. THE EXACT USER-VISIBLE LABELS: localization/en-US/toolkit/about/aboutSupport.ftl
+################################################################################
+
+--- firefox/omni.ja :: localization/en-US/toolkit/about/aboutSupport.ftl  (lines 119-127) ---
+   119	place-database-last-vacuum-date = Last Vacuum Date
+   120	place-database-last-integrity-corruption-date = Last Integrity Corruption Date
+   121	a11y-title = Accessibility
+   122	a11y-activated = Activated
+   123	a11y-force-disabled = Prevent Accessibility
+   124	a11y-handler-used = Accessible Handler Used
+   125	a11y-instantiator = Accessibility Instantiator
+   126	library-version-title = Library Versions
+   127	copy-text-to-clipboard-label = Copy text to clipboard
+
+################################################################################
+# 6. THE DEFAULT VALUE OF THE PREF: greprefs.js  (root omni.ja)
+################################################################################
+
+--- firefox/omni.ja :: greprefs.js  (lines 218-224) ---
+   218	pref("ui.textHighlightBackground", "#ef0fff");
+   219	pref("ui.textHighlightForeground", "#ffffff");
+   220	pref("accessibility.force_disabled", 0);
+   221	pref("focusmanager.testmode", false);
+   222	pref("accessibility.typeaheadfind", true);
+   223	pref("accessibility.typeaheadfind.manual", true);
+   224	pref("accessibility.typeaheadfind.casesensitive", 0);
+
+  >>> pref("accessibility.force_disabled", 0)  =>  'Prevent Accessibility' shows 0
+      on a stock profile; it is an int, and 1 (or any non-zero) means a11y is
+      blocked from starting. 0 does NOT mean a11y is ACTIVE - only that it is
+      not blocked. Activation is reported separately by a11y-activated.
+
+################################################################################
+# 7. a11y-supporting / adjacent references found in the same jars
+################################################################################
+
+--- (a) browser/omni.ja :: modules/policies/policies-schema.json (a PREF policy can set it) ---
+3042:          "accessibility.force_disabled": {
+3043-            "Value": 1,
+3044-            "Status": "default",
+3045-            "Type": "number"
+3046-          },
+3047-          "browser.cache.disk.parent_directory": {
+3048-            "Value": "SOME_NATIVE_PATH",
+
+--- (b) modules/TelemetryEnvironment.sys.mjs (the pref is recorded in telemetry) ---
+223-  ["app.support.baseURL", { what: RECORD_PREF_VALUE }],
+224-  ["accessibility.browsewithcaret", { what: RECORD_PREF_VALUE }],
+225:  ["accessibility.force_disabled", { what: RECORD_PREF_VALUE }],
+226-  ["app.shield.optoutstudies.enabled", { what: RECORD_PREF_VALUE }],
+227-  ["app.update.interval", { what: RECORD_PREF_VALUE }],
+
+--- (c) DevTools Server a11y actors read the SAME appinfo flag ---
+    browser/omni.ja :: chrome/devtools/modules/devtools/server/actors/accessibility/accessibility.js
+        57:    return Services.appinfo.accessibilityEnabled;
+    browser/omni.ja :: chrome/devtools/modules/devtools/server/actors/accessibility/parent-accessibility.js
+        12:const PREF_ACCESSIBILITY_FORCE_DISABLED = "accessibility.force_disabled";
+        19:      PREF_ACCESSIBILITY_FORCE_DISABLED
+        32:    Services.prefs.addObserver(PREF_ACCESSIBILITY_FORCE_DISABLED, this);
+        54:      data === PREF_ACCESSIBILITY_FORCE_DISABLED
+        56:      // PREF_ACCESSIBILITY_FORCE_DISABLED preference change event. When set to
+        72:    return Services.appinfo.accessibilityEnabled;
+        100:    return Services.prefs.getIntPref(PREF_ACCESSIBILITY_FORCE_DISABLED) < 1;
+        119:   * PREF_ACCESSIBILITY_FORCE_DISABLED preference on and off to shutdown a11y
+        129:    // Set PREF_ACCESSIBILITY_FORCE_DISABLED to 1 to force disable
+        133:    Services.prefs.setIntPref(PREF_ACCESSIBILITY_FORCE_DISABLED, 1);
+        134:    // Set PREF_ACCESSIBILITY_FORCE_DISABLED back to previous default or user
+        138:    Services.prefs.setIntPref(PREF_ACCESSIBILITY_FORCE_DISABLED, this.userPref);
+        150:    Services.prefs.removeObserver(PREF_ACCESSIBILITY_FORCE_DISABLED, this);
+    browser/omni.ja :: chrome/devtools/modules/devtools/server/actors/accessibility/walker.js
+        508:    if (!Services.appinfo.accessibilityEnabled) {
+    browser/omni.ja :: chrome/devtools/modules/devtools/server/actors/utils/accessibility.js
+        37:  if (!Services.appinfo.accessibilityEnabled) {
+
+--- (d) is there any JS that reads a force-on ENVIRONMENT VARIABLE for a11y? ---
+    full-jar grep for GNOME_ACCESSIBILITY | ACCESSIBILITY_ENABLED | GTK_MODULES |
+    AT_SPI_BUS across BOTH jars returned NO hits in any .js/.mjs/.jsm/.xhtml/.ftl
+    member. (Only libxul.so, the compiled C++ a11y/GTK platform code, carries the
+     literal GNOME_ACCESSIBILITY - see ff_binary_env_strings.txt.)
+
+################################################################################
+# 8. ANSWER + USER SELF-VERIFICATION PROCEDURE
+################################################################################
+  The about:support "Accessibility" table is populated by
+  modules/Troubleshoot.sys.mjs -> accessibility(done) -> aboutSupport.js accessibility(data).
+
+  Rows and exactly what feeds them:
+    "Accessibility"                 <- FTL a11y-title        (section heading)
+    "Activated"                     <- data.isActive      = Services.appinfo.accessibilityEnabled
+    "Prevent Accessibility"         <- data.forceDisabled = Services.prefs.getIntPref("accessibility.force_disabled")
+    "Accessible Handler Used"       <- FTL label exists (a11y-handler-used) but is NOT
+                                       written by aboutSupport.js in this build (Windows-only path)
+    "Accessibility Instantiator"    <- data.instantiator = Services.appinfo.accessibilityInstantiator
+                                       (row only un-hidden when non-empty)
+
+  HOW A USER VERIFIES A11Y STATE (no guessing, no venv):
+    1. Open about:support  ->  section "Accessibility".
+       - "Activated: true"  => Gecko a11y IS running (accessibility service instantiated).
+       - "Activated: false" => Gecko a11y is NOT running in this session.
+       - "Prevent Accessibility: 0" => a11y is not blocked by the pref.
+       - "Prevent Accessibility: 1" => a11y startup is blocked by the pref.
+    2. Open about:config and inspect "accessibility.force_disabled"
+       (expected default 0 per greprefs.js; shown as int).
+    3. Cross-check with about:config "accessibility.*" plus the AT-SPI bus state on the
+       host (org.a11y.Bus on the session bus), because "Activated: true" while the AT-SPI
+       bridge is present means the accessibility tree is being built.
+
+  IMPORTANT for the reported incident: forcing renderer a11y in Chrome/Electron uses the
+  CHROMIUM switch "--force-renderer-accessibility" (see ff_binary_env_strings.txt and
+  chrome_launch_forensics.txt). That switch is a CHROMIUM concept and has NOTHING to do
+  with Firefox's pref "accessibility.force_disabled", which works in the OPPOSITE
+  direction (it PREVENTS a11y). In Firefox the effective force-on path is the GTK/ATK
+  bridge (libatk-bridge-2.0.so.0 + GNOME_ACCESSIBILITY literal inside libxul.so), not a
+  Gecko pref.
+
+================================================================================
+ END
+================================================================================

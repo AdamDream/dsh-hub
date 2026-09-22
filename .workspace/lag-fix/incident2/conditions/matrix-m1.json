@@ -1,0 +1,273 @@
+{
+  "meta": {
+    "line": "conditions-matrix",
+    "agent": "incident2-conditions",
+    "label": "m1",
+    "url": "http://127.0.0.1:3080",
+    "startedAt": "2026-09-22T10:26:47+08:00",
+    "hostPid": 10806,
+    "hostPidAlive": true,
+    "prereg": {
+      "jank_frames_gt50_post": 3,
+      "jank_longest_task_ms": 100,
+      "jank_click_to_panel_ms": 300,
+      "smooth_frames_gt50_post": 1,
+      "smooth_longest_task_ms": 50,
+      "smooth_click_to_panel_ms": 200
+    },
+    "design": "OFAT：BASE 为参照，每个 cell 只改一个因子；每 cell 每次 rep 为全新 context+page",
+    "criteria": "click→面板可见耗时 + 点击前后各 3s 的 >50ms 帧数与最长任务",
+    "discipline": "只点 设置/关闭/设置页导航/侧栏会话标题；不点 保存/应用/删除/移除壁纸/模型切换；不 pkill",
+    "cells": [
+      {
+        "id": "BASE",
+        "dim": "0-baseline",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      },
+      {
+        "id": "D1-longsession",
+        "dim": "1-entry",
+        "factors": {
+          "entry": "longsession",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      },
+      {
+        "id": "D1-pluginusage",
+        "dim": "1-entry",
+        "factors": {
+          "entry": "pluginusage",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      },
+      {
+        "id": "D2-reopen",
+        "dim": "2-order",
+        "factors": {
+          "entry": "home",
+          "order": "reopen",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      },
+      {
+        "id": "D3-immediate",
+        "dim": "3-loadstate",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "immediate",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": true
+        }
+      },
+      {
+        "id": "D3-wait10",
+        "dim": "3-loadstate",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": true
+        }
+      },
+      {
+        "id": "D3-wait60",
+        "dim": "3-loadstate",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait60",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": true
+        }
+      },
+      {
+        "id": "D4-1920",
+        "dim": "4-viewport",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1920x1080",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      },
+      {
+        "id": "D4-narrow",
+        "dim": "4-viewport",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "900x800",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      },
+      {
+        "id": "D5-collapsed",
+        "dim": "5-scale",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "collapse",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      },
+      {
+        "id": "D5-expanded",
+        "dim": "5-scale",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "expandAll",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      },
+      {
+        "id": "D6-frostoff",
+        "dim": "6-wallpaper",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "frost-off",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      },
+      {
+        "id": "D6-wallpaperoff",
+        "dim": "6-wallpaper",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "off",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      },
+      {
+        "id": "D6-noblur",
+        "dim": "6-wallpaper",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "noblur",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      },
+      {
+        "id": "D7-dark",
+        "dim": "7-theme",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "dark",
+          "cacheDisabled": false
+        }
+      }
+    ],
+    "reps": 2
+  },
+  "lock": null,
+  "environment": {
+    "atStart": null,
+    "atEnd": null
+  },
+  "reps": [],
+  "summary": {},
+  "terminated": {
+    "signal": "SIGTERM",
+    "at": "2026-09-22T10:36:47+08:00"
+  },
+  "finishedAt": "2026-09-22T10:36:47+08:00",
+  "log": [
+    "[10:26:47] pre-launch real browser instances: 0",
+    "[10:26:47] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.7min, ownPid 68109/true); retry in 32s (elapsed 0s)",
+    "[10:27:19] LOCK held by incident2-regression (first-open A/B) (age 0.1min, ownPid 72503/true); retry in 31s (elapsed 32s)",
+    "[10:27:50] LOCK held by incident2-regression (first-open A/B) (age 0.1min, ownPid 73170/true); retry in 20s (elapsed 63s)",
+    "[10:28:10] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.1min, ownPid 73800/true); retry in 24s (elapsed 83s)",
+    "[10:28:34] LOCK held by incident2-regression (first-open A/B) (age 0.0min, ownPid 74258/true); retry in 28s (elapsed 107s)",
+    "[10:29:02] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 78607/true); retry in 37s (elapsed 135s)",
+    "[10:29:39] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.8min, ownPid 78607/true); retry in 37s (elapsed 172s)",
+    "[10:30:16] LOCK held by incident2-host-click (age 0.2min, ownPid 78647/true); retry in 26s (elapsed 210s)",
+    "[10:30:43] LOCK held by incident2-regression (first-open batch) (age 0.4min, ownPid 88615/true); retry in 25s (elapsed 236s)",
+    "[10:31:08] LOCK held by incident2-regression (first-open batch) (age 0.8min, ownPid 88615/true); retry in 33s (elapsed 261s)",
+    "[10:31:41] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.4min, ownPid 92575/true); retry in 30s (elapsed 295s)",
+    "[10:32:11] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.9min, ownPid 92575/true); retry in 21s (elapsed 324s)",
+    "[10:32:32] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.3min, ownPid 92575/true); retry in 24s (elapsed 346s)",
+    "[10:32:56] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.7min, ownPid 92575/true); retry in 23s (elapsed 370s)",
+    "[10:33:20] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 2.0min, ownPid 92575/true); retry in 40s (elapsed 393s)",
+    "[10:34:00] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.6min, ownPid 101437/true); retry in 23s (elapsed 433s)",
+    "[10:34:23] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.0min, ownPid 101437/true); retry in 22s (elapsed 456s)",
+    "[10:34:45] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.3min, ownPid 101437/true); retry in 26s (elapsed 478s)",
+    "[10:35:11] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.8min, ownPid 101437/true); retry in 37s (elapsed 504s)",
+    "[10:35:48] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 2.4min, ownPid 101437/true); retry in 26s (elapsed 542s)",
+    "[10:36:15] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 2.8min, ownPid 101437/true); retry in 21s (elapsed 568s)",
+    "[10:36:36] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.1min, ownPid 139886/true); retry in 30s (elapsed 589s)",
+    "[10:36:47] signal SIGTERM: closing browser → releasing lock → flushing artifact"
+  ]
+}

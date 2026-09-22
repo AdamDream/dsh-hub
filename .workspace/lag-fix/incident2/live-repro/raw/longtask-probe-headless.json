@@ -1,0 +1,113 @@
+{
+ "mode": "headless",
+ "stallMs": 180,
+ "at": "2026-09-22T02:44:53.715Z",
+ "windows": [
+  {
+   "label": "W0-baseline",
+   "note": "no stall injected",
+   "frames": {
+    "n": 180,
+    "p50": 16.7,
+    "max": 16.8,
+    "over50": 0
+   },
+   "longtaskCount": 0,
+   "longtaskMax": null,
+   "longtaskEntries": [],
+   "lofCount": 0,
+   "lofMax": null
+  },
+  {
+   "label": "W1-evaluate-loop",
+   "note": "busy 180ms inside page.evaluate",
+   "frames": {
+    "n": 182,
+    "p50": 16.7,
+    "max": 195.7,
+    "over50": 1
+   },
+   "longtaskCount": 0,
+   "longtaskMax": null,
+   "longtaskEntries": [],
+   "lofCount": 1,
+   "lofMax": 184
+  },
+  {
+   "label": "W2-setTimeout-loop",
+   "note": "busy 180ms inside a page setTimeout callback",
+   "frames": {
+    "n": 173,
+    "p50": 16.7,
+    "max": 180.9,
+    "over50": 1
+   },
+   "longtaskCount": 1,
+   "longtaskMax": 180,
+   "longtaskEntries": [
+    {
+     "t": 10293.9,
+     "dur": 180,
+     "name": "self",
+     "attribution": [
+      {
+       "name": "unknown",
+       "type": "taskattribution",
+       "containerType": "window"
+      }
+     ]
+    }
+   ],
+   "lofCount": 1,
+   "lofMax": 180
+  },
+  {
+   "label": "W3-rAF-loop",
+   "note": "busy 180ms inside a page requestAnimationFrame callback",
+   "frames": {
+    "n": 171,
+    "p50": 16.7,
+    "max": 180.5,
+    "over50": 1
+   },
+   "longtaskCount": 1,
+   "longtaskMax": 180,
+   "longtaskEntries": [
+    {
+     "t": 13259.9,
+     "dur": 180,
+     "name": "self",
+     "attribution": [
+      {
+       "name": "unknown",
+       "type": "taskattribution",
+       "containerType": "window"
+      }
+     ]
+    }
+   ],
+   "lofCount": 1,
+   "lofMax": 195
+  }
+ ],
+ "installed": {
+  "installed": {
+   "longtask": true,
+   "lof": true
+  },
+  "err": [],
+  "supported": [
+   "element",
+   "event",
+   "long-animation-frame",
+   "longtask"
+  ],
+  "visibility": "visible"
+ },
+ "pageStallDurations": {
+  "gotA": 180,
+  "gotB": 180
+ },
+ "verdict": "LONGTASK-CHANNEL-WORKS",
+ "lockReleased": true
+}

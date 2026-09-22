@@ -1,0 +1,20 @@
+=== Firefox main process (9042) open fds referencing dri/nvidia ===
+(exit above may be EACCES - note honestly)
+
+=== Firefox content procs (10350, 10133) dri fds ===
+--- 10350 ---
+89
+--- 10133 ---
+91
+--- 9042 ---
+423
+
+=== maps of firefox main: any i915/amdgpu/nvidia/llvmpipe/gallium ===
+      1 grep: /proc/9042/maps: 权限不够
+
+=== maps of firefox content proc 10350 (same) ===
+      1 grep: /proc/10350/maps: 权限不够
+
+=== llvmpipe/swrast anywhere in firefox maps? ===
+grep: /proc/9042/maps: 权限不够
+grep: /proc/10350/maps: 权限不够

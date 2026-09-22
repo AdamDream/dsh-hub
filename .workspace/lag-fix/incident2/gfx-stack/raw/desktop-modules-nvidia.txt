@@ -1,0 +1,29 @@
+=== lsmod: DLP / out-of-tree modules ===
+LSDEfs               7143424  1
+amdgpu              19714048  65
+amdxcp                 12288  1 amdgpu
+gpu_sched              61440  1 amdgpu
+nvidia_uvm           2052096  0
+drm_panel_backlight_quirks    12288  1 amdgpu
+drm_buddy              24576  1 amdgpu
+drm_exec               12288  1 amdgpu
+drm_suballoc_helper    20480  1 amdgpu
+nvidia_drm            139264  4
+drm_display_helper    278528  1 amdgpu
+cec                    94208  2 drm_display_helper,amdgpu
+nvidia_modeset       1744896  3 nvidia_drm
+i2c_algo_bit           16384  1 amdgpu
+drm_ttm_helper         16384  2 amdgpu,nvidia_drm
+ttm                   118784  2 amdgpu,drm_ttm_helper
+nvidia              14807040  41 nvidia_uvm,nvidia_modeset
+video                  77824  2 amdgpu,nvidia_modeset
+
+=== /proc/modules non-standard (not in kernel tree) count ===
+129
+
+=== any other full-screen 5120x2880 windows? ===
+17:     0x200000a "@!0,0;BDHF": ("gjs" "Gjs")  5120x2880+0+0  +0+0
+
+=== nvidia-smi (is the 4090 doing work / has display?) ===
+/usr/bin/nvidia-smi
+Failed to initialize NVML: Unknown Error

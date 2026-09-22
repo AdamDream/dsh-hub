@@ -1,0 +1,117 @@
+### libxul.so LITERAL STRING FINGERPRINT
+file: /snap/firefox/8863/usr/lib/firefox/libxul.so
+size: 183575264 bytes
+date: 2026-09-22T10:59:02+08:00
+
+=== TARGET LITERALS (occurrence counts via: grep -a -o -F -e LIT | wc -l) ===
+LITERAL                                              OCCURRENCES
+WRWorker#                                            1
+WRWorkerLP#                                          0
+WRRenderBackend                                      1
+WRSceneBuilder                                       2
+WrGlyphRasterizer                                    1
+RenderCompositorSWGL                                 6
+SoftwareVsyncThread                                  1
+SWGL                                                 75
+MOZ_WEBRENDER                                        1
+MOZ_X11_EGL                                          1
+gfx.webrender.software                               4
+FEATURE_FAILURE_WEBRENDER_COMPOSITOR_DISABLED        1
+X11_EGL                                              6
+
+=== 'SWGL' as a standalone token (grep -a -o -w) — disambiguates from RenderCompositorSWGL ===
+20
+
+=== Thread-name style WR* literals actually present (distinct, bounded) ===
+     61 WRDL
+     22 WRITE
+     22 WRAP
+     19 WRONG
+     14 WRSVQH
+      7 WRITING
+      7 WRAPPER
+      5 WRITEMASK
+      4 WRITEFONT
+      3 WRITABLE
+      3 WRH
+      3 WRDidRasterize
+      3 WRAPPED
+      2 WRW
+      2 WRNNMKORTY
+      2 WRITTEN
+      2 WRITESTORAGE
+      2 WRITEQUERY
+      2 WRITEINDEXVERTEXUNIFORMSTORAGE
+      2 WRITEABLE
+      2 WRING
+      1 WRz
+      1 WRyIOVNa
+      1 WRXRZR
+      1 WRXRYRZR
+      1 WRWXWbWeWgWlWnWpWtWxW
+      1 WRWSWTWUWVWXWYWbWcWeWgWlWnWpWqWrWtWuWxWyWzW
+      1 WRWRW
+      1 WRWorkerYuvImagerotationspatial
+      1 WRWorker#
+
+=== WebRender-related distinct literals (bounded, head 60) ===
+webrender_api
+webrender_bindings
+WebRenderBridge
+WebRenderBridgeChild
+WebRenderBridgeConstructor
+WebRenderBridgeParent
+webrender_build
+WebRenderCompositor
+WebRenderCompositorSetting
+webrendererror
+WebRenderError
+webrenderinstalltrigger_enabledopaque_response_bl
+WebRenderLayerScrollData
+WebRenderParentCommand
+WebRenderRequested
+WebRenderResourcePathOverridden
+WebRenderScrollData
+webrender_software
+WebRenderTextureHost
+WebRenderUserDatas
+Wrap
+WRAP
+WrapAsWorkerRunnable
+WrapChannel
+WrapColumn
+WRAP_CONVERTSRGB
+WRAP_FAILUREclear_all_website_data_cancell
+WrapForValidIterator
+WrapForValidIteratorMethodIfWrapped
+WrapForValidIteratorNext
+WrapForValidIteratorReturn
+WrapGlobalObject
+WrapHackMask
+WrapInt
+WrapKey
+WrapList
+WRAP_LIST
+WrapMode
+WRAP_NEWTYPESIMPLICIT_SOMEUNWRAP_VARIANT_N
+WrapObject
+Wrapped
+WRAPPED
+WrappedControlRunnable
+WrappedDebuggerRunnable
+WrappedDek
+WrappedDekstruct
+WrappedFactory
+WrappedJS
+WrappedJSIterator
+WrappedNative
+WRAPPED_NATIVE
+WrappedNative_NoHelper
+WrappedNativeProto
+WrappedNativeScope
+WrappedNative_TearOff
+WrappedNativeTearOff
+WrappedObj
+WrappedRegExpObject
+WRAPPED_REJECTION_REASON
+WrappedTypedArray

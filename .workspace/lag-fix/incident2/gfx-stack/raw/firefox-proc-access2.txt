@@ -1,0 +1,21 @@
+=== ptrace_scope ===
+1
+=== /proc/9042/environ readable? ===
+NOT READABLE: head: 无法以读模式打开 '/proc/9042/environ': 权限不够
+=== /proc/9042/cmdline readable? ===
+READABLE
+=== /proc/9042/cmdline content (tr \0 ' ') ===
+/snap/firefox/8863/usr/lib/firefox/firefox 
+=== /proc/9042/comm ===
+firefox
+=== dumpable field via status (if present) ===
+CoreDumping:	0
+=== compare: our own /proc/self/environ readable? ===
+SELF READABLE (so it is the process's dumpable flag, not the FS)
+=== firefox parent 4139 / 3736 identification ===
+    PID    PPID USER     ELAPSED COMMAND
+   3736       1 CNS2026+    1690 /usr/lib/systemd/systemd --user
+   4139    3736 CNS2026+    1688 /usr/bin/gnome-shell
+=== is 4139 a systemd user scope / snapfuse? ===
+gnome-shell
+/usr/bin/gnome-shell 

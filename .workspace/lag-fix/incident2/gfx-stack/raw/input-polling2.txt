@@ -1,0 +1,51 @@
+=== usbhid mousepoll parameter ===
+0
+=== usbhid params all ===
+ignoreled=0
+jspoll=0
+kbpoll=0
+mousepoll=0
+quirks=(null),(null),(null),(null)
+
+=== interface endpoint dirs for mice ===
+--- /sys/bus/usb/devices/1-2:1.1 ---
+0003:258A:027B.0002 authorized bAlternateSetting bInterfaceClass bInterfaceNumber bInterfaceProtocol bInterfaceSubClass bNumEndpoints driver ep_82 firmware_node modalias physical_location power subsystem supports_autosuspend uevent usbmisc 
+   ep_82: bInterval=01 type=Interrupt
+--- /sys/bus/usb/devices/1-3:1.1 ---
+0003:3554:FB50.0006 authorized bAlternateSetting bInterfaceClass bInterfaceNumber bInterfaceProtocol bInterfaceSubClass bNumEndpoints driver ep_82 firmware_node modalias physical_location power subsystem supports_autosuspend uevent usbmisc 
+   ep_82: bInterval=01 type=Interrupt
+--- /sys/bus/usb/devices/9-1.3:1.0 ---
+0003:046D:C08B.0003 authorized bAlternateSetting bInterfaceClass bInterfaceNumber bInterfaceProtocol bInterfaceSubClass bNumEndpoints driver ep_81 modalias power subsystem supports_autosuspend uevent 
+   ep_81: bInterval=01 type=Interrupt
+
+=== lsusb -v attempt (non-root) ===
+  bcdUSB               2.00
+  bMaxPacketSize0        64
+  idVendor           0x3554 VGN
+  idProduct          0xfb50 VGN DragonFly F1 SE
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval               1
+        wMaxPacketSize     0x0011  1x 17 bytes
+        bInterval               1
+
+=== udevadm attribute-walk bInterval ===
+found, all possible attributes in the udev rules key format.
+A rule to match, can be composed by the attributes of the device
+and the attributes from one single parent device.
+    DRIVER=="usbhid"
+    ATTR{authorized}=="1"
+    ATTR{bAlternateSetting}==" 0"
+    ATTR{bInterfaceClass}=="03"
+    ATTR{bInterfaceNumber}=="01"
+    ATTR{bInterfaceProtocol}=="02"
+    ATTR{bInterfaceSubClass}=="01"
+    ATTR{bNumEndpoints}=="01"
+    ATTR{physical_location/dock}=="no"
+    ATTR{physical_location/horizontal_position}=="left"
+    ATTR{physical_location/lid}=="no"
+    ATTR{physical_location/panel}=="back"
+    ATTR{physical_location/vertical_position}=="lower"
+    ATTR{power/async}=="enabled"
+    ATTR{power/runtime_active_kids}=="0"
+    ATTR{power/runtime_enabled}=="enabled"
+    ATTR{power/runtime_status}=="suspended"

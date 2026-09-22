@@ -1,0 +1,105 @@
+=== getfacl /dev/dri/* ===
+--- /dev/dri/card1 ---
+# file: /dev/dri/card1
+# owner: root
+# group: video
+user::rw-
+user:CNS2026495165:rw-
+group::rw-
+mask::rw-
+other::---
+
+--- /dev/dri/card2 ---
+# file: /dev/dri/card2
+# owner: root
+# group: video
+user::rw-
+user:CNS2026495165:rw-
+group::rw-
+mask::rw-
+other::---
+
+--- /dev/dri/renderD128 ---
+# file: /dev/dri/renderD128
+# owner: root
+# group: render
+user::rw-
+user:CNS2026495165:rw-
+group::rw-
+mask::rw-
+other::---
+
+--- /dev/dri/renderD129 ---
+# file: /dev/dri/renderD129
+# owner: root
+# group: render
+user::rw-
+user:CNS2026495165:rw-
+group::rw-
+mask::rw-
+other::---
+
+--- /dev/nvidia0 ---
+# file: /dev/nvidia0
+# owner: root
+# group: root
+user::rw-
+group::rw-
+other::rw-
+
+--- /dev/nvidiactl ---
+# file: /dev/nvidiactl
+# owner: root
+# group: root
+user::rw-
+group::rw-
+other::rw-
+
+=== snap list all (mesa/gnome content snaps) ===
+名称                         版本                              修订版本   追踪               发布者           注记
+bare                       1.0                             5      latest/stable    canonical**   base
+core22                     20260824                        2955   latest/stable    canonical**   base
+core24                     20260824                        2124   latest/stable    canonical**   base
+firefox                    155.0.1-1                       8863   latest/stable/…  mozilla**     -
+firmware-updater           0+git.2d77dfe                   258    1/stable/…       canonical**   -
+ghostty                    v1.3.1                          820    latest/stable    ken-vandine*  classic
+gnome-42-2204              0+git.4982e7b-sdk0+git.69b626a  263    latest/stable/…  canonical**   -
+gnome-46-2404              0+git.b31ceab-sdk0+git.f0723a0  164    latest/stable    canonical**   -
+gtk-common-themes          0.1-81-g442e511                 1535   latest/stable/…  canonical**   -
+mesa-2404                  25.2.8-snap288                  1839   latest/stable    canonical**   -
+snap-store                 0+git.d2bdf905                  1419   2/stable/…       canonical**   -
+snapd                      2.76.3                          27738  latest/stable    canonical**   snapd
+snapd-desktop-integration  0.9                             391    latest/stable/…  canonical**   -
+=== snap connections mesa-2404 ===
+接口                 插头                                  插槽                  注记
+content[gpu-2404]  firefox:gpu-2404                    mesa-2404:gpu-2404  -
+content[gpu-2404]  firmware-updater:gpu-2404           mesa-2404:gpu-2404  -
+content            mesa-2404:kernel-gpu-2404           -                   -
+content[gpu-2404]  snap-store:gpu-2404                 mesa-2404:gpu-2404  -
+content[gpu-2404]  snapd-desktop-integration:gpu-2404  mesa-2404:gpu-2404  -
+=== snap info mesa-2404 (head 25) ===
+name:      mesa-2404
+summary:   Mesa libraries for core24 snaps
+publisher: Canonical**
+store-url: https://snapcraft.io/mesa-2404
+contact:   https://github.com/canonical/mesa-2404
+license:   MIT
+description: |
+  A content snap containing the mesa libraries and drivers for `base: core24`
+  snaps.
+  
+  It supports a broad range of hardware through the Mesa stack as well as
+  Nvidia
+  drivers installed from your distribution through the native SnapD support.
+  
+  To make use of this snap in your application, allowing for GPU acceleration
+  on
+  a broader set of hardware without including the drivers in your snap, refer
+  to the
+  documentation below:
+  
+  https://mir-server.io/docs/the-gpu-2404-snap-interface
+  
+  _Note: On some, typically desktop, systems SnapD supports loading Nvidia
+  drivers installed on the host. mesa-2404 is compatible with this._
+services:

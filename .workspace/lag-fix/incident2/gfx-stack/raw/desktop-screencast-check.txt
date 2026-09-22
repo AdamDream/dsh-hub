@@ -1,0 +1,43 @@
+=== screencast / portal screenshot activity in user journal ===
+9月 22 10:02:17 CNS202649516533 systemd[3736]: Listening on pipewire-pulse.socket - PipeWire PulseAudio.
+9月 22 10:02:17 CNS202649516533 systemd[3736]: Listening on pipewire.socket - PipeWire Multimedia System Sockets.
+9月 22 10:02:17 CNS202649516533 systemd[3736]: Started pipewire.service - PipeWire Multimedia Service.
+9月 22 10:02:17 CNS202649516533 systemd[3736]: Started filter-chain.service - PipeWire filter chain daemon.
+9月 22 10:02:17 CNS202649516533 systemd[3736]: Started pipewire-pulse.service - PipeWire PulseAudio.
+9月 22 10:02:17 CNS202649516533 pipewire[3754]: mod.jackdbus-detect: Failed to receive jackdbus reply: org.freedesktop.DBus.Error.ServiceUnknown: The name org.jackaudio.service was not provided by any .service files
+9月 22 10:02:17 CNS202649516533 wireplumber[3759]: PipeWire's libcamera SPA missing or broken. libcamera not supported.
+9月 22 10:02:17 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='org.freedesktop.portal.Documents' unit='xdg-document-portal.service' requested by ':1.10' (uid=1001 pid=3757 comm="/usr/bin/snap run snapd-desktop-integration" label="unconfined")
+9月 22 10:02:17 CNS202649516533 systemd[3736]: Starting xdg-document-portal.service - flatpak document portal service...
+9月 22 10:02:17 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='org.freedesktop.impl.portal.PermissionStore' unit='xdg-permission-store.service' requested by ':1.11' (uid=1001 pid=3822 comm="/usr/libexec/xdg-document-portal" label="unconfined")
+9月 22 10:02:17 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Successfully activated service 'org.freedesktop.impl.portal.PermissionStore'
+9月 22 10:02:17 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Successfully activated service 'org.freedesktop.portal.Documents'
+9月 22 10:02:17 CNS202649516533 systemd[3736]: Started xdg-document-portal.service - flatpak document portal service.
+9月 22 10:02:17 CNS202649516533 xdg-document-portal[3822]: Ignoring invalid max threads value 4294967295 > max (100000).
+9月 22 10:02:18 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='org.freedesktop.portal.Desktop' unit='xdg-desktop-portal.service' requested by ':1.18' (uid=1001 pid=4042 comm="/usr/bin/fcitx5 -d" label="unconfined")
+9月 22 10:02:18 CNS202649516533 systemd[3736]: Starting xdg-desktop-portal.service - Portal service...
+9月 22 10:02:18 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='org.freedesktop.impl.portal.desktop.gnome' unit='xdg-desktop-portal-gnome.service' requested by ':1.25' (uid=1001 pid=4056 comm="/usr/libexec/xdg-desktop-portal" label="unconfined")
+9月 22 10:02:18 CNS202649516533 systemd[3736]: Dependency failed for xdg-desktop-portal-gnome.service - Portal service (GNOME implementation).
+9月 22 10:02:18 CNS202649516533 systemd[3736]: xdg-desktop-portal-gnome.service: Job xdg-desktop-portal-gnome.service/start failed with result 'dependency'.
+9月 22 10:02:18 CNS202649516533 systemd[3736]: Starting xdg-desktop-portal-rewrite-launchers.service - Rewrite dynamic launcher portal entries...
+9月 22 10:02:18 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating via systemd: service name='org.gtk.vfs.Daemon' unit='gvfs-daemon.service' requested by ':1.31' (uid=1001 pid=4086 comm="/usr/libexec/xdg-desktop-portal-rewrite-launchers" label="unconfined")
+9月 22 10:02:18 CNS202649516533 systemd[3736]: Finished xdg-desktop-portal-rewrite-launchers.service - Rewrite dynamic launcher portal entries.
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating service name='org.gnome.Shell.Screencast' requested by ':1.46' (uid=1001 pid=4139 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Error looking up permission: GDBus.Error:org.freedesktop.portal.Error.NotFound: No entry for geolocation
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Successfully activated service 'org.gnome.Shell.Screencast'
+
+=== xdg-desktop-portal processes ===
+   3754  0.0 /usr/bin/pipewire
+   3755  0.0 /usr/bin/pipewire -c filter-chain.conf
+   3759  0.0 /usr/bin/wireplumber
+   3761  0.0 /usr/bin/pipewire-pulse
+   3822  0.0 /usr/libexec/xdg-document-portal
+   3833  0.0 fusermount3 -o rw,nosuid,nodev,fsname=portal,auto_unmount,subtype=portal -- /run/user/1001/doc
+   5863  0.0 /usr/libexec/xdg-desktop-portal-gtk
+   9208  0.0 /usr/libexec/xdg-desktop-portal
+   9224  0.0 /usr/libexec/xdg-desktop-portal-gnome
+
+=== gnome-shell Screencast service activation (system journal) ===
+9月 22 10:02:02 CNS202649516533 /usr/libexec/gdm-x-session[2877]: dbus-daemon[2877]: [session uid=120 pid=2877] Activating service name='org.gnome.Shell.Screencast' requested by ':1.5' (uid=120 pid=2917 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:02 CNS202649516533 /usr/libexec/gdm-x-session[2877]: dbus-daemon[2877]: [session uid=120 pid=2877] Successfully activated service 'org.gnome.Shell.Screencast'
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Activating service name='org.gnome.Shell.Screencast' requested by ':1.46' (uid=1001 pid=4139 comm="/usr/bin/gnome-shell" label="unconfined")
+9月 22 10:02:19 CNS202649516533 dbus-daemon[3772]: [session uid=1001 pid=3772] Successfully activated service 'org.gnome.Shell.Screencast'

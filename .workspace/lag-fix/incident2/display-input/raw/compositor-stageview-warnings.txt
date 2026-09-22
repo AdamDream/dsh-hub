@@ -1,0 +1,57 @@
+# compositor stage-view allocation failures (gnome-shell), this boot — 2026-09-22T10:42:17+08:00
+## total this boot
+3941
+## count by actor type
+   3941 [4139]
+   1966 [MetaWindowActorX11]
+   1966 [MetaSurfaceActorX11]
+      3 [StBoxLayout]
+      2 [ShellTrayIcon]
+      1 [StBin]
+      1 [MetaWindowGroup]
+      1 [Gjs_ui_panel_Panel]
+## per-minute rate
+     13 9月 22 10:02
+    114 9月 22 10:03
+    198 9月 22 10:04
+     18 9月 22 10:05
+    142 9月 22 10:06
+    356 9月 22 10:07
+     16 9月 22 10:08
+    232 9月 22 10:09
+    306 9月 22 10:10
+    188 9月 22 10:11
+     16 9月 22 10:12
+    208 9月 22 10:13
+    162 9月 22 10:14
+     42 9月 22 10:15
+     26 9月 22 10:19
+    378 9月 22 10:20
+    166 9月 22 10:21
+     18 9月 22 10:22
+    112 9月 22 10:23
+      8 9月 22 10:25
+     82 9月 22 10:26
+    108 9月 22 10:27
+     84 9月 22 10:30
+     88 9月 22 10:31
+     50 9月 22 10:32
+    212 9月 22 10:33
+    120 9月 22 10:35
+     16 9月 22 10:36
+    148 9月 22 10:38
+     84 9月 22 10:40
+    186 9月 22 10:41
+     44 9月 22 10:42
+## first / last
+9月 22 10:02:19 CNS202649516533 gnome-shell[4139]: Can't update stage views actor panelBox [StBoxLayout] is on because it needs an allocation.
+9月 22 10:42:07 CNS202649516533 gnome-shell[4139]: Can't update stage views actor unnamed [MetaSurfaceActorX11] is on because it needs an allocation.
+## same warning count in /var/log/syslog (all boots retained)
+28655
+## ShellTrayIcon / panel actors specifically (syslog, all retained)
+2026-09-20T17:33:20.678992+08:00 CNS202649516533 gnome-shell[4195]: Can't update stage views actor unnamed [ShellTrayIcon] is on because it needs an allocation.
+2026-09-20T17:33:22.568500+08:00 CNS202649516533 gnome-shell[4195]: Can't update stage views actor unnamed [ShellTrayIcon] is on because it needs an allocation.
+2026-09-22T10:02:19.815755+08:00 CNS202649516533 gnome-shell[4139]: Can't update stage views actor panelBox [StBoxLayout] is on because it needs an allocation.
+2026-09-22T10:02:19.815796+08:00 CNS202649516533 gnome-shell[4139]: Can't update stage views actor panel [Gjs_ui_panel_Panel] is on because it needs an allocation.
+2026-09-22T10:02:19.815859+08:00 CNS202649516533 gnome-shell[4139]: Can't update stage views actor unnamed [ShellTrayIcon] is on because it needs an allocation.
+2026-09-22T10:02:21.525196+08:00 CNS202649516533 gnome-shell[4139]: Can't update stage views actor unnamed [ShellTrayIcon] is on because it needs an allocation.

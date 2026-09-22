@@ -1,0 +1,49 @@
+############ DSH dist: zstd + compression level sites ############
+
+--- DSH dist: any spawn/exec of a zstd CLI ---
+
+--- DSH dist: jsonl.zstd writer sites ---
+
+--- codex-responses zstd level ---
+    if (typeof process === "undefined" || !(process.versions?.node || process.versions?.bun)) {
+        return null;
+    }
+    return process.getBuiltinModule?.("node:zlib") ?? null;
+}
+// Returns the zstd-compressed body bytes, or null when compression is
+// unavailable (browser/Vite builds). Callers fall back to sending the
+// uncompressed JSON when this returns null.
+function compressRequestBodyZstd(bodyJson) {
+    const zlib = loadNodeZlib();
+    if (!zlib || typeof zlib.zstdCompressSync !== "function") {
+        return null;
+    }
+    try {
+        const compressed = zlib.zstdCompressSync(bodyJson, {
+            params: { [zlib.constants.ZSTD_c_compressionLevel]: REQUEST_COMPRESSION_ZSTD_LEVEL },
+        });
+        return new Uint8Array(compressed.buffer, compressed.byteOffset, compressed.byteLength);
+    }
+    catch {
+        return null;
+    }
+}
+// ============================================================================
+// Main Stream Function
+// ============================================================================
+
+############ sessions ingest / sync loop in DSH ############
+
+############ biggest session project dirs (ingest cost proxy) ############
+171M	/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-dsh--/
+159M	/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-Dexterous_Hand_23Dof--/
+136M	/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-Dexterous_Hand_23Dof-Dexterous_Hand_23Dof--/
+19M	/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-~9762~8BD5--/
+18M	/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-math--/
+17M	/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-MCU--/
+12M	/home/CNS2026495165/.dsh/sessions/--media-CNS2026495165-EAGET--/
+7.0M	/home/CNS2026495165/.dsh/sessions/--home-CNS2026495165-robocon--/
+
+############ network/video-call helpers holding CPU (Codex tray relevance) ############
+   1547       1  0.0    1816 gnome-remote-de
+   4348    4110  0.0    1795 cc-switch

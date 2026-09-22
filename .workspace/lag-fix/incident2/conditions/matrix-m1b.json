@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "line": "conditions-matrix",
+    "agent": "incident2-conditions",
+    "label": "m1b",
+    "url": "http://127.0.0.1:3080",
+    "startedAt": "2026-09-22T10:39:35+08:00",
+    "hostPid": 10806,
+    "hostPidAlive": true,
+    "prereg": {
+      "jank_frames_gt50_post": 3,
+      "jank_longest_task_ms": 100,
+      "jank_click_to_panel_ms": 300,
+      "smooth_frames_gt50_post": 1,
+      "smooth_longest_task_ms": 50,
+      "smooth_click_to_panel_ms": 200
+    },
+    "design": "OFAT：BASE 为参照，每个 cell 只改一个因子；每 cell 每次 rep 为全新 context+page",
+    "criteria": "click→面板可见耗时 + 点击前后各 3s 的 >50ms 帧数与最长任务",
+    "discipline": "只点 设置/关闭/设置页导航/侧栏会话标题；不点 保存/应用/删除/移除壁纸/模型切换；不 pkill",
+    "cells": [
+      {
+        "id": "BASE",
+        "dim": "0-baseline",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      },
+      {
+        "id": "D3-wait60",
+        "dim": "3-loadstate",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait60",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": true
+        }
+      }
+    ],
+    "reps": 2
+  },
+  "lock": {
+    "ok": false,
+    "reason": "wait-timeout",
+    "acquired": false
+  },
+  "environment": {
+    "atStart": null,
+    "atEnd": null
+  },
+  "reps": [],
+  "summary": null,
+  "terminated": null,
+  "finishedAt": "2026-09-22T10:42:10+08:00",
+  "log": [
+    "[10:39:35] pre-launch real browser instances: 0",
+    "[10:39:35] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.1min, ownPid 160678/true); retry in 6s (elapsed 0s)",
+    "[10:39:41] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 160678/true); retry in 5s (elapsed 6s)",
+    "[10:39:46] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.3min, ownPid 160678/true); retry in 8s (elapsed 11s)",
+    "[10:39:54] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.4min, ownPid 160678/true); retry in 5s (elapsed 19s)",
+    "[10:39:59] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.5min, ownPid 160678/true); retry in 6s (elapsed 24s)",
+    "[10:40:05] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.6min, ownPid 160678/true); retry in 7s (elapsed 30s)",
+    "[10:40:12] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.7min, ownPid 160678/true); retry in 4s (elapsed 37s)",
+    "[10:40:16] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.8min, ownPid 160678/true); retry in 5s (elapsed 41s)",
+    "[10:40:21] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.9min, ownPid 160678/true); retry in 6s (elapsed 46s)",
+    "[10:40:27] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.9min, ownPid 160678/true); retry in 4s (elapsed 52s)",
+    "[10:40:31] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.0min, ownPid 160678/true); retry in 7s (elapsed 56s)",
+    "[10:40:38] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.1min, ownPid 160678/true); retry in 5s (elapsed 63s)",
+    "[10:40:43] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.2min, ownPid 160678/true); retry in 7s (elapsed 68s)",
+    "[10:40:50] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.3min, ownPid 160678/true); retry in 5s (elapsed 75s)",
+    "[10:40:55] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.4min, ownPid 160678/true); retry in 7s (elapsed 80s)",
+    "[10:41:03] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.5min, ownPid 160678/true); retry in 7s (elapsed 88s)",
+    "[10:41:10] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.7min, ownPid 160678/true); retry in 4s (elapsed 95s)",
+    "[10:41:14] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.7min, ownPid 160678/true); retry in 4s (elapsed 99s)",
+    "[10:41:18] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.8min, ownPid 160678/true); retry in 5s (elapsed 103s)",
+    "[10:41:23] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 1.9min, ownPid 160678/true); retry in 7s (elapsed 108s)",
+    "[10:41:31] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 2.0min, ownPid 160678/true); retry in 5s (elapsed 115s)",
+    "[10:41:36] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 2.1min, ownPid 160678/true); retry in 8s (elapsed 121s)",
+    "[10:41:44] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 2.2min, ownPid 160678/true); retry in 5s (elapsed 129s)",
+    "[10:41:49] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 2.3min, ownPid 160678/true); retry in 7s (elapsed 133s)",
+    "[10:41:55] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 2.4min, ownPid 160678/true); retry in 7s (elapsed 140s)",
+    "[10:42:03] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 2.5min, ownPid 160678/true); retry in 8s (elapsed 147s)",
+    "[10:42:10] LOCK wait exceeded 150000ms; giving up (NOT taking the lock)",
+    "[10:42:10] LOCK NOT ACQUIRED → 不启动浏览器（纪律）"
+  ]
+}

@@ -1,0 +1,840 @@
+{
+  "schema": "dsh-trace-report/v1",
+  "generatedAt": "2026-09-22T02:31:44.019Z",
+  "meta": {
+    "inputPath": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/user-capture/fixtures/real-settings-trace.json",
+    "fileBytes": 26121454,
+    "wasGzip": false,
+    "shape": "devtools-trace",
+    "unit": "us",
+    "eventCount": 103153,
+    "timedEventCount": 16062,
+    "spanMs": 12563.192,
+    "origin": "DevTools Performance panel",
+    "environment": null
+  },
+  "shape": "devtools-trace",
+  "anchor": {
+    "t": 1425625901,
+    "how": "performance.mark(USER_CLICK_SETTINGS_START)（点击前那一刻）",
+    "confidence": "high",
+    "coverageBeforeMs": 9863,
+    "coverageAfterMs": 2700,
+    "windowFullyCovered": false,
+    "runsInWindow": 0,
+    "framesInWindow": 4,
+    "evidence": 12,
+    "selection": "⚠ 没有任何候选能让 ±3000ms 窗口完全落在采集范围内，退化为证据量最大者",
+    "candidates": [
+      {
+        "t": 1426674749.5,
+        "how": "performance.mark START/END 窗口中点（窗口 2098 ms；其后再无足够帧数据，已避开截断）",
+        "confidence": "high",
+        "window": {
+          "start": 1425625901,
+          "end": 1427723598
+        },
+        "coverageBeforeMs": 10912,
+        "coverageAfterMs": 1651,
+        "windowFullyCovered": false,
+        "runsInWindow": 0,
+        "framesInWindow": 4,
+        "evidence": 12
+      },
+      {
+        "t": 1425625901,
+        "how": "performance.mark(USER_CLICK_SETTINGS_START)（点击前那一刻）",
+        "confidence": "high",
+        "coverageBeforeMs": 9863,
+        "coverageAfterMs": 2700,
+        "windowFullyCovered": false,
+        "runsInWindow": 0,
+        "framesInWindow": 4,
+        "evidence": 12,
+        "selection": "⚠ 没有任何候选能让 ±3000ms 窗口完全落在采集范围内，退化为证据量最大者"
+      }
+    ]
+  },
+  "window": {
+    "window": {
+      "from": 1422625.901,
+      "to": 1428625.901,
+      "spanMs": 6000,
+      "anchor": 1425625.901,
+      "unit": "ms"
+    },
+    "frames": {
+      "n": 4,
+      "fps": 94.5,
+      "p50": 8.7,
+      "p95": 12.9,
+      "p99": 12.9,
+      "max": 18.8,
+      "jankyOver50": 0,
+      "buckets": [
+        {
+          "label": "<16.7 (≥60fps)",
+          "count": 3,
+          "sharePct": 75
+        },
+        {
+          "label": "16.7–33 (30–60fps)",
+          "count": 1,
+          "sharePct": 25
+        },
+        {
+          "label": "33–50 (20–30fps)",
+          "count": 0,
+          "sharePct": 0
+        },
+        {
+          "label": "50–100 (10–20fps)",
+          "count": 0,
+          "sharePct": 0
+        },
+        {
+          "label": "100–250 (4–10fps)",
+          "count": 0,
+          "sharePct": 0
+        },
+        {
+          "label": ">250 (<4fps)",
+          "count": 0,
+          "sharePct": 0
+        }
+      ],
+      "source": "AnimationFrame 间隔（主线程活跃帧节拍，共 53 个帧边界）",
+      "frameSpanMs": 40.4
+    },
+    "mainThreadBusyMs": 67.7,
+    "occupancyPctOfSpan": 1.1,
+    "occupancyPctOfSpanRaw": 1.1,
+    "occupancyPctOfActive": null,
+    "dataThin": false,
+    "thinness": [],
+    "before": {
+      "n": 46,
+      "fps": 12.6,
+      "p50": 19,
+      "p95": 273.4,
+      "p99": 432.8,
+      "max": 960.1,
+      "janky": 15
+    },
+    "after": {
+      "n": 4,
+      "fps": 94.5,
+      "p50": 8.7,
+      "p95": 12.9,
+      "p99": 12.9,
+      "max": 18.8,
+      "janky": 0
+    },
+    "top10": [
+      {
+        "startMs": 1425728.1,
+        "attribution": [],
+        "relToAnchorMs": 102.2,
+        "durMs": 26,
+        "blockingMs": 0,
+        "functionName": null,
+        "url": null,
+        "line": null,
+        "task": null,
+        "source": "RunTask",
+        "forcedStyleAndLayoutMs": null
+      },
+      {
+        "startMs": 1425696.3,
+        "attribution": [
+          {
+            "functionName": "(anonymous)",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 57,
+            "totalMs": 17.9,
+            "calls": 3
+          },
+          {
+            "functionName": "ba",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 54,
+            "totalMs": 0.3,
+            "calls": 12
+          },
+          {
+            "functionName": "listener",
+            "url": null,
+            "line": 6480,
+            "totalMs": 0.2,
+            "calls": 10
+          }
+        ],
+        "relToAnchorMs": 70.4,
+        "durMs": 21.2,
+        "blockingMs": 0,
+        "functionName": null,
+        "url": null,
+        "line": null,
+        "task": null,
+        "source": "RunTask",
+        "forcedStyleAndLayoutMs": null
+      },
+      {
+        "startMs": 1425635.1,
+        "attribution": [],
+        "relToAnchorMs": 9.2,
+        "durMs": 5,
+        "blockingMs": 0,
+        "functionName": null,
+        "url": null,
+        "line": null,
+        "task": null,
+        "source": "RunTask",
+        "forcedStyleAndLayoutMs": null
+      },
+      {
+        "startMs": 1425629.9,
+        "attribution": [],
+        "relToAnchorMs": 4,
+        "durMs": 4.2,
+        "blockingMs": 0,
+        "functionName": null,
+        "url": null,
+        "line": null,
+        "task": null,
+        "source": "RunTask",
+        "forcedStyleAndLayoutMs": null
+      },
+      {
+        "startMs": 1425719.6,
+        "attribution": [
+          {
+            "functionName": "handleMessage",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+            "line": 10290,
+            "totalMs": 0.3,
+            "calls": 8
+          },
+          {
+            "functionName": "se",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 42,
+            "totalMs": 0.1,
+            "calls": 1
+          },
+          {
+            "functionName": "publish",
+            "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+            "line": 5698,
+            "totalMs": 0.1,
+            "calls": 12
+          }
+        ],
+        "relToAnchorMs": 93.7,
+        "durMs": 2.2,
+        "blockingMs": 0,
+        "functionName": null,
+        "url": null,
+        "line": null,
+        "task": null,
+        "source": "RunTask",
+        "forcedStyleAndLayoutMs": null
+      },
+      {
+        "startMs": 1425717.5,
+        "attribution": [
+          {
+            "functionName": "Ha",
+            "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+            "line": 54,
+            "totalMs": 0.2,
+            "calls": 8
+          }
+        ],
+        "relToAnchorMs": 91.6,
+        "durMs": 2.2,
+        "blockingMs": 0,
+        "functionName": null,
+        "url": null,
+        "line": null,
+        "task": null,
+        "source": "RunTask",
+        "forcedStyleAndLayoutMs": null
+      },
+      {
+        "startMs": 1425653.6,
+        "attribution": [
+          {
+            "functionName": "raf",
+            "url": null,
+            "line": 5982,
+            "totalMs": 0.2,
+            "calls": 1
+          }
+        ],
+        "relToAnchorMs": 27.7,
+        "durMs": 1.5,
+        "blockingMs": 0,
+        "functionName": null,
+        "url": null,
+        "line": null,
+        "task": null,
+        "source": "RunTask",
+        "forcedStyleAndLayoutMs": null
+      },
+      {
+        "startMs": 1425644.9,
+        "attribution": [],
+        "relToAnchorMs": 19,
+        "durMs": 1.5,
+        "blockingMs": 0,
+        "functionName": null,
+        "url": null,
+        "line": null,
+        "task": null,
+        "source": "RunTask",
+        "forcedStyleAndLayoutMs": null
+      },
+      {
+        "startMs": 1425661.3,
+        "attribution": [],
+        "relToAnchorMs": 35.4,
+        "durMs": 1.3,
+        "blockingMs": 0,
+        "functionName": null,
+        "url": null,
+        "line": null,
+        "task": null,
+        "source": "RunTask",
+        "forcedStyleAndLayoutMs": null
+      },
+      {
+        "startMs": 1425641.9,
+        "attribution": [],
+        "relToAnchorMs": 16,
+        "durMs": 1.3,
+        "blockingMs": 0,
+        "functionName": null,
+        "url": null,
+        "line": null,
+        "task": null,
+        "source": "RunTask",
+        "forcedStyleAndLayoutMs": null
+      }
+    ],
+    "taskCount": 11,
+    "fnSummary": [
+      {
+        "functionName": "(anonymous)",
+        "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "line": 57,
+        "totalMs": 17.9,
+        "calls": 3
+      },
+      {
+        "functionName": "handleMessage",
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+        "line": 10290,
+        "totalMs": 5.3,
+        "calls": 130
+      },
+      {
+        "functionName": "publish",
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+        "line": 5698,
+        "totalMs": 1.9,
+        "calls": 196
+      },
+      {
+        "functionName": "(anonymous)",
+        "url": "http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b",
+        "line": 4446,
+        "totalMs": 0.5,
+        "calls": 3
+      },
+      {
+        "functionName": "Ha",
+        "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "line": 54,
+        "totalMs": 0.5,
+        "calls": 20
+      },
+      {
+        "functionName": "raf",
+        "url": null,
+        "line": 5982,
+        "totalMs": 0.4,
+        "calls": 4
+      },
+      {
+        "functionName": "listener",
+        "url": null,
+        "line": 6480,
+        "totalMs": 0.3,
+        "calls": 12
+      },
+      {
+        "functionName": "ba",
+        "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "line": 54,
+        "totalMs": 0.3,
+        "calls": 12
+      },
+      {
+        "functionName": "se",
+        "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "line": 42,
+        "totalMs": 0.1,
+        "calls": 1
+      },
+      {
+        "functionName": "onClick",
+        "url": "http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b",
+        "line": 4418,
+        "totalMs": 0.1,
+        "calls": 1
+      },
+      {
+        "functionName": "onMove",
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-sidebar/client.js?rev=7563cb4b02ca",
+        "line": 132,
+        "totalMs": 0.1,
+        "calls": 1
+      },
+      {
+        "functionName": "uo",
+        "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "line": 54,
+        "totalMs": 0.1,
+        "calls": 2
+      },
+      {
+        "functionName": "Dr",
+        "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "line": 55,
+        "totalMs": 0,
+        "calls": 2
+      }
+    ],
+    "blockingTotalMs": 0,
+    "stage": {
+      "script": {
+        "totalMs": 0,
+        "count": 0,
+        "top": []
+      },
+      "recalcStyle": {
+        "totalMs": 0,
+        "count": 0,
+        "top": []
+      },
+      "layout": {
+        "totalMs": 0,
+        "count": 0,
+        "top": []
+      },
+      "paint": {
+        "totalMs": 0,
+        "count": 0,
+        "top": []
+      }
+    }
+  },
+  "coverage": {
+    "anchorBeforeMs": 9862.973,
+    "anchorAfterMs": 2700.219,
+    "wantedMs": 3000,
+    "beforeShortfallMs": -6863,
+    "afterShortfallMs": 300,
+    "adequate": false
+  },
+  "windowStage": {
+    "script": {
+      "totalMs": 0,
+      "count": 0,
+      "top": []
+    },
+    "recalcStyle": {
+      "totalMs": 0,
+      "count": 0,
+      "top": []
+    },
+    "layout": {
+      "totalMs": 0,
+      "count": 0,
+      "top": []
+    },
+    "paint": {
+      "totalMs": 0,
+      "count": 0,
+      "top": []
+    }
+  },
+  "globalStage": {
+    "totals": {
+      "script": 2062.706,
+      "recalcStyle": 24.853,
+      "layout": 44.995,
+      "paint": 66.432
+    },
+    "counts": {
+      "script": 10371,
+      "recalcStyle": 60,
+      "layout": 11,
+      "paint": 275
+    },
+    "namesSeen": {
+      "RunTask": 10182,
+      "EventDispatch": 107,
+      "Commit": 54,
+      "v8.compile": 53,
+      "UpdateLayoutTree": 60,
+      "Layout": 11,
+      "Paint": 43,
+      "v8.compileModule": 2,
+      "MinorGC": 22,
+      "TimerFire": 4,
+      "RasterTask": 178,
+      "MajorGC": 1
+    },
+    "cpuTop": [
+      {
+        "key": "(idle) @ (unknown)",
+        "functionName": "(idle)",
+        "url": null,
+        "count": 76320,
+        "idle": true,
+        "sharePct": 94.84
+      },
+      {
+        "key": "(program) @ (unknown)",
+        "functionName": "(program)",
+        "url": null,
+        "count": 1047,
+        "idle": true,
+        "sharePct": 1.3
+      },
+      {
+        "key": "materialize @ http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-modules/client.js?rev=7eb526320903",
+        "functionName": "materialize",
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-modules/client.js?rev=7eb526320903",
+        "line": 222,
+        "col": 14,
+        "count": 544,
+        "idle": false,
+        "sharePct": 0.68
+      },
+      {
+        "key": "findNextMatchSync @ http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "functionName": "findNextMatchSync",
+        "url": "http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "line": 1,
+        "col": 20,
+        "count": 284,
+        "idle": false,
+        "sharePct": 0.35
+      },
+      {
+        "key": "(garbage collector) @ (unknown)",
+        "functionName": "(garbage collector)",
+        "url": null,
+        "count": 141,
+        "idle": true,
+        "sharePct": 0.18
+      },
+      {
+        "key": "get @ http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "functionName": "get",
+        "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "line": 10,
+        "col": 3047,
+        "count": 103,
+        "idle": false,
+        "sharePct": 0.13
+      },
+      {
+        "key": "a @ http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "functionName": "a",
+        "url": "http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "line": 43,
+        "col": 9178,
+        "count": 69,
+        "idle": false,
+        "sharePct": 0.09
+      },
+      {
+        "key": "(anonymous) @ http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-settings-general/client.js?rev=f733efde3f2f",
+        "functionName": "(anonymous)",
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-settings-general/client.js?rev=f733efde3f2f",
+        "line": 0,
+        "col": 0,
+        "count": 67,
+        "idle": false,
+        "sharePct": 0.08
+      },
+      {
+        "key": "Oi @ http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "functionName": "Oi",
+        "url": "http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "line": 151,
+        "col": 16499,
+        "count": 64,
+        "idle": false,
+        "sharePct": 0.08
+      },
+      {
+        "key": "appendChild @ (unknown)",
+        "functionName": "appendChild",
+        "url": null,
+        "count": 64,
+        "idle": false,
+        "sharePct": 0.08
+      },
+      {
+        "key": "o0 @ http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "functionName": "o0",
+        "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "line": 55,
+        "col": 27707,
+        "count": 47,
+        "idle": false,
+        "sharePct": 0.06
+      },
+      {
+        "key": "(anonymous) @ (unknown)",
+        "functionName": "(anonymous)",
+        "url": null,
+        "line": 0,
+        "col": 19,
+        "count": 41,
+        "idle": false,
+        "sharePct": 0.05
+      },
+      {
+        "key": "(anonymous) @ http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "functionName": "(anonymous)",
+        "url": "http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "line": 0,
+        "col": 0,
+        "count": 39,
+        "idle": false,
+        "sharePct": 0.05
+      },
+      {
+        "key": "(anonymous) @ http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "functionName": "(anonymous)",
+        "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "line": 0,
+        "col": 0,
+        "count": 38,
+        "idle": false,
+        "sharePct": 0.05
+      },
+      {
+        "key": "(anonymous) @ http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+        "functionName": "(anonymous)",
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+        "line": 0,
+        "col": 0,
+        "count": 38,
+        "idle": false,
+        "sharePct": 0.05
+      },
+      {
+        "key": "Xo @ http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "functionName": "Xo",
+        "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "line": 53,
+        "col": 17110,
+        "count": 36,
+        "idle": false,
+        "sharePct": 0.04
+      },
+      {
+        "key": "qd @ http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "functionName": "qd",
+        "url": "http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "line": 151,
+        "col": 17835,
+        "count": 33,
+        "idle": false,
+        "sharePct": 0.04
+      },
+      {
+        "key": "handleMessage @ http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+        "functionName": "handleMessage",
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+        "line": 10288,
+        "col": 26,
+        "count": 28,
+        "idle": false,
+        "sharePct": 0.03
+      },
+      {
+        "key": "Ri @ http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "functionName": "Ri",
+        "url": "http://127.0.0.1:3080/assets/index-ClqxG24t.js",
+        "line": 6,
+        "col": 16,
+        "count": 27,
+        "idle": false,
+        "sharePct": 0.03
+      },
+      {
+        "key": "(anonymous) @ http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-api-remotes/client.js?rev=9a16f4532366",
+        "functionName": "(anonymous)",
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-api-remotes/client.js?rev=9a16f4532366",
+        "line": 3499,
+        "col": 56,
+        "count": 27,
+        "idle": false,
+        "sharePct": 0.03
+      },
+      {
+        "key": "fetch @ (unknown)",
+        "functionName": "fetch",
+        "url": null,
+        "count": 27,
+        "idle": false,
+        "sharePct": 0.03
+      },
+      {
+        "key": "op @ http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "functionName": "op",
+        "url": "http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "line": 42,
+        "col": 39,
+        "count": 25,
+        "idle": false,
+        "sharePct": 0.03
+      },
+      {
+        "key": "compile @ http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+        "functionName": "compile",
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+        "line": 1692,
+        "col": 10,
+        "count": 23,
+        "idle": false,
+        "sharePct": 0.03
+      },
+      {
+        "key": "(anonymous) @ http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-modules/client.js?rev=7eb526320903",
+        "functionName": "(anonymous)",
+        "url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-modules/client.js?rev=7eb526320903",
+        "line": 113,
+        "col": 49,
+        "count": 22,
+        "idle": false,
+        "sharePct": 0.03
+      },
+      {
+        "key": "lp @ http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "functionName": "lp",
+        "url": "http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js",
+        "line": 42,
+        "col": 890,
+        "count": 22,
+        "idle": false,
+        "sharePct": 0.03
+      }
+    ],
+    "cpuTotalSamples": 80471,
+    "profileChunks": 1092,
+    "recalcElementCounts": []
+  },
+  "fixes": [
+    {
+      "key": "ui-layout",
+      "label": "ui-layout:366 —— 帧内 rAF 合并（themeColor 强制重算去重）",
+      "module": "dsh-client-ui-layout",
+      "expectedRev": "82cca1a6178a",
+      "deliveredRev": "82cca1a6178a",
+      "revMatch": true,
+      "status": "PRESENT",
+      "evidenceKind": "rev + 代码结构签名",
+      "note": null,
+      "behaviorEvidence": [
+        {
+          "kind": "metric",
+          "text": "窗口 p99 帧间隔 12.9 ms、>50ms 掉帧 0 次"
+        },
+        {
+          "kind": "metric",
+          "text": "全 trace 分项：Script 2063 ms / RecalcStyle 25 ms / Layout 45 ms / Paint 66 ms"
+        }
+      ]
+    },
+    {
+      "key": "runtime",
+      "label": "dsh-client-runtime —— U-P2AC（客户端 runtime 热面修复）",
+      "module": "dsh-client-runtime",
+      "expectedRev": "5559de4ce28c",
+      "deliveredRev": "5559de4ce28c",
+      "revMatch": true,
+      "status": "PRESENT",
+      "evidenceKind": "rev + 标记 /* p2ac-fix */ ×4",
+      "note": null,
+      "behaviorEvidence": [
+        {
+          "kind": "behavior",
+          "text": "窗口内 top10 未见 runtime/session 事件流的直接命中（不能据此排除）"
+        }
+      ]
+    },
+    {
+      "key": "usage",
+      "label": "dsh-usage —— U-IG1/IG2/IG3/CC1（宿主 ingest 阻塞 + 游标 off-by-one）",
+      "module": "dsh-usage",
+      "expectedRev": "4536b91ed282",
+      "deliveredRev": "4536b91ed282",
+      "revMatch": true,
+      "status": "PRESENT",
+      "evidenceKind": "rev + 宿主事件循环延迟（页面侧只能看到 RPC 变慢）",
+      "note": "该修复在宿主（冷面），页面 trace 里只能看到「一次 RPC/一次长任务」，需要与宿主侧 G1 数据联合判读。",
+      "behaviorEvidence": [
+        {
+          "kind": "limit",
+          "text": "usage 修复在宿主（冷面）：页面 trace 无法直接证明宿主事件循环阻塞，需与宿主侧 G1 延迟数据联合判读"
+        }
+      ]
+    },
+    {
+      "key": "wallpaper",
+      "label": "dsh-wallpaper —— (iv-a) 内容比较去重",
+      "module": "dsh-wallpaper",
+      "expectedRev": "826d9217a8fc",
+      "deliveredRev": "826d9217a8fc",
+      "revMatch": true,
+      "status": "PRESENT",
+      "evidenceKind": "rev + 代码结构签名",
+      "note": null,
+      "behaviorEvidence": []
+    }
+  ],
+  "empirical": {
+    "RunTask": 10479,
+    "FunctionCall": 989,
+    "UpdateLayoutTree": 60,
+    "RecalcStyle": 0,
+    "Layout": 11,
+    "Paint": 100,
+    "PaintSetup": 0,
+    "ProfileChunk": 1091,
+    "StackCpuSampling": 81465,
+    "AnimationFrame": 212,
+    "AnimationFrame::Render": 106,
+    "AnimationFrame::StyleAndLayout": 106,
+    "BeginCommitCompositorFrame": 53,
+    "Commit": 54,
+    "EventDispatch": 113,
+    "FrameCommittedInBrowser": 1,
+    "DrawFrame": 0,
+    "RasterTask": 178,
+    "UpdateCounters": 1019
+  },
+  "extraWarnings": [
+    "锚点之后只有 2700 ms 数据（希望 3000 ms，缺 300 ms）⇒ 录制在点击后过早停止，「点击后」窗口不完整。请按 Runbook「录制后至少再等 5 秒」重录。"
+  ],
+  "headline": "点击前后各 3s 内采集 4 个帧间隔，活跃期 94.5 FPS，p99 12.9 ms，>50ms 掉帧 0 次（未见明显掉帧）。 窗口内主线程被任务占用 68 ms = 1.1%（按活跃期 n/a），占用不高。 最长任务 26.0 ms，落在 ?。 rev 判定：ui-layout/runtime/usage/wallpaper 已是修复后构建 ⇒ 若仍卡，说明残留卡点在别处，需看 top10 与 CPU 分项。"
+}

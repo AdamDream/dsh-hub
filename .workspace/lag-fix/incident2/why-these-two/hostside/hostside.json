@@ -1,0 +1,269 @@
+{
+  "audit": "host-side RPC cost audit for hypothesis H4",
+  "date_utc": "2026-09-22",
+  "target": {
+    "base_url": "http://127.0.0.1:3080",
+    "host_process": {
+      "pid": 301709,
+      "cmdline": "node /home/CNS2026495165/.npm-global/bin/dsh web",
+      "started": "2026-09-22 10:54:59",
+      "touched": "read-only HTTP probes only; never signalled/restarted/killed"
+    },
+    "package_tree_note": "~/.dsh/profiles/node_modules/@deepseek-ai/<pkg>/lib/index.js and ~/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/<pkg>/lib/index.js are the SAME file (shared inode 31327410; dsh-host-apiproxy md5 76fe5ee08d88b662f789011274cc3a55). dsh-host-apiproxy/lib/index.js mtime 2026-09-22 10:51 predates host start 10:54:59, so the running host includes the dsh-lag-fix B1-perf v1 edit at index.js:2237-2243."
+  },
+
+  "verdict": {
+    "hypothesis": "H4: the expensive panels are expensive because of the RPC they trigger and/or an uncached host-side rescan",
+    "overall": "SUPPORTED, with corrected attribution",
+    "supported_for": [
+      "通用设置 (General) panel: only via subagent.list (224.1 ms median, 121x the fast-method median), which is an UNCACHED full-filesystem rescan and is triggered by session-selection change, not by the section itself",
+      "the general mechanism: session.list and subagent.list both call sessionPersistence.list() per call with no memo, walking 1049 session dirs / 1052 log files / 578 MB every time"
+    ],
+    "not_supported_for": [
+      "插件列表 (Plugin list) tab: pluginInventory/list is 1.4 ms median, 21719 B, 177 entries, in-memory loader walk, 208-218 calls/s, no rescan",
+      "the remaining General-section mount RPCs: settings.describe, skill.list, commands/list, session.models, llm.providers, credentials.describe, session.history, dynamicCordisRunner/inventory are all <= 7.3 ms median"
+    ],
+    "key_finding": "the expensive/smooth split does not map onto RPC sets; it maps onto whether subagent.list / session.list happen to be in flight. General's single 224 ms item is a session-selection-driven call that the 'smooth' sections also trigger on session change.",
+    "prior_finding_check": {
+      "claim": "dsh-host-apiproxy/lib/index.js ~2237 calls sessionListMetadata(events) inside a sort comparator (O(N log N) folds, no memo); session.list is 0.166 s median after a hotfix",
+      "comparator_claim": "REFUTED for current code: the comparator is gone, replaced by a precomputed attachedRecency Map (index.js:2237-2243)",
+      "0.166s_claim": "REFUTED: my >=15-sample medians are 282.6 / 336.9 / 477.2 ms. Best run 282.6 ms = 1.7x the claimed figure and it is the fastest of three",
+      "conclusion": "hotfix is present and removed the algorithmic multiplier, but session.list remains the slowest mount-adjacent RPC because the dominant cost is persistence.list() (index.js:2255) plus a 496 KB response, not the comparator"
+    }
+  },
+
+  "routing": {
+    "dispatchers": [
+      {"owner": "dsh-host-apiproxy unary table", "match": "POST /api/<exact key of UNARY_ROUTES>", "citation": "dsh-host-apiproxy/lib/types/fetch/handler.js:27-75 (table), :77-79 (methodFor, exact key lookup), :199-237 (handler); body.method must equal the path segment (:231-233)"},
+      {"owner": "dsh-api-gateway RPC interceptor on the shared /api channel", "match": "POST /api/<namespace>/<method> (exactly two non-empty segments)", "citation": "dsh-api-gateway/lib/index.js:62 (intercept registration), lib/types/index.js:70-79 (claimsEndpoint segment check), :142-148 (payload must be exactly one plain-object `args` field)"},
+      {"owner": "dsh-host-apiproxy physical routes", "match": "GET /api/events.mux, GET /api/events.host, GET|HEAD /api/session.export?sessionId=..., POST /api/respond", "citation": "dsh-host-apiproxy/lib/types/fetch/handler.js:180-196, :220-224"},
+      {"owner": "SPA fallback (webserver prefix/exact route)", "match": "GET /", "citation": "dsh-host-webserver/lib/index.js:270-277"}
+    ],
+    "why_pluginInventory_slash_404s": "POST /api/pluginInventory.list hits the unary table, whose methodFor requires an exact own key; 'pluginInventory.list' is not a key, so 404. The real endpoint is the two-segment Remote route /api/pluginInventory/list, claimed by the gateway interceptor which is consulted before the apiproxy fallback (dsh-client-connection/lib/index.js:235-238).",
+    "remote_payload_shape": "{\"args\":{}} — a plain OBJECT. {\"args\":[]} yields HTTP 200 + business error 'Remote payload must contain exactly one plain-object args field' (dsh-api-gateway/lib/types/index.js:142-148).",
+    "methods": {
+      "host.describe":                           {"route": "POST /api/host.describe", "payload": {}, "kind": "unary", "verified": "200 ok"},
+      "session.list":                            {"route": "POST /api/session.list", "payload": {}, "kind": "unary", "verified": "200 ok"},
+      "session.history":                         {"route": "POST /api/session.history", "payload": {"sessionId": "<attached id>"}, "kind": "unary", "verified": "200 ok"},
+      "session.models":                          {"route": "POST /api/session.models", "payload": {"sessionId": "<top-level attached id>"}, "kind": "unary", "verified": "200 payload accepted; business error agent-busy for subagent-owned ids"},
+      "workspace.list":                          {"route": "POST /api/workspace.list", "payload": {}, "kind": "unary", "verified": "200 ok"},
+      "agentPreset.list":                        {"route": "POST /api/agentPreset.list", "payload": {}, "kind": "unary", "verified": "200 ok"},
+      "subagent.list":                           {"route": "POST /api/subagent.list", "payload": {"parentSessionId": "<id>"}, "kind": "unary", "verified": "200 ok"},
+      "skill.list":                              {"route": "POST /api/skill.list", "payload": {"sessionId": "<id>"}, "kind": "unary", "verified": "200 ok"},
+      "settings.describe":                       {"route": "POST /api/settings.describe", "payload": {}, "kind": "unary", "verified": "200 ok"},
+      "credentials.describe":                    {"route": "POST /api/credentials.describe", "payload": {"refs": ["<ref>"]}, "kind": "unary", "verified": "200 schema accepted; ok:false because the ref is not configured"},
+      "llm.providers":                           {"route": "POST /api/llm.providers", "payload": {}, "kind": "unary", "verified": "200 ok"},
+      "commands/list":                           {"route": "POST /api/commands/list", "payload": {"args": {"sessionId": "<id>"}}, "kind": "remote", "verified": "endpoint reached, business error without a live top-level session"},
+      "pluginInventory/list":                    {"route": "POST /api/pluginInventory/list", "payload": {"args": {}}, "kind": "remote", "verified": "200 ok, 177 entries"},
+      "dynamicCordisRunner/inventory":           {"route": "POST /api/dynamicCordisRunner/inventory", "payload": {"args": {}}, "kind": "remote", "verified": "200 ok, []"}
+    },
+    "curl_template_unary": "curl -s -o /tmp/x.json -w '%{http_code} %{size_download} %{time_total}\\n' -X POST http://127.0.0.1:3080/api/<METHOD> -H 'content-type: application/json' -d '{\"type\":\"client-request\",\"rpcId\":\"r1\",\"method\":\"<METHOD>\",\"payload\":{...}}'",
+    "curl_template_remote": "curl -s -o /tmp/x.json -w '%{http_code} %{size_download} %{time_total}\\n' -X POST http://127.0.0.1:3080/api/<NS>/<METHOD> -H 'content-type: application/json' -d '{\"type\":\"client-request\",\"rpcId\":\"r1\",\"method\":\"<NS>/<METHOD>\",\"payload\":{\"args\":{...}}}'",
+    "not_called_write_methods": ["settings.update", "settings.replace", "settings.mutate", "credentials.set", "credentials.unset", "agentPreset.select", "agentPreset.copy", "agentPreset.remove", "agentPreset.openDocument", "session.create", "session.rename", "session.fork", "session.prompt", "session.cancel", "session.selectModel", "session.attachment", "session.updateQueue", "workspace.create", "workspace.rename", "workspace.delete", "workspace.insertBefore", "workspace.insertSessionBefore", "workspace.archiveSession", "goal.create", "goal.edit", "goal.pause", "goal.resume", "goal.complete", "goal.clear", "subagent.prompt", "subagent.interrupt", "subagent.history", "host.createDirectory", "host.openPath", "host.pickDirectory", "dynamicCordisRunner.invoke", "dynamicCordisRunner.runHostHalf", "dynamicCordisRunner.settleUserRun", "dynamicCordisRunner.stopFromPanel", "dynamicCordisRunner.reportRenderFailure", "dynamicCordisRunner.reportClientGuardFailure", "dynamicCordisRunner.resolveInspectQuery", "dynamicCordisRunner.resolveRequestRun", "dynamicCordisRunner.getClientCode"]
+  },
+
+  "runs": {
+    "run1_sequential_15": {"n_per_method": 15, "order": "fixed", "note": "slowest samples for nearly every method; concurrent browser line active; treat as contention upper bound"},
+    "run2_interleaved_16": {"n_per_method": 16, "order": "shuffled round-robin", "note": "raw json overwritten by run3; per-run medians transcribed from stdout"},
+    "run3_interleaved_20": {"n_per_method": 20, "order": "shuffled round-robin"},
+    "aggregate": "median of the three per-run medians",
+    "concurrency_discipline": "single connection per measurement; never more than 4 concurrent curls; sustained bursts limited to 4-5 s",
+    "fast_method_median_ms": 1.85,
+    "fast_method_median_mount_paths_only_ms": 1.60,
+    "stable_outlier_threshold_ms": 9.25
+  },
+
+  "methods": {
+    "session.list": {
+      "median_ms": 336.9,
+      "worst_p95_ms": 996.6,
+      "per_run_median_ms": [477.2, 336.9, 282.6],
+      "bytes_median": 495963,
+      "ratio_to_fast_median": 182.1,
+      "stable_outlier": true,
+      "http": 200,
+      "payload_detail": {"items": 299, "top_level": 99, "subagent": 200, "subagent_cap": "SUBAGENT_LIST_MAX=200 (dsh-host-apiproxy/lib/index.js:1231-1233)"},
+      "cached": false,
+      "caching_verdict": "NO CACHE; per-call persistence.list() + per-session projections, 496 KB body",
+      "citations": ["dsh-host-apiproxy/lib/index.js:2224-2301 (listVisibleSessionSummaries)", "dsh-host-apiproxy/lib/index.js:2255 (await persistence.list(signal))", "dsh-host-apiproxy/lib/index.js:2492-2494 (sessions.list handler)"],
+      "blocks_event_loop": true,
+      "blocking": {
+        "2way_4s": {"target_calls_per_s": 4.0, "probe_p50_quiet_ms": 0.50, "probe_p50_loaded_ms": 1.40, "probe_p50_inflation": 2.8, "probe_p95_quiet_ms": 4.60, "probe_p95_loaded_ms": 43.90, "probe_p95_inflation": 9.5, "probe_p99_loaded_ms": 63.3, "probe_max_loaded_ms": 89.8},
+        "4way_burst": {"probe_p50_inflation": 8.5, "probe_max_loaded_ms": 789.1, "burst_wall_s": 18.515}
+      },
+      "verdict": "SLOWEST mount-adjacent RPC; uncached full-filesystem rescan; blocks the host event loop for up to ~0.8 s"
+    },
+    "subagent.list": {
+      "median_ms": 224.1,
+      "worst_p95_ms": 1146.9,
+      "per_run_median_ms": [615.6, 224.1, 175.3],
+      "bytes_median": 105,
+      "ratio_to_fast_median": 121.1,
+      "stable_outlier": true,
+      "http": 200,
+      "cached": false,
+      "caching_verdict": "NO CACHE; prepareListing() calls sessionPersistence.list() (full FS walk) and rebuilds the whole corpus on every call, then filters by parentSessionId",
+      "parent_independence": {
+        "note": "cost is independent of the parent id: the whole corpus is built before filtering (dsh-subagent/lib/index.js:1863-1889)",
+        "this_session_median_ms": 294.5,
+        "nonexistent_parent_median_ms": 351.3,
+        "other_root_parent_median_ms": 381.4
+      },
+      "citations": ["dsh-host-apiproxy/lib/index.js:2978-2986 (subagents.list handler)", "dsh-subagent/lib/index.js:1830-1833 (listChildren)", "dsh-subagent/lib/index.js:1863-1899 (prepareListing; persistence.list at :1874)", "dsh-session-persistence-jsonl/lib/index.js:1037-1039 (list)", "dsh-session-persistence-jsonl/lib/index.js:1060-1087 (listArtifacts)"],
+      "client_trigger": {
+        "note": "not section-scoped: fired on session selection change and reconnect, independent of which settings section is open",
+        "citations": ["dsh-client-runtime/lib/client.js:7994-8010 (refreshSubagents -> api.subagents.list)", "dsh-client-runtime/lib/client.js:8450-8451 (handleConnected)", "dsh-client-runtime/lib/client.js:9235 (selected-session watcher)"]
+      },
+      "blocks_event_loop": false,
+      "blocking": {
+        "4way_4s": {"target_calls_per_s": 5.7, "probe_p50_quiet_ms": 0.70, "probe_p50_loaded_ms": 0.90, "probe_p50_inflation": 1.29, "probe_p95_quiet_ms": 10.70, "probe_p95_loaded_ms": 17.00, "probe_p95_inflation": 1.59, "probe_p99_loaded_ms": 68.8, "probe_max_loaded_ms": 112.8},
+        "4way_burst": {"probe_p50_inflation": 1.38, "probe_max_loaded_ms": 314.9, "burst_wall_s": 5.417}
+      },
+      "verdict": "the ONLY host-expensive General-section mount RPC; slow rather than blocking (I/O-parked on the filesystem walk)"
+    },
+    "pluginInventory/list": {
+      "median_ms": 1.4,
+      "worst_p95_ms": 7.0,
+      "per_run_median_ms": [1.4, 1.5, 1.0],
+      "bytes_median": 21719,
+      "ratio_to_fast_median": 0.8,
+      "stable_outlier": false,
+      "http": 200,
+      "entries": 177,
+      "cached": false,
+      "caching_verdict": "no cache BY DESIGN, but also no rescan: a synchronous walk of the Cordis loader's in-memory entry store; no readdir, no import(), no module-graph walk, no disk hit",
+      "scan_loop_citation": {"file": "dsh-host-plugin-inventory/lib/index.js", "lines": "102-114", "quote": "list() { const entries = []; for (const entry of this.ctx.loader.entries()) { if (entry.options.group) continue; entries.push({...}); } return { entries }; }"},
+      "loader_source_citation": {"file": "cordis-plugin-loader/lib/index.js", "lines": "170-177", "quote": "*entries() { for (const entry of Object.values(this.store)) { yield entry; if (!entry.subtree) continue; yield* entry.subtree.entries(); } }"},
+      "design_note_citation": {"file": "dsh-host-plugin-inventory/lib/index.js", "lines": "96-101", "quote": "Read the Loader directly on every call. Cordis's internal plugin/status events already maintain Entry.fiber and Fiber.state, so a second cache would only add another lifecycle truth to keep synchronized."},
+      "client_note": {"file": "dsh-client-ui-settings-plugin-inventory/lib/client.js", "lines": "69-84", "quote": "useEffect(() => { list().then(setState ready) }, [list, request]); useMemo filter over snapshot.entries — fetch once on mount, no further host RPC"},
+      "blocks_event_loop": false,
+      "blocking": {
+        "2way_4s": {"target_calls_per_s": 208.0, "probe_p50_quiet_ms": 0.50, "probe_p50_loaded_ms": 1.20, "probe_p95_quiet_ms": 4.70, "probe_p95_loaded_ms": 7.70},
+        "4way_4s": {"target_calls_per_s": 218.2, "calls": 875, "probe_p50_quiet_ms": 1.00, "probe_p50_loaded_ms": 4.40, "probe_p95_quiet_ms": 12.60, "probe_p95_loaded_ms": 59.50, "delta_p50_ms": 3.4, "note": "relative 4.4x inflation on a 1 ms baseline; absolute delta 3.4 ms = probe curl spawn under CPU sharing, not host slowness"}
+      },
+      "verdict": "NOT an H4 offender; the 插件列表 tab's perceived cost is not this RPC"
+    },
+    "dynamicCordisRunner/inventory": {
+      "median_ms": 0.9,
+      "worst_p95_ms": 91.7,
+      "per_run_median_ms": [12.8, 0.9, 0.8],
+      "bytes_median": 70,
+      "ratio_to_fast_median": 0.5,
+      "stable_outlier": false,
+      "cached": false,
+      "caching_verdict": "no cache; registry.all() = [...this.plugins.values()] over an in-memory Map, plus shallow cloneAttempt copies; no fs I/O; does not need a cache",
+      "citations": ["dsh-cordis-host-runner/lib/index.js:1939-1964 (inventory())", "dsh-cordis-host-runner/lib/index.js:1015-1017 (all())", "dsh-cordis-host-runner/lib/index.js:2581-2594 (cloneAttempt)"],
+      "blocks_event_loop": false,
+      "verdict": "cheap"
+    },
+    "settings.describe": {
+      "median_ms": 2.3,
+      "worst_p95_ms": 22.7,
+      "per_run_median_ms": [7.3, 2.3, 2.0],
+      "bytes_median": 43533,
+      "namespaces": 20,
+      "ratio_to_fast_median": 1.2,
+      "stable_outlier": false,
+      "cached": "snapshot-backed, not memoised",
+      "caching_verdict": "served from an in-memory registration snapshot (registration.resolved is deepFreeze'd at register time / swapped on commit), NOT a per-call disk read; but every call re-runs structuredClone + schema.toJSON() + redactSecrets for 20 namespaces and re-serialises 43.5 KB synchronously",
+      "citations": ["dsh-host-apiproxy/lib/index.js:3482-3490 (settings.describe)", "dsh-host-apiproxy/lib/index.js:2430-2444 (namespaceView)", "dsh-settings/lib/index.js:352-382 (describe)", "dsh-settings/lib/index.js:255 (registrations Map), :319 (resolved snapshot), :546-548 (commit swap)", "dsh-settings-file/lib/index.js:179-196 (chokidar watcher keeps the document in memory)"],
+      "blocks_event_loop": false,
+      "blocking": {"2way_4s": {"target_calls_per_s": 184.2, "probe_p50_quiet_ms": 0.50, "probe_p50_loaded_ms": 3.20, "probe_p95_quiet_ms": 5.20, "probe_p95_loaded_ms": 9.00, "delta_p50_ms": 2.7}},
+      "verdict": "cheap; not an H4 offender (its 43.5 KB lands in the browser, not on the host)"
+    },
+    "session.history": {
+      "median_ms": 6.8,
+      "worst_p95_ms": 60.0,
+      "per_run_median_ms": [10.7, 6.8, 6.5],
+      "bytes_median": 592488,
+      "bytes_max": 678106,
+      "ratio_to_fast_median": 3.7,
+      "stable_outlier": false,
+      "cached": false,
+      "caching_verdict": "no cache, but bounded: a page slice of the attached event array",
+      "citations": ["dsh-host-apiproxy/lib/index.js:2654-2678 (sessions.history)"],
+      "verdict": "cheap on the host despite the ~600 KB body; any cost lands client-side (out of scope here)"
+    },
+    "agentPreset.list": {
+      "median_ms": 5.0,
+      "worst_p95_ms": 21.7,
+      "per_run_median_ms": [13.3, 5.0, 2.2],
+      "bytes_median": 1182,
+      "ratio_to_fast_median": 2.7,
+      "stable_outlier": false,
+      "cached": false,
+      "citations": ["dsh-host-apiproxy/lib/index.js:3317-3337"],
+      "verdict": "cheap; this is the Settings-modal-open RPC"
+    },
+    "workspace.list": {"median_ms": 2.7, "worst_p95_ms": 9.9, "per_run_median_ms": [5.2, 2.7, 0.8], "bytes_median": 8792, "ratio_to_fast_median": 1.5, "stable_outlier": false, "verdict": "cheap; used as the event-loop probe because it is a pure in-memory registry read"},
+    "skill.list": {"median_ms": 1.0, "worst_p95_ms": 8.1, "per_run_median_ms": [3.1, 0.7, 1.0], "bytes_median": 1593, "ratio_to_fast_median": 0.5, "stable_outlier": false, "verdict": "cheap"},
+    "commands/list": {"median_ms": 0.7, "worst_p95_ms": 7.5, "per_run_median_ms": [0.7, 1.2, 0.6], "bytes_median": 231, "ratio_to_fast_median": 0.4, "stable_outlier": false, "verdict": "cheap (probe hit a business error because a live top-level session id was needed)"},
+    "session.models": {"median_ms": 0.9, "worst_p95_ms": 25.6, "per_run_median_ms": [3.6, 0.9, 0.7], "bytes_median": 248, "ratio_to_fast_median": 0.5, "stable_outlier": false, "caching_verdict": "rebuilds the catalog per call (Promise.all over providers x models)", "citations": ["dsh-host-apiproxy/lib/index.js:1010-1050 (buildModelCatalog)", "dsh-host-apiproxy/lib/index.js:2679-2692 (sessions.models)"], "verdict": "cheap on the error path; real top-level-session cost UNVERIFIED (agent-busy for every reachable id)"},
+    "llm.providers": {"median_ms": 0.8, "worst_p95_ms": 7.8, "per_run_median_ms": [3.6, 0.8, 0.6], "bytes_median": 6118, "ratio_to_fast_median": 0.4, "stable_outlier": false, "verdict": "cheap"},
+    "host.describe": {"median_ms": 16.6, "worst_p95_ms": 115.4, "per_run_median_ms": [16.6], "bytes_median": 231, "ratio_to_fast_median": 9.0, "stable_outlier": "unverified", "note": "sampled in run1 only, which is the contention upper bound and the slowest run for nearly every method", "citations": ["dsh-host-apiproxy/lib/index.js:4745-4760"], "verdict": "implementation is trivial (defaults.defaultModelSelection() + ctx.agents.list().length); steady state UNVERIFIED but expected ~1 ms"},
+    "credentials.describe": {"median_ms": 7.2, "worst_p95_ms": 12.4, "per_run_median_ms": [7.2], "bytes_median": 363, "ratio_to_fast_median": 3.9, "stable_outlier": false, "note": "sampled in run1 only; the ref passed is not configured so the call short-circuits — steady state UNVERIFIED", "verdict": "cheap"},
+    "GET_root_control": {"median_ms": 11.8, "worst_p95_ms": 50.4, "per_run_median_ms": [11.8], "bytes_median": 16611, "note": "static SPA shell; establishes the round-trip + 16.6 KB static-read baseline", "verdict": "control"}
+  },
+
+  "uncached_rescan_evidence": {
+    "session_store_size": {"root": "~/.dsh/sessions", "project_dirs": 19, "session_dirs": 1049, "log_files": 1052, "disk_bytes": 578000000},
+    "walk_loop_citation": {"file": "dsh-session-persistence-jsonl/lib/index.js", "lines": "1060-1087", "quote": "for (const project of await this.listProjectDirs(signal)) { for (const dir of await this.listSessionDirs(project, signal)) { const opposite = ...; const oppositeExists = await this.exists(opposite); const path = ...; if (!(await this.exists(path))) continue; const first = ... await this.readFirstLine(path, signal); const meta = parseHeaderMeta(first); await this.assertStoredIdentity(path, meta, void 0, signal); artifacts.push(...); } }", "per_directory_syscalls": "readdir(project) + open/close(opposite) + open/close(path) + open/read/close(path) + logPath compare or sameFile(realpath x2) per session dir"},
+    "helper_citations": ["dsh-session-persistence-jsonl/lib/index.js:1037-1039 (list)", "dsh-session-persistence-jsonl/lib/index.js:1377-1387 (listProjectDirs, readdir, no memo)", "dsh-session-persistence-jsonl/lib/index.js:1389-1397 (listSessionDirs, readdir, no memo)", "dsh-session-persistence-jsonl/lib/index.js:1431 (exists = open+close)", "dsh-session-persistence-jsonl/lib/index.js:1253-1276 (readFirstLine)", "dsh-session-persistence-jsonl/lib/index.js:1345-1360 (assertStoredIdentity)"],
+    "only_memoised_piece": {"file": "dsh-session-persistence-jsonl/lib/index.js", "lines": "1398-1400", "quote": "ensureRootEncoding() { this.rootEncodingCheck ??= this.checkRootEncoding(); return this.rootEncodingCheck; }"},
+    "callers": ["dsh-subagent/lib/index.js:1872-1879 (subagent.list)", "dsh-host-apiproxy/lib/index.js:2255 (session.list)"],
+    "module_graph_rescan": "NOT FOUND for pluginInventory/list (in-memory loader store) and NOT FOUND for dynamicCordisRunner/inventory (in-memory Map). No measured number suggests a module-graph rescan on any audited path; a general negative across every adjacent code path is UNVERIFIED."
+  },
+
+  "section_attribution": {
+    "通用设置 (General)": {
+      "mount_rpcs": {
+        "settings.describe": {"median_ms": 2.3, "expensive": false},
+        "subagent.list": {"median_ms": 224.1, "worst_p95_ms": 1146.9, "expensive": true},
+        "session.history": {"median_ms": 6.8, "bytes": 592488, "expensive": false},
+        "skill.list": {"median_ms": 1.0, "expensive": false},
+        "commands/list": {"median_ms": 0.7, "expensive": false},
+        "session.models": {"median_ms": 0.9, "expensive": false, "note": "UNVERIFIED on a real top-level session"},
+        "llm.providers": {"median_ms": 0.8, "expensive": false},
+        "credentials.describe": {"median_ms": 7.2, "expensive": false, "note": "UNVERIFIED steady state"},
+        "dynamicCordisRunner/inventory": {"median_ms": 0.9, "expensive": false}
+      },
+      "expensive_count": 1,
+      "of": 9,
+      "conclusion": "one host-expensive RPC (subagent.list) and one uncached rescan; the other eight are <= 7.3 ms median. subagent.list is not section-scoped — it is fired by session selection change / reconnect."
+    },
+    "插件 (Plugins) -> 插件列表 (Plugin list)": {
+      "mount_rpcs": {"pluginInventory/list": {"median_ms": 1.4, "bytes": 21719, "entries": 177, "expensive": false, "rescan": false}},
+      "expensive_count": 0,
+      "conclusion": "NOT-SUPPORTED: 1.4 ms, in-memory, no rescan, 208-218 calls/s, one fetch per mount with client-side memoised filtering. Whatever makes this tab feel slow is not host RPC cost."
+    },
+    "smooth_sections": {
+      "模型 (models)": {"rpcs": ["llm.providers 0.8 ms", "credentials.describe 7.2 ms", "session.models 0.9 ms"], "host_expensive": false},
+      "Agent 预设": {"rpcs": ["agentPreset.list 5.0 ms"], "host_expensive": false},
+      "远程工作区 (remote workspace)": {"rpcs": ["workspace.list 2.7 ms"], "host_expensive": false},
+      "分布式控制 dsh-ssh-gui": {"rpcs": ["settings.describe 2.3 ms (read path)"], "host_expensive": false},
+      "vision-adam 识图设置": {"rpcs": ["settings.describe 2.3 ms"], "host_expensive": false},
+      "子代理模型": {"rpcs": ["settings.describe 2.3 ms", "agentPreset.list 5.0 ms"], "host_expensive": false}
+    },
+    "asymmetry_conclusion": "The expensive/smooth split does NOT map onto the RPC sets. Every section's own RPCs sit in the 0.6-7.3 ms band. General's only 224 ms item is a session-selection-driven subagent.list that every section triggers on session change; the Plugins tab is host-cheap like the smooth sections yet is reported as expensive."
+  },
+
+  "unverified": [
+    {"item": "session.models on a real top-level session", "reason": "every attached session id reachable read-only returned agent-busy ('session is owned by subagent routing'), so no successful sample; buildModelCatalog does Promise.all over providers x models so a real sample could exceed 0.9 ms"},
+    {"item": "credentials.describe steady state", "reason": "sampled in run1 only; the ref passed is not configured, so the call short-circuits"},
+    {"item": "host.describe steady state", "reason": "sampled in run1 only (the contention upper bound); expected ~1 ms from the trivial implementation but not re-measured"},
+    {"item": "module-graph rescan as a general negative", "reason": "verified absent for pluginInventory/list and dynamicCordisRunner/inventory only; adjacent code paths not exhaustively audited because no measurement suggests one"},
+    {"item": "host vs client split of session.history's ~600 KB body", "reason": "measured 6.8 ms wall without separating host serialisation from client transfer/parse"},
+    {"item": "commands/list and session.models real cost", "reason": "both probes hit business errors (no live top-level session id available read-only); the endpoint and payload schema are verified, the successful-path cost is not"}
+  ],
+
+  "discipline": {
+    "files_written": ["/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/why-these-two/hostside/hostside.md", "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/why-these-two/hostside/hostside.json"],
+    "temporary_work": "/tmp/dshaudit/ (scripts + raw JSON) — outside the workspace, not part of the deliverable; all numbers transcribed here",
+    "product_files_modified": "none",
+    "processes_signalled": "none",
+    "browser_launched": "none",
+    "sandbox_permissions_used": "none",
+    "max_concurrent_curls": 4,
+    "max_burst_duration_s": 4.2
+  }
+}

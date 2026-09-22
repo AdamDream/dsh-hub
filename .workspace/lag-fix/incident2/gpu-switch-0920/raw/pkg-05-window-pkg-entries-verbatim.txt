@@ -1,0 +1,83 @@
+### VERBATIM: grep -E '^2026-09-(1[89]|2[012])' /var/log/dpkg.log ###
+2026-09-21 11:56:35 startup archives unpack
+2026-09-21 11:56:36 install chatgpt:amd64 <none> 26.915.31945
+2026-09-21 11:56:36 status half-installed chatgpt:amd64 26.915.31945
+2026-09-21 11:56:38 status triggers-pending gnome-menus:amd64 3.36.0-1.1ubuntu3
+2026-09-21 11:56:38 status triggers-pending desktop-file-utils:amd64 0.27-2build1
+2026-09-21 11:56:41 status unpacked chatgpt:amd64 26.915.31945
+2026-09-21 11:56:41 startup packages configure
+2026-09-21 11:56:41 configure chatgpt:amd64 26.915.31945 <none>
+2026-09-21 11:56:41 status unpacked chatgpt:amd64 26.915.31945
+2026-09-21 11:56:41 status half-configured chatgpt:amd64 26.915.31945
+2026-09-21 11:56:41 status installed chatgpt:amd64 26.915.31945
+2026-09-21 11:56:41 trigproc gnome-menus:amd64 3.36.0-1.1ubuntu3 <none>
+2026-09-21 11:56:41 status half-configured gnome-menus:amd64 3.36.0-1.1ubuntu3
+2026-09-21 11:56:41 status installed gnome-menus:amd64 3.36.0-1.1ubuntu3
+2026-09-21 11:56:41 trigproc desktop-file-utils:amd64 0.27-2build1 <none>
+2026-09-21 11:56:41 status half-configured desktop-file-utils:amd64 0.27-2build1
+2026-09-21 11:56:41 status installed desktop-file-utils:amd64 0.27-2build1
+2026-09-22 10:50:05 startup archives unpack
+2026-09-22 10:50:05 install google-chrome-stable:amd64 <none> 153.0.8010.52-1
+2026-09-22 10:50:05 status half-installed google-chrome-stable:amd64 153.0.8010.52-1
+2026-09-22 10:50:09 status triggers-pending gnome-menus:amd64 3.36.0-1.1ubuntu3
+2026-09-22 10:50:09 status triggers-pending desktop-file-utils:amd64 0.27-2build1
+2026-09-22 10:50:09 status triggers-pending man-db:amd64 2.12.0-4build2
+2026-09-22 10:50:09 status unpacked google-chrome-stable:amd64 153.0.8010.52-1
+2026-09-22 10:50:09 startup packages configure
+2026-09-22 10:50:09 configure google-chrome-stable:amd64 153.0.8010.52-1 <none>
+2026-09-22 10:50:09 status unpacked google-chrome-stable:amd64 153.0.8010.52-1
+2026-09-22 10:50:09 status half-configured google-chrome-stable:amd64 153.0.8010.52-1
+2026-09-22 10:50:10 status installed google-chrome-stable:amd64 153.0.8010.52-1
+2026-09-22 10:50:10 trigproc gnome-menus:amd64 3.36.0-1.1ubuntu3 <none>
+2026-09-22 10:50:10 status half-configured gnome-menus:amd64 3.36.0-1.1ubuntu3
+2026-09-22 10:50:10 status installed gnome-menus:amd64 3.36.0-1.1ubuntu3
+2026-09-22 10:50:10 trigproc man-db:amd64 2.12.0-4build2 <none>
+2026-09-22 10:50:10 status half-configured man-db:amd64 2.12.0-4build2
+2026-09-22 10:50:10 status installed man-db:amd64 2.12.0-4build2
+2026-09-22 10:50:10 trigproc desktop-file-utils:amd64 0.27-2build1 <none>
+2026-09-22 10:50:10 status half-configured desktop-file-utils:amd64 0.27-2build1
+2026-09-22 10:50:10 status installed desktop-file-utils:amd64 0.27-2build1
+
+### VERBATIM: /var/log/apt/history.log (FULL FILE) ###
+
+Start-Date: 2026-09-01  16:49:00
+Commandline: apt install pi
+Requested-By: CNS2026495165 (1001)
+Install: libcln6:amd64 (1.3.7-1, automatic), pi:amd64 (1.3.7-1)
+End-Date: 2026-09-01  16:49:01
+
+Start-Date: 2026-09-01  17:00:20
+Commandline: apt remove pi
+Requested-By: CNS2026495165 (1001)
+Remove: pi:amd64 (1.3.7-1)
+End-Date: 2026-09-01  17:00:20
+
+Start-Date: 2026-09-03  17:03:36
+Commandline: apt install htop
+Requested-By: CNS2026495165 (1001)
+Install: htop:amd64 (3.3.0-4build1)
+End-Date: 2026-09-03  17:03:37
+
+Start-Date: 2026-09-11  11:50:59
+Commandline: packagekit role='install-files'
+Requested-By: CNS2026495165 (1001)
+Install: libatkmm-1.6-1v5:amd64 (2.28.4-1build4, automatic), libgtkmm-2.4-1t64:amd64 (1:2.24.5-5.2build2, automatic), libglibmm-2.4-1t64:amd64 (2.66.7-1build1, automatic), libcairomm-1.0-1v5:amd64 (1.14.5-1build1, automatic), libpangomm-1.4-1v5:amd64 (2.46.4-1build3, automatic), baidunetdisk:amd64 (8.7.0), libsigc++-2.0-0v5:amd64 (2.12.1-2, automatic)
+End-Date: 2026-09-11  11:51:15
+
+Start-Date: 2026-09-15  14:47:30
+Commandline: apt-get install -y libxcb-cursor0 libxkbcommon-x11-0
+Requested-By: CNS2026495165 (1001)
+Install: libxcb-cursor0:amd64 (0.1.4-1build1)
+End-Date: 2026-09-15  14:47:31
+
+Start-Date: 2026-09-21  11:56:35
+Commandline: packagekit role='install-files'
+Requested-By: CNS2026495165 (1001)
+Install: chatgpt:amd64 (26.915.31945)
+End-Date: 2026-09-21  11:56:41
+
+Start-Date: 2026-09-22  10:50:05
+Commandline: apt install ./google-chrome-stable_current_amd64.deb
+Requested-By: CNS2026495165 (1001)
+Install: google-chrome-stable:amd64 (153.0.8010.52-1)
+End-Date: 2026-09-22  10:50:10

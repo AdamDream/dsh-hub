@@ -1,0 +1,230 @@
+{
+ "meta": {
+  "mode": "recon",
+  "run": "recon",
+  "reps": 5,
+  "startedAt": "2026-09-22T04:06:49.326Z",
+  "args": {
+   "mode": "recon"
+  },
+  "host": "CNS202649516533",
+  "env": {
+   "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+   "platform": "Linux x86_64",
+   "dpr": 1,
+   "viewport": {
+    "w": 1280,
+    "h": 800
+   },
+   "ltErr": null,
+   "loafErr": null,
+   "visibilityState": "visible",
+   "hasLoAF": true,
+   "supportedEntryTypes": [
+    "element",
+    "event",
+    "first-input",
+    "interaction-contentful-paint",
+    "largest-contentful-paint",
+    "layout-shift",
+    "long-animation-frame",
+    "longtask",
+    "mark",
+    "measure",
+    "navigation",
+    "paint",
+    "resource",
+    "soft-navigation",
+    "visibility-state"
+   ]
+  },
+  "finishedAt": "2026-09-22T04:06:53.714Z"
+ },
+ "cells": [],
+ "recon": {
+  "visibility": {
+   "initial": "visible",
+   "afterBlankBringToFront": "visible",
+   "hiddenBool": false,
+   "afterBringToFront": "visible"
+  },
+  "traceProbe": {
+   "useStream": true,
+   "totalEvents": 1396,
+   "topNames": [
+    [
+     "v8.callFunction",
+     87
+    ],
+    [
+     "FunctionCall",
+     87
+    ],
+    [
+     "PageAnimator::serviceScriptedAnimations",
+     82
+    ],
+    [
+     "FireAnimationFrame",
+     82
+    ],
+    [
+     "PrePaint",
+     82
+    ],
+    [
+     "Layerize",
+     69
+    ],
+    [
+     "Paint",
+     16
+    ],
+    [
+     "UpdateLayoutTree",
+     8
+    ],
+    [
+     "Layout",
+     8
+    ],
+    [
+     "LocalFrameView::performLayout",
+     8
+    ],
+    [
+     "HitTest",
+     3
+    ],
+    [
+     "TimerFire",
+     3
+    ],
+    [
+     "V8.DeoptimizeCode",
+     1
+    ],
+    [
+     "v8.newInstance",
+     1
+    ]
+   ],
+   "hasRunTask": false,
+   "hasTimeStamp": false,
+   "markMatch": {
+    "PROBE_S": 7505899176,
+    "PROBE_E": 7506522975
+   },
+   "timeStampSamples": [
+    {
+     "args": {
+      "data": {
+       "frame": "7E209BDD51A24EBCB465DB25A09C059C",
+       "message": "PROBE_S",
+       "name": "PROBE_S",
+       "sampleTraceId": 1061759885121416
+      }
+     },
+     "cat": "devtools.timeline",
+     "name": "TimeStamp",
+     "ph": "I",
+     "pid": 576247,
+     "s": "t",
+     "tid": 576247,
+     "ts": 7505899176,
+     "tts": 419984
+    },
+    {
+     "args": {
+      "data": {
+       "frame": "7E209BDD51A24EBCB465DB25A09C059C",
+       "message": "BLK_S_eval",
+       "name": "BLK_S_eval",
+       "sampleTraceId": 1061759885121460
+      }
+     },
+     "cat": "devtools.timeline",
+     "name": "TimeStamp",
+     "ph": "I",
+     "pid": 576247,
+     "s": "t",
+     "tid": 576247,
+     "ts": 7505899854,
+     "tts": 420209
+    },
+    {
+     "args": {
+      "data": {
+       "frame": "7E209BDD51A24EBCB465DB25A09C059C",
+       "message": "BLK_E_eval",
+       "name": "BLK_E_eval",
+       "sampleTraceId": 1061759885121466
+      }
+     },
+     "cat": "devtools.timeline",
+     "name": "TimeStamp",
+     "ph": "I",
+     "pid": 576247,
+     "s": "t",
+     "tid": 576247,
+     "ts": 7506020098,
+     "tts": 540441
+    },
+    {
+     "args": {
+      "data": {
+       "frame": "7E209BDD51A24EBCB465DB25A09C059C",
+       "message": "PROBE_E",
+       "name": "PROBE_E",
+       "sampleTraceId": 1061759885121395
+      }
+     },
+     "cat": "devtools.timeline",
+     "name": "TimeStamp",
+     "ph": "I",
+     "pid": 576247,
+     "s": "t",
+     "tid": 576247,
+     "ts": 7506522975,
+     "tts": 551020
+    }
+   ],
+   "runTaskSamples": []
+  },
+  "rafHidden": {
+   "ticksIn1s": 1,
+   "stillTicking": true
+  },
+  "hiddenRafInject": {
+   "site": "raf",
+   "reqMs": 120,
+   "t0": 2325.5999999996275,
+   "start": 2325.899999999441,
+   "end": 2445.899999999441,
+   "actual": 120,
+   "site_t": 2325.5999999996275,
+   "after": 2445.899999999441
+  },
+  "hiddenTimeoutInject": {
+   "site": "timeout",
+   "reqMs": 120,
+   "t0": 2447.699999999255,
+   "start": 2447.699999999255,
+   "end": 2567.699999999255,
+   "actual": 120,
+   "site_t": 2447.699999999255,
+   "after": 2567.7999999998137
+  },
+  "hiddenEvalInject": {
+   "site": "eval",
+   "reqMs": 120,
+   "t0": 2569.0999999996275,
+   "start": 2569.0999999996275,
+   "end": 2689.0999999996275,
+   "actual": 120,
+   "site_t": 2569.0999999996275,
+   "after": 2689.199999999255
+  },
+  "frozenState": "visible"
+ }
+}

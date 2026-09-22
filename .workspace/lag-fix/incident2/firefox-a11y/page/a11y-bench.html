@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!--
+  a11y-bench.html — DOM-heavy workload probe for measuring the cost of a
+  force-enabled accessibility tree.  Two engines are measured with the SAME
+  page: Gecko (snap Firefox, launched directly) and Blink (Playwright
+  chromium).  The page is intentionally dependency-free and does all its own
+  timing, then POSTs a JSON report back to the harness server.
+
+  Query parameters:
+    n      number of generated rows               (default 6000)
+    m      mutation iterations in phase MUTATE     (default 3000)
+    f      frames in phase ANIMATE                 (default 180)
+    k      mutations per frame in phase ANIMATE    (default 120)
+    t      fixed duration, ms, of the THROUGHPUT and REFLOW phases (default 3000)
+    batch  mutations per inner batch in those two phases (default 400)
+    token  opaque id echoed back in the report
+
+  Phases (all timed with performance.now(), single-threaded main thread):
+    BUILD   — construct an interactive DOM subtree.  This is the phase an
+              accessibility tree costs most in: every row carries a role,
+              a tabindex and a button, so both engines must materialise real
+              accessible objects rather than ignoring presentational nodes.
+    MUTATE  — synchronous text/attribute/style churn, no frames involved:
+              a pure measure of per-mutation main-thread cost.
+    ANIMATE — requestAnimationFrame loop that keeps mutating: yields frame
+              intervals, long tasks and visibility state.
+    READ    — one forced layout+style recalc sweep reading geometry.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>a11y cost probe</title>
+<style>
+  html, body { margin: 0; padding: 0; font: 13px/1.3 sans-serif; background: #fff; color: #111; }
+  #stage { width: 900px; }
+  .row { display: block; height: 22px; }
+  .row.on { background: #eef; }
+  .row button { width: 40px; }
+  #hud { position: fixed; top: 0; right: 0; font: 11px monospace; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="hud"></div>
+<script>
+"use strict";
+(function () {
+  const q = new URLSearchParams(location.search);
+  const N = Math.max(100, Number(q.get("n") || 6000));
+  const M = Math.max(50, Number(q.get("m") || 3000));
+  const F = Math.max(10, Number(q.get("f") || 180));
+  const K = Math.max(1, Number(q.get("k") || 120));
+  const T = Math.max(200, Number(q.get("t") || 3000));
+  const BATCH = Math.max(20, Number(q.get("batch") || 400));
+  const TOKEN = q.get("token") || "notoken";
+
+  const stage = document.getElementById("stage");
+  const hud = document.getElementById("hud");
+  const rows = [];
+  const report = {
+    token: TOKEN,
+    ua: navigator.userAgent,
+    params: { n: N, m: M, f: F, k: K, t: T, batch: BATCH },
+    hardwareConcurrency: navigator.hardwareConcurrency,
+    visibilityState: document.visibilityState,
+    phases: {},
+    frames: null,
+    longTasks: null,
+    errors: [],
+  };
+
+  /* ------------------------------------------------------------ longtasks */
+  let longTasks = [];
+  try {
+    new PerformanceObserver((list) => {
+      for (const e of list.getEntries()) longTasks.push(Math.round(e.duration * 100) / 100);
+    }).observe({ entryTypes: ["longtask"] });
+  } catch (e) { report.errors.push("longtask-observer:" + e.message); }
+
+  const now = () => performance.now();
+  const fmt = (ms) => Math.round(ms * 1000) / 1000;
+
+  /* ---------------------------------------------------------------- BUILD */
+  function build() {
+    const t0 = now();
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < N; i++) {
+      const row = document.createElement("div");
+      row.className = "row";
+      row.setAttribute("role", "listitem");
+      row.setAttribute("aria-label", "item " + i);
+      row.tabIndex = 0;
+      const span = document.createElement("span");
+      span.textContent = "row " + i + " lorem ipsum dolor sit amet";
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("aria-label", "remove item " + i);
+      btn.textContent = "\u00d7";
+      row.appendChild(span);
+      row.appendChild(btn);
+      frag.appendChild(row);
+      rows.push({ row: row, span: span, btn: btn });
+    }
+    stage.appendChild(frag);
+    return now() - t0;
+  }
+
+  /* --------------------------------------------------------------- MUTATE */
+  /* deterministic pseudo-random so every condition replays the SAME sequence */
+  let seed = 1234567;
+  function rnd(n) { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n; }
+
+  function mutate(iters) {
+    const t0 = now();
+    for (let i = 0; i < iters; i++) {
+      const r = rows[rnd(rows.length)];
+      r.span.textContent = "row " + i + " lorem ipsum dolor sit amet";
+      r.row.classList.toggle("on");
+      r.btn.setAttribute("aria-label", "remove item " + (i & 1023));
+      r.row.setAttribute("aria-label", "item " + (i & 2047));
+    }
+    return now() - t0;
+  }
+
+  /* ---------------------------------------------------------- THROUGHPUT */
+  /* Hold wall-clock time constant, count completed mutation batches.  This is
+     the vsync-independent signal: cost per DOM mutation. */
+  function throughput(ms) {
+    const t0 = now();
+    let iters = 0, batches = 0;
+    while (now() - t0 < ms) {
+      iters += BATCH;
+      mutate(BATCH);
+      batches++;
+    }
+    const el = now() - t0;
+    return { ms: el, iterations: iters, batches: batches, perSec: Math.round(iters / (el / 1000)) };
+  }
+
+  /* Mutations PLUS a synchronous forced layout each batch: this is the phase in
+     which an accessibility engine that participates in layout/refresh has to
+     show up. */
+  function reflow(ms) {
+    const t0 = now();
+    let iters = 0, batches = 0, sink = 0;
+    while (now() - t0 < ms) {
+      iters += BATCH;
+      mutate(BATCH);
+      sink += stage.offsetHeight;   /* forced synchronous layout */
+      batches++;
+    }
+    const el = now() - t0;
+    return { ms: el, iterations: iters, batches: batches, perSec: Math.round(iters / (el / 1000)), sink: Math.round(sink) };
+  }
+
+  /* ---------------------------------------------------------------- READ */
+  function readSweep() {
+    const t0 = now();
+    let acc = 0;
+    for (let i = 0; i < rows.length; i += 7) {
+      const r = rows[i].row;
+      const b = r.getBoundingClientRect();
+      acc += b.width + b.height + r.offsetTop;
+    }
+    return { ms: now() - t0, acc: Math.round(acc) };
+  }
+
+  /* ------------------------------------------------------------- ANIMATE */
+  /* Each rAF callback must stay well under Gecko's dom.max_script_run_time
+     (10 s), otherwise the browser kills the script and the whole run yields no
+     report at all.  The caller therefore bounds k/batch; this guard records a
+     warning instead of dying silently. */
+  function animate() {
+    return new Promise((resolve) => {
+      const intervals = [];
+      let last = now();
+      const t0 = last;
+      let frames = 0;
+      function step() {
+        const t = now();
+        intervals.push(t - last);
+        last = t;
+        mutate(K);
+        hud.textContent = "frame " + frames + " " + Math.round(t - t0) + "ms";
+        frames++;
+        if (frames < F) requestAnimationFrame(step);
+        else resolve({ totalMs: now() - t0, intervals: intervals, frames: frames });
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
+  /* ----------------------------------------------------------------- MAIN */
+  function stats(a) {
+    if (!a.length) return null;
+    const s = a.slice().sort((x, y) => x - y);
+    const q = (p) => fmt(s[Math.min(s.length - 1, Math.floor(p * s.length))]);
+    const sum = s.reduce((x, y) => x + y, 0);
+    return {
+      count: s.length, mean: fmt(sum / s.length), p50: q(0.5), p90: q(0.9),
+      p95: q(0.95), p99: q(0.99), max: fmt(s[s.length - 1]),
+      over33: s.filter((v) => v > 33.4).length,
+      over50: s.filter((v) => v > 50).length,
+      over100: s.filter((v) => v > 100).length,
+    };
+  }
+
+  (async function main() {
+    try {
+      report.phases.build = fmt(build());
+      report.phases.read1 = (function () { const r = readSweep(); return fmt(r.ms); })();
+      report.phases.mutate = fmt(mutate(M));
+      report.visibilityStateDuringAnimate = document.visibilityState;
+      const a = await animate();
+      report.frames = { totalMs: fmt(a.totalMs), frames: a.frames, ...stats(a.intervals) };
+      report.phases.animate = fmt(a.totalMs);
+      report.phases.read2 = (function () { const r = readSweep(); return fmt(r.ms); })();
+      report.throughput = throughput(T);
+      report.reflow = reflow(T);
+      report.longTasks = { count: longTasks.length, total: fmt(longTasks.reduce((x, y) => x + y, 0)), max: longTasks.length ? fmt(Math.max.apply(null, longTasks)) : 0 };
+      report.domNodes = document.getElementsByTagName("*").length;
+      report.ok = true;
+    } catch (e) {
+      report.ok = false;
+      report.errors.push("main:" + (e && e.message ? e.message : String(e)));
+    }
+    /* Use a sync XHR so the report survives an immediate process teardown, and
+       also expose it on window so an external driver (Marionette/CDP) can read
+       it back without depending on the network round-trip. */
+    window.__A11Y_BENCH_REPORT__ = report;
+    try {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/result", false);
+      xhr.setRequestHeader("content-type", "application/json");
+      xhr.send(JSON.stringify(report));
+      report.posted = xhr.status;
+    } catch (e) {
+      report.posted = "error:" + e.message;
+    }
+    document.title = "DONE " + TOKEN;
+  })();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+=== search all plausible env sources for mesa_glthread / MESA_ ===
+--- /home/CNS2026495165/.bashrc ---
+   (no mesa/gl matches)
+--- /home/CNS2026495165/.profile ---
+   (no mesa/gl matches)
+--- /etc/environment ---
+   (no mesa/gl matches)
+--- /etc/profile ---
+   (no mesa/gl matches)
+--- /etc/environment.d/90atk-adaptor.conf ---
+   (no mesa/gl matches)
+--- /etc/environment.d/90qt-a11y.conf ---
+   (no mesa/gl matches)
+--- /etc/environment.d/90qtwebengine-dictionaries-path.conf ---
+   (no mesa/gl matches)
+
+=== systemd user environment ===
+(no mesa/gl vars in systemd user env)
+
+=== /etc/environment full ===
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+##TEC_BEGIN##
+export ACCESSIBILITY_ENABLED=1
+export GNOME_ACCESSIBILITY=1
+##TEC_END##
+
+=== ~/.config/environment.d listing ===
+ls: 无法访问 '/home/CNS2026495165/.config/environment.d/': 没有那个文件或目录
+
+=== 00-mesa-defaults.conf: glthread-related entries ===
+397-          -->
+398-        <application name="SPECviewperf13" executable="viewperf">
+399-            <option name="vblank_mode" value="0" />
+400:            <option name="glthread_nop_check_framebuffer_status" value="true" />
+401-            <option name="allow_glsl_extension_directive_midshader" value="true" />
+402-            <option name="allow_glsl_120_subset_in_110" value="true" />
+403-            <!-- This makes it use GL_NVX_gpu_memory_info to query memory info
+--
+495-        <application name="FINAL FANTASY XI" executable="pol.exe">
+496-            <!-- Causes invisible textures. -->
+497-            <!-- https://gitlab.freedesktop.org/mesa/mesa/-/issues/7562 -->
+498:            <option name="mesa_glthread_app_profile" value="0"/>
+499-        </application>
+500-
+501-        <application name="Talos Principle" executable="Talos">
+--
+526-        </application>
+527-
+528-        <application name="DeusExMD" executable="DeusExMD">
+529:            <option name="mesa_glthread_app_profile" value="0"/>
+530-        </application>
+531-        <application name="F1 2015" executable="F12015">
+532:            <option name="mesa_glthread_app_profile" value="0"/>
+533-        </application>
+534-        <application name="KWin Wayland" executable="kwin_wayland">
+535:            <!-- This works around a cursor issue with glthread.
+536-                 See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/7351#note_1581105 -->
+537:            <option name="mesa_glthread_app_profile" value="0"/>
+538-        </application>
+539-
+540-        <!-- Adaptive sync denylist follows below: -->
+--
+644-        </application>
+645-
+646-        <application name="gfxbench" executable="testfw_app">
+647:            <option name="mesa_glthread_app_profile" value="0" />
+648-            <option name="vk_x11_override_min_image_count" value="2" />
+649-            <option name="vk_wsi_force_bgra8_unorm_first" value="true" />
+650-        </application>
+--
+893-    </device>
+894-    <device driver="zink">
+895-        <application name="Hyperdimension Neptunia Re;Birth1" executable="NeptuniaReBirth1.exe">
+896:            <!-- glthread uploads need too much vram and exceed 32bit VA limit -->
+897-            <!-- https://gitlab.freedesktop.org/mesa/mesa/-/issues/8333 -->
+898:            <option name="mesa_glthread_app_profile" value="0"/>
+899-        </application>
+900-
+901-        <application name="Borderlands 2 (Native, OpenGL, 32bit)" executable="Borderlands2">
+
+=== Firefox-specific drirc entries in 00-mesa-defaults.conf ===
+603:        <application name="Firefox" executable="firefox">
+604-            <option name="adaptive_sync" value="false" />
+605-        </application>
+606:        <application name="Firefox ESR" executable="firefox-esr">
+607-            <option name="adaptive_sync" value="false" />
+608-        </application>
+609-        <application name="Chromium" executable="chromium">
+610-            <option name="adaptive_sync" value="false" />
+611-        </application>
+612-        <application name="Google Chrome" executable="chrome">
+--
+763:             Bonus workaround for Firefox bug #1845309. -->
+764:        <application name="Firefox" executable="firefox">
+765-            <option name="no_fp16" value="true" />
+766-        </application>
+767:        <application name="Firefox ESR" executable="firefox-esr">
+768-            <option name="no_fp16" value="true" />
+769-        </application>
+770-        <application name="Chromium" executable="chromium">
+771-            <option name="no_fp16" value="true" />
+772-        </application>
+773-        <application name="Google Chrome" executable="chrome">

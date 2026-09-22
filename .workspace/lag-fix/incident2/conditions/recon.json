@@ -1,0 +1,145 @@
+{
+  "generatedFor": "conditions-matrix experiment, DSH Web GUI http://127.0.0.1:3080 (read-only static recon + read-only RPCs)",
+  "deployedRoot": "/home/CNS2026495165/.dsh/profiles/node_modules/",
+  "noTestIds": "no data-testid anywhere in deployed client plugins; use aria-*/role/CSS-module hash class suffixes",
+  "localeCaveat": "UI language follows navigator.languages (dsh-client-locale/lib/client.js:1184-1200); headless default en-US renders English while the user sees Chinese - pin locale 'zh-CN' for text selectors",
+  "settingsButton": "div[class$=\"_settingsArea\"] button[aria-haspopup=\"dialog\"]",
+  "settingsButtonEvidence": "@deepseek-ai/dsh-client-ui-settings-general/lib/client.js:203-212 (button, aria-haspopup=dialog, aria-expanded=open, no aria-label/title/data-*); seat: @deepseek-ai/dsh-client-ui-sidebar/lib/client.js:229-238 + class token map line 58; label 设置 only rendered when sidebar wide (client.js:254-258)",
+  "settingsButtonAlternatives": [
+    "button[aria-haspopup=\"dialog\"]  (NOT unique: context meter @deepseek-ai/dsh-client-ui-conversation/lib/client.js:3144-3151, message feedback @deepseek-ai/dsh-client-ui-message-feedback/lib/client.js:555)",
+    "button.VOzbGW_trigger  (build hash class; + .VOzbGW_rail in rail mode)"
+  ],
+  "settingsPanelVisible": "div.VOzbGW_panel[role=\"dialog\"][aria-modal=\"true\"]",
+  "settingsPanelVisibleAlt": "[aria-haspopup=\"dialog\"][aria-expanded=\"true\"]",
+  "settingsPanelEvidence": "@deepseek-ai/dsh-client-ui-settings-general/lib/client.js:112-168 (overlay>mask+panel), mounted only while open at 213-219; class map 37-57; CSS: overlay z-index 1000 fixed inset 0, mask backdrop-filter var(--dsw-mask-blur)=blur(2px)+bg-mask-1, panel 800px/max calc(100vw-48px), no open animation; focus moves to close button on mount (108-111)",
+  "settingsPanelVisiblePredicate": "panel exists AND rect.width>0 && rect.height>0 && visibility!=='hidden' && display!=='none'",
+  "settingsClose": "div.VOzbGW_panel button.VOzbGW_close",
+  "settingsCloseAlternatives": ["Escape key (client.js:99-107)", "click .VOzbGW_overlay > .VOzbGW_mask (client.js:115-119)"],
+  "settingsDefaultSection": "rows sorted by order (client.js:502-507); activeId ?? rows[0] (client.js:97) => 'general' (order 0) mounts on first open => theme appearance row (order 10) + wallpaper row (order 30) mount; usage card lives in settings.plugin.item, dispatched only inside the Plugins section (settings-plugins client.js:399-408,913-923), NOT mounted by opening on General",
+  "sessionRow": "div[role=\"tree\"] div[role=\"treeitem\"][aria-selected]",
+  "sessionRowTitle": "span.YDXeBa_title (inside the row)",
+  "sessionActive": "div.YDXeBa_sessionRow[aria-selected=\"true\"] (plus class YDXeBa_selected)",
+  "sessionRowEvidence": "@deepseek-ai/dsh-client-ui-workspace/lib/client.js:717-751 (row element, role=treeitem, aria-selected, onClick open(id)); class map 343-378; no data-session-id -> identify rows by title text; drag payload uses node.id (728)",
+  "groupHeader": "div[role=\"tree\"] div[role=\"treeitem\"][aria-expanded]",
+  "groupHeaderTitle": "span.YDXeBa_projectText span.YDXeBa_title",
+  "groupHeaderEvidence": "dsh-client-ui-workspace/lib/client.js:469-536 (projectRow role=treeitem aria-expanded, label span, action buttons aria-label 工作区“<name>”的操作 / 在“<name>”中新建会话), labels 2258-2260; toggles expansion 1378-1385",
+  "grouping": "by Host Workspace entity (workspace.list) + one synthetic Ungrouped group ('未分组'), NOT by raw cwd",
+  "groupingEvidence": "dsh-client-ui-workspace/lib/client.js:147-164 groupByWorkspace; 100-102 sessionVisible hides origin=='subagent', archived and blank rows",
+  "collapsedGroupRendersNoRows": "deriveGroups yields sessions:[] unless expanded (dsh-client-ui-workspace/lib/client.js:197-210) and TreeBody maps group.sessions (1404); COLLAPSED_SESSION_LIMIT=5 (1039) with expander button aria-expanded (1452-1460); only auto-expansion = group of the current session (1210-1219)",
+  "openExistingSessionSteps": [
+    "click a group header: div[role=\"tree\"] div[role=\"treeitem\"][aria-expanded=\"false\"] (match by its span.YDXeBa_title text)",
+    "click a row: div[role=\"tree\"] div[role=\"treeitem\"][aria-selected\"]",
+    "optional expander: button containing text '展开其余 {n} 个会话' / 'Show {n} more'"
+  ],
+  "viewStorePersistence": "persist key 'dsh.workspace.view.v5' (@deepseek-ai/dsh-client-ui-workspace/lib/client.js:26-59, persist at 34); impl @deepseek-ai/dsh-client-runtime/lib/client.js:5436-5451; scope suffix possible at 5476",
+  "themeMechanism": {
+    "how": "persisted in the HOST user-settings document (namespace ui-theme, field preference), projected to two DOM fields: document.documentElement.style.colorScheme and document.body[data-ds-dark-theme] (present == dark). On a fresh page load both are set by a server-rendered inline boot script whose value is read from settings.yaml per index request, before any client plugin runs. Palette values come from injected CSS body{...}/body[data-ds-dark-theme]{...}; built-in themes register empty token sets, so inline body tokens exist only from override layers (wallpaper).",
+    "persistence": "/home/CNS2026495165/.dsh/settings.yaml:218-219 (ui-theme: preference: light); namespace/defaults @deepseek-ai/dsh-client-ui-theme/lib/index.js; client mirror client.js:979-985; only write entry = ThemeRuntime.setTheme -> settings scope (client.js:1130,1169-1181)",
+    "localStorageSeeding": "NO EFFECT - 0 occurrences of localStorage in dsh-client-ui-theme/lib/client.js and dsh-client-ui-layout/lib/client.js; the fresh-load value is server-injected (verified with curl: body script contains preference = \"light\")",
+    "emulateMediaColorScheme": "NO EFFECT while preference!=='system' - @deepseek-ai/dsh-client-ui-theme/lib/client.js:1238 resolves preference==='system' ? media.matches : preference; media query only constructed at 1131-1144",
+    "urlParam": "NONE - no router (no pushState/location.hash/replaceState in dist/assets/index-ClqxG24t.js)",
+    "domForceInPage": "YES (read-only alternative, no persistence, no file change): document.documentElement.style.colorScheme='dark'; document.body.setAttribute('data-ds-dark-theme',''); plus fix the wallpaper override token: document.body.style.setProperty('--dsw-alias-bg-base','rgba(15,17,21,0.88)') (or removeProperty) - see caveats",
+    "domForceCaveats": [
+      "inline body tokens beat body[data-ds-dark-theme]; with wallpaper active the light rgba(255,255,255,0.88) stays inline unless overridden",
+      "the presenter reverts it on the next theme publish (landingIntact fails, dsh-client-ui-layout/lib/client.js:420-427,460-467); a fresh page load always reverts it (boot script)",
+      "only a persisted preference change (Appearance cubes, aria-pressed buttons, dsh-client-ui-theme/lib/client.js:83-91,1341-1349) makes prefers-color-scheme/emulateMedia live"
+    ],
+    "domTruth": "document.body.hasAttribute('data-ds-dark-theme') === dark; document.documentElement.style.colorScheme",
+    "evidence": [
+      "@deepseek-ai/dsh-client-ui-theme/lib/index.js :: bootThemeScript/bootThemeInjection (body-placement inline script per index)",
+      "curl -s http://127.0.0.1:3080/ -> '<body><script>…const preference = \"light\"… document.body.toggleAttribute('data-ds-dark-theme', dark)' and '<div id=\"root\"></div>'",
+      "@deepseek-ai/dsh-client-ui-layout/lib/client.js:344-345 DARK_ATTRIBUTE, 408-450 apply(), 428-430 writes, 460-467 landingIntact, 479-483 dispose",
+      "@deepseek-ai/dsh-client-ui-theme/lib/client.js:998-1006 BUILTIN_THEMES tokens:{} ; 1238 resolve; 1255-1263 composeActive",
+      "token CSS selectors: 'body{--dsw-alias-bg-base:var(--dsw-static-neutral-bluish-00)' vs 'body[data-ds-dark-theme]{--dsw-alias-bg-base:var(--dsw-static-neutral-bluish-950)' (@deepseek-ai/dsh-client-ui-theme/lib/client.js inline css regions)"
+    ]
+  },
+  "wallpaper": {
+    "configured": true,
+    "source": "/dsh-wallpaper/media/37758c1c-9ca8-47d2-bade-3048ab825fb6.png",
+    "sourceEvidence": "/home/CNS2026495165/.dsh/settings.yaml:199-205 (wallpaper.global: source, darkMask 0, opacity 0.88, blur 0); file /home/CNS2026495165/.dsh/wallpapers/37758c1c-9ca8-47d2-bade-3048ab825fb6.png = PNG 1810x1279 RGB, 2334260 bytes; GET on the URL returns 200 image/png 2334260 bytes; plugin @local/dsh-wallpaper present in the live __DSH_BOOT__ manifest",
+    "layerSelector": "body > div[style*=\"background-size: cover\"]",
+    "maskSelector": "body > div[style*=\"z-index: -1\"]:not([style*=\"background-size: cover\"])",
+    "maskPresent": false,
+    "maskNote": "the plugin's dark-mask element is created only when darkMask>0 and is removed otherwise (@local/dsh-wallpaper/lib/client.js:226-237, 258-264); with darkMask:0 it does not exist. The real 'frost' is a theme token override: --dsw-alias-bg-base = rgba(base, 0.88) (shadeTokens, 190-211) written inline on body by the presenter; neutralize with document.body.style.removeProperty('--dsw-alias-bg-base')",
+    "extraMaskLayer": "the Settings modal's own mask div.VOzbGW_overlay > div.VOzbGW_mask has backdrop-filter: var(--dsw-mask-blur) = blur(2px) full-viewport over the wallpaper; in-page off-switch: style.backdropFilter='none' (and background 'transparent')",
+    "inPageRemovable": true,
+    "inPageRemovableNote": "pure in-page DOM removal: no persistence and no product-file change; the plugin re-creates the element only when it re-applies its config (settings sync, session change, theme/change: @local/dsh-wallpaper/lib/client.js:238-266, 581-588). Removing the element does NOT remove the token shading - remove the inline --dsw-alias-bg-base too for a true 'no wallpaper' condition",
+    "settingsPageSignal": "WallpaperRow (settings.general.item id=wallpaper order=30, @local/dsh-wallpaper/lib/client.js:591-602) sets a three-state page signal home/session/settings on mount/unmount (335-350, 396-403); because General is the default settings section, OPENING SETTINGS re-runs applyWallpaper (rewrites backgroundImage on the 2.2MB full-viewport layer + re-checks token shading), and closing it does so again - toggling this is a first-class matrix condition",
+    "landedFixMarkers": [
+      "@local/dsh-wallpaper/lib/client.js:201-204 'The source and this layer are rebuilt byte-identically on every theme change; re-stacking identical content only re-enters every theme/change listener, so the existing layer is kept and its redundant publish is skipped.' (sameShadedTokens, 181-185, used 204)",
+      "@deepseek-ai/dsh-client-ui-layout/lib/client.js:411-417 content-signature skip comment; 420-426 'Provably idempotent replay…'; 440-447 rAF-deferred computed-style read; 346-379 scheduleThemeColorRefresh coalescing; 468-477 idempotent metadata refresh",
+      "@local/dsh-usage/lib/client.js:780-783 /* dsh-perf-fix A-gating-fix v1 */ IntersectionObserver poll gate, motive at 978-982 ('every cycle costs the host ~0.3-0.5s of blocked event loop')",
+      "other landed markers: dsh-client-runtime/lib/client.js:8576 (dsh-perf-fix P1 v1), 8842 (P2 v1), 9324 (P2 v1); dsh-client-ui-workspace/lib/client.js:171,286 (dsh-lag-fix B1/C1)"
+    ]
+  },
+  "sessionScale": {
+    "source": "curl -s -X POST http://127.0.0.1:3080/api/session.list (read-only RPC) + /api/workspace.list",
+    "total": 299,
+    "topLevel": 99,
+    "subagent": 200,
+    "byCwd": [
+      {"cwd": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof", "count": 31},
+      {"cwd": "/home/CNS2026495165/Dexterous_Hand_23Dof", "count": 19},
+      {"cwd": "/home/CNS2026495165/dsh", "count": 16},
+      {"cwd": "/home/CNS2026495165/面试", "count": 6},
+      {"cwd": "/home/CNS2026495165/作业", "count": 4},
+      {"cwd": "/home/CNS2026495165/math", "count": 3},
+      {"cwd": "/home/CNS2026495165/university", "count": 3},
+      {"cwd": "/media/CNS2026495165/EAGET", "count": 2},
+      {"cwd": "/home/CNS2026495165/MCU", "count": 2},
+      {"cwd": "/home/CNS2026495165/robocon", "count": 2},
+      {"cwd": "/home/CNS2026495165/RS", "count": 2},
+      {"cwd": "/home/CNS2026495165/openarm", "count": 2},
+      {"cwd": "/home/CNS2026495165/下载/motor-debugging-tool-master/Linux/x86_64", "count": 2},
+      {"cwd": "/home/CNS2026495165/桌面", "count": 1},
+      {"cwd": "/home/CNS2026495165/触觉产品资料", "count": 1},
+      {"cwd": "/home/CNS2026495165/blender", "count": 1},
+      {"cwd": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof/orca_core-main", "count": 1},
+      {"cwd": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof/RBS_core-joint-api", "count": 1}
+    ],
+    "byWorkspaceGroup": [
+      {"label": "Dexterous_Hand_23Dof", "cwd": "/home/CNS2026495165/Dexterous_Hand_23Dof", "count": 19},
+      {"label": "dsh", "cwd": "/home/CNS2026495165/dsh", "count": 16},
+      {"label": "面试", "cwd": "/home/CNS2026495165/面试", "count": 6},
+      {"label": "作业", "cwd": "/home/CNS2026495165/作业", "count": 4},
+      {"label": "university", "cwd": "/home/CNS2026495165/university", "count": 3},
+      {"label": "math", "cwd": "/home/CNS2026495165/math", "count": 3},
+      {"label": "robocon", "cwd": "/home/CNS2026495165/robocon", "count": 2},
+      {"label": "openarm", "cwd": "/home/CNS2026495165/openarm", "count": 2},
+      {"label": "RS", "cwd": "/home/CNS2026495165/RS", "count": 2},
+      {"label": "MCU", "cwd": "/home/CNS2026495165/MCU", "count": 2},
+      {"label": "触觉产品资料", "cwd": "/home/CNS2026495165/触觉产品资料", "count": 1},
+      {"label": "未分组/Ungrouped", "cwd": null, "count": 39}
+    ],
+    "fewest": {"cwd": "/home/CNS2026495165/触觉产品资料", "count": 1, "byWorkspaceGroupCount": 1},
+    "fewestByCwdTies": ["/home/CNS2026495165/桌面", "/home/CNS2026495165/触觉产品资料", "/home/CNS2026495165/blender", "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof/orca_core-main", "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof/RBS_core-joint-api"],
+    "most": {"cwd": "/home/CNS2026495165/Dexterous_Hand_23Dof/Dexterous_Hand_23Dof", "count": 31, "note": "as a workspace GROUP the most is Dexterous_Hand_23Dof (19); the Ungrouped bucket holds 39 top-level rows"},
+    "currentWorkspace": {"cwd": "/home/CNS2026495165/dsh", "group": "dsh", "topLevel": 16, "allItems": 96},
+    "currentWorkspaceCorrection": "'current workspace (~99 top-level)' does not exist: 99 is the GLOBAL top-level total; the dsh workspace has 16 top-level rows (96 items incl. 80 subagents)",
+    "maxRenderedRows": "99 rows in 12 groups; <=5 per group until the expander is clicked, 0 while a group is collapsed",
+    "readOnlyNavigation": "The GUI cannot be pointed at a different cwd's session list: one global tree (workspace.list has no cwd parameter), no router/URL state (no pushState/location.hash in the shell bundle). Only two read-only ways to surface another cwd: click its group header to expand (then the '展开其余 {n} 个会话' expander), or use the global sidebar search (button[aria-label=\"搜索会话\"] / input placeholder '搜索会话…', dsh-client-ui-workspace/lib/client.js:1905-1932) whose rows carry span.YDXeBa_searchResultWorkspace; switching 视图选项 -> 单列表/In one list (1182-1185) flattens all 99 rows"
+  },
+  "readyPredicate": "waitForFunction(() => { if (document.querySelector('[data-dsh-boot]')) return false; if (!window.__DSH_BOOT__) return false; if (!window.__ModuleLoader__ || window.__ModuleLoader__.mode !== 'live') return false; const trigger = document.querySelector('div[class$=\"_settingsArea\"] button[aria-haspopup=\"dialog\"]'); const tree = document.querySelector('div[role=\"tree\"]'); if (!trigger || !tree) return false; if (!tree.querySelector('[role=\"treeitem\"][aria-expanded]')) return false; return true; })  then settle ~400ms (or two rAFs) before T0",
+  "readyPredicateEvidence": [
+    "window.__DSH_BOOT__ manifest embedded in the served index (curl-verified)",
+    "module loader starts mode:'queue' (served bootstrap script) and flips to 'live' at @deepseek-ai/dsh-client-modules/lib/client.js:181-183",
+    "shell boot kernel class Yd/Gd in dist/assets/index-ClqxG24t.js: splash root div[data-dsh-boot] (+[data-dsh-boot-spinner]) appended to #root, removed by Gd.dispose(); run() = create tree -> prefetchImmediateTier -> runPluginBoot -> mountApp -> ctx.inject(['uiRenderer'])",
+    "uiRenderer.mount provided only after inject ['slots','sessions'] (@deepseek-ai/dsh-client-ui-renderer/lib/client.js:933-939) and BootHandoff replaces the boot DOM on the first layout effect (941-968) => [data-dsh-boot] absent == app mounted",
+    "sessions store bootstrap: session.list (@deepseek-ai/dsh-client-runtime/lib/client.js:8070); workspaces store bootstrap: workspace.list -> phase 'ready' (9583-9606); group headers appear once workspaces are ready (no DOM phase attribute exists for these two stores)"
+  ],
+  "harnessCrossCheck": {
+    "file": ".workspace/lag-fix/incident2/conditions/matrix.mjs (read-only inspection)",
+    "themeLeverDead": "matrix.mjs:420-430 forces dark via html[data-theme=dark] + class 'dark' + page.emulateMedia({colorScheme:'dark'}). Nothing reads data-theme/'dark', and emulateMedia is inert while ui-theme.preference !== 'system' (@deepseek-ai/dsh-client-ui-theme/lib/client.js:1238; current persistence is 'light'). Use: document.documentElement.style.colorScheme='dark' + document.body.setAttribute('data-ds-dark-theme','') + document.body.style.setProperty('--dsw-alias-bg-base','rgba(15,17,21,0.88)')",
+    "settingsButtonProbe": "matrix.mjs:271-274 probes getByRole(button,name=设置) / has-text / [aria-label=设置] / [title=设置]; there is no aria-label or title on the trigger, and the label span exists only in wide mode. Preferred: div[class$=\"_settingsArea\"] button[aria-haspopup=\"dialog\"]",
+    "closeProbeOk": "matrix.mjs:297 getByRole(button,name=关闭) is valid (accessible name from the visually-hidden label, settings-general/lib/client.js:157-160); matrix.mjs:300 [role=\"dialog\"] count check matches the panel"
+  },
+  "unverified": [
+    "exact localStorage key of the sidebar view store (declared 'dsh.workspace.view.v5'; a .<scopeKey> suffix is possible, dsh-client-runtime/lib/client.js:5476) - check Object.keys(localStorage)",
+    "whether a fresh page has a current session (auto-expanding its group, dsh-client-ui-workspace/lib/client.js:1210-1219) or starts with all groups collapsed and zero session rows; also whether groupExpansion carries over via storageState",
+    "the resolved UI locale in the measurement browser (navigator.languages -> zh vs en) - pin locale explicitly",
+    "whether the wallpaper layer really is document.body.firstElementChild at runtime (source uses body.prepend; other plugins may prepend later) - use the [style*=\"background-size: cover\"] fallback",
+    "whether div[class$=\"_settingsArea\"] contains exactly one button (slot wrapper nodes unknown) - assert count === 1 before relying on the selector",
+    "whether any theme publish occurs during an idle window, i.e. whether the in-page dark force survives the measurement (source says publishes are event-driven: settings revision, theme registration, wallpaper override re-stack; panel open/close remounts the wallpaper row and may publish)",
+    "cost attribution for click->panel latency (wallpaper re-apply writing background-image on a 2.2MB full-viewport layer, the blur(2px) backdrop-filter mask over it, General-section mount) - code-supported hypotheses, not measured"
+  ]
+}

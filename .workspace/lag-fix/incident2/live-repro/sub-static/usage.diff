@@ -1,0 +1,100 @@
+--- backup/R4-20260921-115821/deployed/client.js	2026-09-21 11:58:21.345362772 +0800
++++ /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-usage/lib/client.js	2026-09-21 14:30:32.999481943 +0800
+@@ -834,6 +834,22 @@
+ 			const [sessionTo, setSessionTo] = react.useState("");
+ 			const rpcAvailable = rpc && typeof rpc.call === "function";
+ 			const loadAllRef = react.useRef(null);
++			/* dsh-perf-fix R4 v1: 旧响应/卸载保护。RPC 不假设可取消：用单调代次 + alive
++			   标志丢弃过期响应；setup 重新置 alive 以兼容 StrictMode 的 setup→cleanup→setup
++			   与真实 remount；cleanup 递增代次，使上一轮在飞请求在重挂载后也无法复活。 */
++			const aliveRef = react.useRef(true);
++			const allGenerationRef = react.useRef(0);
++			const sessionsGenerationRef = react.useRef(0);
++			const statusGenerationRef = react.useRef(0);
++			react.useEffect(() => {
++				aliveRef.current = true;
++				return () => {
++					aliveRef.current = false;
++					allGenerationRef.current += 1;
++					sessionsGenerationRef.current += 1;
++					statusGenerationRef.current += 1;
++				};
++			}, []);
+ 
+ 			const range = react.useMemo(() => {
+ 				const now = Date.now();
+@@ -872,11 +888,13 @@
+ 			}, [rangeDays, customFrom, customTo]);
+ 			const payload = react.useMemo(() => ({ from: range.from, to: range.to, dataSources: dataSource }), [range.from, range.to, dataSource]);
+ 			const loadAll = react.useCallback(async () => {
++				const generation = ++allGenerationRef.current;
++				const current = () => aliveRef.current && generation === allGenerationRef.current;
+ 				if (!rpcAvailable) {
+-					setError({ code: "unavailable", message: "宿主未注册 /usage RPC 通道" });
++					if (current()) setError({ code: "unavailable", message: "宿主未注册 /usage RPC 通道" });
+ 					return;
+ 				}
+-				setLoading(true);
++				if (current()) setLoading(true);
+ 				try {
+ 					// 2026-09-18b: the intraday series has its OWN window (04:00 →
+ 					// 04:00 of the selected day), independent of the card-level range
+@@ -901,7 +919,7 @@
+ 						// instead of blanking the whole card.
+ 						rpc.call(CHANNEL, "timeseries", { granularity: "hour", from: trendWin.from, to: trendWin.to, dataSources: dataSource }).catch(() => null),
+ 					]);
+-					if (calls.slice(0, 6).every((r) => r && r.ok)) {
++					if (current() && calls.slice(0, 6).every((r) => r && r.ok)) {
+ 						setSummary(calls[0].value);
+ 						setTimeseries(calls[1].value || []);
+ 						setHeatmap(calls[2].value || []);
+@@ -911,37 +929,41 @@
+ 						setTimeseriesHour(calls[6] && calls[6].ok ? calls[6].value || [] : []);
+ 						setTrendWindow(trendWin);
+ 						setError(null);
+-					} else {
++					} else if (current()) {
+ 						const failed = calls.slice(0, 6).find((r) => !r || !r.ok);
+ 						setError((failed && failed.error) || { code: "internal", message: "unknown rpc failure" });
+ 					}
+ 				} catch (cause) {
+-					setError({ code: "transport", message: String((cause && cause.message) || cause) });
++					if (current()) setError({ code: "transport", message: String((cause && cause.message) || cause) });
+ 				} finally {
+-					setLoading(false);
++					if (current()) setLoading(false);
+ 				}
+ 			}, [rpcAvailable, rpc, payload, range.from, dataSource, trendDay]);
+ 			loadAllRef.current = loadAll;
+ 			const loadSessions = react.useCallback(async () => {
++				const generation = ++sessionsGenerationRef.current;
++				const current = () => aliveRef.current && generation === sessionsGenerationRef.current;
+ 				if (!rpcAvailable) return;
+ 				const from = sessionFrom ? new Date(sessionFrom + "T00:00:00").getTime() : range.from;
+ 				const to = sessionTo ? new Date(sessionTo + "T23:59:59").getTime() : range.to;
+ 				try {
+ 					const result = await rpc.call(CHANNEL, "sessions", { from, to, dataSources: dataSource, limit: 200 });
+ 					if (result && result.ok) {
+-						setSessionRows(result.value || []);
+-					} else {
++						if (current()) setSessionRows(result.value || []);
++					} else if (current()) {
+ 						setError((result && result.error) || { code: "internal", message: "sessions rpc failure" });
+ 					}
+ 				} catch (cause) {
+-					setError({ code: "transport", message: String((cause && cause.message) || cause) });
++					if (current()) setError({ code: "transport", message: String((cause && cause.message) || cause) });
+ 				}
+-			}, [rpcAvailable, rpc, dataSource, range.from, range.to, sessionFrom, sessionTo]);
++				}, [rpcAvailable, rpc, dataSource, range.from, range.to, sessionFrom, sessionTo]);
+ 			const loadStatus = react.useCallback(async () => {
++				const generation = ++statusGenerationRef.current;
++				const current = () => aliveRef.current && generation === statusGenerationRef.current;
+ 				if (!rpcAvailable) return;
+ 				try {
+ 					const result = await rpc.call(CHANNEL, "status", {});
+-					if (result && result.ok) setStatus(result.value);
++					if (current() && result && result.ok) setStatus(result.value);
+ 				} catch {
+ 					// status is best-effort
+ 				}

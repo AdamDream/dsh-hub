@@ -1,0 +1,278 @@
+{
+ "tag": "smoke",
+ "config": {
+  "mode": "headless",
+  "target": "minimal",
+  "cells": [
+   "idle-floor",
+   "dom-transform"
+  ],
+  "all": false,
+  "reps": 1,
+  "gpu": "default",
+  "trace": false,
+  "dwell": 3000,
+  "settle": 800,
+  "moveHz": 100,
+  "tag": "smoke",
+  "out": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/minimal-page/raw",
+  "lockWaitMin": 30,
+  "profile": "fresh",
+  "headlessNew": false,
+  "order": "repmajor",
+  "reuse": false,
+  "nolock": true
+ },
+ "startedCells": [
+  "idle-floor",
+  "dom-transform"
+ ],
+ "reps": 1,
+ "lock": {
+  "ok": true,
+  "token": null,
+  "external": true,
+  "waitedMs": 0,
+  "attempts": 0,
+  "preemptions": [],
+  "waits": [],
+  "acquiredAt": "2026-09-22T10:53:58+08:00",
+  "statusAtStart": {
+   "held": true,
+   "raw": "agent: incident2-minimal-page (single-hold campaign)\nline: label=m1 phases=smoke+matrix+trace+gpu\npurpose: one bounded hold covering the whole minimal-page measurement matrix\nowner_pid: 284598   # this probe process; preemption checks THIS\npid: 284598\nhost_pid: 10806   # node dsh web (read-only reference; never restarted, not the owner)\nstarted_at: 2026-09-22T10:53:58+08:00\nstarted_epoch: 1790045638\ntoken: CNS202649516533-284598-k68k76s5\nnote: single browser at a time; releases with rm owner.txt && rmdir; hard cap 30min\n",
+   "owner": {
+    "agent": "incident2-minimal-page (single-hold campaign)",
+    "line": "label=m1 phases=smoke+matrix+trace+gpu",
+    "purpose": "one bounded hold covering the whole minimal-page measurement matrix",
+    "owner_pid": "284598   # this probe process; preemption checks THIS",
+    "pid": "284598",
+    "host_pid": "10806   # node dsh web (read-only reference; never restarted, not the owner)",
+    "started_at": "2026-09-22T10:53:58+08:00",
+    "started_epoch": "1790045638",
+    "token": "CNS202649516533-284598-k68k76s5",
+    "note": "single browser at a time; releases with rm owner.txt && rmdir; hard cap 30min"
+   },
+   "ownerProcessField": "owner_pid",
+   "ownerProcessPid": 284598,
+   "ownerProcessAlive": true,
+   "startedEpoch": 1790045638,
+   "ageMin": 0,
+   "preemptable": false
+  }
+ },
+ "finishedAt": "2026-09-22T10:54:08+08:00",
+ "results": [
+  {
+   "cellId": "idle-floor",
+   "rep": 1,
+   "mode": "headless",
+   "gpu": "default",
+   "trace": null,
+   "scenario": "none",
+   "desc": "n=0, follower off, always-loop on: pure rAF/vsync floor with zero interaction",
+   "primary": {
+    "stats": {
+     "frameCount": 180,
+     "intervalCount": 179,
+     "spanMs": 2983.2,
+     "fpsMean": 60,
+     "p50": 16.699999999999818,
+     "p95": 16.700000000000273,
+     "p99": 16.800000000000068,
+     "max": 16.800000000000182,
+     "mean": 16.67,
+     "gt16_7": 67,
+     "gt20": 0,
+     "gt33": 0,
+     "gt50": 0,
+     "gt100": 0,
+     "pctGt50": 0,
+     "framesMissedVs60": 0
+    },
+    "perfDelta": {
+     "ScriptDuration": 0.0011,
+     "RecalcStyleDuration": 0,
+     "LayoutDuration": 0,
+     "TaskDuration": 0.0063,
+     "LayoutCount": 0,
+     "RecalcStyleCount": 0,
+     "Nodes": 0,
+     "JSEventListeners": 0,
+     "JSHeapUsedSize": 65340,
+     "Script_ms": 1.1,
+     "RecalcStyle_ms": 0,
+     "Layout_ms": 0,
+     "Task_ms": 6.3
+    },
+    "counters": {
+     "moves": 0,
+     "ripplesSpawned": 0,
+     "trayOpens": 0,
+     "trayCloses": 0,
+     "ripplesAliveEnd": 0
+    },
+    "drive": {
+     "movesSent": 0,
+     "wallMs": 0,
+     "nominalHz": 100
+    },
+    "longtaskCount": 0,
+    "loafCount": 0,
+    "longtaskDurSum": 0,
+    "loafDurSum": 0,
+    "loafBlockingSum": 0,
+    "loavesGt50": 0,
+    "observerUnsupported": {
+     "longtask": null,
+     "loaf": null
+    },
+    "visibility": "visible",
+    "hasFocus": true,
+    "screenInfo": {
+     "w": 1600,
+     "h": 900,
+     "aw": 1600,
+     "ah": 900,
+     "dpr": 1
+    },
+    "longestLongtask": null,
+    "worstLoaf": null
+   },
+   "dshPhase": null,
+   "traceError": null,
+   "censusBefore": {
+    "foreignInstanceTotal": 0,
+    "foreignProcTotal": 0,
+    "instanceTotal": 1,
+    "foreignInstances": []
+   },
+   "censusDuringMax": 0,
+   "censusAfter": {
+    "foreignInstanceTotal": 0,
+    "foreignProcTotal": 0,
+    "instanceTotal": 0
+   },
+   "loadBefore": {
+    "l1": 3.68,
+    "l5": 4.58,
+    "l15": 5.01
+   },
+   "loadAfter": {
+    "l1": 3.68,
+    "l5": 4.58,
+    "l15": 5.01
+   },
+   "browserClosed": true,
+   "error": null,
+   "screenshot": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/minimal-page/screens/smoke-idle-floor-headless-default-r1.png",
+   "file": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/minimal-page/raw/smoke-headless-default-idle-floor-r1.json"
+  },
+  {
+   "cellId": "dom-transform",
+   "rep": 1,
+   "mode": "headless",
+   "gpu": "default",
+   "trace": null,
+   "scenario": "ripple",
+   "desc": "n=64, DOM ripples animated by transform (compositable), will-change on",
+   "primary": {
+    "stats": {
+     "frameCount": 300,
+     "intervalCount": 299,
+     "spanMs": 4983.1,
+     "fpsMean": 60,
+     "p50": 16.699999999999818,
+     "p95": 16.799999999999727,
+     "p99": 16.800000000000182,
+     "max": 16.800000000000182,
+     "mean": 16.67,
+     "gt16_7": 93,
+     "gt20": 0,
+     "gt33": 0,
+     "gt50": 0,
+     "gt100": 0,
+     "pctGt50": 0,
+     "framesMissedVs60": 0
+    },
+    "perfDelta": {
+     "ScriptDuration": 0.0108,
+     "RecalcStyleDuration": 0.0756,
+     "LayoutDuration": 0.0196,
+     "TaskDuration": 0.2453,
+     "LayoutCount": 526,
+     "RecalcStyleCount": 619,
+     "Nodes": 320,
+     "JSEventListeners": 300,
+     "JSHeapUsedSize": 287452,
+     "Script_ms": 10.8,
+     "RecalcStyle_ms": 75.6,
+     "Layout_ms": 19.6,
+     "Task_ms": 245.3
+    },
+    "counters": {
+     "moves": 300,
+     "ripplesSpawned": 300,
+     "trayOpens": 0,
+     "trayCloses": 0,
+     "ripplesAliveEnd": 37
+    },
+    "drive": {
+     "movesSent": 300,
+     "wallMs": 4995,
+     "nominalHz": 100,
+     "effectiveHz": 60.1,
+     "rectRefreshes": 0
+    },
+    "longtaskCount": 0,
+    "loafCount": 0,
+    "longtaskDurSum": 0,
+    "loafDurSum": 0,
+    "loafBlockingSum": 0,
+    "loavesGt50": 0,
+    "observerUnsupported": {
+     "longtask": null,
+     "loaf": null
+    },
+    "visibility": "visible",
+    "hasFocus": true,
+    "screenInfo": {
+     "w": 1600,
+     "h": 900,
+     "aw": 1600,
+     "ah": 900,
+     "dpr": 1
+    },
+    "longestLongtask": null,
+    "worstLoaf": null
+   },
+   "dshPhase": null,
+   "traceError": null,
+   "censusBefore": {
+    "foreignInstanceTotal": 0,
+    "foreignProcTotal": 0,
+    "instanceTotal": 1,
+    "foreignInstances": []
+   },
+   "censusDuringMax": 0,
+   "censusAfter": {
+    "foreignInstanceTotal": 0,
+    "foreignProcTotal": 0,
+    "instanceTotal": 0
+   },
+   "loadBefore": {
+    "l1": 3.68,
+    "l5": 4.58,
+    "l15": 5.01
+   },
+   "loadAfter": {
+    "l1": 3.34,
+    "l5": 4.48,
+    "l15": 4.97
+   },
+   "browserClosed": true,
+   "error": null,
+   "screenshot": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/minimal-page/screens/smoke-dom-transform-headless-default-r1.png",
+   "file": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/minimal-page/raw/smoke-headless-default-dom-transform-r1.json"
+  }
+ ]
+}

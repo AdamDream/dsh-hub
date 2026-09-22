@@ -1,0 +1,65 @@
+=== full-screen window 0x200000a properties ===
+WM_STATE(WM_STATE):
+		window state: Normal
+		icon window: 0x0
+_GTK_EDGE_CONSTRAINTS(CARDINAL) = 170
+_NET_WM_ALLOWED_ACTIONS(ATOM) = _NET_WM_ACTION_CHANGE_DESKTOP, _NET_WM_ACTION_ABOVE, _NET_WM_ACTION_BELOW
+_NET_WM_DESKTOP(CARDINAL) = 4294967295
+_NET_WM_STATE(ATOM) = _NET_WM_STATE_SKIP_PAGER, _NET_WM_STATE_SKIP_TASKBAR, _NET_WM_STATE_STICKY
+WM_HINTS(WM_HINTS):
+		Client accepts input or input focus: True
+		Initial state is Normal State.
+		window id # of group leader: 0x2000001
+_GTK_THEME_VARIANT(UTF8_STRING) = 
+XdndAware(ATOM) = BITMAP
+_GTK_WINDOW_OBJECT_PATH(UTF8_STRING) = "/com/rastersoft/ding/window/1"
+_GTK_APPLICATION_OBJECT_PATH(UTF8_STRING) = "/com/rastersoft/ding"
+_GTK_UNIQUE_BUS_NAME(UTF8_STRING) = ":1.99"
+_GTK_APPLICATION_ID(UTF8_STRING) = "com.rastersoft.ding"
+_MOTIF_WM_HINTS(_MOTIF_WM_HINTS) = 0x3, 0x21, 0x0, 0x0, 0x0
+_NET_WM_WINDOW_TYPE(ATOM) = _NET_WM_WINDOW_TYPE_DESKTOP
+_NET_WM_SYNC_REQUEST_COUNTER(CARDINAL) = 33554444, 33554445
+_NET_WM_USER_TIME_WINDOW(WINDOW): window id # 0x200000b
+WM_CLIENT_LEADER(WINDOW): window id # 0x2000001
+_NET_WM_PID(CARDINAL) = 4856
+WM_LOCALE_NAME(STRING) = "zh_CN.UTF-8"
+WM_CLIENT_MACHINE(STRING) = "CNS202649516533"
+WM_NORMAL_HINTS(WM_SIZE_HINTS):
+		program specified minimum size: 5120 by 2880
+		program specified maximum size: 5120 by 2880
+		program specified resize increment: 2 by 2
+		program specified base size: 0 by 0
+
+=== xwininfo detail ===
+
+xwininfo: Window id: 0x200000a "@!0,0;BDHF"
+
+  Absolute upper-left X:  0
+  Absolute upper-left Y:  0
+  Relative upper-left X:  0
+  Relative upper-left Y:  0
+  Width: 5120
+  Height: 2880
+  Depth: 32
+  Visual: 0x54d
+  Visual Class: TrueColor
+  Border width: 0
+  Class: InputOutput
+  Colormap: 0x2000009 (not installed)
+  Bit Gravity State: NorthWestGravity
+  Window Gravity State: NorthWestGravity
+  Backing Store State: NotUseful
+  Save Under State: no
+  Map State: IsViewable
+  Override Redirect State: no
+  Corners:  +0+0  -0+0  -0-0  +0-0
+  -geometry 2560x1440+0+0
+
+
+=== which gjs pids own it (both gjs processes) ===
+4238 /usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.Shell.Notifications
+4646 /usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.ScreenSaver
+4856 gjs /usr/share/gnome-shell/extensions/ding@rastersoft.com/app/ding.js -E -P /usr/share/gnome-shell/extensions/ding@rastersoft.com/app
+
+=== X client pid for that window ===
+_NET_WM_PID(CARDINAL) = 4856

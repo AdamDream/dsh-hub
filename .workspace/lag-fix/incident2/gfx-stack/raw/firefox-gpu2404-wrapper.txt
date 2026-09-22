@@ -1,0 +1,201 @@
+=== snap/command-chain ===
+总计 3
+drwxr-xr-x 2 root root 101  9月  4 15:14 .
+drwxr-xr-x 3 root root  79  9月  4 15:14 ..
+-rwxr-xr-x 1 root root 149  9月  4 15:14 desktop-launch
+-rwxr-xr-x 1 root root 666  9月  4 15:14 gpu-2404-wrapper
+-rwxr-xr-x 1 root root 156  9月  4 15:14 hooks-configure-fonts
+-rwxr-xr-x 1 root root 541  9月  4 15:14 run
+
+=== gpu-2404-wrapper ===
+#!/bin/bash
+
+GPU_WRAPPER="${SNAP}/gpu-2404/bin/gpu-2404-provider-wrapper"
+
+if [ -z "$1" ]; then
+  echo "Usage: gpu-2404-wrapper <command>"
+  exit 1
+fi
+
+if [ -z "${SNAP}" ]; then
+  echo "Not running inside a snap context: SNAP not declared"
+  exit 2
+fi
+
+if [ ! -f "${GPU_WRAPPER}" ]; then
+  echo "Content snap GPU wrapper '${GPU_WRAPPER}' not found: ensure slot is connected"
+  exit 3
+fi
+
+# emulate "exec $@" using "source"
+# have to disable "unused variables" because checkshell doesn't know that $BASH_ARGV0 is $0
+# shellcheck disable=SC2034  # Unused variables left for readability
+BASH_ARGV0="${GPU_WRAPPER}"
+# shellcheck source=/dev/null
+source "${GPU_WRAPPER}"
+
+=== snapcraft.yaml lines 170-200 (layout) ===
+    override-build: |
+      craftctl default
+      if [ $CRAFT_ARCH_BUILD_FOR = "amd64" ] || [ $CRAFT_ARCH_BUILD_FOR = "arm64" ]; then
+        cargo-1.91 build --release
+        mkdir -p $CRAFT_STAGE/usr/bin/
+        cp target/release/dump_syms $CRAFT_STAGE/usr/bin/
+      fi
+
+  # This is a temporary workaround to including the hunspell content
+  # snap, which would cause breakage in the Ubuntu desktop image build
+  # because of the Ubuntu policy.  See:
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1792006
+  #
+  # The definition of this part is essentially a copy of the
+  # corresponding part in hunspell-dictionaries-1-7-2004 by
+  # Buo-ren, Lin.
+  hunspell:
+    plugin: nil
+    override-build: |
+      craftctl default
+      set -eu
+      apt download $(apt-cache search '^hunspell-.*$' |
+        awk '!/myspell|dbgsym|tools|transitional|dependency/{printf "%s ", $1}')
+      find . -name "*.deb" -exec dpkg-deb -x {} "$CRAFT_PART_INSTALL" \;
+    prime:
+      - usr/share/hunspell
+
+  mozconfig:
+    plugin: nil
+    override-stage: |
+      cp $CRAFT_PROJECT_DIR/mozconfig.in $CRAFT_STAGE/mozconfig
+    override-prime: ''
+
+  # Launchpad builders have a timeout for how long they are allowed to access
+  # the internet (through a proxy) starting from the start of the build.
+  # Since the firefox part takes a long time to build, we need to ensure
+  # that all other parts that need to access the internet (to e.g. fetch build
+  # or stage packages) are built before it (before the proxy authentication is
+  # revoked).
+  firefox:
+    plugin: nil
+
+=== snap.yaml layout section ===
+  post-refresh:
+    plugs:
+    - host-usr-share-hunspell
+  install:
+    plugs:
+    - host-usr-share-hunspell
+  configure:
+    command-chain:
+    - snap/command-chain/hooks-configure-fonts
+    plugs:
+    - desktop
+layout:
+  /usr/lib/x86_64-linux-gnu/opensc-pkcs11.so:
+    bind-file: $SNAP/usr/lib/x86_64-linux-gnu/opensc-pkcs11.so
+  /usr/share/libdrm:
+    bind: $SNAP/gpu-2404/libdrm
+  /usr/share/drirc.d:
+    symlink: $SNAP/gpu-2404/drirc.d
+  /usr/share/X11/XErrorDB:
+    symlink: $SNAP/gpu-2404/X11/XErrorDB
+  /usr/lib/x86_64-linux-gnu/webkit2gtk-4.0:
+    bind: $SNAP/gnome-platform/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0
+  /usr/lib/x86_64-linux-gnu/webkit2gtk-4.1:
+    bind: $SNAP/gnome-platform/usr/lib/x86_64-linux-gnu/webkit2gtk-4.1
+  /usr/lib/x86_64-linux-gnu/libproxy:
+    bind: $SNAP/gnome-platform/usr/lib/x86_64-linux-gnu/libproxy
+  /usr/share/xml/iso-codes:
+    bind: $SNAP/gnome-platform/usr/share/xml/iso-codes
+links:
+  source-code:
+  - https://github.com/canonical/firefox-snap
+
+=== mesa-2404 bin (has nvidia helpers?) ===
+总计 1329
+drwxr-xr-x 2 root root      73  6月 30 17:25 .
+drwxr-xr-x 9 root root     113  6月 30 17:25 ..
+-rwxr-xr-x 1 root root 1356776  6月 30 17:25 component-monitor
+-r-xr-xr-x 1 root root    3504  6月 30 17:25 gpu-2404-provider-wrapper
+=== mesa-2404 snap/ hooks ===
+总计 70
+drwxr-xr-x 2 root root    76  6月 30 17:26 .
+drwxr-xr-x 9 root root   113  6月 30 17:25 ..
+-rw-r--r-- 1 root root 30979  6月 30 17:25 amd64.list
+-rw-r--r-- 1 root root 26876  6月 30 17:26 manifest.yaml
+-rw-r--r-- 1 root root 12862  6月 30 17:26 snapcraft.yaml
+=== gpu-2404 symlink dir in firefox snap (host view) ===
+总计 0
+drwxr-xr-x 2 root root   3  9月  4 15:14 .
+drwxr-xr-x 6 root root 179  9月  4 15:14 ..
+=== mesa-2404 libdrm ===
+总计 23
+drwxr-xr-x 2 root root    33  6月 30 17:25 .
+drwxr-xr-x 9 root root   113  6月 30 17:25 ..
+-rw-r--r-- 1 root root 23250  6月  8  2025 amdgpu.ids
+=== mesa-2404 X11 ===
+总计 42
+drwxr-xr-x 2 root root    31  6月 30 17:25 .
+drwxr-xr-x 9 root root   113  6月 30 17:25 ..
+-rw-r--r-- 1 root root 42077  4月  9  2024 XErrorDB
+=== mesa-2404 usr/lib/x86_64-linux-gnu: dri dir? ===
+dri
+gbm
+libdrm_amdgpu.so.1
+libdrm_amdgpu.so.1.125.0
+libdrm_intel.so.1
+libdrm_intel.so.1.125.0
+libdrm_nouveau.so.2
+libdrm_nouveau.so.2.125.0
+libdrm_radeon.so.1
+libdrm_radeon.so.1.125.0
+libdrm.so.2
+libdrm.so.2.125.0
+libEGL_mesa.so.0
+libEGL_mesa.so.0.0.0
+libEGL.so.1
+libEGL.so.1.1.0
+libgallium-25.2.8-0ubuntu0.24.04.2.so
+libgbm.so.1
+libgbm.so.1.0.0
+libglapi.so.0
+libglapi.so.0.0.0
+libGLdispatch.so.0
+libGLdispatch.so.0.0.0
+libGLESv2.so.2
+libGLESv2.so.2.1.0
+libGL.so.1
+libGL.so.1.7.0
+libGLX_indirect.so.0
+libGLX_mesa.so.0
+libGLX_mesa.so.0.0.0
+libGLX.so.0
+libGLX.so.0.0.0
+libicudata.so.74
+libicudata.so.74.2
+libicui18n.so.74
+libicui18n.so.74.2
+libicuio.so.74
+libicuio.so.74.2
+libicutest.so.74
+libicutest.so.74.2
+=== mesa-2404 dri ===
+总计 15117
+drwxr-xr-x 2 root root     1332  6月 30 17:25 .
+drwxr-xr-x 5 root root     3461  6月 30 17:25 ..
+lrwxrwxrwx 1 root root       14  4月 21 22:43 apple_dri.so -> libdril_dri.so
+lrwxrwxrwx 1 root root       14  4月 21 22:43 armada-drm_dri.so -> libdril_dri.so
+lrwxrwxrwx 1 root root       14  4月 21 22:43 asahi_dri.so -> libdril_dri.so
+lrwxrwxrwx 1 root root       14  4月 21 22:43 crocus_dri.so -> libdril_dri.so
+lrwxrwxrwx 1 root root       14  4月 21 22:43 d3d12_dri.so -> libdril_dri.so
+lrwxrwxrwx 1 root root       40  4月 21 22:43 d3d12_drv_video.so -> ../libgallium-25.2.8-0ubuntu0.24.04.2.so
+lrwxrwxrwx 1 root root       14  4月 21 22:43 exynos_dri.so -> libdril_dri.so
+lrwxrwxrwx 1 root root       14  4月 21 22:43 gm12u320_dri.so -> libdril_dri.so
+lrwxrwxrwx 1 root root       14  4月 21 22:43 hdlcd_dri.so -> libdril_dri.so
+lrwxrwxrwx 1 root root       14  4月 21 22:43 hx8357d_dri.so -> libdril_dri.so
+lrwxrwxrwx 1 root root       14  4月 21 22:43 i915_dri.so -> libdril_dri.so
+-rw-r--r-- 1 root root  1772232  6月 10 21:10 i965_drv_video.so
+-rw-r--r-- 1 root root 13589472  1月 13  2026 iHD_drv_video.so
+lrwxrwxrwx 1 root root       14  4月 21 22:43 ili9163_dri.so -> libdril_dri.so
+lrwxrwxrwx 1 root root       14  4月 21 22:43 ili9225_dri.so -> libdril_dri.so
+lrwxrwxrwx 1 root root       14  4月 21 22:43 ili9341_dri.so -> libdril_dri.so
+lrwxrwxrwx 1 root root       14  4月 21 22:43 ili9486_dri.so -> libdril_dri.so

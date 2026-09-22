@@ -1,0 +1,180 @@
+{
+  "cond": "tp-off",
+  "label": "smoke-tpoff",
+  "ts": "2026-09-22T02:14:27.620Z",
+  "nav": {
+    "domcontentloadedMs": 32,
+    "settleMs": 2500,
+    "clicked": true,
+    "closed": true,
+    "clickWallMs": 44,
+    "dwellMs": 3000,
+    "wallS": 3.047
+  },
+  "stub": {
+    "spec": "tp-off",
+    "effective": false,
+    "mountProof": {
+      "mechanism": "landingIntact forced false via body getPropertyValue readback",
+      "expected": "readback>0 且 forcedReplay==readback",
+      "tpTokenReadbacks": 0,
+      "tpForcedReplay": 0,
+      "effective": false,
+      "counters": {
+        "tpSignatureChecks": 0,
+        "tpSkipTake": 0,
+        "tpForcedReplay": 0,
+        "tpTokenReadbacks": 0,
+        "tpBodyWrites": 1,
+        "tcRafScheduled": 3,
+        "tcSyncInvoked": 0,
+        "tcRefreshRan": 0,
+        "tcComputedReads": 2,
+        "usageRequestsSeen": 0,
+        "usageRequestsBlocked": 0,
+        "usageByMethod": {},
+        "p2acOldCarryHits": 0,
+        "p2acKeyGateActive": 0,
+        "fetchSeen": 25,
+        "xhrSeen": 0,
+        "wsFramesSeen": 173
+      },
+      "stubLog": [
+        [
+          1790043261596,
+          "installed",
+          "tp-off"
+        ]
+      ]
+    },
+    "clickProof": {
+      "mechanism": "landingIntact forced false via body getPropertyValue readback",
+      "expected": "readback>0 且 forcedReplay==readback",
+      "tpTokenReadbacks": 0,
+      "tpForcedReplay": 0,
+      "effective": false,
+      "counters": {
+        "tpSignatureChecks": 0,
+        "tpSkipTake": 0,
+        "tpForcedReplay": 0,
+        "tpTokenReadbacks": 0,
+        "tpBodyWrites": 1,
+        "tcRafScheduled": 187,
+        "tcSyncInvoked": 0,
+        "tcRefreshRan": 0,
+        "tcComputedReads": 2,
+        "usageRequestsSeen": 0,
+        "usageRequestsBlocked": 0,
+        "usageByMethod": {},
+        "p2acOldCarryHits": 0,
+        "p2acKeyGateActive": 0,
+        "fetchSeen": 26,
+        "xhrSeen": 0,
+        "wsFramesSeen": 348
+      },
+      "stubLog": [
+        [
+          1790043261596,
+          "installed",
+          "tp-off"
+        ]
+      ]
+    },
+    "routeHits": null
+  },
+  "phaseMount": {
+    "ScriptDuration": 0.236,
+    "RecalcStyleDuration": 0.018,
+    "TaskDuration": 0.55,
+    "RecalcStyleCount": 87
+  },
+  "phaseClick": {
+    "ScriptDuration": 0.254,
+    "RecalcStyleDuration": 0.018,
+    "LayoutDuration": 0.004,
+    "TaskDuration": 0.327,
+    "RecalcStyleCount": 191,
+    "ScriptMsPerS": 0.083,
+    "RecalcMsPerS": 0.006,
+    "TaskMsPerS": 0.107
+  },
+  "rafClick": {
+    "n": 183,
+    "min": 8.016,
+    "p50": 16.7,
+    "p90": 16.7,
+    "p99": 16.8,
+    "max": 16.8,
+    "mean": 16.619,
+    "over50": 0,
+    "over100": 0
+  },
+  "longtasks": {
+    "n": 0,
+    "totalMs": 0,
+    "maxMs": null
+  },
+  "ws": {
+    "total": 348,
+    "byType": {
+      "server-request": 348
+    }
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "concurrency": {
+    "gateOutcome": "EXCLUSIVE",
+    "gateWaitedMs": 21385,
+    "foreignSeenDuringGate": [
+      "28057@00:01",
+      "28057@00:02",
+      "28057@00:03",
+      "28057@00:04",
+      "28057@00:05",
+      "28057@00:06",
+      "28057@00:07",
+      "28285@00:00",
+      "28057@00:08",
+      "28285@00:01",
+      "28057@00:09",
+      "28285@00:02",
+      "28057@00:10",
+      "28285@00:03",
+      "28057@00:11",
+      "28285@00:04",
+      "28285@00:05",
+      "28285@00:06",
+      "28285@00:07",
+      "28285@00:08",
+      "28285@00:09",
+      "28285@00:10",
+      "28285@00:11",
+      "28285@00:12",
+      "28285@00:13",
+      "28285@00:14"
+    ],
+    "censusStart": {
+      "at": "2026-09-22T02:14:21.479Z",
+      "instances": 0,
+      "mineCount": 0,
+      "foreignCount": 0,
+      "foreign": [],
+      "lockOwner": "agent: incident2-regression (first-open A/B) line: cond=tp-off pid: 28164",
+      "lockHeldByMyLine": true
+    },
+    "censusEnd": {
+      "at": "2026-09-22T02:14:27.620Z",
+      "instances": 0,
+      "mineCount": 0,
+      "foreignCount": 0,
+      "foreign": [],
+      "lockOwner": null,
+      "lockHeldByMyLine": false
+    },
+    "exclusiveThroughout": true
+  },
+  "lock": {
+    "heldAtStart": true,
+    "released": true
+  }
+}

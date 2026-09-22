@@ -1,0 +1,42 @@
+[lock] 初始 {"exists":true,"owner":"incident2-conditions","pid":null,"line":"conditions-matrix","mine":false}
+[lock-wait] 0s attempts=1 owner=incident2-conditions pid=null alive=false
+[lock-wait] 11s attempts=40 owner=incident2-conditions pid=null alive=false
+[lock-wait] 22s attempts=80 owner=incident2-conditions pid=null alive=false
+[lock] 原子取得（attempt 114, 32s）
+[nav] domcontentloaded at +6115ms
+[settle] quiet after 7208ms (nav->settle 13323ms)
+[clock] page.timeOrigin=1790045154066.5 node.timeOrigin=1790045122244.9 Δ=31821.6ms  evalRTT=0.5ms ⇒ 换算误差界 ±0.3ms
+[STALL] seq=0 /api/host.describe 771.2ms (phase=pending)
+[STALL] seq=1 /usage/status 243.7ms (phase=pending)
+[STALL] seq=2 /api/host.describe 203.9ms (phase=pending)
+[STALL] seq=3 /usage/status 216.1ms (phase=pending)
+[STALL] seq=4 /api/host.describe 187.5ms (phase=pending)
+[STALL] seq=5 /usage/status 193.8ms (phase=pending)
+[STALL] seq=6 /api/host.describe 189.1ms (phase=pending)
+[STALL] seq=7 /usage/status 123.0ms (phase=pending)
+[STALL] seq=8 /api/host.describe 148.7ms (phase=pending)
+[pre] 3000ms 结束：累计拍数=15（循环是否在跑=true）
+[click] anchor=1790045170447.5 来源=pointerdown-captured(页内捕获) 不确定度=±0.0ms  夹逼宽=51.4ms err=none
+[STALL] seq=15 /usage/status 422.3ms (phase=pending)
+[STALL] seq=16 /api/host.describe 358.3ms (phase=pending)
+[STALL] seq=17 /usage/status 280.1ms (phase=pending)
+[STALL] seq=18 /api/host.describe 221.4ms (phase=pending)
+[STALL] seq=19 /usage/status 161.0ms (phase=pending)
+[STALL] seq=25 /usage/status 169.8ms (phase=pending)
+[STALL] seq=26 /api/host.describe 109.4ms (phase=pending)
+[STALL] seq=27 /usage/status 118.8ms (phase=pending)
+[STALL] seq=28 /api/host.describe 100.9ms (phase=pending)
+[STALL] seq=33 /usage/status 122.3ms (phase=pending)
+[STALL] seq=35 /usage/status 125.6ms (phase=pending)
+[STALL] seq=36 /api/host.describe 182.7ms (phase=pending)
+[STALL] seq=37 /usage/status 188.8ms (phase=pending)
+[STALL] seq=38 /api/host.describe 152.1ms (phase=pending)
+[diag] beats=39 首拍 t0-anchor=-3045.4 末拍 t0-anchor=3007.6
+[diag] 窗内拍数 pre=15 click±500=5 post=22；探针自我饿住 idleExcess p50=0.0 max=0.0
+[diag] 点击→设置面板可见 = 未采到（INCONCLUSIVE）；页内可见性轮询最大间隔=n/ams；页内 rpcTimeline=0 条；墙钟残差=-1.1ms
+[summary pre]           n=15 p50=148.7 p95=297.2 max=422.3
+[summary click±500ms]   n=5 p50=280.1 p95=409.5 max=422.3
+[summary post3s]        n=22 p50=105.1 p95=277.1 max=358.3
+[stalls>=100ms in click window] 3
+[out] raw/click-run5.json
+[lock] 释放跳过：owner=null（不是本线，绝不清理他人记账）

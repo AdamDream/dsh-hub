@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "line": "conditions-matrix",
+    "agent": "incident2-conditions",
+    "label": "smoke",
+    "url": "http://127.0.0.1:3080",
+    "startedAt": "2026-09-22T10:14:24+08:00",
+    "hostPid": 10806,
+    "hostPidAlive": true,
+    "prereg": {
+      "jank_frames_gt50_post": 3,
+      "jank_longest_task_ms": 100,
+      "jank_click_to_panel_ms": 300,
+      "smooth_frames_gt50_post": 1,
+      "smooth_longest_task_ms": 50,
+      "smooth_click_to_panel_ms": 200
+    },
+    "design": "OFAT：BASE 为参照，每个 cell 只改一个因子；每 cell 每次 rep 为全新 context+page",
+    "criteria": "click→面板可见耗时 + 点击前后各 3s 的 >50ms 帧数与最长任务",
+    "discipline": "只点 设置/关闭/设置页导航/侧栏会话标题；不点 保存/应用/删除/移除壁纸/模型切换；不 pkill",
+    "cells": [
+      {
+        "id": "BASE",
+        "dim": "0-baseline",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      }
+    ],
+    "reps": 1
+  },
+  "lock": {
+    "ok": false,
+    "reason": "wait-timeout",
+    "acquired": false
+  },
+  "environment": {
+    "atStart": null,
+    "atEnd": null
+  },
+  "reps": [],
+  "summary": null,
+  "terminated": null,
+  "finishedAt": "2026-09-22T10:17:18+08:00",
+  "log": [
+    "[10:14:24] pre-launch browser instances: 1",
+    "[10:14:24] LOCK held by incident2-regression (first-open A/B) (age ?min, ownPid 28164/true); retry in 38s (elapsed 0s)",
+    "[10:15:01] LOCK held by unknown (age ?min, ownPid unknown/null); retry in 37s (elapsed 38s)",
+    "[10:15:39] LOCK held by unknown (age ?min, ownPid unknown/null); retry in 33s (elapsed 75s)",
+    "[10:16:11] LOCK held by incident2-regression (first-open A/B) (age ?min, ownPid 32323/true); retry in 36s (elapsed 107s)",
+    "[10:16:48] LOCK held by unknown (age ?min, ownPid unknown/null); retry in 30s (elapsed 144s)",
+    "[10:17:18] LOCK wait exceeded 150000ms; giving up (NOT taking the lock)",
+    "[10:17:18] LOCK NOT ACQUIRED → 不启动浏览器（纪律）"
+  ]
+}

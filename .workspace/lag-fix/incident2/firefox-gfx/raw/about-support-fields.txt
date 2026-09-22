@@ -1,0 +1,109 @@
+### about:support EXACT FIELD NAMES — extracted from THIS build's own snap files
+### source: /snap/firefox/8863/usr/lib/firefox/omni.ja
+###   -> chrome/toolkit/content/global/aboutSupport.js
+###   -> localization/en-US/toolkit/about/aboutSupport.ftl
+
+=== aboutSupport.ftl lines 94-102,245 ===
+graphics-title = Graphics
+graphics-features-title = Features
+graphics-diagnostics-title = Diagnostics
+graphics-failure-log-title = Failure Log
+graphics-gpu1-title = GPU #1
+graphics-gpu2-title = GPU #2
+graphics-decision-log-title = Decision Log
+graphics-crash-guards-title = Crash Guard Disabled Features
+graphics-workarounds-title = Workarounds
+compositing = Compositing
+
+=== aboutSupport.js: row construction ===
+611:      addRow("diagnostics", "gpu-process-pid", [new Text(gpuProcessPid)]);
+613:        addRow("diagnostics", "gpu-process", [gpuProcessKillButton]);
+631:      addRow("diagnostics", "gpu-device-reset", [gpuDeviceResetButton]);
+709:    addRow("features", "graphicsDevicePixelRatios", [
+720:    addRow("features", "compositing", [new Text(compositor)]);
+721:    addRow("features", "supportFontDetermination", [
+777:        await addRow("features", feature, [new Text(str)]);
+787:      await addRow("features", "#DirectWrite", [new Text(message)]);
+842:    let featureLog = data.featureLog;
+843:    delete data.featureLog;
+845:    if (featureLog.features.length) {
+846:      for (let feature of featureLog.features) {
+905:    if (featureLog.fallbacks.length) {
+906:      for (let fallback of featureLog.fallbacks) {
+907:        addRow("workarounds", "#" + fallback.name, [
+915:    let crashGuards = data.crashGuards;
+916:    delete data.crashGuards;
+918:    if (crashGuards.length) {
+919:      for (let guard of crashGuards) {
+940:      addRow("diagnostics", key, [new Text(value)]);
+
+=== aboutSupport.js line 715-725 (Compositing row) ===
+      compositor = data.windowLayerManagerType;
+    } else {
+      let noOMTCString = await document.l10n.formatValue("main-thread-no-omtc");
+      compositor = "BasicLayers (" + noOMTCString + ")";
+    }
+    addRow("features", "compositing", [new Text(compositor)]);
+    addRow("features", "supportFontDetermination", [
+      new Text(data.supportFontDetermination),
+    ]);
+    delete data.windowLayerManagerRemote;
+    delete data.windowLayerManagerType;
+
+=== aboutSupport.js line 750-782 (featureKeys incl. Window Protocol / Target Frame Rate) ===
+      "webgl1Renderer",
+      "webgl1Version",
+      "webgl1DriverExtensions",
+      "webgl1Extensions",
+      "webgl2WSIInfo",
+      "webgl2Renderer",
+      "webgl2Version",
+      "webgl2DriverExtensions",
+      "webgl2Extensions",
+      ["supportsHardwareH264", "hardware-h264"],
+      ["windowProtocol", "graphics-window-protocol"],
+      ["desktopEnvironment", "graphics-desktop-environment"],
+      "targetFrameRate",
+    ];
+    for (let feature of featureKeys) {
+      if (Array.isArray(feature)) {
+        await addRowFromKey("features", feature[0], feature[1]);
+        continue;
+      }
+      await addRowFromKey("features", feature);
+    }
+
+    featureKeys = ["webgpuDefaultAdapter", "webgpuFallbackAdapter"];
+    for (let feature of featureKeys) {
+      const obj = data[feature];
+      if (obj) {
+        const str = JSON.stringify(obj, null, "  ");
+        await addRow("features", feature, [new Text(str)]);
+        delete data[feature];
+      }
+    }
+
+    if ("directWriteEnabled" in data) {
+
+=== aboutSupport.js line 785-800 (GPU adapter rows) ===
+        message += " (" + data.directWriteVersion + ")";
+      }
+      await addRow("features", "#DirectWrite", [new Text(message)]);
+      delete data.directWriteEnabled;
+      delete data.directWriteVersion;
+    }
+
+    // Adapter tbodies.
+    let adapterKeys = [
+      ["adapterDescription", "gpu-description"],
+      ["adapterVendorID", "gpu-vendor-id"],
+      ["adapterDeviceID", "gpu-device-id"],
+      ["driverVendor", "gpu-driver-vendor"],
+      ["driverVersion", "gpu-driver-version"],
+      ["driverDate", "gpu-driver-date"],
+      ["adapterDrivers", "gpu-drivers"],
+      ["adapterSubsysID", "gpu-subsys-id"],
+      ["adapterRAM", "gpu-ram"],
+    ];
+
+    function showGpu(id, suffix) {

@@ -1,0 +1,17 @@
+=== exact cpu index for xhci IRQs ===
+IRQ   47 cpus_with_irqs=[22] max_cpu=22 name=xhci_hcd
+IRQ   55 cpus_with_irqs=[] max_cpu=0 name=xhci_hcd
+IRQ   64 cpus_with_irqs=[] max_cpu=0 name=xhci_hcd
+IRQ   73 cpus_with_irqs=[25] max_cpu=25 name=xhci_hcd
+IRQ   81 cpus_with_irqs=[26] max_cpu=26 name=xhci_hcd
+IRQ  134 cpus_with_irqs=[5] max_cpu=5 name=amdgpu
+
+=== which usb bus is on 73:00.4 / 74:00.0 ===
+usb7: pci=0000:73:00.4
+usb8: pci=0000:73:00.4
+usb9: pci=0000:74:00.0
+
+=== devices under bus 7/8 subtree ===
+/sys/bus/usb/devices/7-2 = Generic USB2.1 Hub 0bda:5411
+/sys/bus/usb/devices/8-2 = Generic USB3.2 Hub 0bda:0411
+/sys/bus/usb/devices/8-2.3 = MediaTek Inc. Wireless_Device 0e8d:7961

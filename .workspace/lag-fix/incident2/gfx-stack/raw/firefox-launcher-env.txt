@@ -1,0 +1,148 @@
+=== firefox.launcher (snap) ===
+#!/bin/sh
+
+# Copyright (C) 2021 Canonical Ltd.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3, as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# When running the snap for the first time, try and locate an existing
+# firefox config in $SNAP_REAL_HOME/.mozilla/firefox, and import it.
+# This requires the personal-files plug to be connected.
+# This is a stopgap measure until proper profile migration is implemented
+# in firefox (see https://bugzilla.mozilla.org/1730530).
+DOTMOZILLA="$SNAP_USER_COMMON/.mozilla"
+if [ ! -d "$DOTMOZILLA" ]; then
+  FIREFOX_CONFIG="$SNAP_REAL_HOME/.mozilla/firefox"
+  cat "$FIREFOX_CONFIG/profiles.ini" >/dev/null 2>&1
+  if [ "$?" -eq "0" ]; then
+    SIZE=$(du -sb $FIREFOX_CONFIG | cut -f 1)
+    AVAILABLE_BLOCKS=$(stat -f -c %a $SNAP_USER_COMMON)
+    BLOCK_SIZE=$(stat -f -c %s $SNAP_USER_COMMON)
+    AVAILABLE_SIZE=$(($AVAILABLE_BLOCKS*$BLOCK_SIZE))
+    if [ $AVAILABLE_SIZE -gt $SIZE ]; then
+      printf "Importing existing firefox profiles from $FIREFOX_CONFIG\n"
+      TS1=$(date +%s.%3N)
+      mkdir -p "$DOTMOZILLA"
+      cp -R "$FIREFOX_CONFIG" "$DOTMOZILLA/"
+      # Search and replace absolute file paths in plain-text config files.
+      for FILENAME in "pkcs11.txt" "extensions.json"; do
+        find "$DOTMOZILLA/firefox" -name "$FILENAME" \
+            -exec sed -i "s#$FIREFOX_CONFIG#$DOTMOZILLA/firefox#g" {} \;
+      done
+      # Patch the imported profiles to set the default one for use by the snap
+      # (legacy mode, no dedicated profiles).
+      $SNAP/patch-default-profile.py "$DOTMOZILLA/firefox/profiles.ini"
+      TS2=$(date +%s.%3N)
+      T=$(printf "$TS1 $TS2" | awk '{printf "%.3f",$2-$1}')
+      printf "Import done in $T s\n"
+    else
+      printf "Not importing existing firefox profiles from $FIREFOX_CONFIG "
+      printf "because there is not enough available space in $SNAP_USER_COMMON "
+      printf "(required: $SIZE bytes / available: $AVAILABLE_SIZE bytes)\n"
+    fi
+  fi
+fi
+
+exec "$SNAP/usr/lib/firefox/firefox" "$@"
+
+=== firefox-desktop wrapper in snap ===
+总计 257462
+drwxr-xr-x 7 root root       761  9月  4 15:14 .
+drwxr-xr-x 4 root root        66  9月  4 15:14 ..
+-rw-r--r-- 1 root root       700  9月  4 15:10 application.ini
+drwxr-xr-x 3 root root        44  9月  4 15:14 browser
+-rwxr-xr-x 1 root root   1860512  9月  4 15:14 crashhelper
+-rwxr-xr-x 1 root root   4500640  9月  4 15:14 crashreporter
+drwxr-xr-x 3 root root        27  9月  4 15:14 defaults
+-rw-r--r-- 1 root root       189  9月  4 15:10 dependentlibs.list
+drwxr-xr-x 4 root root        90  9月  4 15:14 distribution
+-rwxr-xr-x 1 root root    631464  9月  4 15:14 firefox
+-rwxr-xr-x 1 root root    631368  9月  4 15:14 firefox-bin
+drwxr-xr-x 2 root root        41  9月  4 15:14 fonts
+-rwxr-xr-x 1 root root   5956968  9月  4 15:14 geckodriver
+-rwxr-xr-x 1 root root     40872  9月  4 15:14 gfxtest
+drwxr-xr-x 3 root root        26  9月  4 15:14 gmp-clearkey
+-rwxr-xr-x 1 root root   1136088  9月  4 15:14 libfreeblpriv3.so
+-rwxr-xr-x 1 root root   8861224  9月  4 15:14 libgkcodecs.so
+-rwxr-xr-x 1 root root    161688  9月  4 15:14 liblgpllibs.so
+-rwxr-xr-x 1 root root   4101128  9月  4 15:14 libmozavcodec.so
+-rwxr-xr-x 1 root root    591048  9月  4 15:14 libmozavutil.so
+-rwxr-xr-x 1 root root      4384  9月  4 15:14 libmozgtk.so
+-rwxr-xr-x 1 root root   2371624  9月  4 15:14 libmozinference.so
+-rwxr-xr-x 1 root root    284984  9月  4 15:14 libmozsandbox.so
+-rwxr-xr-x 1 root root   1559656  9月  4 15:14 libmozsqlite3.so
+-rwxr-xr-x 1 root root     13328  9月  4 15:14 libmozwayland.so
+-rwxr-xr-x 1 root root    208208  9月  4 15:14 libnspr4.so
+-rwxr-xr-x 1 root root    758032  9月  4 15:14 libnss3.so
+-rwxr-xr-x 1 root root    185848  9月  4 15:14 libnssutil3.so
+-rwxr-xr-x 1 root root     16480  9月  4 15:14 libplc4.so
+
+=== search snap bin for LIBGL/EGL/GBM env ===
+/snap/firefox/8863/snap/manifest.yaml:59:      MOZ_APP_REMOTINGNAME: firefox_firefox
+/snap/firefox/8863/snap/manifest.yaml:60:      MOZ_LEGACY_HOME: '1'
+/snap/firefox/8863/snap/manifest.yaml:118:        MOZ_SOURCE_REPO=$(echo $FFINFO | jq -r .moz_source_repo)
+/snap/firefox/8863/snap/manifest.yaml:119:        MOZ_SOURCE_STAMP=$(echo $FFINFO | jq -r .moz_source_stamp)
+/snap/firefox/8863/snap/manifest.yaml:120:        FETCHES=$MOZ_SOURCE_REPO/raw-file/$MOZ_SOURCE_STAMP/taskcluster/kinds/fetch/toolchains.yml
+/snap/firefox/8863/snap/manifest.yaml:316:        echo "ac_add_options MOZ_PGO=1" >> $MOZCONFIG
+/snap/firefox/8863/snap/manifest.yaml:696:      < apikeys jq .MOZ_GOOGLE_LOCATION_SERVICE_API_KEY | tr -d '"' > $CRAFT_PART_INSTALL/gls-gapi.data
+/snap/firefox/8863/snap/manifest.yaml:698:      < apikeys jq .MOZ_GOOGLE_SAFEBROWSING_API_KEY | tr -d '"' > $CRAFT_PART_INSTALL/sb-gapi.data
+/snap/firefox/8863/snap/snapcraft.yaml:40:      MOZ_APP_REMOTINGNAME: "firefox_firefox"
+/snap/firefox/8863/snap/snapcraft.yaml:41:      MOZ_LEGACY_HOME: 1
+/snap/firefox/8863/snap/snapcraft.yaml:151:        MOZ_SOURCE_REPO=$(echo $FFINFO | jq -r .moz_source_repo)
+/snap/firefox/8863/snap/snapcraft.yaml:152:        MOZ_SOURCE_STAMP=$(echo $FFINFO | jq -r .moz_source_stamp)
+/snap/firefox/8863/snap/snapcraft.yaml:153:        FETCHES=$MOZ_SOURCE_REPO/raw-file/$MOZ_SOURCE_STAMP/taskcluster/kinds/fetch/toolchains.yml
+/snap/firefox/8863/snap/snapcraft.yaml:320:        echo "ac_add_options MOZ_PGO=1" >> $MOZCONFIG
+/snap/firefox/8863/snap/snapcraft.yaml:559:      < apikeys jq .MOZ_GOOGLE_LOCATION_SERVICE_API_KEY | tr -d '"' > $CRAFT_PART_INSTALL/gls-gapi.data
+/snap/firefox/8863/snap/snapcraft.yaml:561:      < apikeys jq .MOZ_GOOGLE_SAFEBROWSING_API_KEY | tr -d '"' > $CRAFT_PART_INSTALL/sb-gapi.data
+
+=== meta/snap.yaml env + plugs ===
+105:environment:
+106-  SNAP_DESKTOP_RUNTIME: $SNAP/gnome-platform
+107-  GTK_USE_PORTAL: '1'
+108-  LD_LIBRARY_PATH: ${SNAP_LIBRARY_PATH}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}:$SNAP/usr/lib:$SNAP/usr/lib/x86_64-linux-gnu
+--
+110:plugs:
+111-  browser-sandbox:
+112-    interface: browser-support
+113-    allow-sandbox: true
+
+=== snap.yaml plugs list ===
+apps keys: ['firefox', 'geckodriver']
+--- firefox ---
+  command: firefox.launcher
+  plugs: ['desktop', 'desktop-legacy', 'gsettings', 'opengl', 'wayland', 'x11', 'alsa', 'audio-playback', 'audio-record', 'avahi-observe', 'browser-sandbox', 'camera', 'cups-control', 'hardware-observe', 'home', 'host-hunspell', 'host-usr-share-hunspell', 'joystick', 'kerberos-tickets', 'login-session-observe', 'mount-observe', 'network', 'network-observe', 'password-manager-service', 'pcscd', 'removable-media', 'screen-inhibit-control', 'system-packages-doc', 'timezone-control', 'u2f-devices', 'unity7', 'upower-observe']
+  environment: {'DICPATH': '$SNAP_COMMON/snap-hunspell', 'GTK_USE_PORTAL': '1', 'HOME': '$SNAP_USER_COMMON', 'PIPEWIRE_CONFIG_NAME': 'client.conf', 'SPEECHD_ADDRESS': 'unix_socket:/run/user/$SNAP_UID/speech-dispatcher/speechd.sock', 'MOZ_APP_REMOTINGNAME': 'firefox_firefox', 'MOZ_LEGACY_HOME': '1'}
+--- geckodriver ---
+  command: usr/lib/firefox/geckodriver
+  plugs: ['desktop', 'desktop-legacy', 'gsettings', 'opengl', 'wayland', 'x11', 'network-bind', 'audio-playback', 'audio-record', 'avahi-observe', 'browser-sandbox', 'camera', 'cups-control', 'hardware-observe', 'home', 'host-hunspell', 'host-usr-share-hunspell', 'joystick', 'kerberos-tickets', 'login-session-observe', 'network', 'network-observe', 'password-manager-service', 'pcscd', 'removable-media', 'screen-inhibit-control', 'system-packages-doc', 'timezone-control', 'u2f-devices', 'unity7', 'upower-observe']
+  environment: None
+
+=== assumed content snaps ===
+9:assumes:
+61:    - snap/command-chain/gpu-2404-wrapper
+101:    - snap/command-chain/gpu-2404-wrapper
+137:  gpu-2404:
+138:    interface: content
+139:    target: $SNAP/gpu-2404
+140:    default-provider: mesa-2404
+144:    interface: content
+146:    default-provider: gtk-common-themes
+148:    interface: content
+150:    default-provider: gtk-common-themes
+152:    interface: content
+154:    default-provider: gtk-common-themes
+156:    interface: content
+158:    default-provider: gnome-46-2404
+180:    bind: $SNAP/gpu-2404/libdrm
+182:    symlink: $SNAP/gpu-2404/drirc.d
+184:    symlink: $SNAP/gpu-2404/X11/XErrorDB

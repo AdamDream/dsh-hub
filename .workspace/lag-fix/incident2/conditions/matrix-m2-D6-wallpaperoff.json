@@ -1,0 +1,635 @@
+{
+  "meta": {
+    "line": "conditions-matrix",
+    "agent": "incident2-conditions",
+    "label": "m2-D6-wallpaperoff",
+    "url": "http://127.0.0.1:3080",
+    "startedAt": "2026-09-22T10:45:06+08:00",
+    "hostPid": 10806,
+    "hostPidAlive": true,
+    "prereg": {
+      "jank_frames_gt50_post": 3,
+      "jank_longest_task_ms": 100,
+      "jank_click_to_panel_ms": 300,
+      "smooth_frames_gt50_post": 1,
+      "smooth_longest_task_ms": 50,
+      "smooth_click_to_panel_ms": 200
+    },
+    "design": "OFAT：BASE 为参照，每个 cell 只改一个因子；每 cell 每次 rep 为全新 context+page",
+    "criteria": "click→面板可见耗时 + 点击前后各 3s 的 >50ms 帧数与最长任务",
+    "discipline": "只点 设置/关闭/设置页导航/侧栏会话标题；不点 保存/应用/删除/移除壁纸/模型切换；不 pkill",
+    "cells": [
+      {
+        "id": "D6-wallpaperoff",
+        "dim": "6-wallpaper",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "off",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      }
+    ],
+    "reps": 2
+  },
+  "lock": {
+    "ok": true,
+    "waitedSec": 11,
+    "preempted": [],
+    "acquired": true
+  },
+  "environment": {
+    "atStart": {
+      "total": 1,
+      "pids": [
+        272840
+      ],
+      "own": 1,
+      "foreign": 0,
+      "foreign_tenants": 0,
+      "host_derived": 0,
+      "foreign_pids": [],
+      "tenant_detail": [],
+      "host_derived_detail": [],
+      "gate_strict_passed": true,
+      "gate_tenants_passed": true,
+      "loadavg": 5.58,
+      "own_pids": [
+        272840
+      ]
+    },
+    "atEnd": {
+      "total": 1,
+      "pids": [
+        272840
+      ],
+      "own": 1,
+      "foreign": 0,
+      "foreign_tenants": 0,
+      "host_derived": 0,
+      "foreign_pids": [],
+      "tenant_detail": [],
+      "host_derived_detail": [],
+      "gate_strict_passed": true,
+      "gate_tenants_passed": true,
+      "loadavg": 4.33,
+      "own_pids": [
+        272840
+      ]
+    }
+  },
+  "reps": [
+    {
+      "cell": "D6-wallpaperoff",
+      "dim": "6-wallpaper",
+      "rep": 1,
+      "factors": {
+        "id": "D6-wallpaperoff",
+        "dim": "6-wallpaper",
+        "entry": "home",
+        "order": "first",
+        "load": "wait10",
+        "vp": "1440x900",
+        "scale": "current",
+        "wallpaper": "off",
+        "theme": "current",
+        "cacheDisabled": false
+      },
+      "startedAt": "2026-09-22T10:45:17+08:00",
+      "phases": [
+        {
+          "phase": "ready",
+          "ms": 1658
+        },
+        {
+          "phase": "after-load-wait",
+          "mode": "wait10",
+          "atMs": 11658
+        }
+      ],
+      "opens": [
+        {
+          "clickAt": 12910.2,
+          "panelAt": 12923.1,
+          "panelPaintAt": 12922.1,
+          "errors": [],
+          "clickToPanelMs": 12.9,
+          "clickToPaintMs": 11.9,
+          "pre": {
+            "frames": 180,
+            "over50": 0,
+            "maxIntervalMs": 16.8,
+            "spanMs": 2983.2
+          },
+          "post": {
+            "frames": 180,
+            "over50": 0,
+            "maxIntervalMs": 16.8,
+            "spanMs": 2983.2
+          },
+          "ltPre": {
+            "n": 0,
+            "maxMs": 0,
+            "totalMs": 0
+          },
+          "ltPost": {
+            "n": 0,
+            "maxMs": 0,
+            "totalMs": 0
+          },
+          "panelNodes": 168,
+          "dialogCount": 1,
+          "activeTab": null,
+          "clickErr": null,
+          "strategy": "settingsArea>button[aria-haspopup=dialog]",
+          "openIndex": 1,
+          "isFirstEverInPage": true,
+          "verdict": "SMOOTH"
+        }
+      ],
+      "validity": {
+        "domNodesOk": true,
+        "wallpaperLeverEffective": true,
+        "gate_passed": true,
+        "gate_strict_passed": true,
+        "anyPanelOpened": true
+      },
+      "levers": {
+        "entry": {
+          "ok": true,
+          "note": "home (no pre-navigation)"
+        },
+        "wallpaper": {
+          "mode": "off",
+          "did": "removed wallpaper layer",
+          "before": {
+            "bodyInlineBgBase": "rgba(255, 255, 255, 0.88)",
+            "bodyComputedBg": "rgba(255, 255, 255, 0.88)",
+            "wallpaperFound": true,
+            "wallpaperInline": "position: fixed; inset: 0px; z-index: -1; pointer-events: none; width: 100%; height: 100%; background-size: cover; backg"
+          },
+          "after": {
+            "wallpaperFound": false
+          },
+          "effective": true,
+          "persistent": false
+        }
+      },
+      "facts": {
+        "domNodes": 525,
+        "dialogCount": 0,
+        "panelNodes": 0,
+        "workspaceGroups": 11,
+        "sessionRows": 0,
+        "activeTab": null,
+        "bodyBg": "rgba(255, 255, 255, 0.88)",
+        "bodyBgImage": "none",
+        "bodyInlineBgBase": "rgba(255, 255, 255, 0.88)",
+        "bodyDarkAttr": false,
+        "htmlColorScheme": "light",
+        "url": "http://127.0.0.1:3080/",
+        "backdropFilterLayers": [],
+        "fullViewportBlurCount": 0,
+        "wallpaper": {
+          "found": false
+        },
+        "layers": []
+      },
+      "concurrency": {
+        "atStart": {
+          "total": 1,
+          "pids": [
+            272840
+          ],
+          "own": 1,
+          "foreign": 0,
+          "foreign_tenants": 0,
+          "host_derived": 0,
+          "foreign_pids": [],
+          "tenant_detail": [],
+          "host_derived_detail": [],
+          "gate_strict_passed": true,
+          "gate_tenants_passed": true,
+          "loadavg": 5.58,
+          "own_pids": [
+            272840
+          ]
+        },
+        "atEnd": {
+          "total": 1,
+          "pids": [
+            272840
+          ],
+          "own": 1,
+          "foreign": 0,
+          "foreign_tenants": 0,
+          "host_derived": 0,
+          "foreign_pids": [],
+          "tenant_detail": [],
+          "host_derived_detail": [],
+          "gate_strict_passed": true,
+          "gate_tenants_passed": true,
+          "loadavg": 5.06,
+          "own_pids": [
+            272840
+          ]
+        },
+        "gate_tenants_passed": true,
+        "gate_strict_passed": true,
+        "gate_passed": true,
+        "foreign_tenants_max": 0,
+        "foreign_max": 0,
+        "host_derived_max": 0
+      },
+      "factsPanelOpen": {
+        "domNodes": 697,
+        "dialogCount": 1,
+        "panelNodes": 168,
+        "workspaceGroups": 11,
+        "sessionRows": 0,
+        "activeTab": null,
+        "bodyBg": "rgba(255, 255, 255, 0.88)",
+        "bodyBgImage": "none",
+        "bodyInlineBgBase": "rgba(255, 255, 255, 0.88)",
+        "bodyDarkAttr": false,
+        "htmlColorScheme": "light",
+        "url": "http://127.0.0.1:3080/",
+        "backdropFilterLayers": [
+          {
+            "tag": "DIV",
+            "cls": "VOzbGW_mask",
+            "bf": "blur(2px)",
+            "z": "auto",
+            "w": 1440,
+            "h": 900,
+            "fullViewport": true,
+            "opacity": "1",
+            "display": "block"
+          }
+        ],
+        "fullViewportBlurCount": 1,
+        "wallpaper": {
+          "found": true,
+          "inline": "position: fixed; inset: 0px; z-index: -1; pointer-events: none; width: 100%; height: 100%; background-size: co",
+          "bgImageLen": 89,
+          "filter": "none",
+          "writes": 0,
+          "sameValueWrites": 0
+        },
+        "layers": [
+          {
+            "tag": "DIV",
+            "id": null,
+            "cls": "",
+            "z": "-1",
+            "bg": "rgba(0, 0, 0, 0)",
+            "bf": "none",
+            "bgi": "url(\"http://127.0.0.1:3080/dsh-wallpaper/media/37758c1c-9ca8-47d2-bade",
+            "pointerEvents": "none"
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "cls": "VOzbGW_mask",
+            "z": "auto",
+            "bg": "rgba(0, 0, 0, 0.24)",
+            "bf": "blur(2px)",
+            "bgi": "none",
+            "pointerEvents": "auto"
+          }
+        ]
+      },
+      "verdict": "SMOOTH",
+      "primary": [
+        {
+          "openIndex": 1,
+          "clickToPanelMs": 12.9,
+          "framesGt50Post": 0,
+          "longestTaskPostMs": 0,
+          "verdict": "SMOOTH"
+        }
+      ]
+    },
+    {
+      "cell": "D6-wallpaperoff",
+      "dim": "6-wallpaper",
+      "rep": 2,
+      "factors": {
+        "id": "D6-wallpaperoff",
+        "dim": "6-wallpaper",
+        "entry": "home",
+        "order": "first",
+        "load": "wait10",
+        "vp": "1440x900",
+        "scale": "current",
+        "wallpaper": "off",
+        "theme": "current",
+        "cacheDisabled": false
+      },
+      "startedAt": "2026-09-22T10:45:33+08:00",
+      "phases": [
+        {
+          "phase": "ready",
+          "ms": 5301
+        },
+        {
+          "phase": "after-load-wait",
+          "mode": "wait10",
+          "atMs": 15301
+        }
+      ],
+      "opens": [
+        {
+          "clickAt": 16535.7,
+          "panelAt": 16547.7,
+          "panelPaintAt": 16549.6,
+          "errors": [],
+          "clickToPanelMs": 12,
+          "clickToPaintMs": 13.9,
+          "pre": {
+            "frames": 180,
+            "over50": 0,
+            "maxIntervalMs": 16.8,
+            "spanMs": 2983.2
+          },
+          "post": {
+            "frames": 180,
+            "over50": 0,
+            "maxIntervalMs": 16.8,
+            "spanMs": 2983.2
+          },
+          "ltPre": {
+            "n": 0,
+            "maxMs": 0,
+            "totalMs": 0
+          },
+          "ltPost": {
+            "n": 0,
+            "maxMs": 0,
+            "totalMs": 0
+          },
+          "panelNodes": 168,
+          "dialogCount": 1,
+          "activeTab": null,
+          "clickErr": null,
+          "strategy": "settingsArea>button[aria-haspopup=dialog]",
+          "openIndex": 1,
+          "isFirstEverInPage": true,
+          "verdict": "SMOOTH"
+        }
+      ],
+      "validity": {
+        "domNodesOk": true,
+        "wallpaperLeverEffective": true,
+        "gate_passed": true,
+        "gate_strict_passed": true,
+        "anyPanelOpened": true
+      },
+      "levers": {
+        "entry": {
+          "ok": true,
+          "note": "home (no pre-navigation)"
+        },
+        "wallpaper": {
+          "mode": "off",
+          "did": "removed wallpaper layer",
+          "before": {
+            "bodyInlineBgBase": "rgba(255, 255, 255, 0.88)",
+            "bodyComputedBg": "rgba(255, 255, 255, 0.88)",
+            "wallpaperFound": true,
+            "wallpaperInline": "position: fixed; inset: 0px; z-index: -1; pointer-events: none; width: 100%; height: 100%; background-size: cover; backg"
+          },
+          "after": {
+            "wallpaperFound": false
+          },
+          "effective": true,
+          "persistent": false
+        }
+      },
+      "facts": {
+        "domNodes": 525,
+        "dialogCount": 0,
+        "panelNodes": 0,
+        "workspaceGroups": 11,
+        "sessionRows": 0,
+        "activeTab": null,
+        "bodyBg": "rgba(255, 255, 255, 0.88)",
+        "bodyBgImage": "none",
+        "bodyInlineBgBase": "rgba(255, 255, 255, 0.88)",
+        "bodyDarkAttr": false,
+        "htmlColorScheme": "light",
+        "url": "http://127.0.0.1:3080/",
+        "backdropFilterLayers": [],
+        "fullViewportBlurCount": 0,
+        "wallpaper": {
+          "found": false
+        },
+        "layers": []
+      },
+      "concurrency": {
+        "atStart": {
+          "total": 1,
+          "pids": [
+            272840
+          ],
+          "own": 1,
+          "foreign": 0,
+          "foreign_tenants": 0,
+          "host_derived": 0,
+          "foreign_pids": [],
+          "tenant_detail": [],
+          "host_derived_detail": [],
+          "gate_strict_passed": true,
+          "gate_tenants_passed": true,
+          "loadavg": 5.06,
+          "own_pids": [
+            272840
+          ]
+        },
+        "atEnd": {
+          "total": 1,
+          "pids": [
+            272840
+          ],
+          "own": 1,
+          "foreign": 0,
+          "foreign_tenants": 0,
+          "host_derived": 0,
+          "foreign_pids": [],
+          "tenant_detail": [],
+          "host_derived_detail": [],
+          "gate_strict_passed": true,
+          "gate_tenants_passed": true,
+          "loadavg": 4.33,
+          "own_pids": [
+            272840
+          ]
+        },
+        "gate_tenants_passed": true,
+        "gate_strict_passed": true,
+        "gate_passed": true,
+        "foreign_tenants_max": 0,
+        "foreign_max": 0,
+        "host_derived_max": 0
+      },
+      "factsPanelOpen": {
+        "domNodes": 697,
+        "dialogCount": 1,
+        "panelNodes": 168,
+        "workspaceGroups": 11,
+        "sessionRows": 0,
+        "activeTab": null,
+        "bodyBg": "rgba(255, 255, 255, 0.88)",
+        "bodyBgImage": "none",
+        "bodyInlineBgBase": "rgba(255, 255, 255, 0.88)",
+        "bodyDarkAttr": false,
+        "htmlColorScheme": "light",
+        "url": "http://127.0.0.1:3080/",
+        "backdropFilterLayers": [
+          {
+            "tag": "DIV",
+            "cls": "VOzbGW_mask",
+            "bf": "blur(2px)",
+            "z": "auto",
+            "w": 1440,
+            "h": 900,
+            "fullViewport": true,
+            "opacity": "1",
+            "display": "block"
+          }
+        ],
+        "fullViewportBlurCount": 1,
+        "wallpaper": {
+          "found": true,
+          "inline": "position: fixed; inset: 0px; z-index: -1; pointer-events: none; width: 100%; height: 100%; background-size: co",
+          "bgImageLen": 89,
+          "filter": "none",
+          "writes": 0,
+          "sameValueWrites": 0
+        },
+        "layers": [
+          {
+            "tag": "DIV",
+            "id": null,
+            "cls": "",
+            "z": "-1",
+            "bg": "rgba(0, 0, 0, 0)",
+            "bf": "none",
+            "bgi": "url(\"http://127.0.0.1:3080/dsh-wallpaper/media/37758c1c-9ca8-47d2-bade",
+            "pointerEvents": "none"
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "cls": "VOzbGW_mask",
+            "z": "auto",
+            "bg": "rgba(0, 0, 0, 0.24)",
+            "bf": "blur(2px)",
+            "bgi": "none",
+            "pointerEvents": "auto"
+          }
+        ]
+      },
+      "verdict": "SMOOTH",
+      "primary": [
+        {
+          "openIndex": 1,
+          "clickToPanelMs": 12,
+          "framesGt50Post": 0,
+          "longestTaskPostMs": 0,
+          "verdict": "SMOOTH"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "D6-wallpaperoff": {
+      "dim": "6-wallpaper",
+      "reps": 2,
+      "windowsValid": 2,
+      "windowsTotal": 2,
+      "gateAllPassed": true,
+      "firstOpen": {
+        "n": 2,
+        "clickToPanelMs": {
+          "median": 12,
+          "all": [
+            12.9,
+            12
+          ]
+        },
+        "framesGt50Post": {
+          "median": 0,
+          "all": [
+            0,
+            0
+          ]
+        },
+        "framesGt50Pre": {
+          "median": 0,
+          "all": [
+            0,
+            0
+          ]
+        },
+        "longestTaskPostMs": {
+          "median": 0,
+          "all": [
+            0,
+            0
+          ]
+        },
+        "longestTaskPreMs": {
+          "median": 0,
+          "all": [
+            0,
+            0
+          ]
+        },
+        "verdicts": [
+          "SMOOTH",
+          "SMOOTH"
+        ]
+      },
+      "reopen": null,
+      "cellVerdict": "SMOOTH",
+      "relativeToBase": null
+    }
+  },
+  "terminated": null,
+  "instrumentSelfCheck": {
+    "ownByDelta": [
+      272840
+    ],
+    "ownByAncestry": [
+      272840
+    ],
+    "used": [
+      272840
+    ],
+    "agree": true,
+    "detectionWorks": true
+  },
+  "finishedAt": "2026-09-22T10:45:53+08:00",
+  "log": [
+    "[10:45:06] pre-launch real browser instances: 0",
+    "[10:45:06] LOCK held by incident2-host-click (age 0.0min, ownPid 272357/true); retry in 3s (elapsed 0s)",
+    "[10:45:09] LOCK held by incident2-host-click (age 0.0min, ownPid 272357/true); retry in 2s (elapsed 3s)",
+    "[10:45:10] LOCK held by incident2-host-click (age 0.1min, ownPid 272357/true); retry in 2s (elapsed 4s)",
+    "[10:45:13] LOCK held by incident2-host-click (age 0.1min, ownPid 272357/true); retry in 2s (elapsed 7s)",
+    "[10:45:15] LOCK held by incident2-host-click (age 0.1min, ownPid 272357/true); retry in 2s (elapsed 8s)",
+    "[10:45:17] LOCK acquired after 11s",
+    "[10:45:17] launching chromium (headless)",
+    "[10:45:17] own browser instances = 1 (delta=1 ancestry=1 agree=true)",
+    "[10:45:17] cell D6-wallpaperoff rep 1/2",
+    "[10:45:33]   D6-wallpaperoff r1: #1 ctp=12.9 f>50=0 lt=0 SMOOTH | tenants-gate=true tenants=0 hostDerived=0 strict=true",
+    "[10:45:33] cell D6-wallpaperoff rep 2/2",
+    "[10:45:53]   D6-wallpaperoff r2: #1 ctp=12 f>50=0 lt=0 SMOOTH | tenants-gate=true tenants=0 hostDerived=0 strict=true",
+    "[10:45:53] done",
+    "[10:45:53] LOCK released"
+  ]
+}

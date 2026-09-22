@@ -1,0 +1,302 @@
+{
+  "meta": {
+    "line": "conditions-matrix",
+    "agent": "incident2-conditions",
+    "label": "m3-D4-narrow",
+    "url": "http://127.0.0.1:3080",
+    "startedAt": "2026-09-22T10:48:43+08:00",
+    "hostPid": 10806,
+    "hostPidAlive": true,
+    "prereg": {
+      "jank_frames_gt50_post": 3,
+      "jank_longest_task_ms": 100,
+      "jank_click_to_panel_ms": 300,
+      "smooth_frames_gt50_post": 1,
+      "smooth_longest_task_ms": 50,
+      "smooth_click_to_panel_ms": 200
+    },
+    "design": "OFAT：BASE 为参照，每个 cell 只改一个因子；每 cell 每次 rep 为全新 context+page",
+    "criteria": "click→面板可见耗时 + 点击前后各 3s 的 >50ms 帧数与最长任务",
+    "discipline": "只点 设置/关闭/设置页导航/侧栏会话标题；不点 保存/应用/删除/移除壁纸/模型切换；不 pkill",
+    "cells": [
+      {
+        "id": "D4-narrow",
+        "dim": "4-viewport",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "900x800",
+          "scale": "current",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      }
+    ],
+    "reps": 2
+  },
+  "lock": {
+    "ok": true,
+    "waitedSec": 0,
+    "preempted": [],
+    "acquired": true
+  },
+  "environment": {
+    "atStart": {
+      "total": 1,
+      "pids": [
+        290869
+      ],
+      "own": 1,
+      "foreign": 0,
+      "foreign_tenants": 0,
+      "host_derived": 0,
+      "foreign_pids": [],
+      "tenant_detail": [],
+      "host_derived_detail": [],
+      "gate_strict_passed": true,
+      "gate_tenants_passed": true,
+      "loadavg": 4.39,
+      "own_pids": [
+        290869
+      ]
+    },
+    "atEnd": {
+      "total": 1,
+      "pids": [
+        290869
+      ],
+      "own": 1,
+      "foreign": 0,
+      "foreign_tenants": 0,
+      "host_derived": 0,
+      "foreign_pids": [],
+      "tenant_detail": [],
+      "host_derived_detail": [],
+      "gate_strict_passed": true,
+      "gate_tenants_passed": true,
+      "loadavg": 3.96,
+      "own_pids": [
+        290869
+      ]
+    }
+  },
+  "reps": [
+    {
+      "cell": "D4-narrow",
+      "dim": "4-viewport",
+      "rep": 1,
+      "factors": {
+        "id": "D4-narrow",
+        "dim": "4-viewport",
+        "entry": "home",
+        "order": "first",
+        "load": "wait10",
+        "vp": "900x800",
+        "scale": "current",
+        "wallpaper": "on",
+        "theme": "current",
+        "cacheDisabled": false
+      },
+      "startedAt": "2026-09-22T10:48:44+08:00",
+      "phases": [],
+      "opens": [],
+      "validity": {
+        "gate_passed": true,
+        "gate_strict_passed": true,
+        "anyPanelOpened": false
+      },
+      "levers": {},
+      "facts": null,
+      "concurrency": {
+        "atStart": {
+          "total": 1,
+          "pids": [
+            290869
+          ],
+          "own": 1,
+          "foreign": 0,
+          "foreign_tenants": 0,
+          "host_derived": 0,
+          "foreign_pids": [],
+          "tenant_detail": [],
+          "host_derived_detail": [],
+          "gate_strict_passed": true,
+          "gate_tenants_passed": true,
+          "loadavg": 4.39,
+          "own_pids": [
+            290869
+          ]
+        },
+        "atEnd": {
+          "total": 1,
+          "pids": [
+            290869
+          ],
+          "own": 1,
+          "foreign": 0,
+          "foreign_tenants": 0,
+          "host_derived": 0,
+          "foreign_pids": [],
+          "tenant_detail": [],
+          "host_derived_detail": [],
+          "gate_strict_passed": true,
+          "gate_tenants_passed": true,
+          "loadavg": 4.44,
+          "own_pids": [
+            290869
+          ]
+        },
+        "gate_tenants_passed": true,
+        "gate_strict_passed": true,
+        "gate_passed": true,
+        "foreign_tenants_max": 0,
+        "foreign_max": 0,
+        "host_derived_max": 0
+      },
+      "error": "page.waitForFunction: Timeout 60000ms exceeded.",
+      "verdict": "INVALID",
+      "primary": []
+    },
+    {
+      "cell": "D4-narrow",
+      "dim": "4-viewport",
+      "rep": 2,
+      "factors": {
+        "id": "D4-narrow",
+        "dim": "4-viewport",
+        "entry": "home",
+        "order": "first",
+        "load": "wait10",
+        "vp": "900x800",
+        "scale": "current",
+        "wallpaper": "on",
+        "theme": "current",
+        "cacheDisabled": false
+      },
+      "startedAt": "2026-09-22T10:49:44+08:00",
+      "phases": [],
+      "opens": [],
+      "validity": {
+        "gate_passed": true,
+        "gate_strict_passed": true,
+        "anyPanelOpened": false
+      },
+      "levers": {},
+      "facts": null,
+      "concurrency": {
+        "atStart": {
+          "total": 1,
+          "pids": [
+            290869
+          ],
+          "own": 1,
+          "foreign": 0,
+          "foreign_tenants": 0,
+          "host_derived": 0,
+          "foreign_pids": [],
+          "tenant_detail": [],
+          "host_derived_detail": [],
+          "gate_strict_passed": true,
+          "gate_tenants_passed": true,
+          "loadavg": 4.44,
+          "own_pids": [
+            290869
+          ]
+        },
+        "atEnd": {
+          "total": 1,
+          "pids": [
+            290869
+          ],
+          "own": 1,
+          "foreign": 0,
+          "foreign_tenants": 0,
+          "host_derived": 0,
+          "foreign_pids": [],
+          "tenant_detail": [],
+          "host_derived_detail": [],
+          "gate_strict_passed": true,
+          "gate_tenants_passed": true,
+          "loadavg": 3.96,
+          "own_pids": [
+            290869
+          ]
+        },
+        "gate_tenants_passed": true,
+        "gate_strict_passed": true,
+        "gate_passed": true,
+        "foreign_tenants_max": 0,
+        "foreign_max": 0,
+        "host_derived_max": 0
+      },
+      "error": "page.waitForFunction: Timeout 60000ms exceeded.",
+      "verdict": "INVALID",
+      "primary": []
+    }
+  ],
+  "summary": {
+    "D4-narrow": {
+      "dim": "4-viewport",
+      "reps": 2,
+      "windowsValid": 0,
+      "windowsTotal": 0,
+      "gateAllPassed": true,
+      "firstOpen": {
+        "n": 0,
+        "clickToPanelMs": {
+          "median": null,
+          "all": []
+        },
+        "framesGt50Post": {
+          "median": null,
+          "all": []
+        },
+        "framesGt50Pre": {
+          "median": null,
+          "all": []
+        },
+        "longestTaskPostMs": {
+          "median": null,
+          "all": []
+        },
+        "longestTaskPreMs": {
+          "median": null,
+          "all": []
+        },
+        "verdicts": []
+      },
+      "reopen": null,
+      "cellVerdict": "INCONCLUSIVE",
+      "relativeToBase": null
+    }
+  },
+  "terminated": null,
+  "instrumentSelfCheck": {
+    "ownByDelta": [
+      290869
+    ],
+    "ownByAncestry": [
+      290869
+    ],
+    "used": [
+      290869
+    ],
+    "agree": true,
+    "detectionWorks": true
+  },
+  "finishedAt": "2026-09-22T10:50:44+08:00",
+  "log": [
+    "[10:48:43] pre-launch real browser instances: 0",
+    "[10:48:43] LOCK acquired after 0s",
+    "[10:48:43] launching chromium (headless)",
+    "[10:48:44] own browser instances = 1 (delta=1 ancestry=1 agree=true)",
+    "[10:48:44] cell D4-narrow rep 1/2",
+    "[10:49:44]   D4-narrow r1:  | tenants-gate=true tenants=0 hostDerived=0 strict=true",
+    "[10:49:44] cell D4-narrow rep 2/2",
+    "[10:50:44]   D4-narrow r2:  | tenants-gate=true tenants=0 hostDerived=0 strict=true",
+    "[10:50:44] done",
+    "[10:50:44] LOCK released"
+  ]
+}

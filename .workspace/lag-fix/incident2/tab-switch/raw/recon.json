@@ -1,0 +1,895 @@
+{
+  "at": "2026-09-22T03:04:48.254Z",
+  "stage": "done",
+  "errors": [],
+  "lock": {
+    "acquired": true,
+    "events": [
+      {
+        "at": "2026-09-22T03:04:48.255Z",
+        "event": "waiting",
+        "seen": "agent: incident2-gecko-vs-blink (Blink vs Gecko controlled comparison) line: engine=chromium+firefox cells=combined,hover-tray,dom-lefttop,hover-blur,dsh purpose: same page + same animation + same synthetic pointer path measured on both engines owner_pid: 337298 pid: 337298 host_pid: 301709   # node dsh web (read-only reference; never restarted) started_at: 2026-09-22T11:03:40+08:00 started_epoch: 1790046220 concurrentWith: none loadavg_at_acquire: 3.16 3.17 3.98 4/3144 337309 token: CNS202649516533-337298-gvb note: single browser at a time; release = rm owner.txt && rmdir RESTORED-BY: 337463 (incident2-why-these-two) at 2026-09-22T11:04 — my automated reclaimer mis-parsed this multi-line owner.txt (shell word-splitting) and removed it at 11:03:42 while owner_pid 337298 was still alive. Content above restored byte-for-byte from my own command output. I did NOT run any browser while holding it. "
+      },
+      {
+        "at": "2026-09-22T03:05:06.255Z",
+        "event": "acquired"
+      }
+    ],
+    "ownerText": "agent=incident2-tab-switch\npid=365210\nstarted_at=2026-09-22T03:05:06.255Z\nstarted_epoch=1790046306\npurpose=recon: settings panel DOM\n"
+  },
+  "hostPid": "301709",
+  "censusAtStart": {
+    "headless_shell": [
+      {
+        "pid": 365829,
+        "exe": "headless_shell",
+        "userDataDir": "/tmp/playwright_chromiumdev_profile-BgS9ht",
+        "args": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding"
+      }
+    ],
+    "chromium": [],
+    "foreign": 0,
+    "own": [],
+    "host_pid": null,
+    "total": 1,
+    "self_pid": 365210
+  },
+  "trigger": {
+    "x": 140,
+    "y": 919,
+    "text": "设置"
+  },
+  "dialog": {
+    "present": true,
+    "dialogCls": "VOzbGW_panel",
+    "dialogBox": {
+      "w": 800,
+      "h": 800
+    },
+    "navTag": "NAV",
+    "navCls": "VOzbGW_nav",
+    "navSlot": null,
+    "buttons": [
+      {
+        "tag": "BUTTON",
+        "cls": "VOzbGW_navCell VOzbGW_active",
+        "id": null,
+        "text": "通用设置",
+        "role": null,
+        "aria": {
+          "current": "true",
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 362,
+          "y": 139,
+          "w": 164,
+          "h": 40
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "VOzbGW_navCell",
+        "id": null,
+        "text": "模型",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 362,
+          "y": 183,
+          "w": 164,
+          "h": 40
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "VOzbGW_navCell",
+        "id": null,
+        "text": "插件",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 362,
+          "y": 227,
+          "w": 164,
+          "h": 40
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "VOzbGW_navCell",
+        "id": null,
+        "text": "Agent 预设",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 362,
+          "y": 271,
+          "w": 164,
+          "h": 40
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "VOzbGW_navCell",
+        "id": null,
+        "text": "远程工作区",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 362,
+          "y": 315,
+          "w": 164,
+          "h": 40
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "VOzbGW_navCell",
+        "id": null,
+        "text": "分布式控制 · dsh-ssh-gui",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 362,
+          "y": 359,
+          "w": 164,
+          "h": 40
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "VOzbGW_navCell",
+        "id": null,
+        "text": "vision-adam 识图设置",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 362,
+          "y": 403,
+          "w": 164,
+          "h": 40
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "VOzbGW_navCell",
+        "id": null,
+        "text": "子代理模型",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 362,
+          "y": 447,
+          "w": 164,
+          "h": 40
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "_button_kz6gm_4 _outline_kz6gm_56 _sm_kz6gm_30",
+        "id": null,
+        "text": "打开配置文件",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 1006,
+          "y": 95,
+          "w": 94,
+          "h": 28
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "VOzbGW_close",
+        "id": null,
+        "text": "关闭",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 1108,
+          "y": 95,
+          "w": 28,
+          "h": 28
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "_5QVD0a_selector",
+        "id": null,
+        "text": "标准模式（子代理 deepseek-v4.1-flash）",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": "false",
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 816,
+          "y": 158,
+          "w": 310,
+          "h": 36
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "oY77xG_selector",
+        "id": null,
+        "text": "Workspace Write",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": "false",
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 965.9,
+          "y": 244,
+          "w": 160.1,
+          "h": 36
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "hVGvvW_selector",
+        "id": null,
+        "text": "中文",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": "false",
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 1044,
+          "y": 317,
+          "w": 82,
+          "h": 36
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "_8HJdBW_themeCube _8HJdBW_selected",
+        "id": null,
+        "text": "浅色",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 562,
+          "y": 416,
+          "w": 182.7,
+          "h": 84
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "_8HJdBW_themeCube",
+        "id": null,
+        "text": "深色",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 752.7,
+          "y": 416,
+          "w": 182.7,
+          "h": 84
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "_8HJdBW_themeCube",
+        "id": null,
+        "text": "跟随系统",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 943.3,
+          "y": 416,
+          "w": 182.7,
+          "h": 84
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "T1PP_q_selector",
+        "id": null,
+        "text": "排队发送",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": "false",
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 1016,
+          "y": 537,
+          "w": 110,
+          "h": 36
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "",
+        "id": null,
+        "text": "选择图片",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 646,
+          "y": 691,
+          "w": 82,
+          "h": 32
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "",
+        "id": null,
+        "text": "移除壁纸",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 738,
+          "y": 691,
+          "w": 82,
+          "h": 32
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "cls": "",
+        "id": null,
+        "text": "应用",
+        "role": null,
+        "aria": {
+          "current": null,
+          "selected": null,
+          "controls": null,
+          "expanded": null,
+          "labelledby": null,
+          "label": null
+        },
+        "slot": null,
+        "testid": null,
+        "disabled": false,
+        "box": {
+          "x": 1070,
+          "y": 740,
+          "w": 56,
+          "h": 32
+        }
+      }
+    ],
+    "tabs": [],
+    "slotNodes": [
+      {
+        "slot": "settings.header",
+        "tag": "DIV",
+        "cls": "",
+        "text": "设置"
+      },
+      {
+        "slot": "settings.action",
+        "tag": "DIV",
+        "cls": "",
+        "text": "打开配置文件"
+      },
+      {
+        "slot": "settings.close",
+        "tag": "DIV",
+        "cls": "",
+        "text": "关闭"
+      },
+      {
+        "slot": "settings.section",
+        "tag": "DIV",
+        "cls": "",
+        "text": "Agent 预设对此后新建的会话生效。运行中的会话保持它开始时的预设。标准模式（"
+      },
+      {
+        "slot": "settings.general.item",
+        "tag": "DIV",
+        "cls": "",
+        "text": "Agent 预设对此后新建的会话生效。运行中的会话保持它开始时的预设。标准模式（"
+      }
+    ],
+    "scrollables": [
+      {
+        "tag": "DIV",
+        "cls": "VOzbGW_options",
+        "slot": null,
+        "clientH": 746,
+        "scrollH": 820,
+        "overflowY": "auto"
+      }
+    ],
+    "nodes": 168,
+    "svg": 16
+  },
+  "navCandidates": [
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "通用设置",
+      "slot": null,
+      "cls": "VOzbGW_navCell VOzbGW_active",
+      "x": 444,
+      "y": 159,
+      "w": 164,
+      "h": 40,
+      "aria": {
+        "current": "true",
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "模型",
+      "slot": null,
+      "cls": "VOzbGW_navCell",
+      "x": 444,
+      "y": 203,
+      "w": 164,
+      "h": 40,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "插件",
+      "slot": null,
+      "cls": "VOzbGW_navCell",
+      "x": 444,
+      "y": 247,
+      "w": 164,
+      "h": 40,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "Agent 预设",
+      "slot": null,
+      "cls": "VOzbGW_navCell",
+      "x": 444,
+      "y": 291,
+      "w": 164,
+      "h": 40,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "远程工作区",
+      "slot": null,
+      "cls": "VOzbGW_navCell",
+      "x": 444,
+      "y": 335,
+      "w": 164,
+      "h": 40,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "分布式控制 · dsh-ssh-gui",
+      "slot": null,
+      "cls": "VOzbGW_navCell",
+      "x": 444,
+      "y": 379,
+      "w": 164,
+      "h": 40,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "vision-adam 识图设置",
+      "slot": null,
+      "cls": "VOzbGW_navCell",
+      "x": 444,
+      "y": 423,
+      "w": 164,
+      "h": 40,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "子代理模型",
+      "slot": null,
+      "cls": "VOzbGW_navCell",
+      "x": 444,
+      "y": 467,
+      "w": 164,
+      "h": 40,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "打开配置文件",
+      "slot": null,
+      "cls": "_button_kz6gm_4 _outline_kz6gm_56 _sm_kz6gm_30",
+      "x": 1053,
+      "y": 109,
+      "w": 94,
+      "h": 28,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "关闭",
+      "slot": null,
+      "cls": "VOzbGW_close",
+      "x": 1122,
+      "y": 109,
+      "w": 28,
+      "h": 28,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "标准模式（子代理 deepseek-v4.1-flash）",
+      "slot": null,
+      "cls": "_5QVD0a_selector",
+      "x": 971,
+      "y": 176,
+      "w": 310,
+      "h": 36,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "Workspace Write",
+      "slot": null,
+      "cls": "oY77xG_selector",
+      "x": 1046,
+      "y": 262,
+      "w": 160.1,
+      "h": 36,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "中文",
+      "slot": null,
+      "cls": "hVGvvW_selector",
+      "x": 1085,
+      "y": 335,
+      "w": 82,
+      "h": 36,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "浅色",
+      "slot": null,
+      "cls": "_8HJdBW_themeCube _8HJdBW_selected",
+      "x": 653.3,
+      "y": 458,
+      "w": 182.7,
+      "h": 84,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "深色",
+      "slot": null,
+      "cls": "_8HJdBW_themeCube",
+      "x": 844,
+      "y": 458,
+      "w": 182.7,
+      "h": 84,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "跟随系统",
+      "slot": null,
+      "cls": "_8HJdBW_themeCube",
+      "x": 1034.7,
+      "y": 458,
+      "w": 182.7,
+      "h": 84,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "排队发送",
+      "slot": null,
+      "cls": "T1PP_q_selector",
+      "x": 1071,
+      "y": 555,
+      "w": 110,
+      "h": 36,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "选择图片",
+      "slot": null,
+      "cls": "",
+      "x": 687,
+      "y": 707,
+      "w": 82,
+      "h": 32,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "移除壁纸",
+      "slot": null,
+      "cls": "",
+      "x": 779,
+      "y": 707,
+      "w": 82,
+      "h": 32,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "text": "应用",
+      "slot": null,
+      "cls": "",
+      "x": 1098,
+      "y": 756,
+      "w": 56,
+      "h": 32,
+      "aria": {
+        "current": null,
+        "selected": null
+      }
+    }
+  ],
+  "release": {
+    "released": false,
+    "error": "SystemError [ERR_FS_EISDIR]: Path is a directory: rm returned EISDIR (is a directory) /home/CNS2026495165/dsh/.workspace/lag-fix/research-v2/.probe.lock"
+  },
+  "censusAtEnd": {
+    "headless_shell": [],
+    "chromium": [],
+    "foreign": 0,
+    "own": [],
+    "host_pid": null,
+    "total": 0,
+    "self_pid": 365210
+  }
+}

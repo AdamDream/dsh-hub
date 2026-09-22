@@ -1,0 +1,71 @@
+=== ldd: does LAgentUser link X11 capture libs? ===
+	libXext.so.6 => /lib/x86_64-linux-gnu/libXext.so.6 (0x00007679653be000)
+	libX11.so.6 => /lib/x86_64-linux-gnu/libX11.so.6 (0x0000767964cc3000)
+--- (all deps count) ---
+42
+
+=== LMonitor ldd X11 ===
+
+=== LWMHelper ldd X11 ===
+	libX11.so.6 => /lib/x86_64-linux-gnu/libX11.so.6 (0x00007a20166c3000)
+
+=== startLSDEfsSvr service + script ===
+[Unit]
+Description=LMonitor
+
+[Service]
+ExecStart=/usr/local/.OCular/LMonitor
+Environment="LC_ALL=C"
+Restart=always
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          LMonitor
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+### END INIT INFO
+  
+case "$1" in
+        start)		
+		
+	        rm -f /var/tmp/TECCheckMntRunTime >/dev/null 2>&1
+	        rm -f /var/tmp/TECCheckSYSRunTime >/dev/null 2>&1
+			if uname -a | grep -qi "wsl"; then
+				LC_ALL=C start-stop-daemon --start --quiet --oknodo --chuid 0:0 --background --exec /usr/local/.OCular/LMonitor
+			else
+				LC_ALL=C /usr/local/.OCular/LMonitor >/dev/null 2>&1 &
+			fi
+                exit 0;
+                ;;
+        stop)
+                ;;
+        restart)
+                ;;
+esac
+
+exit 0
+
+=== systemctl status startLSDEfsSvr (read-only) ===
+● startLSDEfsSvr.service - LMonitor
+     Loaded: loaded (/etc/systemd/system/startLSDEfsSvr.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-09-22 10:01:58 CST; 34min ago
+   Main PID: 1584 (LMonitor)
+      Tasks: 357 (limit: 73997)
+     Memory: 385.4M (peak: 1.1G)
+        CPU: 20.652s
+     CGroup: /system.slice/startLSDEfsSvr.service
+             ├─1584 /usr/local/.OCular/LMonitor
+             ├─2100 /usr/local/.OCular/LAgent
+             ├─2102 /usr/local/.OCular/LSDConfig
+             ├─2104 /usr/local/.OCular/LSGTransmit
+             ├─2106 /usr/local/.OCular/LNacConfig
+             ├─2108 /usr/local/.OCular/LMonitorFileOP
+             ├─2111 /usr/local/.OCular/LVnctransfer
+             ├─2610 Lrdlv3 /usr/local/.OCular/TKSFrame.so TksDocRunService "/systemname \"TKSConfig\""
+             └─2760 /usr/local/.OCular/FilezillaLogProcessor
+

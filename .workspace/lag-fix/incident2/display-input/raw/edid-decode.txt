@@ -1,0 +1,13 @@
+# EDID decode for HDMI-A-2 (LG ULTRAFINE, GSM) — 2026-09-22T10:42:18+08:00
+## method: raw EDID block read via 'xrandr --prop', decoded offline (no writes)
+manufacturer      : GSM (GSM = LG Electronics)
+EDID version      : 1.3  week 6 year 2026
+physical size     : 600 x 340 mm  (diagonal 27.15 in)
+DTD1 (PREFERRED)  : 594.00 MHz  3840x2160  total 4400x2250  -> 60.000 Hz
+range limits 0xfd : vertical 40-60 Hz   horizontal min 30 kHz
+name descriptor   : 'LG ULTRAFINE\n'
+serial descriptor : '606NTUWJK582\n'
+
+=> native/preferred mode is 3840x2160@60.00Hz; EDID declares only 40-60Hz vertical range.
+=> therefore the 5120x2880 X screen is a GNOME-created render surface, NOT a panel mode,
+   and 60Hz is a hard ceiling (no >60Hz mode exists at any resolution on this link).

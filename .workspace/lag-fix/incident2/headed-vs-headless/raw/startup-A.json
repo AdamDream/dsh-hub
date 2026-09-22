@@ -1,0 +1,120 @@
+{
+  "probe": "startup+control",
+  "arm": "A",
+  "at": "2026-09-22T02:42:30.839Z",
+  "steps": [
+    {
+      "step": "load-phase (no interaction, 6s)",
+      "longtasks": [
+        {
+          "s": 104,
+          "d": 95
+        },
+        {
+          "s": 201.9,
+          "d": 52
+        },
+        {
+          "s": 354.6,
+          "d": 69
+        }
+      ],
+      "longtask_total_ms": 216,
+      "raf_count": 348
+    },
+    {
+      "step": "CONTROL: deliberate 120ms main-thread block",
+      "control_span_ms": 120,
+      "frames_during_window": 75,
+      "interval_stats_around_control": {
+        "n": 74,
+        "p50": 16.7,
+        "p95": 16.7,
+        "p99": 16.8,
+        "max": 100,
+        "over50": 1,
+        "over100": 0
+      },
+      "interval_at_spike": 16.6,
+      "control_task_delta_ms": 458.079,
+      "control_script_delta_ms": 300.14,
+      "longtasks_observed": []
+    },
+    {
+      "step": "settings click -> visible (tight CDP delta)",
+      "click_to_visible_frame_ms": 50.1,
+      "delta_window_ms": 95.645,
+      "ScriptDuration_ms": 44.155,
+      "TaskDuration_ms": 67.518,
+      "RecalcStyleDuration_ms": 3.439,
+      "LayoutDuration_ms": 5.559,
+      "LayoutCount": 2,
+      "RecalcStyleCount": 12,
+      "longtasks_at_click": [],
+      "interval_stats_after_click": {
+        "n": 4,
+        "p50": 16.6,
+        "p95": 16.7,
+        "p99": 16.7,
+        "max": 33.4,
+        "over50": 0,
+        "over100": 0
+      },
+      "raf_frames": 5,
+      "click_frame_delta": null,
+      "wall_click_epoch_ms": 1790044960068
+    },
+    {
+      "step": "idle 3s window",
+      "Paint_delta": "ABSENT",
+      "CompositeLayers_delta": "ABSENT",
+      "TaskDuration_ms": 353.258,
+      "ScriptDuration_ms": 290.233,
+      "RecalcStyleCount": 181,
+      "LayoutCount": 0,
+      "raf_frames": 185
+    }
+  ],
+  "paint_presence": {
+    "Paint": false,
+    "CompositeLayers": false
+  },
+  "metric_names": [
+    "AdSubframes",
+    "ArrayBufferContents",
+    "AudioHandlers",
+    "AudioWorkletProcessors",
+    "ContextLifecycleStateObservers",
+    "DetachedScriptStates",
+    "DevToolsCommandDuration",
+    "Documents",
+    "DomContentLoaded",
+    "FirstMeaningfulPaint",
+    "Frames",
+    "JSEventListeners",
+    "JSHeapTotalSize",
+    "JSHeapUsedSize",
+    "LayoutCount",
+    "LayoutDuration",
+    "LayoutObjects",
+    "MediaKeySessions",
+    "MediaKeys",
+    "NavigationStart",
+    "Nodes",
+    "ProcessTime",
+    "RTCPeerConnections",
+    "RecalcStyleCount",
+    "RecalcStyleDuration",
+    "ResourceFetchers",
+    "Resources",
+    "ScriptDuration",
+    "TaskDuration",
+    "TaskOtherDuration",
+    "ThreadTime",
+    "Timestamp",
+    "UACSSResources",
+    "V8CompileDuration",
+    "V8PerContextDatas",
+    "WorkerGlobalScopes"
+  ]
+}

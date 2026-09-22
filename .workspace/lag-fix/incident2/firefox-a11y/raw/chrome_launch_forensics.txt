@@ -1,0 +1,296 @@
+================================================================================
+ PART B - CHROMIUM AUTO-ENABLEMENT / CHROME LAUNCH FORENSICS
+ host: Ubuntu 24.04.3 LTS, GNOME/X11, uid 1001 (CNS2026495165)
+ date: 2026-09-22
+ mode: READ-ONLY. Every command below was executed as-is; nothing was modified,
+       created or deleted outside the raw/ output directory. No process was
+       signalled or restarted. pgrep -f was not used (process discovery used a
+       /proc scan instead). /proc/303448/environ was not readable
+       (yama ptrace_scope=1) and no escalation was attempted.
+================================================================================
+
+--------------------------------------------------------------------------------
+ B1. DOES /opt/google/chrome/chrome CONTAIN THE "SELF-DETECTS A11Y" STRINGS?
+--------------------------------------------------------------------------------
+ Method: strings -a -t x /opt/google/chrome/chrome > /tmp/a11y/chrome.strings
+         (1,982,581 strings). Counts are fixed-string (grep -F -c) per dump line;
+         "exact" means the whole extracted string equals the pattern.
+
+ PATTERN                        | verdict  | exact | substr | note
+ -------------------------------+----------+-------+--------+------------------------------
+ ACCESSIBILITY_ENABLED          | PRESENT  |   1   |   1    | @0x1e82cb1 - in a *_ENABLED/_DISABLED
+                                |          |       |        | NAME POOL, NOT proven as a getenv()
+ GNOME_ACCESSIBILITY            | PRESENT  |   1   |   1    | @0x1e31198 - in a sorted merged pool
+ enable-accessibility           | ABSENT   |   0   |   21   | only as enable-accessibility-* flag names
+ force_renderer_accessibility   | ABSENT   |   0   |   0    | underscore form does not exist
+ force-renderer-accessibility   | PRESENT  |   1   |   1    | @0x2c25520 - content SWITCH TABLE
+ screen_reader                  | ABSENT   |   0   |   0*   | *ci=1, and it is an AXMode name blob
+ atk_bridge                     | SUBSTR   |   0   |   1    | host = atk_bridge_adaptor_init
+ libatk-bridge                  | SUBSTR   |   0   |   1    | host = libatk-bridge-2.0.so.0
+ IsAccessibilityEnabled         | ABSENT   |   0   |   0    | no such literal
+ ax_mode                        | SUBSTR   |   0   |   2    | hosts = ax-ax_mode, ax-last_ax_mode
+ --force-renderer-accessibility | ABSENT   |   0   |   0    | expected: see note (6) below
+ org.a11y.Bus                   | PRESENT  |   1   |   1    | @0x1a9fd1a, next to org.freedesktop.DBus
+ atspi                          | SUBSTR   |   0   |   24   | real atspi_* symbols, see quote Q4
+ GTK_MODULES                    | ABSENT   |   0   |   0    | Chrome does NOT read GTK_MODULES
+ gail                           | ABSENT   |   0   |   0    | -
+ accessibility.force_disabled   | ABSENT   |   0   |   0    | this is a FIREFOX pref, not Chrome's
+ AT_SPI_BUS                     | ABSENT   |   0   |   0    | -
+
+ CONTROL SET (proves real env-var literals DO appear as exact strings in Chrome,
+ so a present literal alone is not proof of consumption):
+   CHROME_WRAPPER exact=1 | CHROME_VERSION_EXTRA exact=1 | CHROME_USER_DATA_DIR exact=1
+   WAYLAND_DISPLAY exact=1 | XDG_SESSION_TYPE exact=2 | OZONE_PLATFORM exact=0
+
+ VERBATIM CONTEXTS (first occurrence, +/- 4 dump lines, match in [ ])
+
+ Q1. force-renderer-accessibility @0x2c25520 -> this IS the Chromium switch table
+     2c254c0 enable-experimental-accessibility-labels-debugging
+     2c25500 disable-renderer-accessibility
+  [  2c25520 force-renderer-accessibility]
+     2c26a33 	EUC-JP
+     2c26a3b Shift_JIS
+
+ Q2. ACCESSIBILITY_ENABLED @0x1e82cb1 -> a name pool, NOT an env lookup
+     1e82c75 IS_PREFERRED_DISABLED
+     1e82c8b SH_ENACT_CANDIDATE_HEURISTIC_DISABLED
+  [  1e82cb1 ACCESSIBILITY_ENABLED]
+     1e82cc7 GL_VERTEX_ATTRIB_ARRAY_ENABLED
+     1e82ce6 CAPTURE_NOT_ENABLED
+     1e82d34 ATSPI_STATE_ENABLED
+
+ Q3. GNOME_ACCESSIBILITY / QT_ACCESSIBILITY -> alphabetically sorted merged pool
+     1e31139 UNITY
+     1e3113f POSITIVE_INFINITY
+     1e31151 NEGATIVE_INFINITY
+     1e31163 PROCESS_UTILITY
+  [  1e31173 QT_ACCESSIBILITY]
+     1e31184 TOUCH_ACCESSIBILITY
+  [  1e31198 GNOME_ACCESSIBILITY]
+     1e311ac WAITING_FOR_TARGET_AVAILABILITY
+     1e3126d _NET_WM_WINDOW_OPACITY
+   => strict A-Z ordering: this is linker string deduplication, so presence of the
+      literal does NOT establish that Chrome reads an environment variable.
+
+ Q4. atspi_* @0xe778 -> Chrome's browser process DOES dynamically import the
+     AT-SPI bridge symbols (this is the dlsym table, so a11y IS reachable):
+        e72a atk_object_ref_state_set
+        e743 atk_state_set_contains_state
+        e760 atk_state_type_get_name
+     [   e778 atspi_init]
+        e783 atspi_event_listener_new
+        e79c atspi_event_listener_register
+        e7ba g_clear_error
+        e7c8 atspi_event_listener_deregister
+   and, in the same import region:
+        e296 atk_bridge_adaptor_init
+        103ff libatk-bridge-2.0.so.0   (among libatk-1.0.so.0 / libgobject-2.0.so.0 /
+                                        libgio-2.0.so.0 / libnspr4.so = DT_NEEDED list)
+
+ VERDICT B1: Chrome DOES contain a real, self-recognised a11y force switch
+             ("force-renderer-accessibility", in the content-switches table) and
+             the ATK/AT-SPI bridge imports. It does NOT contain GTK_MODULES, and
+             the ACCESSIBILITY_ENABLED / GNOME_ACCESSIBILITY / SCREEN_READER
+             literals are entries in name/enum pools whose role as environment
+             variables is NOT established -> INCONCLUSIVE for those three.
+
+--------------------------------------------------------------------------------
+ B2. STATE LOCATIONS (existence + accessibility-related content)
+--------------------------------------------------------------------------------
+ 1) ~/.config/google-chrome/Local State
+    EXISTS, 8925 bytes, mode -rw-------, mtime 2026-09-22 11:00
+    cmd: grep -o -i -E '"[a-z_]*(accessib|screen_reader|force_renderer|a11y)[a-z_]*"[^,}]{0,60}' "$D/Local State"
+    RESULT: no matches  -> contains NO accessibility / screen_reader / force_renderer keys.
+    (file was NOT dumped; only the targeted pattern was grepped)
+
+ 2) ~/.config/google-chrome/Default/Preferences
+    EXISTS, 28546 bytes, mode -rw-------, mtime 2026-09-22 11:00
+    cmd: grep -o -i -E '"[a-z_]*(accessib|screen_reader|force_renderer)[a-z_]*"[^,}]{0,60}' .../Default/Preferences
+    RESULT (only match, verbatim):
+      "accessibility":{"captions":{"headless_caption_enabled":false
+    => the only accessibility key present is the CAPTIONS sub-dictionary.
+       There is NO force_renderer_accessibility / screen_reader key, i.e. Chrome's
+       own preferences do NOT record a forced-a11y decision.
+
+ 3) /usr/share/applications/google-chrome.desktop
+    EXISTS, 8576 bytes, root:root, mtime 2026-09-17 11:47
+    Exec lines (verbatim):
+      line 108: Exec=/usr/bin/google-chrome-stable %U
+      line 171: Exec=/usr/bin/google-chrome-stable
+      line 223: Exec=/usr/bin/google-chrome-stable --incognito
+    => NO --force-renderer-accessibility anywhere in the file.
+
+ 4) /usr/share/applications/com.google.Chrome.desktop
+    EXISTS, 8876 bytes, mtime 2026-09-17 11:47
+      line 108: Exec=/usr/bin/google-chrome-stable %U
+      line 176: Exec=/usr/bin/google-chrome-stable
+      line 228: Exec=/usr/bin/google-chrome-stable --incognito
+    => NO flag.
+
+ 5) ~/.local/share/applications/  (and /etc/xdg/autostart/, ~/.config/autostart/)
+    EXISTS. Contents: blender.desktop, cc-switch-handler.desktop,
+    claude-code-url-handler.desktop, mimeapps.list, mimeinfo.cache
+    cmd: grep -rln -i 'chrome' <those dirs>
+    RESULT: nothing -> NO user desktop file launches Chrome.
+
+ 6) /etc/opt/chrome/policies/
+    ABSENT  (ls: cannot access '/etc/opt/chrome/': No such file or directory)
+
+ 7) /etc/chromium/policies/
+    ABSENT  (ls: cannot access '/etc/chromium/': No such file or directory)
+    => There is NO Chrome/Chromium policy file on this host at all.
+
+ 8) ~/.config/google-chrome/NativeMessagingHosts/
+    EXISTS, empty (only . and ..) -> no native messaging host.
+
+ OTHER (checked because they can record a launch):
+  - ~/.config/google-chrome/chrome_debug.log : ABSENT
+  - ~/.config/google-chrome/Crash Reports/pending/ : EMPTY (no .dmp to mine)
+  - /home/CNS2026495165/.bash_history : 0 matches for 'force-renderer-accessibility'
+    (mtime 2026-09-21 19:04, i.e. today's commands are not yet flushed)
+  - grep -rl 'force-renderer-accessibility' over ~/.config, ~/.local, ~/.bashrc,
+    ~/.profile, /etc/environment, /etc/profile*, /etc/X11, /usr/local, /etc,
+    /usr/share/dbus-1, /usr/libexec : NO script or config file on this host
+    contains the switch text. The ONLY files containing it are the binaries
+    /opt/google/chrome/chrome and /opt/google/chrome/google-chrome (see B3/H4).
+  - find /opt /usr/local /usr/share/applications /usr/share/dbus-1 /etc/xdg /usr/bin
+    /usr/libexec -xdev -newermt '2026-09-22 09:30' -type f   ->
+        /opt/google/chrome/google-chrome     <== TAMPERED LAUNCHER
+        /usr/bin/firefox                     <== TAMPERED LAUNCHER (see appendix)
+        /usr/share/applications/mimeinfo.cache  (regenerated cache, no chrome content)
+
+--------------------------------------------------------------------------------
+ B3. WHERE COULD pid 303448's "--force-renderer-accessibility" HAVE COME FROM?
+--------------------------------------------------------------------------------
+ FACTS ESTABLISHED ABOUT THE RUNNING PROCESS
+   /proc/303448/cmdline (verbatim, NUL-separated):
+     /opt/google/chrome/chrome --force-renderer-accessibility --ozone-platform=x11
+   ps -o pid,lstart,etime,args -p 303448 :
+     303448  Tue 2026-09-22 10:56:57  (parent chain below)
+   parent chain (read from /proc/<pid>/status PPid, walking up):
+     303448  /opt/google/chrome/chrome --force-renderer-accessibility --ozone-platform=x11
+       -> 4139  /usr/bin/gnome-shell
+         -> 3736  /usr/lib/systemd/systemd --user
+           -> 1
+   sibling processes launched by the SAME gnome-shell (pid 4139):
+     30300  /usr/bin/bytedance-feishu-stable --force-renderer-accessibility
+     303448 /opt/google/chrome/chrome --force-renderer-accessibility --ozone-platform=x11
+     9042   /snap/firefox/8863/usr/lib/firefox/firefox
+     5657   /usr/bin/wechat
+
+ HYPOTHESIS VERDICTS
+
+ H1 "it came from an ENVIRONMENT VARIABLE"  -> NOT SUPPORTED
+    * Mechanism: a process's /proc/<pid>/cmdline is the argv passed at exec(2). An
+      environment variable cannot insert a token into argv. A wrapper would have to
+      expand one explicitly, and the only Chrome launcher wrapper on this host does
+      not: /opt/google/chrome/google-chrome is 30 lines and was read in full; its
+      exec line is literal, with no variable expansion:
+         exec -a "$0" "$HERE/chrome" "$@" --force-renderer-accessibility
+    * The a11y env vars that DO exist on this host are GTK/Qt-level, not Chromium's:
+         /etc/environment            : ACCESSIBILITY_ENABLED=1 ; GNOME_ACCESSIBILITY=1
+         /etc/profile:41-42          : export ACCESSIBILITY_ENABLED=1 ; export GNOME_ACCESSIBILITY=1
+         /etc/environment.d/90atk-adaptor.conf : GTK_MODULES=${GTK_MODULES:+$GTK_MODULES:}gail:atk-bridge
+         /etc/environment.d/90qt-a11y.conf     : QT_ACCESSIBILITY=1
+      and GTK_MODULES is ABSENT from the Chrome binary, so Chrome does not consume it.
+    * Note for completeness: /etc/environment lines are written with an "export "
+      prefix inside ##TEC_BEGIN##/##TEC_END## markers. /etc/environment is parsed by
+      pam_env as NAME=VALUE pairs, so an "export X=1" line does not define a variable
+      named X there (the effective copy is the one in /etc/profile, which IS a shell).
+      This makes the ACCESSIBILITY_ENABLED/GNOME_ACCESSIBILITY injection largely
+      vestigial via pam_env - it does NOT put the Chromium switch into any argv.
+
+ H2 "it came from a POLICY FILE"  -> NOT SUPPORTED
+    /etc/opt/chrome/policies/ and /etc/chromium/policies/ do not exist. The host's
+    only policy machinery is a managed endpoint agent (/etc/.OCular/), and
+    grep -ril -E 'chrome|accessib|renderer-accessibility' over
+    /etc/.OCular/Policy/, policy.xml, config.xml, Agent.conf, SDConfig.xml
+    returned NO hits -> no policy references Chrome or accessibility.
+
+ H3 "it came from a DESKTOP-FILE Exec LINE"  -> NOT SUPPORTED (for this PID)
+    * Both Chrome desktop files carry a plain Exec with no flag (see B2 items 3-4).
+    * Timing/argument-shape evidence rules the wrapper path out for pid 303448:
+        - the wrapper appends the flag LAST, after "$@"; pid 303448 has the flag
+          FIRST and --ozone-platform=x11 second;
+        - the wrapper also sets argv[0] to the invoking path via `exec -a "$0"`,
+          but pid 303448's argv[0] is the real binary /opt/google/chrome/chrome;
+        - the wrapper never adds --ozone-platform=x11, which pid 303448 does have.
+      => pid 303448 was exec'd directly as
+         "/opt/google/chrome/chrome --force-renderer-accessibility --ozone-platform=x11".
+
+ H4 "the LAUNCHER WRAPPER was edited to force it"  -> SUPPORTED (PROVEN)
+    /opt/google/chrome/google-chrome
+      mtime 2026-09-22 10:50   (every other file in /opt/google/chrome is 2026-09-17 11:47)
+      size 1065 bytes, bash script
+      line 30 (last line, verbatim, od -c confirms trailing \n):
+         exec -a "$0" "$HERE/chrome" "$@" --force-renderer-accessibility
+      lines 1-29 are the stock Google wrapper, including the stock comments
+      ("exec -a below is a bashism", "Sanitize std{in,stdout,stderr}").
+      PROOF OF MODIFICATION (package checksums):
+        dpkg -V google-chrome-stable   ->   ??5??????   /opt/google/chrome/google-chrome
+        /var/lib/dpkg/info/google-chrome-stable.md5sums (recorded):
+            eecca240162aa8b7b6531304438ba7e6  opt/google/chrome/google-chrome
+        md5sum /opt/google/chrome/google-chrome (actual):
+            b53a1c87f2de81b09e99c4491b1c3ffb
+      => the shipped content is NOT what is on disk. CONSEQUENCE: any launch through
+         /usr/bin/google-chrome, /usr/bin/google-chrome-stable, the GNOME activities
+         entry, or the desktop icons now forces renderer accessibility.
+
+ WHAT REMAINS UNRESOLVED (stated plainly)
+   * The exact human/automated ACTION that produced pid 303448's argv is NOT
+     ESTABLISHED. Evidence is consistent with a direct spawn of the binary by
+     gnome-shell (gnome-shell's own "Run a Command"/Alt+F2 path spawns with ppid =
+     gnome-shell and passes argv exactly as entered), but no log, history entry or
+     file proving that action was found. => INCONCLUSIVE.
+   * I did not attempt to prove whether Chromium could rewrite its own browser-process
+     argv in memory (which would make the /proc view non-exec evidence). The observed
+     argument ORDER (forced switch before --ozone-platform=x11) and argv[0] do not
+     match any in-memory append or wrapper, which is why the wrapper is excluded for
+     this PID, but the negative is not independently proven.
+   * The identity of the actor that rewrote the two launcher scripts is NOT
+     established by this file (see the appendix and forensic-findings.md).
+
+--------------------------------------------------------------------------------
+ APPENDIX (beyond the strict Chrome scope, cross-referenced): FIREFOX LAUNCHER TAMPER
+--------------------------------------------------------------------------------
+ The same forensics pass over browser launchers found a second, independent
+ force-on: /usr/bin/firefox (the Ubuntu snap-transition script) now FORCES
+ GNOME_ACCESSIBILITY=1 into the Firefox environment.
+
+ cmd: sed -n '55,80p' /usr/bin/firefox | nl -ba -v55
+   line 70 (verbatim):
+       # TODO: handle other desktop environments
+   line 71: (blank)
+   line 72 (last line, verbatim; cat -A shows a clean trailing $):
+       GNOME_ACCESSIBILITY=1 exec /snap/bin/firefox "$@"
+
+ cmd: wc -l -c /usr/bin/firefox          -> 72 lines, 2399 bytes
+      ls -la /usr/bin/firefox            -> -rwxr-xr-x 1 root root 2399  Sep 22 10:02
+      file /usr/bin/firefox              -> POSIX shell script, ASCII text executable
+
+ PROOF OF MODIFICATION:
+   dpkg -S /usr/bin/firefox   ->  firefox: /usr/bin/firefox
+   dpkg -V firefox            ->  ??5??????   /usr/bin/firefox
+   recorded md5: df16e16833ffbb4a160531651b801a49  usr/bin/firefox
+   actual   md5: 2ee34784f247a3149b3c9a3acc4f526e  /usr/bin/firefox
+   /var/lib/dpkg/info/firefox.conffiles does not exist -> not a conffile, so this
+   is NOT an admin-sanctioned conffile edit.
+   (No pristine copy is available to diff: no firefox .deb in
+    /var/cache/apt/archives, and no other copy of the script on disk.)
+
+ SIGNIFICANCE: this is direct corroboration of the user's concern in PART A, and it
+ is the one place where a real, readable environment variable - GNOME_ACCESSIBILITY -
+ is used to force a browser's accessibility on. GNOME_ACCESSIBILITY is exactly the
+ literal that DOES exist inside libxul.so (see ff_binary_env_strings.txt), i.e. it is
+ consumed by Firefox's GTK/ATK path, whereas it is only an unproven name-pool entry
+ in Chrome.
+
+ CAVEAT: /snap/bin/firefox (the path used by the snap's own desktop entry,
+ /var/lib/snapd/desktop/applications/firefox_firefox.desktop) does not go through
+ /usr/bin/firefox, so this line affects launches that use /usr/bin/firefox only.
+ Whether the running Firefox (pid 9042, started 10:05:38) took this path was NOT
+ established.
+
+================================================================================
+ END OF PART B FORENSICS
+================================================================================

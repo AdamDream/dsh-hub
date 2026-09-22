@@ -1,0 +1,38 @@
+### GLEAN STORE DECODE — /home/CNS2026495165/snap/firefox/common/.mozilla/firefox/g05ps3km.default/datareporting/glean/db/data.safe.bin
+### format (derived + validated): [u64 keylen][key][u64 reclen][u8 tag][u64 paylen][payload]
+###   reclen == 1 + 8 + paylen ;  tag 1=Counter 6=Integer 7=String 2/3/11=Distribution 17=Object/Map
+### VALIDATION: gfx.display.primary_width=5120  primary_height=2880  display.count=1  target_frame_rate=60
+###             gfx.linux_window_protocol='x11'(3 chars)  content_backend='Skia'(4)  status.last_compositor_gecko_version='155.0.1'(7)
+
+=== COMPOSITOR STATUS (the about:support 'Compositing' equivalent) ===
+  gfx.status.compositor                    = 'webrender'
+  gfx.features.compositor                  = 'webrender'
+  gfx.feature.webrender                    = 'available'
+  gfx.features.webrender                   = '{"status":"available"}'
+  gfx.features.hw_compositing              = '{"status":"available"}'
+  gfx.features.opengl_compositing          = '{"status":"available"}'
+  gfx.features.gpu_process                 = '{"status":"unused"}'
+  gfx.features.wr_compositor               = '{"status":"blocklisted:FEATURE_FAILURE_WEBRENDER_COMPOSITOR_DISABLED"}'
+  gfx.status.headless                      = '' (empty => not headless)
+
+=== COUNTER: gfx.skipped_composites = 1173 ===
+
+=== libxul.so literal check: is 'webrender_software' an available but UNUSED value? ===
+  grep -a -o -F 'webrender_software' libxul.so  -> 1 occurrence  (AVAILABLE)
+  grep -a -o -F 'WebRender (Software)' libxul.so -> 1 occurrence  (about:support display string)
+  RECORDED VALUE IS 'webrender' (9 chars), NOT 'webrender_software'
+
+=== FRAME TIME REASON — user's REAL accumulated counters (not simulated) ===
+  on_time                   101469   98.20%
+  missed_composite            1020    0.99%
+  slow_composite               632    0.61%
+  missed_composite_low         159    0.15%
+  missed_composite_long         37    0.04%
+  missed_composite_mid           9    0.01%
+  no_vsync                       1    0.00%
+  no_vsync_no_id                 1    0.00%
+  ----------------------------------------
+  TOTAL                     103328
+  => 98.20% of content frames were ON TIME; slow_composite 0.61%; all missed_composite 1.19%
+  CAVEAT: CUMULATIVE over the Glean store lifetime (store last written 2026-09-22 11:00),
+          NOT isolated to the Codex page / not per-session. Dominated by ordinary/idle frames.

@@ -1,0 +1,80 @@
+{
+  "checks": {
+    "① 页内 hook 装上（fetch-out/in 都有记录）": true,
+    "① hook 含 RPC 方法与请求体": true,
+    "② 点击锚点采到（pointerdown/click 捕获）": true,
+    "③ 可见性信号从 false 翻到 true": true,
+    "③ 内容信号（关键字）也采到": true,
+    "④ 突变观测记录到面板加入": true,
+    "⑤ 点击锚点落在 Node 夹逼窗内": true
+  },
+  "ok": true,
+  "anchor": {
+    "label": "pointerdown-captured",
+    "t": 1790045050351.8,
+    "perf": 354.1999999997206,
+    "btnText": "设置"
+  },
+  "tSend": 1790045050324.5862,
+  "tDone": 1790045050353.028,
+  "snap": {
+    "marks": [
+      {
+        "label": "arm-click-watch",
+        "t": 1790045050324.5,
+        "perf": 326.89999999990687
+      },
+      {
+        "label": "pointerdown-captured",
+        "t": 1790045050351.8,
+        "perf": 354.1999999997206,
+        "btnText": "设置"
+      },
+      {
+        "label": "pointerdown-captured",
+        "t": 1790045050351.8,
+        "perf": 354.1999999997206,
+        "btnText": "设置"
+      },
+      {
+        "label": "click-captured",
+        "t": 1790045050351.9001,
+        "perf": 354.29999999981374
+      }
+    ],
+    "rec": [
+      {
+        "dir": "fetch-out",
+        "t": 1790045050352,
+        "url": "/api/settings.describe",
+        "method": "POST",
+        "bytes": 83,
+        "body": "{\"type\":\"client-request\",\"rpcId\":\"dry-1\",\"method\":\"settings.describe\",\"payload\":{}}",
+        "rpcMethod": "settings.describe",
+        "rpcId": "dry-1"
+      },
+      {
+        "dir": "fetch-in",
+        "t": 1790045050393.7002,
+        "url": "/api/settings.describe",
+        "status": 200,
+        "bytes": 88,
+        "rpcId": "dry-1",
+        "rpcMethod": "settings.describe"
+      }
+    ],
+    "longtasks": [],
+    "frames": 93,
+    "visVisibleAt": 1790045050535,
+    "visFirstContent": 1790045050535,
+    "visMaxGap": 20.300048828125,
+    "mutations": [
+      {
+        "t": 1790045050515.8,
+        "tag": "DIV",
+        "role": "dialog",
+        "txt": "设置\n子代理模型\n访问模式"
+      }
+    ]
+  }
+}

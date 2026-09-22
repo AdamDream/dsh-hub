@@ -1,0 +1,59 @@
+# LIVE AT-SPI ACCESSIBILITY-BUS BASELINE — the user's own running browsers
+# host: Ubuntu 24.04 / X11 / uid 1001 / DISPLAY=:1   (read-only D-Bus queries)
+# a11y bus: unix:path=/run/user/1001/at-spi/bus_1  (owner: pid 4054 at-spi-bus-launcher)
+# timeline (local time, 2026-09-22):
+#   10:56  ListNames on the a11y bus                     -> firefox pid 9042 present
+#   10:57  registry root GetChildren (app list)          -> :1.25 = firefox pid 9042 present
+#   11:02  per-app queries (Name/role/ChildCount)        -> tree materialised
+#   NOTE the activation evidence (bus membership) was observed BEFORE any
+#   per-application query was issued, so the query cannot have caused it.
+# Firefox pid 9042 has been running since ~10:01 (etimes 3033 s at 10:52).
+
+== AT-SPI registered applications (20) -> owning process ==
+:1.1  4139   gnome-shell
+:1.3  4263   gsd-color
+:1.4  4270   gsd-keyboard
+:1.5  4276   gsd-power
+:1.6  4302   gsd-wacom
+:1.7  4306   gsd-xsettings
+:1.8  4273   gsd-media-keys
+:1.12 4337   evolution-alarm
+:1.13 4348   cc-switch
+:1.15 4856   gjs
+:1.18 5863   xdg-desktop-por
+:1.19 5739   WeChatAppEx
+:1.21 6378   update-notifier
+:1.23 6458   update-manager
+:1.24 5600   nautilus
+:1.25 9042   firefox          <-- the user's Firefox PARENT process
+:1.26 4180   mutter-x11-fram
+:1.27 10761  terminator
+:1.28 30300  feishu
+:1.59 303448 chrome           <-- the user's Chrome browser process
+
+== accessible application root for the two browsers (AT-SPI property reads) ==
+:1.25 (firefox 9042) : Name="Firefox"        role=application  ChildCount=2
+:1.59 (chrome 303448): Name="Google Chrome"  role=application  ChildCount=3
+
+== Firefox content processes on the a11y bus ==
+none (checked 9283,9351,9600,9950,10127,10356,48308,48599,297670,298181,301868)
+-> consistent with Gecko: the accessibility tree is served by the PARENT process.
+
+== user preference state (read-only gsettings) ==
+org.gnome.desktop.interface toolkit-accessibility        = false
+org.gnome.desktop.a11y.applications screen-reader-enabled = false
+org.gnome.desktop.a11y.interface high-contrast            = false
+
+== environment that forces the above on anyway ==
+/etc/environment            : export ACCESSIBILITY_ENABLED=1 ; export GNOME_ACCESSIBILITY=1
+/etc/environment.d/90atk-adaptor.conf : GTK_MODULES=${GTK_MODULES:+$GTK_MODULES:}gail:atk-bridge
+/etc/environment.d/90qt-a11y.conf     : QT_ACCESSIBILITY=1
+(confirmed in this session's own environment, i.e. inherited by every
+ descendant of the login session: GTK_MODULES=gail:atk-bridge
+ GNOME_ACCESSIBILITY=1 ACCESSIBILITY_ENABLED=1)
+
+== at-spi daemon cost (sampled 5x2s at 10:57:54-10:58:02, loadavg ~2.5) ==
+at-spi2-registryd  (pid 4183) cpu 0.0 %  RSS 7748 kB
+at-spi-bus-launcher(pid 4054) cpu 0.0 %  RSS 7824 kB
+-> the a11y DAEMONS cost nothing; any cost is paid inside each application that
+   builds a tree, which is exactly the hypothesis under test.

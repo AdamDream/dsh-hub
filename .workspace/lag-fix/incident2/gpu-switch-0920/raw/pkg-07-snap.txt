@@ -1,0 +1,55 @@
+### snap changes ###
+ID   状态    生成                  就绪                  摘要
+74   Done  今天 10:07（美国山区标准时间）  今天 10:07（美国山区标准时间）  自动刷新 snap "firmware-updater"
+
+
+### snap list --all ###
+名称                         版本                              修订版本   追踪               发布者           注记
+bare                       1.0                             5      latest/stable    canonical**   base
+core22                     20260410                        2437   latest/stable    canonical**   base,已禁用
+core22                     20260824                        2955   latest/stable    canonical**   base
+core24                     20260410                        1643   latest/stable    canonical**   base,已禁用
+core24                     20260824                        2124   latest/stable    canonical**   base
+firefox                    155.0.1-1                       8863   latest/stable/…  mozilla**     -
+firefox                    141.0-2                         6565   latest/stable/…  mozilla**     已禁用
+firmware-updater           0+git.2d77dfe                   258    1/stable/…       canonical**   -
+firmware-updater           0+git.5645b80                   226    1/stable/…       canonical**   已禁用
+ghostty                    v1.3.1                          820    latest/stable    ken-vandine*  classic
+gnome-42-2204              0+git.4982e7b-sdk0+git.69b626a  263    latest/stable/…  canonical**   -
+gnome-42-2204              0+git.38ea591                   202    latest/stable/…  canonical**   已禁用
+gnome-46-2404              0+git.b31ceab-sdk0+git.f0723a0  164    latest/stable    canonical**   -
+gtk-common-themes          0.1-81-g442e511                 1535   latest/stable/…  canonical**   -
+mesa-2404                  25.2.8-snap288                  1839   latest/stable    canonical**   -
+snap-store                 0+git.d2bdf905                  1419   2/stable/…       canonical**   -
+snap-store                 0+git.8334e2e4                  1390   2/stable/…       canonical**   已禁用
+snapd                      2.76.2                          27710  latest/stable    canonical**   snapd,已禁用
+snapd                      2.76.3                          27738  latest/stable    canonical**   snapd
+snapd-desktop-integration  0.9                             391    latest/stable/…  canonical**   -
+snapd-desktop-integration  0.9                             315    latest/stable/…  canonical**   已禁用
+
+### ls -la /var/lib/snapd/snaps ###
+总计 3311304
+drwxr-xr-x  3 root root      4096  9月 22 10:07 .
+drwxr-xr-x 25 root root      4096  9月 22 10:11 ..
+-rw-------  2 root root      4096  8月  6  2025 bare_5.snap
+-rw-------  2 root root  77586432  8月 17 04:49 core22_2437.snap
+-rw-------  2 root root  77574144  9月 17 14:20 core22_2955.snap
+-rw-------  2 root root  70049792  8月 13 15:55 core24_1643.snap
+-rw-------  2 root root  70033408  9月 13 15:40 core24_2124.snap
+-rw-------  2 root root 257036288  8月  6  2025 firefox_6565.snap
+-rw-------  2 root root 273506304  9月  7 05:19 firefox_8863.snap
+-rw-------  2 root root  17301504  8月 15 05:34 firmware-updater_226.snap
+-rw-------  2 root root  13316096  9月 22 10:07 firmware-updater_258.snap
+-rw-------  2 root root 142442496  9月  7 11:59 ghostty_820.snap
+-rw-------  2 root root 541073408  8月  6  2025 gnome-42-2204_202.snap
+-rw-------  2 root root 557309952  8月 11 20:30 gnome-42-2204_263.snap
+-rw-------  2 root root 644382720  8月 13 16:00 gnome-46-2404_164.snap
+-rw-------  2 root root  96141312  8月  6  2025 gtk-common-themes_1535.snap
+-rw-------  2 root root 421507072  8月 13 15:59 mesa-2404_1839.snap
+drwxr-xr-x  2 root root      4096  5月 21  2025 partial
+-rw-------  2 root root  52535296  8月 12 17:14 snapd_27710.snap
+-rw-------  2 root root  52711424  9月  8 07:04 snapd_27738.snap
+-rw-------  2 root root    589824  8月  6  2025 snapd-desktop-integration_315.snap
+-rw-------  2 root root    847872  8月 13 15:55 snapd-desktop-integration_391.snap
+-rw-------  2 root root  12382208  8月 14 10:39 snap-store_1390.snap
+-rw-------  2 root root  12406784  9月 20 23:50 snap-store_1419.snap

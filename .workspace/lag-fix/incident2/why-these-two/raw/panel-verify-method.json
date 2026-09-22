@@ -1,0 +1,256 @@
+{
+  "launchedAt": "2026-09-22T04:04:48.479Z",
+  "browser": "153.0.8010.52",
+  "viewport": "2560x1440@2",
+  "positiveControl": [
+    {
+      "label": "A_cdp_runtime_evaluate",
+      "longtaskCount": 0,
+      "longtaskMax": 0,
+      "longtasks": [],
+      "loafCount": 1,
+      "loafMax": 121.70000000018626,
+      "frameMax": 99.89999999999964,
+      "framesGt50": 1
+    },
+    {
+      "label": "B_inpage_setTimeout",
+      "longtaskCount": 1,
+      "longtaskMax": 120,
+      "longtasks": [
+        {
+          "start": 0.7000000001862645,
+          "dur": 120,
+          "name": "self"
+        }
+      ],
+      "loafCount": 1,
+      "loafMax": 123.40000000037253,
+      "frameMax": 116.60000000000218,
+      "framesGt50": 1
+    },
+    {
+      "label": "C_inpage_rAF",
+      "longtaskCount": 1,
+      "longtaskMax": 120,
+      "longtasks": [
+        {
+          "start": 16.199999999254942,
+          "dur": 120,
+          "name": "self"
+        }
+      ],
+      "loafCount": 1,
+      "loafMax": 120.1000000005588,
+      "frameMax": 100,
+      "framesGt50": 1
+    },
+    {
+      "label": "D_inpage_promise_microtask_check",
+      "longtaskCount": 0,
+      "longtaskMax": 0,
+      "longtasks": [],
+      "loafCount": 1,
+      "loafMax": 122.29999999981374,
+      "frameMax": 100,
+      "framesGt50": 1
+    },
+    {
+      "label": "E_idle_control",
+      "longtaskCount": 0,
+      "longtaskMax": 0,
+      "longtasks": [],
+      "loafCount": 0,
+      "loafMax": 0,
+      "frameMax": 16.80000000000291,
+      "framesGt50": 0
+    }
+  ],
+  "rpcByStep": [
+    {
+      "label": "1_open_settings",
+      "requests": [
+        {
+          "url": "/ssh-gui/nodes.list",
+          "httpMethod": "POST",
+          "rpcMethod": "nodes.list",
+          "postLen": 107
+        },
+        {
+          "url": "/ssh-gui/config.get",
+          "httpMethod": "POST",
+          "rpcMethod": "config.get",
+          "postLen": 107
+        },
+        {
+          "url": "/api/dynamicCordisRunner/inventory",
+          "httpMethod": "POST",
+          "rpcMethod": "dynamicCordisRunner/inventory",
+          "postLen": 135
+        },
+        {
+          "url": "/api/agentPreset.list",
+          "httpMethod": "POST",
+          "rpcMethod": "agentPreset.list",
+          "postLen": 113
+        },
+        {
+          "url": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' fill='none' rx='22' ry='22' stroke='black' stroke-width='2' stroke-dasharray='4 4'/%3E%3C/svg%3E",
+          "httpMethod": "GET",
+          "rpcMethod": null,
+          "postLen": 0
+        },
+        {
+          "url": "/favicon.svg",
+          "httpMethod": "GET",
+          "rpcMethod": null,
+          "postLen": 0
+        },
+        {
+          "url": "/api/agentPreset.list",
+          "httpMethod": "POST",
+          "rpcMethod": "agentPreset.list",
+          "postLen": 113
+        }
+      ],
+      "nRequests": 7,
+      "rpcMethods": [
+        "nodes.list",
+        "config.get",
+        "dynamicCordisRunner/inventory",
+        "agentPreset.list",
+        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' fill='none' rx='22' ry='22' stroke='black' stroke-width='2' stroke-dasharray='4 4'/%3E%3C/svg%3E",
+        "/favicon.svg"
+      ]
+    },
+    {
+      "label": "2_nav_plugins",
+      "requests": [
+        {
+          "url": "/usage/summary",
+          "httpMethod": "POST",
+          "rpcMethod": "summary",
+          "postLen": 163
+        },
+        {
+          "url": "/usage/timeseries",
+          "httpMethod": "POST",
+          "rpcMethod": "timeseries",
+          "postLen": 186
+        },
+        {
+          "url": "/usage/heatmap",
+          "httpMethod": "POST",
+          "rpcMethod": "heatmap",
+          "postLen": 135
+        },
+        {
+          "url": "/usage/byModel",
+          "httpMethod": "POST",
+          "rpcMethod": "byModel",
+          "postLen": 163
+        },
+        {
+          "url": "/usage/byProject",
+          "httpMethod": "POST",
+          "rpcMethod": "byProject",
+          "postLen": 165
+        },
+        {
+          "url": "/usage/byDay",
+          "httpMethod": "POST",
+          "rpcMethod": "byDay",
+          "postLen": 161
+        },
+        {
+          "url": "/usage/timeseries",
+          "httpMethod": "POST",
+          "rpcMethod": "timeseries",
+          "postLen": 187
+        },
+        {
+          "url": "/usage/sessions",
+          "httpMethod": "POST",
+          "rpcMethod": "sessions",
+          "postLen": 176
+        },
+        {
+          "url": "/usage/status",
+          "httpMethod": "POST",
+          "rpcMethod": "status",
+          "postLen": 103
+        },
+        {
+          "url": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNSIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJXaW5kb3dUZXh0IiBkPSJNMjAgM2gtMVYxaC0ydjJIN1YxSDV2Mkg0Yy0xLjEgMC0yIC45LTIgMnYxNmMwIDEuMS45IDIgMiAyaDE2YzEuMSAwIDItLjkgMi0yVjVjMC0xLjEtLjktMi0yLTJ6bTAgMThINFY4aDE2djEzeiIvPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik0wIDBoMjR2MjRIMHoiLz48L3N2Zz4=",
+          "httpMethod": "GET",
+          "rpcMethod": null,
+          "postLen": 0
+        }
+      ],
+      "nRequests": 10,
+      "rpcMethods": [
+        "summary",
+        "timeseries",
+        "heatmap",
+        "byModel",
+        "byProject",
+        "byDay",
+        "sessions",
+        "status",
+        "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNSIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJXaW5kb3dUZXh0IiBkPSJNMjAgM2gtMVYxaC0ydjJIN1YxSDV2Mkg0Yy0xLjEgMC0yIC45LTIgMnYxNmMwIDEuMS45IDIgMiAyaDE2YzEuMSAwIDItLjkgMi0yVjVjMC0xLjEtLjktMi0yLTJ6bTAgMThINFY4aDE2djEzeiIvPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik0wIDBoMjR2MjRIMHoiLz48L3N2Zz4="
+      ]
+    },
+    {
+      "label": "3_tab_插件列表",
+      "requests": [
+        {
+          "url": "/api/pluginInventory/list",
+          "httpMethod": "POST",
+          "rpcMethod": "pluginInventory/list",
+          "postLen": 126
+        }
+      ],
+      "nRequests": 1,
+      "rpcMethods": [
+        "pluginInventory/list"
+      ]
+    },
+    {
+      "label": "4_tab_back_插件配置",
+      "requests": [],
+      "nRequests": 0,
+      "rpcMethods": []
+    },
+    {
+      "label": "5_close",
+      "requests": [],
+      "nRequests": 0,
+      "rpcMethods": []
+    }
+  ],
+  "activeTabAfterNavPlugins": "插件配置",
+  "channels": {
+    "longtask": "on",
+    "loaf": "on",
+    "event": "on",
+    "eventTimingSeen": 92
+  },
+  "logs": [
+    "[12:04:44] lock: exclusive",
+    "[12:04:44] launched chrome 153.0.8010.52",
+    "[12:04:48] --- ② nav item vs plugins tab: full network set (NO /api/ filter) ---",
+    "[12:04:48]   diag: {\"boot\":true,\"hasBootJson\":true,\"loaderMode\":\"live\",\"settingsArea\":0,\"triggers\":0,\"trees\":0,\"url\":\"http://127.0.0.1:3080/\",\"bodyChildren\":3}",
+    "[12:04:51]   1_open_settings                    n=7 :: nodes.list, config.get, dynamicCordisRunner/inventory, agentPreset.list, data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' fill='none' rx='22' ry='22' stroke='black' stroke-width='2' stroke-dasharray='4 4'/%3E%3C/svg%3E, /favicon.svg",
+    "[12:04:53]   2_nav_plugins                      n=10 :: summary, timeseries, heatmap, byModel, byProject, byDay, sessions, status, data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNSIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJXaW5kb3dUZXh0IiBkPSJNMjAgM2gtMVYxaC0ydjJIN1YxSDV2Mkg0Yy0xLjEgMC0yIC45LTIgMnYxNmMwIDEuMS45IDIgMiAyaDE2YzEuMSAwIDItLjkgMi0yVjVjMC0xLjEtLjktMi0yLTJ6bTAgMThINFY4aDE2djEzeiIvPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik0wIDBoMjR2MjRIMHoiLz48L3N2Zz4=",
+    "[12:04:53]   (after nav 插件 the active tab is: 插件配置)",
+    "[12:04:55]   3_tab_插件列表                         n=1 :: pluginInventory/list",
+    "[12:04:57]   4_tab_back_插件配置                    n=0 :: ",
+    "[12:05:00]   5_close                            n=0 :: ",
+    "[12:05:00] --- ① positive control: which injection channel does LongTask see? ---",
+    "[12:05:02]   A_cdp_runtime_evaluate             LT=0/0  LoAF=1/121.70000000018626  fmax=99.89999999999964  >50=1",
+    "[12:05:03]   B_inpage_setTimeout                LT=1/120  LoAF=1/123.40000000037253  fmax=116.60000000000218  >50=1",
+    "[12:05:05]   C_inpage_rAF                       LT=1/120  LoAF=1/120.1000000005588  fmax=100  >50=1",
+    "[12:05:07]   D_inpage_promise_microtask_check   LT=0/0  LoAF=1/122.29999999981374  fmax=100  >50=1",
+    "[12:05:09]   E_idle_control                     LT=0/0  LoAF=0/0  fmax=16.80000000000291  >50=0"
+  ]
+}

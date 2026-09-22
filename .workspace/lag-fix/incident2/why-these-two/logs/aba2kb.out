@@ -1,0 +1,131 @@
+### ARM aba2k-b 2560x1440 reps3 ablate=aba 11:43:33
+[11:43:33] run=aba2kb order=A reps=3 browser=chrome-headless vp=2560x1440@2 sections=nav trace=true ablate=aba
+[11:43:33] loadavg=5.98 6.27 5.77 4/3200 500589
+[11:43:33] pre-census: total=0 own=0 foreign=0
+[11:43:33] lock: exclusive
+[11:43:33] quiet gate: quiet=true waited=5ms foreign=0
+[11:43:33] launched chrome-headless version=153.0.8010.52
+[11:44:33] rep1 ERROR: TimeoutError: page.goto: Timeout 60000ms exceeded. | Call log: | [2m  - navigating to "http://127.0.0.1:3080/", waiting until "domcontentloaded"[22m | 
+[11:44:49] rep2 ready 1630ms channels={"longtask":"on","loaf":"on","event":"on"}
+[11:44:52]   IDLE_BASE              c2f=null max=66.7 >50=2 LT=1/84 rpc=host.describe,session.list,workspace.list,settings.describe,dynamicCordisRunner/syncInspectManifest,dynamicCordisRunner/inventory,credentials.describe,dynamicCordisRunner/inventory,agentPreset.list pw=1138
+[11:44:55]   OPEN                   c2f=94.1 max=83.4 >50=2 LT=0/0 rpc=agentPreset.list pw=1419
+[11:44:55] rep2 nav has 8 sections: ["通用设置","模型","插件","Agent 预设","远程工作区","分布式控制 · dsh-ssh-gui","vision-adam 识图设置","子代理模型"] (active at open: 通用设置)
+[11:44:57]   SEC_1_first_view       c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:44:59]   SCROLL_first           c2f=null max=66.8 >50=2 LT=0/0 rpc=- pw=246
+[11:45:02]   SEC_S2_模型              c2f=3.9 max=83.3 >50=2 LT=0/0 rpc=llm.providers,credentials.describe pw=615
+[11:45:03]   SCROLL_S2_模型           c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:45:05]   SEC_S3_插件              c2f=25.3 max=83.4 >50=3 LT=0/0 rpc=- pw=1358
+[11:45:08]   SCROLL_S3_插件           c2f=null max=83.4 >50=13 LT=0/0 rpc=- pw=0
+[11:45:08]   插件 tabs: ["插件配置","插件列表","按项目","按日","会话明细"]
+[11:45:10]   TAB_S3_插件::tab:插件配置_active c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:45:13]   SCROLL_tab_S3_插件::tab:插件配置 c2f=null max=100 >50=12 LT=0/0 rpc=- pw=0
+[11:45:15]   TAB_S3_插件::tab:插件列表    c2f=74.1 max=83.3 >50=2 LT=0/0 rpc=pluginInventory/list pw=1119
+[11:45:18]   SCROLL_tab_S3_插件::tab:插件列表 c2f=null max=99.9 >50=14 LT=0/0 rpc=- pw=0
+[11:45:21]   TAB_S3_插件::tab:按项目     c2f=2.3 max=83.3 >50=1 LT=0/0 rpc=- pw=816
+[11:45:23]   SCROLL_tab_S3_插件::tab:按项目 c2f=null max=100 >50=5 LT=0/0 rpc=- pw=0
+[11:45:25]   TAB_S3_插件::tab:按日      c2f=1.8 max=83.4 >50=1 LT=0/0 rpc=- pw=816
+[11:45:28]   SCROLL_tab_S3_插件::tab:按日 c2f=null max=83.4 >50=10 LT=0/0 rpc=- pw=0
+[11:45:30]   TAB_S3_插件::tab:会话明细    c2f=9.2 max=100 >50=1 LT=1/54 rpc=- pw=818
+[11:45:33]   SCROLL_tab_S3_插件::tab:会话明细 c2f=null max=83.3 >50=9 LT=0/0 rpc=- pw=0
+[11:45:35]   SEC_S4_Agent 预设        c2f=9.8 max=83.4 >50=2 LT=0/0 rpc=agentPreset.list pw=639
+[11:45:37]   SCROLL_S4_Agent 预设     c2f=null max=66.7 >50=2 LT=0/0 rpc=- pw=0
+[11:45:40]   SEC_S5_远程工作区           c2f=4.5 max=66.7 >50=1 LT=0/0 rpc=- pw=407
+[11:45:41]   SCROLL_S5_远程工作区        c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:45:43]   SEC_S6_分布式控制 · dsh-ssh-gui c2f=15.8 max=100 >50=2 LT=0/0 rpc=- pw=605
+[11:45:44]   SCROLL_S6_分布式控制 · dsh-ssh-gui c2f=null max=66.7 >50=1 LT=0/0 rpc=- pw=0
+[11:45:47]   SEC_S7_vision-adam 识图设置 c2f=17.6 max=83.2 >50=2 LT=0/0 rpc=- pw=405
+[11:45:48]   SCROLL_S7_vision-adam 识图设置 c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:45:50]   SEC_S8_子代理模型           c2f=17.1 max=66.6 >50=2 LT=0/0 rpc=- pw=405
+[11:45:51]   SCROLL_S8_子代理模型        c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:45:54]   SEC_back_first         c2f=4.9 max=66.7 >50=1 LT=0/0 rpc=agentPreset.list pw=913
+[11:45:56]   SEC_plugins_REVISIT    c2f=19.5 max=66.7 >50=2 LT=0/0 rpc=- pw=686
+[11:45:59]   TAB_plugins_REVISIT_list c2f=1.6 max=66.6 >50=1 LT=0/0 rpc=pluginInventory/list pw=694
+[11:46:01]   CLOSE                  c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=178
+[11:46:01] rep2 ablation ABA: NORMAL -> ABLATED(mask) -> NORMAL2
+[11:46:04]   FOCUS_NORMAL_open      c2f=5.1 max=66.7 >50=1 LT=0/0 rpc=- pw=1366
+[11:46:06]   FOCUS_NORMAL_navPlugins c2f=19.4 max=66.7 >50=2 LT=0/0 rpc=- pw=926
+[11:46:09]   FOCUS_NORMAL_tabList   c2f=1.2 max=66.6 >50=1 LT=0/0 rpc=pluginInventory/list pw=694
+[11:46:11]   FOCUS_NORMAL_navGeneral c2f=4 max=83.4 >50=1 LT=0/0 rpc=- pw=919
+[11:46:13]   FOCUS_NORMAL_scrollGeneral c2f=null max=66.7 >50=2 LT=0/0 rpc=- pw=0
+[11:46:16]   FOCUS_NORMAL_close     c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=178
+[11:46:18]   FOCUS_ABLATED_open     c2f=7.7 max=83.3 >50=1 LT=0/0 rpc=- pw=1366
+[11:46:21]   FOCUS_ABLATED_navPlugins c2f=19.5 max=16.8 >50=0 LT=0/0 rpc=- pw=926
+[11:46:24]   FOCUS_ABLATED_tabList  c2f=1.4 max=16.8 >50=0 LT=0/0 rpc=pluginInventory/list pw=694
+[11:46:26]   FOCUS_ABLATED_navGeneral c2f=4.2 max=16.8 >50=0 LT=0/0 rpc=agentPreset.list pw=913
+[11:46:28]   FOCUS_ABLATED_scrollGeneral c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:46:31]   FOCUS_ABLATED_close    c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=178
+[11:46:33]   FOCUS_NORMAL2_open     c2f=4.8 max=83.3 >50=1 LT=0/0 rpc=- pw=1366
+[11:46:36]   FOCUS_NORMAL2_navPlugins c2f=16.2 max=83.3 >50=2 LT=0/0 rpc=- pw=926
+[11:46:38]   FOCUS_NORMAL2_tabList  c2f=1.1 max=66.6 >50=1 LT=0/0 rpc=pluginInventory/list pw=694
+[11:46:41]   FOCUS_NORMAL2_navGeneral c2f=4 max=83.4 >50=1 LT=0/0 rpc=- pw=919
+[11:46:43]   FOCUS_NORMAL2_scrollGeneral c2f=null max=66.7 >50=2 LT=0/0 rpc=- pw=0
+[11:46:45]   FOCUS_NORMAL2_close    c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=178
+[11:46:47]   POSCTL_pre             c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:46:49]   POSCTL_120             c2f=null max=100.1 >50=1 LT=0/0 rpc=- pw=0
+[11:46:51]   POSCTL_120_inpanel     c2f=null max=100 >50=1 LT=0/0 rpc=- pw=0
+[11:46:56] rep2 trace sliced 53/53 phases; stamps=106 keptEvents=55625
+[11:46:56] rep2 done: phases=53 traceEvents=55625 net=22 frames=7236 longtasks=4
+[11:47:25] rep3 ready 28833ms channels={"longtask":"on","loaf":"on","event":"on"}
+[11:47:28]   IDLE_BASE              c2f=null max=66.7 >50=1 LT=1/79 rpc=dynamicCordisRunner/inventory,credentials.describe,dynamicCordisRunner/inventory,agentPreset.list pw=1138
+[11:47:31]   OPEN                   c2f=40.7 max=83.3 >50=2 LT=0/0 rpc=agentPreset.list pw=1419
+[11:47:31] rep3 nav has 8 sections: ["通用设置","模型","插件","Agent 预设","远程工作区","分布式控制 · dsh-ssh-gui","vision-adam 识图设置","子代理模型"] (active at open: 通用设置)
+[11:47:33]   SEC_1_first_view       c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:47:35]   SCROLL_first           c2f=null max=66.6 >50=2 LT=0/0 rpc=- pw=246
+[11:47:38]   SEC_S2_模型              c2f=3.8 max=66.7 >50=2 LT=0/0 rpc=llm.providers,credentials.describe pw=615
+[11:47:39]   SCROLL_S2_模型           c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:47:41]   SEC_S3_插件              c2f=19.2 max=83.3 >50=3 LT=0/0 rpc=- pw=1358
+[11:47:44]   SCROLL_S3_插件           c2f=null max=83.4 >50=15 LT=0/0 rpc=- pw=0
+[11:47:44]   插件 tabs: ["插件配置","插件列表","按项目","按日","会话明细"]
+[11:47:46]   TAB_S3_插件::tab:插件配置_active c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:47:48]   SCROLL_tab_S3_插件::tab:插件配置 c2f=null max=83.4 >50=14 LT=0/0 rpc=- pw=0
+[11:47:51]   TAB_S3_插件::tab:插件列表    c2f=2.9 max=83.4 >50=2 LT=0/0 rpc=pluginInventory/list pw=1119
+[11:47:54]   SCROLL_tab_S3_插件::tab:插件列表 c2f=null max=83.4 >50=14 LT=0/0 rpc=- pw=0
+[11:47:56]   TAB_S3_插件::tab:按项目     c2f=2.2 max=66.7 >50=1 LT=0/0 rpc=- pw=816
+[11:47:58]   SCROLL_tab_S3_插件::tab:按项目 c2f=null max=83.3 >50=5 LT=0/0 rpc=- pw=0
+[11:48:01]   TAB_S3_插件::tab:按日      c2f=3 max=66.6 >50=1 LT=0/0 rpc=- pw=816
+[11:48:03]   SCROLL_tab_S3_插件::tab:按日 c2f=null max=83.4 >50=11 LT=0/0 rpc=- pw=0
+[11:48:06]   TAB_S3_插件::tab:会话明细    c2f=8.1 max=100 >50=1 LT=0/0 rpc=- pw=818
+[11:48:08]   SCROLL_tab_S3_插件::tab:会话明细 c2f=null max=83.3 >50=9 LT=0/0 rpc=- pw=0
+[11:48:11]   SEC_S4_Agent 预设        c2f=16.8 max=66.8 >50=1 LT=0/0 rpc=agentPreset.list pw=413
+[11:48:12]   SCROLL_S4_Agent 预设     c2f=null max=66.7 >50=1 LT=0/0 rpc=- pw=226
+[11:48:14]   SEC_S5_远程工作区           c2f=3.6 max=66.6 >50=1 LT=0/0 rpc=- pw=407
+[11:48:15]   SCROLL_S5_远程工作区        c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:48:18]   SEC_S6_分布式控制 · dsh-ssh-gui c2f=18.7 max=66.7 >50=1 LT=0/0 rpc=- pw=605
+[11:48:19]   SCROLL_S6_分布式控制 · dsh-ssh-gui c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:48:21]   SEC_S7_vision-adam 识图设置 c2f=18.2 max=66.7 >50=2 LT=0/0 rpc=- pw=405
+[11:48:22]   SCROLL_S7_vision-adam 识图设置 c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:48:25]   SEC_S8_子代理模型           c2f=16.1 max=66.7 >50=2 LT=0/0 rpc=- pw=405
+[11:48:25]   SCROLL_S8_子代理模型        c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:48:28]   SEC_back_first         c2f=3.9 max=66.6 >50=1 LT=0/0 rpc=agentPreset.list pw=913
+[11:48:31]   SEC_plugins_REVISIT    c2f=17.1 max=66.7 >50=3 LT=0/0 rpc=- pw=1358
+[11:48:33]   TAB_plugins_REVISIT_list c2f=1.7 max=83.4 >50=2 LT=0/0 rpc=pluginInventory/list pw=1119
+[11:48:36]   CLOSE                  c2f=null max=33.4 >50=0 LT=0/0 rpc=- pw=178
+[11:48:36] rep3 ablation ABA: NORMAL -> ABLATED(mask) -> NORMAL2
+[11:48:38]   FOCUS_NORMAL_open      c2f=8.5 max=83.4 >50=1 LT=0/0 rpc=agentPreset.list pw=1585
+[11:48:41]   FOCUS_NORMAL_navPlugins c2f=17 max=83.4 >50=3 LT=0/0 rpc=- pw=1604
+[11:48:43]   FOCUS_NORMAL_tabList   c2f=1.8 max=66.7 >50=2 LT=0/0 rpc=pluginInventory/list pw=1119
+[11:48:45]   FOCUS_NORMAL_scrollList c2f=null max=83.4 >50=17 LT=0/0 rpc=- pw=0
+[11:48:48]   FOCUS_NORMAL_navGeneral c2f=6.4 max=66.8 >50=1 LT=0/0 rpc=agentPreset.list pw=913
+[11:48:50]   FOCUS_NORMAL_scrollGeneral c2f=null max=66.6 >50=2 LT=0/0 rpc=- pw=0
+[11:48:53]   FOCUS_NORMAL_close     c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=178
+[11:48:55]   FOCUS_ABLATED_open     c2f=6.5 max=83.3 >50=1 LT=0/0 rpc=- pw=1366
+[11:48:58]   FOCUS_ABLATED_navPlugins c2f=16.8 max=33.3 >50=0 LT=0/0 rpc=- pw=1604
+[11:49:00]   FOCUS_ABLATED_tabList  c2f=53.2 max=16.8 >50=0 LT=0/0 rpc=pluginInventory/list pw=1119
+[11:49:02]   FOCUS_ABLATED_scrollList c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:49:05]   FOCUS_ABLATED_navGeneral c2f=8.5 max=16.8 >50=0 LT=0/0 rpc=agentPreset.list pw=913
+[11:49:07]   FOCUS_ABLATED_scrollGeneral c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:49:09]   FOCUS_ABLATED_close    c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=178
+[11:49:12]   FOCUS_NORMAL2_open     c2f=7.3 max=83.3 >50=1 LT=0/0 rpc=- pw=1366
+[11:49:14]   FOCUS_NORMAL2_navPlugins c2f=19 max=66.7 >50=2 LT=0/0 rpc=- pw=926
+[11:49:17]   FOCUS_NORMAL2_tabList  c2f=2.4 max=83.4 >50=1 LT=0/0 rpc=pluginInventory/list pw=694
+[11:49:19]   FOCUS_NORMAL2_navGeneral c2f=4.1 max=66.7 >50=1 LT=0/0 rpc=- pw=919
+[11:49:21]   FOCUS_NORMAL2_scrollGeneral c2f=null max=66.7 >50=2 LT=0/0 rpc=- pw=0
+[11:49:24]   FOCUS_NORMAL2_close    c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=178
+[11:49:26]   POSCTL_pre             c2f=null max=16.8 >50=0 LT=0/0 rpc=- pw=0
+[11:49:27]   POSCTL_120             c2f=null max=100 >50=1 LT=0/0 rpc=- pw=0
+[11:49:30]   POSCTL_120_inpanel     c2f=null max=116.7 >50=1 LT=0/0 rpc=- pw=1412
+[11:49:36] rep3 trace sliced 55/55 phases; stamps=110 keptEvents=79287
+[11:49:36] rep3 done: phases=55 traceEvents=79337 net=24 frames=7413 longtasks=3
+[11:49:36] wrote /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/why-these-two/raw/panel-aba2kb-A-chrome-headless.json
+[11:49:36] lock released
+### ABA2KB DONE 11:49:36

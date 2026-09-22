@@ -1,0 +1,64 @@
+[phase2 390338] holding lock; concurrentWith=agent: incident2-why-these-two (panel cost attribution: why only General+Plugins) line: same-page cross-panel comparison (general vs models vs plugins + tabs) purpose: attribute the "only these two sp
+=== [11:12:14] DSH chromium rep=1
+    OK chromium dpr=1 cell=idle-floor rep=1 -> /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/gecko-vs-blink/raw/run-chromium-dpr1-dsh-r1.json
+      frameStats.collector={"n":480,"p50":16.7,"p95":16.7,"p99":16.8,"max":16.8,"mean":16.666,"over50":0,"over100":0}
+      frameStats.page     ={"n":0,"p50":null,"p95":null,"p99":null,"max":null,"mean":null,"over50":0,"over100":0}
+      rafJs={"n":0,"totalMs":0,"maxMs":0,"meanMs":null} domNodes=600 dprReadBack=1
+      longtask={"supported":true,"count":0,"err":null}
+      loaf={"supported":true,"count":0,"err":null}
+      cdpWindowMs=8009 absentFields=["Paint","CompositeLayers","Layout","RecalcStyle"]
+=== [11:12:29] DSH chromium rep=2
+    OK chromium dpr=1 cell=idle-floor rep=2 -> /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/gecko-vs-blink/raw/run-chromium-dpr1-dsh-r2.json
+      frameStats.collector={"n":479,"p50":16.7,"p95":16.8,"p99":16.8,"max":16.8,"mean":16.666,"over50":0,"over100":0}
+      frameStats.page     ={"n":0,"p50":null,"p95":null,"p99":null,"max":null,"mean":null,"over50":0,"over100":0}
+      rafJs={"n":0,"totalMs":0,"maxMs":0,"meanMs":null} domNodes=600 dprReadBack=1
+      longtask={"supported":true,"count":0,"err":null}
+      loaf={"supported":true,"count":0,"err":null}
+      cdpWindowMs=8008 absentFields=["Paint","CompositeLayers","Layout","RecalcStyle"]
+=== [11:12:41] DSH firefox rep=1
+    OK firefox dpr=1 cell=idle-floor rep=1 -> /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/gecko-vs-blink/raw/run-firefox-dpr1-dsh-r1.json
+      frameStats.collector={"n":479,"p50":17.04,"p95":17.06,"p99":17.08,"max":17.08,"mean":16.666,"over50":0,"over100":0}
+      frameStats.page     ={"n":0,"p50":null,"p95":null,"p99":null,"max":null,"mean":null,"over50":0,"over100":0}
+      rafJs={"n":0,"totalMs":0,"maxMs":0,"meanMs":null} domNodes=600 dprReadBack=1
+      longtask={"supported":true,"count":0,"err":null}
+      loaf={"supported":true,"count":0,"err":null}
+=== [11:13:05] DSH firefox rep=2
+    OK firefox dpr=1 cell=idle-floor rep=2 -> /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/gecko-vs-blink/raw/run-firefox-dpr1-dsh-r2.json
+      frameStats.collector={"n":480,"p50":17.06,"p95":17.08,"p99":17.08,"max":17.1,"mean":16.668,"over50":0,"over100":0}
+      frameStats.page     ={"n":0,"p50":null,"p95":null,"p99":null,"max":null,"mean":null,"over50":0,"over100":0}
+      rafJs={"n":0,"totalMs":0,"maxMs":0,"meanMs":null} domNodes=600 dprReadBack=1
+      longtask={"supported":true,"count":0,"err":null}
+      loaf={"supported":true,"count":0,"err":null}
+=== [11:13:29] LOADCURVE chromium port=18905
+      pass1 L=0ms frames=180 p50=16.7 p95=16.7 max=16.8 over50=0 rafJsMean=undefined
+      pass1 L=4ms frames=180 p50=16.7 p95=16.8 max=16.8 over50=0 rafJsMean=undefined
+      pass1 L=8ms frames=181 p50=16.7 p95=16.8 max=16.8 over50=0 rafJsMean=undefined
+      pass1 L=12ms frames=180 p50=16.7 p95=16.8 max=16.8 over50=0 rafJsMean=undefined
+      pass1 L=16ms frames=175 p50=16.7 p95=16.8 max=33.4 over50=0 rafJsMean=undefined
+      pass1 L=20ms frames=141 p50=16.7 p95=33.4 max=33.4 over50=0 rafJsMean=undefined
+      pass1 L=28ms frames=104 p50=33.3 p95=33.4 max=33.4 over50=0 rafJsMean=undefined
+      pass2 L=0ms frames=181 p50=16.7 p95=16.8 max=16.8 over50=0 rafJsMean=undefined
+      pass2 L=4ms frames=180 p50=16.7 p95=16.7 max=16.8 over50=0 rafJsMean=undefined
+      pass2 L=8ms frames=181 p50=16.7 p95=16.7 max=16.8 over50=0 rafJsMean=undefined
+      pass2 L=12ms frames=180 p50=16.7 p95=16.7 max=16.8 over50=0 rafJsMean=undefined
+      pass2 L=16ms frames=174 p50=16.7 p95=16.8 max=33.4 over50=0 rafJsMean=undefined
+      pass2 L=20ms frames=141 p50=16.7 p95=33.4 max=33.5 over50=0 rafJsMean=undefined
+      pass2 L=28ms frames=103 p50=33.3 p95=33.4 max=33.4 over50=0 rafJsMean=undefined
+    -> /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/gecko-vs-blink/raw/loadcurve-chromium-dpr1-combined.json
+=== [11:14:22] LOADCURVE firefox port=18906
+      pass1 L=0ms frames=181 p50=17.06 p95=17.06 max=17.08 over50=0 rafJsMean=undefined
+      pass1 L=4ms frames=181 p50=17.06 p95=17.08 max=17.08 over50=0 rafJsMean=undefined
+      pass1 L=8ms frames=180 p50=17.06 p95=17.08 max=17.08 over50=0 rafJsMean=undefined
+      pass1 L=12ms frames=180 p50=17.06 p95=17.08 max=17.08 over50=0 rafJsMean=undefined
+      pass1 L=16ms frames=166 p50=17.06 p95=33.12 max=33.14 over50=0 rafJsMean=undefined
+      pass1 L=20ms frames=139 p50=17.06 p95=33.14 max=34.14 over50=0 rafJsMean=undefined
+      pass1 L=28ms frames=101 p50=33.14 p95=34.14 max=34.16 over50=0 rafJsMean=undefined
+      pass2 L=0ms frames=180 p50=17.06 p95=17.08 max=17.1 over50=0 rafJsMean=undefined
+      pass2 L=4ms frames=180 p50=17.06 p95=17.08 max=17.08 over50=0 rafJsMean=undefined
+      pass2 L=8ms frames=181 p50=17.06 p95=17.08 max=17.08 over50=0 rafJsMean=undefined
+      pass2 L=12ms frames=181 p50=17.06 p95=17.08 max=17.08 over50=0 rafJsMean=undefined
+      pass2 L=16ms frames=167 p50=17.06 p95=33.12 max=33.16 over50=0 rafJsMean=undefined
+      pass2 L=20ms frames=140 p50=17.06 p95=34.1 max=34.14 over50=0 rafJsMean=undefined
+      pass2 L=28ms frames=101 p50=33.12 p95=34.12 max=34.16 over50=0 rafJsMean=undefined
+    -> /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/gecko-vs-blink/raw/loadcurve-firefox-dpr1-combined.json
+[phase2 390338] done at 2026-09-22T11:15:16+08:00 loadavg=5.31 4.96 4.64 4/4029 399299

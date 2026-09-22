@@ -1,0 +1,47 @@
+### EVIDENCE: playwright firefox presence check
+2026-09-22T10:58:40+08:00
+
+--- command: node -e playwright firefox.executablePath() (from /home/CNS2026495165/playwright_scratch) ---
+playwright version: 1.49.1
+firefox.executablePath(): /home/CNS2026495165/.cache/ms-playwright/firefox-1466/firefox/firefox
+exists: false
+chromium.executablePath(): /home/CNS2026495165/.cache/ms-playwright/chromium-1148/chrome-linux/chrome exists: true
+
+--- ls -la ~/.cache/ms-playwright/ ---
+总计 24
+drwxrwxr-x  6 CNS2026495165 CNS2026495165 4096  9月 12 13:02 .
+drwx------ 34 CNS2026495165 CNS2026495165 4096  9月 22 10:50 ..
+drwxrwxr-x  3 CNS2026495165 CNS2026495165 4096  9月 12 13:02 chromium-1148
+drwxrwxr-x  3 CNS2026495165 CNS2026495165 4096  9月 12 13:02 chromium_headless_shell-1148
+drwxrwxr-x  2 CNS2026495165 CNS2026495165 4096  9月 12 13:02 ffmpeg-1010
+drwxrwxr-x  2 CNS2026495165 CNS2026495165 4096  9月 12 13:01 .links
+
+--- find ~/.cache/ms-playwright -maxdepth 2 ---
+/home/CNS2026495165/.cache/ms-playwright
+/home/CNS2026495165/.cache/ms-playwright/chromium-1148
+/home/CNS2026495165/.cache/ms-playwright/chromium-1148/INSTALLATION_COMPLETE
+/home/CNS2026495165/.cache/ms-playwright/chromium-1148/chrome-linux
+/home/CNS2026495165/.cache/ms-playwright/chromium-1148/DEPENDENCIES_VALIDATED
+/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148
+/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/INSTALLATION_COMPLETE
+/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux
+/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/DEPENDENCIES_VALIDATED
+/home/CNS2026495165/.cache/ms-playwright/.links
+/home/CNS2026495165/.cache/ms-playwright/.links/734e00801b39611500688a5449bacc03d3b30793
+/home/CNS2026495165/.cache/ms-playwright/ffmpeg-1010
+/home/CNS2026495165/.cache/ms-playwright/ffmpeg-1010/COPYING.LGPLv2.1
+/home/CNS2026495165/.cache/ms-playwright/ffmpeg-1010/INSTALLATION_COMPLETE
+/home/CNS2026495165/.cache/ms-playwright/ffmpeg-1010/DEPENDENCIES_VALIDATED
+/home/CNS2026495165/.cache/ms-playwright/ffmpeg-1010/ffmpeg-linux
+
+--- ls -d ~/.cache/ms-playwright/firefox-* (expected playwright 1.49 firefox) ---
+ls: 无法访问 '/home/CNS2026495165/.cache/ms-playwright/firefox-*': 没有那个文件或目录
+
+--- application.ini of expected playwright firefox dir (should not exist) ---
+cat: /home/CNS2026495165/.cache/ms-playwright/firefox-1466/firefox/application.ini: 没有那个文件或目录
+
+--- find / -name 'libxul.so' (bounded 60s) ---
+/snap/firefox/8863/usr/lib/firefox/libxul.so
+/snap/firefox/6565/usr/lib/firefox/libxul.so
+
+--- find / -maxdepth 4 -type d -name 'firefox-1*' ---

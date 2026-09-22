@@ -1,0 +1,170 @@
+════════════════════════════════════════════════════════════════
+ DSH 点击设置卡顿 · trace 解析报告
+════════════════════════════════════════════════════════════════
+输入文件     : /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/user-capture/fixtures/real-settings-trace.json
+输入形态     : devtools-trace（时间单位 us）
+文件大小     : 25509 KB
+事件总数     : 103153（其中有时长的事件 16062）
+trace 跨度   : 12.56 s
+采集来源     : DevTools Performance panel
+
+── 锚点（点击「设置」）──────────────────────────────────────────
+锚点时间     : 1425625901.0 µs（trace 时钟）
+判定依据     : performance.mark(USER_CLICK_SETTINGS_START)（点击前那一刻）
+置信度       : high
+候选锚点     :
+               · 1426674749.5  [high] performance.mark START/END 窗口中点（窗口 2098 ms；其后再无足够帧数据，已避开截断）
+                 └ 覆盖 不足（前 10912 ms / 后 1651 ms）· 窗口内 0 任务 / 4 帧样本
+               · 1425625901.0  [high] performance.mark(USER_CLICK_SETTINGS_START)（点击前那一刻）
+                 └ 覆盖 不足（前 9863 ms / 后 2700 ms）· 窗口内 0 任务 / 4 帧样本
+选择理由     : ⚠ 没有任何候选能让 ±3000ms 窗口完全落在采集范围内，退化为证据量最大者
+
+── 点击前后 6.0 秒 · 帧分布 ────────────────────────────
+口径         : AnimationFrame 间隔（主线程活跃帧节拍，共 53 个帧边界）
+帧数         : 4
+平均 FPS     : 94.5   ← 活跃期帧率（空闲期不产生帧事件，不等于屏幕刷新率）
+帧间隔 p50 / p95 / p99 / max : 8.7 / 12.9 / 12.9 / 18.8 ms
+掉帧(>50ms)  : 0 次（活跃期跨度 40 ms）
+  提示         : 帧边界样本只有 4 个（无头/空闲页极少产生帧事件），
+                 上面这张分布表只能当参考；判卡请以「主线程占用」和「最长任务」为准。
+主线程占用   : 68 ms / 窗口 6000 ms = 1.1%
+               ← 占用率越高越卡；>50% 必然可感知，>80% 严重。这是不依赖帧事件的最硬指标。
+  窗口内 RunTask 数 : 11（帧边界事件只有 4 个 ⇒ 占用率比帧率更可靠）
+  区间                        次数  占比
+  <16.7 (≥60fps)             3   75.0% █████████████████████████
+  16.7–33 (30–60fps)         1   25.0% ████████
+  33–50 (20–30fps)           0    0.0% 
+  50–100 (10–20fps)          0    0.0% 
+  100–250 (4–10fps)          0    0.0% 
+  >250 (<4fps)               0    0.0% 
+
+  对比：锚点前 46 帧 FPS 12.6 / p99 432.8 / 掉帧 15   ‖   锚点后 4 帧 FPS 94.5 / p99 12.9 / 掉帧 0
+
+── 最长任务 top 10（窗口内）────────────────────────────────────
+  #  相对锚点     耗时      阻塞     来源      函数 / URL
+   1      +102 ms    26.0 ms    0.0 ms  RunTask   (无函数归属)
+   2       +70 ms    21.2 ms    0.0 ms  RunTask   (anonymous)
+                   http://127.0.0.1:3080/assets/index-ClqxG24t.js
+                   ⤷ 该任务内函数占用：17.9ms (anonymous) · 0.3ms ba · 0.2ms listener
+   3        +9 ms     5.0 ms    0.0 ms  RunTask   (无函数归属)
+   4        +4 ms     4.2 ms    0.0 ms  RunTask   (无函数归属)
+   5       +94 ms     2.2 ms    0.0 ms  RunTask   handleMessage
+                   http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6
+                   ⤷ 该任务内函数占用：0.3ms handleMessage · 0.1ms se · 0.1ms publish
+   6       +92 ms     2.2 ms    0.0 ms  RunTask   Ha
+                   http://127.0.0.1:3080/assets/index-ClqxG24t.js
+   7       +28 ms     1.5 ms    0.0 ms  RunTask   raf
+   8       +19 ms     1.5 ms    0.0 ms  RunTask   (无函数归属)
+   9       +35 ms     1.3 ms    0.0 ms  RunTask   (无函数归属)
+  10       +16 ms     1.3 ms    0.0 ms  RunTask   (无函数归属)
+  窗口内任务数 11 · 总阻塞（Σ(dur−50ms)）0.0 ms
+
+── 窗口内函数级占用（FunctionCall 口径 top 12）────────────────
+  #  累计耗时    调用次数  函数 @ URL
+   1    17.9 ms        3   (anonymous)
+                           http://127.0.0.1:3080/assets/index-ClqxG24t.js
+   2     5.3 ms      130   handleMessage
+                           http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6
+   3     1.9 ms      196   publish
+                           http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c
+   4     0.5 ms        3   (anonymous)
+                           http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b
+   5     0.5 ms       20   Ha
+                           http://127.0.0.1:3080/assets/index-ClqxG24t.js
+   6     0.4 ms        4   raf
+                           (unknown)
+   7     0.3 ms       12   listener
+                           (unknown)
+   8     0.3 ms       12   ba
+                           http://127.0.0.1:3080/assets/index-ClqxG24t.js
+   9     0.1 ms        1   se
+                           http://127.0.0.1:3080/assets/index-ClqxG24t.js
+  10     0.1 ms        1   onClick
+                           http://127.0.0.1:3080/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b
+  11     0.1 ms        1   onMove
+                           http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-sidebar/client.js?rev=7563cb4b02ca
+  12     0.1 ms        2   uo
+                           http://127.0.0.1:3080/assets/index-ClqxG24t.js
+
+── 实证口径（本 trace 里该事件名到底有多少个）──────────────────
+  RunTask                          10479   主线程任务（长任务口径的来源）
+  FunctionCall                       989   带 URL 的函数调用，用于归属到模块
+  UpdateLayoutTree                    60   = Performance 面板的 Recalc Style
+  Layout                              11   布局
+  Paint                              100   绘制
+  ProfileChunk                      1091   CPU profile 分片（函数级归因的前提）
+  StackCpuSampling                 81465   调用栈采样（函数级归因的数据源）
+  AnimationFrame                     212   帧边界（帧分布口径）
+  Commit                              54   提交合成器
+  EventDispatch                      113   事件派发（点击处理）
+  FrameCommittedInBrowser              1   
+
+── Script / RecalcStyle / Layout / Paint 分项 ──────────────────
+（全 trace 口径，主线程顶层事件；单位 ms）
+  分项                总耗时      占比      事件数
+  Script（JS 执行）              2062.7    93.8%   10371
+  RecalcStyle（样式重算）            24.9     1.1%      60
+  Layout（布局）                   45.0     2.0%      11
+  Paint/Raster/Composite（绘制、合成）     66.4     3.0%     275
+  分项合计 2199.0 ms · trace 总跨度 12563 ms ⟹ 主线程被计入事件占用约 17.5%
+
+（窗口内口径，仅列耗时 top3 事件）
+  Script（JS 执行）           （窗口内无）
+  RecalcStyle（样式重算）       （窗口内无）
+  Layout（布局）              （窗口内无）
+  Paint/Raster/Composite（绘制、合成）（窗口内无）
+
+── CPU profile 函数级自耗时（top 15，按采样数）──────────────────
+  采样总数 80471（ProfileChunk 1092 个；未设采样间隔，故只给相对占比）
+  #   占比     函数 @ URL
+   1    94.8%  (idle) @ (unknown)
+   2     1.3%  (program) @ (unknown)
+   3     0.7%  materialize @ http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-modules/client.js?rev=7eb526320903:222
+   4     0.3%  findNextMatchSync @ http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js:1
+   5     0.2%  (garbage collector) @ (unknown)
+   6     0.1%  get @ http://127.0.0.1:3080/assets/index-ClqxG24t.js:10
+   7     0.1%  a @ http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js:43
+   8     0.1%  (anonymous) @ http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-settings-general/client.js?rev=f733efd…:0
+   9     0.1%  Oi @ http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js:151
+  10     0.1%  appendChild @ (unknown)
+  11     0.1%  o0 @ http://127.0.0.1:3080/assets/index-ClqxG24t.js:55
+  12     0.1%  (anonymous) @ (unknown):0
+  13     0.1%  (anonymous) @ http://127.0.0.1:3080/assets/vendor-D22_Mp1f.js:0
+  14     0.1%  (anonymous) @ http://127.0.0.1:3080/assets/index-ClqxG24t.js:0
+  15     0.1%  (anonymous) @ http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6:0
+
+── 已知修复项命中判定 ──────────────────────────────────────────
+  口径：宿主下发的 client.js?rev=<sha1 前 12 位>，与已落地修复的终态指纹比对。
+
+  [ui-layout] ✔ 命中（已修复构建）
+      ui-layout:366 —— 帧内 rAF 合并（themeColor 强制重算去重）
+      期望 rev 82cca1a6178a · 实际 rev 82cca1a6178a · 判据 rev + 代码结构签名
+      · [metric] 窗口 p99 帧间隔 12.9 ms、>50ms 掉帧 0 次
+      · [metric] 全 trace 分项：Script 2063 ms / RecalcStyle 25 ms / Layout 45 ms / Paint 66 ms
+
+  [runtime] ✔ 命中（已修复构建）
+      dsh-client-runtime —— U-P2AC（客户端 runtime 热面修复）
+      期望 rev 5559de4ce28c · 实际 rev 5559de4ce28c · 判据 rev + 标记 /* p2ac-fix */ ×4
+      · [behavior] 窗口内 top10 未见 runtime/session 事件流的直接命中（不能据此排除）
+
+  [usage] ✔ 命中（已修复构建）
+      dsh-usage —— U-IG1/IG2/IG3/CC1（宿主 ingest 阻塞 + 游标 off-by-one）
+      期望 rev 4536b91ed282 · 实际 rev 4536b91ed282 · 判据 rev + 宿主事件循环延迟（页面侧只能看到 RPC 变慢）
+      注：该修复在宿主（冷面），页面 trace 里只能看到「一次 RPC/一次长任务」，需要与宿主侧 G1 数据联合判读。
+      · [limit] usage 修复在宿主（冷面）：页面 trace 无法直接证明宿主事件循环阻塞，需与宿主侧 G1 延迟数据联合判读
+
+  [wallpaper] ✔ 命中（已修复构建）
+      dsh-wallpaper —— (iv-a) 内容比较去重
+      期望 rev 826d9217a8fc · 实际 rev 826d9217a8fc · 判据 rev + 代码结构签名
+
+  提示：rev 需要人工投喂（--rev ui-layout=…,runtime=…,usage=…），或使用方案 C 工具自动抓取的目标页 rev。
+  rev 只回答「你跑的是不是修复后的构建」；行为证据回答「卡在哪」。两者都命中才算闭环。
+
+── 采集/解析告警 ──────────────────────────────────────────────
+  ⚠ 锚点之后只有 2700 ms 数据（希望 3000 ms，缺 300 ms）⇒ 录制在点击后过早停止，「点击后」窗口不完整。请按 Runbook「录制后至少再等 5 秒」重录。
+
+── 结论 ───────────────────────────────────────────────────────
+  点击前后各 3s 内采集 4 个帧间隔，活跃期 94.5 FPS，p99 12.9 ms，>50ms 掉帧 0 次（未见明显掉帧）。 窗口内主线程被任务占用 68 ms = 1.1%（按活跃期 n/a），占用不高。 最长任务 26.0 ms，落在 ?。 rev 判定：ui-layout/runtime/usage/wallpaper 已是修复后构建 ⇒ 若仍卡，说明残留卡点在别处，需看 top10 与 CPU 分项。
+════════════════════════════════════════════════════════════════
+
+（机器可读报告已写入 /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/user-capture/fixtures/parser-report.json）

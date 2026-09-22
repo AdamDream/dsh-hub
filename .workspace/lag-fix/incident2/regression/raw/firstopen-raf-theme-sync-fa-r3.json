@@ -1,0 +1,363 @@
+{
+  "cond": "theme-sync-faithful",
+  "label": "raf-theme-sync-fa-r3",
+  "ts": "2026-09-22T02:53:23.720Z",
+  "instrument": {
+    "name": "raf-face-runner",
+    "page_stub": "sub/raf-face-pagestub.js",
+    "why_not_shared_harness": "tools/stubs.js 的 theme-sync 无条件同步 rAF 与 firstopen-ab.mjs 自带 rAF 心跳互相递归 → RangeError，共享器械无法产出 theme-sync 窗口（见 repro 证据）",
+    "vs_shared": [
+      "rAF 包装按调用点栈分类，把器械心跳与生产调度分开计数",
+      "theme-sync 分支加重入保护（rAF 回调内排的 rAF 走真 rAF），避免无限递归",
+      "指标口径（phaseMount/phaseClick/rafClick/overlay/longtasks/taskBusyPct）与 firstopen-ab.mjs 同构",
+      "共享计数同名项保留：tcRafScheduled/tcSyncInvoked/tcMetaContentWrites(InClick)/tcComputedReads(InRaf/InClick)/tcRefreshRan/tpApplySeen(InClick)…"
+    ]
+  },
+  "reproSameBrowser": null,
+  "repro": null,
+  "nav": {
+    "domcontentloadedMs": 45,
+    "settleMs": 6000,
+    "clicked": true,
+    "closed": true,
+    "clickError": null,
+    "gotoError": null,
+    "clickWallMs": 42,
+    "dwellMs": 6000,
+    "wallS": 6.047
+  },
+  "stub": {
+    "spec": "theme-sync-faithful",
+    "mechanism": "[faithful] reentrancy-guarded synchronous requestAnimationFrame (theme-color 写回回到帧内)；生产主题调度返回 falsy handle 以消除在飞标志伪影",
+    "effective": true,
+    "mountEffective": true,
+    "pathReachableClick": {
+      "themeApplyRan": true,
+      "themeApplyRanInClick": false,
+      "themeRefreshRan": true,
+      "themeDeferScheduledByProd": true,
+      "themeDeferScheduledByProdInClick": false,
+      "metaContentWrites": 2,
+      "metaContentWritesInClick": 0,
+      "bodyWrites": 1,
+      "bodyWritesInClick": 0,
+      "computedReadsInClick": 0,
+      "usageSeen": 0,
+      "usageSeenInClick": 0
+    },
+    "pathReachableMount": {
+      "themeApplyRan": true,
+      "themeApplyRanInClick": false,
+      "themeRefreshRan": true,
+      "themeDeferScheduledByProd": true,
+      "themeDeferScheduledByProdInClick": false,
+      "metaContentWrites": 2,
+      "metaContentWritesInClick": 0,
+      "bodyWrites": 1,
+      "bodyWritesInClick": 0,
+      "computedReadsInClick": 0,
+      "usageSeen": 0,
+      "usageSeenInClick": 0
+    },
+    "mountProof": {
+      "mechanism": "[faithful] reentrancy-guarded synchronous requestAnimationFrame (theme-color 写回回到帧内)；生产主题调度返回 falsy handle 以消除在飞标志伪影",
+      "expected": "rafSyncExecutedProd>0（生产 scheduleThemeColorRefresh 排的 rAF 被同步执行）",
+      "effective": true,
+      "effectiveStrict": true,
+      "cond": "theme-sync-faithful",
+      "counters": {
+        "tpSignatureChecks": 0,
+        "tpSkipTake": 0,
+        "tpForcedReplay": 0,
+        "tpTokenReadbacks": 0,
+        "tpBodyWrites": 1,
+        "tpBodyWritesInClick": 0,
+        "tpApplySeen": 2,
+        "tpApplySeenInClick": 0,
+        "tcRafScheduled": 3,
+        "tcRafScheduledInClick": 0,
+        "tcSyncInvoked": 2,
+        "tcRefreshRan": 2,
+        "tcComputedReads": 2,
+        "tcComputedReadsInRaf": 2,
+        "tcComputedReadsInClick": 0,
+        "tcMetaInserted": 1,
+        "tcMetaContentWrites": 2,
+        "tcMetaContentWritesInClick": 0,
+        "tcMetaWritesInRaf": 2,
+        "usageRequestsSeen": 0,
+        "usageRequestsSeenInClick": 0,
+        "usageRequestsBlocked": 0,
+        "usageByMethod": {},
+        "p2acOldCarryHits": 0,
+        "p2acKeyGateActive": 0,
+        "fetchSeen": 0,
+        "xhrSeen": 0,
+        "wsFramesSeen": 0,
+        "rafCallsTotal": 3,
+        "rafCallsInClick": 0,
+        "rafByHeartbeat": 0,
+        "rafByHeartbeatInClick": 0,
+        "rafByProdThemeDefer": 2,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafStackSamplesTaken": 3,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a:555:16"
+        ],
+        "rafOtherSamples": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "rafSyncExecuted": 3,
+        "rafSyncExecutedProd": 2,
+        "rafSyncExecutedProdInClick": 0,
+        "rafSyncFallback": 0,
+        "rafSyncFallbackInsideCallback": 0,
+        "rafSyncFallbackFromProd": 0,
+        "tcMetaWritesInSyncRafCallback": 2,
+        "tcComputedReadsInSyncRafCallback": 2
+      },
+      "pathReachable": {
+        "themeApplyRan": true,
+        "themeApplyRanInClick": false,
+        "themeRefreshRan": true,
+        "themeDeferScheduledByProd": true,
+        "themeDeferScheduledByProdInClick": false,
+        "metaContentWrites": 2,
+        "metaContentWritesInClick": 0,
+        "bodyWrites": 1,
+        "bodyWritesInClick": 0,
+        "computedReadsInClick": 0,
+        "usageSeen": 0,
+        "usageSeenInClick": 0
+      },
+      "stubLog": [
+        [
+          1790045590602,
+          "installed",
+          "theme-sync-faithful"
+        ]
+      ]
+    },
+    "clickProof": {
+      "mechanism": "[faithful] reentrancy-guarded synchronous requestAnimationFrame (theme-color 写回回到帧内)；生产主题调度返回 falsy handle 以消除在飞标志伪影",
+      "expected": "rafSyncExecutedProd>0（生产 scheduleThemeColorRefresh 排的 rAF 被同步执行）",
+      "effective": true,
+      "effectiveStrict": true,
+      "cond": "theme-sync-faithful",
+      "counters": {
+        "tpSignatureChecks": 0,
+        "tpSkipTake": 0,
+        "tpForcedReplay": 0,
+        "tpTokenReadbacks": 0,
+        "tpBodyWrites": 1,
+        "tpBodyWritesInClick": 0,
+        "tpApplySeen": 2,
+        "tpApplySeenInClick": 0,
+        "tcRafScheduled": 367,
+        "tcRafScheduledInClick": 364,
+        "tcSyncInvoked": 2,
+        "tcRefreshRan": 2,
+        "tcComputedReads": 2,
+        "tcComputedReadsInRaf": 2,
+        "tcComputedReadsInClick": 0,
+        "tcMetaInserted": 1,
+        "tcMetaContentWrites": 2,
+        "tcMetaContentWritesInClick": 0,
+        "tcMetaWritesInRaf": 2,
+        "usageRequestsSeen": 0,
+        "usageRequestsSeenInClick": 0,
+        "usageRequestsBlocked": 0,
+        "usageByMethod": {},
+        "p2acOldCarryHits": 0,
+        "p2acKeyGateActive": 0,
+        "fetchSeen": 0,
+        "xhrSeen": 0,
+        "wsFramesSeen": 0,
+        "rafCallsTotal": 367,
+        "rafCallsInClick": 364,
+        "rafByHeartbeat": 364,
+        "rafByHeartbeatInClick": 364,
+        "rafByProdThemeDefer": 2,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafStackSamplesTaken": 12,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a:555:16"
+        ],
+        "rafOtherSamples": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "rafSyncExecuted": 3,
+        "rafSyncExecutedProd": 2,
+        "rafSyncExecutedProdInClick": 0,
+        "rafSyncFallback": 364,
+        "rafSyncFallbackInsideCallback": 363,
+        "rafSyncFallbackFromProd": 0,
+        "tcMetaWritesInSyncRafCallback": 2,
+        "tcComputedReadsInSyncRafCallback": 2
+      },
+      "pathReachable": {
+        "themeApplyRan": true,
+        "themeApplyRanInClick": false,
+        "themeRefreshRan": true,
+        "themeDeferScheduledByProd": true,
+        "themeDeferScheduledByProdInClick": false,
+        "metaContentWrites": 2,
+        "metaContentWritesInClick": 0,
+        "bodyWrites": 1,
+        "bodyWritesInClick": 0,
+        "computedReadsInClick": 0,
+        "usageSeen": 0,
+        "usageSeenInClick": 0
+      },
+      "stubLog": [
+        [
+          1790045590602,
+          "installed",
+          "theme-sync-faithful"
+        ]
+      ]
+    },
+    "routeHits": null,
+    "rafClassification": {
+      "callsTotal": 367,
+      "callsInClick": 364,
+      "byHeartbeat": 364,
+      "byHeartbeatInClick": 364,
+      "byProdThemeDefer": 2,
+      "byProdThemeDeferInClick": 0,
+      "byOther": 1,
+      "byOtherInClick": 0,
+      "mountPhase": {
+        "byHeartbeat": 0,
+        "byProdThemeDefer": 2,
+        "byOther": 1,
+        "callsTotal": 3
+      },
+      "clickPhaseDelta": {
+        "byHeartbeat": 364,
+        "byProdThemeDefer": 0,
+        "byOther": 0,
+        "callsTotal": 364
+      },
+      "prodStackSamples": [
+        "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+        "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a:555:16"
+      ],
+      "otherSamplesTop": {
+        "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+      },
+      "stackSamplesTaken": 12
+    },
+    "syncEvidence": {
+      "mode": "theme-sync-faithful",
+      "syncExecuted": 3,
+      "syncExecutedProd": 2,
+      "syncExecutedProdInClick": 0,
+      "syncFallback": 364,
+      "syncFallbackInsideCallback": 363,
+      "syncFallbackFromProd": 0,
+      "metaWritesInSyncRafCallback": 2,
+      "computedReadsInSyncRafCallback": 2,
+      "metaWritesInRaf": 2,
+      "computedReadsInRaf": 2
+    }
+  },
+  "phaseMount": {
+    "ScriptDuration": 0.166,
+    "RecalcStyleDuration": 0.038,
+    "TaskDuration": 0.569,
+    "RecalcStyleCount": 244
+  },
+  "phaseClick": {
+    "ScriptDuration": 0.195,
+    "RecalcStyleDuration": 0.038,
+    "LayoutDuration": 0.005,
+    "TaskDuration": 0.359,
+    "RecalcStyleCount": 371,
+    "ScriptMsPerS": 0.032,
+    "RecalcMsPerS": 0.006,
+    "TaskMsPerS": 0.059
+  },
+  "rafClick": {
+    "n": 363,
+    "min": 7.43,
+    "p50": 16.7,
+    "p90": 16.7,
+    "p99": 16.8,
+    "max": 16.8,
+    "mean": 16.64,
+    "over50": 0,
+    "over100": 0
+  },
+  "overlay": {
+    "firstVisibleAt": 7055.1,
+    "clickDispatchAt": 7042,
+    "msToVisible": 13.1,
+    "firstBox": {
+      "area": 921600,
+      "w": 1280,
+      "h": 720,
+      "t": 7055.100000000093
+    },
+    "nowBox": {
+      "area": 921600,
+      "w": 1280,
+      "h": 720,
+      "t": 13058.200000000186
+    },
+    "clickBox": {
+      "x": 10,
+      "y": 668,
+      "w": 260,
+      "h": 42
+    }
+  },
+  "taskBusyPct": 5.937,
+  "longtasks": {
+    "n": 0,
+    "totalMs": 0,
+    "maxMs": null
+  },
+  "ws": {
+    "total": 1644,
+    "byType": {
+      "server-request": 1644
+    }
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "concurrency": {
+    "gateOutcome": "EXCLUSIVE",
+    "gateWaitedMs": 22,
+    "foreignSeenDuringGate": [],
+    "censusStart": {
+      "at": "2026-09-22T02:53:10.366Z",
+      "instances": 0,
+      "mineCount": 0,
+      "foreignCount": 0,
+      "foreign": [],
+      "lockOwner": "agent: incident2-regression (raf-face theme-sync A/B) line: label=raf-theme-sync-fa-r3 pid: 300272",
+      "lockHeldByMyLine": true
+    },
+    "censusEnd": {
+      "at": "2026-09-22T02:53:23.719Z",
+      "instances": 0,
+      "mineCount": 0,
+      "foreignCount": 0,
+      "foreign": [],
+      "lockOwner": "agent: incident2-regression (raf-face theme-sync A/B) line: label=raf-theme-sync-fa-r3 pid: 300272",
+      "lockHeldByMyLine": true
+    },
+    "exclusiveThroughout": true
+  },
+  "lock": {
+    "heldAtStart": true,
+    "released": true
+  }
+}

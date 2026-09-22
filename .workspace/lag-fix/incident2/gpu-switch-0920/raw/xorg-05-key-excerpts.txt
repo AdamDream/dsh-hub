@@ -1,0 +1,165 @@
+##### FILE: /home/CNS2026495165/.local/share/xorg/Xorg.1.log.old  (lines 1-25, verbatim)
+1:[   130.097] _XSERVTransSocketUNIXCreateListener: ...SocketCreateListener() failed
+2:[   130.097] _XSERVTransMakeAllCOTSServerListeners: server already running
+3:[   130.097] (--) Log file renamed from "/home/CNS2026495165/.local/share/xorg/Xorg.pid-3931.log" to "/home/CNS2026495165/.local/share/xorg/Xorg.1.log"
+4:[   130.097] 
+5:X.Org X Server 1.21.1.11
+6:X Protocol Version 11, Revision 0
+7:[   130.097] Current Operating System: Linux CNS202649516533 6.14.0-27-generic #27~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Jul 22 17:38:49 UTC 2 x86_64
+8:[   130.097] Kernel command line: BOOT_IMAGE=/boot/vmlinuz-6.14.0-27-generic root=UUID=38c1adbf-c111-44ca-bb6b-7c041bea3a19 ro quiet splash vt.handoff=7
+9:[   130.097] xorg-server 2:21.1.12-1ubuntu1.4 (For technical support please see http://www.ubuntu.com/support) 
+10:[   130.097] Current version of pixman: 0.42.2
+11:[   130.097] 	Before reporting problems, check http://wiki.x.org
+12:	to make sure that you have the latest version.
+13:[   130.097] Markers: (--) probed, (**) from config file, (==) default setting,
+14:	(++) from command line, (!!) notice, (II) informational,
+15:	(WW) warning, (EE) error, (NI) not implemented, (??) unknown.
+16:[   130.097] (==) Log file: "/home/CNS2026495165/.local/share/xorg/Xorg.1.log", Time: Sun Sep 20 11:12:48 2026
+17:[   130.098] (==) Using config directory: "/etc/X11/xorg.conf.d"
+18:[   130.098] (==) Using system config directory "/usr/share/X11/xorg.conf.d"
+19:[   130.098] (==) ServerLayout "layout"
+20:[   130.098] (==) No screen section available. Using defaults.
+21:[   130.098] (**) |-->Screen "Default Screen Section" (0)
+22:[   130.098] (**) |   |-->Monitor "<default monitor>"
+23:[   130.098] (==) No monitor specified for screen "Default Screen Section".
+24:	Using a default monitor configuration.
+25:[   130.098] (**) Allowing byte-swapped clients
+
+##### FILE: /home/CNS2026495165/.local/share/xorg/Xorg.1.log.old (lines 56-90 GPU claim)
+56:[   130.098] (II) systemd-logind: took control of session /org/freedesktop/login1/session/_32
+57:[   130.100] (II) xfree86: Adding drm device (/dev/dri/card1)
+58:[   130.100] (II) Platform probe for /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1
+59:[   130.100] (II) systemd-logind: got fd for /dev/dri/card1 226:1 fd 15 paused 0
+60:[   130.100] (II) xfree86: Adding drm device (/dev/dri/card2)
+61:[   130.100] (II) Platform probe for /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2
+62:[   130.100] (II) systemd-logind: got fd for /dev/dri/card2 226:2 fd 16 paused 0
+63:[   130.101] (**) OutputClass "nvidia" ModulePath extended to "/usr/lib/x86_64-linux-gnu/nvidia/xorg,/usr/lib/xorg/modules"
+64:[   130.102] (--) PCI: (1@0:0:0) 10de:2684:10de:16f3 rev 161, Mem @ 0xdd000000/16777216, 0xf000000000/34359738368, 0xf800000000/33554432, I/O @ 0x0000f000/128, BIOS @ 0x????????/524288
+65:[   130.102] (--) PCI:*(115@0:0:0) 1002:13c0:1458:d000 rev 193, Mem @ 0xf810000000/268435456, 0xde200000/2097152, 0xde700000/524288, I/O @ 0x0000e000/256
+66:[   130.102] (II) "glx" will be loaded by default.
+67:[   130.102] (II) LoadModule: "twatermarkext"
+68:[   130.103] (II) Loading /usr/lib/xorg/modules/extensions/libtwatermarkext.so
+69:[   130.103] (II) Module twatermarkext: vendor="My Vendor"
+70:[   130.103] 	compiled for 1.20.8, module version = 1.0.0
+71:[   130.103] 	Module class: X.Org Server Extension
+72:[   130.103] 	ABI class: X.Org Server Extension, version 10.0
+73:[   130.103] (II) LoadModule: "glx"
+74:[   130.103] (II) Loading /usr/lib/xorg/modules/extensions/libglx.so
+75:[   130.103] (II) Module glx: vendor="X.Org Foundation"
+76:[   130.103] 	compiled for 1.21.1.11, module version = 1.0.0
+77:[   130.103] 	ABI class: X.Org Server Extension, version 10.0
+78:[   130.103] (II) Applying OutputClass "AMDgpu" to /dev/dri/card2
+79:[   130.103] 	loading driver: amdgpu
+80:[   130.103] (II) Applying OutputClass "nvidia" to /dev/dri/card1
+81:[   130.103] 	loading driver: nvidia
+82:[   130.566] (==) Matched amdgpu as autoconfigured driver 0
+83:[   130.566] (==) Matched ati as autoconfigured driver 1
+84:[   130.566] (==) Matched nvidia as autoconfigured driver 2
+85:[   130.566] (==) Matched nouveau as autoconfigured driver 3
+86:[   130.566] (==) Matched modesetting as autoconfigured driver 4
+87:[   130.566] (==) Matched fbdev as autoconfigured driver 5
+88:[   130.566] (==) Matched vesa as autoconfigured driver 6
+89:[   130.566] (==) Assigned the driver to the xf86ConfigLayout
+90:[   130.566] (II) LoadModule: "amdgpu"
+
+##### FILE: /home/CNS2026495165/.local/share/xorg/Xorg.1.log.old (lines 434-475 outputs/EDID/NVIDIA)
+434:[   130.831] (II) AMDGPU(0): Output HDMI-A-1 disconnected
+435:[   130.831] (II) AMDGPU(0): Output HDMI-A-2 connected
+436:[   130.831] (II) AMDGPU(0): Output DisplayPort-3 disconnected
+437:[   130.831] (II) AMDGPU(0): Output DisplayPort-4 disconnected
+438:[   130.831] (II) AMDGPU(0): Using exact sizes for initial modes
+439:[   130.831] (II) AMDGPU(0): Output HDMI-A-2 using initial mode 3840x2160 +0+0
+440:[   130.831] (II) AMDGPU(0): mem size init: gart size :78d174000 vram size: s:7e851000 visible:7e851000
+441:[   130.831] (==) AMDGPU(0): DPI set to (96, 96)
+442:[   130.831] (==) AMDGPU(0): Using gamma correction (1.0, 1.0, 1.0)
+443:[   130.831] (II) Loading sub module "ramdac"
+444:[   130.831] (II) LoadModule: "ramdac"
+445:[   130.831] (II) Module "ramdac" already built-in
+446:[   130.831] (==) NVIDIA(G0): Depth 24, (==) framebuffer bpp 32
+447:[   130.831] (==) NVIDIA(G0): RGB weight 888
+448:[   130.831] (==) NVIDIA(G0): Default visual is TrueColor
+449:[   130.831] (==) NVIDIA(G0): Using gamma correction (1.0, 1.0, 1.0)
+450:[   130.831] (**) Option "AllowNVIDIAGpuScreens"
+451:[   130.831] (II) Applying OutputClass "nvidia" options to /dev/dri/card1
+452:[   130.831] (**) NVIDIA(G0): Option "AllowEmptyInitialConfiguration"
+453:[   130.831] (**) NVIDIA(G0): Enabling 2D acceleration
+454:[   130.831] (II) Loading sub module "glxserver_nvidia"
+455:[   130.831] (II) LoadModule: "glxserver_nvidia"
+456:[   130.831] (II) Loading /usr/lib/x86_64-linux-gnu/nvidia/xorg/libglxserver_nvidia.so
+457:[   130.836] (II) Module glxserver_nvidia: vendor="NVIDIA Corporation"
+458:[   130.836] 	compiled for 1.16.99.901, module version = 1.0.0
+459:[   130.836] 	Module class: X.Org Server Extension
+460:[   130.836] (II) NVIDIA GLX Module  595.84  Wed Jun 10 20:51:44 UTC 2026
+461:[   130.836] (II) NVIDIA: The X server supports PRIME Render Offload.
+462:[   130.840] (--) NVIDIA(0): Valid display device(s) on GPU-0 at PCI:1:0:0
+463:[   130.840] (--) NVIDIA(0):     DFP-0
+464:[   130.840] (--) NVIDIA(0):     DFP-1
+465:[   130.840] (--) NVIDIA(0):     DFP-2
+466:[   130.840] (--) NVIDIA(0):     DFP-3
+467:[   130.840] (--) NVIDIA(0):     DFP-4
+468:[   130.840] (--) NVIDIA(0):     DFP-5
+469:[   130.840] (--) NVIDIA(0):     DFP-6
+470:[   130.850] (II) NVIDIA(G0): NVIDIA GPU NVIDIA GeForce RTX 4090 (AD102-A) at PCI:1:0:0
+471:[   130.850] (II) NVIDIA(G0):     (GPU-0)
+472:[   130.850] (--) NVIDIA(G0): Memory: 25153536 kBytes
+473:[   130.850] (--) NVIDIA(G0): VideoBIOS: 95.02.3c.00.02
+474:[   130.850] (II) NVIDIA(G0): Detected PCI Express Link width: 16X
+475:[   130.850] (--) NVIDIA(GPU-0): DFP-0: disconnected
+
+##### FILE: /home/CNS2026495165/.local/share/xorg/Xorg.1.log.old (lines 503-512, 1316-1323)
+503:[   130.856] (II) NVIDIA(G0): Validated MetaModes:
+504:[   130.856] (II) NVIDIA(G0):     "NULL"
+505:[   130.856] (II) NVIDIA(G0): Virtual screen size determined to be 640 x 480
+506:[   130.856] (WW) NVIDIA(G0): Unable to get display device for DPI computation.
+507:[   130.856] (==) NVIDIA(G0): DPI set to (75, 75); computed from built-in default
+508:[   130.856] (II) UnloadModule: "radeon"
+509:[   130.856] (II) Unloading radeon
+510:[   130.857] (II) UnloadModule: "nouveau"
+511:[   130.857] (II) Unloading nouveau
+512:[   130.857] (II) UnloadModule: "modesetting"
+1316:[114833.237] (II) UnloadModule: "libinput"
+1317:[114833.237] (II) systemd-logind: releasing fd for 13:66
+1318:[114833.247] (II) UnloadModule: "libinput"
+1319:[114833.247] (II) systemd-logind: releasing fd for 13:65
+1320:[114833.311] (II) NVIDIA(GPU-0): Deleting GPU-0
+1321:[114833.351] (WW) xf86CloseConsole: KDSETMODE failed: Input/output error
+1322:[114833.351] (WW) xf86CloseConsole: VT_GETMODE failed: Input/output error
+1323:[114833.352] (II) Server terminated successfully (0). Closing log file.
+
+##### FILE: /home/CNS2026495165/.local/share/xorg/Xorg.1.log (lines 1-20, 57-65, 434-439, 594)
+1:[    29.306] _XSERVTransSocketUNIXCreateListener: ...SocketCreateListener() failed
+2:[    29.306] _XSERVTransMakeAllCOTSServerListeners: server already running
+3:[    29.306] (--) Log file renamed from "/home/CNS2026495165/.local/share/xorg/Xorg.pid-3884.log" to "/home/CNS2026495165/.local/share/xorg/Xorg.1.log"
+4:[    29.306] 
+5:X.Org X Server 1.21.1.11
+6:X Protocol Version 11, Revision 0
+7:[    29.306] Current Operating System: Linux CNS202649516533 6.14.0-27-generic #27~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Jul 22 17:38:49 UTC 2 x86_64
+8:[    29.306] Kernel command line: BOOT_IMAGE=/boot/vmlinuz-6.14.0-27-generic root=UUID=38c1adbf-c111-44ca-bb6b-7c041bea3a19 ro quiet splash vt.handoff=7
+9:[    29.306] xorg-server 2:21.1.12-1ubuntu1.4 (For technical support please see http://www.ubuntu.com/support) 
+10:[    29.306] Current version of pixman: 0.42.2
+11:[    29.306] 	Before reporting problems, check http://wiki.x.org
+12:	to make sure that you have the latest version.
+13:[    29.306] Markers: (--) probed, (**) from config file, (==) default setting,
+14:	(++) from command line, (!!) notice, (II) informational,
+15:	(WW) warning, (EE) error, (NI) not implemented, (??) unknown.
+16:[    29.306] (==) Log file: "/home/CNS2026495165/.local/share/xorg/Xorg.1.log", Time: Tue Sep 22 10:02:17 2026
+17:[    29.307] (==) Using config directory: "/etc/X11/xorg.conf.d"
+18:[    29.307] (==) Using system config directory "/usr/share/X11/xorg.conf.d"
+19:[    29.307] (==) ServerLayout "layout"
+20:[    29.307] (==) No screen section available. Using defaults.
+57:[    29.308] (II) xfree86: Adding drm device (/dev/dri/card1)
+58:[    29.308] (II) Platform probe for /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/drm/card1
+59:[    29.309] (II) systemd-logind: got fd for /dev/dri/card1 226:1 fd 15 paused 0
+60:[    29.309] (II) xfree86: Adding drm device (/dev/dri/card2)
+61:[    29.309] (II) Platform probe for /sys/devices/pci0000:00/0000:00:08.1/0000:73:00.0/drm/card2
+62:[    29.309] (II) systemd-logind: got fd for /dev/dri/card2 226:2 fd 16 paused 0
+63:[    29.310] (**) OutputClass "nvidia" ModulePath extended to "/usr/lib/x86_64-linux-gnu/nvidia/xorg,/usr/lib/xorg/modules"
+64:[    29.311] (--) PCI: (1@0:0:0) 10de:2684:10de:16f3 rev 161, Mem @ 0xdd000000/16777216, 0xf000000000/34359738368, 0xf800000000/33554432, I/O @ 0x0000f000/128, BIOS @ 0x????????/524288
+65:[    29.311] (--) PCI:*(115@0:0:0) 1002:13c0:1458:d000 rev 193, Mem @ 0xf810000000/268435456, 0xde200000/2097152, 0xde700000/524288, I/O @ 0x0000e000/256
+434:[    30.041] (II) AMDGPU(0): Output HDMI-A-1 disconnected
+435:[    30.041] (II) AMDGPU(0): Output HDMI-A-2 connected
+436:[    30.041] (II) AMDGPU(0): Output DisplayPort-3 disconnected
+437:[    30.041] (II) AMDGPU(0): Output DisplayPort-4 disconnected
+438:[    30.041] (II) AMDGPU(0): Using exact sizes for initial modes
+439:[    30.041] (II) AMDGPU(0): Output HDMI-A-2 using initial mode 3840x2160 +0+0
+594:[    30.123] (II) AMDGPU(0): Setting screen physical size to 1016 x 571

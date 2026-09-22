@@ -1,0 +1,133 @@
+############ workqueue hogging events (kernel stalls) ############
+9月 22 10:12:23 CNS202649516533 kernel: workqueue: pm_runtime_work hogged CPU for >10000us 4 times, consider switching to WQ_UNBOUND
+9月 22 10:17:24 CNS202649516533 kernel: workqueue: pm_runtime_work hogged CPU for >10000us 5 times, consider switching to WQ_UNBOUND
+9月 22 10:27:26 CNS202649516533 kernel: workqueue: pm_runtime_work hogged CPU for >10000us 7 times, consider switching to WQ_UNBOUND
+9月 22 10:31:03 CNS202649516533 kernel: workqueue: pm_runtime_work hogged CPU for >10000us 11 times, consider switching to WQ_UNBOUND
+
+############ DISPLAY re-probe events timeline ############
+      1 9月 22 10:01:56
+    303 9月 22 10:02:01
+     60 9月 22 10:02:02
+    304 9月 22 10:02:18
+     60 9月 22 10:02:19
+      1 9月 22 10:02:20
+     60 9月 22 10:10:01
+     60 9月 22 10:28:54
+    196 9月 22 10:29:17
+     62 9月 22 10:30:15
+    136 9月 22 10:30:19
+     76 9月 22 10:30:29
+    120 9月 22 10:30:31
+    137 9月 22 10:30:36
+    120 9月 22 10:30:47
+     60 9月 22 10:31:00
+     76 9月 22 10:31:14
+--- count of Modeline lines per minute ---
+979
+    167 9月 22 10:02:01
+     30 9月 22 10:02:02
+    167 9月 22 10:02:18
+     30 9月 22 10:02:19
+     30 9月 22 10:10:01
+     30 9月 22 10:28:54
+    105 9月 22 10:29:17
+     30 9月 22 10:30:15
+     75 9月 22 10:30:19
+     45 9月 22 10:30:29
+     60 9月 22 10:30:31
+     75 9月 22 10:30:36
+     60 9月 22 10:30:47
+     30 9月 22 10:31:00
+     45 9月 22 10:31:14
+
+############ anacron / cron.daily execution at 10:06 ############
+9月 22 10:05:01 CNS202649516533 CRON[8239]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+9月 22 10:05:01 CNS202649516533 CRON[8240]: (root) CMD (command -v debian-sa1 > /dev/null && debian-sa1 1 1)
+9月 22 10:05:01 CNS202649516533 CRON[8239]: pam_unix(cron:session): session closed for user root
+9月 22 10:06:57 CNS202649516533 anacron[1539]: Job `cron.daily' started
+9月 22 10:06:57 CNS202649516533 anacron[11186]: Updated timestamp for job `cron.daily' to 2026-09-22
+9月 22 10:06:57 CNS202649516533 anacron[1539]: Job `cron.daily' terminated
+9月 22 10:06:57 CNS202649516533 anacron[1539]: Normal exit (1 job run)
+9月 22 10:06:57 CNS202649516533 systemd[1]: anacron.service: Deactivated successfully.
+9月 22 10:10:21 CNS202649516533 systemd[1]: Starting sysstat-collect.service - system activity accounting tool...
+9月 22 10:10:21 CNS202649516533 systemd[1]: sysstat-collect.service: Deactivated successfully.
+9月 22 10:10:21 CNS202649516533 systemd[1]: Finished sysstat-collect.service - system activity accounting tool.
+
+############ systemd unit CPU accounting: top consumers this boot ############
+/                                                              3125      -    14.4G        -        -
+dev-hugepages.mount                                               -      -   108.0K        -        -
+dev-mqueue.mount                                                  -      -    60.0K        -        -
+init.scope                                                        1      -     8.3M        -        -
+proc-sys-fs-binfmt_misc.mount                                     -      -     8.0K        -        -
+sys-fs-fuse-connections.mount                                     -      -     8.0K        -        -
+sys-kernel-config.mount                                           -      -     4.0K        -        -
+sys-kernel-debug.mount                                            -      -    20.0K        -        -
+sys-kernel-tracing.mount                                          -      -     4.0K        -        -
+system.slice                                                    487      -     1.1G        -        -
+system.slice/ModemManager.service                                 4      -     8.0M        -        -
+system.slice/NetworkManager.service                               4      -    17.2M        -        -
+system.slice/accounts-daemon.service                              4      -     5.1M        -        -
+system.slice/avahi-daemon.service                                 2      -     2.5M        -        -
+system.slice/bluetooth.service                                    1      -     3.0M        -        -
+system.slice/bolt.service                                         4      -     1.4M        -        -
+system.slice/boot-efi.mount                                       -      -    24.0K        -        -
+system.slice/colord.service                                       4      -    25.3M        -        -
+system.slice/cron.service                                         1      -   468.0K        -        -
+system.slice/cups-browsed.service                                 4      -     6.3M        -        -
+system.slice/cups.service                                         1      -     5.1M        -        -
+system.slice/dbus.service                                         1      -     4.7M        -        -
+system.slice/gdm.service                                          4      -     7.3M        -        -
+system.slice/gnome-remote-desktop.service                         4      -    12.1M        -        -
+system.slice/kerneloops.service                                   2      -     1.3M        -        -
+
+############ per-unit CPU from systemd ############
+● snapd.service - Snap Daemon
+     Active: active (running) since Tue 2026-09-22 10:01:59 CST; 29min ago
+     Memory: 115.2M (peak: 247.6M)
+        CPU: 3.301s
+     Active: inactive (dead)
+     Active: inactive (dead)
+     Active: inactive (dead) since Tue 2026-09-22 10:01:59 CST; 29min ago
+        CPU: 24ms
+     Active: inactive (dead) since Tue 2026-09-22 10:06:57 CST; 24min ago
+        CPU: 9ms
+     Active: inactive (dead) since Tue 2026-09-22 10:16:54 CST; 14min ago
+        CPU: 15ms
+     Active: inactive (dead) since Tue 2026-09-22 10:06:57 CST; 24min ago
+        CPU: 37ms
+
+############ zstd references in DSH workspace scripts ############
+/home/CNS2026495165/dsh/.workspace/settings-lag/DIAGNOSIS.md
+/home/CNS2026495165/dsh/.workspace/settings-lag/session_list.json
+/home/CNS2026495165/dsh/.workspace/settings-lag/audit-data.md
+/home/CNS2026495165/dsh/.workspace/settings-lag/audit-archive.md
+/home/CNS2026495165/dsh/.workspace/settings-lag/audit-subagent-filter.md
+/home/CNS2026495165/dsh/.workspace/settings-lag/scan_sessions.sh
+/home/CNS2026495165/dsh/.workspace/settings-lag/audit-server.md
+/home/CNS2026495165/dsh/.workspace/settings-lag/census-subagent.mjs
+/home/CNS2026495165/dsh/.workspace/reports/execs/p0-hotload/p0c-restart-helper-exec.md
+/home/CNS2026495165/dsh/.workspace/reports/execs/acceptance/acceptance-exec.md
+/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/mime-db/db.json
+/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/koffi/doc/contribute.md
+/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@earendil-works/pi-ai/dist/api/openai-codex-responses.js.map
+/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@earendil-works/pi-ai/dist/api/openai-codex-responses.js
+/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@earendil-works/pi-ai/dist/api/openai-codex-responses.d.ts.map
+/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@img/sharp-wasm32/lib/sharp-wasm32-0.35.4.node.wasm
+/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@img/sharp-libvips-linux-x64/lib/libvips-cpp.so.8.18.6
+/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/sharp/lib/index.d.ts
+/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/sharp/dist/index.d.mts
+/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/sharp/dist/output.cjs
+
+############ current D-state (uninterruptible) processes ############
+    440 D    -                        [kworker/u129:5+events_unbound]
+   2085 D    -                        [.Ocular]
+
+############ iowait / steal re-check + per-cpu ############
+
+10时31分31秒     CPU     %user     %nice   %system   %iowait    %steal     %idle
+10时31分32秒     all      6.54      0.09      2.47      0.19      0.00     90.71
+10时31分33秒     all      4.71      0.00      3.55      0.25      0.00     91.49
+10时31分34秒     all      6.59      0.00      2.57      0.09      0.00     90.75
+10时31分35秒     all      3.87      0.00      2.30      0.22      0.00     93.61
+10时31分36秒     all      6.38      0.03      3.18      0.25      0.00     90.16
+平均时间:     all      5.62      0.03      2.81      0.20      0.00     91.34

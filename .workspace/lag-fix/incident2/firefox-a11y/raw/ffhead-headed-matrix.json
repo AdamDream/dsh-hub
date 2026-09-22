@@ -1,0 +1,202 @@
+{
+  "generatedAt": "2026-09-22T11:46:18+08:00",
+  "config": {
+    "phase": "matrix",
+    "mode": "headed",
+    "reps": 3,
+    "dwellFrames": 120,
+    "rows": 30000,
+    "muts": 20000,
+    "perFrame": 20000,
+    "thrMs": 3000,
+    "thrBatch": 500,
+    "resultTimeoutSec": 180,
+    "resultTimeoutMs": 180000,
+    "lockWaitMin": 1,
+    "tag": "ffhead"
+  },
+  "busAddress": "unix:path=/run/user/1001/at-spi/bus_1",
+  "busAppsBefore": {
+    "address": "unix:path=/run/user/1001/at-spi/bus_1",
+    "apps": [
+      ":1.1",
+      ":1.3",
+      ":1.4",
+      ":1.6",
+      ":1.5",
+      ":1.8",
+      ":1.13",
+      ":1.12",
+      ":1.7",
+      ":1.15",
+      ":1.18",
+      ":1.19",
+      ":1.21",
+      ":1.24",
+      ":1.23",
+      ":1.26",
+      ":1.27",
+      ":1.28",
+      ":1.3070",
+      ":1.3091"
+    ],
+    "error": null
+  },
+  "busAppsAfter": {
+    "address": "unix:path=/run/user/1001/at-spi/bus_1",
+    "apps": [
+      ":1.1",
+      ":1.3",
+      ":1.4",
+      ":1.6",
+      ":1.5",
+      ":1.8",
+      ":1.13",
+      ":1.12",
+      ":1.7",
+      ":1.15",
+      ":1.18",
+      ":1.19",
+      ":1.21",
+      ":1.24",
+      ":1.23",
+      ":1.26",
+      ":1.27",
+      ":1.28",
+      ":1.3070",
+      ":1.3091",
+      ":1.3158"
+    ],
+    "error": null
+  },
+  "runs": [
+    {
+      "condition": "env-default",
+      "rep": 1,
+      "mode": "headed",
+      "token": "ffhead-headed-env-default-r1-1790048595679",
+      "rootPid": 499105,
+      "profileDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r1",
+      "userJs": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r1/user.js",
+      "homeDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-default-r1",
+      "envPassed": {
+        "ACCESSIBILITY_ENABLED": "1",
+        "GNOME_ACCESSIBILITY": "1",
+        "GTK_MODULES": "gail:atk-bridge"
+      },
+      "dbusSessionBusAddress": "unix:path=/run/user/1001/bus",
+      "gsettingsBackend": "memory",
+      "launchedAt": "2026-09-22T11:43:15+08:00",
+      "args": [
+        "--new-instance",
+        "--no-remote",
+        "--marionette",
+        "--profile",
+        "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r1",
+        "http://127.0.0.1:43063/page?n=30000&m=20000&f=120&k=20000&t=3000&batch=500&token=ffhead-headed-env-default-r1-1790048595679"
+      ],
+      "logFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/logs/headed-env-default-r1.log",
+      "loadBefore": "5.46 6.20 5.74 8/3183 499105",
+      "loadavgDuringResult": "5.67 6.10 5.79 4/3420 505467",
+      "busWatch": [
+        {
+          "at": "2026-09-22T11:43:16+08:00",
+          "tMs": 1144,
+          "busName": ":1.3135",
+          "onBus": true
+        }
+      ],
+      "atspi": null,
+      "rootAccessible": {
+        "busName": ":1.3135",
+        "name": "ERROR: Error org.freedesktop.DBus.Error.ServiceUnknown: The name :1.3135 was not provided by any .service files",
+        "role": "ERROR: Error org.freedesktop.DBus.Error.ServiceUnknown: The name :1.3135 was not provided by any .service files",
+        "childCount": null
+      },
+      "result": null,
+      "cpuAtResult": {
+        "cpuS": 0,
+        "procs": 1
+      },
+      "cpuAtEnd": {
+        "cpuS": 0,
+        "procs": 1
+      },
+      "wallMs": 180344,
+      "timedOut": true,
+      "notes": [
+        "no /result POST within 180000 ms",
+        "sigterm: ESRCH"
+      ],
+      "procEnviron": {
+        "root": {
+          "readable": false,
+          "error": "ENOENT"
+        },
+        "children": []
+      },
+      "chromeReadback": {
+        "port": 2841,
+        "ok": true,
+        "error": null,
+        "result": {
+          "pref_force_disabled": 0,
+          "a11yService": "REGISTERED",
+          "appName": "Firefox",
+          "appVersion": "155.0.1",
+          "env": {
+            "ACCESSIBILITY_ENABLED": "1",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": "gail:atk-bridge"
+          }
+        },
+        "chromeScopeTried": true,
+        "hello": {
+          "applicationType": "gecko",
+          "marionetteProtocol": 3
+        },
+        "session": {
+          "error": null,
+          "resultId": true
+        }
+      },
+      "busOnAfterRun": true,
+      "busName": ":1.3135",
+      "effectivePrefs": {
+        "user_js": [],
+        "prefs_js": []
+      },
+      "ourExes": [],
+      "leftoverPids": [],
+      "killWasScopedToOwnGroup": true,
+      "profileLeakProcs": [
+        {
+          "pid": 495445,
+          "comm": "firefox",
+          "exe": null,
+          "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --new-instance --no-remote --marionette --profile /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r1 http"
+        }
+      ],
+      "censusAfter": 50,
+      "loadAfter": "5.54 6.06 5.78 6/3420 505485",
+      "censusBefore": 37,
+      "interlock": {
+        "foreignProbeBrowsersBefore": [],
+        "foreignWaitMs": 11,
+        "noForeignProbeBrowser": true,
+        "lockStillOurs": false,
+        "lockToken": "NOLOCK-49721",
+        "loadavgAtRun": "5.54 6.06 5.78 4/3420 505485"
+      },
+      "userBrowsersRunning": 44,
+      "abortedBatch": "first-run-no-result"
+    }
+  ],
+  "hostLoadStart": "5.46 6.20 5.74 8/3183 499105",
+  "hostLoadEnd": "5.54 6.06 5.78 6/3420 505485",
+  "lock": {
+    "waitedMs": 61881,
+    "attempts": 22,
+    "preemptions": []
+  }
+}

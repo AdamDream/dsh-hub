@@ -1,0 +1,3265 @@
+{
+ "tags_used": [
+  "headless-run1",
+  "headless-run2"
+ ],
+ "controls": {
+  "control-instrument-headed": {
+   "mode": "headed",
+   "stallMs": 180,
+   "verdict": "ERROR",
+   "fatal": "browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /home/CNS2026495165/.cache/ms-playwright/chromium-1148/chrome-linux/chrome --disable-field-trial-config -",
+   "lock_acquired": true,
+   "lock_waitedMs": 22501,
+   "lockReleased": true,
+   "has_injected_block": false,
+   "busyMs": null
+  },
+  "control-instrument-headless": {
+   "mode": "headless",
+   "stallMs": 180,
+   "verdict": "ERROR",
+   "fatal": "Too many arguments. If you need to pass more than 1 argument to the function wrap them in an object.",
+   "lock_acquired": true,
+   "lock_waitedMs": 123117,
+   "lockReleased": false,
+   "control_frames_n": 180,
+   "control_frameStats_rederived": {
+    "n": 180,
+    "min": 16.5,
+    "p50": 16.7,
+    "p90": 16.8,
+    "p99": 16.9,
+    "p99_lin": 16.9,
+    "max": 16.9,
+    "mean": 16.667,
+    "sum": 3000.1,
+    "ge33_4": 0,
+    "ge50": 0,
+    "ge80": 0,
+    "ge100": 0,
+    "ge200": 0,
+    "raf_per_s": 60.0
+   },
+   "control_longtasks": 0,
+   "control_lof": 0,
+   "control_task_ms": 59.865,
+   "control_errors": [],
+   "has_injected_block": false,
+   "busyMs": null
+  }
+ },
+ "runs": {
+  "headless-run1": {
+   "mode": "headless",
+   "run": 1,
+   "file": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/live-repro/raw/headless-run1.json",
+   "gateOutcome": "EXCLUSIVE",
+   "lockReleased": false,
+   "lock": {
+    "acquired": true,
+    "history": [
+     {
+      "at": "2026-09-22T02:22:57.427Z",
+      "result": "ACQUIRED",
+      "waitedMs": 0
+     }
+    ],
+    "waitedMs": 0
+   },
+   "page": {
+    "treeitems": 11,
+    "nodesAtStable": 526,
+    "visibilityState": "visible",
+    "hasFocus": true
+   },
+   "gpu": {
+    "webgl": true,
+    "vendor": "Google Inc. (Google)",
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)"
+   },
+   "navMs": 2947,
+   "launchMs": 52,
+   "windows": [
+    {
+     "name": "idle",
+     "wallMs": 6001,
+     "metricsDelta": {
+      "ScriptDuration": 0.028439,
+      "TaskDuration": 0.09018,
+      "LayoutDuration": 0,
+      "RecalcStyleDuration": 0,
+      "LayoutCount": 0,
+      "RecalcStyleCount": 0,
+      "JSHeapUsedSize": -3625240,
+      "Nodes": -18,
+      "Documents": -3,
+      "Timestamp": 6.000837
+     }
+    },
+    {
+     "name": "click1",
+     "index": 1,
+     "t_arm": 6077.700000000186,
+     "t_pre": 12086.90000000014,
+     "t_click": 12115.800000000047,
+     "t_dialogpw": 12140.90000000014,
+     "t_post": 15142,
+     "span_arm_to_pre_ms": 6009.2,
+     "span_pre_to_click_ms": 28.9,
+     "span_click_to_post_ms": 3026.2,
+     "span_click_to_post_vs_3000_ms": 26.2,
+     "reported_wallPreMs": 1,
+     "reported_wallPostMs": 3054,
+     "reported_clickCallMs": 50,
+     "n_evts": 3,
+     "evt_phases": [
+      "pointerdown",
+      "mousedown",
+      "click"
+     ],
+     "evt_monotone": true,
+     "n_frames_total_in_raw": 542,
+     "n_frames_pre": 2,
+     "n_frames_post": 179,
+     "n_frames_post_strict": 178,
+     "n_frames_fullwin": 181,
+     "n_frames_settle": null,
+     "frames_coverage": {
+      "before_t_arm": 0,
+      "after_t_post": 0,
+      "first_t": 6077.8,
+      "last_t": 15127.5,
+      "t_arm": 6077.700000000186,
+      "t_post": 15142
+     },
+     "frames_pre_stats": {
+      "n": 2,
+      "min": 16.6,
+      "p50": 16.6,
+      "p90": 16.7,
+      "p99": 16.7,
+      "p99_lin": 16.699,
+      "max": 16.7,
+      "mean": 16.65,
+      "sum": 33.3,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.06
+     },
+     "frames_post_stats": {
+      "n": 179,
+      "min": 10,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 32.3,
+      "p99_lin": 26.06,
+      "max": 33.4,
+      "mean": 16.852,
+      "sum": 3016.5,
+      "ge33_4": 1,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 59.34
+     },
+     "frames_fullwin_stats": {
+      "n": 181,
+      "min": 10,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 32.3,
+      "p99_lin": 25.9,
+      "max": 33.4,
+      "mean": 16.85,
+      "sum": 3049.8,
+      "ge33_4": 1,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 59.35
+     },
+     "settle_stats": null,
+     "marks_snapshot_vs_global_mismatch": [],
+     "problems": [],
+     "reported": {
+      "clickToDialogDomMs": 16.8,
+      "clickToDialogVisibleMs": 19.7,
+      "clickToDialogPaintedMs": 51.9,
+      "playwrightDialogVisibleMs": 3,
+      "dialogVisibleOk": true,
+      "dialogPaintedRect": {
+       "w": 800,
+       "h": 800
+      },
+      "nodesNow": 697
+     },
+     "metricsDelta": {
+      "ScriptDuration": 0.036309,
+      "TaskDuration": 0.102096,
+      "LayoutDuration": 0.009005,
+      "RecalcStyleDuration": 0.003014,
+      "LayoutCount": 4,
+      "RecalcStyleCount": 9,
+      "JSHeapUsedSize": 2990912,
+      "Nodes": 255,
+      "Documents": 0,
+      "Timestamp": 3.054828
+     },
+     "longtasks_in_raw": 0,
+     "lof_in_raw": 0,
+     "installErrors": [],
+     "console": [],
+     "errors": [],
+     "vis": [],
+     "resizes": [],
+     "mutations": [
+      {
+       "t": 12132.5,
+       "n": 1,
+       "added": 1,
+       "removed": 0,
+       "kind": "childList"
+      },
+      {
+       "t": 12133.8,
+       "n": 1,
+       "added": 1,
+       "removed": 0,
+       "kind": "childList"
+      }
+     ],
+     "dom_claim_page_t": 12132.600000000046,
+     "nearest_mutation_to_dom_claim": {
+      "mut_t": 12132.5,
+      "delta_ms": -0.1
+     },
+     "paint_claim_page_t": 12167.700000000046,
+     "nearest_frame_to_paint_claim": {
+      "frame_t": 12167.6,
+      "delta_ms": -0.1,
+      "frame_dt": 32.3
+     }
+    },
+    {
+     "name": "click2",
+     "index": 2,
+     "t_arm": 31310.700000000186,
+     "t_pre": 34312.40000000014,
+     "t_click": 34346.700000000186,
+     "t_dialogpw": 34364.60000000009,
+     "t_post": 37365.90000000014,
+     "span_arm_to_pre_ms": 3001.7,
+     "span_pre_to_click_ms": 34.3,
+     "span_click_to_post_ms": 3019.2,
+     "span_click_to_post_vs_3000_ms": 19.2,
+     "reported_wallPreMs": 1,
+     "reported_wallPostMs": 3053,
+     "reported_clickCallMs": 47,
+     "n_evts": 3,
+     "evt_phases": [
+      "pointerdown",
+      "mousedown",
+      "click"
+     ],
+     "evt_monotone": true,
+     "n_frames_total_in_raw": 363,
+     "n_frames_pre": 2,
+     "n_frames_post": 181,
+     "n_frames_post_strict": 180,
+     "n_frames_fullwin": 183,
+     "n_frames_settle": 180,
+     "frames_coverage": {
+      "before_t_arm": 0,
+      "after_t_post": 0,
+      "first_t": 31327,
+      "last_t": 37359.9,
+      "t_arm": 31310.700000000186,
+      "t_post": 37365.90000000014
+     },
+     "frames_pre_stats": {
+      "n": 2,
+      "min": 16.5,
+      "p50": 16.5,
+      "p90": 16.7,
+      "p99": 16.7,
+      "p99_lin": 16.698,
+      "max": 16.7,
+      "mean": 16.6,
+      "sum": 33.2,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.24
+     },
+     "frames_post_stats": {
+      "n": 181,
+      "min": 8.2,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 19.3,
+      "p99_lin": 17.46,
+      "max": 25,
+      "mean": 16.666,
+      "sum": 3016.5,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     },
+     "frames_fullwin_stats": {
+      "n": 183,
+      "min": 8.2,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 19.3,
+      "p99_lin": 17.414,
+      "max": 25,
+      "mean": 16.665,
+      "sum": 3049.7,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.01
+     },
+     "settle_stats": {
+      "n": 180,
+      "min": 11.8,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 17.1,
+      "p99_lin": 16.942,
+      "max": 21.7,
+      "mean": 16.666,
+      "sum": 2999.9,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     },
+     "marks_snapshot_vs_global_mismatch": [],
+     "problems": [],
+     "reported": {
+      "clickToDialogDomMs": 10.3,
+      "clickToDialogVisibleMs": 13.7,
+      "clickToDialogPaintedMs": 38.7,
+      "playwrightDialogVisibleMs": 5,
+      "dialogVisibleOk": true,
+      "dialogPaintedRect": {
+       "w": 800,
+       "h": 800
+      },
+      "nodesNow": 697
+     },
+     "metricsDelta": {
+      "ScriptDuration": 0.033231,
+      "TaskDuration": 0.087668,
+      "LayoutDuration": 0.005147,
+      "RecalcStyleDuration": 0.001804,
+      "LayoutCount": 3,
+      "RecalcStyleCount": 9,
+      "JSHeapUsedSize": 618336,
+      "Nodes": 254,
+      "Documents": 0,
+      "Timestamp": 3.054201
+     },
+     "longtasks_in_raw": 0,
+     "lof_in_raw": 0,
+     "installErrors": [],
+     "console": [],
+     "errors": [],
+     "vis": [],
+     "resizes": [],
+     "mutations": [
+      {
+       "t": 34357,
+       "n": 2,
+       "added": 1,
+       "removed": 1,
+       "kind": "childList"
+      },
+      {
+       "t": 34357.5,
+       "n": 1,
+       "added": 1,
+       "removed": 0,
+       "kind": "childList"
+      }
+     ],
+     "dom_claim_page_t": 34357.00000000019,
+     "nearest_mutation_to_dom_claim": {
+      "mut_t": 34357,
+      "delta_ms": -0.0
+     },
+     "paint_claim_page_t": 34385.40000000018,
+     "nearest_frame_to_paint_claim": {
+      "frame_t": 34385.4,
+      "delta_ms": -0.0,
+      "frame_dt": 25
+     }
+    },
+    {
+     "name": "click3",
+     "index": 3,
+     "t_arm": 53502.700000000186,
+     "t_pre": 56504.30000000005,
+     "t_click": 56528.40000000014,
+     "t_dialogpw": 56538.80000000005,
+     "t_post": 59540.40000000014,
+     "span_arm_to_pre_ms": 3001.6,
+     "span_pre_to_click_ms": 24.1,
+     "span_click_to_post_ms": 3012.0,
+     "span_click_to_post_vs_3000_ms": 12.0,
+     "reported_wallPreMs": 0,
+     "reported_wallPostMs": 3036,
+     "reported_clickCallMs": 32,
+     "n_evts": 3,
+     "evt_phases": [
+      "pointerdown",
+      "mousedown",
+      "click"
+     ],
+     "evt_monotone": true,
+     "n_frames_total_in_raw": 362,
+     "n_frames_pre": 2,
+     "n_frames_post": 180,
+     "n_frames_post_strict": 179,
+     "n_frames_fullwin": 182,
+     "n_frames_settle": 180,
+     "frames_coverage": {
+      "before_t_arm": 0,
+      "after_t_post": 0,
+      "first_t": 53509.3,
+      "last_t": 59525.7,
+      "t_arm": 53502.700000000186,
+      "t_post": 59540.40000000014
+     },
+     "frames_pre_stats": {
+      "n": 2,
+      "min": 16.6,
+      "p50": 16.6,
+      "p90": 16.7,
+      "p99": 16.7,
+      "p99_lin": 16.699,
+      "max": 16.7,
+      "mean": 16.65,
+      "sum": 33.3,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.06
+     },
+     "frames_post_stats": {
+      "n": 180,
+      "min": 4.1,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 19.8,
+      "p99_lin": 18.299,
+      "max": 29.1,
+      "mean": 16.666,
+      "sum": 2999.9,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     },
+     "frames_fullwin_stats": {
+      "n": 182,
+      "min": 4.1,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 19.8,
+      "p99_lin": 18.261,
+      "max": 29.1,
+      "mean": 16.666,
+      "sum": 3033.2,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     },
+     "settle_stats": {
+      "n": 180,
+      "min": 16.4,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 16.9,
+      "p99_lin": 16.9,
+      "max": 16.9,
+      "mean": 16.666,
+      "sum": 2999.8,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     },
+     "marks_snapshot_vs_global_mismatch": [],
+     "problems": [],
+     "reported": {
+      "clickToDialogDomMs": 5.7,
+      "clickToDialogVisibleMs": 14.2,
+      "clickToDialogPaintedMs": 43.4,
+      "playwrightDialogVisibleMs": 2,
+      "dialogVisibleOk": true,
+      "dialogPaintedRect": {
+       "w": 800,
+       "h": 800
+      },
+      "nodesNow": 697
+     },
+     "metricsDelta": {
+      "ScriptDuration": 0.030032,
+      "TaskDuration": 0.057211,
+      "LayoutDuration": 0.001266,
+      "RecalcStyleDuration": 0.001276,
+      "LayoutCount": 3,
+      "RecalcStyleCount": 8,
+      "JSHeapUsedSize": 626228,
+      "Nodes": 254,
+      "Documents": 0,
+      "Timestamp": 3.036136
+     },
+     "longtasks_in_raw": 0,
+     "lof_in_raw": 0,
+     "installErrors": [],
+     "console": [],
+     "errors": [],
+     "vis": [],
+     "resizes": [],
+     "mutations": [
+      {
+       "t": 56534.1,
+       "n": 2,
+       "added": 1,
+       "removed": 1,
+       "kind": "childList"
+      },
+      {
+       "t": 56534.6,
+       "n": 1,
+       "added": 1,
+       "removed": 0,
+       "kind": "childList"
+      }
+     ],
+     "dom_claim_page_t": 56534.10000000014,
+     "nearest_mutation_to_dom_claim": {
+      "mut_t": 56534.1,
+      "delta_ms": -0.0
+     },
+     "paint_claim_page_t": 56571.80000000014,
+     "nearest_frame_to_paint_claim": {
+      "frame_t": 56571.7,
+      "delta_ms": -0.1,
+      "frame_dt": 29.1
+     }
+    }
+   ],
+   "cross": {},
+   "census": {
+    "censusStart": {
+     "at": "2026-09-22T02:22:57.427Z",
+     "total": 0,
+     "mine": 0,
+     "foreign": 0,
+     "helperProcs": 0,
+     "binaryKinds": {},
+     "lockDirPresent": false,
+     "lockOwner": null,
+     "lockHeldByThisLine": false,
+     "foreignList": [],
+     "mineList": []
+    },
+    "censusBeforeLaunch": {
+     "at": "2026-09-22T02:22:57.430Z",
+     "total": 0,
+     "mine": 0,
+     "foreign": 0,
+     "helperProcs": 0,
+     "binaryKinds": {},
+     "lockDirPresent": true,
+     "lockOwner": "pid=61984 | ts=2026-09-22T02:22:57.427Z | owner=incident2-live-repro",
+     "lockHeldByThisLine": true,
+     "foreignList": [],
+     "mineList": []
+    },
+    "censusAfterLaunch": {
+     "at": "2026-09-22T02:22:57.488Z",
+     "total": 1,
+     "mine": 1,
+     "foreign": 0,
+     "helperProcs": 4,
+     "binaryKinds": {
+      "headless_shell": 5
+     },
+     "lockDirPresent": true,
+     "lockOwner": "pid=61984 | ts=2026-09-22T02:22:57.427Z | owner=incident2-live-repro",
+     "lockHeldByThisLine": true,
+     "foreignList": [],
+     "mineList": [
+      {
+       "pid": 61998,
+       "exe": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+       "binaryKind": "headless_shell",
+       "headlessFlag": "--headless",
+       "ozone": null,
+       "useGl": null,
+       "useAngle": null,
+       "gpuDisabled": false,
+       "userDataDir": "/tmp/playwright_chromiumdev_profile-QxZgzc"
+      }
+     ]
+    },
+    "censusAtIdleEnd": {
+     "at": "2026-09-22T02:23:09.639Z",
+     "total": 1,
+     "mine": 1,
+     "foreign": 0,
+     "helperProcs": 5,
+     "binaryKinds": {
+      "headless_shell": 6
+     },
+     "lockDirPresent": true,
+     "lockOwner": "pid=61984 | ts=2026-09-22T02:22:57.427Z | owner=incident2-live-repro",
+     "lockHeldByThisLine": true,
+     "foreignList": [],
+     "mineList": [
+      {
+       "pid": 61998,
+       "exe": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+       "binaryKind": "headless_shell",
+       "headlessFlag": "--headless",
+       "ozone": null,
+       "useGl": null,
+       "useAngle": null,
+       "gpuDisabled": false,
+       "userDataDir": "/tmp/playwright_chromiumdev_profile-QxZgzc"
+      }
+     ]
+    },
+    "censusAfterClick1": {
+     "at": "2026-09-22T02:23:12.853Z",
+     "total": 1,
+     "mine": 1,
+     "foreign": 0,
+     "helperProcs": 5,
+     "binaryKinds": {
+      "headless_shell": 6
+     },
+     "lockDirPresent": true,
+     "lockOwner": "pid=61984 | ts=2026-09-22T02:22:57.427Z | owner=incident2-live-repro",
+     "lockHeldByThisLine": true,
+     "foreignList": [],
+     "mineList": [
+      {
+       "pid": 61998,
+       "exe": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+       "binaryKind": "headless_shell",
+       "headlessFlag": "--headless",
+       "ozone": null,
+       "useGl": null,
+       "useAngle": null,
+       "gpuDisabled": false,
+       "userDataDir": "/tmp/playwright_chromiumdev_profile-QxZgzc"
+      }
+     ]
+    },
+    "censusAfterClick2": {
+     "at": "2026-09-22T02:23:35.049Z",
+     "total": 1,
+     "mine": 1,
+     "foreign": 0,
+     "helperProcs": 5,
+     "binaryKinds": {
+      "headless_shell": 6
+     },
+     "lockDirPresent": true,
+     "lockOwner": "pid=61984 | ts=2026-09-22T02:22:57.427Z | owner=incident2-live-repro",
+     "lockHeldByThisLine": true,
+     "foreignList": [],
+     "mineList": [
+      {
+       "pid": 61998,
+       "exe": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+       "binaryKind": "headless_shell",
+       "headlessFlag": "--headless",
+       "ozone": null,
+       "useGl": null,
+       "useAngle": null,
+       "gpuDisabled": false,
+       "userDataDir": "/tmp/playwright_chromiumdev_profile-QxZgzc"
+      }
+     ]
+    },
+    "censusAfterClick3": {
+     "at": "2026-09-22T02:23:57.247Z",
+     "total": 1,
+     "mine": 1,
+     "foreign": 0,
+     "helperProcs": 5,
+     "binaryKinds": {
+      "headless_shell": 6
+     },
+     "lockDirPresent": true,
+     "lockOwner": "agent: incident2-regression (first-open batch) | line: batch plan=base:3,tp-off:3,p2ac-old:2,usage-nofetch:3,theme-sync:3 | pid: 65663",
+     "lockHeldByThisLine": false,
+     "foreignList": [],
+     "mineList": [
+      {
+       "pid": 61998,
+       "exe": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+       "binaryKind": "headless_shell",
+       "headlessFlag": "--headless",
+       "ozone": null,
+       "useGl": null,
+       "useAngle": null,
+       "gpuDisabled": false,
+       "userDataDir": "/tmp/playwright_chromiumdev_profile-QxZgzc"
+      }
+     ]
+    },
+    "censusEnd": {
+     "at": "2026-09-22T02:23:57.254Z",
+     "total": 1,
+     "mine": 1,
+     "foreign": 0,
+     "helperProcs": 5,
+     "binaryKinds": {
+      "headless_shell": 6
+     },
+     "lockDirPresent": true,
+     "lockOwner": "agent: incident2-regression (first-open batch) | line: batch plan=base:3,tp-off:3,p2ac-old:2,usage-nofetch:3,theme-sync:3 | pid: 65663",
+     "lockHeldByThisLine": false,
+     "foreignList": [],
+     "mineList": [
+      {
+       "pid": 61998,
+       "exe": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+       "binaryKind": "headless_shell",
+       "headlessFlag": "--headless",
+       "ozone": null,
+       "useGl": null,
+       "useAngle": null,
+       "gpuDisabled": false,
+       "userDataDir": "/tmp/playwright_chromiumdev_profile-QxZgzc"
+      }
+     ]
+    }
+   },
+   "markerProof": {
+    "@deepseek-ai/dsh-client-ui-layout": {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a",
+     "url_rev": "82cca1a6178a",
+     "sha1_12": "82cca1a6178a",
+     "rev_matches_sha1": true,
+     "ok": true,
+     "status": 200,
+     "bytes": 24966,
+     "markers": {
+      "scheduleThemeColorRefresh": 3,
+      "lastSignature": 4,
+      "themeColorRefreshQueue": 4
+     }
+    },
+    "@local/dsh-wallpaper": {
+     "url": "/plugins/@local/dsh-wallpaper/client.js?rev=826d9217a8fc",
+     "url_rev": "826d9217a8fc",
+     "sha1_12": "826d9217a8fc",
+     "rev_matches_sha1": true,
+     "ok": true,
+     "status": 200,
+     "bytes": 31338,
+     "markers": {
+      "shadedTokens": 3,
+      "sameShadedTokens": 2,
+      "lastTokens": 0
+     }
+    },
+    "@deepseek-ai/dsh-client-runtime": {
+     "url": "/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+     "url_rev": "5559de4ce28c",
+     "sha1_12": "5559de4ce28c",
+     "rev_matches_sha1": true,
+     "ok": true,
+     "status": 200,
+     "bytes": 398395,
+     "markers": {
+      "p2ac-fix": 4
+     }
+    },
+    "@local/dsh-usage": {
+     "url": "/plugins/@local/dsh-usage/client.js?rev=4536b91ed282",
+     "url_rev": "4536b91ed282",
+     "sha1_12": "4536b91ed282",
+     "rev_matches_sha1": true,
+     "ok": true,
+     "status": 200,
+     "bytes": 71013,
+     "markers": {
+      "dsh-perf-fix": 2
+     }
+    }
+   },
+   "idle": {
+    "t_arm": 6077.700000000186,
+    "t_pre1": 12086.90000000014,
+    "spanMs": 6009.2,
+    "frameStats": {
+     "n": 361,
+     "min": 16.2,
+     "p50": 16.7,
+     "p90": 16.8,
+     "p99": 17,
+     "p99_lin": 16.94,
+     "max": 17.2,
+     "mean": 16.666,
+     "sum": 6016.6,
+     "ge33_4": 0,
+     "ge50": 0,
+     "ge80": 0,
+     "ge100": 0,
+     "ge200": 0,
+     "raf_per_s": 60.0
+    },
+    "longtasks": 0,
+    "lof": 0,
+    "mutations": 2,
+    "console": [],
+    "errors": [],
+    "metricsDelta": {
+     "ScriptDuration": 0.028439,
+     "TaskDuration": 0.09018,
+     "LayoutDuration": 0,
+     "RecalcStyleDuration": 0,
+     "LayoutCount": 0,
+     "RecalcStyleCount": 0,
+     "JSHeapUsedSize": -3625240,
+     "Nodes": -18,
+     "Documents": -3,
+     "Timestamp": 6.000837
+    }
+   },
+   "pre3s_before_click": [
+    {
+     "index": 1,
+     "t_pre": 12086.90000000014,
+     "n": 180,
+     "t_covered_from": 9094.4,
+     "stats": {
+      "n": 180,
+      "min": 16.5,
+      "p50": 16.7,
+      "p90": 16.7,
+      "p99": 16.8,
+      "p99_lin": 16.8,
+      "max": 16.8,
+      "mean": 16.667,
+      "sum": 3000.0,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     }
+    },
+    {
+     "index": 2,
+     "t_pre": 34312.40000000014,
+     "n": 180,
+     "t_covered_from": 31327,
+     "stats": {
+      "n": 180,
+      "min": 11.8,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 17.1,
+      "p99_lin": 16.942,
+      "max": 21.7,
+      "mean": 16.666,
+      "sum": 2999.9,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     }
+    },
+    {
+     "index": 3,
+     "t_pre": 56504.30000000005,
+     "n": 180,
+     "t_covered_from": 53509.3,
+     "stats": {
+      "n": 180,
+      "min": 16.4,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 16.9,
+      "p99_lin": 16.9,
+      "max": 16.9,
+      "mean": 16.666,
+      "sum": 2999.8,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     }
+    }
+   ],
+   "closedBeforeClick2": true,
+   "closedBeforeClick3": true,
+   "markerProof_loadedResources_n": 54,
+   "markerProof_loadedResources": [
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-modules/client.js?rev=7eb526320903",
+     "initiatorType": "script",
+     "encodedBodySize": 15347,
+     "decodedBodySize": 15347,
+     "transferSize": 15647,
+     "startTime": 79,
+     "duration": 155
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+     "initiatorType": "script",
+     "encodedBodySize": 398569,
+     "decodedBodySize": 398569,
+     "transferSize": 398869,
+     "startTime": 79,
+     "duration": 178
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-typert-registry/client.js?rev=f41d56e0b747",
+     "initiatorType": "script",
+     "encodedBodySize": 52153,
+     "decodedBodySize": 52153,
+     "transferSize": 52453,
+     "startTime": 430,
+     "duration": 155
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-api-gateway/client.js?rev=965b70361a00",
+     "initiatorType": "script",
+     "encodedBodySize": 18560,
+     "decodedBodySize": 18560,
+     "transferSize": 18860,
+     "startTime": 430,
+     "duration": 155
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-hmr/client.js?rev=774dfcde3162",
+     "initiatorType": "script",
+     "encodedBodySize": 3427,
+     "decodedBodySize": 3427,
+     "transferSize": 3727,
+     "startTime": 431,
+     "duration": 154
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-theme/client.js?rev=e19c47b60a1c",
+     "initiatorType": "script",
+     "encodedBodySize": 80114,
+     "decodedBodySize": 80114,
+     "transferSize": 80414,
+     "startTime": 431,
+     "duration": 156
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-api-remotes/client.js?rev=9a16f4532366",
+     "initiatorType": "script",
+     "encodedBodySize": 205655,
+     "decodedBodySize": 205655,
+     "transferSize": 205955,
+     "startTime": 431,
+     "duration": 156
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+     "initiatorType": "script",
+     "encodedBodySize": 359924,
+     "decodedBodySize": 359924,
+     "transferSize": 360224,
+     "startTime": 431,
+     "duration": 157
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-locale/client.js?rev=2660ca3f6a00",
+     "initiatorType": "script",
+     "encodedBodySize": 48844,
+     "decodedBodySize": 48844,
+     "transferSize": 49144,
+     "startTime": 431,
+     "duration": 235
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-renderer/client.js?rev=79b59d365f3b",
+     "initiatorType": "script",
+     "encodedBodySize": 39235,
+     "decodedBodySize": 39235,
+     "transferSize": 39535,
+     "startTime": 431,
+     "duration": 235
+    },
+    {
+     "url": "/plugins/@local/dsh-wallpaper/client.js?rev=826d9217a8fc",
+     "initiatorType": "script",
+     "encodedBodySize": 31803,
+     "decodedBodySize": 31803,
+     "transferSize": 32103,
+     "startTime": 431,
+     "duration": 235
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-session-log-export/client.js?rev=c8b2bb57ded4",
+     "initiatorType": "script",
+     "encodedBodySize": 11446,
+     "decodedBodySize": 11446,
+     "transferSize": 11746,
+     "startTime": 667,
+     "duration": 45
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-cordis-client-runner/client.js?rev=99f7a9b63dac",
+     "initiatorType": "script",
+     "encodedBodySize": 230403,
+     "decodedBodySize": 230403,
+     "transferSize": 230703,
+     "startTime": 668,
+     "duration": 46
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a",
+     "initiatorType": "script",
+     "encodedBodySize": 24988,
+     "decodedBodySize": 24988,
+     "transferSize": 25288,
+     "startTime": 668,
+     "duration": 44
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-sidebar/client.js?rev=7563cb4b02ca",
+     "initiatorType": "script",
+     "encodedBodySize": 17411,
+     "decodedBodySize": 17411,
+     "transferSize": 17711,
+     "startTime": 668,
+     "duration": 45
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-settings/client.js?rev=5d1695c62b38",
+     "initiatorType": "script",
+     "encodedBodySize": 51168,
+     "decodedBodySize": 51168,
+     "transferSize": 51468,
+     "startTime": 668,
+     "duration": 45
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-settings-general/client.js?rev=f733efde3f2f",
+     "initiatorType": "script",
+     "encodedBodySize": 26630,
+     "decodedBodySize": 26630,
+     "transferSize": 26930,
+     "startTime": 668,
+     "duration": 44
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-settings-models/client.js?rev=f12fb342db3b",
+     "initiatorType": "script",
+     "encodedBodySize": 131544,
+     "decodedBodySize": 131544,
+     "transferSize": 131844,
+     "startTime": 669,
+     "duration": 111
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-settings-plugin-inventory/client.js?rev=1bc641ec1ba4",
+     "initiatorType": "script",
+     "encodedBodySize": 17303,
+     "decodedBodySize": 17303,
+     "transferSize": 17603,
+     "startTime": 669,
+     "duration": 111
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-brand-official/client.js?rev=c426d52ce216",
+     "initiatorType": "script",
+     "encodedBodySize": 1910,
+     "decodedBodySize": 1910,
+     "transferSize": 2210,
+     "startTime": 669,
+     "duration": 110
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-conversation/client.js?rev=cf4575517765",
+     "initiatorType": "script",
+     "encodedBodySize": 447932,
+     "decodedBodySize": 447932,
+     "transferSize": 448232,
+     "startTime": 669,
+     "duration": 112
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-attachment/client.js?rev=5349ce7aa495",
+     "initiatorType": "script",
+     "encodedBodySize": 35171,
+     "decodedBodySize": 35171,
+     "transferSize": 35471,
+     "startTime": 669,
+     "duration": 111
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-tool/client.js?rev=48c8d92e8828",
+     "initiatorType": "script",
+     "encodedBodySize": 78222,
+     "decodedBodySize": 78222,
+     "transferSize": 78522,
+     "startTime": 669,
+     "duration": 111
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-workflow-run/client.js?rev=60e130ad4f36",
+     "initiatorType": "script",
+     "encodedBodySize": 27951,
+     "decodedBodySize": 27951,
+     "transferSize": 28251,
+     "startTime": 669,
+     "duration": 144
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-cordis/client.js?rev=8bc3880ac5d7",
+     "initiatorType": "script",
+     "encodedBodySize": 74240,
+     "decodedBodySize": 74240,
+     "transferSize": 74540,
+     "startTime": 669,
+     "duration": 144
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-deliverables/client.js?rev=13a78ee19f2e",
+     "initiatorType": "script",
+     "encodedBodySize": 16387,
+     "decodedBodySize": 16387,
+     "transferSize": 16687,
+     "startTime": 669,
+     "duration": 143
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-input-trigger/client.js?rev=b9564b9138a7",
+     "initiatorType": "script",
+     "encodedBodySize": 36837,
+     "decodedBodySize": 36837,
+     "transferSize": 37137,
+     "startTime": 669,
+     "duration": 144
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+     "initiatorType": "script",
+     "encodedBodySize": 114359,
+     "decodedBodySize": 114359,
+     "transferSize": 114659,
+     "startTime": 669,
+     "duration": 144
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-commands/client.js?rev=887c0ca028a4",
+     "initiatorType": "script",
+     "encodedBodySize": 45718,
+     "decodedBodySize": 45718,
+     "transferSize": 46018,
+     "startTime": 669,
+     "duration": 298
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-skill/client.js?rev=f229a70eecce",
+     "initiatorType": "script",
+     "encodedBodySize": 16067,
+     "decodedBodySize": 16067,
+     "transferSize": 16367,
+     "startTime": 670,
+     "duration": 299
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-subagent/client.js?rev=508ed11aec66",
+     "initiatorType": "script",
+     "encodedBodySize": 42608,
+     "decodedBodySize": 42608,
+     "transferSize": 42908,
+     "startTime": 670,
+     "duration": 304
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-reference/client.js?rev=b90724526688",
+     "initiatorType": "script",
+     "encodedBodySize": 5492,
+     "decodedBodySize": 5492,
+     "transferSize": 5792,
+     "startTime": 670,
+     "duration": 499
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-jobs/client.js?rev=ed0d04a8c154",
+     "initiatorType": "script",
+     "encodedBodySize": 12858,
+     "decodedBodySize": 12858,
+     "transferSize": 13158,
+     "startTime": 670,
+     "duration": 499
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-goal/client.js?rev=31aac5c02463",
+     "initiatorType": "script",
+     "encodedBodySize": 18910,
+     "decodedBodySize": 18910,
+     "transferSize": 19210,
+     "startTime": 670,
+     "duration": 533
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-message-feedback/client.js?rev=b3ebba00affa",
+     "initiatorType": "script",
+     "encodedBodySize": 28240,
+     "decodedBodySize": 28240,
+     "transferSize": 28540,
+     "startTime": 670,
+     "duration": 662
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-model-selection/client.js?rev=639da97bfe66",
+     "initiatorType": "script",
+     "encodedBodySize": 36889,
+     "decodedBodySize": 36889,
+     "transferSize": 37189,
+     "startTime": 670,
+     "duration": 663
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-permission-presets/client.js?rev=e36eeb24d0eb",
+     "initiatorType": "script",
+     "encodedBodySize": 19762,
+     "decodedBodySize": 19762,
+     "transferSize": 20062,
+     "startTime": 670,
+     "duration": 687
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-agent-preset/client.js?rev=96dbaff92d41",
+     "initiatorType": "script",
+     "encodedBodySize": 73924,
+     "decodedBodySize": 73924,
+     "transferSize": 74224,
+     "startTime": 670,
+     "duration": 763
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-settings-plugins/client.js?rev=219832a33fa4",
+     "initiatorType": "script",
+     "encodedBodySize": 53066,
+     "decodedBodySize": 53066,
+     "transferSize": 53366,
+     "startTime": 670,
+     "duration": 763
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-plan/client.js?rev=7f9f228f9516",
+     "initiatorType": "script",
+     "encodedBodySize": 5834,
+     "decodedBodySize": 5834,
+     "transferSize": 6134,
+     "startTime": 670,
+     "duration": 795
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-user-questions/client.js?rev=350ccf0385ba",
+     "initiatorType": "script",
+     "encodedBodySize": 37586,
+     "decodedBodySize": 37586,
+     "transferSize": 37886,
+     "startTime": 670,
+     "duration": 939
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-trajectory/client.js?rev=c4415b657c8b",
+     "initiatorType": "script",
+     "encodedBodySize": 359173,
+     "decodedBodySize": 359173,
+     "transferSize": 359473,
+     "startTime": 671,
+     "duration": 940
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-vision-adam/client.js?rev=24bcc3eec45c",
+     "initiatorType": "script",
+     "encodedBodySize": 12297,
+     "decodedBodySize": 12297,
+     "transferSize": 12597,
+     "startTime": 671,
+     "duration": 1010
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-taste/client.js?rev=e37a5f7cd476",
+     "initiatorType": "script",
+     "encodedBodySize": 46175,
+     "decodedBodySize": 46175,
+     "transferSize": 46475,
+     "startTime": 671,
+     "duration": 1116
+    },
+    {
+     "url": "/plugins/@local/dsh-btw/client.js?rev=374dca63f9aa",
+     "initiatorType": "script",
+     "encodedBodySize": 335348,
+     "decodedBodySize": 335348,
+     "transferSize": 335648,
+     "startTime": 671,
+     "duration": 1116
+    },
+    {
+     "url": "/plugins/@local/dsh-usage/client.js?rev=4536b91ed282",
+     "initiatorType": "script",
+     "encodedBodySize": 72804,
+     "decodedBodySize": 72804,
+     "transferSize": 73104,
+     "startTime": 671,
+     "duration": 1142
+    },
+    {
+     "url": "/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b",
+     "initiatorType": "script",
+     "encodedBodySize": 267026,
+     "decodedBodySize": 267026,
+     "transferSize": 267326,
+     "startTime": 671,
+     "duration": 1466
+    },
+    {
+     "url": "/plugins/@local/dsh-pptmaster/client.js?rev=45d20726c34d",
+     "initiatorType": "script",
+     "encodedBodySize": 4096057,
+     "decodedBodySize": 4096057,
+     "transferSize": 4096357,
+     "startTime": 671,
+     "duration": 1601
+    },
+    {
+     "url": "/plugins/@local/dsh-ssh-gui/client.js?rev=562e71eae991",
+     "initiatorType": "script",
+     "encodedBodySize": 62376,
+     "decodedBodySize": 62376,
+     "transferSize": 62676,
+     "startTime": 671,
+     "duration": 1520
+    },
+    {
+     "url": "/plugins/@local/dsh-subagent-model/client.js?rev=d0b7a565217f",
+     "initiatorType": "script",
+     "encodedBodySize": 17099,
+     "decodedBodySize": 17099,
+     "transferSize": 17399,
+     "startTime": 671,
+     "duration": 1575
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a",
+     "initiatorType": "fetch",
+     "encodedBodySize": 24988,
+     "decodedBodySize": 24988,
+     "transferSize": 25288,
+     "startTime": 4960,
+     "duration": 336
+    },
+    {
+     "url": "/plugins/@local/dsh-wallpaper/client.js?rev=826d9217a8fc",
+     "initiatorType": "fetch",
+     "encodedBodySize": 31803,
+     "decodedBodySize": 31803,
+     "transferSize": 32103,
+     "startTime": 5297,
+     "duration": 226
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+     "initiatorType": "fetch",
+     "encodedBodySize": 398569,
+     "decodedBodySize": 398569,
+     "transferSize": 398869,
+     "startTime": 5524,
+     "duration": 346
+    },
+    {
+     "url": "/plugins/@local/dsh-usage/client.js?rev=4536b91ed282",
+     "initiatorType": "fetch",
+     "encodedBodySize": 72804,
+     "decodedBodySize": 72804,
+     "transferSize": 73104,
+     "startTime": 5872,
+     "duration": 201
+    }
+   ],
+   "all_raw_frames": {
+    "n": 1267,
+    "min": 4.1,
+    "p50": 16.7,
+    "p90": 16.8,
+    "p99": 17.1,
+    "p99_lin": 17.034,
+    "max": 33.4,
+    "mean": 16.692,
+    "sum": 21149.0,
+    "ge33_4": 1,
+    "ge50": 0,
+    "ge80": 0,
+    "ge100": 0,
+    "ge200": 0,
+    "raf_per_s": 59.91
+   },
+   "global_max_frame": [
+    14711.1,
+    33.4
+   ],
+   "global_frames_ge80": [],
+   "global_frames_ge50": []
+  },
+  "headless-run2": {
+   "mode": "headless",
+   "run": 2,
+   "file": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/live-repro/raw/headless-run2.json",
+   "gateOutcome": "EXCLUSIVE",
+   "lockReleased": false,
+   "lock": {
+    "acquired": true,
+    "history": [
+     {
+      "at": "2026-09-22T02:24:00.419Z",
+      "result": "HELD:65663",
+      "waitedMs": 0
+     },
+     {
+      "at": "2026-09-22T02:24:04.752Z",
+      "result": "HELD:65663",
+      "waitedMs": 4333
+     },
+     {
+      "at": "2026-09-22T02:24:07.083Z",
+      "result": "HELD:65663",
+      "waitedMs": 6664
+     },
+     {
+      "at": "2026-09-22T02:24:09.671Z",
+      "result": "HELD:65663",
+      "waitedMs": 9252
+     },
+     {
+      "at": "2026-09-22T02:24:14.264Z",
+      "result": "HELD:65663",
+      "waitedMs": 13845
+     },
+     {
+      "at": "2026-09-22T02:24:18.007Z",
+      "result": "HELD:65663",
+      "waitedMs": 17588
+     },
+     {
+      "at": "2026-09-22T02:24:20.170Z",
+      "result": "HELD:65663",
+      "waitedMs": 19751
+     },
+     {
+      "at": "2026-09-22T02:24:24.871Z",
+      "result": "HELD:65663",
+      "waitedMs": 24452
+     },
+     {
+      "at": "2026-09-22T02:24:27.247Z",
+      "result": "HELD:65663",
+      "waitedMs": 26828
+     },
+     {
+      "at": "2026-09-22T02:24:30.795Z",
+      "result": "HELD:65663",
+      "waitedMs": 30376
+     },
+     {
+      "at": "2026-09-22T02:24:34.762Z",
+      "result": "HELD:65663",
+      "waitedMs": 34343
+     },
+     {
+      "at": "2026-09-22T02:24:36.891Z",
+      "result": "HELD:65663",
+      "waitedMs": 36472
+     },
+     {
+      "at": "2026-09-22T02:24:41.884Z",
+      "result": "HELD:65663",
+      "waitedMs": 41465
+     },
+     {
+      "at": "2026-09-22T02:24:43.997Z",
+      "result": "HELD:65663",
+      "waitedMs": 43578
+     },
+     {
+      "at": "2026-09-22T02:24:46.285Z",
+      "result": "HELD:65663",
+      "waitedMs": 45866
+     },
+     {
+      "at": "2026-09-22T02:24:49.362Z",
+      "result": "HELD:65663",
+      "waitedMs": 48943
+     },
+     {
+      "at": "2026-09-22T02:24:52.192Z",
+      "result": "HELD:65663",
+      "waitedMs": 51773
+     },
+     {
+      "at": "2026-09-22T02:24:56.290Z",
+      "result": "HELD:65663",
+      "waitedMs": 55871
+     },
+     {
+      "at": "2026-09-22T02:25:01.136Z",
+      "result": "HELD:65663",
+      "waitedMs": 60717
+     },
+     {
+      "at": "2026-09-22T02:25:06.050Z",
+      "result": "HELD:68109",
+      "waitedMs": 65631
+     },
+     {
+      "at": "2026-09-22T02:25:09.847Z",
+      "result": "HELD:68109",
+      "waitedMs": 69428
+     },
+     {
+      "at": "2026-09-22T02:25:14.246Z",
+      "result": "HELD:68109",
+      "waitedMs": 73827
+     },
+     {
+      "at": "2026-09-22T02:25:18.724Z",
+      "result": "HELD:68109",
+      "waitedMs": 78305
+     },
+     {
+      "at": "2026-09-22T02:25:22.368Z",
+      "result": "HELD:68109",
+      "waitedMs": 81949
+     },
+     {
+      "at": "2026-09-22T02:25:26.251Z",
+      "result": "HELD:68109",
+      "waitedMs": 85832
+     },
+     {
+      "at": "2026-09-22T02:25:29.537Z",
+      "result": "HELD:68109",
+      "waitedMs": 89118
+     },
+     {
+      "at": "2026-09-22T02:25:32.165Z",
+      "result": "HELD:68109",
+      "waitedMs": 91746
+     },
+     {
+      "at": "2026-09-22T02:25:35.246Z",
+      "result": "HELD:68109",
+      "waitedMs": 94827
+     },
+     {
+      "at": "2026-09-22T02:25:38.958Z",
+      "result": "HELD:68109",
+      "waitedMs": 98539
+     },
+     {
+      "at": "2026-09-22T02:25:41.031Z",
+      "result": "HELD:68109",
+      "waitedMs": 100612
+     },
+     {
+      "at": "2026-09-22T02:25:45.452Z",
+      "result": "HELD:68109",
+      "waitedMs": 105033
+     },
+     {
+      "at": "2026-09-22T02:25:49.088Z",
+      "result": "HELD:68109",
+      "waitedMs": 108669
+     },
+     {
+      "at": "2026-09-22T02:25:52.872Z",
+      "result": "HELD:68109",
+      "waitedMs": 112453
+     },
+     {
+      "at": "2026-09-22T02:25:55.599Z",
+      "result": "HELD:68109",
+      "waitedMs": 115180
+     },
+     {
+      "at": "2026-09-22T02:25:59.302Z",
+      "result": "HELD:68109",
+      "waitedMs": 118883
+     },
+     {
+      "at": "2026-09-22T02:26:03.297Z",
+      "result": "HELD:68109",
+      "waitedMs": 122878
+     },
+     {
+      "at": "2026-09-22T02:26:05.404Z",
+      "result": "HELD:68109",
+      "waitedMs": 124985
+     },
+     {
+      "at": "2026-09-22T02:26:10.248Z",
+      "result": "HELD:68109",
+      "waitedMs": 129829
+     },
+     {
+      "at": "2026-09-22T02:26:13.449Z",
+      "result": "HELD:68109",
+      "waitedMs": 133030
+     },
+     {
+      "at": "2026-09-22T02:26:17.170Z",
+      "result": "HELD:68109",
+      "waitedMs": 136751
+     },
+     {
+      "at": "2026-09-22T02:26:19.200Z",
+      "result": "HELD:68109",
+      "waitedMs": 138781
+     },
+     {
+      "at": "2026-09-22T02:26:21.828Z",
+      "result": "HELD:68109",
+      "waitedMs": 141409
+     },
+     {
+      "at": "2026-09-22T02:26:25.336Z",
+      "result": "HELD:68109",
+      "waitedMs": 144917
+     },
+     {
+      "at": "2026-09-22T02:26:30.223Z",
+      "result": "HELD:68109",
+      "waitedMs": 149804
+     },
+     {
+      "at": "2026-09-22T02:26:33.720Z",
+      "result": "HELD:68109",
+      "waitedMs": 153301
+     },
+     {
+      "at": "2026-09-22T02:26:36.706Z",
+      "result": "HELD:68109",
+      "waitedMs": 156287
+     },
+     {
+      "at": "2026-09-22T02:26:41.242Z",
+      "result": "HELD:68109",
+      "waitedMs": 160823
+     },
+     {
+      "at": "2026-09-22T02:26:45.480Z",
+      "result": "HELD:68109",
+      "waitedMs": 165061
+     },
+     {
+      "at": "2026-09-22T02:26:48.475Z",
+      "result": "HELD:68109",
+      "waitedMs": 168056
+     },
+     {
+      "at": "2026-09-22T02:26:50.817Z",
+      "result": "HELD:68109",
+      "waitedMs": 170398
+     },
+     {
+      "at": "2026-09-22T02:26:53.005Z",
+      "result": "HELD:68109",
+      "waitedMs": 172586
+     },
+     {
+      "at": "2026-09-22T02:26:57.399Z",
+      "result": "HELD:68109",
+      "waitedMs": 176980
+     },
+     {
+      "at": "2026-09-22T02:27:02.062Z",
+      "result": "HELD:68109",
+      "waitedMs": 181643
+     },
+     {
+      "at": "2026-09-22T02:27:06.878Z",
+      "result": "HELD:68109",
+      "waitedMs": 186459
+     },
+     {
+      "at": "2026-09-22T02:27:09.048Z",
+      "result": "HELD:68109",
+      "waitedMs": 188629
+     },
+     {
+      "at": "2026-09-22T02:27:12.811Z",
+      "result": "HELD:72503",
+      "waitedMs": 192392
+     },
+     {
+      "at": "2026-09-22T02:27:17.414Z",
+      "result": "HELD:72503",
+      "waitedMs": 196995
+     },
+     {
+      "at": "2026-09-22T02:27:20.313Z",
+      "result": "HELD:72503",
+      "waitedMs": 199894
+     },
+     {
+      "at": "2026-09-22T02:27:24.357Z",
+      "result": "HELD:72503",
+      "waitedMs": 203938
+     },
+     {
+      "at": "2026-09-22T02:27:29.038Z",
+      "result": "HELD:72503",
+      "waitedMs": 208619
+     },
+     {
+      "at": "2026-09-22T02:27:31.647Z",
+      "result": "HELD:72503",
+      "waitedMs": 211228
+     },
+     {
+      "at": "2026-09-22T02:27:34.552Z",
+      "result": "HELD:72503",
+      "waitedMs": 214133
+     },
+     {
+      "at": "2026-09-22T02:27:36.639Z",
+      "result": "HELD:72503",
+      "waitedMs": 216220
+     },
+     {
+      "at": "2026-09-22T02:27:40.113Z",
+      "result": "HELD:72503",
+      "waitedMs": 219694
+     },
+     {
+      "at": "2026-09-22T02:27:43.241Z",
+      "result": "HELD:73170",
+      "waitedMs": 222822
+     },
+     {
+      "at": "2026-09-22T02:27:46.075Z",
+      "result": "HELD:73170",
+      "waitedMs": 225656
+     },
+     {
+      "at": "2026-09-22T02:27:50.904Z",
+      "result": "HELD:73170",
+      "waitedMs": 230485
+     },
+     {
+      "at": "2026-09-22T02:27:53.020Z",
+      "result": "HELD:73170",
+      "waitedMs": 232601
+     },
+     {
+      "at": "2026-09-22T02:27:55.924Z",
+      "result": "HELD:73170",
+      "waitedMs": 235505
+     },
+     {
+      "at": "2026-09-22T02:28:00.248Z",
+      "result": "HELD:73170",
+      "waitedMs": 239829
+     },
+     {
+      "at": "2026-09-22T02:28:04.734Z",
+      "result": "HELD:73636",
+      "waitedMs": 244315
+     },
+     {
+      "at": "2026-09-22T02:28:07.195Z",
+      "result": "HELD:73800",
+      "waitedMs": 246776
+     },
+     {
+      "at": "2026-09-22T02:28:11.543Z",
+      "result": "HELD:73800",
+      "waitedMs": 251124
+     },
+     {
+      "at": "2026-09-22T02:28:15.228Z",
+      "result": "HELD:73800",
+      "waitedMs": 254809
+     },
+     {
+      "at": "2026-09-22T02:28:19.805Z",
+      "result": "HELD:73939",
+      "waitedMs": 259386
+     },
+     {
+      "at": "2026-09-22T02:28:21.951Z",
+      "result": "HELD:73939",
+      "waitedMs": 261532
+     },
+     {
+      "at": "2026-09-22T02:28:24.356Z",
+      "result": "HELD:73939",
+      "waitedMs": 263937
+     },
+     {
+      "at": "2026-09-22T02:28:29.302Z",
+      "result": "HELD:73939",
+      "waitedMs": 268883
+     },
+     {
+      "at": "2026-09-22T02:28:32.284Z",
+      "result": "HELD:73939",
+      "waitedMs": 271865
+     },
+     {
+      "at": "2026-09-22T02:28:36.238Z",
+      "result": "HELD:74258",
+      "waitedMs": 275819
+     },
+     {
+      "at": "2026-09-22T02:28:38.818Z",
+      "result": "HELD:74258",
+      "waitedMs": 278399
+     },
+     {
+      "at": "2026-09-22T02:28:42.793Z",
+      "result": "HELD:74258",
+      "waitedMs": 282374
+     },
+     {
+      "at": "2026-09-22T02:28:46.441Z",
+      "result": "HELD:74258",
+      "waitedMs": 286022
+     },
+     {
+      "at": "2026-09-22T02:28:48.853Z",
+      "result": "ACQUIRED",
+      "waitedMs": 288434
+     }
+    ],
+    "waitedMs": 288434
+   },
+   "page": {
+    "treeitems": 11,
+    "nodesAtStable": 526,
+    "visibilityState": "visible",
+    "hasFocus": true
+   },
+   "gpu": {
+    "webgl": true,
+    "vendor": "Google Inc. (Google)",
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)"
+   },
+   "navMs": 6125,
+   "launchMs": 49,
+   "windows": [
+    {
+     "name": "idle",
+     "wallMs": 6001,
+     "metricsDelta": {
+      "ScriptDuration": 0.018367,
+      "TaskDuration": 0.07427,
+      "LayoutDuration": 0,
+      "RecalcStyleDuration": 0,
+      "LayoutCount": 0,
+      "RecalcStyleCount": 0,
+      "JSHeapUsedSize": 1739440,
+      "Nodes": 0,
+      "Documents": 0,
+      "Timestamp": 6.000761
+     }
+    },
+    {
+     "name": "click1",
+     "index": 1,
+     "t_arm": 8712.100000000093,
+     "t_pre": 14721.199999999953,
+     "t_click": 14756.899999999907,
+     "t_dialogpw": 14782.899999999907,
+     "t_post": 17785.199999999953,
+     "span_arm_to_pre_ms": 6009.1,
+     "span_pre_to_click_ms": 35.7,
+     "span_click_to_post_ms": 3028.3,
+     "span_click_to_post_vs_3000_ms": 28.3,
+     "reported_wallPreMs": 0,
+     "reported_wallPostMs": 3063,
+     "reported_clickCallMs": 57,
+     "n_evts": 3,
+     "evt_phases": [
+      "pointerdown",
+      "mousedown",
+      "click"
+     ],
+     "evt_monotone": true,
+     "n_frames_total_in_raw": 545,
+     "n_frames_pre": 2,
+     "n_frames_post": 182,
+     "n_frames_post_strict": 181,
+     "n_frames_fullwin": 184,
+     "n_frames_settle": null,
+     "frames_coverage": {
+      "before_t_arm": 0,
+      "after_t_post": 0,
+      "first_t": 8717.9,
+      "last_t": 17784.2,
+      "t_arm": 8712.100000000093,
+      "t_post": 17785.199999999953
+     },
+     "frames_pre_stats": {
+      "n": 2,
+      "min": 16.5,
+      "p50": 16.5,
+      "p90": 16.7,
+      "p99": 16.7,
+      "p99_lin": 16.698,
+      "max": 16.7,
+      "mean": 16.6,
+      "sum": 33.2,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.24
+     },
+     "frames_post_stats": {
+      "n": 182,
+      "min": 7.9,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 24.4,
+      "p99_lin": 18.73,
+      "max": 25.5,
+      "mean": 16.666,
+      "sum": 3033.2,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     },
+     "frames_fullwin_stats": {
+      "n": 184,
+      "min": 7.9,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 24.4,
+      "p99_lin": 18.59,
+      "max": 25.5,
+      "mean": 16.665,
+      "sum": 3066.4,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.01
+     },
+     "settle_stats": null,
+     "marks_snapshot_vs_global_mismatch": [],
+     "problems": [],
+     "reported": {
+      "clickToDialogDomMs": 16.4,
+      "clickToDialogVisibleMs": 19.8,
+      "clickToDialogPaintedMs": 27.6,
+      "playwrightDialogVisibleMs": 4,
+      "dialogVisibleOk": true,
+      "dialogPaintedRect": {
+       "w": 800,
+       "h": 800
+      },
+      "nodesNow": 697
+     },
+     "metricsDelta": {
+      "ScriptDuration": 0.018964,
+      "TaskDuration": 0.081156,
+      "LayoutDuration": 0.007516,
+      "RecalcStyleDuration": 0.003642,
+      "LayoutCount": 3,
+      "RecalcStyleCount": 8,
+      "JSHeapUsedSize": -4284864,
+      "Nodes": 242,
+      "Documents": -2,
+      "Timestamp": 3.063307
+     },
+     "longtasks_in_raw": 0,
+     "lof_in_raw": 0,
+     "installErrors": [],
+     "console": [],
+     "errors": [],
+     "vis": [],
+     "resizes": [],
+     "mutations": [
+      {
+       "t": 14773.1,
+       "n": 1,
+       "added": 1,
+       "removed": 0,
+       "kind": "childList"
+      },
+      {
+       "t": 14775.1,
+       "n": 1,
+       "added": 1,
+       "removed": 0,
+       "kind": "childList"
+      }
+     ],
+     "dom_claim_page_t": 14773.299999999907,
+     "nearest_mutation_to_dom_claim": {
+      "mut_t": 14773.1,
+      "delta_ms": -0.2
+     },
+     "paint_claim_page_t": 14784.499999999907,
+     "nearest_frame_to_paint_claim": {
+      "frame_t": 14784.4,
+      "delta_ms": -0.1,
+      "frame_dt": 7.9
+     }
+    },
+    {
+     "name": "click2",
+     "index": 2,
+     "t_arm": 33940.10000000009,
+     "t_pre": 36941.5,
+     "t_click": 36968.69999999995,
+     "t_dialogpw": 36984.80000000005,
+     "t_post": 39986,
+     "span_arm_to_pre_ms": 3001.4,
+     "span_pre_to_click_ms": 27.2,
+     "span_click_to_post_ms": 3017.3,
+     "span_click_to_post_vs_3000_ms": 17.3,
+     "reported_wallPreMs": 1,
+     "reported_wallPostMs": 3043,
+     "reported_clickCallMs": 37,
+     "n_evts": 3,
+     "evt_phases": [
+      "pointerdown",
+      "mousedown",
+      "click"
+     ],
+     "evt_monotone": true,
+     "n_frames_total_in_raw": 363,
+     "n_frames_pre": 2,
+     "n_frames_post": 181,
+     "n_frames_post_strict": 180,
+     "n_frames_fullwin": 183,
+     "n_frames_settle": 180,
+     "frames_coverage": {
+      "before_t_arm": 0,
+      "after_t_post": 0,
+      "first_t": 33950.2,
+      "last_t": 39983.3,
+      "t_arm": 33940.10000000009,
+      "t_post": 39986
+     },
+     "frames_pre_stats": {
+      "n": 2,
+      "min": 16.6,
+      "p50": 16.6,
+      "p90": 16.6,
+      "p99": 16.6,
+      "p99_lin": 16.6,
+      "max": 16.6,
+      "mean": 16.6,
+      "sum": 33.2,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.24
+     },
+     "frames_post_stats": {
+      "n": 181,
+      "min": 10.3,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 19.4,
+      "p99_lin": 17.64,
+      "max": 22.7,
+      "mean": 16.666,
+      "sum": 3016.6,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     },
+     "frames_fullwin_stats": {
+      "n": 183,
+      "min": 10.3,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 19.4,
+      "p99_lin": 17.596,
+      "max": 22.7,
+      "mean": 16.666,
+      "sum": 3049.8,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     },
+     "settle_stats": {
+      "n": 180,
+      "min": 4.4,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 16.9,
+      "p99_lin": 16.9,
+      "max": 28.9,
+      "mean": 16.666,
+      "sum": 2999.8,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     },
+     "marks_snapshot_vs_global_mismatch": [],
+     "problems": [],
+     "reported": {
+      "clickToDialogDomMs": 9.2,
+      "clickToDialogVisibleMs": 15,
+      "clickToDialogPaintedMs": 37.8,
+      "playwrightDialogVisibleMs": 4,
+      "dialogVisibleOk": true,
+      "dialogPaintedRect": {
+       "w": 800,
+       "h": 800
+      },
+      "nodesNow": 697
+     },
+     "metricsDelta": {
+      "ScriptDuration": 0.046143,
+      "TaskDuration": 0.078847,
+      "LayoutDuration": 0.003998,
+      "RecalcStyleDuration": 0.001816,
+      "LayoutCount": 3,
+      "RecalcStyleCount": 9,
+      "JSHeapUsedSize": 23260,
+      "Nodes": 254,
+      "Documents": 0,
+      "Timestamp": 3.044109
+     },
+     "longtasks_in_raw": 0,
+     "lof_in_raw": 0,
+     "installErrors": [],
+     "console": [],
+     "errors": [],
+     "vis": [],
+     "resizes": [],
+     "mutations": [
+      {
+       "t": 36977.8,
+       "n": 2,
+       "added": 1,
+       "removed": 1,
+       "kind": "childList"
+      },
+      {
+       "t": 36978.4,
+       "n": 1,
+       "added": 1,
+       "removed": 0,
+       "kind": "childList"
+      }
+     ],
+     "dom_claim_page_t": 36977.89999999995,
+     "nearest_mutation_to_dom_claim": {
+      "mut_t": 36977.8,
+      "delta_ms": -0.1
+     },
+     "paint_claim_page_t": 37006.499999999956,
+     "nearest_frame_to_paint_claim": {
+      "frame_t": 37006.4,
+      "delta_ms": -0.1,
+      "frame_dt": 22.7
+     }
+    },
+    {
+     "name": "click3",
+     "index": 3,
+     "t_arm": 56129.89999999991,
+     "t_pre": 59132.60000000009,
+     "t_click": 59169.30000000005,
+     "t_dialogpw": 59189.10000000009,
+     "t_post": 62190.69999999995,
+     "span_arm_to_pre_ms": 3002.7,
+     "span_pre_to_click_ms": 36.7,
+     "span_click_to_post_ms": 3021.4,
+     "span_click_to_post_vs_3000_ms": 21.4,
+     "reported_wallPreMs": 1,
+     "reported_wallPostMs": 3057,
+     "reported_clickCallMs": 53,
+     "n_evts": 3,
+     "evt_phases": [
+      "pointerdown",
+      "mousedown",
+      "click"
+     ],
+     "evt_monotone": true,
+     "n_frames_total_in_raw": 364,
+     "n_frames_pre": 3,
+     "n_frames_post": 181,
+     "n_frames_post_strict": 180,
+     "n_frames_fullwin": 184,
+     "n_frames_settle": 180,
+     "frames_coverage": {
+      "before_t_arm": 0,
+      "after_t_post": 0,
+      "first_t": 56132.8,
+      "last_t": 62182.7,
+      "t_arm": 56129.89999999991,
+      "t_post": 62190.69999999995
+     },
+     "frames_pre_stats": {
+      "n": 3,
+      "min": 16.6,
+      "p50": 16.6,
+      "p90": 16.8,
+      "p99": 16.8,
+      "p99_lin": 16.796,
+      "max": 16.8,
+      "mean": 16.667,
+      "sum": 50.0,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     },
+     "frames_post_stats": {
+      "n": 181,
+      "min": 2.1,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 17.6,
+      "p99_lin": 17.36,
+      "max": 30.5,
+      "mean": 16.667,
+      "sum": 3016.7,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     },
+     "frames_fullwin_stats": {
+      "n": 184,
+      "min": 2.1,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 17.6,
+      "p99_lin": 17.351,
+      "max": 30.5,
+      "mean": 16.667,
+      "sum": 3066.7,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     },
+     "settle_stats": {
+      "n": 180,
+      "min": 14.8,
+      "p50": 16.7,
+      "p90": 16.7,
+      "p99": 16.9,
+      "p99_lin": 16.9,
+      "max": 18.6,
+      "mean": 16.666,
+      "sum": 2999.9,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     },
+     "marks_snapshot_vs_global_mismatch": [],
+     "problems": [],
+     "reported": {
+      "clickToDialogDomMs": 11.4,
+      "clickToDialogVisibleMs": 14.2,
+      "clickToDialogPaintedMs": 44.5,
+      "playwrightDialogVisibleMs": 2,
+      "dialogVisibleOk": true,
+      "dialogPaintedRect": {
+       "w": 800,
+       "h": 800
+      },
+      "nodesNow": 697
+     },
+     "metricsDelta": {
+      "ScriptDuration": 0.032182,
+      "TaskDuration": 0.081877,
+      "LayoutDuration": 0.005549,
+      "RecalcStyleDuration": 0.002104,
+      "LayoutCount": 3,
+      "RecalcStyleCount": 9,
+      "JSHeapUsedSize": -2482656,
+      "Nodes": 254,
+      "Documents": 0,
+      "Timestamp": 3.058029
+     },
+     "longtasks_in_raw": 0,
+     "lof_in_raw": 0,
+     "installErrors": [],
+     "console": [],
+     "errors": [],
+     "vis": [],
+     "resizes": [],
+     "mutations": [
+      {
+       "t": 59180.6,
+       "n": 2,
+       "added": 1,
+       "removed": 1,
+       "kind": "childList"
+      },
+      {
+       "t": 59181.6,
+       "n": 1,
+       "added": 1,
+       "removed": 0,
+       "kind": "childList"
+      }
+     ],
+     "dom_claim_page_t": 59180.70000000005,
+     "nearest_mutation_to_dom_claim": {
+      "mut_t": 59180.6,
+      "delta_ms": -0.1
+     },
+     "paint_claim_page_t": 59213.80000000005,
+     "nearest_frame_to_paint_claim": {
+      "frame_t": 59213.8,
+      "delta_ms": -0.0,
+      "frame_dt": 30.5
+     }
+    }
+   ],
+   "cross": {},
+   "census": {
+    "censusStart": {
+     "at": "2026-09-22T02:24:00.419Z",
+     "total": 0,
+     "mine": 0,
+     "foreign": 0,
+     "helperProcs": 0,
+     "binaryKinds": {},
+     "lockDirPresent": true,
+     "lockOwner": "agent: incident2-regression (first-open batch) | line: batch plan=base:3,tp-off:3,p2ac-old:2,usage-nofetch:3,theme-sync:3 | pid: 65663",
+     "lockHeldByThisLine": false,
+     "foreignList": [],
+     "mineList": []
+    },
+    "censusBeforeLaunch": {
+     "at": "2026-09-22T02:28:48.858Z",
+     "total": 0,
+     "mine": 0,
+     "foreign": 0,
+     "helperProcs": 0,
+     "binaryKinds": {},
+     "lockDirPresent": true,
+     "lockOwner": "pid=66434 | ts=2026-09-22T02:28:48.853Z | owner=incident2-live-repro",
+     "lockHeldByThisLine": true,
+     "foreignList": [],
+     "mineList": []
+    },
+    "censusAfterLaunch": {
+     "at": "2026-09-22T02:28:48.912Z",
+     "total": 1,
+     "mine": 1,
+     "foreign": 0,
+     "helperProcs": 4,
+     "binaryKinds": {
+      "headless_shell": 5
+     },
+     "lockDirPresent": true,
+     "lockOwner": "pid=66434 | ts=2026-09-22T02:28:48.853Z | owner=incident2-live-repro",
+     "lockHeldByThisLine": true,
+     "foreignList": [],
+     "mineList": [
+      {
+       "pid": 78485,
+       "exe": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+       "binaryKind": "headless_shell",
+       "headlessFlag": "--headless",
+       "ozone": null,
+       "useGl": null,
+       "useAngle": null,
+       "gpuDisabled": false,
+       "userDataDir": "/tmp/playwright_chromiumdev_profile-qd4dvN"
+      }
+     ]
+    },
+    "censusAtIdleEnd": {
+     "at": "2026-09-22T02:29:03.703Z",
+     "total": 1,
+     "mine": 1,
+     "foreign": 0,
+     "helperProcs": 5,
+     "binaryKinds": {
+      "headless_shell": 6
+     },
+     "lockDirPresent": true,
+     "lockOwner": "agent: incident2-regression (raf-face theme-sync A/B) | line: label=raf-theme-sync-r1 | pid: 78607",
+     "lockHeldByThisLine": false,
+     "foreignList": [],
+     "mineList": [
+      {
+       "pid": 78485,
+       "exe": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+       "binaryKind": "headless_shell",
+       "headlessFlag": "--headless",
+       "ozone": null,
+       "useGl": null,
+       "useAngle": null,
+       "gpuDisabled": false,
+       "userDataDir": "/tmp/playwright_chromiumdev_profile-qd4dvN"
+      }
+     ]
+    },
+    "censusAfterClick1": {
+     "at": "2026-09-22T02:29:06.912Z",
+     "total": 1,
+     "mine": 1,
+     "foreign": 0,
+     "helperProcs": 5,
+     "binaryKinds": {
+      "headless_shell": 6
+     },
+     "lockDirPresent": true,
+     "lockOwner": "agent: incident2-regression (raf-face theme-sync A/B) | line: label=raf-theme-sync-r1 | pid: 78607",
+     "lockHeldByThisLine": false,
+     "foreignList": [],
+     "mineList": [
+      {
+       "pid": 78485,
+       "exe": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+       "binaryKind": "headless_shell",
+       "headlessFlag": "--headless",
+       "ozone": null,
+       "useGl": null,
+       "useAngle": null,
+       "gpuDisabled": false,
+       "userDataDir": "/tmp/playwright_chromiumdev_profile-qd4dvN"
+      }
+     ]
+    },
+    "censusAfterClick2": {
+     "at": "2026-09-22T02:29:29.106Z",
+     "total": 1,
+     "mine": 1,
+     "foreign": 0,
+     "helperProcs": 5,
+     "binaryKinds": {
+      "headless_shell": 6
+     },
+     "lockDirPresent": true,
+     "lockOwner": "agent: incident2-regression (raf-face theme-sync A/B) | line: label=raf-theme-sync-r1 | pid: 78607",
+     "lockHeldByThisLine": false,
+     "foreignList": [],
+     "mineList": [
+      {
+       "pid": 78485,
+       "exe": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+       "binaryKind": "headless_shell",
+       "headlessFlag": "--headless",
+       "ozone": null,
+       "useGl": null,
+       "useAngle": null,
+       "gpuDisabled": false,
+       "userDataDir": "/tmp/playwright_chromiumdev_profile-qd4dvN"
+      }
+     ]
+    },
+    "censusAfterClick3": {
+     "at": "2026-09-22T02:29:51.330Z",
+     "total": 1,
+     "mine": 1,
+     "foreign": 0,
+     "helperProcs": 5,
+     "binaryKinds": {
+      "headless_shell": 6
+     },
+     "lockDirPresent": true,
+     "lockOwner": "agent: incident2-regression (raf-face theme-sync A/B) | line: label=raf-theme-sync-r1 | pid: 78607",
+     "lockHeldByThisLine": false,
+     "foreignList": [],
+     "mineList": [
+      {
+       "pid": 78485,
+       "exe": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+       "binaryKind": "headless_shell",
+       "headlessFlag": "--headless",
+       "ozone": null,
+       "useGl": null,
+       "useAngle": null,
+       "gpuDisabled": false,
+       "userDataDir": "/tmp/playwright_chromiumdev_profile-qd4dvN"
+      }
+     ]
+    },
+    "censusEnd": {
+     "at": "2026-09-22T02:29:51.337Z",
+     "total": 1,
+     "mine": 1,
+     "foreign": 0,
+     "helperProcs": 5,
+     "binaryKinds": {
+      "headless_shell": 6
+     },
+     "lockDirPresent": true,
+     "lockOwner": "agent: incident2-regression (raf-face theme-sync A/B) | line: label=raf-theme-sync-r1 | pid: 78607",
+     "lockHeldByThisLine": false,
+     "foreignList": [],
+     "mineList": [
+      {
+       "pid": 78485,
+       "exe": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell",
+       "binaryKind": "headless_shell",
+       "headlessFlag": "--headless",
+       "ozone": null,
+       "useGl": null,
+       "useAngle": null,
+       "gpuDisabled": false,
+       "userDataDir": "/tmp/playwright_chromiumdev_profile-qd4dvN"
+      }
+     ]
+    }
+   },
+   "markerProof": {
+    "@deepseek-ai/dsh-client-ui-layout": {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a",
+     "url_rev": "82cca1a6178a",
+     "sha1_12": "82cca1a6178a",
+     "rev_matches_sha1": true,
+     "ok": true,
+     "status": 200,
+     "bytes": 24966,
+     "markers": {
+      "scheduleThemeColorRefresh": 3,
+      "lastSignature": 4,
+      "themeColorRefreshQueue": 4
+     }
+    },
+    "@local/dsh-wallpaper": {
+     "url": "/plugins/@local/dsh-wallpaper/client.js?rev=826d9217a8fc",
+     "url_rev": "826d9217a8fc",
+     "sha1_12": "826d9217a8fc",
+     "rev_matches_sha1": true,
+     "ok": true,
+     "status": 200,
+     "bytes": 31338,
+     "markers": {
+      "shadedTokens": 3,
+      "sameShadedTokens": 2,
+      "lastTokens": 0
+     }
+    },
+    "@deepseek-ai/dsh-client-runtime": {
+     "url": "/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+     "url_rev": "5559de4ce28c",
+     "sha1_12": "5559de4ce28c",
+     "rev_matches_sha1": true,
+     "ok": true,
+     "status": 200,
+     "bytes": 398395,
+     "markers": {
+      "p2ac-fix": 4
+     }
+    },
+    "@local/dsh-usage": {
+     "url": "/plugins/@local/dsh-usage/client.js?rev=4536b91ed282",
+     "url_rev": "4536b91ed282",
+     "sha1_12": "4536b91ed282",
+     "rev_matches_sha1": true,
+     "ok": true,
+     "status": 200,
+     "bytes": 71013,
+     "markers": {
+      "dsh-perf-fix": 2
+     }
+    }
+   },
+   "idle": {
+    "t_arm": 8712.100000000093,
+    "t_pre1": 14721.199999999953,
+    "spanMs": 6009.1,
+    "frameStats": {
+     "n": 361,
+     "min": 16.4,
+     "p50": 16.7,
+     "p90": 16.8,
+     "p99": 16.8,
+     "p99_lin": 16.8,
+     "max": 17,
+     "mean": 16.666,
+     "sum": 6016.5,
+     "ge33_4": 0,
+     "ge50": 0,
+     "ge80": 0,
+     "ge100": 0,
+     "ge200": 0,
+     "raf_per_s": 60.0
+    },
+    "longtasks": 0,
+    "lof": 0,
+    "mutations": 2,
+    "console": [],
+    "errors": [],
+    "metricsDelta": {
+     "ScriptDuration": 0.018367,
+     "TaskDuration": 0.07427,
+     "LayoutDuration": 0,
+     "RecalcStyleDuration": 0,
+     "LayoutCount": 0,
+     "RecalcStyleCount": 0,
+     "JSHeapUsedSize": 1739440,
+     "Nodes": 0,
+     "Documents": 0,
+     "Timestamp": 6.000761
+    }
+   },
+   "pre3s_before_click": [
+    {
+     "index": 1,
+     "t_pre": 14721.199999999953,
+     "n": 180,
+     "t_covered_from": 11734.5,
+     "stats": {
+      "n": 180,
+      "min": 16.4,
+      "p50": 16.7,
+      "p90": 16.7,
+      "p99": 16.8,
+      "p99_lin": 16.8,
+      "max": 16.8,
+      "mean": 16.667,
+      "sum": 3000.0,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     }
+    },
+    {
+     "index": 2,
+     "t_pre": 36941.5,
+     "n": 180,
+     "t_covered_from": 33950.2,
+     "stats": {
+      "n": 180,
+      "min": 4.4,
+      "p50": 16.7,
+      "p90": 16.8,
+      "p99": 16.9,
+      "p99_lin": 16.9,
+      "max": 28.9,
+      "mean": 16.666,
+      "sum": 2999.8,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     }
+    },
+    {
+     "index": 3,
+     "t_pre": 59132.60000000009,
+     "n": 180,
+     "t_covered_from": 56132.8,
+     "stats": {
+      "n": 180,
+      "min": 14.8,
+      "p50": 16.7,
+      "p90": 16.7,
+      "p99": 16.9,
+      "p99_lin": 16.9,
+      "max": 18.6,
+      "mean": 16.666,
+      "sum": 2999.9,
+      "ge33_4": 0,
+      "ge50": 0,
+      "ge80": 0,
+      "ge100": 0,
+      "ge200": 0,
+      "raf_per_s": 60.0
+     }
+    }
+   ],
+   "closedBeforeClick2": true,
+   "closedBeforeClick3": true,
+   "markerProof_loadedResources_n": 54,
+   "markerProof_loadedResources": [
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-modules/client.js?rev=7eb526320903",
+     "initiatorType": "script",
+     "encodedBodySize": 15347,
+     "decodedBodySize": 15347,
+     "transferSize": 15647,
+     "startTime": 737,
+     "duration": 544
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+     "initiatorType": "script",
+     "encodedBodySize": 398569,
+     "decodedBodySize": 398569,
+     "transferSize": 398869,
+     "startTime": 737,
+     "duration": 772
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-typert-registry/client.js?rev=f41d56e0b747",
+     "initiatorType": "script",
+     "encodedBodySize": 52153,
+     "decodedBodySize": 52153,
+     "transferSize": 52453,
+     "startTime": 1693,
+     "duration": 179
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-api-gateway/client.js?rev=965b70361a00",
+     "initiatorType": "script",
+     "encodedBodySize": 18560,
+     "decodedBodySize": 18560,
+     "transferSize": 18860,
+     "startTime": 1693,
+     "duration": 179
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-hmr/client.js?rev=774dfcde3162",
+     "initiatorType": "script",
+     "encodedBodySize": 3427,
+     "decodedBodySize": 3427,
+     "transferSize": 3727,
+     "startTime": 1693,
+     "duration": 178
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-connection/client.js?rev=23a7e79f44f6",
+     "initiatorType": "script",
+     "encodedBodySize": 359924,
+     "decodedBodySize": 359924,
+     "transferSize": 360224,
+     "startTime": 1694,
+     "duration": 181
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-theme/client.js?rev=e19c47b60a1c",
+     "initiatorType": "script",
+     "encodedBodySize": 80114,
+     "decodedBodySize": 80114,
+     "transferSize": 80414,
+     "startTime": 1694,
+     "duration": 180
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-api-remotes/client.js?rev=9a16f4532366",
+     "initiatorType": "script",
+     "encodedBodySize": 205655,
+     "decodedBodySize": 205655,
+     "transferSize": 205955,
+     "startTime": 1694,
+     "duration": 180
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-renderer/client.js?rev=79b59d365f3b",
+     "initiatorType": "script",
+     "encodedBodySize": 39235,
+     "decodedBodySize": 39235,
+     "transferSize": 39535,
+     "startTime": 1694,
+     "duration": 619
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-locale/client.js?rev=2660ca3f6a00",
+     "initiatorType": "script",
+     "encodedBodySize": 48844,
+     "decodedBodySize": 48844,
+     "transferSize": 49144,
+     "startTime": 1694,
+     "duration": 619
+    },
+    {
+     "url": "/plugins/@local/dsh-wallpaper/client.js?rev=826d9217a8fc",
+     "initiatorType": "script",
+     "encodedBodySize": 31803,
+     "decodedBodySize": 31803,
+     "transferSize": 32103,
+     "startTime": 1694,
+     "duration": 619
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-session-log-export/client.js?rev=c8b2bb57ded4",
+     "initiatorType": "script",
+     "encodedBodySize": 11446,
+     "decodedBodySize": 11446,
+     "transferSize": 11746,
+     "startTime": 2315,
+     "duration": 207
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-cordis-client-runner/client.js?rev=99f7a9b63dac",
+     "initiatorType": "script",
+     "encodedBodySize": 230403,
+     "decodedBodySize": 230403,
+     "transferSize": 230703,
+     "startTime": 2315,
+     "duration": 208
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a",
+     "initiatorType": "script",
+     "encodedBodySize": 24988,
+     "decodedBodySize": 24988,
+     "transferSize": 25288,
+     "startTime": 2316,
+     "duration": 206
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-sidebar/client.js?rev=7563cb4b02ca",
+     "initiatorType": "script",
+     "encodedBodySize": 17411,
+     "decodedBodySize": 17411,
+     "transferSize": 17711,
+     "startTime": 2316,
+     "duration": 206
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-settings/client.js?rev=5d1695c62b38",
+     "initiatorType": "script",
+     "encodedBodySize": 51168,
+     "decodedBodySize": 51168,
+     "transferSize": 51468,
+     "startTime": 2316,
+     "duration": 206
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-settings-general/client.js?rev=f733efde3f2f",
+     "initiatorType": "script",
+     "encodedBodySize": 26630,
+     "decodedBodySize": 26630,
+     "transferSize": 26930,
+     "startTime": 2316,
+     "duration": 206
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-settings-plugin-inventory/client.js?rev=1bc641ec1ba4",
+     "initiatorType": "script",
+     "encodedBodySize": 17303,
+     "decodedBodySize": 17303,
+     "transferSize": 17603,
+     "startTime": 2316,
+     "duration": 400
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-settings-models/client.js?rev=f12fb342db3b",
+     "initiatorType": "script",
+     "encodedBodySize": 131544,
+     "decodedBodySize": 131544,
+     "transferSize": 131844,
+     "startTime": 2316,
+     "duration": 400
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-brand-official/client.js?rev=c426d52ce216",
+     "initiatorType": "script",
+     "encodedBodySize": 1910,
+     "decodedBodySize": 1910,
+     "transferSize": 2210,
+     "startTime": 2316,
+     "duration": 400
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-conversation/client.js?rev=cf4575517765",
+     "initiatorType": "script",
+     "encodedBodySize": 447932,
+     "decodedBodySize": 447932,
+     "transferSize": 448232,
+     "startTime": 2316,
+     "duration": 401
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-attachment/client.js?rev=5349ce7aa495",
+     "initiatorType": "script",
+     "encodedBodySize": 35171,
+     "decodedBodySize": 35171,
+     "transferSize": 35471,
+     "startTime": 2316,
+     "duration": 400
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-cordis/client.js?rev=8bc3880ac5d7",
+     "initiatorType": "script",
+     "encodedBodySize": 74240,
+     "decodedBodySize": 74240,
+     "transferSize": 74540,
+     "startTime": 2316,
+     "duration": 738
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-tool/client.js?rev=48c8d92e8828",
+     "initiatorType": "script",
+     "encodedBodySize": 78222,
+     "decodedBodySize": 78222,
+     "transferSize": 78522,
+     "startTime": 2316,
+     "duration": 739
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-workflow-run/client.js?rev=60e130ad4f36",
+     "initiatorType": "script",
+     "encodedBodySize": 27951,
+     "decodedBodySize": 27951,
+     "transferSize": 28251,
+     "startTime": 2316,
+     "duration": 789
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-deliverables/client.js?rev=13a78ee19f2e",
+     "initiatorType": "script",
+     "encodedBodySize": 16387,
+     "decodedBodySize": 16387,
+     "transferSize": 16687,
+     "startTime": 2317,
+     "duration": 789
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-workspace/client.js?rev=5596cec54007",
+     "initiatorType": "script",
+     "encodedBodySize": 114359,
+     "decodedBodySize": 114359,
+     "transferSize": 114659,
+     "startTime": 2317,
+     "duration": 789
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-input-trigger/client.js?rev=b9564b9138a7",
+     "initiatorType": "script",
+     "encodedBodySize": 36837,
+     "decodedBodySize": 36837,
+     "transferSize": 37137,
+     "startTime": 2317,
+     "duration": 1267
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-commands/client.js?rev=887c0ca028a4",
+     "initiatorType": "script",
+     "encodedBodySize": 45718,
+     "decodedBodySize": 45718,
+     "transferSize": 46018,
+     "startTime": 2317,
+     "duration": 1268
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-skill/client.js?rev=f229a70eecce",
+     "initiatorType": "script",
+     "encodedBodySize": 16067,
+     "decodedBodySize": 16067,
+     "transferSize": 16367,
+     "startTime": 2317,
+     "duration": 1268
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-subagent/client.js?rev=508ed11aec66",
+     "initiatorType": "script",
+     "encodedBodySize": 42608,
+     "decodedBodySize": 42608,
+     "transferSize": 42908,
+     "startTime": 2317,
+     "duration": 1556
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-reference/client.js?rev=b90724526688",
+     "initiatorType": "script",
+     "encodedBodySize": 5492,
+     "decodedBodySize": 5492,
+     "transferSize": 5792,
+     "startTime": 2317,
+     "duration": 1556
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-jobs/client.js?rev=ed0d04a8c154",
+     "initiatorType": "script",
+     "encodedBodySize": 12858,
+     "decodedBodySize": 12858,
+     "transferSize": 13158,
+     "startTime": 2317,
+     "duration": 1556
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-goal/client.js?rev=31aac5c02463",
+     "initiatorType": "script",
+     "encodedBodySize": 18910,
+     "decodedBodySize": 18910,
+     "transferSize": 19210,
+     "startTime": 2318,
+     "duration": 1843
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-message-feedback/client.js?rev=b3ebba00affa",
+     "initiatorType": "script",
+     "encodedBodySize": 28240,
+     "decodedBodySize": 28240,
+     "transferSize": 28540,
+     "startTime": 2318,
+     "duration": 1843
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-model-selection/client.js?rev=639da97bfe66",
+     "initiatorType": "script",
+     "encodedBodySize": 36889,
+     "decodedBodySize": 36889,
+     "transferSize": 37189,
+     "startTime": 2318,
+     "duration": 1883
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-permission-presets/client.js?rev=e36eeb24d0eb",
+     "initiatorType": "script",
+     "encodedBodySize": 19762,
+     "decodedBodySize": 19762,
+     "transferSize": 20062,
+     "startTime": 2318,
+     "duration": 2179
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-agent-preset/client.js?rev=96dbaff92d41",
+     "initiatorType": "script",
+     "encodedBodySize": 73924,
+     "decodedBodySize": 73924,
+     "transferSize": 74224,
+     "startTime": 2318,
+     "duration": 2179
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-settings-plugins/client.js?rev=219832a33fa4",
+     "initiatorType": "script",
+     "encodedBodySize": 53066,
+     "decodedBodySize": 53066,
+     "transferSize": 53366,
+     "startTime": 2318,
+     "duration": 2241
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-plan/client.js?rev=7f9f228f9516",
+     "initiatorType": "script",
+     "encodedBodySize": 5834,
+     "decodedBodySize": 5834,
+     "transferSize": 6134,
+     "startTime": 2318,
+     "duration": 2418
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-user-questions/client.js?rev=350ccf0385ba",
+     "initiatorType": "script",
+     "encodedBodySize": 37586,
+     "decodedBodySize": 37586,
+     "transferSize": 37886,
+     "startTime": 2318,
+     "duration": 2418
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-trajectory/client.js?rev=c4415b657c8b",
+     "initiatorType": "script",
+     "encodedBodySize": 359173,
+     "decodedBodySize": 359173,
+     "transferSize": 359473,
+     "startTime": 2318,
+     "duration": 2541
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-vision-adam/client.js?rev=24bcc3eec45c",
+     "initiatorType": "script",
+     "encodedBodySize": 12297,
+     "decodedBodySize": 12297,
+     "transferSize": 12597,
+     "startTime": 2318,
+     "duration": 2939
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-taste/client.js?rev=e37a5f7cd476",
+     "initiatorType": "script",
+     "encodedBodySize": 46175,
+     "decodedBodySize": 46175,
+     "transferSize": 46475,
+     "startTime": 2318,
+     "duration": 2941
+    },
+    {
+     "url": "/plugins/@local/dsh-btw/client.js?rev=374dca63f9aa",
+     "initiatorType": "script",
+     "encodedBodySize": 335348,
+     "decodedBodySize": 335348,
+     "transferSize": 335648,
+     "startTime": 2318,
+     "duration": 2942
+    },
+    {
+     "url": "/plugins/@local/dsh-usage/client.js?rev=4536b91ed282",
+     "initiatorType": "script",
+     "encodedBodySize": 72804,
+     "decodedBodySize": 72804,
+     "transferSize": 73104,
+     "startTime": 2319,
+     "duration": 3299
+    },
+    {
+     "url": "/plugins/dsh-workspace-enhancement/client.js?rev=b295bb00e32b",
+     "initiatorType": "script",
+     "encodedBodySize": 267026,
+     "decodedBodySize": 267026,
+     "transferSize": 267326,
+     "startTime": 2319,
+     "duration": 3299
+    },
+    {
+     "url": "/plugins/@local/dsh-pptmaster/client.js?rev=45d20726c34d",
+     "initiatorType": "script",
+     "encodedBodySize": 4096057,
+     "decodedBodySize": 4096057,
+     "transferSize": 4096357,
+     "startTime": 2319,
+     "duration": 3525
+    },
+    {
+     "url": "/plugins/@local/dsh-ssh-gui/client.js?rev=562e71eae991",
+     "initiatorType": "script",
+     "encodedBodySize": 62376,
+     "decodedBodySize": 62376,
+     "transferSize": 62676,
+     "startTime": 2319,
+     "duration": 3331
+    },
+    {
+     "url": "/plugins/@local/dsh-subagent-model/client.js?rev=d0b7a565217f",
+     "initiatorType": "script",
+     "encodedBodySize": 17099,
+     "decodedBodySize": 17099,
+     "transferSize": 17399,
+     "startTime": 2319,
+     "duration": 3332
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a",
+     "initiatorType": "fetch",
+     "encodedBodySize": 24988,
+     "decodedBodySize": 24988,
+     "transferSize": 25288,
+     "startTime": 8135,
+     "duration": 247
+    },
+    {
+     "url": "/plugins/@local/dsh-wallpaper/client.js?rev=826d9217a8fc",
+     "initiatorType": "fetch",
+     "encodedBodySize": 31803,
+     "decodedBodySize": 31803,
+     "transferSize": 32103,
+     "startTime": 8383,
+     "duration": 183
+    },
+    {
+     "url": "/plugins/@deepseek-ai/dsh-client-runtime/client.js?rev=5559de4ce28c",
+     "initiatorType": "fetch",
+     "encodedBodySize": 398569,
+     "decodedBodySize": 398569,
+     "transferSize": 398869,
+     "startTime": 8567,
+     "duration": 28
+    },
+    {
+     "url": "/plugins/@local/dsh-usage/client.js?rev=4536b91ed282",
+     "initiatorType": "fetch",
+     "encodedBodySize": 72804,
+     "decodedBodySize": 72804,
+     "transferSize": 73104,
+     "startTime": 8598,
+     "duration": 109
+    }
+   ],
+   "all_raw_frames": {
+    "n": 1272,
+    "min": 2.1,
+    "p50": 16.7,
+    "p90": 16.8,
+    "p99": 17,
+    "p99_lin": 17.0,
+    "max": 30.5,
+    "mean": 16.666,
+    "sum": 21199.1,
+    "ge33_4": 0,
+    "ge50": 0,
+    "ge80": 0,
+    "ge100": 0,
+    "ge200": 0,
+    "raf_per_s": 60.0
+   },
+   "global_max_frame": [
+    59213.8,
+    30.5
+   ],
+   "global_frames_ge80": [],
+   "global_frames_ge50": []
+  }
+ }
+}

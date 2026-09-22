@@ -129,5 +129,38 @@
    `enable → settle → reset → block` 对 **3 s / 20 s** 的阻塞只报 **10.31 / 10.16 ms**；改成 `enable → settle → block` 才报 **3 003 / 20 015 ms**。
    ⇒ **任何"主线程阻塞/事件循环延迟"测量都必须避开在阻塞前 `reset()`**（保留样本或改用独立心跳确认）。
    证据：`exec-ingest/tools/probe-eld-reset.mjs` + `out/eld-reset-trap.txt`。
+9. ⚠️ **引擎口径陷阱（incident2 实测，2026-09-22）**：**Gecko（Firefox）会静默接受 `PerformanceObserver.observe({entryTypes:['longtask']})`
+   与 `{type:'long-animation-frame'}`（不抛错、`longtaskSupported=true`）却永不投递任何条目**。
+   阳性对照（同页三次 200 ms 同步阻塞）：**Blink 报 `longtaskCount=2` + `loafCount=3`；Gecko 报 `0 / 0`**。
+   ⇒ ① **Gecko 上"0 长任务/无长帧"是 API 缺失，不是不卡**，禁止作为证据引用；
+   ② 任何 LongTask 判据**必须先做"注入阻塞 ⇒ 通道确能报出"的阳性对照**（regression 线已自证：注入 150 ms ⇒ 观测到 1 条恰 150 ms）；
+   ③ Firefox 侧改用 rAF 帧间隔/帧投递口径；④ 报告必须写明**引擎与版本**（UA 读回，不靠推断）。
+10. ⚠️ **DPR 自证规则**：Blink 的 DPR 由 CDP `Emulation.setDeviceMetricsOverride` 实现（**`headless_shell` 命令行里没有 `--force-device-scale-factor`**；
+    早期某批被加了该 flag，其 `devicePixelRatio=1` 是**人为产物、不可作证据**）。**每次运行都要页内读回 `devicePixelRatio`
+    与 canvas backing/CSS 尺寸自证生效**；Gecko 侧写 `user.js` 的 `layout.css.devPixelsPerPx`（BiDi `setViewport.devicePixelRatio` 可作第二开关）。
+11. **Gecko 可运行配方（incident2 实测可用）**：直接 exec snap 载荷
+    `/snap/firefox/8863/usr/lib/firefox/firefox --headless --no-remote --new-instance --profile /tmp/<dir>/prof --remote-debugging-port=N`，
+    经 **WebDriver BiDi**（`ws://127.0.0.1:N/session`，Node 22 原生 WebSocket）驱动。
+    **前提**：① `HOME` 必须可写（否则 `Could not find profile folder.` 直接退出）；② 私有 profile + `--no-remote --new-instance`（确保永不附着用户会话）。
+    **边界**：headless Gecko 走 **SWGL 软件 WebRender**，绝对 ms 是软件光栅口径，**只有同引擎相对比较有效**。
+    Playwright 的 `firefox` 不可用（需自带 juggler 构建）；Firefox 155 已移除 CDP（`/json/version` 不再提供）。
+12. **系统级取证通道（incident2 发现）**：本机 **`/var/log/Xorg.*.log*` 不存在**（真日志在 `~/.local/share/xorg/`），
+    但 **gdm 的 `/usr/libexec/gdm-x-session[PID]` 会把整份 X 日志转发进 journald** ⇒ **已被轮转删除的历史 Xorg 日志可从 `journalctl -b -N` 完整恢复**
+    （含 `NVIDIA(0)`/`AMDGPU(0)`、连接器 EDID、`(--) PCI:*` boot-VGA 标记）。跨 boot 比较图形栈时必须用这条通道。
+13. ⚠️ **阳性对照必须在"页内"注入阻塞，不能用 CDP `Runtime.evaluate`**（incident2 实测）：
+    同一 120 ms 忙循环，**页内 `setTimeout`/rAF 注入 → LongTask 如实报 120.0 ms**；
+    而 **`Runtime.evaluate` 注入 → LongTask 报 0（通道盲区）**，同段循环 **LoAF 却报 123.5 ms**。
+    ⇒ 用 `page.evaluate` 做"证明通道可用"的对照会得到**假阴性**并误判"通道不灵"。统一改用**页内定时器注入**。
+14. **口径辨析：设置里"导航项"与"tab"是两件事**（incident2 实测，影响对照分组）：
+    点导航「插件」→ 落 **`插件配置`**（`dsh-client-ui-settings-plugins/lib/client.js:1289-1291` order 0），发 **9 个 `/usage/*` RPC**（click+6…8ms 并发，+25…290ms 到齐）；
+    **`插件列表`**（`dsh-client-ui-settings-plugin-inventory/lib/client.js:288` order 10）才发 `pluginInventory.list`。两者成本不同（导航热 **4.2ms** / tab **20.8ms**），**不得混为一谈**。
+15. ⚠️ **跨引擎时钟粒度陷阱（gecko-vs-blink 实测）**：Gecko 默认把内容进程 `performance.now()` **夹到 1 ms**（0.35 ms 忙等报成 1.0 ms，**高估 2.9×**），Blink 为 0.1 ms；
+    设 `privacy.reduceTimerPrecision=false` 后 Gecko 到 0.02 ms。⇒ **任何跨引擎的亚毫秒级"JS 耗时"比值，不做时钟校正就是假象**（该线因此把 DOM 单元判为 INCONCLUSIVE）。
+    该线另自曝一处仪器产物并已自行推翻：`setInterval(16ms)`+35ms 忙等曾显示 Gecko p50 **66.2 ms vs Blink 33.3 ms（2×）**，改用 **rAF 锁负载**做负载曲线后差距消失（各档比值 0.95–1.00）——**setInterval 补偿语义造成的假象**。
+16. **锁文件 `owner.txt` 格式必须统一**：现存 `pid=N` 与 `pid: N` 两种写法，**只认前者的解析器会把存活 owner 误判为死锁**（gecko-vs-blink 线实测并已在脚本里兼容四种写法，且只删自己的锁目录）。
+    **统一为 `pid: N`（冒号+空格）**；回收脚本必须同时兼容两式，并遵守"只听自己的锁"。
+
+
+
 
 

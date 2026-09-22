@@ -1,0 +1,200 @@
+{
+  "condition": "env-cleared",
+  "rep": 2,
+  "mode": "headless",
+  "token": "ffm-headless-env-cleared-r2-1790046794441",
+  "rootPid": 394648,
+  "profileDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headless-env-cleared-r2",
+  "userJs": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headless-env-cleared-r2/user.js",
+  "homeDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headless-env-cleared-r2",
+  "envPassed": {
+    "ACCESSIBILITY_ENABLED": null,
+    "GNOME_ACCESSIBILITY": null,
+    "GTK_MODULES": null
+  },
+  "dbusSessionBusAddress": "unix:path=/run/user/1001/bus",
+  "gsettingsBackend": "memory",
+  "launchedAt": "2026-09-22T11:13:35+08:00",
+  "args": [
+    "--new-instance",
+    "--no-remote",
+    "--marionette",
+    "--profile",
+    "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headless-env-cleared-r2",
+    "--headless",
+    "http://127.0.0.1:44103/page?n=6000&m=3000&f=180&k=120&token=ffm-headless-env-cleared-r2-1790046794441"
+  ],
+  "logFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/logs/headless-env-cleared-r2.log",
+  "loadBefore": "4.37 4.72 4.54 3/4231 394648",
+  "loadavgDuringResult": "4.51 4.74 4.54 3/4496 395626",
+  "busWatch": [],
+  "atspi": null,
+  "rootAccessible": null,
+  "result": {
+    "token": "ffm-headless-env-cleared-r2-1790046794441",
+    "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+    "params": {
+      "n": 6000,
+      "m": 3000,
+      "f": 180,
+      "k": 120,
+      "t": 3000,
+      "batch": 400
+    },
+    "hardwareConcurrency": 32,
+    "visibilityState": "visible",
+    "phases": {
+      "build": 13,
+      "read1": 45,
+      "mutate": 4,
+      "animate": 2986,
+      "read2": 2
+    },
+    "frames": {
+      "totalMs": 2986,
+      "frames": 180,
+      "count": 180,
+      "mean": 16.583,
+      "p50": 17,
+      "p90": 18,
+      "p95": 18,
+      "p99": 18,
+      "max": 18,
+      "over33": 0,
+      "over50": 0,
+      "over100": 0
+    },
+    "longTasks": {
+      "count": 0,
+      "total": 0,
+      "max": 0
+    },
+    "errors": [],
+    "visibilityStateDuringAnimate": "visible",
+    "throughput": {
+      "ms": 3000,
+      "iterations": 3273600,
+      "batches": 8184,
+      "perSec": 1091200
+    },
+    "reflow": {
+      "ms": 3000,
+      "iterations": 578400,
+      "batches": 1446,
+      "perSec": 192800,
+      "sink": 190872000
+    },
+    "domNodes": 18009,
+    "ok": true,
+    "receivedAt": "2026-09-22T03:13:45.502Z"
+  },
+  "cpuAtResult": {
+    "cpuS": 8.83,
+    "procs": 10
+  },
+  "cpuAtEnd": {
+    "cpuS": 0,
+    "procs": 1
+  },
+  "wallMs": 13301,
+  "timedOut": false,
+  "notes": [],
+  "chromeReadback": {
+    "port": 2862,
+    "ok": true,
+    "error": null,
+    "result": {
+      "pref_force_disabled_err": "[Exception... \"Component returned failure code: 0x8000ffff (NS_ERROR_UNEXPECTED) [nsIPrefBranch.getBoolPref]\"  nsresult: \"0x8000ffff (NS_ERROR_UNEXPECTED)\"  location: \"JS frame :: [System Principal] :: <TOP_LEVEL> :: line 4\"  data: no]",
+      "a11yService": "REGISTERED",
+      "appName": "Firefox",
+      "appVersion": "155.0.1",
+      "env": {
+        "ACCESSIBILITY_ENABLED": "",
+        "GNOME_ACCESSIBILITY": "1",
+        "GTK_MODULES": ""
+      }
+    },
+    "chromeScopeTried": true,
+    "hello": {
+      "applicationType": "gecko",
+      "marionetteProtocol": 3
+    },
+    "session": {
+      "error": null,
+      "resultId": true
+    }
+  },
+  "busOnAfterRun": false,
+  "busName": null,
+  "effectivePrefs": {
+    "user_js": [],
+    "prefs_js": []
+  },
+  "ourExes": [
+    "/snap/firefox/8863/usr/lib/firefox/firefox"
+  ],
+  "leftoverPids": [],
+  "killWasScopedToOwnGroup": true,
+  "profileLeakProcs": [],
+  "censusAfter": 91,
+  "loadAfter": "4.51 4.74 4.54 3/4238 395647",
+  "censusBefore": 90,
+  "interlock": {
+    "foreignProbeBrowsersBefore": [
+      {
+        "pid": 384425,
+        "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --headless --no-remote --new-instance --profile /tmp/gvb-profiles/gvb-gvb-fir"
+      },
+      {
+        "pid": 385636,
+        "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --headless --no-remote --new-instance --profile /tmp/gvb-profiles/gvb-gvb-fir"
+      },
+      {
+        "pid": 389868,
+        "cmdline": "/opt/google/chrome/chrome --type=zygote --no-zygote-sandbox --no-sandbox --headless --crashpad-handler-pid=389861 --enab"
+      },
+      {
+        "pid": 389869,
+        "cmdline": "/opt/google/chrome/chrome --type=zygote --no-sandbox --headless --crashpad-handler-pid=389861 --enable-crash-reporter=, "
+      },
+      {
+        "pid": 391878,
+        "cmdline": "/opt/google/chrome/chrome --type=zygote --no-zygote-sandbox --no-sandbox --headless --crashpad-handler-pid=391870 --enab"
+      },
+      {
+        "pid": 391881,
+        "cmdline": "/opt/google/chrome/chrome --type=zygote --no-sandbox --headless --crashpad-handler-pid=391870 --enable-crash-reporter=, "
+      },
+      {
+        "pid": 391967,
+        "cmdline": "/opt/google/chrome/chrome --type=renderer --top-chrome-webui --crashpad-handler-pid=391870 --enable-crash-reporter=, --n"
+      },
+      {
+        "pid": 391976,
+        "cmdline": "/opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=391870 --enable-crash-reporter=, --noerrdialogs --user-"
+      },
+      {
+        "pid": 391985,
+        "cmdline": "/opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=391870 --enable-crash-reporter=, --noerrdialogs --user-"
+      },
+      {
+        "pid": 394402,
+        "cmdline": "/opt/google/chrome/chrome --type=renderer --top-chrome-webui --crashpad-handler-pid=389861 --enable-crash-reporter=, --n"
+      },
+      {
+        "pid": 394411,
+        "cmdline": "/opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=389861 --enable-crash-reporter=, --noerrdialogs --user-"
+      },
+      {
+        "pid": 394413,
+        "cmdline": "/opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=389861 --enable-crash-reporter=, --noerrdialogs --user-"
+      }
+    ],
+    "foreignWaitMs": 21110,
+    "noForeignProbeBrowser": false,
+    "lockStillOurs": false,
+    "lockToken": "CNS202649516",
+    "loadavgAtRun": "4.51 4.74 4.54 3/4238 395647"
+  },
+  "userBrowsersRunning": 77
+}

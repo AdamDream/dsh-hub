@@ -1,0 +1,6288 @@
+{
+  "at": "2026-09-22T03:13:05.244Z",
+  "tz": "Asia/Shanghai",
+  "git": {},
+  "lock": {
+    "acquired": true,
+    "events": [
+      {
+        "at": "2026-09-22T03:13:05.281Z",
+        "event": "waiting",
+        "seen": "agent: incident2-gecko-vs-blink (phase2: DSH re-run + load curve) line: engine=chromium+firefox dsh-rerun loadcurve purpose: same page/anim measured on both engines; frame-delivery-vs-load curve owner_pid: 390338 pid: 390338 host_pid: 301709 started_at: 2026-09-22T11:12:14+08:00 started_epoch: 1790046734 concurrentWith: agent: incident2-why-these-two (panel cost attribution: why only General+Plugins) line: same-page cross-panel comparison (general vs models vs plugins + tabs) purpose: attribute the \"only these two sp loadavg_at_acquire: 4.68 4.89 4.57 2/3952 390352 token: CNS202649516533-390338-gvb2 note: single browser at a time; release = rm owner.txt && rmdir "
+      },
+      {
+        "at": "2026-09-22T03:13:23.281Z",
+        "event": "waiting",
+        "seen": "agent: incident2-gecko-vs-blink (phase2: DSH re-run + load curve) line: engine=chromium+firefox dsh-rerun loadcurve purpose: same page/anim measured on both engines; frame-delivery-vs-load curve owner_pid: 390338 pid: 390338 host_pid: 301709 started_at: 2026-09-22T11:12:14+08:00 started_epoch: 1790046734 concurrentWith: agent: incident2-why-these-two (panel cost attribution: why only General+Plugins) line: same-page cross-panel comparison (general vs models vs plugins + tabs) purpose: attribute the \"only these two sp loadavg_at_acquire: 4.68 4.89 4.57 2/3952 390352 token: CNS202649516533-390338-gvb2 note: single browser at a time; release = rm owner.txt && rmdir "
+      },
+      {
+        "at": "2026-09-22T03:13:41.282Z",
+        "event": "waiting",
+        "seen": "agent: incident2-gecko-vs-blink (phase2: DSH re-run + load curve) line: engine=chromium+firefox dsh-rerun loadcurve purpose: same page/anim measured on both engines; frame-delivery-vs-load curve owner_pid: 390338 pid: 390338 host_pid: 301709 started_at: 2026-09-22T11:12:14+08:00 started_epoch: 1790046734 concurrentWith: agent: incident2-why-these-two (panel cost attribution: why only General+Plugins) line: same-page cross-panel comparison (general vs models vs plugins + tabs) purpose: attribute the \"only these two sp loadavg_at_acquire: 4.68 4.89 4.57 2/3952 390352 token: CNS202649516533-390338-gvb2 note: single browser at a time; release = rm owner.txt && rmdir "
+      },
+      {
+        "at": "2026-09-22T03:13:59.282Z",
+        "event": "waiting",
+        "seen": "agent: incident2-regression (engine/DPR self-proof) line: label=engine-dpr-r1 pid: 395203 started_at: 2026-09-22T03:13:42.622Z purpose: single window; longtask positive control + DPR readback "
+      },
+      {
+        "at": "2026-09-22T03:14:17.283Z",
+        "event": "waiting",
+        "seen": "agent: incident2-regression (engine/DPR self-proof) line: label=engine-dpr-r1 pid: 395203 started_at: 2026-09-22T03:13:42.622Z purpose: single window; longtask positive control + DPR readback "
+      },
+      {
+        "at": "2026-09-22T03:14:35.283Z",
+        "event": "waiting",
+        "seen": "agent: incident2-regression (engine/DPR self-proof) line: label=engine-dpr-r1 pid: 397447 started_at: 2026-09-22T03:14:30.635Z purpose: single window; longtask positive control + DPR readback "
+      },
+      {
+        "at": "2026-09-22T03:14:53.283Z",
+        "event": "waiting",
+        "seen": "agent: incident2-regression (engine/DPR self-proof) line: label=engine-dpr-r1 pid: 397447 started_at: 2026-09-22T03:14:30.635Z purpose: single window; longtask positive control + DPR readback "
+      },
+      {
+        "at": "2026-09-22T03:15:11.284Z",
+        "event": "waiting",
+        "seen": "agent: incident2-regression (engine/DPR self-proof) line: label=engine-dpr-r1 pid: 398968 started_at: 2026-09-22T03:15:03.079Z purpose: single window; longtask positive control + DPR readback "
+      },
+      {
+        "at": "2026-09-22T03:15:29.284Z",
+        "event": "acquired"
+      }
+    ],
+    "ownerText": "agent=incident2-tab-switch\npid=393517\nstarted_at=2026-09-22T03:15:29.284Z\nstarted_epoch=1790046929\npurpose=settings tab-switch + scroll per-section profiling (chromium headless_shell)\n"
+  },
+  "env": {
+    "window_ms": 1600,
+    "settle_ms": 900,
+    "boot_ms": 12000,
+    "scroll_rounds": 3,
+    "scroll_seg_ms": 2200,
+    "sweep_rounds": 3,
+    "ping_rounds": 3
+  },
+  "errors": [],
+  "windows": [
+    {
+      "label": "NULL#1(惰性点击)",
+      "firstFrameAfterClickMs": 13.9,
+      "firstGapAfterClickMs": 16.6,
+      "arm": {
+        "perf": 29120.2,
+        "wall": 1790046958541,
+        "sigBefore": {
+          "len": 306,
+          "hash": 164143340,
+          "nodes": 84,
+          "svg": 7
+        }
+      },
+      "wallClickMs": 1,
+      "lastClickT": 29121,
+      "clickToContentMs": null,
+      "clickToStableMs": null,
+      "contentChanged": null,
+      "watchTimedOut": null,
+      "sigBefore": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 18.1,
+        "p99": 20.8,
+        "max": 20.8,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583.2
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 771,
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 2,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.0001,
+        "DevToolsCommandDuration": 0.0008,
+        "ScriptDuration": 0.0819,
+        "TaskDuration": 0.094,
+        "JSHeapUsedSize": 4797868
+      },
+      "cdpBefore": {
+        "Documents": 2,
+        "Frames": 2,
+        "JSEventListeners": 244,
+        "Nodes": 1017,
+        "LayoutCount": 14,
+        "RecalcStyleCount": 53,
+        "LayoutDuration": 0.051885,
+        "RecalcStyleDuration": 0.021839,
+        "DevToolsCommandDuration": 0.394113,
+        "ScriptDuration": 2.048201,
+        "TaskDuration": 3.028816,
+        "JSHeapUsedSize": 28927612
+      },
+      "cdpAfter": {
+        "Documents": 2,
+        "Frames": 2,
+        "JSEventListeners": 246,
+        "Nodes": 1017,
+        "LayoutCount": 14,
+        "RecalcStyleCount": 55,
+        "LayoutDuration": 0.051885,
+        "RecalcStyleDuration": 0.02191,
+        "DevToolsCommandDuration": 0.394916,
+        "ScriptDuration": 2.130117,
+        "TaskDuration": 3.122785,
+        "JSHeapUsedSize": 33725480
+      }
+    },
+    {
+      "label": "NULL#2(惰性点击)",
+      "firstFrameAfterClickMs": 8.3,
+      "firstGapAfterClickMs": 16.7,
+      "arm": {
+        "perf": 31624.7,
+        "wall": 1790046961045,
+        "sigBefore": {
+          "len": 306,
+          "hash": 164143340,
+          "nodes": 84,
+          "svg": 7
+        }
+      },
+      "wallClickMs": 1,
+      "lastClickT": 31626.4,
+      "clickToContentMs": null,
+      "clickToStableMs": null,
+      "contentChanged": null,
+      "watchTimedOut": null,
+      "sigBefore": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 16.8,
+        "max": 16.8,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583.3
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 771,
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 2,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.0002,
+        "DevToolsCommandDuration": 0.0013,
+        "ScriptDuration": 0.0019,
+        "TaskDuration": 0.012,
+        "JSHeapUsedSize": 61924
+      },
+      "cdpBefore": {
+        "Documents": 2,
+        "Frames": 2,
+        "JSEventListeners": 246,
+        "Nodes": 1017,
+        "LayoutCount": 14,
+        "RecalcStyleCount": 55,
+        "LayoutDuration": 0.051885,
+        "RecalcStyleDuration": 0.02191,
+        "DevToolsCommandDuration": 0.39502,
+        "ScriptDuration": 2.130681,
+        "TaskDuration": 3.125853,
+        "JSHeapUsedSize": 33734968
+      },
+      "cdpAfter": {
+        "Documents": 2,
+        "Frames": 2,
+        "JSEventListeners": 248,
+        "Nodes": 1017,
+        "LayoutCount": 14,
+        "RecalcStyleCount": 57,
+        "LayoutDuration": 0.051885,
+        "RecalcStyleDuration": 0.022074,
+        "DevToolsCommandDuration": 0.396307,
+        "ScriptDuration": 2.132623,
+        "TaskDuration": 3.137808,
+        "JSHeapUsedSize": 33796892
+      }
+    },
+    {
+      "label": "NULL#3(惰性点击)",
+      "firstFrameAfterClickMs": 2.3,
+      "firstGapAfterClickMs": 16.6,
+      "arm": {
+        "perf": 34131.3,
+        "wall": 1790046963552,
+        "sigBefore": {
+          "len": 306,
+          "hash": 164143340,
+          "nodes": 84,
+          "svg": 7
+        }
+      },
+      "wallClickMs": 1,
+      "lastClickT": 34132.4,
+      "clickToContentMs": null,
+      "clickToStableMs": null,
+      "contentChanged": null,
+      "watchTimedOut": null,
+      "sigBefore": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 16.8,
+        "max": 16.8,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583.2
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 771,
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 2,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.0001,
+        "DevToolsCommandDuration": 0.0007,
+        "ScriptDuration": 0.0011,
+        "TaskDuration": 0.0062,
+        "JSHeapUsedSize": 65704
+      },
+      "cdpBefore": {
+        "Documents": 2,
+        "Frames": 2,
+        "JSEventListeners": 248,
+        "Nodes": 1017,
+        "LayoutCount": 14,
+        "RecalcStyleCount": 57,
+        "LayoutDuration": 0.051885,
+        "RecalcStyleDuration": 0.022074,
+        "DevToolsCommandDuration": 0.396456,
+        "ScriptDuration": 2.245838,
+        "TaskDuration": 3.265915,
+        "JSHeapUsedSize": 40439040
+      },
+      "cdpAfter": {
+        "Documents": 2,
+        "Frames": 2,
+        "JSEventListeners": 250,
+        "Nodes": 1017,
+        "LayoutCount": 14,
+        "RecalcStyleCount": 59,
+        "LayoutDuration": 0.051885,
+        "RecalcStyleDuration": 0.02219,
+        "DevToolsCommandDuration": 0.397205,
+        "ScriptDuration": 2.246916,
+        "TaskDuration": 3.272154,
+        "JSHeapUsedSize": 40504744
+      }
+    },
+    {
+      "label": "SWEEP r1 → 通用设置",
+      "firstFrameAfterClickMs": 15.3,
+      "firstGapAfterClickMs": 17.5,
+      "arm": {
+        "perf": 36635.6,
+        "wall": 1790046966056,
+        "sigBefore": {
+          "len": 306,
+          "hash": 164143340,
+          "nodes": 84,
+          "svg": 7
+        }
+      },
+      "wallClickMs": 2,
+      "lastClickT": 36636.8,
+      "clickToContentMs": null,
+      "clickToStableMs": null,
+      "contentChanged": false,
+      "watchTimedOut": true,
+      "sigBefore": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 17.1,
+        "p99": 24.3,
+        "max": 24.3,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1582.4
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 771,
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -6,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 4,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.0002,
+        "DevToolsCommandDuration": 0.0009,
+        "ScriptDuration": 0.0915,
+        "TaskDuration": 0.1179,
+        "JSHeapUsedSize": -8666244
+      },
+      "cdpBefore": {
+        "Documents": 2,
+        "Frames": 2,
+        "JSEventListeners": 250,
+        "Nodes": 1017,
+        "LayoutCount": 14,
+        "RecalcStyleCount": 59,
+        "LayoutDuration": 0.051885,
+        "RecalcStyleDuration": 0.02219,
+        "DevToolsCommandDuration": 0.397292,
+        "ScriptDuration": 2.260344,
+        "TaskDuration": 3.288119,
+        "JSHeapUsedSize": 39442764
+      },
+      "cdpAfter": {
+        "Documents": 2,
+        "Frames": 2,
+        "JSEventListeners": 244,
+        "Nodes": 1017,
+        "LayoutCount": 14,
+        "RecalcStyleCount": 63,
+        "LayoutDuration": 0.051885,
+        "RecalcStyleDuration": 0.022432,
+        "DevToolsCommandDuration": 0.398224,
+        "ScriptDuration": 2.35186,
+        "TaskDuration": 3.406041,
+        "JSHeapUsedSize": 30776520
+      }
+    },
+    {
+      "label": "SWEEP r1 → 模型",
+      "firstFrameAfterClickMs": 10.2,
+      "firstGapAfterClickMs": 30.8,
+      "arm": {
+        "perf": 39139,
+        "wall": 1790046968560,
+        "sigBefore": {
+          "len": 306,
+          "hash": 164143340,
+          "nodes": 84,
+          "svg": 7
+        }
+      },
+      "wallClickMs": 9,
+      "lastClickT": 39141,
+      "clickToContentMs": 10.3,
+      "clickToStableMs": 41.1,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "sigAfter": {
+        "len": 73,
+        "hash": -1817251326,
+        "nodes": 36,
+        "svg": 2
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 17,
+        "p99": 30.8,
+        "max": 30.8,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583.3
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 4,
+        "characterData": 0,
+        "records": 6
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 723,
+        "dialogNodes": 120,
+        "dialogSvg": 11
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 9,
+        "Nodes": 49,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 5,
+        "LayoutDuration": 0.0025,
+        "RecalcStyleDuration": 0.0007,
+        "DevToolsCommandDuration": 0.0011,
+        "ScriptDuration": 0.0679,
+        "TaskDuration": 0.0999,
+        "JSHeapUsedSize": 2191108
+      },
+      "cdpBefore": {
+        "Documents": 2,
+        "Frames": 2,
+        "JSEventListeners": 244,
+        "Nodes": 1017,
+        "LayoutCount": 14,
+        "RecalcStyleCount": 63,
+        "LayoutDuration": 0.051885,
+        "RecalcStyleDuration": 0.022432,
+        "DevToolsCommandDuration": 0.398331,
+        "ScriptDuration": 2.35282,
+        "TaskDuration": 3.412744,
+        "JSHeapUsedSize": 30778660
+      },
+      "cdpAfter": {
+        "Documents": 2,
+        "Frames": 2,
+        "JSEventListeners": 253,
+        "Nodes": 1066,
+        "LayoutCount": 15,
+        "RecalcStyleCount": 68,
+        "LayoutDuration": 0.054394,
+        "RecalcStyleDuration": 0.023103,
+        "DevToolsCommandDuration": 0.399462,
+        "ScriptDuration": 2.420732,
+        "TaskDuration": 3.512646,
+        "JSHeapUsedSize": 32969768
+      }
+    },
+    {
+      "label": "SWEEP r1 → 插件",
+      "firstFrameAfterClickMs": 21.1,
+      "firstGapAfterClickMs": 0.9,
+      "arm": {
+        "perf": 41644.8,
+        "wall": 1790046971066,
+        "sigBefore": {
+          "len": 73,
+          "hash": -1817251326,
+          "nodes": 36,
+          "svg": 2
+        }
+      },
+      "wallClickMs": 24,
+      "lastClickT": 41647.7,
+      "clickToContentMs": 53.1,
+      "clickToStableMs": 54.3,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 73,
+        "hash": -1817251326,
+        "nodes": 36,
+        "svg": 2
+      },
+      "sigAfter": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 20.3,
+        "p99": 31.7,
+        "max": 31.7,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1567.3
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 9,
+        "by_method": {
+          "/usage/summary": {
+            "n": 1,
+            "ms": [
+              121.1
+            ],
+            "status": 200
+          },
+          "/usage/timeseries": {
+            "n": 2,
+            "ms": [
+              308.6,
+              459.1
+            ],
+            "status": 200
+          },
+          "/usage/heatmap": {
+            "n": 1,
+            "ms": [
+              506.9
+            ],
+            "status": 200
+          },
+          "/usage/byModel": {
+            "n": 1,
+            "ms": [
+              665.7
+            ],
+            "status": 200
+          },
+          "/usage/byProject": {
+            "n": 1,
+            "ms": [
+              791.5
+            ],
+            "status": 200
+          },
+          "/usage/byDay": {
+            "n": 1,
+            "ms": [
+              240
+            ],
+            "status": 200
+          },
+          "/usage/sessions": {
+            "n": 1,
+            "ms": [
+              504.7
+            ],
+            "status": 200
+          },
+          "/usage/status": {
+            "n": 1,
+            "ms": [
+              643.4
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/usage/summary",
+            "ms": 121.1,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/timeseries",
+            "ms": 308.6,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/heatmap",
+            "ms": 506.9,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byModel",
+            "ms": 665.7,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byProject",
+            "ms": 791.5,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byDay",
+            "ms": 240,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/timeseries",
+            "ms": 459.1,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/sessions",
+            "ms": 504.7,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/status",
+            "ms": 643.4,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 13,
+        "removed": 5,
+        "attributes": 11,
+        "characterData": 5,
+        "records": 34
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 1024,
+        "dialogNodes": 421,
+        "dialogSvg": 14
+      },
+      "cdpDelta": {
+        "Documents": 1,
+        "Frames": 1,
+        "JSEventListeners": -10,
+        "Nodes": 388,
+        "LayoutCount": 4,
+        "RecalcStyleCount": 7,
+        "LayoutDuration": 0.0149,
+        "RecalcStyleDuration": 0.0041,
+        "DevToolsCommandDuration": 0.0014,
+        "ScriptDuration": 0.0937,
+        "TaskDuration": 0.1708,
+        "JSHeapUsedSize": -1546896
+      },
+      "cdpBefore": {
+        "Documents": 2,
+        "Frames": 2,
+        "JSEventListeners": 253,
+        "Nodes": 1066,
+        "LayoutCount": 15,
+        "RecalcStyleCount": 68,
+        "LayoutDuration": 0.054394,
+        "RecalcStyleDuration": 0.023103,
+        "DevToolsCommandDuration": 0.399621,
+        "ScriptDuration": 2.450939,
+        "TaskDuration": 3.558212,
+        "JSHeapUsedSize": 34819316
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 243,
+        "Nodes": 1454,
+        "LayoutCount": 19,
+        "RecalcStyleCount": 75,
+        "LayoutDuration": 0.069259,
+        "RecalcStyleDuration": 0.02722,
+        "DevToolsCommandDuration": 0.400982,
+        "ScriptDuration": 2.544663,
+        "TaskDuration": 3.728986,
+        "JSHeapUsedSize": 33272420
+      }
+    },
+    {
+      "label": "SWEEP r1 → Agent 预设",
+      "firstFrameAfterClickMs": 13.7,
+      "firstGapAfterClickMs": 23.4,
+      "arm": {
+        "perf": 44152.7,
+        "wall": 1790046973573,
+        "sigBefore": {
+          "len": 2139,
+          "hash": -1088071131,
+          "nodes": 337,
+          "svg": 5
+        }
+      },
+      "wallClickMs": 6,
+      "lastClickT": 44154,
+      "clickToContentMs": 13.7,
+      "clickToStableMs": 37.2,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "sigAfter": {
+        "len": 491,
+        "hash": -538306195,
+        "nodes": 94,
+        "svg": 12
+      },
+      "frames": {
+        "n": 94,
+        "p50": 16.7,
+        "p95": 18.7,
+        "p99": 30.8,
+        "max": 30.8,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583.2
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 1,
+        "by_method": {
+          "/api/agentPreset.list": {
+            "n": 1,
+            "ms": [
+              68.1
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/api/agentPreset.list",
+            "ms": 68.1,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 3,
+        "removed": 1,
+        "attributes": 4,
+        "characterData": 0,
+        "records": 8
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 781,
+        "dialogNodes": 178,
+        "dialogSvg": 21
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 19,
+        "Nodes": 131,
+        "LayoutCount": 2,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.0122,
+        "RecalcStyleDuration": 0.0012,
+        "DevToolsCommandDuration": 0.0009,
+        "ScriptDuration": 0.0931,
+        "TaskDuration": 0.1354,
+        "JSHeapUsedSize": 1636620
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 243,
+        "Nodes": 1454,
+        "LayoutCount": 19,
+        "RecalcStyleCount": 75,
+        "LayoutDuration": 0.069259,
+        "RecalcStyleDuration": 0.02722,
+        "DevToolsCommandDuration": 0.401098,
+        "ScriptDuration": 2.583988,
+        "TaskDuration": 3.779835,
+        "JSHeapUsedSize": 33039624
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 262,
+        "Nodes": 1585,
+        "LayoutCount": 21,
+        "RecalcStyleCount": 81,
+        "LayoutDuration": 0.081479,
+        "RecalcStyleDuration": 0.028382,
+        "DevToolsCommandDuration": 0.402017,
+        "ScriptDuration": 2.677137,
+        "TaskDuration": 3.915259,
+        "JSHeapUsedSize": 34676244
+      }
+    },
+    {
+      "label": "SWEEP r1 → 远程工作区",
+      "firstFrameAfterClickMs": 11,
+      "firstGapAfterClickMs": 37.5,
+      "arm": {
+        "perf": 46659.1,
+        "wall": 1790046976080,
+        "sigBefore": {
+          "len": 491,
+          "hash": -538306195,
+          "nodes": 94,
+          "svg": 12
+        }
+      },
+      "wallClickMs": 13,
+      "lastClickT": 46661,
+      "clickToContentMs": 48.6,
+      "clickToStableMs": 56.8,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 491,
+        "hash": -538306195,
+        "nodes": 94,
+        "svg": 12
+      },
+      "sigAfter": {
+        "len": 225,
+        "hash": -821458389,
+        "nodes": 48,
+        "svg": 0
+      },
+      "frames": {
+        "n": 94,
+        "p50": 16.7,
+        "p95": 18.4,
+        "p99": 37.5,
+        "max": 37.5,
+        "over50": 0,
+        "over33": 1,
+        "over100": 0,
+        "sumMs": 1578.7
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 1,
+        "by_method": {
+          "/dsw/machines.list": {
+            "n": 1,
+            "ms": [
+              9.4
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/dsw/machines.list",
+            "ms": 9.4,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 4,
+        "characterData": 0,
+        "records": 6
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 735,
+        "dialogNodes": 132,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -22,
+        "Nodes": -616,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 5,
+        "LayoutDuration": 0.006,
+        "RecalcStyleDuration": 0.0006,
+        "DevToolsCommandDuration": 0.0017,
+        "ScriptDuration": 0.0708,
+        "TaskDuration": 0.1069,
+        "JSHeapUsedSize": -5084568
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 262,
+        "Nodes": 1585,
+        "LayoutCount": 21,
+        "RecalcStyleCount": 81,
+        "LayoutDuration": 0.081479,
+        "RecalcStyleDuration": 0.028382,
+        "DevToolsCommandDuration": 0.402122,
+        "ScriptDuration": 2.698719,
+        "TaskDuration": 3.94409,
+        "JSHeapUsedSize": 35962044
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 240,
+        "Nodes": 969,
+        "LayoutCount": 22,
+        "RecalcStyleCount": 86,
+        "LayoutDuration": 0.087485,
+        "RecalcStyleDuration": 0.028944,
+        "DevToolsCommandDuration": 0.403792,
+        "ScriptDuration": 2.769559,
+        "TaskDuration": 4.050976,
+        "JSHeapUsedSize": 30877476
+      }
+    },
+    {
+      "label": "SWEEP r1 → 分布式控制 · dsh-ssh-gui",
+      "firstFrameAfterClickMs": 5.9,
+      "firstGapAfterClickMs": 27.9,
+      "arm": {
+        "perf": 49165.1,
+        "wall": 1790046978586,
+        "sigBefore": {
+          "len": 225,
+          "hash": -821458389,
+          "nodes": 48,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 7,
+      "lastClickT": 49166.5,
+      "clickToContentMs": 33.9,
+      "clickToStableMs": 34.2,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 225,
+        "hash": -821458389,
+        "nodes": 48,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 332,
+        "hash": -363243656,
+        "nodes": 15,
+        "svg": 0
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 27.9,
+        "max": 27.9,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1578.4
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 4,
+        "by_method": {
+          "/ssh-gui/nodes.list": {
+            "n": 1,
+            "ms": [
+              5.7
+            ],
+            "status": 200
+          },
+          "/ssh-gui/keyref.list": {
+            "n": 1,
+            "ms": [
+              8.4
+            ],
+            "status": 200
+          },
+          "/ssh-gui/config.get": {
+            "n": 1,
+            "ms": [
+              8.9
+            ],
+            "status": 200
+          },
+          "/ssh-gui/serial.ports": {
+            "n": 1,
+            "ms": [
+              10.1
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/ssh-gui/nodes.list",
+            "ms": 5.7,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/ssh-gui/keyref.list",
+            "ms": 8.4,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/ssh-gui/config.get",
+            "ms": 8.9,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/ssh-gui/serial.ports",
+            "ms": 10.1,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 8,
+        "characterData": 0,
+        "records": 10
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 702,
+        "dialogNodes": 99,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 5,
+        "Nodes": 25,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.0031,
+        "RecalcStyleDuration": 0.0004,
+        "DevToolsCommandDuration": 0.0012,
+        "ScriptDuration": 0.0052,
+        "TaskDuration": 0.0238,
+        "JSHeapUsedSize": 267912
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 240,
+        "Nodes": 969,
+        "LayoutCount": 22,
+        "RecalcStyleCount": 86,
+        "LayoutDuration": 0.087485,
+        "RecalcStyleDuration": 0.028944,
+        "DevToolsCommandDuration": 0.403942,
+        "ScriptDuration": 2.787494,
+        "TaskDuration": 4.074001,
+        "JSHeapUsedSize": 31320724
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 245,
+        "Nodes": 994,
+        "LayoutCount": 23,
+        "RecalcStyleCount": 92,
+        "LayoutDuration": 0.09058,
+        "RecalcStyleDuration": 0.029388,
+        "DevToolsCommandDuration": 0.405192,
+        "ScriptDuration": 2.792696,
+        "TaskDuration": 4.097762,
+        "JSHeapUsedSize": 31588636
+      }
+    },
+    {
+      "label": "SWEEP r1 → vision-adam 识图设置",
+      "firstFrameAfterClickMs": 13.7,
+      "firstGapAfterClickMs": 25,
+      "arm": {
+        "perf": 51669.7,
+        "wall": 1790046981090,
+        "sigBefore": {
+          "len": 332,
+          "hash": -363243656,
+          "nodes": 15,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 4,
+      "lastClickT": 51670.8,
+      "clickToContentMs": 13.7,
+      "clickToStableMs": 38.8,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 332,
+        "hash": -363243656,
+        "nodes": 15,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 575,
+        "hash": -809981415,
+        "nodes": 24,
+        "svg": 0
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 27.9,
+        "max": 27.9,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1582.9
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 8,
+        "characterData": 1,
+        "records": 11
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 711,
+        "dialogNodes": 108,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 8,
+        "Nodes": 52,
+        "LayoutCount": 2,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.0017,
+        "RecalcStyleDuration": 0.0004,
+        "DevToolsCommandDuration": 0.0009,
+        "ScriptDuration": 0.0471,
+        "TaskDuration": 0.0706,
+        "JSHeapUsedSize": 2918420
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 245,
+        "Nodes": 994,
+        "LayoutCount": 24,
+        "RecalcStyleCount": 92,
+        "LayoutDuration": 0.091482,
+        "RecalcStyleDuration": 0.029388,
+        "DevToolsCommandDuration": 0.405316,
+        "ScriptDuration": 2.824827,
+        "TaskDuration": 4.140268,
+        "JSHeapUsedSize": 32682684
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 253,
+        "Nodes": 1046,
+        "LayoutCount": 26,
+        "RecalcStyleCount": 98,
+        "LayoutDuration": 0.093204,
+        "RecalcStyleDuration": 0.029822,
+        "DevToolsCommandDuration": 0.406227,
+        "ScriptDuration": 2.871896,
+        "TaskDuration": 4.210865,
+        "JSHeapUsedSize": 35601104
+      }
+    },
+    {
+      "label": "SWEEP r1 → 子代理模型",
+      "firstFrameAfterClickMs": 9.1,
+      "firstGapAfterClickMs": 27.3,
+      "arm": {
+        "perf": 54173.5,
+        "wall": 1790046983594,
+        "sigBefore": {
+          "len": 575,
+          "hash": -809981415,
+          "nodes": 24,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 5,
+      "lastClickT": 54175.2,
+      "clickToContentMs": 9.2,
+      "clickToStableMs": 36.6,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 575,
+        "hash": -809981415,
+        "nodes": 24,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 1321,
+        "hash": -2021467203,
+        "nodes": 68,
+        "svg": 0
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 27.3,
+        "max": 27.3,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1582.8
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 3,
+        "removed": 4,
+        "attributes": 4,
+        "characterData": 1,
+        "records": 12
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 755,
+        "dialogNodes": 152,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -23,
+        "Nodes": 67,
+        "LayoutCount": 2,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.0011,
+        "RecalcStyleDuration": 0.0008,
+        "DevToolsCommandDuration": 0.001,
+        "ScriptDuration": 0.0124,
+        "TaskDuration": 0.0474,
+        "JSHeapUsedSize": -7112156
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 253,
+        "Nodes": 1046,
+        "LayoutCount": 26,
+        "RecalcStyleCount": 98,
+        "LayoutDuration": 0.093204,
+        "RecalcStyleDuration": 0.029822,
+        "DevToolsCommandDuration": 0.406319,
+        "ScriptDuration": 2.912432,
+        "TaskDuration": 4.265867,
+        "JSHeapUsedSize": 36200152
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 230,
+        "Nodes": 1113,
+        "LayoutCount": 28,
+        "RecalcStyleCount": 104,
+        "LayoutDuration": 0.094325,
+        "RecalcStyleDuration": 0.030655,
+        "DevToolsCommandDuration": 0.407307,
+        "ScriptDuration": 2.924847,
+        "TaskDuration": 4.313284,
+        "JSHeapUsedSize": 29087996
+      }
+    },
+    {
+      "label": "SWEEP r2 → 通用设置",
+      "firstFrameAfterClickMs": 7.1,
+      "firstGapAfterClickMs": 28,
+      "arm": {
+        "perf": 56680.5,
+        "wall": 1790046986101,
+        "sigBefore": {
+          "len": 1321,
+          "hash": -2021467203,
+          "nodes": 68,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 10,
+      "lastClickT": 56683.5,
+      "clickToContentMs": 35.2,
+      "clickToStableMs": 50.4,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 1321,
+        "hash": -2021467203,
+        "nodes": 68,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "frames": {
+        "n": 94,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 28,
+        "max": 28,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1576.5
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 1,
+        "by_method": {
+          "/api/agentPreset.list": {
+            "n": 1,
+            "ms": [
+              98.2
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/api/agentPreset.list",
+            "ms": 98.2,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 9,
+        "characterData": 0,
+        "records": 11
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 771,
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 20,
+        "Nodes": 149,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.003,
+        "RecalcStyleDuration": 0.0008,
+        "DevToolsCommandDuration": 0.0011,
+        "ScriptDuration": 0.0829,
+        "TaskDuration": 0.1159,
+        "JSHeapUsedSize": -1020412
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 230,
+        "Nodes": 1113,
+        "LayoutCount": 28,
+        "RecalcStyleCount": 104,
+        "LayoutDuration": 0.094325,
+        "RecalcStyleDuration": 0.030655,
+        "DevToolsCommandDuration": 0.407413,
+        "ScriptDuration": 2.990893,
+        "TaskDuration": 4.394791,
+        "JSHeapUsedSize": 36060944
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 250,
+        "Nodes": 1262,
+        "LayoutCount": 29,
+        "RecalcStyleCount": 110,
+        "LayoutDuration": 0.097359,
+        "RecalcStyleDuration": 0.031463,
+        "DevToolsCommandDuration": 0.408478,
+        "ScriptDuration": 3.073813,
+        "TaskDuration": 4.510719,
+        "JSHeapUsedSize": 35040532
+      }
+    },
+    {
+      "label": "SWEEP r2 → 模型",
+      "firstFrameAfterClickMs": 15.8,
+      "firstGapAfterClickMs": 30.3,
+      "arm": {
+        "perf": 59183.4,
+        "wall": 1790046988604,
+        "sigBefore": {
+          "len": 306,
+          "hash": 164143340,
+          "nodes": 84,
+          "svg": 7
+        }
+      },
+      "wallClickMs": 4,
+      "lastClickT": 59184.6,
+      "clickToContentMs": 15.9,
+      "clickToStableMs": 46.1,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "sigAfter": {
+        "len": 73,
+        "hash": -1817251326,
+        "nodes": 36,
+        "svg": 2
+      },
+      "frames": {
+        "n": 96,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 30.3,
+        "max": 30.3,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1599.9
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 4,
+        "characterData": 0,
+        "records": 6
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 723,
+        "dialogNodes": 120,
+        "dialogSvg": 11
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -17,
+        "Nodes": -341,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 5,
+        "LayoutDuration": 0.0014,
+        "RecalcStyleDuration": 0.0003,
+        "DevToolsCommandDuration": 0.0008,
+        "ScriptDuration": 0.0348,
+        "TaskDuration": 0.0581,
+        "JSHeapUsedSize": -6126884
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 250,
+        "Nodes": 1262,
+        "LayoutCount": 29,
+        "RecalcStyleCount": 110,
+        "LayoutDuration": 0.097359,
+        "RecalcStyleDuration": 0.031463,
+        "DevToolsCommandDuration": 0.408566,
+        "ScriptDuration": 3.118849,
+        "TaskDuration": 4.567508,
+        "JSHeapUsedSize": 34447264
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 233,
+        "Nodes": 921,
+        "LayoutCount": 30,
+        "RecalcStyleCount": 115,
+        "LayoutDuration": 0.098784,
+        "RecalcStyleDuration": 0.031792,
+        "DevToolsCommandDuration": 0.409367,
+        "ScriptDuration": 3.153617,
+        "TaskDuration": 4.625597,
+        "JSHeapUsedSize": 28320380
+      }
+    },
+    {
+      "label": "SWEEP r2 → 插件",
+      "firstFrameAfterClickMs": 8.9,
+      "firstGapAfterClickMs": 27.5,
+      "arm": {
+        "perf": 61708.8,
+        "wall": 1790046991129,
+        "sigBefore": {
+          "len": 73,
+          "hash": -1817251326,
+          "nodes": 36,
+          "svg": 2
+        }
+      },
+      "wallClickMs": 11,
+      "lastClickT": 61711.2,
+      "clickToContentMs": 36.6,
+      "clickToStableMs": 56.6,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 73,
+        "hash": -1817251326,
+        "nodes": 36,
+        "svg": 2
+      },
+      "sigAfter": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "frames": {
+        "n": 94,
+        "p50": 16.7,
+        "p95": 20.2,
+        "p99": 32.4,
+        "max": 32.4,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1591.1
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 9,
+        "by_method": {
+          "/usage/summary": {
+            "n": 1,
+            "ms": [
+              66.1
+            ],
+            "status": 200
+          },
+          "/usage/timeseries": {
+            "n": 2,
+            "ms": [
+              268,
+              321.9
+            ],
+            "status": 200
+          },
+          "/usage/heatmap": {
+            "n": 1,
+            "ms": [
+              377.8
+            ],
+            "status": 200
+          },
+          "/usage/byModel": {
+            "n": 1,
+            "ms": [
+              446
+            ],
+            "status": 200
+          },
+          "/usage/byProject": {
+            "n": 1,
+            "ms": [
+              499.1
+            ],
+            "status": 200
+          },
+          "/usage/byDay": {
+            "n": 1,
+            "ms": [
+              205.5
+            ],
+            "status": 200
+          },
+          "/usage/sessions": {
+            "n": 1,
+            "ms": [
+              373.5
+            ],
+            "status": 200
+          },
+          "/usage/status": {
+            "n": 1,
+            "ms": [
+              420.4
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/usage/summary",
+            "ms": 66.1,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/timeseries",
+            "ms": 268,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/heatmap",
+            "ms": 377.8,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byModel",
+            "ms": 446,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byProject",
+            "ms": 499.1,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byDay",
+            "ms": 205.5,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/timeseries",
+            "ms": 321.9,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/sessions",
+            "ms": 373.5,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/status",
+            "ms": 420.4,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 13,
+        "removed": 5,
+        "attributes": 11,
+        "characterData": 5,
+        "records": 34
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 1024,
+        "dialogNodes": 421,
+        "dialogSvg": 14
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 19,
+        "Nodes": 613,
+        "LayoutCount": 4,
+        "RecalcStyleCount": 7,
+        "LayoutDuration": 0.0086,
+        "RecalcStyleDuration": 0.0017,
+        "DevToolsCommandDuration": 0.0014,
+        "ScriptDuration": 0.0547,
+        "TaskDuration": 0.0877,
+        "JSHeapUsedSize": 1879808
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 233,
+        "Nodes": 921,
+        "LayoutCount": 30,
+        "RecalcStyleCount": 115,
+        "LayoutDuration": 0.098784,
+        "RecalcStyleDuration": 0.031792,
+        "DevToolsCommandDuration": 0.409455,
+        "ScriptDuration": 3.166598,
+        "TaskDuration": 4.644235,
+        "JSHeapUsedSize": 32121208
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 252,
+        "Nodes": 1534,
+        "LayoutCount": 34,
+        "RecalcStyleCount": 122,
+        "LayoutDuration": 0.107334,
+        "RecalcStyleDuration": 0.033477,
+        "DevToolsCommandDuration": 0.410887,
+        "ScriptDuration": 3.221273,
+        "TaskDuration": 4.73189,
+        "JSHeapUsedSize": 34001016
+      }
+    },
+    {
+      "label": "SWEEP r2 → Agent 预设",
+      "firstFrameAfterClickMs": 5.8,
+      "firstGapAfterClickMs": 25.3,
+      "arm": {
+        "perf": 64214.4,
+        "wall": 1790046993635,
+        "sigBefore": {
+          "len": 2139,
+          "hash": -1088071131,
+          "nodes": 337,
+          "svg": 5
+        }
+      },
+      "wallClickMs": 7,
+      "lastClickT": 64215.4,
+      "clickToContentMs": 31.2,
+      "clickToStableMs": 34.7,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "sigAfter": {
+        "len": 491,
+        "hash": -538306195,
+        "nodes": 94,
+        "svg": 12
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 20.1,
+        "p99": 30.6,
+        "max": 30.6,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1578.9
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 1,
+        "by_method": {
+          "/api/agentPreset.list": {
+            "n": 1,
+            "ms": [
+              15.3
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/api/agentPreset.list",
+            "ms": 15.3,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 4,
+        "characterData": 0,
+        "records": 6
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 781,
+        "dialogNodes": 178,
+        "dialogSvg": 21
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 19,
+        "Nodes": 131,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 5,
+        "LayoutDuration": 0.003,
+        "RecalcStyleDuration": 0.0005,
+        "DevToolsCommandDuration": 0.0009,
+        "ScriptDuration": 0.1039,
+        "TaskDuration": 0.1315,
+        "JSHeapUsedSize": 4396644
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 252,
+        "Nodes": 1534,
+        "LayoutCount": 34,
+        "RecalcStyleCount": 122,
+        "LayoutDuration": 0.107334,
+        "RecalcStyleDuration": 0.033477,
+        "DevToolsCommandDuration": 0.410978,
+        "ScriptDuration": 3.221883,
+        "TaskDuration": 4.737525,
+        "JSHeapUsedSize": 34002276
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 271,
+        "Nodes": 1665,
+        "LayoutCount": 35,
+        "RecalcStyleCount": 127,
+        "LayoutDuration": 0.110318,
+        "RecalcStyleDuration": 0.034001,
+        "DevToolsCommandDuration": 0.411844,
+        "ScriptDuration": 3.325774,
+        "TaskDuration": 4.868978,
+        "JSHeapUsedSize": 38398920
+      }
+    },
+    {
+      "label": "SWEEP r2 → 远程工作区",
+      "firstFrameAfterClickMs": 15.1,
+      "firstGapAfterClickMs": 23.4,
+      "arm": {
+        "perf": 66717.5,
+        "wall": 1790046996138,
+        "sigBefore": {
+          "len": 491,
+          "hash": -538306195,
+          "nodes": 94,
+          "svg": 12
+        }
+      },
+      "wallClickMs": 5,
+      "lastClickT": 66718.5,
+      "clickToContentMs": 15.2,
+      "clickToStableMs": 38.7,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 491,
+        "hash": -538306195,
+        "nodes": 94,
+        "svg": 12
+      },
+      "sigAfter": {
+        "len": 225,
+        "hash": -821458389,
+        "nodes": 48,
+        "svg": 0
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 17,
+        "p99": 29.9,
+        "max": 29.9,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 1,
+        "by_method": {
+          "/dsw/machines.list": {
+            "n": 1,
+            "ms": [
+              15.2
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/dsw/machines.list",
+            "ms": 15.2,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 4,
+        "characterData": 0,
+        "records": 6
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 735,
+        "dialogNodes": 132,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -31,
+        "Nodes": -696,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 5,
+        "LayoutDuration": 0.0018,
+        "RecalcStyleDuration": 0.0004,
+        "DevToolsCommandDuration": 0.0013,
+        "ScriptDuration": 0.0512,
+        "TaskDuration": 0.0762,
+        "JSHeapUsedSize": -6648228
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 271,
+        "Nodes": 1665,
+        "LayoutCount": 35,
+        "RecalcStyleCount": 127,
+        "LayoutDuration": 0.110318,
+        "RecalcStyleDuration": 0.034001,
+        "DevToolsCommandDuration": 0.411945,
+        "ScriptDuration": 3.363147,
+        "TaskDuration": 4.912361,
+        "JSHeapUsedSize": 40346700
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 240,
+        "Nodes": 969,
+        "LayoutCount": 36,
+        "RecalcStyleCount": 132,
+        "LayoutDuration": 0.112099,
+        "RecalcStyleDuration": 0.034354,
+        "DevToolsCommandDuration": 0.413237,
+        "ScriptDuration": 3.414379,
+        "TaskDuration": 4.988584,
+        "JSHeapUsedSize": 33698472
+      }
+    },
+    {
+      "label": "SWEEP r2 → 分布式控制 · dsh-ssh-gui",
+      "firstFrameAfterClickMs": 10.1,
+      "firstGapAfterClickMs": 27.9,
+      "arm": {
+        "perf": 69222.3,
+        "wall": 1790046998643,
+        "sigBefore": {
+          "len": 225,
+          "hash": -821458389,
+          "nodes": 48,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 8,
+      "lastClickT": 69223.6,
+      "clickToContentMs": 10.2,
+      "clickToStableMs": 38.1,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 225,
+        "hash": -821458389,
+        "nodes": 48,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 332,
+        "hash": -363243656,
+        "nodes": 15,
+        "svg": 0
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 17.1,
+        "p99": 27.9,
+        "max": 27.9,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1582.8
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 4,
+        "by_method": {
+          "/ssh-gui/nodes.list": {
+            "n": 1,
+            "ms": [
+              179
+            ],
+            "status": 200
+          },
+          "/ssh-gui/keyref.list": {
+            "n": 1,
+            "ms": [
+              193
+            ],
+            "status": 200
+          },
+          "/ssh-gui/config.get": {
+            "n": 1,
+            "ms": [
+              193
+            ],
+            "status": 200
+          },
+          "/ssh-gui/serial.ports": {
+            "n": 1,
+            "ms": [
+              193.3
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/ssh-gui/nodes.list",
+            "ms": 179,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/ssh-gui/keyref.list",
+            "ms": 193,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/ssh-gui/config.get",
+            "ms": 193,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/ssh-gui/serial.ports",
+            "ms": 193.3,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 8,
+        "characterData": 0,
+        "records": 10
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 702,
+        "dialogNodes": 99,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 5,
+        "Nodes": 25,
+        "LayoutCount": 3,
+        "RecalcStyleCount": 7,
+        "LayoutDuration": 0.0037,
+        "RecalcStyleDuration": 0.0006,
+        "DevToolsCommandDuration": 0.001,
+        "ScriptDuration": 0.0444,
+        "TaskDuration": 0.0588,
+        "JSHeapUsedSize": 31084
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 240,
+        "Nodes": 969,
+        "LayoutCount": 36,
+        "RecalcStyleCount": 132,
+        "LayoutDuration": 0.112099,
+        "RecalcStyleDuration": 0.034354,
+        "DevToolsCommandDuration": 0.413397,
+        "ScriptDuration": 3.415124,
+        "TaskDuration": 4.993483,
+        "JSHeapUsedSize": 33705980
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 245,
+        "Nodes": 994,
+        "LayoutCount": 39,
+        "RecalcStyleCount": 139,
+        "LayoutDuration": 0.1158,
+        "RecalcStyleDuration": 0.034971,
+        "DevToolsCommandDuration": 0.414425,
+        "ScriptDuration": 3.459479,
+        "TaskDuration": 5.052265,
+        "JSHeapUsedSize": 33737064
+      }
+    },
+    {
+      "label": "SWEEP r2 → vision-adam 识图设置",
+      "firstFrameAfterClickMs": 4.9,
+      "firstGapAfterClickMs": 28.8,
+      "arm": {
+        "perf": 71726.9,
+        "wall": 1790047001148,
+        "sigBefore": {
+          "len": 332,
+          "hash": -363243656,
+          "nodes": 15,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 5,
+      "lastClickT": 71728.7,
+      "clickToContentMs": 5,
+      "clickToStableMs": 33.8,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 332,
+        "hash": -363243656,
+        "nodes": 15,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 575,
+        "hash": -809981415,
+        "nodes": 24,
+        "svg": 0
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 17.9,
+        "p99": 28.8,
+        "max": 28.8,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1582.9
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 8,
+        "characterData": 1,
+        "records": 11
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 711,
+        "dialogNodes": 108,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 8,
+        "Nodes": 52,
+        "LayoutCount": 2,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.0015,
+        "RecalcStyleDuration": 0.0006,
+        "DevToolsCommandDuration": 0.0011,
+        "ScriptDuration": 0.0632,
+        "TaskDuration": 0.101,
+        "JSHeapUsedSize": 97176
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 245,
+        "Nodes": 994,
+        "LayoutCount": 39,
+        "RecalcStyleCount": 139,
+        "LayoutDuration": 0.1158,
+        "RecalcStyleDuration": 0.034971,
+        "DevToolsCommandDuration": 0.414552,
+        "ScriptDuration": 3.465137,
+        "TaskDuration": 5.065796,
+        "JSHeapUsedSize": 34753016
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 253,
+        "Nodes": 1046,
+        "LayoutCount": 41,
+        "RecalcStyleCount": 145,
+        "LayoutDuration": 0.117257,
+        "RecalcStyleDuration": 0.035531,
+        "DevToolsCommandDuration": 0.41566,
+        "ScriptDuration": 3.528306,
+        "TaskDuration": 5.166761,
+        "JSHeapUsedSize": 34850192
+      }
+    },
+    {
+      "label": "SWEEP r2 → 子代理模型",
+      "firstFrameAfterClickMs": 2,
+      "firstGapAfterClickMs": 27.2,
+      "arm": {
+        "perf": 74232.1,
+        "wall": 1790047003653,
+        "sigBefore": {
+          "len": 575,
+          "hash": -809981415,
+          "nodes": 24,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 3,
+      "lastClickT": 74233.2,
+      "clickToContentMs": 29.4,
+      "clickToStableMs": 55.7,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 575,
+        "hash": -809981415,
+        "nodes": 24,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 1321,
+        "hash": -2021467203,
+        "nodes": 68,
+        "svg": 0
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.9,
+        "p99": 27.2,
+        "max": 27.2,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1598
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 3,
+        "removed": 4,
+        "attributes": 4,
+        "characterData": 1,
+        "records": 12
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 755,
+        "dialogNodes": 152,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 8,
+        "Nodes": 249,
+        "LayoutCount": 2,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.0014,
+        "RecalcStyleDuration": 0.0007,
+        "DevToolsCommandDuration": 0.001,
+        "ScriptDuration": 0.025,
+        "TaskDuration": 0.0407,
+        "JSHeapUsedSize": 590572
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 253,
+        "Nodes": 1046,
+        "LayoutCount": 41,
+        "RecalcStyleCount": 145,
+        "LayoutDuration": 0.117257,
+        "RecalcStyleDuration": 0.035531,
+        "DevToolsCommandDuration": 0.415791,
+        "ScriptDuration": 3.58039,
+        "TaskDuration": 5.239429,
+        "JSHeapUsedSize": 39177792
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 261,
+        "Nodes": 1295,
+        "LayoutCount": 43,
+        "RecalcStyleCount": 151,
+        "LayoutDuration": 0.118623,
+        "RecalcStyleDuration": 0.036258,
+        "DevToolsCommandDuration": 0.416792,
+        "ScriptDuration": 3.605377,
+        "TaskDuration": 5.280104,
+        "JSHeapUsedSize": 39768364
+      }
+    },
+    {
+      "label": "SWEEP r3 → 通用设置",
+      "firstFrameAfterClickMs": 12.1,
+      "firstGapAfterClickMs": 29.1,
+      "arm": {
+        "perf": 76736.6,
+        "wall": 1790047006157,
+        "sigBefore": {
+          "len": 1321,
+          "hash": -2021467203,
+          "nodes": 68,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 9,
+      "lastClickT": 76737.7,
+      "clickToContentMs": 12.2,
+      "clickToStableMs": 41.3,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 1321,
+        "hash": -2021467203,
+        "nodes": 68,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 30.2,
+        "max": 30.2,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 1,
+        "by_method": {
+          "/api/agentPreset.list": {
+            "n": 1,
+            "ms": [
+              93.2
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/api/agentPreset.list",
+            "ms": 93.2,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 9,
+        "characterData": 0,
+        "records": 11
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 771,
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 20,
+        "Nodes": 149,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.0033,
+        "RecalcStyleDuration": 0.0011,
+        "DevToolsCommandDuration": 0.0009,
+        "ScriptDuration": 0.0578,
+        "TaskDuration": 0.0761,
+        "JSHeapUsedSize": 3406320
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 228,
+        "Nodes": 1113,
+        "LayoutCount": 43,
+        "RecalcStyleCount": 151,
+        "LayoutDuration": 0.118623,
+        "RecalcStyleDuration": 0.036258,
+        "DevToolsCommandDuration": 0.416916,
+        "ScriptDuration": 3.640992,
+        "TaskDuration": 5.334043,
+        "JSHeapUsedSize": 29457504
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 248,
+        "Nodes": 1262,
+        "LayoutCount": 44,
+        "RecalcStyleCount": 157,
+        "LayoutDuration": 0.121891,
+        "RecalcStyleDuration": 0.037335,
+        "DevToolsCommandDuration": 0.41783,
+        "ScriptDuration": 3.69879,
+        "TaskDuration": 5.410129,
+        "JSHeapUsedSize": 32863824
+      }
+    },
+    {
+      "label": "SWEEP r3 → 模型",
+      "firstFrameAfterClickMs": 8.9,
+      "firstGapAfterClickMs": 22.7,
+      "arm": {
+        "perf": 79239.5,
+        "wall": 1790047008660,
+        "sigBefore": {
+          "len": 306,
+          "hash": 164143340,
+          "nodes": 84,
+          "svg": 7
+        }
+      },
+      "wallClickMs": 7,
+      "lastClickT": 79240.6,
+      "clickToContentMs": 9,
+      "clickToStableMs": 31.7,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "sigAfter": {
+        "len": 73,
+        "hash": -1817251326,
+        "nodes": 36,
+        "svg": 2
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 22.7,
+        "max": 22.7,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583.3
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 4,
+        "characterData": 0,
+        "records": 6
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 723,
+        "dialogNodes": 120,
+        "dialogSvg": 11
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 9,
+        "Nodes": 49,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 5,
+        "LayoutDuration": 0.0025,
+        "RecalcStyleDuration": 0.0004,
+        "DevToolsCommandDuration": 0.001,
+        "ScriptDuration": 0.0038,
+        "TaskDuration": 0.0161,
+        "JSHeapUsedSize": 312576
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 248,
+        "Nodes": 1262,
+        "LayoutCount": 44,
+        "RecalcStyleCount": 157,
+        "LayoutDuration": 0.121891,
+        "RecalcStyleDuration": 0.037335,
+        "DevToolsCommandDuration": 0.417955,
+        "ScriptDuration": 3.773691,
+        "TaskDuration": 5.494715,
+        "JSHeapUsedSize": 37649472
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 257,
+        "Nodes": 1311,
+        "LayoutCount": 45,
+        "RecalcStyleCount": 162,
+        "LayoutDuration": 0.124363,
+        "RecalcStyleDuration": 0.037764,
+        "DevToolsCommandDuration": 0.418976,
+        "ScriptDuration": 3.777469,
+        "TaskDuration": 5.510816,
+        "JSHeapUsedSize": 37962048
+      }
+    },
+    {
+      "label": "SWEEP r3 → 插件",
+      "firstFrameAfterClickMs": 7.1,
+      "firstGapAfterClickMs": 27.4,
+      "arm": {
+        "perf": 81743.8,
+        "wall": 1790047011165,
+        "sigBefore": {
+          "len": 73,
+          "hash": -1817251326,
+          "nodes": 36,
+          "svg": 2
+        }
+      },
+      "wallClickMs": 8,
+      "lastClickT": 81745.4,
+      "clickToContentMs": 34.5,
+      "clickToStableMs": 59.2,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 73,
+        "hash": -1817251326,
+        "nodes": 36,
+        "svg": 2
+      },
+      "sigAfter": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "frames": {
+        "n": 94,
+        "p50": 16.7,
+        "p95": 20.5,
+        "p99": 27.4,
+        "max": 27.4,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1580.1
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 9,
+        "by_method": {
+          "/usage/summary": {
+            "n": 1,
+            "ms": [
+              29.6
+            ],
+            "status": 200
+          },
+          "/usage/timeseries": {
+            "n": 2,
+            "ms": [
+              185.5,
+              227.6
+            ],
+            "status": 200
+          },
+          "/usage/heatmap": {
+            "n": 1,
+            "ms": [
+              273.1
+            ],
+            "status": 200
+          },
+          "/usage/byModel": {
+            "n": 1,
+            "ms": [
+              310.4
+            ],
+            "status": 200
+          },
+          "/usage/byProject": {
+            "n": 1,
+            "ms": [
+              347.8
+            ],
+            "status": 200
+          },
+          "/usage/byDay": {
+            "n": 1,
+            "ms": [
+              119.2
+            ],
+            "status": 200
+          },
+          "/usage/sessions": {
+            "n": 1,
+            "ms": [
+              272.2
+            ],
+            "status": 200
+          },
+          "/usage/status": {
+            "n": 1,
+            "ms": [
+              289.3
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/usage/summary",
+            "ms": 29.6,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/timeseries",
+            "ms": 185.5,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/heatmap",
+            "ms": 273.1,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byModel",
+            "ms": 310.4,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byProject",
+            "ms": 347.8,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byDay",
+            "ms": 119.2,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/timeseries",
+            "ms": 227.6,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/sessions",
+            "ms": 272.2,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/status",
+            "ms": 289.3,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 13,
+        "removed": 5,
+        "attributes": 11,
+        "characterData": 5,
+        "records": 34
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 1024,
+        "dialogNodes": 421,
+        "dialogSvg": 14
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -14,
+        "Nodes": 151,
+        "LayoutCount": 4,
+        "RecalcStyleCount": 7,
+        "LayoutDuration": 0.0068,
+        "RecalcStyleDuration": 0.0017,
+        "DevToolsCommandDuration": 0.0012,
+        "ScriptDuration": 0.0696,
+        "TaskDuration": 0.102,
+        "JSHeapUsedSize": -6280436
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 257,
+        "Nodes": 1311,
+        "LayoutCount": 45,
+        "RecalcStyleCount": 162,
+        "LayoutDuration": 0.124363,
+        "RecalcStyleDuration": 0.037764,
+        "DevToolsCommandDuration": 0.419103,
+        "ScriptDuration": 3.783887,
+        "TaskDuration": 5.52572,
+        "JSHeapUsedSize": 39129456
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 243,
+        "Nodes": 1462,
+        "LayoutCount": 49,
+        "RecalcStyleCount": 169,
+        "LayoutDuration": 0.131209,
+        "RecalcStyleDuration": 0.039446,
+        "DevToolsCommandDuration": 0.420333,
+        "ScriptDuration": 3.85344,
+        "TaskDuration": 5.627761,
+        "JSHeapUsedSize": 32849020
+      }
+    },
+    {
+      "label": "SWEEP r3 → Agent 预设",
+      "firstFrameAfterClickMs": 14.9,
+      "firstGapAfterClickMs": 22.8,
+      "arm": {
+        "perf": 84250.2,
+        "wall": 1790047013671,
+        "sigBefore": {
+          "len": 2139,
+          "hash": -1088071131,
+          "nodes": 337,
+          "svg": 5
+        }
+      },
+      "wallClickMs": 10,
+      "lastClickT": 84251.2,
+      "clickToContentMs": 15,
+      "clickToStableMs": 37.7,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "sigAfter": {
+        "len": 491,
+        "hash": -538306195,
+        "nodes": 94,
+        "svg": 12
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 29.5,
+        "max": 29.5,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583.3
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 1,
+        "by_method": {
+          "/api/agentPreset.list": {
+            "n": 1,
+            "ms": [
+              7.1
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/api/agentPreset.list",
+            "ms": 7.1,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 4,
+        "characterData": 0,
+        "records": 6
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 781,
+        "dialogNodes": 178,
+        "dialogSvg": 21
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 19,
+        "Nodes": 131,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 5,
+        "LayoutDuration": 0.0054,
+        "RecalcStyleDuration": 0.0006,
+        "DevToolsCommandDuration": 0.0009,
+        "ScriptDuration": 0.0618,
+        "TaskDuration": 0.0858,
+        "JSHeapUsedSize": 7863196
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 243,
+        "Nodes": 1462,
+        "LayoutCount": 49,
+        "RecalcStyleCount": 169,
+        "LayoutDuration": 0.131209,
+        "RecalcStyleDuration": 0.039446,
+        "DevToolsCommandDuration": 0.420464,
+        "ScriptDuration": 3.889146,
+        "TaskDuration": 5.67153,
+        "JSHeapUsedSize": 31631780
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 262,
+        "Nodes": 1593,
+        "LayoutCount": 50,
+        "RecalcStyleCount": 174,
+        "LayoutDuration": 0.136658,
+        "RecalcStyleDuration": 0.040018,
+        "DevToolsCommandDuration": 0.42136,
+        "ScriptDuration": 3.95093,
+        "TaskDuration": 5.757294,
+        "JSHeapUsedSize": 39494976
+      }
+    },
+    {
+      "label": "SWEEP r3 → 远程工作区",
+      "firstFrameAfterClickMs": 10.4,
+      "firstGapAfterClickMs": 22.2,
+      "arm": {
+        "perf": 86754.3,
+        "wall": 1790047016175,
+        "sigBefore": {
+          "len": 491,
+          "hash": -538306195,
+          "nodes": 94,
+          "svg": 12
+        }
+      },
+      "wallClickMs": 6,
+      "lastClickT": 86755.5,
+      "clickToContentMs": 10.5,
+      "clickToStableMs": 32.7,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 491,
+        "hash": -538306195,
+        "nodes": 94,
+        "svg": 12
+      },
+      "sigAfter": {
+        "len": 225,
+        "hash": -821458389,
+        "nodes": 48,
+        "svg": 0
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 22.2,
+        "max": 22.2,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583.3
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 1,
+        "by_method": {
+          "/dsw/machines.list": {
+            "n": 1,
+            "ms": [
+              3.9
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/dsw/machines.list",
+            "ms": 3.9,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 4,
+        "characterData": 0,
+        "records": 6
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 735,
+        "dialogNodes": 132,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 16,
+        "Nodes": 97,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 5,
+        "LayoutDuration": 0.0026,
+        "RecalcStyleDuration": 0.0004,
+        "DevToolsCommandDuration": 0.0008,
+        "ScriptDuration": 0.0129,
+        "TaskDuration": 0.0435,
+        "JSHeapUsedSize": 1343764
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 262,
+        "Nodes": 1593,
+        "LayoutCount": 50,
+        "RecalcStyleCount": 174,
+        "LayoutDuration": 0.136658,
+        "RecalcStyleDuration": 0.040018,
+        "DevToolsCommandDuration": 0.421444,
+        "ScriptDuration": 3.985189,
+        "TaskDuration": 5.800157,
+        "JSHeapUsedSize": 35085708
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 278,
+        "Nodes": 1690,
+        "LayoutCount": 51,
+        "RecalcStyleCount": 179,
+        "LayoutDuration": 0.139274,
+        "RecalcStyleDuration": 0.040454,
+        "DevToolsCommandDuration": 0.422228,
+        "ScriptDuration": 3.998089,
+        "TaskDuration": 5.843643,
+        "JSHeapUsedSize": 36429472
+      }
+    },
+    {
+      "label": "SWEEP r3 → 分布式控制 · dsh-ssh-gui",
+      "firstFrameAfterClickMs": 6.6,
+      "firstGapAfterClickMs": 35.2,
+      "arm": {
+        "perf": 89258.3,
+        "wall": 1790047018679,
+        "sigBefore": {
+          "len": 225,
+          "hash": -821458389,
+          "nodes": 48,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 8,
+      "lastClickT": 89260.1,
+      "clickToContentMs": 41.9,
+      "clickToStableMs": 78.8,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 225,
+        "hash": -821458389,
+        "nodes": 48,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 332,
+        "hash": -363243656,
+        "nodes": 15,
+        "svg": 0
+      },
+      "frames": {
+        "n": 92,
+        "p50": 16.7,
+        "p95": 21.9,
+        "p99": 36.9,
+        "max": 36.9,
+        "over50": 0,
+        "over33": 2,
+        "over100": 0,
+        "sumMs": 1582.4
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 4,
+        "by_method": {
+          "/ssh-gui/nodes.list": {
+            "n": 1,
+            "ms": [
+              18.1
+            ],
+            "status": 200
+          },
+          "/ssh-gui/keyref.list": {
+            "n": 1,
+            "ms": [
+              27.2
+            ],
+            "status": 200
+          },
+          "/ssh-gui/config.get": {
+            "n": 1,
+            "ms": [
+              41.9
+            ],
+            "status": 200
+          },
+          "/ssh-gui/serial.ports": {
+            "n": 1,
+            "ms": [
+              69.5
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/ssh-gui/nodes.list",
+            "ms": 18.1,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/ssh-gui/keyref.list",
+            "ms": 27.2,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/ssh-gui/config.get",
+            "ms": 41.9,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/ssh-gui/serial.ports",
+            "ms": 69.5,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 8,
+        "characterData": 0,
+        "records": 10
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 702,
+        "dialogNodes": 99,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 5,
+        "Nodes": 25,
+        "LayoutCount": 3,
+        "RecalcStyleCount": 7,
+        "LayoutDuration": 0.0039,
+        "RecalcStyleDuration": 0.0007,
+        "DevToolsCommandDuration": 0.0013,
+        "ScriptDuration": 0.0531,
+        "TaskDuration": 0.0942,
+        "JSHeapUsedSize": 1513484
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 238,
+        "Nodes": 969,
+        "LayoutCount": 51,
+        "RecalcStyleCount": 179,
+        "LayoutDuration": 0.139274,
+        "RecalcStyleDuration": 0.040454,
+        "DevToolsCommandDuration": 0.422323,
+        "ScriptDuration": 4.050955,
+        "TaskDuration": 5.923905,
+        "JSHeapUsedSize": 30047948
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 243,
+        "Nodes": 994,
+        "LayoutCount": 54,
+        "RecalcStyleCount": 186,
+        "LayoutDuration": 0.143193,
+        "RecalcStyleDuration": 0.041169,
+        "DevToolsCommandDuration": 0.423627,
+        "ScriptDuration": 4.104029,
+        "TaskDuration": 6.018124,
+        "JSHeapUsedSize": 31561432
+      }
+    },
+    {
+      "label": "SWEEP r3 → vision-adam 识图设置",
+      "firstFrameAfterClickMs": 2.4,
+      "firstGapAfterClickMs": 27.9,
+      "arm": {
+        "perf": 91763.3,
+        "wall": 1790047021184,
+        "sigBefore": {
+          "len": 332,
+          "hash": -363243656,
+          "nodes": 15,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 5,
+      "lastClickT": 91765.5,
+      "clickToContentMs": 30.4,
+      "clickToStableMs": 51.5,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 332,
+        "hash": -363243656,
+        "nodes": 15,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 575,
+        "hash": -809981415,
+        "nodes": 24,
+        "svg": 0
+      },
+      "frames": {
+        "n": 94,
+        "p50": 16.7,
+        "p95": 16.9,
+        "p99": 27.9,
+        "max": 27.9,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1581
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 8,
+        "characterData": 1,
+        "records": 11
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 711,
+        "dialogNodes": 108,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 8,
+        "Nodes": 52,
+        "LayoutCount": 2,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.0017,
+        "RecalcStyleDuration": 0.0007,
+        "DevToolsCommandDuration": 0.001,
+        "ScriptDuration": 0.0368,
+        "TaskDuration": 0.0579,
+        "JSHeapUsedSize": -470952
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 243,
+        "Nodes": 994,
+        "LayoutCount": 54,
+        "RecalcStyleCount": 186,
+        "LayoutDuration": 0.143193,
+        "RecalcStyleDuration": 0.041169,
+        "DevToolsCommandDuration": 0.423798,
+        "ScriptDuration": 4.134607,
+        "TaskDuration": 6.058676,
+        "JSHeapUsedSize": 35192976
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 251,
+        "Nodes": 1046,
+        "LayoutCount": 56,
+        "RecalcStyleCount": 192,
+        "LayoutDuration": 0.144917,
+        "RecalcStyleDuration": 0.041918,
+        "DevToolsCommandDuration": 0.424779,
+        "ScriptDuration": 4.171367,
+        "TaskDuration": 6.116585,
+        "JSHeapUsedSize": 34722024
+      }
+    },
+    {
+      "label": "SWEEP r3 → 子代理模型",
+      "firstFrameAfterClickMs": 14.3,
+      "firstGapAfterClickMs": 22.4,
+      "arm": {
+        "perf": 94267.5,
+        "wall": 1790047023688,
+        "sigBefore": {
+          "len": 575,
+          "hash": -809981415,
+          "nodes": 24,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 3,
+      "lastClickT": 94268.6,
+      "clickToContentMs": 14.3,
+      "clickToStableMs": 36.8,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 575,
+        "hash": -809981415,
+        "nodes": 24,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 1321,
+        "hash": -2021467203,
+        "nodes": 68,
+        "svg": 0
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 18.8,
+        "p99": 23.5,
+        "max": 23.5,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1582.6
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 3,
+        "removed": 4,
+        "attributes": 4,
+        "characterData": 1,
+        "records": 12
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 755,
+        "dialogNodes": 152,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 8,
+        "Nodes": 249,
+        "LayoutCount": 2,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.001,
+        "RecalcStyleDuration": 0.0004,
+        "DevToolsCommandDuration": 0.0008,
+        "ScriptDuration": 0.0773,
+        "TaskDuration": 0.0921,
+        "JSHeapUsedSize": 1853740
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 251,
+        "Nodes": 1046,
+        "LayoutCount": 56,
+        "RecalcStyleCount": 192,
+        "LayoutDuration": 0.144917,
+        "RecalcStyleDuration": 0.041918,
+        "DevToolsCommandDuration": 0.424875,
+        "ScriptDuration": 4.172401,
+        "TaskDuration": 6.124439,
+        "JSHeapUsedSize": 34723624
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 259,
+        "Nodes": 1295,
+        "LayoutCount": 58,
+        "RecalcStyleCount": 198,
+        "LayoutDuration": 0.14595,
+        "RecalcStyleDuration": 0.042362,
+        "DevToolsCommandDuration": 0.425655,
+        "ScriptDuration": 4.249743,
+        "TaskDuration": 6.216543,
+        "JSHeapUsedSize": 36577364
+      }
+    },
+    {
+      "label": "REPEAT#1 → 子代理模型 (同标签)",
+      "firstFrameAfterClickMs": 9.5,
+      "firstGapAfterClickMs": 16.6,
+      "arm": {
+        "perf": 96771.9,
+        "wall": 1790047026193,
+        "sigBefore": {
+          "len": 1321,
+          "hash": -2021467203,
+          "nodes": 68,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 1,
+      "lastClickT": 96772.7,
+      "clickToContentMs": null,
+      "clickToStableMs": null,
+      "contentChanged": null,
+      "watchTimedOut": null,
+      "sigBefore": {
+        "len": 1321,
+        "hash": -2021467203,
+        "nodes": 68,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 1321,
+        "hash": -2021467203,
+        "nodes": 68,
+        "svg": 0
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 16.9,
+        "max": 16.9,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583.2
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 755,
+        "dialogNodes": 152,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 2,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.0001,
+        "DevToolsCommandDuration": 0.0007,
+        "ScriptDuration": 0.0114,
+        "TaskDuration": 0.0389,
+        "JSHeapUsedSize": 1206756
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 228,
+        "Nodes": 1113,
+        "LayoutCount": 58,
+        "RecalcStyleCount": 198,
+        "LayoutDuration": 0.14595,
+        "RecalcStyleDuration": 0.042362,
+        "DevToolsCommandDuration": 0.426203,
+        "ScriptDuration": 4.284142,
+        "TaskDuration": 6.27364,
+        "JSHeapUsedSize": 29607920
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 230,
+        "Nodes": 1113,
+        "LayoutCount": 58,
+        "RecalcStyleCount": 200,
+        "LayoutDuration": 0.14595,
+        "RecalcStyleDuration": 0.042479,
+        "DevToolsCommandDuration": 0.426869,
+        "ScriptDuration": 4.295507,
+        "TaskDuration": 6.312551,
+        "JSHeapUsedSize": 30814676
+      }
+    },
+    {
+      "label": "REPEAT#2 → 子代理模型 (同标签)",
+      "firstFrameAfterClickMs": 5,
+      "firstGapAfterClickMs": 16.7,
+      "arm": {
+        "perf": 99275.9,
+        "wall": 1790047028697,
+        "sigBefore": {
+          "len": 1321,
+          "hash": -2021467203,
+          "nodes": 68,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 1,
+      "lastClickT": 99277,
+      "clickToContentMs": null,
+      "clickToStableMs": null,
+      "contentChanged": null,
+      "watchTimedOut": null,
+      "sigBefore": {
+        "len": 1321,
+        "hash": -2021467203,
+        "nodes": 68,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 1321,
+        "hash": -2021467203,
+        "nodes": 68,
+        "svg": 0
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 25.1,
+        "max": 25.1,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583.3
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 755,
+        "dialogNodes": 152,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 2,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.0002,
+        "DevToolsCommandDuration": 0.0011,
+        "ScriptDuration": 0.0894,
+        "TaskDuration": 0.111,
+        "JSHeapUsedSize": 2681896
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 230,
+        "Nodes": 1113,
+        "LayoutCount": 58,
+        "RecalcStyleCount": 200,
+        "LayoutDuration": 0.14595,
+        "RecalcStyleDuration": 0.042479,
+        "DevToolsCommandDuration": 0.427406,
+        "ScriptDuration": 4.299872,
+        "TaskDuration": 6.328868,
+        "JSHeapUsedSize": 31196772
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 232,
+        "Nodes": 1113,
+        "LayoutCount": 58,
+        "RecalcStyleCount": 202,
+        "LayoutDuration": 0.14595,
+        "RecalcStyleDuration": 0.042714,
+        "DevToolsCommandDuration": 0.428492,
+        "ScriptDuration": 4.389235,
+        "TaskDuration": 6.439873,
+        "JSHeapUsedSize": 33878668
+      }
+    },
+    {
+      "label": "REPEAT#3 → 子代理模型 (同标签)",
+      "firstFrameAfterClickMs": 15.2,
+      "firstGapAfterClickMs": 16.7,
+      "arm": {
+        "perf": 101782.3,
+        "wall": 1790047031203,
+        "sigBefore": {
+          "len": 1321,
+          "hash": -2021467203,
+          "nodes": 68,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 1,
+      "lastClickT": 101783.5,
+      "clickToContentMs": null,
+      "clickToStableMs": null,
+      "contentChanged": null,
+      "watchTimedOut": null,
+      "sigBefore": {
+        "len": 1321,
+        "hash": -2021467203,
+        "nodes": 68,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 1321,
+        "hash": -2021467203,
+        "nodes": 68,
+        "svg": 0
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 24.1,
+        "max": 24.1,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583.2
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 0,
+        "by_method": {},
+        "raw_recent": []
+      },
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 755,
+        "dialogNodes": 152,
+        "dialogSvg": 9
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 2,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.0002,
+        "DevToolsCommandDuration": 0.0008,
+        "ScriptDuration": 0.0414,
+        "TaskDuration": 0.0568,
+        "JSHeapUsedSize": 2102848
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 232,
+        "Nodes": 1113,
+        "LayoutCount": 58,
+        "RecalcStyleCount": 202,
+        "LayoutDuration": 0.14595,
+        "RecalcStyleDuration": 0.042714,
+        "DevToolsCommandDuration": 0.428974,
+        "ScriptDuration": 4.39025,
+        "TaskDuration": 6.447897,
+        "JSHeapUsedSize": 33882296
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 234,
+        "Nodes": 1113,
+        "LayoutCount": 58,
+        "RecalcStyleCount": 204,
+        "LayoutDuration": 0.14595,
+        "RecalcStyleDuration": 0.042933,
+        "DevToolsCommandDuration": 0.429809,
+        "ScriptDuration": 4.43168,
+        "TaskDuration": 6.504652,
+        "JSHeapUsedSize": 35985144
+      }
+    },
+    {
+      "label": "PING r1 → 插件",
+      "firstFrameAfterClickMs": 11.1,
+      "firstGapAfterClickMs": 26.4,
+      "arm": {
+        "perf": 104286.5,
+        "wall": 1790047033707,
+        "sigBefore": {
+          "len": 1321,
+          "hash": -2021467203,
+          "nodes": 68,
+          "svg": 0
+        }
+      },
+      "wallClickMs": 11,
+      "lastClickT": 104287.9,
+      "clickToContentMs": 37.7,
+      "clickToStableMs": 43.9,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 1321,
+        "hash": -2021467203,
+        "nodes": 68,
+        "svg": 0
+      },
+      "sigAfter": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 23.1,
+        "p99": 29.3,
+        "max": 29.3,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1582.7
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 9,
+        "by_method": {
+          "/usage/summary": {
+            "n": 1,
+            "ms": [
+              20.2
+            ],
+            "status": 200
+          },
+          "/usage/timeseries": {
+            "n": 2,
+            "ms": [
+              175.1,
+              200.9
+            ],
+            "status": 200
+          },
+          "/usage/heatmap": {
+            "n": 1,
+            "ms": [
+              272.9
+            ],
+            "status": 200
+          },
+          "/usage/byModel": {
+            "n": 1,
+            "ms": [
+              320.8
+            ],
+            "status": 200
+          },
+          "/usage/byProject": {
+            "n": 1,
+            "ms": [
+              360.5
+            ],
+            "status": 200
+          },
+          "/usage/byDay": {
+            "n": 1,
+            "ms": [
+              88.7
+            ],
+            "status": 200
+          },
+          "/usage/sessions": {
+            "n": 1,
+            "ms": [
+              272.1
+            ],
+            "status": 200
+          },
+          "/usage/status": {
+            "n": 1,
+            "ms": [
+              281.3
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/usage/summary",
+            "ms": 20.2,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/timeseries",
+            "ms": 175.1,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/heatmap",
+            "ms": 272.9,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byModel",
+            "ms": 320.8,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byProject",
+            "ms": 360.5,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byDay",
+            "ms": 88.7,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/timeseries",
+            "ms": 200.9,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/sessions",
+            "ms": 272.1,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/status",
+            "ms": 281.3,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 13,
+        "removed": 5,
+        "attributes": 11,
+        "characterData": 5,
+        "records": 34
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 1024,
+        "dialogNodes": 421,
+        "dialogSvg": 14
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 9,
+        "Nodes": 341,
+        "LayoutCount": 4,
+        "RecalcStyleCount": 7,
+        "LayoutDuration": 0.0093,
+        "RecalcStyleDuration": 0.0019,
+        "DevToolsCommandDuration": 0.0012,
+        "ScriptDuration": 0.0949,
+        "TaskDuration": 0.163,
+        "JSHeapUsedSize": -2866768
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 234,
+        "Nodes": 1113,
+        "LayoutCount": 58,
+        "RecalcStyleCount": 204,
+        "LayoutDuration": 0.14595,
+        "RecalcStyleDuration": 0.042933,
+        "DevToolsCommandDuration": 0.429906,
+        "ScriptDuration": 4.432805,
+        "TaskDuration": 6.511884,
+        "JSHeapUsedSize": 35992580
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 243,
+        "Nodes": 1454,
+        "LayoutCount": 62,
+        "RecalcStyleCount": 211,
+        "LayoutDuration": 0.155245,
+        "RecalcStyleDuration": 0.044849,
+        "DevToolsCommandDuration": 0.431071,
+        "ScriptDuration": 4.527702,
+        "TaskDuration": 6.674882,
+        "JSHeapUsedSize": 33125812
+      }
+    },
+    {
+      "label": "PING r1 → 通用设置",
+      "firstFrameAfterClickMs": 6.5,
+      "firstGapAfterClickMs": 26.7,
+      "arm": {
+        "perf": 106792.2,
+        "wall": 1790047036213,
+        "sigBefore": {
+          "len": 2139,
+          "hash": -1088071131,
+          "nodes": 337,
+          "svg": 5
+        }
+      },
+      "wallClickMs": 8,
+      "lastClickT": 106793.8,
+      "clickToContentMs": 33.4,
+      "clickToStableMs": 38,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 19.8,
+        "p99": 26.7,
+        "max": 26.7,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 1,
+        "by_method": {
+          "/api/agentPreset.list": {
+            "n": 1,
+            "ms": [
+              5.2
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/api/agentPreset.list",
+            "ms": 5.2,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 9,
+        "characterData": 0,
+        "records": 11
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 771,
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 1,
+        "Nodes": -433,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.0025,
+        "RecalcStyleDuration": 0.0009,
+        "DevToolsCommandDuration": 0.0013,
+        "ScriptDuration": 0.0976,
+        "TaskDuration": 0.1335,
+        "JSHeapUsedSize": -2378948
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 243,
+        "Nodes": 1454,
+        "LayoutCount": 62,
+        "RecalcStyleCount": 211,
+        "LayoutDuration": 0.155245,
+        "RecalcStyleDuration": 0.044849,
+        "DevToolsCommandDuration": 0.431173,
+        "ScriptDuration": 4.561183,
+        "TaskDuration": 6.716192,
+        "JSHeapUsedSize": 33495388
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 244,
+        "Nodes": 1021,
+        "LayoutCount": 63,
+        "RecalcStyleCount": 217,
+        "LayoutDuration": 0.157742,
+        "RecalcStyleDuration": 0.045701,
+        "DevToolsCommandDuration": 0.432424,
+        "ScriptDuration": 4.658755,
+        "TaskDuration": 6.849679,
+        "JSHeapUsedSize": 31116440
+      }
+    },
+    {
+      "label": "PING r2 → 插件",
+      "firstFrameAfterClickMs": 16.5,
+      "firstGapAfterClickMs": 27.1,
+      "arm": {
+        "perf": 109297.8,
+        "wall": 1790047038718,
+        "sigBefore": {
+          "len": 306,
+          "hash": 164143340,
+          "nodes": 84,
+          "svg": 7
+        }
+      },
+      "wallClickMs": 9,
+      "lastClickT": 109298.9,
+      "clickToContentMs": 16.5,
+      "clickToStableMs": 43.7,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "sigAfter": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "frames": {
+        "n": 96,
+        "p50": 16.7,
+        "p95": 17.2,
+        "p99": 27.1,
+        "max": 27.1,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1599.9
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 9,
+        "by_method": {
+          "/usage/summary": {
+            "n": 1,
+            "ms": [
+              17.4
+            ],
+            "status": 200
+          },
+          "/usage/timeseries": {
+            "n": 2,
+            "ms": [
+              77.2,
+              197.7
+            ],
+            "status": 200
+          },
+          "/usage/heatmap": {
+            "n": 1,
+            "ms": [
+              77.9
+            ],
+            "status": 200
+          },
+          "/usage/byModel": {
+            "n": 1,
+            "ms": [
+              95.8
+            ],
+            "status": 200
+          },
+          "/usage/byProject": {
+            "n": 1,
+            "ms": [
+              113.5
+            ],
+            "status": 200
+          },
+          "/usage/byDay": {
+            "n": 1,
+            "ms": [
+              177.7
+            ],
+            "status": 200
+          },
+          "/usage/sessions": {
+            "n": 1,
+            "ms": [
+              245.1
+            ],
+            "status": 200
+          },
+          "/usage/status": {
+            "n": 1,
+            "ms": [
+              248.3
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/usage/summary",
+            "ms": 17.4,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/timeseries",
+            "ms": 77.2,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/heatmap",
+            "ms": 77.9,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byModel",
+            "ms": 95.8,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byProject",
+            "ms": 113.5,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byDay",
+            "ms": 177.7,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/timeseries",
+            "ms": 197.7,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/sessions",
+            "ms": 245.1,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/status",
+            "ms": 248.3,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 13,
+        "removed": 5,
+        "attributes": 11,
+        "characterData": 5,
+        "records": 34
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 1024,
+        "dialogNodes": 421,
+        "dialogSvg": 14
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 19,
+        "Nodes": 613,
+        "LayoutCount": 4,
+        "RecalcStyleCount": 7,
+        "LayoutDuration": 0.0072,
+        "RecalcStyleDuration": 0.0014,
+        "DevToolsCommandDuration": 0.0011,
+        "ScriptDuration": 0.0073,
+        "TaskDuration": 0.0297,
+        "JSHeapUsedSize": 999056
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 244,
+        "Nodes": 1021,
+        "LayoutCount": 63,
+        "RecalcStyleCount": 217,
+        "LayoutDuration": 0.157742,
+        "RecalcStyleDuration": 0.045701,
+        "DevToolsCommandDuration": 0.432524,
+        "ScriptDuration": 4.690253,
+        "TaskDuration": 6.885418,
+        "JSHeapUsedSize": 32311712
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 263,
+        "Nodes": 1634,
+        "LayoutCount": 67,
+        "RecalcStyleCount": 224,
+        "LayoutDuration": 0.164901,
+        "RecalcStyleDuration": 0.04711,
+        "DevToolsCommandDuration": 0.433591,
+        "ScriptDuration": 4.697566,
+        "TaskDuration": 6.915096,
+        "JSHeapUsedSize": 33310768
+      }
+    },
+    {
+      "label": "PING r2 → 通用设置",
+      "firstFrameAfterClickMs": 11.3,
+      "firstGapAfterClickMs": 26.5,
+      "arm": {
+        "perf": 111802.8,
+        "wall": 1790047041223,
+        "sigBefore": {
+          "len": 2139,
+          "hash": -1088071131,
+          "nodes": 337,
+          "svg": 5
+        }
+      },
+      "wallClickMs": 7,
+      "lastClickT": 111803.7,
+      "clickToContentMs": 11.4,
+      "clickToStableMs": 37.8,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 26.5,
+        "max": 26.5,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1583.2
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 1,
+        "by_method": {
+          "/api/agentPreset.list": {
+            "n": 1,
+            "ms": [
+              4.4
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/api/agentPreset.list",
+            "ms": 4.4,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 9,
+        "characterData": 0,
+        "records": 11
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 771,
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 20,
+        "Nodes": 149,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.002,
+        "RecalcStyleDuration": 0.0009,
+        "DevToolsCommandDuration": 0.0008,
+        "ScriptDuration": 0.049,
+        "TaskDuration": 0.0659,
+        "JSHeapUsedSize": 1864256
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 263,
+        "Nodes": 1634,
+        "LayoutCount": 68,
+        "RecalcStyleCount": 224,
+        "LayoutDuration": 0.165304,
+        "RecalcStyleDuration": 0.04711,
+        "DevToolsCommandDuration": 0.433688,
+        "ScriptDuration": 4.715872,
+        "TaskDuration": 6.938932,
+        "JSHeapUsedSize": 33278856
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 283,
+        "Nodes": 1783,
+        "LayoutCount": 69,
+        "RecalcStyleCount": 230,
+        "LayoutDuration": 0.167346,
+        "RecalcStyleDuration": 0.047978,
+        "DevToolsCommandDuration": 0.434479,
+        "ScriptDuration": 4.764852,
+        "TaskDuration": 7.004816,
+        "JSHeapUsedSize": 35143112
+      }
+    },
+    {
+      "label": "PING r3 → 插件",
+      "firstFrameAfterClickMs": 7.8,
+      "firstGapAfterClickMs": 24.7,
+      "arm": {
+        "perf": 114306.4,
+        "wall": 1790047043727,
+        "sigBefore": {
+          "len": 306,
+          "hash": 164143340,
+          "nodes": 84,
+          "svg": 7
+        }
+      },
+      "wallClickMs": 7,
+      "lastClickT": 114307.5,
+      "clickToContentMs": 7.8,
+      "clickToStableMs": 32.6,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "sigAfter": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 21.1,
+        "p99": 24.7,
+        "max": 24.7,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1582.7
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 9,
+        "by_method": {
+          "/usage/summary": {
+            "n": 1,
+            "ms": [
+              19.9
+            ],
+            "status": 200
+          },
+          "/usage/timeseries": {
+            "n": 2,
+            "ms": [
+              147,
+              224.7
+            ],
+            "status": 200
+          },
+          "/usage/heatmap": {
+            "n": 1,
+            "ms": [
+              147.7
+            ],
+            "status": 200
+          },
+          "/usage/byModel": {
+            "n": 1,
+            "ms": [
+              165.1
+            ],
+            "status": 200
+          },
+          "/usage/byProject": {
+            "n": 1,
+            "ms": [
+              183.2
+            ],
+            "status": 200
+          },
+          "/usage/byDay": {
+            "n": 1,
+            "ms": [
+              87.4
+            ],
+            "status": 200
+          },
+          "/usage/sessions": {
+            "n": 1,
+            "ms": [
+              270.4
+            ],
+            "status": 200
+          },
+          "/usage/status": {
+            "n": 1,
+            "ms": [
+              273.7
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/usage/summary",
+            "ms": 19.9,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/timeseries",
+            "ms": 147,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/heatmap",
+            "ms": 147.7,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byModel",
+            "ms": 165.1,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byProject",
+            "ms": 183.2,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/byDay",
+            "ms": 87.4,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/timeseries",
+            "ms": 224.7,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/sessions",
+            "ms": 270.4,
+            "st": 200,
+            "stream": false
+          },
+          {
+            "p": "/usage/status",
+            "ms": 273.7,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 13,
+        "removed": 5,
+        "attributes": 11,
+        "characterData": 5,
+        "records": 34
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 1024,
+        "dialogNodes": 421,
+        "dialogSvg": 14
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -40,
+        "Nodes": -321,
+        "LayoutCount": 4,
+        "RecalcStyleCount": 7,
+        "LayoutDuration": 0.0055,
+        "RecalcStyleDuration": 0.0016,
+        "DevToolsCommandDuration": 0.001,
+        "ScriptDuration": 0.052,
+        "TaskDuration": 0.0871,
+        "JSHeapUsedSize": -4090080
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 283,
+        "Nodes": 1783,
+        "LayoutCount": 69,
+        "RecalcStyleCount": 230,
+        "LayoutDuration": 0.167346,
+        "RecalcStyleDuration": 0.047978,
+        "DevToolsCommandDuration": 0.434594,
+        "ScriptDuration": 4.765399,
+        "TaskDuration": 7.009295,
+        "JSHeapUsedSize": 35144856
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 243,
+        "Nodes": 1462,
+        "LayoutCount": 73,
+        "RecalcStyleCount": 237,
+        "LayoutDuration": 0.172842,
+        "RecalcStyleDuration": 0.049579,
+        "DevToolsCommandDuration": 0.435628,
+        "ScriptDuration": 4.817422,
+        "TaskDuration": 7.096423,
+        "JSHeapUsedSize": 31054776
+      }
+    },
+    {
+      "label": "PING r3 → 通用设置",
+      "firstFrameAfterClickMs": 5.6,
+      "firstGapAfterClickMs": 28.3,
+      "arm": {
+        "perf": 116811.7,
+        "wall": 1790047046232,
+        "sigBefore": {
+          "len": 2139,
+          "hash": -1088071131,
+          "nodes": 337,
+          "svg": 5
+        }
+      },
+      "wallClickMs": 7,
+      "lastClickT": 116813.7,
+      "clickToContentMs": 34,
+      "clickToStableMs": 34.3,
+      "contentChanged": true,
+      "watchTimedOut": false,
+      "sigBefore": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "frames": {
+        "n": 95,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 28.3,
+        "max": 28.3,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1578.8
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "rpc": {
+        "total_calls": 1,
+        "by_method": {
+          "/api/agentPreset.list": {
+            "n": 1,
+            "ms": [
+              11.6
+            ],
+            "status": 200
+          }
+        },
+        "raw_recent": [
+          {
+            "p": "/api/agentPreset.list",
+            "ms": 11.6,
+            "st": 200,
+            "stream": false
+          }
+        ]
+      },
+      "churn": {
+        "added": 1,
+        "removed": 1,
+        "attributes": 9,
+        "characterData": 0,
+        "records": 11
+      },
+      "layoutReads": {},
+      "dom": {
+        "totalNodes": 771,
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      },
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 20,
+        "Nodes": 149,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 6,
+        "LayoutDuration": 0.0021,
+        "RecalcStyleDuration": 0.0009,
+        "DevToolsCommandDuration": 0.0011,
+        "ScriptDuration": 0.0218,
+        "TaskDuration": 0.0394,
+        "JSHeapUsedSize": -4790064
+      },
+      "cdpBefore": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 243,
+        "Nodes": 1462,
+        "LayoutCount": 73,
+        "RecalcStyleCount": 237,
+        "LayoutDuration": 0.172842,
+        "RecalcStyleDuration": 0.049579,
+        "DevToolsCommandDuration": 0.435778,
+        "ScriptDuration": 4.832718,
+        "TaskDuration": 7.117713,
+        "JSHeapUsedSize": 37223104
+      },
+      "cdpAfter": {
+        "Documents": 3,
+        "Frames": 3,
+        "JSEventListeners": 263,
+        "Nodes": 1611,
+        "LayoutCount": 74,
+        "RecalcStyleCount": 243,
+        "LayoutDuration": 0.174936,
+        "RecalcStyleDuration": 0.050486,
+        "DevToolsCommandDuration": 0.436899,
+        "ScriptDuration": 4.854553,
+        "TaskDuration": 7.157141,
+        "JSHeapUsedSize": 32433040
+      }
+    },
+    {
+      "label": "SCROLL 插件 r1 →bottom",
+      "seg": {
+        "ok": true,
+        "cls": "VOzbGW_options",
+        "range": 851,
+        "endTop": 851,
+        "writes": 22
+      },
+      "frames": {
+        "n": 153,
+        "p50": 16.7,
+        "p95": 20.8,
+        "p99": 26.1,
+        "max": 30.3,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 2549.7
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.0019,
+        "ScriptDuration": 0.0783,
+        "TaskDuration": 0.1055,
+        "JSHeapUsedSize": 3856824
+      },
+      "sigAfter": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "dom": {
+        "dialogNodes": 421,
+        "dialogSvg": 14
+      }
+    },
+    {
+      "label": "SCROLL 插件 r1 →top",
+      "seg": {
+        "ok": true,
+        "cls": "VOzbGW_options",
+        "range": 851,
+        "endTop": 0,
+        "writes": 22
+      },
+      "frames": {
+        "n": 153,
+        "p50": 16.7,
+        "p95": 20.4,
+        "p99": 27.7,
+        "max": 30.9,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 2549.7
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -18,
+        "Nodes": -180,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.0013,
+        "ScriptDuration": 0.0814,
+        "TaskDuration": 0.1208,
+        "JSHeapUsedSize": -6101576
+      },
+      "sigAfter": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "dom": {
+        "dialogNodes": 421,
+        "dialogSvg": 14
+      }
+    },
+    {
+      "label": "SCROLL 插件 r2 →bottom",
+      "seg": {
+        "ok": true,
+        "cls": "VOzbGW_options",
+        "range": 851,
+        "endTop": 851,
+        "writes": 22
+      },
+      "frames": {
+        "n": 153,
+        "p50": 16.7,
+        "p95": 20.3,
+        "p99": 24.4,
+        "max": 25,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 2549.8
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.0011,
+        "ScriptDuration": 0.0845,
+        "TaskDuration": 0.1151,
+        "JSHeapUsedSize": 3560584
+      },
+      "sigAfter": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "dom": {
+        "dialogNodes": 421,
+        "dialogSvg": 14
+      }
+    },
+    {
+      "label": "SCROLL 插件 r2 →top",
+      "seg": {
+        "ok": true,
+        "cls": "VOzbGW_options",
+        "range": 851,
+        "endTop": 0,
+        "writes": 22
+      },
+      "frames": {
+        "n": 153,
+        "p50": 16.7,
+        "p95": 19.6,
+        "p99": 24.3,
+        "max": 25.4,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 2549.7
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.0011,
+        "ScriptDuration": 0.0819,
+        "TaskDuration": 0.1121,
+        "JSHeapUsedSize": -3873196
+      },
+      "sigAfter": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "dom": {
+        "dialogNodes": 421,
+        "dialogSvg": 14
+      }
+    },
+    {
+      "label": "SCROLL 插件 r3 →bottom",
+      "seg": {
+        "ok": true,
+        "cls": "VOzbGW_options",
+        "range": 851,
+        "endTop": 851,
+        "writes": 22
+      },
+      "frames": {
+        "n": 153,
+        "p50": 16.7,
+        "p95": 19.3,
+        "p99": 20.5,
+        "max": 20.9,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 2549.8
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.0012,
+        "ScriptDuration": 0.0022,
+        "TaskDuration": 0.0237,
+        "JSHeapUsedSize": -5540116
+      },
+      "sigAfter": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "dom": {
+        "dialogNodes": 421,
+        "dialogSvg": 14
+      }
+    },
+    {
+      "label": "SCROLL 插件 r3 →top",
+      "seg": {
+        "ok": true,
+        "cls": "VOzbGW_options",
+        "range": 851,
+        "endTop": 0,
+        "writes": 22
+      },
+      "frames": {
+        "n": 153,
+        "p50": 16.7,
+        "p95": 23,
+        "p99": 25.8,
+        "max": 29.5,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 2549.8
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.001,
+        "ScriptDuration": 0.0879,
+        "TaskDuration": 0.1187,
+        "JSHeapUsedSize": 6276964
+      },
+      "sigAfter": {
+        "len": 2139,
+        "hash": -1088071131,
+        "nodes": 337,
+        "svg": 5
+      },
+      "dom": {
+        "dialogNodes": 421,
+        "dialogSvg": 14
+      }
+    },
+    {
+      "label": "SCROLL 通用设置 r1 →bottom",
+      "seg": {
+        "ok": true,
+        "cls": "VOzbGW_options",
+        "range": 74,
+        "endTop": 74,
+        "writes": 22
+      },
+      "frames": {
+        "n": 153,
+        "p50": 16.7,
+        "p95": 22.1,
+        "p99": 27.3,
+        "max": 32.4,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 2549.7
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -21,
+        "Nodes": -582,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.0013,
+        "ScriptDuration": 0.1316,
+        "TaskDuration": 0.1773,
+        "JSHeapUsedSize": -970788
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "dom": {
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      }
+    },
+    {
+      "label": "SCROLL 通用设置 r1 →top",
+      "seg": {
+        "ok": true,
+        "cls": "VOzbGW_options",
+        "range": 74,
+        "endTop": 0,
+        "writes": 22
+      },
+      "frames": {
+        "n": 153,
+        "p50": 16.7,
+        "p95": 20.7,
+        "p99": 25.4,
+        "max": 28.4,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 2549.9
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.0011,
+        "ScriptDuration": 0.0597,
+        "TaskDuration": 0.0966,
+        "JSHeapUsedSize": -996148
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "dom": {
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      }
+    },
+    {
+      "label": "SCROLL 通用设置 r2 →bottom",
+      "seg": {
+        "ok": true,
+        "cls": "VOzbGW_options",
+        "range": 74,
+        "endTop": 74,
+        "writes": 22
+      },
+      "frames": {
+        "n": 153,
+        "p50": 16.7,
+        "p95": 22,
+        "p99": 26.6,
+        "max": 29.4,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 2549.8
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.0009,
+        "ScriptDuration": 0.0845,
+        "TaskDuration": 0.1514,
+        "JSHeapUsedSize": -6096836
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "dom": {
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      }
+    },
+    {
+      "label": "SCROLL 通用设置 r2 →top",
+      "seg": {
+        "ok": true,
+        "cls": "VOzbGW_options",
+        "range": 74,
+        "endTop": 0,
+        "writes": 22
+      },
+      "frames": {
+        "n": 153,
+        "p50": 16.7,
+        "p95": 20.6,
+        "p99": 24.7,
+        "max": 26.5,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 2549.6
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.0009,
+        "ScriptDuration": 0.1389,
+        "TaskDuration": 0.1926,
+        "JSHeapUsedSize": 9561356
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "dom": {
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      }
+    },
+    {
+      "label": "SCROLL 通用设置 r3 →bottom",
+      "seg": {
+        "ok": true,
+        "cls": "VOzbGW_options",
+        "range": 74,
+        "endTop": 74,
+        "writes": 22
+      },
+      "frames": {
+        "n": 153,
+        "p50": 16.7,
+        "p95": 19.5,
+        "p99": 21.6,
+        "max": 23.1,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 2549.7
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.001,
+        "ScriptDuration": 0.0299,
+        "TaskDuration": 0.0544,
+        "JSHeapUsedSize": -400464
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "dom": {
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      }
+    },
+    {
+      "label": "SCROLL 通用设置 r3 →top",
+      "seg": {
+        "ok": true,
+        "cls": "VOzbGW_options",
+        "range": 74,
+        "endTop": 0,
+        "writes": 22
+      },
+      "frames": {
+        "n": 153,
+        "p50": 16.7,
+        "p95": 20.2,
+        "p99": 27.4,
+        "max": 28,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 2549.8
+      },
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "loaf": [],
+      "churn": {
+        "added": 0,
+        "removed": 0,
+        "attributes": 0,
+        "characterData": 0,
+        "records": 0
+      },
+      "layoutReads": {},
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -4,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.0008,
+        "ScriptDuration": 0.0666,
+        "TaskDuration": 0.1029,
+        "JSHeapUsedSize": -3789052
+      },
+      "sigAfter": {
+        "len": 306,
+        "hash": 164143340,
+        "nodes": 84,
+        "svg": 7
+      },
+      "dom": {
+        "dialogNodes": 168,
+        "dialogSvg": 16
+      }
+    }
+  ],
+  "meta": {},
+  "host": {
+    "webProcs": [
+      "301709 node /home/CNS2026495165/.npm-global/bin/dsh web"
+    ],
+    "loadavg": "4.25 4.75 4.54 5/4403 393537"
+  },
+  "census_before_lock": {
+    "headless_shell": [],
+    "chromium": [],
+    "foreign": 0,
+    "own": [],
+    "host_pid": null,
+    "total": 0,
+    "self_pid": 393517
+  },
+  "census_pre_launch": {
+    "headless_shell": [],
+    "chromium": [],
+    "foreign": 0,
+    "own": [],
+    "host_pid": null,
+    "total": 0,
+    "self_pid": 393517
+  },
+  "census_post_launch": {
+    "headless_shell": [
+      {
+        "pid": 400270,
+        "exe": "headless_shell",
+        "userDataDir": "/tmp/playwright_chromiumdev_profile-J8yEdS",
+        "args": "/home/CNS2026495165/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding"
+      }
+    ],
+    "chromium": [],
+    "foreign": 0,
+    "own": [],
+    "host_pid": null,
+    "total": 1,
+    "self_pid": 393517
+  },
+  "own_browser": [
+    {
+      "pid": 400270,
+      "userDataDir": "/tmp/playwright_chromiumdev_profile-J8yEdS"
+    }
+  ],
+  "own_user_data_dir": "/tmp/playwright_chromiumdev_profile-J8yEdS",
+  "concurrency_at_start": {
+    "total": 1,
+    "own": 1,
+    "foreign": 0,
+    "foreign_list": [],
+    "own_list": [
+      "400270:headless_shell"
+    ]
+  },
+  "instrument": {
+    "ready": true,
+    "loafSupported": true,
+    "loafError": null,
+    "errors": []
+  },
+  "trigger": {
+    "x": 140,
+    "y": 919
+  },
+  "nav": {
+    "navCls": "VOzbGW_nav",
+    "navBox": {
+      "x": 350,
+      "y": 75,
+      "w": 188,
+      "h": 800
+    },
+    "tabs": [
+      {
+        "i": 0,
+        "text": "通用设置",
+        "x": 444,
+        "y": 159,
+        "w": 164,
+        "h": 40,
+        "active": true
+      },
+      {
+        "i": 1,
+        "text": "模型",
+        "x": 444,
+        "y": 203,
+        "w": 164,
+        "h": 40,
+        "active": false
+      },
+      {
+        "i": 2,
+        "text": "插件",
+        "x": 444,
+        "y": 247,
+        "w": 164,
+        "h": 40,
+        "active": false
+      },
+      {
+        "i": 3,
+        "text": "Agent 预设",
+        "x": 444,
+        "y": 291,
+        "w": 164,
+        "h": 40,
+        "active": false
+      },
+      {
+        "i": 4,
+        "text": "远程工作区",
+        "x": 444,
+        "y": 335,
+        "w": 164,
+        "h": 40,
+        "active": false
+      },
+      {
+        "i": 5,
+        "text": "分布式控制 · dsh-ssh-gui",
+        "x": 444,
+        "y": 379,
+        "w": 164,
+        "h": 40,
+        "active": false
+      },
+      {
+        "i": 6,
+        "text": "vision-adam 识图设置",
+        "x": 444,
+        "y": 423,
+        "w": 164,
+        "h": 40,
+        "active": false
+      },
+      {
+        "i": 7,
+        "text": "子代理模型",
+        "x": 444,
+        "y": 467,
+        "w": 164,
+        "h": 40,
+        "active": false
+      }
+    ],
+    "contentSel": "[data-slot=\"settings.section\"]",
+    "optionsCls": "VOzbGW_options",
+    "optionsBox": {
+      "x": 538,
+      "y": 129,
+      "w": 612,
+      "h": 746
+    },
+    "dialogBox": {
+      "x": 350,
+      "y": 75,
+      "w": 800,
+      "h": 800
+    }
+  },
+  "nullPoint": {
+    "x": 380,
+    "y": 87,
+    "tag": "NAV",
+    "cls": "VOzbGW_nav"
+  },
+  "positiveControl": [
+    {
+      "kind": "devtools",
+      "requested_ms": 60,
+      "actual_block_ms": 60,
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "longtask_max_ms": null,
+      "loaf": [],
+      "loaf_max_ms": null,
+      "frames": {
+        "n": 54,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 36.2,
+        "max": 36.2,
+        "over50": 0,
+        "over33": 1,
+        "over100": 0,
+        "sumMs": 882.9
+      },
+      "frames_over50": 0,
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.0612,
+        "ScriptDuration": 0.0501,
+        "TaskDuration": 0.1226,
+        "JSHeapUsedSize": 252800
+      },
+      "detected": false
+    },
+    {
+      "kind": "devtools",
+      "requested_ms": 120,
+      "actual_block_ms": 120,
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "longtask_max_ms": null,
+      "loaf": [
+        {
+          "t": 16036.6,
+          "dur": 122,
+          "blocking": 0,
+          "styleAndLayout": 0,
+          "scripts": 0
+        }
+      ],
+      "loaf_max_ms": null,
+      "frames": {
+        "n": 55,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 18.4,
+        "max": 18.4,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 893.5
+      },
+      "frames_over50": 0,
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.1212,
+        "ScriptDuration": 0.0215,
+        "TaskDuration": 0.1479,
+        "JSHeapUsedSize": 1946056
+      },
+      "detected": false
+    },
+    {
+      "kind": "devtools",
+      "requested_ms": 200,
+      "actual_block_ms": 200,
+      "longtasks": [],
+      "longtask_total_ms": 0,
+      "longtask_max_ms": null,
+      "loaf": [
+        {
+          "t": 17564.7,
+          "dur": 202,
+          "blocking": 0,
+          "styleAndLayout": -0.1,
+          "scripts": 0
+        }
+      ],
+      "loaf_max_ms": null,
+      "frames": {
+        "n": 55,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 16.8,
+        "max": 16.8,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 885.1
+      },
+      "frames_over50": 0,
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.2011,
+        "ScriptDuration": 0.0006,
+        "TaskDuration": 0.2047,
+        "JSHeapUsedSize": 2083332
+      },
+      "detected": false
+    },
+    {
+      "kind": "pageTask",
+      "requested_ms": 60,
+      "actual_block_ms": 60,
+      "longtasks": [
+        {
+          "t": 19172.3,
+          "dur": 60,
+          "name": "self",
+          "attr": [
+            {
+              "type": "unknown",
+              "containerType": "window",
+              "containerSrc": ""
+            }
+          ]
+        }
+      ],
+      "longtask_total_ms": 60,
+      "longtask_max_ms": 60,
+      "loaf": [
+        {
+          "t": 19170.6,
+          "dur": 61,
+          "blocking": 10,
+          "styleAndLayout": -0.9,
+          "scripts": 1
+        }
+      ],
+      "loaf_max_ms": null,
+      "frames": {
+        "n": 55,
+        "p50": 16.6,
+        "p95": 21,
+        "p99": 32.5,
+        "max": 32.5,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 886.1
+      },
+      "frames_over50": 0,
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.001,
+        "ScriptDuration": 0.134,
+        "TaskDuration": 0.1457,
+        "JSHeapUsedSize": 648900
+      },
+      "detected": true
+    },
+    {
+      "kind": "pageTask",
+      "requested_ms": 120,
+      "actual_block_ms": 120,
+      "longtasks": [
+        {
+          "t": 20637,
+          "dur": 120,
+          "name": "self",
+          "attr": [
+            {
+              "type": "unknown",
+              "containerType": "window",
+              "containerSrc": ""
+            }
+          ]
+        }
+      ],
+      "longtask_total_ms": 120,
+      "longtask_max_ms": 120,
+      "loaf": [
+        {
+          "t": 20635.6,
+          "dur": 121,
+          "blocking": 70,
+          "styleAndLayout": -0.5,
+          "scripts": 1
+        }
+      ],
+      "loaf_max_ms": null,
+      "frames": {
+        "n": 55,
+        "p50": 16.7,
+        "p95": 23,
+        "p99": 45.3,
+        "max": 45.3,
+        "over50": 0,
+        "over33": 2,
+        "over100": 0,
+        "sumMs": 894.7
+      },
+      "frames_over50": 0,
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 2,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.0011,
+        "ScriptDuration": 0.2389,
+        "TaskDuration": 0.2519,
+        "JSHeapUsedSize": 5400976
+      },
+      "detected": true
+    },
+    {
+      "kind": "pageTask",
+      "requested_ms": 200,
+      "actual_block_ms": 200,
+      "longtasks": [
+        {
+          "t": 22163.1,
+          "dur": 200,
+          "name": "self",
+          "attr": [
+            {
+              "type": "unknown",
+              "containerType": "window",
+              "containerSrc": ""
+            }
+          ]
+        }
+      ],
+      "longtask_total_ms": 200,
+      "longtask_max_ms": 200,
+      "loaf": [
+        {
+          "t": 22161.7,
+          "dur": 201,
+          "blocking": 150,
+          "styleAndLayout": -0.6,
+          "scripts": 1
+        }
+      ],
+      "loaf_max_ms": null,
+      "frames": {
+        "n": 55,
+        "p50": 16.7,
+        "p95": 20.8,
+        "p99": 28.5,
+        "max": 28.5,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 888.4
+      },
+      "frames_over50": 0,
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -4,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "DevToolsCommandDuration": 0.0012,
+        "ScriptDuration": 0.2831,
+        "TaskDuration": 0.3029,
+        "JSHeapUsedSize": -7000568
+      },
+      "detected": true
+    },
+    {
+      "kind": "click",
+      "requested_ms": 60,
+      "actual_block_ms": 60,
+      "longtasks": [
+        {
+          "t": 23770.7,
+          "dur": 60,
+          "name": "self",
+          "attr": [
+            {
+              "type": "unknown",
+              "containerType": "window",
+              "containerSrc": ""
+            }
+          ]
+        }
+      ],
+      "longtask_total_ms": 60,
+      "longtask_max_ms": 60,
+      "loaf": [
+        {
+          "t": 23769.6,
+          "dur": 61,
+          "blocking": 10,
+          "styleAndLayout": -0.9,
+          "scripts": 1
+        }
+      ],
+      "loaf_max_ms": null,
+      "frames": {
+        "n": 71,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 62.7,
+        "max": 62.7,
+        "over50": 1,
+        "over33": 1,
+        "over100": 0,
+        "sumMs": 1199.5
+      },
+      "frames_over50": 1,
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 4,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 3,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.0001,
+        "DevToolsCommandDuration": 0.0016,
+        "ScriptDuration": 0.0917,
+        "TaskDuration": 0.1,
+        "JSHeapUsedSize": 518668
+      },
+      "detected": true
+    },
+    {
+      "kind": "click",
+      "requested_ms": 120,
+      "actual_block_ms": 120,
+      "longtasks": [
+        {
+          "t": 25486.6,
+          "dur": 120,
+          "name": "self",
+          "attr": [
+            {
+              "type": "unknown",
+              "containerType": "window",
+              "containerSrc": ""
+            }
+          ]
+        }
+      ],
+      "longtask_total_ms": 120,
+      "longtask_max_ms": 120,
+      "loaf": [
+        {
+          "t": 25485.4,
+          "dur": 121,
+          "blocking": 70,
+          "styleAndLayout": -0.9,
+          "scripts": 1
+        }
+      ],
+      "loaf_max_ms": null,
+      "frames": {
+        "n": 70,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 28.8,
+        "max": 28.8,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1144.4
+      },
+      "frames_over50": 0,
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": 5,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 3,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.0014,
+        "DevToolsCommandDuration": 0.0015,
+        "ScriptDuration": 0.1536,
+        "TaskDuration": 0.1657,
+        "JSHeapUsedSize": 1775660
+      },
+      "detected": true
+    },
+    {
+      "kind": "click",
+      "requested_ms": 200,
+      "actual_block_ms": 200,
+      "longtasks": [
+        {
+          "t": 27264.3,
+          "dur": 200,
+          "name": "self",
+          "attr": [
+            {
+              "type": "unknown",
+              "containerType": "window",
+              "containerSrc": ""
+            }
+          ]
+        }
+      ],
+      "longtask_total_ms": 200,
+      "longtask_max_ms": 200,
+      "loaf": [
+        {
+          "t": 27262.7,
+          "dur": 202,
+          "blocking": 150,
+          "styleAndLayout": -0.1,
+          "scripts": 1
+        }
+      ],
+      "loaf_max_ms": null,
+      "frames": {
+        "n": 70,
+        "p50": 16.7,
+        "p95": 16.8,
+        "p99": 19.2,
+        "max": 19.2,
+        "over50": 0,
+        "over33": 0,
+        "over100": 0,
+        "sumMs": 1136.7
+      },
+      "frames_over50": 0,
+      "cdpDelta": {
+        "Documents": 0,
+        "Frames": 0,
+        "JSEventListeners": -10,
+        "Nodes": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 2,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.0001,
+        "DevToolsCommandDuration": 0.001,
+        "ScriptDuration": 0.2509,
+        "TaskDuration": 0.2611,
+        "JSHeapUsedSize": -6090196
+      },
+      "detected": true
+    }
+  ],
+  "positiveControlVerdict": {
+    "PC-C click-driven 120ms (决定性闸门)": "PASS — 点击驱动通道能报出注入的 120ms 阻塞",
+    "PC-P page-task 120ms": "PASS",
+    "PC-D devtools-task 120ms (器械边界；预期盲)": "AS-EXPECTED-BLIND — longtask 通道对 DevTools 下发的任务不产出条目",
+    "rAF 帧间隔通道灵敏度": "无灵敏度 — 120ms 阻塞未产生任何 >50ms 帧间隔 ⇒ 本环境 rAF 帧间隔不可当失速探测器",
+    "LoAF 通道灵敏度": "无灵敏度"
+  },
+  "activeIdxBeforeRepeat": 7,
+  "pingIdx": {
+    "general": 0,
+    "plugins": 2
+  },
+  "scrollRanges": {
+    "插件": {
+      "found": true,
+      "cls": "VOzbGW_options",
+      "clientH": 746,
+      "scrollH": 1597,
+      "range": 851
+    },
+    "通用设置": {
+      "found": true,
+      "cls": "VOzbGW_options",
+      "clientH": 746,
+      "scrollH": 820,
+      "range": 74
+    }
+  },
+  "closeState": {
+    "dialogCount": 0,
+    "nodes": 608
+  },
+  "stage": "done",
+  "release": {
+    "released": false,
+    "refused": "not my lock",
+    "owner": "agent: incident2-why-these-two (panel cost attribution: why only General+Plugins)\nline: same-page cross-panel comparison (general vs models vs plugins + tabs)\npurpose: attribute the \"only these two spots are expensive\" difference to one testable mechanism (H1..H6)\nowner_pid: 408162\npid: 408162\nhost_pid: 301709   # node dsh web (read-only reference; never restarted)\nstarted_at: 2026-09-22T03:17:52.566Z\nstarted_epoch: 1790047072\nconcurrentWith: none\nloadavg_at_acquire: 4.66 4.74 4.60 3/3856 408169\ntoken: CNS202649516533-408162-wtt\nnote: single browser at a time; release = rm owner.txt && rmdir\n"
+  },
+  "concurrency_at_end": {
+    "total": 0,
+    "own": 0,
+    "foreign": 0,
+    "foreign_list": [],
+    "own_list": []
+  }
+}

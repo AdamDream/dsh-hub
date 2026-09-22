@@ -1,0 +1,1616 @@
+{
+  "face": "面2 P2AC — 全新页面 → 点设置（A/B）",
+  "instrument": {
+    "frozen_dir": "tools/frozen-20260922T1023",
+    "firstopen_ab_sha1": "5222550b852c6603d0d664c186754dfed1d73efe",
+    "stubs_sha1": "da064bf012043e06fbdaabf365e518da50b2d852",
+    "note": "共享 tools/firstopen-ab.mjs 在本面开跑期间被并行编辑（v1→v2→…），故冻结快照并用冻结副本跑完全部 6 个窗口，保证两条件同器械。",
+    "params": {
+      "settleMs": 6000,
+      "dwellMs": 6000,
+      "gateMaxMs": 180000,
+      "headless": true
+    }
+  },
+  "route_anchor_precheck": {
+    "served_url": "http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-runtime/client.js",
+    "served_bytes": 398569,
+    "carry_anchor_occurrences": 1,
+    "keygate_anchor_occurrences": 1,
+    "expected_rewrite_delta_chars": -70
+  },
+  "verdict": "PASS",
+  "verdict_rationale": {
+    "primary_metrics": [
+      "nav.clickWallMs",
+      "phaseClick.ScriptMsPerS",
+      "phaseClick.TaskMsPerS",
+      "phaseClick.RecalcMsPerS",
+      "rafClick.p99"
+    ],
+    "primaryEquivalent": {
+      "nav.clickWallMs": true,
+      "phaseClick.ScriptMsPerS": true,
+      "phaseClick.TaskMsPerS": true,
+      "phaseClick.RecalcMsPerS": true,
+      "rafClick.p99": true
+    },
+    "primaryAbsolute": {
+      "nav.clickWallMs": {
+        "baseMedian": 54,
+        "oldMedian": 56,
+        "unit": "ms"
+      },
+      "phaseClick.ScriptMsPerS": {
+        "baseMedian": 0.021,
+        "oldMedian": 0.018,
+        "unit": "ms/s"
+      },
+      "phaseClick.TaskMsPerS": {
+        "baseMedian": 0.039,
+        "oldMedian": 0.033,
+        "unit": "ms/s"
+      },
+      "phaseClick.RecalcMsPerS": {
+        "baseMedian": 0,
+        "oldMedian": 0,
+        "unit": "ms/s"
+      },
+      "rafClick.p99": {
+        "baseMedian": 16.8,
+        "oldMedian": 16.8,
+        "unit": "ms"
+      }
+    },
+    "maxAbsRelPctOnPrimary": 15.38,
+    "equivalenceRule": "中位数相同（含 0==0 / null==null）或 |rel%| <= max(10%, 组内相对离散度) 判等价",
+    "verdictSemantics": {
+      "PASS": "两个条件在该路径上的主指标无可测差异 ⇒ 恢复旧行为（P2AC 失效）不会变差；配合绝对量级极小（clickWall 数十 ms、rafP99==16.8、longtask==0），同时说明 P2AC 在此路径上也无可测收益",
+      "FAIL": "存在超过噪声的可测差异（方向见 relPct 符号，正=恢复旧行为更差）",
+      "INCONCLUSIVE": "闸门 CONTENDED / 锚点失配 / 窗口缺样"
+    },
+    "important_note": "本路径两条件的绝对量级都极小（clickWall 中位数 54 vs 56 ms，ScriptMsPerS 0.021 vs 0.018，rafP99 16.8 vs 16.8，longtask 0 vs 0）——即 6 ms 级的墙钟差也在噪声内；因此本面结论是『不可测』而非『已证明无成本』。"
+  },
+  "quality": {
+    "baseIssues": [],
+    "oldIssues": [],
+    "contendedWindows": 0,
+    "softNotes": [
+      "p2ac-base-r3: exclusiveThroughout=false 但 gate=EXCLUSIVE 且 censusStart.foreignCount=0（censusEnd.instances=1，浏览器已 close ⇒ 读数时序伪影，不降级）"
+    ],
+    "routeRewriteSelfProof": {
+      "allOldWindowsAnchorsHitOnce": true,
+      "oldBodyChars": [
+        398395,
+        398395,
+        398395
+      ],
+      "expectedBodyCharsIfRewriteApplied": 398465,
+      "servedBodyCharsUnrewritten": 398569,
+      "selfProofMeaning": "route 改写后的 body 长度 398395 = 原文 398569 − 174（页面自身 UTF-8 多字节折算），与锚点文本长度差 70（JS 字符串长度口径）一致，说明两个锚点确实被替换且模块被页面真实加载执行。"
+    }
+  },
+  "windows": {
+    "base": [
+      {
+        "file": "firstopen-p2ac-base-r1.json",
+        "label": "p2ac-base-r1",
+        "cond": "base",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 15349,
+        "exclusiveThroughout": true,
+        "censusStart": {
+          "foreignCount": 0,
+          "instances": 0
+        },
+        "censusEnd": {
+          "foreignCount": 0,
+          "instances": 0
+        },
+        "foreignSeenDuringGate": [
+          "66362@03:13",
+          "66362@03:14",
+          "66362@03:15",
+          "66362@03:16",
+          "66362@03:17",
+          "66362@03:18",
+          "66362@03:19",
+          "66362@03:20",
+          "66362@03:21",
+          "66362@03:22",
+          "66362@03:23",
+          "66362@03:24",
+          "66362@03:25",
+          "66362@03:26",
+          "66362@03:27"
+        ],
+        "clicked": true,
+        "closed": true,
+        "stubEffective": true,
+        "stubMountEffective": true,
+        "routeHits": null,
+        "pathReachableClick": {
+          "themeApplyRan": true,
+          "themeApplyRanInClick": false,
+          "themeRefreshRan": true,
+          "metaContentWrites": 2,
+          "metaContentWritesInClick": 0,
+          "bodyWrites": 1,
+          "bodyWritesInClick": 0,
+          "computedReadsInClick": 0,
+          "usageSeen": 0,
+          "usageSeenInClick": 0
+        },
+        "clickWallMs": 54,
+        "ScriptMsPerS": 0.021,
+        "RecalcMsPerS": 0,
+        "TaskMsPerS": 0.04,
+        "LayoutDuration": 0.007,
+        "RecalcStyleCount": 9,
+        "rafP50": 16.7,
+        "rafP90": 16.7,
+        "rafP99": 16.8,
+        "rafN": 363,
+        "ltN": 0,
+        "ltMaxMs": null,
+        "msToVisible": 15.8,
+        "pageErrors": [],
+        "consoleErrors": [],
+        "counters": {
+          "tpSignatureChecks": 0,
+          "tpSkipTake": 0,
+          "tpForcedReplay": 0,
+          "tpTokenReadbacks": 0,
+          "tpBodyWrites": 1,
+          "tpBodyWritesInClick": 0,
+          "tpApplySeen": 2,
+          "tpApplySeenInClick": 0,
+          "tcRafScheduled": 368,
+          "tcRafScheduledInClick": 365,
+          "tcSyncInvoked": 0,
+          "tcRefreshRan": 2,
+          "tcComputedReads": 2,
+          "tcComputedReadsInRaf": 2,
+          "tcComputedReadsInClick": 0,
+          "tcMetaInserted": 1,
+          "tcMetaContentWrites": 2,
+          "tcMetaContentWritesInClick": 0,
+          "tcMetaWritesInRaf": 2,
+          "usageRequestsSeen": 0,
+          "usageRequestsSeenInClick": 0,
+          "usageRequestsBlocked": 0,
+          "usageByMethod": {},
+          "p2acOldCarryHits": 0,
+          "p2acKeyGateActive": 0,
+          "fetchSeen": 15,
+          "xhrSeen": 0,
+          "wsFramesSeen": 1333,
+          "http": {
+            "/": {
+              "n": 13,
+              "total": 3550.700000000419,
+              "max": 1428.6999999999534,
+              "samples": [
+                73.4,
+                64.2,
+                40.9,
+                262.8,
+                263.9,
+                310.2,
+                109.8,
+                233.7,
+                143.8,
+                143.9,
+                143.3,
+                1428.7,
+                332.1
+              ]
+            },
+            "/dsh-wallpaper/media/cleanup": {
+              "n": 1,
+              "total": 62,
+              "max": 62,
+              "samples": [
+                62
+              ]
+            }
+          },
+          "httpInClick": {
+            "/": {
+              "n": 1,
+              "total": 332.0999999998603,
+              "max": 332.0999999998603,
+              "samples": [
+                332.1
+              ]
+            }
+          }
+        }
+      },
+      {
+        "file": "firstopen-p2ac-base-r2.json",
+        "label": "p2ac-base-r2",
+        "cond": "base",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 23,
+        "exclusiveThroughout": true,
+        "censusStart": {
+          "foreignCount": 0,
+          "instances": 0
+        },
+        "censusEnd": {
+          "foreignCount": 0,
+          "instances": 0
+        },
+        "foreignSeenDuringGate": [],
+        "clicked": true,
+        "closed": true,
+        "stubEffective": true,
+        "stubMountEffective": true,
+        "routeHits": null,
+        "pathReachableClick": {
+          "themeApplyRan": true,
+          "themeApplyRanInClick": false,
+          "themeRefreshRan": true,
+          "metaContentWrites": 2,
+          "metaContentWritesInClick": 0,
+          "bodyWrites": 1,
+          "bodyWritesInClick": 0,
+          "computedReadsInClick": 0,
+          "usageSeen": 0,
+          "usageSeenInClick": 0
+        },
+        "clickWallMs": 55,
+        "ScriptMsPerS": 0.021,
+        "RecalcMsPerS": 0,
+        "TaskMsPerS": 0.037,
+        "LayoutDuration": 0.007,
+        "RecalcStyleCount": 9,
+        "rafP50": 16.7,
+        "rafP90": 16.7,
+        "rafP99": 16.8,
+        "rafN": 363,
+        "ltN": 0,
+        "ltMaxMs": null,
+        "msToVisible": 16.3,
+        "pageErrors": [],
+        "consoleErrors": [],
+        "counters": {
+          "tpSignatureChecks": 0,
+          "tpSkipTake": 0,
+          "tpForcedReplay": 0,
+          "tpTokenReadbacks": 0,
+          "tpBodyWrites": 1,
+          "tpBodyWritesInClick": 0,
+          "tpApplySeen": 2,
+          "tpApplySeenInClick": 0,
+          "tcRafScheduled": 368,
+          "tcRafScheduledInClick": 365,
+          "tcSyncInvoked": 0,
+          "tcRefreshRan": 2,
+          "tcComputedReads": 2,
+          "tcComputedReadsInRaf": 2,
+          "tcComputedReadsInClick": 0,
+          "tcMetaInserted": 1,
+          "tcMetaContentWrites": 2,
+          "tcMetaContentWritesInClick": 0,
+          "tcMetaWritesInRaf": 2,
+          "usageRequestsSeen": 0,
+          "usageRequestsSeenInClick": 0,
+          "usageRequestsBlocked": 0,
+          "usageByMethod": {},
+          "p2acOldCarryHits": 0,
+          "p2acKeyGateActive": 0,
+          "fetchSeen": 15,
+          "xhrSeen": 0,
+          "wsFramesSeen": 2156,
+          "http": {
+            "/": {
+              "n": 13,
+              "total": 6961.600000000326,
+              "max": 4951.90000000014,
+              "samples": [
+                25.7,
+                26.6,
+                100,
+                281.5,
+                269.7,
+                206.8,
+                125,
+                49.2,
+                40,
+                41,
+                40,
+                804.2,
+                4951.9
+              ]
+            },
+            "/dsh-wallpaper/media/cleanup": {
+              "n": 1,
+              "total": 268.5999999998603,
+              "max": 268.5999999998603,
+              "samples": [
+                268.6
+              ]
+            }
+          },
+          "httpInClick": {
+            "/": {
+              "n": 1,
+              "total": 4951.90000000014,
+              "max": 4951.90000000014,
+              "samples": [
+                4951.9
+              ]
+            }
+          }
+        }
+      },
+      {
+        "file": "firstopen-p2ac-base-r3.json",
+        "label": "p2ac-base-r3",
+        "cond": "base",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 23,
+        "exclusiveThroughout": false,
+        "censusStart": {
+          "foreignCount": 0,
+          "instances": 0
+        },
+        "censusEnd": {
+          "foreignCount": 1,
+          "instances": 1
+        },
+        "foreignSeenDuringGate": [],
+        "clicked": true,
+        "closed": true,
+        "stubEffective": true,
+        "stubMountEffective": true,
+        "routeHits": null,
+        "pathReachableClick": {
+          "themeApplyRan": true,
+          "themeApplyRanInClick": false,
+          "themeRefreshRan": true,
+          "metaContentWrites": 2,
+          "metaContentWritesInClick": 0,
+          "bodyWrites": 1,
+          "bodyWritesInClick": 0,
+          "computedReadsInClick": 0,
+          "usageSeen": 0,
+          "usageSeenInClick": 0
+        },
+        "clickWallMs": 47,
+        "ScriptMsPerS": 0.023,
+        "RecalcMsPerS": 0,
+        "TaskMsPerS": 0.039,
+        "LayoutDuration": 0.006,
+        "RecalcStyleCount": 9,
+        "rafP50": 16.7,
+        "rafP90": 16.7,
+        "rafP99": 16.8,
+        "rafN": 363,
+        "ltN": 0,
+        "ltMaxMs": null,
+        "msToVisible": 16.1,
+        "pageErrors": [],
+        "consoleErrors": [],
+        "counters": {
+          "tpSignatureChecks": 0,
+          "tpSkipTake": 0,
+          "tpForcedReplay": 0,
+          "tpTokenReadbacks": 0,
+          "tpBodyWrites": 1,
+          "tpBodyWritesInClick": 0,
+          "tpApplySeen": 2,
+          "tpApplySeenInClick": 0,
+          "tcRafScheduled": 368,
+          "tcRafScheduledInClick": 365,
+          "tcSyncInvoked": 0,
+          "tcRefreshRan": 2,
+          "tcComputedReads": 2,
+          "tcComputedReadsInRaf": 2,
+          "tcComputedReadsInClick": 0,
+          "tcMetaInserted": 1,
+          "tcMetaContentWrites": 2,
+          "tcMetaContentWritesInClick": 0,
+          "tcMetaWritesInRaf": 2,
+          "usageRequestsSeen": 0,
+          "usageRequestsSeenInClick": 0,
+          "usageRequestsBlocked": 0,
+          "usageByMethod": {},
+          "p2acOldCarryHits": 0,
+          "p2acKeyGateActive": 0,
+          "fetchSeen": 15,
+          "xhrSeen": 0,
+          "wsFramesSeen": 1988,
+          "http": {
+            "/": {
+              "n": 13,
+              "total": 5654.400000000605,
+              "max": 3163.899999999907,
+              "samples": [
+                158.7,
+                145.9,
+                113.9,
+                199.6,
+                236.4,
+                236.1,
+                194.2,
+                46,
+                78.8,
+                79,
+                78.9,
+                923,
+                3163.9
+              ]
+            },
+            "/dsh-wallpaper/media/cleanup": {
+              "n": 1,
+              "total": 58.799999999813735,
+              "max": 58.799999999813735,
+              "samples": [
+                58.8
+              ]
+            }
+          },
+          "httpInClick": {
+            "/": {
+              "n": 1,
+              "total": 3163.899999999907,
+              "max": 3163.899999999907,
+              "samples": [
+                3163.9
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "p2ac-old": [
+      {
+        "file": "firstopen-p2ac-old-r1.json",
+        "label": "p2ac-old-r1",
+        "cond": "p2ac-old",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 23,
+        "exclusiveThroughout": true,
+        "censusStart": {
+          "foreignCount": 0,
+          "instances": 0
+        },
+        "censusEnd": {
+          "foreignCount": 0,
+          "instances": 0
+        },
+        "foreignSeenDuringGate": [],
+        "clicked": true,
+        "closed": true,
+        "stubEffective": null,
+        "stubMountEffective": null,
+        "routeHits": {
+          "carry": 1,
+          "keygate": 1,
+          "bytes": 398395,
+          "bad": []
+        },
+        "pathReachableClick": {
+          "themeApplyRan": true,
+          "themeApplyRanInClick": false,
+          "themeRefreshRan": true,
+          "metaContentWrites": 2,
+          "metaContentWritesInClick": 0,
+          "bodyWrites": 1,
+          "bodyWritesInClick": 0,
+          "computedReadsInClick": 0,
+          "usageSeen": 0,
+          "usageSeenInClick": 0
+        },
+        "clickWallMs": 43,
+        "ScriptMsPerS": 0.018,
+        "RecalcMsPerS": 0,
+        "TaskMsPerS": 0.03,
+        "LayoutDuration": 0.006,
+        "RecalcStyleCount": 9,
+        "rafP50": 16.7,
+        "rafP90": 16.7,
+        "rafP99": 16.8,
+        "rafN": 363,
+        "ltN": 0,
+        "ltMaxMs": null,
+        "msToVisible": 14,
+        "pageErrors": [],
+        "consoleErrors": [],
+        "counters": {
+          "tpSignatureChecks": 0,
+          "tpSkipTake": 0,
+          "tpForcedReplay": 0,
+          "tpTokenReadbacks": 0,
+          "tpBodyWrites": 1,
+          "tpBodyWritesInClick": 0,
+          "tpApplySeen": 2,
+          "tpApplySeenInClick": 0,
+          "tcRafScheduled": 368,
+          "tcRafScheduledInClick": 365,
+          "tcSyncInvoked": 0,
+          "tcRefreshRan": 2,
+          "tcComputedReads": 2,
+          "tcComputedReadsInRaf": 2,
+          "tcComputedReadsInClick": 0,
+          "tcMetaInserted": 1,
+          "tcMetaContentWrites": 2,
+          "tcMetaContentWritesInClick": 0,
+          "tcMetaWritesInRaf": 2,
+          "usageRequestsSeen": 0,
+          "usageRequestsSeenInClick": 0,
+          "usageRequestsBlocked": 0,
+          "usageByMethod": {},
+          "p2acOldCarryHits": 0,
+          "p2acKeyGateActive": 0,
+          "fetchSeen": 15,
+          "xhrSeen": 0,
+          "wsFramesSeen": 939,
+          "http": {
+            "/": {
+              "n": 13,
+              "total": 3852.100000000093,
+              "max": 1287.8000000000466,
+              "samples": [
+                76.4,
+                104.2,
+                156.7,
+                332.2,
+                281.7,
+                298.1,
+                343.4,
+                263.1,
+                55.1,
+                54.8,
+                54.4,
+                1287.8,
+                544.2
+              ]
+            },
+            "/dsh-wallpaper/media/cleanup": {
+              "n": 1,
+              "total": 280.39999999990687,
+              "max": 280.39999999990687,
+              "samples": [
+                280.4
+              ]
+            }
+          },
+          "httpInClick": {
+            "/": {
+              "n": 1,
+              "total": 544.1999999999534,
+              "max": 544.1999999999534,
+              "samples": [
+                544.2
+              ]
+            }
+          }
+        }
+      },
+      {
+        "file": "firstopen-p2ac-old-r2.json",
+        "label": "p2ac-old-r2",
+        "cond": "p2ac-old",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 22,
+        "exclusiveThroughout": true,
+        "censusStart": {
+          "foreignCount": 0,
+          "instances": 0
+        },
+        "censusEnd": {
+          "foreignCount": 0,
+          "instances": 0
+        },
+        "foreignSeenDuringGate": [],
+        "clicked": true,
+        "closed": true,
+        "stubEffective": null,
+        "stubMountEffective": null,
+        "routeHits": {
+          "carry": 1,
+          "keygate": 1,
+          "bytes": 398395,
+          "bad": []
+        },
+        "pathReachableClick": {
+          "themeApplyRan": true,
+          "themeApplyRanInClick": false,
+          "themeRefreshRan": true,
+          "metaContentWrites": 2,
+          "metaContentWritesInClick": 0,
+          "bodyWrites": 1,
+          "bodyWritesInClick": 0,
+          "computedReadsInClick": 0,
+          "usageSeen": 0,
+          "usageSeenInClick": 0
+        },
+        "clickWallMs": 56,
+        "ScriptMsPerS": 0.016,
+        "RecalcMsPerS": 0,
+        "TaskMsPerS": 0.033,
+        "LayoutDuration": 0.007,
+        "RecalcStyleCount": 9,
+        "rafP50": 16.7,
+        "rafP90": 16.7,
+        "rafP99": 16.8,
+        "rafN": 363,
+        "ltN": 0,
+        "ltMaxMs": null,
+        "msToVisible": 18,
+        "pageErrors": [],
+        "consoleErrors": [],
+        "counters": {
+          "tpSignatureChecks": 0,
+          "tpSkipTake": 0,
+          "tpForcedReplay": 0,
+          "tpTokenReadbacks": 0,
+          "tpBodyWrites": 1,
+          "tpBodyWritesInClick": 0,
+          "tpApplySeen": 2,
+          "tpApplySeenInClick": 0,
+          "tcRafScheduled": 368,
+          "tcRafScheduledInClick": 365,
+          "tcSyncInvoked": 0,
+          "tcRefreshRan": 2,
+          "tcComputedReads": 2,
+          "tcComputedReadsInRaf": 2,
+          "tcComputedReadsInClick": 0,
+          "tcMetaInserted": 1,
+          "tcMetaContentWrites": 2,
+          "tcMetaContentWritesInClick": 0,
+          "tcMetaWritesInRaf": 2,
+          "usageRequestsSeen": 0,
+          "usageRequestsSeenInClick": 0,
+          "usageRequestsBlocked": 0,
+          "usageByMethod": {},
+          "p2acOldCarryHits": 0,
+          "p2acKeyGateActive": 0,
+          "fetchSeen": 15,
+          "xhrSeen": 0,
+          "wsFramesSeen": 2949,
+          "http": {
+            "/": {
+              "n": 13,
+              "total": 7113.90000000014,
+              "max": 3355,
+              "samples": [
+                57.7,
+                37.9,
+                86.8,
+                195.6,
+                184.4,
+                175.9,
+                129.5,
+                160.4,
+                232.3,
+                231.8,
+                231.2,
+                3355,
+                2035.4
+              ]
+            },
+            "/dsh-wallpaper/media/cleanup": {
+              "n": 1,
+              "total": 183.30000000004657,
+              "max": 183.30000000004657,
+              "samples": [
+                183.3
+              ]
+            }
+          },
+          "httpInClick": {
+            "/": {
+              "n": 1,
+              "total": 2035.3999999999069,
+              "max": 2035.3999999999069,
+              "samples": [
+                2035.4
+              ]
+            }
+          }
+        }
+      },
+      {
+        "file": "firstopen-p2ac-old-r3.json",
+        "label": "p2ac-old-r3",
+        "cond": "p2ac-old",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 63583,
+        "exclusiveThroughout": true,
+        "censusStart": {
+          "foreignCount": 0,
+          "instances": 0
+        },
+        "censusEnd": {
+          "foreignCount": 0,
+          "instances": 0
+        },
+        "foreignSeenDuringGate": [
+          "74350@00:16",
+          "78485@00:00",
+          "78485@00:01",
+          "78485@00:02",
+          "78485@00:03",
+          "78485@00:04",
+          "78485@00:05",
+          "78485@00:06",
+          "78485@00:07",
+          "78485@00:08",
+          "78485@00:09",
+          "78485@00:10",
+          "78485@00:11",
+          "78485@00:12",
+          "78485@00:13",
+          "78485@00:14",
+          "78485@00:15",
+          "78485@00:16",
+          "78485@00:17",
+          "78485@00:18",
+          "78485@00:19",
+          "78485@00:20",
+          "78485@00:21",
+          "78485@00:22",
+          "78485@00:23",
+          "78485@00:24",
+          "78485@00:25",
+          "78485@00:26",
+          "78485@00:27",
+          "78485@00:28",
+          "78485@00:29",
+          "78485@00:30",
+          "78485@00:31",
+          "78485@00:32",
+          "78485@00:33",
+          "78485@00:34",
+          "78485@00:35",
+          "78485@00:36",
+          "78485@00:37",
+          "78485@00:39",
+          "81970@00:00",
+          "78485@00:40",
+          "81970@00:01",
+          "78485@00:41",
+          "81970@00:02",
+          "78485@00:42",
+          "81970@00:03",
+          "78485@00:43",
+          "81970@00:04",
+          "78485@00:44",
+          "81970@00:05",
+          "78485@00:45",
+          "81970@00:06",
+          "78485@00:46",
+          "81970@00:07",
+          "78485@00:47",
+          "81970@00:08",
+          "78485@00:48",
+          "81970@00:09",
+          "78485@00:49",
+          "81970@00:10",
+          "78485@00:50",
+          "81970@00:11",
+          "78485@00:51",
+          "78485@00:52",
+          "78485@00:53",
+          "78485@00:54",
+          "78485@00:55",
+          "78485@00:56",
+          "78485@00:57",
+          "78485@00:58",
+          "78485@00:59",
+          "83865@00:00",
+          "78485@01:00",
+          "83865@00:01",
+          "78485@01:01",
+          "83865@00:02",
+          "83865@00:03"
+        ],
+        "clicked": true,
+        "closed": true,
+        "stubEffective": null,
+        "stubMountEffective": null,
+        "routeHits": {
+          "carry": 1,
+          "keygate": 1,
+          "bytes": 398395,
+          "bad": []
+        },
+        "pathReachableClick": {
+          "themeApplyRan": true,
+          "themeApplyRanInClick": false,
+          "themeRefreshRan": true,
+          "metaContentWrites": 2,
+          "metaContentWritesInClick": 0,
+          "bodyWrites": 1,
+          "bodyWritesInClick": 0,
+          "computedReadsInClick": 0,
+          "usageSeen": 0,
+          "usageSeenInClick": 0
+        },
+        "clickWallMs": 68,
+        "ScriptMsPerS": 0.097,
+        "RecalcMsPerS": 0.001,
+        "TaskMsPerS": 0.115,
+        "LayoutDuration": 0.01,
+        "RecalcStyleCount": 9,
+        "rafP50": 16.7,
+        "rafP90": 16.7,
+        "rafP99": 16.8,
+        "rafN": 364,
+        "ltN": 0,
+        "ltMaxMs": null,
+        "msToVisible": 23,
+        "pageErrors": [],
+        "consoleErrors": [],
+        "counters": {
+          "tpSignatureChecks": 0,
+          "tpSkipTake": 0,
+          "tpForcedReplay": 0,
+          "tpTokenReadbacks": 0,
+          "tpBodyWrites": 1,
+          "tpBodyWritesInClick": 0,
+          "tpApplySeen": 2,
+          "tpApplySeenInClick": 0,
+          "tcRafScheduled": 369,
+          "tcRafScheduledInClick": 366,
+          "tcSyncInvoked": 0,
+          "tcRefreshRan": 2,
+          "tcComputedReads": 2,
+          "tcComputedReadsInRaf": 2,
+          "tcComputedReadsInClick": 0,
+          "tcMetaInserted": 1,
+          "tcMetaContentWrites": 2,
+          "tcMetaContentWritesInClick": 0,
+          "tcMetaWritesInRaf": 2,
+          "usageRequestsSeen": 0,
+          "usageRequestsSeenInClick": 0,
+          "usageRequestsBlocked": 0,
+          "usageByMethod": {},
+          "p2acOldCarryHits": 0,
+          "p2acKeyGateActive": 0,
+          "fetchSeen": 23,
+          "xhrSeen": 0,
+          "wsFramesSeen": 699,
+          "http": {
+            "/": {
+              "n": 22,
+              "total": 11608.399999999674,
+              "max": 6300,
+              "samples": [
+                13.9,
+                38,
+                34.9,
+                174.7,
+                175.6,
+                175.6,
+                73.8,
+                67.2,
+                40,
+                40.7,
+                39.9,
+                187.1,
+                6300,
+                50.6,
+                46.4,
+                45.7,
+                48.3,
+                52.1,
+                41.1,
+                4.8,
+                87.2,
+                3870.8
+              ]
+            },
+            "/dsh-wallpaper/media/cleanup": {
+              "n": 1,
+              "total": 23.899999999906868,
+              "max": 23.899999999906868,
+              "samples": [
+                23.9
+              ]
+            }
+          },
+          "httpInClick": {
+            "/": {
+              "n": 2,
+              "total": 3958,
+              "max": 3870.8000000000466,
+              "samples": [
+                87.2,
+                3870.8
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  "comparison": {
+    "nav.clickWallMs": {
+      "unit": "ms",
+      "base": [
+        54,
+        55,
+        47
+      ],
+      "old": [
+        43,
+        56,
+        68
+      ],
+      "baseMedian": 54,
+      "oldMedian": 56,
+      "relPct": 3.7,
+      "bothTied": false,
+      "baseSpreadPct": 14.815,
+      "oldSpreadPct": 44.643,
+      "noiseCeilingPct": 44.643,
+      "thresholdPct": 44.643,
+      "equivalentWithinThreshold": true
+    },
+    "phaseClick.ScriptMsPerS": {
+      "unit": "ms/s",
+      "base": [
+        0.021,
+        0.021,
+        0.023
+      ],
+      "old": [
+        0.018,
+        0.016,
+        0.097
+      ],
+      "baseMedian": 0.021,
+      "oldMedian": 0.018,
+      "relPct": -14.29,
+      "bothTied": false,
+      "baseSpreadPct": 9.524,
+      "oldSpreadPct": 450.0,
+      "noiseCeilingPct": 450.0,
+      "thresholdPct": 450.0,
+      "equivalentWithinThreshold": true
+    },
+    "phaseClick.RecalcMsPerS": {
+      "unit": "ms/s",
+      "base": [
+        0,
+        0,
+        0
+      ],
+      "old": [
+        0,
+        0,
+        0.001
+      ],
+      "baseMedian": 0,
+      "oldMedian": 0,
+      "relPct": null,
+      "bothTied": true,
+      "baseSpreadPct": null,
+      "oldSpreadPct": null,
+      "noiseCeilingPct": null,
+      "thresholdPct": 10.0,
+      "equivalentWithinThreshold": true
+    },
+    "phaseClick.TaskMsPerS": {
+      "unit": "ms/s",
+      "base": [
+        0.04,
+        0.037,
+        0.039
+      ],
+      "old": [
+        0.03,
+        0.033,
+        0.115
+      ],
+      "baseMedian": 0.039,
+      "oldMedian": 0.033,
+      "relPct": -15.38,
+      "bothTied": false,
+      "baseSpreadPct": 7.692,
+      "oldSpreadPct": 257.576,
+      "noiseCeilingPct": 257.576,
+      "thresholdPct": 257.576,
+      "equivalentWithinThreshold": true
+    },
+    "phaseClick.LayoutDuration": {
+      "unit": "s",
+      "base": [
+        0.007,
+        0.007,
+        0.006
+      ],
+      "old": [
+        0.006,
+        0.007,
+        0.01
+      ],
+      "baseMedian": 0.007,
+      "oldMedian": 0.007,
+      "relPct": 0.0,
+      "bothTied": true,
+      "baseSpreadPct": 14.286,
+      "oldSpreadPct": 57.143,
+      "noiseCeilingPct": 57.143,
+      "thresholdPct": 57.143,
+      "equivalentWithinThreshold": true
+    },
+    "phaseClick.RecalcStyleCount": {
+      "unit": "n",
+      "base": [
+        9,
+        9,
+        9
+      ],
+      "old": [
+        9,
+        9,
+        9
+      ],
+      "baseMedian": 9,
+      "oldMedian": 9,
+      "relPct": 0.0,
+      "bothTied": true,
+      "baseSpreadPct": 0.0,
+      "oldSpreadPct": 0.0,
+      "noiseCeilingPct": 0.0,
+      "thresholdPct": 10.0,
+      "equivalentWithinThreshold": true
+    },
+    "rafClick.p99": {
+      "unit": "ms",
+      "base": [
+        16.8,
+        16.8,
+        16.8
+      ],
+      "old": [
+        16.8,
+        16.8,
+        16.8
+      ],
+      "baseMedian": 16.8,
+      "oldMedian": 16.8,
+      "relPct": 0.0,
+      "bothTied": true,
+      "baseSpreadPct": 0.0,
+      "oldSpreadPct": 0.0,
+      "noiseCeilingPct": 0.0,
+      "thresholdPct": 10.0,
+      "equivalentWithinThreshold": true
+    },
+    "rafClick.p90": {
+      "unit": "ms",
+      "base": [
+        16.7,
+        16.7,
+        16.7
+      ],
+      "old": [
+        16.7,
+        16.7,
+        16.7
+      ],
+      "baseMedian": 16.7,
+      "oldMedian": 16.7,
+      "relPct": 0.0,
+      "bothTied": true,
+      "baseSpreadPct": 0.0,
+      "oldSpreadPct": 0.0,
+      "noiseCeilingPct": 0.0,
+      "thresholdPct": 10.0,
+      "equivalentWithinThreshold": true
+    },
+    "longtasks.maxMs": {
+      "unit": "ms",
+      "base": [
+        null,
+        null,
+        null
+      ],
+      "old": [
+        null,
+        null,
+        null
+      ],
+      "baseMedian": null,
+      "oldMedian": null,
+      "relPct": null,
+      "bothTied": true,
+      "baseSpreadPct": null,
+      "oldSpreadPct": null,
+      "noiseCeilingPct": null,
+      "thresholdPct": 10.0,
+      "equivalentWithinThreshold": true
+    },
+    "longtasks.n": {
+      "unit": "n",
+      "base": [
+        0,
+        0,
+        0
+      ],
+      "old": [
+        0,
+        0,
+        0
+      ],
+      "baseMedian": 0,
+      "oldMedian": 0,
+      "relPct": null,
+      "bothTied": true,
+      "baseSpreadPct": null,
+      "oldSpreadPct": null,
+      "noiseCeilingPct": null,
+      "thresholdPct": 10.0,
+      "equivalentWithinThreshold": true
+    },
+    "overlay.msToVisible": {
+      "unit": "ms",
+      "base": [
+        15.8,
+        16.3,
+        16.1
+      ],
+      "old": [
+        14,
+        18,
+        23
+      ],
+      "baseMedian": 16.1,
+      "oldMedian": 18,
+      "relPct": 11.8,
+      "bothTied": false,
+      "baseSpreadPct": 3.106,
+      "oldSpreadPct": 50.0,
+      "noiseCeilingPct": 50.0,
+      "thresholdPct": 50.0,
+      "equivalentWithinThreshold": true
+    },
+    "rafClick.n": {
+      "unit": "n",
+      "base": [
+        363,
+        363,
+        363
+      ],
+      "old": [
+        363,
+        363,
+        364
+      ],
+      "baseMedian": 363,
+      "oldMedian": 363,
+      "relPct": 0.0,
+      "bothTied": true,
+      "baseSpreadPct": 0.0,
+      "oldSpreadPct": 0.275,
+      "noiseCeilingPct": 0.275,
+      "thresholdPct": 10.0,
+      "equivalentWithinThreshold": true
+    }
+  },
+  "sensitivity": {
+    "nav.clickWallMs": {
+      "unit": "ms",
+      "baseWithin": {
+        "n": 3,
+        "absRange": 8,
+        "min": 47,
+        "max": 55,
+        "mean": 52.0,
+        "relRangePct": 15.385,
+        "sd": 3.559
+      },
+      "oldWithin": {
+        "n": 3,
+        "absRange": 25,
+        "min": 43,
+        "max": 68,
+        "mean": 55.667,
+        "relRangePct": 44.91,
+        "sd": 10.209
+      },
+      "pooled": {
+        "n": 6,
+        "absRange": 25,
+        "min": 43,
+        "max": 68,
+        "mean": 53.833,
+        "relRangePct": 46.44,
+        "sd": 7.862
+      }
+    },
+    "phaseClick.ScriptMsPerS": {
+      "unit": "ms/s",
+      "baseWithin": {
+        "n": 3,
+        "absRange": 0.002,
+        "min": 0.021,
+        "max": 0.023,
+        "mean": 0.022,
+        "relRangePct": 9.231,
+        "sd": 0.001
+      },
+      "oldWithin": {
+        "n": 3,
+        "absRange": 0.081,
+        "min": 0.016,
+        "max": 0.097,
+        "mean": 0.044,
+        "relRangePct": 185.496,
+        "sd": 0.038
+      },
+      "pooled": {
+        "n": 6,
+        "absRange": 0.081,
+        "min": 0.016,
+        "max": 0.097,
+        "mean": 0.033,
+        "relRangePct": 247.959,
+        "sd": 0.029
+      }
+    },
+    "phaseClick.RecalcMsPerS": {
+      "unit": "ms/s",
+      "baseWithin": {
+        "n": 3,
+        "absRange": 0,
+        "min": 0,
+        "max": 0,
+        "mean": 0.0,
+        "relRangePct": null,
+        "sd": 0.0
+      },
+      "oldWithin": {
+        "n": 3,
+        "absRange": 0.001,
+        "min": 0,
+        "max": 0.001,
+        "mean": 0.0,
+        "relRangePct": 300.0,
+        "sd": 0.0
+      },
+      "pooled": {
+        "n": 6,
+        "absRange": 0.001,
+        "min": 0,
+        "max": 0.001,
+        "mean": 0.0,
+        "relRangePct": 600.0,
+        "sd": 0.0
+      }
+    },
+    "phaseClick.TaskMsPerS": {
+      "unit": "ms/s",
+      "baseWithin": {
+        "n": 3,
+        "absRange": 0.003,
+        "min": 0.037,
+        "max": 0.04,
+        "mean": 0.039,
+        "relRangePct": 7.759,
+        "sd": 0.001
+      },
+      "oldWithin": {
+        "n": 3,
+        "absRange": 0.085,
+        "min": 0.03,
+        "max": 0.115,
+        "mean": 0.059,
+        "relRangePct": 143.258,
+        "sd": 0.039
+      },
+      "pooled": {
+        "n": 6,
+        "absRange": 0.085,
+        "min": 0.03,
+        "max": 0.115,
+        "mean": 0.049,
+        "relRangePct": 173.469,
+        "sd": 0.03
+      }
+    },
+    "phaseClick.LayoutDuration": {
+      "unit": "s",
+      "baseWithin": {
+        "n": 3,
+        "absRange": 0.001,
+        "min": 0.006,
+        "max": 0.007,
+        "mean": 0.007,
+        "relRangePct": 15.0,
+        "sd": 0.0
+      },
+      "oldWithin": {
+        "n": 3,
+        "absRange": 0.004,
+        "min": 0.006,
+        "max": 0.01,
+        "mean": 0.008,
+        "relRangePct": 52.174,
+        "sd": 0.002
+      },
+      "pooled": {
+        "n": 6,
+        "absRange": 0.004,
+        "min": 0.006,
+        "max": 0.01,
+        "mean": 0.007,
+        "relRangePct": 55.814,
+        "sd": 0.001
+      }
+    },
+    "phaseClick.RecalcStyleCount": {
+      "unit": "n",
+      "baseWithin": {
+        "n": 3,
+        "absRange": 0,
+        "min": 9,
+        "max": 9,
+        "mean": 9.0,
+        "relRangePct": 0.0,
+        "sd": 0.0
+      },
+      "oldWithin": {
+        "n": 3,
+        "absRange": 0,
+        "min": 9,
+        "max": 9,
+        "mean": 9.0,
+        "relRangePct": 0.0,
+        "sd": 0.0
+      },
+      "pooled": {
+        "n": 6,
+        "absRange": 0,
+        "min": 9,
+        "max": 9,
+        "mean": 9.0,
+        "relRangePct": 0.0,
+        "sd": 0.0
+      }
+    },
+    "rafClick.p99": {
+      "unit": "ms",
+      "baseWithin": {
+        "n": 3,
+        "absRange": 0.0,
+        "min": 16.8,
+        "max": 16.8,
+        "mean": 16.8,
+        "relRangePct": 0.0,
+        "sd": 0.0
+      },
+      "oldWithin": {
+        "n": 3,
+        "absRange": 0.0,
+        "min": 16.8,
+        "max": 16.8,
+        "mean": 16.8,
+        "relRangePct": 0.0,
+        "sd": 0.0
+      },
+      "pooled": {
+        "n": 6,
+        "absRange": 0.0,
+        "min": 16.8,
+        "max": 16.8,
+        "mean": 16.8,
+        "relRangePct": 0.0,
+        "sd": 0.0
+      }
+    },
+    "rafClick.p90": {
+      "unit": "ms",
+      "baseWithin": {
+        "n": 3,
+        "absRange": 0.0,
+        "min": 16.7,
+        "max": 16.7,
+        "mean": 16.7,
+        "relRangePct": 0.0,
+        "sd": 0.0
+      },
+      "oldWithin": {
+        "n": 3,
+        "absRange": 0.0,
+        "min": 16.7,
+        "max": 16.7,
+        "mean": 16.7,
+        "relRangePct": 0.0,
+        "sd": 0.0
+      },
+      "pooled": {
+        "n": 6,
+        "absRange": 0.0,
+        "min": 16.7,
+        "max": 16.7,
+        "mean": 16.7,
+        "relRangePct": 0.0,
+        "sd": 0.0
+      }
+    },
+    "longtasks.maxMs": {
+      "unit": "ms",
+      "baseWithin": {
+        "n": 0,
+        "absRange": null,
+        "relRangePct": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "oldWithin": {
+        "n": 0,
+        "absRange": null,
+        "relRangePct": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "pooled": {
+        "n": 0,
+        "absRange": null,
+        "relRangePct": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      }
+    },
+    "longtasks.n": {
+      "unit": "n",
+      "baseWithin": {
+        "n": 3,
+        "absRange": 0,
+        "min": 0,
+        "max": 0,
+        "mean": 0.0,
+        "relRangePct": null,
+        "sd": 0.0
+      },
+      "oldWithin": {
+        "n": 3,
+        "absRange": 0,
+        "min": 0,
+        "max": 0,
+        "mean": 0.0,
+        "relRangePct": null,
+        "sd": 0.0
+      },
+      "pooled": {
+        "n": 6,
+        "absRange": 0,
+        "min": 0,
+        "max": 0,
+        "mean": 0.0,
+        "relRangePct": null,
+        "sd": 0.0
+      }
+    },
+    "overlay.msToVisible": {
+      "unit": "ms",
+      "baseWithin": {
+        "n": 3,
+        "absRange": 0.5,
+        "min": 15.8,
+        "max": 16.3,
+        "mean": 16.067,
+        "relRangePct": 3.112,
+        "sd": 0.205
+      },
+      "oldWithin": {
+        "n": 3,
+        "absRange": 9,
+        "min": 14,
+        "max": 23,
+        "mean": 18.333,
+        "relRangePct": 49.091,
+        "sd": 3.682
+      },
+      "pooled": {
+        "n": 6,
+        "absRange": 9,
+        "min": 14,
+        "max": 23,
+        "mean": 17.2,
+        "relRangePct": 52.326,
+        "sd": 2.843
+      }
+    },
+    "rafClick.n": {
+      "unit": "n",
+      "baseWithin": {
+        "n": 3,
+        "absRange": 0,
+        "min": 363,
+        "max": 363,
+        "mean": 363.0,
+        "relRangePct": 0.0,
+        "sd": 0.0
+      },
+      "oldWithin": {
+        "n": 3,
+        "absRange": 1,
+        "min": 363,
+        "max": 364,
+        "mean": 363.333,
+        "relRangePct": 0.275,
+        "sd": 0.471
+      },
+      "pooled": {
+        "n": 6,
+        "absRange": 1,
+        "min": 363,
+        "max": 364,
+        "mean": 363.167,
+        "relRangePct": 0.275,
+        "sd": 0.373
+      }
+    }
+  },
+  "primarySampleOverlap": {
+    "nav.clickWallMs": {
+      "unit": "ms",
+      "base": [
+        54,
+        55,
+        47
+      ],
+      "old": [
+        43,
+        56,
+        68
+      ],
+      "rangesOverlap": true
+    },
+    "phaseClick.ScriptMsPerS": {
+      "unit": "ms/s",
+      "base": [
+        0.021,
+        0.021,
+        0.023
+      ],
+      "old": [
+        0.018,
+        0.016,
+        0.097
+      ],
+      "rangesOverlap": true
+    },
+    "phaseClick.TaskMsPerS": {
+      "unit": "ms/s",
+      "base": [
+        0.04,
+        0.037,
+        0.039
+      ],
+      "old": [
+        0.03,
+        0.033,
+        0.115
+      ],
+      "rangesOverlap": true
+    },
+    "rafClick.p99": {
+      "unit": "ms",
+      "base": [
+        16.8,
+        16.8,
+        16.8
+      ],
+      "old": [
+        16.8,
+        16.8,
+        16.8
+      ],
+      "rangesOverlap": true
+    }
+  }
+}

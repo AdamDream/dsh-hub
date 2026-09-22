@@ -1,0 +1,22 @@
+=== identify PIDs 30380, 30473 (parent tree) ===
+--- PID 30380 ---
+comm: feishu
+stat comm: (feishu)
+cmdline: /proc/self/exe --type=gpu-process --string-annotations --enable-crash-reporter=, --change-stack-guard-on-fork=enable --gpu-preferences=WAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAABgAAAAAAAAAGAAAAAAAAAAFAAAAFAAAAAgAAAAAAAAACAAAAAAAAAA= --use-gl=angle --use-angle=swiftshader-webgl --browser-runtime --aha-multi-profile --shared-files --field-trial-handle=3,i,4605424789526660966,1998506330124397140,262144 --variations-seed-version --smc-metadata=8257535,18244623607547326471,12213144450123745461,20971520 --crashpad-client-sock=13 
+exe: cgroup: 0::/user.slice/user-1001.slice/user@1001.service/app.slice/app-gnome-bytedance\x2dfeishu-30300.scope
+ppid chain:
+   30300: /usr/bin/bytedance-feishu-stable --force-renderer-accessibility  [feishu]
+   4139: /usr/bin/gnome-shell  [gnome-shell]
+   3736: /usr/lib/systemd/systemd --user  [systemd]
+   1: /sbin/init splash  [systemd]
+--- PID 30473 ---
+comm: feishu
+stat comm: (feishu)
+cmdline: /proc/self/exe --type=gpu-process --string-annotations --enable-crash-reporter=, --change-stack-guard-on-fork=enable --gpu-preferences=WAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAABgAAAAAAAAAGAAAAAAAAAAFAAAAFAAAAAgAAAAAAAAACAAAAAAAAAA= --use-gl=angle --use-angle=swiftshader-webgl --browser-runtime --aha-multi-profile --shared-files --field-trial-handle=3,i,4605424789526660966,1998506330124397140,262144 --variations-seed-version --smc-metadata=8257535,18244623607547326471,12213144450123745461,20971520 --crashpad-client-sock=13 
+exe: cgroup: 0::/user.slice/user-1001.slice/user@1001.service/app.slice/app-gnome-bytedance\x2dfeishu-30300.scope
+ppid chain:
+   30380: /proc/self/exe --type=gpu-process --string-annotations --enable-crash-reporter=, --change-stack-guard-on-fork=enable --gpu-preferences=WAAAAAAAAAAgAAAEAAAAAAAAA [feishu]
+   30300: /usr/bin/bytedance-feishu-stable --force-renderer-accessibility  [feishu]
+   4139: /usr/bin/gnome-shell  [gnome-shell]
+   3736: /usr/lib/systemd/systemd --user  [systemd]
+   1: /sbin/init splash  [systemd]

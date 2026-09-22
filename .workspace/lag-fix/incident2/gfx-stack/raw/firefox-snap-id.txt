@@ -1,0 +1,45 @@
+=== readlink /proc/9042/exe ===
+=== /proc/9042/cwd ===
+=== /proc/9042/root ===
+=== /proc/9042/ns/mnt vs self ===
+mnt:[4026531841]
+=== /proc/9042/ns/user vs self ===
+user:[4026531837]
+=== /snap/firefox/ ===
+总计 8
+drwxr-xr-x  4 root root 4096  9月  7 05:19 .
+drwxr-xr-x 16 root root 4096  9月  7 11:59 ..
+drwxr-xr-x  7 root root  201  7月 19  2025 6565
+drwxr-xr-x  6 root root  179  9月  4 15:14 8863
+lrwxrwxrwx  1 root root    4  9月  7 05:19 current -> 8863
+=== /snap/firefox/current ===
+lrwxrwxrwx 1 root root 4  9月  7 05:19 /snap/firefox/current -> 8863
+=== snap list firefox ===
+名称       版本         修订版本  追踪               发布者        注记
+firefox  155.0.1-1  8863  latest/stable/…  mozilla**  -
+=== snap info firefox (head 60) ===
+name:      firefox
+summary:   Mozilla Firefox web browser
+publisher: Mozilla**
+store-url: https://snapcraft.io/firefox
+contact:   https://support.mozilla.org/kb/file-bug-report-or-feature-request-mozilla
+license:   unset
+description: |
+  Firefox is a powerful, extensible web browser with support for modern web
+  application technologies.
+commands:
+  - firefox
+  - firefox.geckodriver
+snap-id:      3wdHCAVyZEmYsCMFDE9qt92UV8rC8Wdk
+tracking:     latest/stable/ubuntu-24.04
+refresh-date: 15 天前，于 05:19（美国山区标准时间）
+channels:
+  latest/stable:    156.0-1       2026-09-17 (8929) 274MB -
+  latest/candidate: 156.0.1-1     2026-09-21 (8969) 274MB -
+  latest/beta:      157.0b4-1     2026-09-21 (8970) 275MB -
+  latest/edge:      158.0a1       2026-09-21 (8966) 298MB -
+  esr/stable:       140.16.0esr-1 2026-09-15 (8928) 248MB -
+  esr/candidate:    140.16.0esr-1 2026-09-15 (8928) 248MB -
+  esr/beta:         ^                                     
+  esr/edge:         ^                                     
+installed:          155.0.1-1                (8863) 274MB -

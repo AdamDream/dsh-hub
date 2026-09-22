@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>instrument-tiebreak: minimal block page</title>
+<!--
+  Deliberately minimal, zero-dependency page for the INSTRUMENT adjudication.
+  It contains NO DSH code, no framework, no animation, no continuous work other
+  than the rAF sampler installed by lib/probe.js (addInitScript, i.e. before any
+  page script).  Everything the probes see is therefore either (a) our injected
+  block or (b) browser bookkeeping — there is no application noise to confuse the
+  four channels.
+-->
+<style>
+  :root{color-scheme:dark}
+  html,body{margin:0;height:100%;background:#0e1117;color:#e6edf3;
+    font:13px/1.4 -apple-system,"Segoe UI",Roboto,Arial,"Noto Sans CJK SC",sans-serif}
+  #wrap{padding:24px}
+  #btn{font:13px/1 inherit;padding:10px 16px;border-radius:8px;border:1px solid #3b82f6;
+    background:#1c2530;color:#e6edf3;cursor:pointer}
+  #btn:active{background:#243244}
+  #status{position:fixed;left:12px;bottom:12px;font:11px/1.5 ui-monospace,Menlo,Consolas,monospace;
+    color:#8b98a5;white-space:pre}
+  .pad{height:60vh}
+</style>
+</head>
+<body>
+  <div id="wrap">
+    <h3 style="margin:0 0 12px;font-weight:600">instrument-tiebreak · minimal block page</h3>
+    <button id="btn">inject-block-here (click)</button>
+    <p style="color:#8b98a5;max-width:640px">
+      The four channels under test (rAF timestamp series, LongTask PO, LoAF PO, CDP trace
+      <code>RunTask</code>) are all installed by <code>lib/probe.js</code> via
+      <code>addInitScript</code>.  Only the block injection varies between cells.
+    </p>
+    <div class="pad"></div>
+  </div>
+  <div id="status">booting…</div>
+<script>
+"use strict";
+(function () {
+  var P = window.__IT__;
+  var st = document.getElementById('status');
+  function paint() {
+    st.textContent =
+      'visibilityState=' + document.visibilityState + '  hidden=' + document.hidden + '\n' +
+      'raf=' + P.raf.length + '  longtask=' + P.lt.length + '  loaf=' + P.loaf.length +
+      '  marks=' + P.marks.length + '  ltSupported=' + (P.ltErr ? 'no(' + P.ltErr + ')' : 'yes') +
+      '  loafSupported=' + (P.loafErr ? 'no(' + P.loafErr + ')' : 'yes');
+  }
+  P.onFrame = function () { if ((P.raf.length & 7) === 0) paint(); };
+  paint();
+  setInterval(paint, 250);
+
+  // click-driven injection site: the handler runs a synchronous busy block.
+  document.getElementById('btn').addEventListener('click', function () {
+    P.clickInject(Number(window.__IT_CLICK_MS__ || 120));
+  });
+
+  window.__IT_READY__ = true;
+})();
+</script>
+</body>
+</html>

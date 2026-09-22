@@ -1,0 +1,67 @@
+window=20.00s  NCPU=32  busy_ticks=4377  machine_capacity_ticks=64000
+MACHINE UTILISATION = 6.84%  (2.19 of 32 cores busy)
+
+CLASS               cores   %machine   %of_busy  procs
+DSH_SUBAGENT        0.008      0.02%       0.4%  4
+DSH_HOST            1.152      3.60%      52.7%  1
+USER                0.790      2.47%      36.1%  18
+SYSTEM              0.124      0.39%       5.7%  43
+THIRD_PARTY         0.113      0.35%       5.2%  6
+
+========================================================================================================
+DSH subagents  (MY investigation load)   total=0.008 cores (0.02% of machine, 0.4% of all busy CPU)
+========================================================================================================
+     0.45%core  pid=70198   node               rss=    76MB st=S  node host-drift.mjs --duration-s 10800 --interval-ms 500 --tag sentinel --out ./raw/host-drift-sentinel.json
+     0.15%core  pid=92575   node               rss=    57MB st=S  node sub/raf-face-runner.mjs --mode theme-sync --label raf-theme-sync-r2 --settle 6000 --dwell 6000 --gatemax 
+     0.15%core  pid=89046   node               rss=    70MB st=S  node host-click-probe.mjs --run 2 --out raw/click-run2.json --lock-timeout-s 1800 --interval-ms 50 --pre-ms 30
+     0.05%core  pid=96754   node               rss=    46MB st=S  node theme-open-ab.mjs --all --settle 5000 --gatewait 90000 --a 3 --e 3 --c 3
+
+========================================================================================================
+DSH host       (dsh web process itself)   total=1.152 cores (3.60% of machine, 52.7% of all busy CPU)
+========================================================================================================
+   115.25%core  pid=10806   node               rss=  4142MB st=R  node /home/CNS2026495165/.npm-global/bin/dsh web
+
+========================================================================================================
+USER           (human interactive apps)   total=0.790 cores (2.47% of machine, 36.1% of all busy CPU)
+========================================================================================================
+    31.35%core  pid=10350   Isolated Web Co    rss=   818MB st=S  /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:51029 -prefMapHandle 1:29
+    25.00%core  pid=9042    firefox            rss=  1148MB st=S  /snap/firefox/8863/usr/lib/firefox/firefox
+     7.05%core  pid=10133   Isolated Web Co    rss=   417MB st=S  /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:50868 -prefMapHandle 1:29
+     5.95%core  pid=4139    gnome-shell        rss=   370MB st=S  /usr/bin/gnome-shell
+     4.10%core  pid=9360    RDD Process        rss=   204MB st=S  /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -parentBuildID 20260904071051 -prefsHandle 0:36458 -pr
+     1.55%core  pid=10645   Isolated Web Co    rss=   368MB st=S  /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:51029 -prefMapHandle 1:29
+     1.20%core  pid=5657    wechat             rss=   465MB st=S  /usr/bin/wechat
+     1.15%core  pid=6134    WeChatAppEx        rss=   163MB st=S  /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=renderer --client_version=4067692808 --enable-crash-reporter
+     0.50%core  pid=30300   feishu             rss=   514MB st=S  /usr/bin/bytedance-feishu-stable --force-renderer-accessibility
+     0.50%core  pid=5775    WeChatAppEx        rss=   198MB st=S  /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=gpu-process --no-sandbox --client_version=4067692808 --enabl
+     0.15%core  pid=4856    gjs                rss=    79MB st=S  gjs /usr/share/gnome-shell/extensions/ding@rastersoft.com/app/ding.js -E -P /usr/share/gnome-shell/extensions/
+     0.10%core  pid=10964   Isolated Web Co    rss=   217MB st=S  /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:51029 -prefMapHandle 1:29
+  ... 6 further procs, 0.40%core combined
+
+========================================================================================================
+SYSTEM         (OS daemons, kernel, auto-updaters)   total=0.124 cores (0.39% of machine, 5.7% of all busy CPU)
+========================================================================================================
+     4.95%core  pid=3884    Xorg               rss=   288MB st=S  /usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1001/gdm/Xauthority -nolisten tcp -background none -norese
+     1.50%core  pid=4758    tracker-miner-f    rss=    49MB st=S  /usr/libexec/tracker-miner-fs-3
+     0.75%core  pid=66169   tracker-extract    rss=    30MB st=S  /usr/libexec/tracker-extract-3 --socket-fd 3
+     0.70%core  pid=939     mt76-usb-rx phy0   rss=     0MB st=S  
+     0.50%core  pid=30411   feishu             rss=   393MB st=S  /opt/bytedance/feishu/feishu --aha-process-t=aha-service --type=backend --task-jssdk-enabled --enable-backend-
+     0.40%core  pid=1527    mt76-tx phy0       rss=     0MB st=S  
+     0.35%core  pid=95505   kworker/u128:2-gfx rss=     0MB st=I  
+     0.30%core  pid=70398   kworker/u128:4-gfx rss=     0MB st=I  
+     0.25%core  pid=56410   kworker/u128:1-sdm rss=     0MB st=I  
+     0.25%core  pid=1541    avahi-daemon       rss=     4MB st=S  avahi-daemon: running [CNS202649516533.local]
+     0.20%core  pid=72397   kworker/3:3-mm_per rss=     0MB st=I  
+     0.20%core  pid=940     mt76-usb-status ph rss=     0MB st=S  
+  ... 31 further procs, 2.10%core combined
+
+========================================================================================================
+THIRD_PARTY    (/usr/local OCular agents)   total=0.113 cores (0.35% of machine, 5.2% of all busy CPU)
+========================================================================================================
+     7.30%core  pid=4535    LAgentUser         rss=    86MB st=S  /usr/local/.OCular/LAgentUser
+     3.30%core  pid=4376    LSDHelper          rss=    65MB st=S  /usr/local/bin/LSDHelper
+     0.40%core  pid=2108    LMonitorFileOP     rss=     8MB st=S  /usr/local/.OCular/LMonitorFileOP
+     0.20%core  pid=2104    LSGTransmit        rss=    11MB st=S  /usr/local/.OCular/LSGTransmit
+     0.10%core  pid=2100    LAgent             rss=    28MB st=S  /usr/local/.OCular/LAgent
+     0.05%core  pid=2102    LSDConfig          rss=    28MB st=S  /usr/local/.OCular/LSDConfig
+

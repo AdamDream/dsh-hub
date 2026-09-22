@@ -1,0 +1,258 @@
+# DISPLAY CHAIN RAW EVIDENCE  2026-09-22T10:34:19+08:00
+## host: CNS202649516533  kernel: 6.14.0-27-generic  virt: none  dmi: Gigabyte Technology Co., Ltd. X870 AORUS ELITE WIFI7 
+
+## 1. session
+XDG_SESSION_TYPE=x11 DISPLAY=:1 WAYLAND_DISPLAY='' XDG_CURRENT_DESKTOP=ubuntu:GNOME
+Remote=no
+Type=x11
+Active=yes
+
+## 2. xrandr --current
+Screen 0: minimum 320 x 200, current 5120 x 2880, maximum 16384 x 16384
+HDMI-A-1 disconnected (normal left inverted right x axis y axis)
+HDMI-A-2 connected primary 5120x2880+0+0 (normal left inverted right x axis y axis) 600mm x 340mm
+   3840x2160     60.00*+  50.00    59.94    30.00    25.00    24.00    29.97    23.98  
+   2560x1440     59.95  
+   1920x1200     60.00  
+   1920x1080     60.00    50.00    59.94    59.93    30.00    24.00    29.97    23.98  
+   1600x1200     60.00  
+   1680x1050     60.00  
+   1280x1024     60.00  
+   1440x900      60.00  
+   1280x800      60.00  
+   1280x720      60.00    59.94  
+   1024x768      60.00  
+   800x600       60.32  
+   720x576       50.00  
+   720x480       60.00    59.94  
+   640x480       60.00    59.94  
+DisplayPort-3 disconnected (normal left inverted right x axis y axis)
+DisplayPort-4 disconnected (normal left inverted right x axis y axis)
+HDMI-1-0 disconnected (normal left inverted right x axis y axis)
+DP-1-0 disconnected (normal left inverted right x axis y axis)
+DP-1-1 disconnected (normal left inverted right x axis y axis)
+DP-1-2 disconnected (normal left inverted right x axis y axis)
+DP-1-3 disconnected (normal left inverted right x axis y axis)
+DP-1-4 disconnected (normal left inverted right x axis y axis)
+DP-1-5 disconnected (normal left inverted right x axis y axis)
+
+## 3. xrandr --listmonitors / --listproviders
+Monitors: 1
+ 0: +*HDMI-A-2 5120/600x2880/340+0+0  HDMI-A-2
+Providers: number : 2
+Provider 0: id: 0x56 cap: 0x9, Source Output, Sink Offload crtcs: 4 outputs: 4 associated providers: 1 name:AMD Ryzen 9 9950X 16-Core Processor @ pci:0000:73:00.0
+Provider 1: id: 0x1ee cap: 0x2, Sink Output crtcs: 4 outputs: 7 associated providers: 1 name:NVIDIA-G0
+
+## 4. xdpyinfo
+number of screens:    1
+  dimensions:    5120x2880 pixels (903x508 millimeters)
+  resolution:    144x144 dots per inch
+  depth of root window:    24 planes
+
+## 5. xrandr active mode + transform (HDMI-A-2 block)
+HDMI-A-2 connected primary 5120x2880+0+0 (0x57) normal (normal left inverted right x axis y axis) 600mm x 340mm
+	Transform:  1.333328 0.000000 0.000000
+	           filter: bilinear
+	TearFree: auto 
+	vrr_capable: 0 
+	max bpc: 16 
+	scaling mode: None 
+	link-status: Good 
+(Transform matrix from verbose block:)
+	Transform:  1.333328 0.000000 0.000000
+	            0.000000 1.333328 0.000000
+	            0.000000 0.000000 1.000000
+	           filter: bilinear
+
+## 6. EDID-derived native/preferred timing and vrefresh range (from Xorg log)
+[    30.040] (II) AMDGPU(0): EDID for output HDMI-A-2
+[    30.040] (II) AMDGPU(0): Monitor name: LG ULTRAFINE
+[    30.041] (II) AMDGPU(0): Modeline "3840x2160"x60.0  594.00  3840 4016 4104 4400  2160 2168 2178 2250 +hsync +vsync (135.0 kHz eP)
+[    30.241] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+[    30.244] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+[    30.245] (II) AMDGPU(0): EDID vendor "GSM", prod id 23739
+vrefresh range decoded from EDID byte 0xFD: min=40Hz max=60Hz (see audit.md derivation)
+
+## 7. GNOME scale config (monitors.xml)
+<monitors version="2">
+  <configuration>
+    <logicalmonitor>
+      <x>0</x>
+      <y>0</y>
+      <scale>1.5</scale>
+      <primary>yes</primary>
+      <monitor>
+        <monitorspec>
+          <connector>HDMI-0</connector>
+          <vendor>GSM</vendor>
+          <product>LG ULTRAFINE</product>
+          <serial>606NTUWJK582</serial>
+        </monitorspec>
+        <mode>
+          <width>3840</width>
+          <height>2160</height>
+          <rate>60.000</rate>
+        </mode>
+      </monitor>
+    </logicalmonitor>
+  </configuration>
+</monitors>
+
+## 8. X resources (Xft.dpi => toolkit DPR)
+*customization:	-color
+Xft.dpi:	192
+Xft.antialias:	1
+Xft.hinting:	1
+Xft.hintstyle:	hintslight
+Xft.rgba:	rgb
+Xcursor.size:	48
+Xcursor.theme:	Yaru
+
+## 9. root window geometry (device px) => logical = /DPR
+_NET_WORKAREA(CARDINAL) = 132, 64, 4988, 2816, 132, 64, 4988, 2816
+_NET_DESKTOP_GEOMETRY(CARDINAL) = 5120, 2880
+_NET_DESKTOP_VIEWPORT(CARDINAL) = 0, 0
+
+## 10. dconf mutter experimental-features
+['x11-randr-fractional-scaling']
+[/]
+edge-tiling=false
+experimental-features=['x11-randr-fractional-scaling']
+
+[keybindings]
+toggle-tiled-left=@as []
+toggle-tiled-right=@as []
+
+## 11. gsettings interface (read; dconf CRITICAL comes from read-only runtime dir, values still valid)
+1.0
+uint32 0
+24
+true
+
+## 12. GPU: which card drives what
+card1 -> driver=nvidia pci=0000:01:00.0 boot_vga=0
+card2 -> driver=amdgpu pci=0000:73:00.0 boot_vga=1
+-- connectors --
+card1-DP-1 status=disconnected
+card1-DP-2 status=disconnected
+card1-DP-3 status=disconnected
+card1-HDMI-A-1 status=disconnected
+card2-DP-4 status=disconnected
+card2-DP-5 status=disconnected
+card2-HDMI-A-2 status=disconnected
+card2-HDMI-A-3 status=connected
+card2-Writeback-1 status=unknown
+
+## 13. Xorg log: driver selection / glamor / provider
+[    29.312] (II) Applying OutputClass "AMDgpu" to /dev/dri/card2
+[    29.312] (II) Applying OutputClass "nvidia" to /dev/dri/card1
+[    30.009] (II) NVIDIA dlloader X Driver  595.84  Wed Jun 10 20:51:08 UTC 2026
+[    30.011] (II) Applying OutputClass "AMDgpu" options to /dev/dri/card2
+[    30.038] (II) AMDGPU(0): glamor X acceleration enabled on AMD Ryzen 9 9950X 16-Core Processor (radeonsi, raphael_mendocino, LLVM 20.1.2, DRM 3.61, 6.14.0-27-generic)
+[    30.041] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[    30.041] (II) AMDGPU(0): Output HDMI-A-2 using initial mode 3840x2160 +0+0
+[    30.041] (II) Applying OutputClass "nvidia" options to /dev/dri/card1
+[    30.067] (II) AMDGPU(0): [DRI2]   DRI driver: radeonsi
+[    30.241] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[    30.244] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[    30.245] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[    30.247] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[    30.251] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[    30.254] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[    30.254] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[    30.599] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[    30.600] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[    30.898] (II) AMDGPU(0): Allocate new frame buffer 5120x2880
+[    30.971] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[    30.972] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[   494.183] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[   494.183] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1627.379] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1627.380] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1650.001] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1650.002] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1650.008] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1650.016] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1650.017] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1650.026] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1650.027] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1708.280] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1708.281] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1712.489] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1712.490] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1712.495] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1712.500] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1712.501] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1722.369] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1722.370] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1722.374] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1724.896] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1724.896] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1724.905] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1724.906] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1729.018] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1729.019] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1729.023] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1729.027] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1729.027] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1740.477] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1740.478] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1740.490] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1740.491] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1753.590] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1753.591] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1767.152] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1767.153] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1767.158] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1803.491] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1803.492] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1803.498] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1803.502] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1803.502] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1803.507] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1828.017] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1828.018] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1839.192] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1839.193] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1839.197] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1935.918] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1935.919] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1935.924] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1952.581] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1952.583] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1952.589] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1952.594] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1952.595] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1952.600] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1952.611] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1952.612] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1952.626] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+[  1952.627] (--) AMDGPU(0): HDMI max TMDS frequency 300000KHz
+
+## 14. amdgpu DPM (read-only)
+power_dpm_force_performance_level=auto
+power_dpm_state=performance
+-- pp_dpm_sclk --
+0: 600Mhz 
+1: 700Mhz 
+2: 2200Mhz *
+-- pp_dpm_mclk --
+0: 1000Mhz 
+1: 2400Mhz *
+2: 2400Mhz *
+
+## 15. nvidia presence
+nvidia-smi: Failed to initialize NVML: Unknown Error 
+power_state(D0=on)=D0
+
+## 16. gnome-shell / mutter versions
+GNOME Shell 46.0
+
+## 17. load / pressure / memory
+ 10:34:19 up 32 min,  1 user,  load average: 6.78, 6.12, 4.95
+               total        used        free      shared  buff/cache   available
+内存：         61885       15697        1202         251       45466       46188
+some avg10=0.00 avg60=0.00 avg300=0.00 total=3729635
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+some avg10=0.00 avg60=0.00 avg300=0.00 total=4
+full avg10=0.00 avg60=0.00 avg300=0.00 total=4

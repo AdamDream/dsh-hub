@@ -1,0 +1,80 @@
+############ correlation: headed browser launches vs Modeline bursts ############
+--- chrome/chromium launch timestamps (from /proc, etimes) ---
+27881 3736 1171 二 9月 22 10:13:54
+27882 27881 1171 二 9月 22 10:13:54
+100408 100390 13 二 9月 22 10:33:12
+101286 89046 1 二 9月 22 10:33:23
+101415 101412 0 二 9月 22 10:33:25
+
+--- sessions: headed vs headless campaign currently running? ---
+    238    1898 [kworker/0:1H-kblockd]
+    241    1895 [kworker/13:1-mm_percpu_wq]
+    251    1895 [kworker/18:1H-kblockd]
+    261    1895 [kworker/9:1-events]
+    262    1895 [kworker/15:1-mm_percpu_wq]
+    263    1895 [kworker/20:1-events]
+    265    1895 [kworker/31:1-events]
+    266    1895 [kworker/4:1-events]
+    267    1895 [kworker/10:1-mm_percpu_wq]
+    269    1895 [kworker/27:1-mm_percpu_wq]
+
+############ Xorg / gnome-shell CPU (compositor - the UI path) ############
+
+10时33分26秒   UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+10时33分27秒  1001      3884    1.00    1.00    0.00    0.00    2.00     4  Xorg
+10时33分27秒  1001      4139    3.00    1.00    0.00    0.00    4.00     2  gnome-shell
+10时33分27秒  1001      9042   14.00    4.00    0.00    0.00   18.00    26  firefox
+10时33分27秒  1001     10350   15.00    1.00    0.00    0.00   16.00    10  Isolated Web Co
+
+10时33分27秒   UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+10时33分28秒  1001      3884    2.00    3.00    0.00    0.00    5.00    29  Xorg
+10时33分28秒  1001      4139    5.00    1.00    0.00    0.00    6.00    12  gnome-shell
+10时33分28秒  1001      9042   20.00    3.00    0.00    0.00   23.00     8  firefox
+10时33分28秒  1001     10350   26.00    0.00    0.00    0.00   26.00    25  Isolated Web Co
+
+10时33分28秒   UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+10时33分29秒  1001      3884    5.00    2.00    0.00    0.00    7.00    28  Xorg
+10时33分29秒  1001      4139    6.00    2.00    0.00    0.00    8.00    30  gnome-shell
+10时33分29秒  1001      9042   30.00   10.00    0.00    1.00   40.00    18  firefox
+10时33分29秒  1001     10350   28.00    1.00    0.00    0.00   29.00     8  Isolated Web Co
+
+10时33分29秒   UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+10时33分30秒  1001      3884    4.00    3.00    0.00    0.00    7.00    29  Xorg
+10时33分30秒  1001      4139    6.00    2.00    0.00    0.00    8.00    13  gnome-shell
+10时33分30秒  1001      9042   16.00    4.00    0.00    0.00   20.00    31  firefox
+10时33分30秒  1001     10350   28.00    1.00    0.00    0.00   29.00    15  Isolated Web Co
+
+平均时间:   UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+平均时间:  1001      3884    3.40    2.40    0.00    0.00    5.80     -  Xorg
+平均时间:  1001      4139    5.40    1.40    0.00    0.20    6.80     -  gnome-shell
+平均时间:  1001      9042   19.20    5.00    0.00    0.20   24.20     -  firefox
+平均时间:  1001     10350   25.60    0.60    0.00    0.00   26.20     -  Isolated Web Co
+
+############ gnome-shell frame/render health signals ############
+9月 22 10:02:01 CNS202649516533 gnome-shell[2917]: Running GNOME Shell (using mutter 46.2) as a X11 window and compositing manager
+9月 22 10:02:02 CNS202649516533 org.gnome.Shell.desktop[2917]: Window manager warning: Failed to parse saved session file: 打开文件“/var/lib/gdm3/.config/mutter/sessions/103b671694a22f0964179004252161882800000028780000.ms”失败：没有那个文件或目录
+9月 22 10:02:18 CNS202649516533 gnome-shell[4139]: Running GNOME Shell (using mutter 46.2) as a X11 window and compositing manager
+
+############ update-manager (auto upater) activity detail ############
+    PID    PPID ELAPSED %CPU %MEM STAT CMD
+   6458    3736    1809  6.0  0.3 SNl  /usr/bin/python3 /usr/bin/update-manager --no-update --no-focus-on-map
+--- its parent/children ---
+    PID %CPU CMD
+--- pk-offline / packagekit running? ---
+
+############ final PSI + vmstat confirmation ############
+--- PSI ---
+[cpu] some avg10=0.00 avg60=0.00 avg300=0.00 total=3647734 full avg10=0.00 avg60=0.00 avg300=0.00 total=0 
+[io] some avg10=0.00 avg60=0.00 avg300=0.03 total=12612401 full avg10=0.00 avg60=0.00 avg300=0.02 total=11930399 
+[memory] some avg10=0.00 avg60=0.00 avg300=0.00 total=4 full avg10=0.00 avg60=0.00 avg300=0.00 total=4 
+--- vmstat 1 5 ---
+procs -----------memory---------- ---swap-- -----io---- -system-- -------cpu-------
+ r  b 交换 空闲 缓冲 缓存   si   so    bi    bo   in   cs us sy id wa st gu
+ 4  0      0 5191252 1371224 42059640    0    0 21505 18302 37074   14  6  2 92  0  0  0
+ 4  0      0 5221880 1371400 42072520    0    0   368 50572 48101 56610 10  4 85  0  0  0
+ 6  0      0 5172496 1371560 42064564    0    0   152 41108 47070 50054  9  4 87  0  0  0
+ 7  0      0 5249132 1371828 42073164    0    0   112 31868 54923 60097 12  5 83  0  0  0
+12  0      0 4989692 1371956 42115384    0    0  8328 45644 58180 66854 12  4 84  0  0  0
+--- uptime/load ---
+ 10:33:34 up 31 min,  1 user,  load average: 6.96, 6.02, 4.86
+6.96 6.02 4.86 5/3220 101897

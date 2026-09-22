@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "harness": "measure-v2",
+    "arm": "B",
+    "rep": 2,
+    "arm_label": "headed-realX",
+    "started_at": "2026-09-22T02:45:36.614Z",
+    "url": "http://127.0.0.1:3080/",
+    "host_pid": 10806,
+    "host_pid_alive": true,
+    "display": ":2",
+    "launch_args": [
+      "--no-sandbox",
+      "--disable-dev-shm-usage",
+      "--enable-precise-memory-info"
+    ],
+    "headless": false,
+    "playwright_version": "1.49.1",
+    "browser_version": null,
+    "note": "Same script and same judging criteria for every arm. Read-only: only the settings entry is clicked. No save/apply/delete.",
+    "finished_at": "2026-09-22T02:45:36.832Z",
+    "total_ms": 218
+  },
+  "invalid_reasons": [
+    "launch-failed"
+  ],
+  "environment": {
+    "at_start": {
+      "at": "2026-09-22T02:45:36.614Z",
+      "loadavg": "5.06 6.06 5.54",
+      "headless_shell_procs": 2,
+      "chrome_family_procs": 10,
+      "foreign_instances": 1,
+      "dsh_host_alive": true,
+      "mem_available_mb": 46939
+    },
+    "at_end": {
+      "at": "2026-09-22T02:45:36.832Z",
+      "loadavg": "5.06 6.06 5.54",
+      "headless_shell_procs": 2,
+      "chrome_family_procs": 10,
+      "foreign_instances": 1,
+      "dsh_host_alive": true,
+      "mem_available_mb": 46818
+    }
+  },
+  "launch": {
+    "ok": false,
+    "error": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /home/CNS2026495165/.cache/ms-playwright/chromium-1148/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --no-sandbox --no-sandbox --disable-dev-shm-usage --enable-precise-memory-info --user-data-dir=/tmp/playwright_chromiumdev_profile-Ci3zFm --remote-debugging-pipe --no-startup-window\n<launched> pid=273523\n[pid=273523][err] chrome_crashpad_handler: --database is required\n[pid=273523][err] Try 'chrome_crashpad_handler --help' for more information.\n[pid=273523][err] [273523:273523:0922/104536.766496:ERROR:socket.cc(120)] recvmsg: 连接被对方重置 (104)\nCall log:\n\u001b[2m  - <launching> /home/CNS2026495165/.cache/ms-playwright/chromium-1148/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,HttpsUpgrades,PaintHolding,ThirdPartyStoragePartitioning,LensOverlay,PlzDedicatedWorker --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --enable-automation --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --no-sandbox --no-sandbox --disable-dev-shm-usage --enable-precise-memory-info --user-data-dir=/tmp/playwright_chromiumdev_profile-Ci3zFm --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=273523\u001b[22m\n\u001b[2m  - [pid=273523][err] chrome_crashpad_handler: --database is required\u001b[22m\n\u001b[2m  - [pid=273523][err] Try 'chrome_crashpad_handler --help' for more information.\u001b[22m\n\u001b[2m  - [pid=273523][err] [273523:273523:0922/104536.766496:ERROR:socket.cc(120)] recvmsg: 连接被对方重置 (104)\u001b[22m\n",
+    "wall_epoch_ms": 1790045136832
+  }
+}

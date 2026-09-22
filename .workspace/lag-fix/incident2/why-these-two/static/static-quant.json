@@ -1,0 +1,289 @@
+{
+  "meta": {
+    "task": "static quantification of DSH Web GUI Settings modal (read-only)",
+    "generated_from": "deployed client bundles + read-only HTTP RPC probes",
+    "gui_url": "http://127.0.0.1:3080",
+    "host_pid": 301709,
+    "code_root_canonical": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/",
+    "code_root_profile_symlinks": "/home/CNS2026495165/.dsh/profiles/node_modules/",
+    "served_bytes_match_disk": true,
+    "served_bytes_proof": {
+      "@deepseek-ai/dsh-client-ui-settings-plugin-inventory/lib/client.js": "md5 98b7d8fa7ea75dbdec4c1865743cb950 (served == on-disk)",
+      "@deepseek-ai/dsh-client-ui-settings-plugins/lib/client.js": "md5 f428c577f4a1ac3c542fa34bf871f115 (served == on-disk)"
+    },
+    "method": "count host-element JSX call sites (jsx/jsxs/createElement/h) per component by line-range extraction of the deployed lib/client.js, then multiply by the repeated-row/card count obtained from read-only RPC; child-component internals NOT expanded, so counts are lower bounds",
+    "caveat": "counts are order-of-magnitude + defensible, not exact DOM totals; see static-quant.md section 9"
+  },
+
+  "premise_correction": {
+    "brief_claim": "the Settings modal has exactly THREE nav sections (general, models, plugins)",
+    "verified_reality": "EIGHT unconditional settings.section registrations, all in the live boot payload",
+    "nav_button_count_expected": 8,
+    "proof_boot_payload": "GET http://127.0.0.1:3080/ lists 52 /plugins/*/client.js module URLs, including all 8 registrants",
+    "proof_nav_renders_all": "@deepseek-ai/dsh-client-ui-settings-general/lib/client.js:132-143 (rows.map), rows built at :502-507, sorted by order",
+    "proof_nav_icon_per_row": "@deepseek-ai/dsh-client-ui-settings-general/lib/client.js:73-90 (navIcon) — one svg per nav button",
+    "sections": [
+      { "id": "general", "order": 0, "label": "通用设置", "registrant": "@deepseek-ai/dsh-client-ui-settings-general", "citation": "@deepseek-ai/dsh-client-ui-settings-general/lib/client.js:585-595" },
+      { "id": "models", "order": 10, "label": "模型", "registrant": "@deepseek-ai/dsh-client-ui-settings-models", "citation": "@deepseek-ai/dsh-client-ui-settings-models/lib/client.js:2784-2792" },
+      { "id": "plugins", "order": 15, "label": "插件", "registrant": "@deepseek-ai/dsh-client-ui-settings-plugins", "citation": "@deepseek-ai/dsh-client-ui-settings-plugins/lib/client.js:1276-1287" },
+      { "id": "agent-presets", "order": 20, "registrant": "@deepseek-ai/dsh-client-ui-agent-preset", "citation": "@deepseek-ai/dsh-client-ui-agent-preset/lib/client.js:1706-1713", "dom": "UNVERIFIED" },
+      { "id": "dsh-workspace-enhancement", "order": 40, "registrant": "dsh-workspace-enhancement", "citation": "dsh-workspace-enhancement/lib/client.js:5376-5383", "dom_estimate": "small (machines.list returned [])", "rpc_on_mount": ["machines.list (POST /dsw/machines.list)"] },
+      { "id": "@local/dsh-ssh-gui", "order": 50, "label": "分布式控制 · dsh-ssh-gui", "registrant": "@local/dsh-ssh-gui", "citation": "@local/dsh-ssh-gui/lib/client.js:987-993", "dom_estimate": 30, "rpc_on_mount": ["nodes.list", "keyref.list", "config.get", "serial.ports"], "rpc_citation": "@local/dsh-ssh-gui/lib/client.js:544-551 + mount effect :587" },
+      { "id": "@deepseek-ai/dsh-vision-adam", "order": 60, "label": "vision-adam 识图设置", "registrant": "@deepseek-ai/dsh-vision-adam", "citation": "@deepseek-ai/dsh-vision-adam/lib/client.js:201-207", "dom_estimate": 13 },
+      { "id": "@local/dsh-subagent-model", "order": 70, "label": "子代理模型", "registrant": "@local/dsh-subagent-model", "citation": "@local/dsh-subagent-model/lib/client.js:309-315", "dom_estimate": 19 }
+    ]
+  },
+
+  "sections": {
+    "general": {
+      "id": "general",
+      "order": 0,
+      "rows": 6,
+      "rows_source": "settings.general.item (list slot) registrations, sorted by order",
+      "row_table": [
+        { "order": -25, "id": "agent-preset", "package": "@deepseek-ai/dsh-client-ui-agent-preset", "citation": "@deepseek-ai/dsh-client-ui-agent-preset/lib/client.js:1699-1705" },
+        { "order": -20, "id": "permission", "package": "@deepseek-ai/dsh-client-ui-permission-presets", "citation": "@deepseek-ai/dsh-client-ui-permission-presets/lib/client.js:441-447" },
+        { "order": 0, "id": "language", "package": "@deepseek-ai/dsh-client-locale", "citation": "@deepseek-ai/dsh-client-locale/lib/client.js:1250-1257" },
+        { "order": 10, "id": "appearance", "package": "@deepseek-ai/dsh-client-ui-theme", "citation": "@deepseek-ai/dsh-client-ui-theme/lib/client.js:1337-1344" },
+        { "order": 20, "id": "composer-enter", "package": "@deepseek-ai/dsh-client-ui-conversation", "citation": "@deepseek-ai/dsh-client-ui-conversation/lib/client.js:9910-9922" },
+        { "order": 30, "id": "wallpaper", "package": "@local/dsh-wallpaper", "citation": "@local/dsh-wallpaper/lib/client.js:591-602" }
+      ],
+      "domNodes_estimate": { "low": 67, "high": 71, "order_of_magnitude": 100, "unit": "host elements" },
+      "dom_breakdown": {
+        "fixed_wrappers": 3,
+        "wrapper_citation": "@deepseek-ai/dsh-client-ui-renderer/lib/client.js:740,745-749 (div[data-slot], display:contents); @deepseek-ai/dsh-client-ui-settings-general/lib/client.js:278 (GeneralSection css)",
+        "row_host_sites": { "agent-preset": 5, "permission": 5, "language": 4, "appearance": 4, "composer-enter": 5, "wallpaper": 33 },
+        "row_subtotal": 56,
+        "uncounted_child_internals_approx": "8-12 (Menu x4/PresetMenu/Icon)"
+      },
+      "svg": { "count": 5, "components": ["IconChevronDownOutline14 x4 (menu triggers)", "Icon (appearance row)"], "note": "wallpaper row renders 0 svg", "confidence": "approx" },
+      "textNodes": { "low": 30, "high": 35, "derivation": "children:t() sites per row = 1,1,1,1,2,10 = 16; plus ~19 expression children" },
+      "rpc_on_section_mount": [],
+      "rpc_on_section_mount_note": "0 new RPCs. SettingsDocumentAction re-reads only through the shared mirror: controller.load() (@deepseek-ai/dsh-client-ui-settings-general/lib/client.js:326-328) -> describeFace.ensure() (:385), idle-only. Wallpaper row inject -> sync() (@local/dsh-wallpaper/lib/client.js:599) recomputes CSS only.",
+      "virtualized": false
+    },
+
+    "models": {
+      "id": "models",
+      "order": 10,
+      "rows": 3,
+      "rows_source": "configured = state.rows.filter((row) => row.configured) @ @deepseek-ai/dsh-client-ui-settings-models/lib/client.js:1881",
+      "configured_predicate_quote": "configured: namespace !== void 0 && (entry.settingsPath.length === 0 || this.schema.getPath(namespace.value, entry.settingsPath) !== void 0)",
+      "configured_predicate_citation": "@deepseek-ai/dsh-client-ui-settings-models/lib/client.js:564-567",
+      "providers_total": 39,
+      "providers_rpc": "POST /api/llm.providers -> ok, providers=39",
+      "configured_providers": ["deepseek-official", "opencode-go", "adam"],
+      "needs_setup": false,
+      "needs_setup_citation": "@deepseek-ai/dsh-client-ui-settings-models/lib/client.js:1762-1766; anyUsable=true because credentials.describe(DEEPSEEK_API_KEY).configured===true",
+      "domNodes_estimate": { "value": 34, "order_of_magnitude": 10, "unit": "host elements" },
+      "dom_breakdown": { "skeleton": 4, "rows": 24, "add_block": 6, "modal_open_false": 0 },
+      "svg": { "count": 2, "components": ["IconPlusOutline16 x2 @ @deepseek-ai/dsh-client-ui-settings-models/lib/client.js:2061,2077"] },
+      "textNodes": { "value": 13 },
+      "rpc_on_section_mount": {
+        "first_mount": ["llm.providers", "credentials.describe"],
+        "later_mounts": [],
+        "proof": "@deepseek-ai/dsh-client-ui-settings-models/lib/client.js:1856 `if (state.status === \"idle\") controller.load();` -> :548 api.llm.providers({}) + :578 credentials.describe({refs})",
+        "background_reload_proof": "refreshIfLoaded @ :2712-2715, wired @ :2766-2775 to settings/document-updated, credentials/reference-updated, llm/adapters-updated, connection/reset -> re-issues llm.providers + credentials.describe even while the section is closed, once opened once"
+      },
+      "virtualized": false
+    },
+
+    "plugins": {
+      "id": "plugins",
+      "order": 15,
+      "tabs": [
+        { "id": "configurable", "order": 0, "label": "可配置", "registrant": "@deepseek-ai/dsh-client-ui-settings-plugins", "citation": "@deepseek-ai/dsh-client-ui-settings-plugins/lib/client.js:1288-1299" },
+        { "id": "all", "order": 10, "label": "插件列表", "registrant": "@deepseek-ai/dsh-client-ui-settings-plugin-inventory", "citation": "@deepseek-ai/dsh-client-ui-settings-plugin-inventory/lib/client.js:285-292" }
+      ],
+      "panel_retention": {
+        "policy": "visited tab panels stay mounted with hidden=true; NOT unmounted",
+        "citation": "@deepseek-ai/dsh-client-ui-settings-plugins/lib/client.js:489-499 (rows.filter(row => row.id === active || visitedIds.has(row.id))), hidden: !selected @ :496",
+        "active_default": "@deepseek-ai/dsh-client-ui-settings-plugins/lib/client.js:420 — active falls back to rows[0] = configurable"
+      },
+      "tab_configurable": {
+        "rows": 3,
+        "rows_source": "ConfigurablePluginsTabController.publish() predicate",
+        "predicate_quote": "const served = new Set(mirrored.view?.namespaces.map((view) => view.ns) ?? []); const namespaces = this.entries().flatMap((entry) => entry.options.key !== void 0 && served.has(entry.options.key) ? [entry.options.key] : []);",
+        "predicate_citation": "@deepseek-ai/dsh-client-ui-settings-plugins/lib/client.js:968-969",
+        "served_namespaces_count": 20,
+        "served_namespaces": ["agent-default-model", "ui-theme", "locale", "ui-onboarding", "ui-conversation", "dsh-subagent", "llm-deepseek", "web-search-deepseek", "agent-loop", "agent-presets", "session-status-board", "dsh-workerspace", "vision-adam", "dsh-btw", "shell", "permission", "llm-pi-ai", "wallpaper", "dsh-usage", "dsh-ssh-gui"],
+        "registered_card_keys": ["shell", "agent-loop", "web-search-deepseek"],
+        "registered_card_keys_citation": "@deepseek-ai/dsh-client-ui-settings-plugins/lib/client.js:847,882,994 (constants) and :1300-1319 (registrations)",
+        "deliberately_not_shown_namespaces": 17,
+        "domNodes_estimate": { "value": 30, "order_of_magnitude": 10, "unit": "host elements" },
+        "dom_breakdown": { "section_chrome": 6, "panel_and_outlets": 3, "cards": 21, "per_card": 7 },
+        "svg": { "count": 3, "components": ["IconChevronDownOutline14 x1 per collapsed PluginCard @ @deepseek-ai/dsh-client-ui-settings-plugins/lib/client.js:234"] },
+        "textNodes": { "value": 10 },
+        "rpc_on_tab_mount": [],
+        "virtualized": false
+      },
+      "tab_all": {
+        "rows": 177,
+        "rows_source": "POST /api/pluginInventory/list -> value.entries.length === 177 (verified twice)",
+        "entries_enabled": 146,
+        "entries_disabled": 31,
+        "fiber_phase_counts": { "active": 146, "null": 31 },
+        "domNodes_estimate": { "value": 1250, "order_of_magnitude": 1000, "unit": "host elements", "scope": "whole plugins section while 插件列表 is active, including the still-mounted hidden 可配置 panel" },
+        "dom_breakdown": {
+          "section_chrome": 6,
+          "configurable_panel_hidden": 24,
+          "inventory_panel": 1220,
+          "inventory_content": 1218,
+          "inside_ul_cards": 1031,
+          "per_enabled_card": 6,
+          "per_disabled_card": 5,
+          "per_card_arithmetic": "146*6 + 31*5 = 876 + 155 = 1031"
+        },
+        "svg": {
+          "count_panel": 178,
+          "count_section": 181,
+          "components": ["IconChevronDownOutline14 x177 (one per card, NO enabled gate)", "IconSearchOutline16 x1"],
+          "citations": ["@deepseek-ai/dsh-client-ui-settings-plugin-inventory/lib/client.js:188-192", "@deepseek-ai/dsh-client-ui-settings-plugin-inventory/lib/client.js:117"],
+          "is_fixed_icon_set": false,
+          "invariant": "svg = N_cards + 1"
+        },
+        "textNodes": { "value": 357, "derivation": "hidden label 1 + h3 1 + count span 1 + 177 * 2" },
+        "rpc_on_tab_mount": ["pluginInventory.list"],
+        "rpc_route": "POST /api/pluginInventory/list  body {\"type\":\"client-request\",\"rpcId\":\"...\",\"method\":\"pluginInventory/list\",\"payload\":{\"args\":{}}}",
+        "rpc_route_note": "NOT /api/pluginInventory.list (404). Route derived from @deepseek-ai/dsh-api-gateway/lib/index.js:62,63-65,117-121 + @deepseek-ai/dsh-client-connection/lib/index.js:275-315. Payload must contain exactly one key: args.",
+        "rpc_cache": "none — data lives in component state; list closure created in apply() and identity-memoized per slot entry (@deepseek-ai/dsh-client-ui-renderer/lib/client.js:396-403)",
+        "rpc_refire_rules": {
+          "click_插件_nav_first_time": "no pluginInventory.list (inventory tab not mounted)",
+          "first_click_on_插件列表": "1 x pluginInventory.list",
+          "toggle_可配置<->插件列表": "0 (panel stays mounted, hidden)",
+          "leave_section_then_return_then_click_插件列表": "1 x pluginInventory.list (full section unmount resets visitedIds/tab state)"
+        },
+        "virtualized": false
+      },
+      "rpc_on_section_mount": [],
+      "rpc_on_section_mount_note": "ConfigurablePluginsTabController is built at boot (@deepseek-ai/dsh-client-ui-settings-plugins/lib/client.js:1241) and only calls describeFace.ensure() (:944), which is idle-only (@deepseek-ai/dsh-client-ui-settings/lib/client.js:1246-1253)."
+    }
+  },
+
+  "svg_149_analysis": {
+    "reported_by_other_line": 149,
+    "code_invariant": "svg(插件列表 panel) = N_cards + 1 (search icon)",
+    "n_cards_now": 177,
+    "expected_now_panel": 178,
+    "expected_now_section": 181,
+    "arithmetic_that_yields_149": "149 = 148 + 1  ->  148 inventory cards + 1 search icon",
+    "is_fixed_icon_set": false,
+    "why_not_fixed": "the chevron svg is rendered inside the per-entry .map with no conditional gate (@deepseek-ai/dsh-client-ui-settings-plugin-inventory/lib/client.js:188), so it is exactly 1:1 with cards",
+    "excluded_candidates": [
+      { "reading": "one chevron per card, current data", "result": 178, "reason": "!= 149" },
+      { "reading": "chevron only on enabled cards", "result": 147, "reason": "no enabled gate at :188" }
+    ],
+    "verdict": "149 most plausibly equals 148 cards + 1 search icon; the measurement's entry count differs from today's 177 => UNVERIFIED provenance",
+    "icon_component_is_single_svg_proof": "dsh-web-frontend/dist/assets/index-ClqxG24t.js offset 230278: hs=({size:n=14,className:i})=>f.jsx(\"svg\",{width:n,height:n,viewBox:\"0 0 14 14\",...})"
+  },
+
+  "rpc_probes": [
+    { "method": "settings.describe", "route": "POST /api/settings.describe", "result": "ok; writable=true; hasDocument=true; namespaces=20" },
+    { "method": "llm.providers", "route": "POST /api/llm.providers", "result": "ok; providers=39" },
+    { "method": "credentials.describe", "route": "POST /api/credentials.describe", "result": "ok; DEEPSEEK_API_KEY configured=true; OPENCODE_GO_API_KEY configured=true" },
+    { "method": "pluginInventory/list", "route": "POST /api/pluginInventory/list", "result": "ok; entries=177; enabled=146" },
+    { "method": "nodes.list", "route": "POST /ssh-gui/nodes.list", "result": "ok; nodes=[] (route-shape probe)" },
+    { "method": "machines.list", "route": "POST /dsw/machines.list", "result": "ok; machines=[] (route-shape probe)" }
+  ],
+
+  "virtualization_verdict": {
+    "any_virtualization": false,
+    "searched_for": ["react-window", "react-virtual", "VirtualList", "virtualiz", "IntersectionObserver", "content-visibility"],
+    "matches": 0,
+    "packages_searched": ["@deepseek-ai/dsh-client-ui-settings-plugins", "@deepseek-ai/dsh-client-ui-settings-plugin-inventory", "@deepseek-ai/dsh-client-ui-settings-models", "@deepseek-ai/dsh-client-ui-settings-general"],
+    "map_quotes": [
+      { "list": "plugins -> 可配置 (3 items)", "code": "children: namespaces.map((ns) => (0, react_jsx_runtime.jsx)(react.Fragment, { children: renderSlot(\"settings.plugin.item\", {}, { entryKey: ns }) }, ns))", "citation": "@deepseek-ai/dsh-client-ui-settings-plugins/lib/client.js:403" },
+      { "list": "plugins -> 插件列表 (177 items)", "code": "children: filteredEntries.map((entry) => { ... })", "citation": "@deepseek-ai/dsh-client-ui-settings-plugin-inventory/lib/client.js:150" },
+      { "list": "models (3 items)", "code": "children: configured.map((row) => {", "citation": "@deepseek-ai/dsh-client-ui-settings-models/lib/client.js:1909" }
+    ],
+    "scroll_container": "div.VOzbGW_options{flex:1;min-height:0;padding:0 24px 24px;overflow-y:auto} @ @deepseek-ai/dsh-client-ui-settings-general/lib/client.js:28 — plain overflow, no windowing",
+    "grid_css": ".qSYn7G_cards{grid-template-columns:repeat(2,minmax(0,1fr));...display:grid} @ @deepseek-ai/dsh-client-ui-settings-plugin-inventory/lib/client.js:11"
+  },
+
+  "h6_wallpaper": {
+    "source": "@local/dsh-wallpaper/lib/client.js",
+    "trigger_table": [
+      { "id": "T1", "path": "sync() -> applyCurrent(ctx)", "interaction": "plugin boot (once)", "citation": "@local/dsh-wallpaper/lib/client.js:569-580 (applyCurrent :573), called :581" },
+      { "id": "T2", "path": "scope.subscribe(sync) -> sync()", "interaction": "any settings-scope change: first settings.describe answer, every settings write, every settings/document-updated", "citation": "@local/dsh-wallpaper/lib/client.js:582" },
+      { "id": "T3", "path": "settings.general.item entry inject -> sync()", "interaction": "first injection of the wallpaper row entry (memoized per entry identity)", "citation": "@local/dsh-wallpaper/lib/client.js:591-602 (sync() :599); memo @deepseek-ai/dsh-client-ui-renderer/lib/client.js:396-403" },
+      { "id": "T4", "path": "notifySettingsOpen(open) -> applyCurrent(ctx)", "interaction": "General section entered or left", "citation": "@local/dsh-wallpaper/lib/client.js:517-522" },
+      { "id": "T5", "path": "commitField optimistic mirror -> applyCurrent(ctx)", "interaction": "every wallpaper control edit", "citation": "@local/dsh-wallpaper/lib/client.js:503-504" },
+      { "id": "T6", "path": "commitField failure rollback -> applyCurrent(ctx)", "interaction": "failed wallpaper settings write", "citation": "@local/dsh-wallpaper/lib/client.js:508-510" },
+      { "id": "T7", "path": "sessions.list.subscribe(...) -> applyCurrent(ctx)", "interaction": "switching the current session", "citation": "@local/dsh-wallpaper/lib/client.js:584-587" },
+      { "id": "T8", "path": "ctx.on(\"theme/change\", () => applyCurrent(ctx))", "interaction": "theme switch", "citation": "@local/dsh-wallpaper/lib/client.js:588" }
+    ],
+    "row_mount_effect": {
+      "quote": "React.useEffect(() => { notifySettingsOpen(true); return () => notifySettingsOpen(false); }, []);",
+      "citation": "@local/dsh-wallpaper/lib/client.js:400-403"
+    },
+    "notifySettingsOpen_impl": {
+      "quote": "notifySettingsOpen: (open) => { if (pageState.settingsOpen === open) return; pageState.settingsOpen = open; applyCurrent(ctx); }",
+      "citation": "@local/dsh-wallpaper/lib/client.js:518-521"
+    },
+    "answers": {
+      "a_switching_away_from_general_fires_applyWallpaper": { "value": true, "reason": "row unmounts -> cleanup notifySettingsOpen(false) @:402 -> guard at :519 does not short-circuit (was true) -> applyCurrent :521" },
+      "b_switching_to_general_fires_applyWallpaper": { "value": true, "reason": "row mounts -> notifySettingsOpen(true) @:401 -> applyCurrent :521" },
+      "c_values_byte_identical_and_skip_guard": {
+        "values_byte_identical": true,
+        "reason": "settings.yaml has only a wallpaper.global key (no pages:) => normalizePages(undefined) = {} => resolveOverride returns normalizePage(value.global) for every page key",
+        "citation": "/home/CNS2026495165/.dsh/settings.yaml:199-204 and @local/dsh-wallpaper/lib/client.js:100-112",
+        "content_skip_guard_in_applyWallpaper": false,
+        "applyWallpaper_quote": "wallpaperEl.style.backgroundImage = `url(\"${config.source}\")`; ... wallpaperEl.style.filter = blur > 0 ? `blur(${blur}px)` : \"none\"; ... if (darkMask > 0) { ensureMaskElement(); ... } else { releaseMaskElement(); } ... shadeTokens(...)",
+        "applyWallpaper_citation": "@local/dsh-wallpaper/lib/client.js:238-266",
+        "existing_guards_and_why_they_do_not_help": [
+          { "guard": "if (cssEl !== null && document.head.contains(cssEl)) return;", "citation": "@local/dsh-wallpaper/lib/client.js:139", "scope": "stylesheet tag only" },
+          { "guard": "if (sameShadedTokens(shadedTokens, next)) return;", "citation": "@local/dsh-wallpaper/lib/client.js:204", "scope": "theme token re-publish only; does not skip the DOM/style writes" }
+        ]
+      }
+    },
+    "network_effect_per_switch": "2 full-viewport style invalidations (background-image + filter) with identical values and no skip; mask element calls are no-ops because darkMask=0",
+    "bounded_loop": {
+      "path": "shadeTokens -> ctx.theme.overrideTokens (:207) -> ThemeService.publish() (@deepseek-ai/dsh-client-ui-theme/lib/client.js:1224-1233) -> ctx.emit('theme/change') (:1264-1267) -> T8 -> applyCurrent",
+      "terminates_after": "one extra applyWallpaper pass (nested shadeTokens returns at :191 `if (shading) return`, later calls at :204)",
+      "net": "first applyWallpaper after a token change costs 2 passes; steady-state section switches cost 1"
+    }
+  },
+
+  "mask_and_painted_area": {
+    "css": {
+      "overlay": ".VOzbGW_overlay{z-index:1000;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}",
+      "mask": ".VOzbGW_mask{background:var(--dsw-alias-bg-mask-1);backdrop-filter:var(--dsw-mask-blur);position:absolute;inset:0}",
+      "panel": ".VOzbGW_panel{z-index:1;background:var(--dsw-alias-bg-layer-2);width:800px;max-width:calc(100vw - 48px);height:min(800px,100vh - 48px);...}",
+      "citation": "@deepseek-ai/dsh-client-ui-settings-general/lib/client.js:28 (VOzbGW_* string); key map :44"
+    },
+    "resolved_tokens": {
+      "--dsw-alias-bg-mask-1": { "light": "#0000003d", "dark": "#00000080", "citation": "@deepseek-ai/dsh-client-ui-theme/lib/client.js:124" },
+      "--dsw-mask-blur": { "value": "blur(2px)", "citation": "@deepseek-ai/dsh-client-ui-theme/lib/client.js:130" }
+    },
+    "wallpaper_layer": {
+      "cssText": "position:fixed;inset:0;z-index:-1;pointer-events:none;width:100%;height:100%;background-size:cover;background-position:center;background-repeat:no-repeat;",
+      "citation": "@local/dsh-wallpaper/lib/client.js:220-225",
+      "dark_mask_layer_present": false,
+      "dark_mask_reason": "settings.yaml wallpaper.global.darkMask = 0 -> releaseMaskElement() branch (@local/dsh-wallpaper/lib/client.js:258-264)",
+      "token_shading": "--dsw-alias-bg-base overridden to rgba(base, 0.88) (settings.yaml:203 opacity) making all app surfaces translucent -> another full-viewport blend"
+    },
+    "geometry": {
+      "viewport": { "w": 1440, "h": 900, "area_px2": 1296000 },
+      "wallpaper_layer": { "w": 1440, "h": 900, "area_px2": 1296000 },
+      "backdrop_filter_mask": { "w": 1440, "h": 900, "area_px2": 1296000 },
+      "panel": { "w": 800, "h": 800, "area_px2": 640000, "height_derivation": "min(800, 900-48)=min(800,852)=800" }
+    },
+    "ratios": {
+      "wallpaper_plus_mask_over_panel": 4.05,
+      "mask_over_panel": 2.025,
+      "wallpaper_over_panel": 2.025,
+      "viewport_over_panel": 2.025,
+      "arithmetic": "(1296000 + 1296000) / 640000 = 2592000 / 640000 = 4.05"
+    },
+    "note": "the mask blurs the full 1,296,000 px^2 backdrop before the opaque panel is composited on top; the panel's own background does not excuse the blur work"
+  },
+
+  "unverified": [
+    { "item": "exact DOM totals", "reason": "child components (Menu, PresetMenu, Icon, Modal, ProviderEditor, RiskConfirmation, Slider internals) live in the prebuilt dsh-web-frontend/dist/assets/index-ClqxG24t.js bundle and were not expanded; no browser may be launched. Counts are lower bounds." },
+    { "item": "agent-presets section DOM size", "reason": "AgentPresetSection (@deepseek-ai/dsh-client-ui-agent-preset/lib/client.js:1706-1713) not quantified in this pass" },
+    { "item": "whether Modal renders nothing when open:false", "reason": "primitive internals not inspected; assumed null in the models count" },
+    { "item": "provenance of the reported 149 SVG", "reason": "code arithmetic gives N_cards+1; today N_cards=177 => 178; 149=148+1 implies 148 entries at measurement time and cannot be reproduced (RPC stable at 177 across two calls; no loader-history endpoint available read-only)" },
+    { "item": "whether Blink re-decodes an identical background-image string", "reason": "browser behaviour; out of scope for a static pass and no browser may be launched" },
+    { "item": "actual event-loop / layout timings", "reason": "not derivable statically; this document supplies only the independent expectation" }
+  ]
+}

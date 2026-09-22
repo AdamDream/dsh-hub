@@ -1,0 +1,361 @@
+{
+  "cond": "base",
+  "label": "raf-base-r3",
+  "ts": "2026-09-22T02:43:37.150Z",
+  "instrument": {
+    "name": "raf-face-runner",
+    "page_stub": "sub/raf-face-pagestub.js",
+    "why_not_shared_harness": "tools/stubs.js 的 theme-sync 无条件同步 rAF 与 firstopen-ab.mjs 自带 rAF 心跳互相递归 → RangeError，共享器械无法产出 theme-sync 窗口（见 repro 证据）",
+    "vs_shared": [
+      "rAF 包装按调用点栈分类，把器械心跳与生产调度分开计数",
+      "theme-sync 分支加重入保护（rAF 回调内排的 rAF 走真 rAF），避免无限递归",
+      "指标口径（phaseMount/phaseClick/rafClick/overlay/longtasks/taskBusyPct）与 firstopen-ab.mjs 同构",
+      "共享计数同名项保留：tcRafScheduled/tcSyncInvoked/tcMetaContentWrites(InClick)/tcComputedReads(InRaf/InClick)/tcRefreshRan/tpApplySeen(InClick)…"
+    ]
+  },
+  "nav": {
+    "domcontentloadedMs": 152,
+    "settleMs": 6000,
+    "clicked": true,
+    "closed": true,
+    "clickError": null,
+    "gotoError": null,
+    "clickWallMs": 63,
+    "dwellMs": 6000,
+    "wallS": 6.069
+  },
+  "stub": {
+    "spec": "base",
+    "mechanism": "control: read-only counters + rAF 调用点栈分类",
+    "effective": true,
+    "mountEffective": true,
+    "pathReachableClick": {
+      "themeApplyRan": true,
+      "themeApplyRanInClick": false,
+      "themeRefreshRan": true,
+      "themeDeferScheduledByProd": true,
+      "themeDeferScheduledByProdInClick": false,
+      "metaContentWrites": 2,
+      "metaContentWritesInClick": 0,
+      "bodyWrites": 1,
+      "bodyWritesInClick": 0,
+      "computedReadsInClick": 0,
+      "usageSeen": 0,
+      "usageSeenInClick": 0
+    },
+    "pathReachableMount": {
+      "themeApplyRan": true,
+      "themeApplyRanInClick": false,
+      "themeRefreshRan": true,
+      "themeDeferScheduledByProd": true,
+      "themeDeferScheduledByProdInClick": false,
+      "metaContentWrites": 2,
+      "metaContentWritesInClick": 0,
+      "bodyWrites": 1,
+      "bodyWritesInClick": 0,
+      "computedReadsInClick": 0,
+      "usageSeen": 0,
+      "usageSeenInClick": 0
+    },
+    "mountProof": {
+      "mechanism": "control: read-only counters + rAF 调用点栈分类",
+      "expected": "counters 变化即证明观测生效",
+      "effective": true,
+      "effectiveStrict": true,
+      "cond": "base",
+      "counters": {
+        "tpSignatureChecks": 0,
+        "tpSkipTake": 0,
+        "tpForcedReplay": 0,
+        "tpTokenReadbacks": 0,
+        "tpBodyWrites": 1,
+        "tpBodyWritesInClick": 0,
+        "tpApplySeen": 2,
+        "tpApplySeenInClick": 0,
+        "tcRafScheduled": 3,
+        "tcRafScheduledInClick": 0,
+        "tcSyncInvoked": 0,
+        "tcRefreshRan": 2,
+        "tcComputedReads": 2,
+        "tcComputedReadsInRaf": 2,
+        "tcComputedReadsInClick": 0,
+        "tcMetaInserted": 1,
+        "tcMetaContentWrites": 2,
+        "tcMetaContentWritesInClick": 0,
+        "tcMetaWritesInRaf": 2,
+        "usageRequestsSeen": 0,
+        "usageRequestsSeenInClick": 0,
+        "usageRequestsBlocked": 0,
+        "usageByMethod": {},
+        "p2acOldCarryHits": 0,
+        "p2acKeyGateActive": 0,
+        "fetchSeen": 0,
+        "xhrSeen": 0,
+        "wsFramesSeen": 0,
+        "rafCallsTotal": 3,
+        "rafCallsInClick": 0,
+        "rafByHeartbeat": 0,
+        "rafByHeartbeatInClick": 0,
+        "rafByProdThemeDefer": 2,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafStackSamplesTaken": 3,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a:555:16"
+        ],
+        "rafOtherSamples": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "rafSyncExecuted": 0,
+        "rafSyncExecutedProd": 0,
+        "rafSyncExecutedProdInClick": 0,
+        "rafSyncFallback": 0,
+        "rafSyncFallbackInsideCallback": 0,
+        "rafSyncFallbackFromProd": 0,
+        "tcMetaWritesInSyncRafCallback": 0,
+        "tcComputedReadsInSyncRafCallback": 0
+      },
+      "pathReachable": {
+        "themeApplyRan": true,
+        "themeApplyRanInClick": false,
+        "themeRefreshRan": true,
+        "themeDeferScheduledByProd": true,
+        "themeDeferScheduledByProdInClick": false,
+        "metaContentWrites": 2,
+        "metaContentWritesInClick": 0,
+        "bodyWrites": 1,
+        "bodyWritesInClick": 0,
+        "computedReadsInClick": 0,
+        "usageSeen": 0,
+        "usageSeenInClick": 0
+      },
+      "stubLog": [
+        [
+          1790045003865,
+          "installed",
+          "base"
+        ]
+      ]
+    },
+    "clickProof": {
+      "mechanism": "control: read-only counters + rAF 调用点栈分类",
+      "expected": "counters 变化即证明观测生效",
+      "effective": true,
+      "effectiveStrict": true,
+      "cond": "base",
+      "counters": {
+        "tpSignatureChecks": 0,
+        "tpSkipTake": 0,
+        "tpForcedReplay": 0,
+        "tpTokenReadbacks": 0,
+        "tpBodyWrites": 1,
+        "tpBodyWritesInClick": 0,
+        "tpApplySeen": 2,
+        "tpApplySeenInClick": 0,
+        "tcRafScheduled": 366,
+        "tcRafScheduledInClick": 363,
+        "tcSyncInvoked": 0,
+        "tcRefreshRan": 2,
+        "tcComputedReads": 2,
+        "tcComputedReadsInRaf": 2,
+        "tcComputedReadsInClick": 0,
+        "tcMetaInserted": 1,
+        "tcMetaContentWrites": 2,
+        "tcMetaContentWritesInClick": 0,
+        "tcMetaWritesInRaf": 2,
+        "usageRequestsSeen": 0,
+        "usageRequestsSeenInClick": 0,
+        "usageRequestsBlocked": 0,
+        "usageByMethod": {},
+        "p2acOldCarryHits": 0,
+        "p2acKeyGateActive": 0,
+        "fetchSeen": 0,
+        "xhrSeen": 0,
+        "wsFramesSeen": 0,
+        "rafCallsTotal": 366,
+        "rafCallsInClick": 363,
+        "rafByHeartbeat": 363,
+        "rafByHeartbeatInClick": 363,
+        "rafByProdThemeDefer": 2,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafStackSamplesTaken": 12,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a:555:16"
+        ],
+        "rafOtherSamples": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "rafSyncExecuted": 0,
+        "rafSyncExecutedProd": 0,
+        "rafSyncExecutedProdInClick": 0,
+        "rafSyncFallback": 0,
+        "rafSyncFallbackInsideCallback": 0,
+        "rafSyncFallbackFromProd": 0,
+        "tcMetaWritesInSyncRafCallback": 0,
+        "tcComputedReadsInSyncRafCallback": 0
+      },
+      "pathReachable": {
+        "themeApplyRan": true,
+        "themeApplyRanInClick": false,
+        "themeRefreshRan": true,
+        "themeDeferScheduledByProd": true,
+        "themeDeferScheduledByProdInClick": false,
+        "metaContentWrites": 2,
+        "metaContentWritesInClick": 0,
+        "bodyWrites": 1,
+        "bodyWritesInClick": 0,
+        "computedReadsInClick": 0,
+        "usageSeen": 0,
+        "usageSeenInClick": 0
+      },
+      "stubLog": [
+        [
+          1790045003865,
+          "installed",
+          "base"
+        ]
+      ]
+    },
+    "routeHits": null,
+    "rafClassification": {
+      "callsTotal": 366,
+      "callsInClick": 363,
+      "byHeartbeat": 363,
+      "byHeartbeatInClick": 363,
+      "byProdThemeDefer": 2,
+      "byProdThemeDeferInClick": 0,
+      "byOther": 1,
+      "byOtherInClick": 0,
+      "mountPhase": {
+        "byHeartbeat": 0,
+        "byProdThemeDefer": 2,
+        "byOther": 1,
+        "callsTotal": 3
+      },
+      "clickPhaseDelta": {
+        "byHeartbeat": 363,
+        "byProdThemeDefer": 0,
+        "byOther": 0,
+        "callsTotal": 363
+      },
+      "prodStackSamples": [
+        "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+        "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a:555:16"
+      ],
+      "otherSamplesTop": {
+        "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+      },
+      "stackSamplesTaken": 12
+    },
+    "syncEvidence": {
+      "mode": "base",
+      "syncExecuted": 0,
+      "syncExecutedProd": 0,
+      "syncExecutedProdInClick": 0,
+      "syncFallback": 0,
+      "syncFallbackInsideCallback": 0,
+      "syncFallbackFromProd": 0,
+      "metaWritesInSyncRafCallback": 0,
+      "computedReadsInSyncRafCallback": 0,
+      "metaWritesInRaf": 2,
+      "computedReadsInRaf": 2
+    }
+  },
+  "phaseMount": {
+    "ScriptDuration": 1.016,
+    "RecalcStyleDuration": 0.014,
+    "TaskDuration": 1.414,
+    "RecalcStyleCount": 35
+  },
+  "phaseClick": {
+    "ScriptDuration": 0.905,
+    "RecalcStyleDuration": 0.005,
+    "LayoutDuration": 0.007,
+    "TaskDuration": 1.011,
+    "RecalcStyleCount": 9,
+    "ScriptMsPerS": 0.149,
+    "RecalcMsPerS": 0.001,
+    "TaskMsPerS": 0.167
+  },
+  "rafClick": {
+    "n": 361,
+    "min": 16.5,
+    "p50": 16.7,
+    "p90": 16.7,
+    "p99": 16.8,
+    "max": 33.4,
+    "mean": 16.758,
+    "over50": 0,
+    "over100": 0
+  },
+  "overlay": {
+    "firstVisibleAt": 7221.1,
+    "clickDispatchAt": 7200.7,
+    "msToVisible": 20.4,
+    "firstBox": {
+      "area": 921600,
+      "w": 1280,
+      "h": 720,
+      "t": 7221.100000000093
+    },
+    "nowBox": {
+      "area": 921600,
+      "w": 1280,
+      "h": 720,
+      "t": 13227.200000000186
+    },
+    "clickBox": {
+      "x": 10,
+      "y": 668,
+      "w": 260,
+      "h": 42
+    }
+  },
+  "taskBusyPct": 16.658,
+  "longtasks": {
+    "n": 0,
+    "totalMs": 0,
+    "maxMs": null
+  },
+  "ws": {
+    "total": 1339,
+    "byType": {
+      "server-request": 1339
+    }
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "concurrency": {
+    "gateOutcome": "EXCLUSIVE",
+    "gateWaitedMs": 23,
+    "foreignSeenDuringGate": [],
+    "censusStart": {
+      "at": "2026-09-22T02:43:23.646Z",
+      "instances": 0,
+      "mineCount": 0,
+      "foreignCount": 0,
+      "foreign": [],
+      "lockOwner": "agent: incident2-regression (raf-face theme-sync A/B) line: label=raf-base-r3 pid: 251477",
+      "lockHeldByMyLine": true
+    },
+    "censusEnd": {
+      "at": "2026-09-22T02:43:37.150Z",
+      "instances": 0,
+      "mineCount": 0,
+      "foreignCount": 0,
+      "foreign": [],
+      "lockOwner": "agent: incident2-regression (raf-face theme-sync A/B) line: label=raf-base-r3 pid: 251477",
+      "lockHeldByMyLine": true
+    },
+    "exclusiveThroughout": true
+  },
+  "lock": {
+    "heldAtStart": true,
+    "released": true
+  }
+}

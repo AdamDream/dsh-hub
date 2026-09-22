@@ -1,0 +1,2119 @@
+{
+  "generatedAt": "2026-09-22T11:54:37+08:00",
+  "config": {
+    "phase": "matrix",
+    "mode": "headed",
+    "reps": 3,
+    "dwellFrames": 120,
+    "rows": 15000,
+    "muts": 10000,
+    "perFrame": 1000,
+    "thrMs": 3000,
+    "thrBatch": 400,
+    "resultTimeoutSec": 200,
+    "resultTimeoutMs": 200000,
+    "lockWaitMin": 1,
+    "tag": "ffhd"
+  },
+  "busAddress": "unix:path=/run/user/1001/at-spi/bus_1",
+  "busAppsBefore": {
+    "address": "unix:path=/run/user/1001/at-spi/bus_1",
+    "apps": [
+      ":1.1",
+      ":1.3",
+      ":1.4",
+      ":1.6",
+      ":1.5",
+      ":1.8",
+      ":1.13",
+      ":1.12",
+      ":1.7",
+      ":1.15",
+      ":1.18",
+      ":1.19",
+      ":1.21",
+      ":1.24",
+      ":1.23",
+      ":1.26",
+      ":1.27",
+      ":1.28",
+      ":1.3070",
+      ":1.3091",
+      ":1.3158"
+    ],
+    "error": null
+  },
+  "busAppsAfter": {
+    "address": "unix:path=/run/user/1001/at-spi/bus_1",
+    "apps": [
+      ":1.1",
+      ":1.3",
+      ":1.4",
+      ":1.6",
+      ":1.5",
+      ":1.8",
+      ":1.13",
+      ":1.12",
+      ":1.7",
+      ":1.15",
+      ":1.18",
+      ":1.19",
+      ":1.21",
+      ":1.24",
+      ":1.23",
+      ":1.26",
+      ":1.27",
+      ":1.28",
+      ":1.3070",
+      ":1.3091"
+    ],
+    "error": null
+  },
+  "runs": [
+    {
+      "condition": "env-default",
+      "rep": 1,
+      "mode": "headed",
+      "token": "ffhd-headed-env-default-r1-1790048942693",
+      "rootPid": 530406,
+      "profileDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r1",
+      "userJs": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r1/user.js",
+      "homeDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-default-r1",
+      "envPassed": {
+        "ACCESSIBILITY_ENABLED": "1",
+        "GNOME_ACCESSIBILITY": "1",
+        "GTK_MODULES": "gail:atk-bridge"
+      },
+      "dbusSessionBusAddress": "unix:path=/run/user/1001/bus",
+      "gsettingsBackend": "memory",
+      "launchedAt": "2026-09-22T11:49:23+08:00",
+      "args": [
+        "--new-instance",
+        "--no-remote",
+        "--marionette",
+        "--profile",
+        "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r1",
+        "http://127.0.0.1:45285/page?n=15000&m=10000&f=120&k=1000&t=3000&batch=400&token=ffhd-headed-env-default-r1-1790048942693"
+      ],
+      "logFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/logs/headed-env-default-r1.log",
+      "loadBefore": "7.13 6.47 5.97 5/3431 530406",
+      "loadavgDuringResult": "7.26 6.52 6.00 10/3667 530858",
+      "busWatch": [
+        {
+          "at": "2026-09-22T11:49:25+08:00",
+          "tMs": 1156,
+          "busName": ":1.3186",
+          "onBus": true
+        }
+      ],
+      "atspi": null,
+      "rootAccessible": {
+        "busName": ":1.3186",
+        "name": "Firefox",
+        "role": "application",
+        "childCount": 1
+      },
+      "result": {
+        "token": "ffhd-headed-env-default-r1-1790048942693",
+        "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "params": {
+          "n": 15000,
+          "m": 10000,
+          "f": 120,
+          "k": 1000,
+          "t": 3000,
+          "batch": 400
+        },
+        "hardwareConcurrency": 32,
+        "visibilityState": "visible",
+        "phases": {
+          "build": 44,
+          "read1": 120,
+          "mutate": 26,
+          "animate": 3765,
+          "read2": 14
+        },
+        "frames": {
+          "totalMs": 3765,
+          "frames": 120,
+          "count": 120,
+          "mean": 31.317,
+          "p50": 25,
+          "p90": 44,
+          "p95": 53,
+          "p99": 63,
+          "max": 137,
+          "over33": 58,
+          "over50": 8,
+          "over100": 1
+        },
+        "longTasks": {
+          "count": 0,
+          "total": 0,
+          "max": 0
+        },
+        "errors": [],
+        "visibilityStateDuringAnimate": "visible",
+        "throughput": {
+          "ms": 3000,
+          "iterations": 444800,
+          "batches": 1112,
+          "perSec": 148267
+        },
+        "reflow": {
+          "ms": 3011,
+          "iterations": 125200,
+          "batches": 313,
+          "perSec": 41581,
+          "sink": 103290000
+        },
+        "domNodes": 45009,
+        "ok": true,
+        "receivedAt": "2026-09-22T03:49:35.191Z"
+      },
+      "cpuAtResult": {
+        "cpuS": 15.78,
+        "procs": 10
+      },
+      "cpuAtEnd": {
+        "cpuS": 0,
+        "procs": 1
+      },
+      "wallMs": 11665,
+      "timedOut": false,
+      "notes": [],
+      "procEnviron": {
+        "root": {
+          "readable": true,
+          "count": 100,
+          "a11y": {
+            "ACCESSIBILITY_ENABLED": "1",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": "gail:atk-bridge",
+            "QT_ACCESSIBILITY": "1"
+          },
+          "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-default-r1",
+          "hasDisplay": true,
+          "gsettings": "memory"
+        },
+        "children": [
+          {
+            "pid": 530507,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 111,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-default-r1",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 530543,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 119,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-default-r1",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 530555,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 117,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": null,
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          }
+        ]
+      },
+      "chromeReadback": {
+        "port": 3047,
+        "ok": true,
+        "error": null,
+        "result": {
+          "pref_force_disabled": 0,
+          "a11yService": "REGISTERED",
+          "appName": "Firefox",
+          "appVersion": "155.0.1",
+          "env": {
+            "ACCESSIBILITY_ENABLED": "1",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": "gail:atk-bridge"
+          }
+        },
+        "chromeScopeTried": true,
+        "hello": {
+          "applicationType": "gecko",
+          "marionetteProtocol": 3
+        },
+        "session": {
+          "error": null,
+          "resultId": true
+        }
+      },
+      "busOnAfterRun": true,
+      "busName": ":1.3186",
+      "effectivePrefs": {
+        "user_js": [],
+        "prefs_js": []
+      },
+      "ourExes": [
+        "/snap/firefox/8863/usr/lib/firefox/firefox"
+      ],
+      "leftoverPids": [],
+      "killWasScopedToOwnGroup": true,
+      "profileLeakProcs": [
+        {
+          "pid": 495445,
+          "comm": "firefox",
+          "exe": null,
+          "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --new-instance --no-remote --marionette --profile /home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r1 http"
+        }
+      ],
+      "censusAfter": 43,
+      "loadAfter": "7.26 6.52 6.00 5/3263 530952",
+      "censusBefore": 50,
+      "interlock": {
+        "foreignProbeBrowsersBefore": [
+          {
+            "pid": 500615,
+            "cmdline": "/opt/google/chrome/chrome --type=zygote --no-zygote-sandbox --no-sandbox --headless --crashpad-handler-pid=500608 --enab"
+          },
+          {
+            "pid": 500616,
+            "cmdline": "/opt/google/chrome/chrome --type=zygote --no-sandbox --headless --crashpad-handler-pid=500608 --enable-crash-reporter=, "
+          },
+          {
+            "pid": 505832,
+            "cmdline": "/opt/google/chrome/chrome --type=renderer --top-chrome-webui --crashpad-handler-pid=500608 --enable-crash-reporter=, --n"
+          },
+          {
+            "pid": 505841,
+            "cmdline": "/opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=500608 --enable-crash-reporter=, --noerrdialogs --user-"
+          },
+          {
+            "pid": 505843,
+            "cmdline": "/opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=500608 --enable-crash-reporter=, --noerrdialogs --user-"
+          }
+        ],
+        "foreignWaitMs": 21156,
+        "noForeignProbeBrowser": false,
+        "lockStillOurs": false,
+        "lockToken": "NOLOCK-50783",
+        "loadavgAtRun": "7.26 6.52 6.00 4/3263 530952"
+      },
+      "userBrowsersRunning": 42
+    },
+    {
+      "condition": "pref-force-disabled",
+      "rep": 1,
+      "mode": "headed",
+      "token": "ffhd-headed-pref-force-disabled-r1-1790048978375",
+      "rootPid": 531164,
+      "profileDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-pref-force-disabled-r1",
+      "userJs": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-pref-force-disabled-r1/user.js",
+      "homeDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-pref-force-disabled-r1",
+      "envPassed": {
+        "ACCESSIBILITY_ENABLED": "1",
+        "GNOME_ACCESSIBILITY": "1",
+        "GTK_MODULES": "gail:atk-bridge"
+      },
+      "dbusSessionBusAddress": "unix:path=/run/user/1001/bus",
+      "gsettingsBackend": "memory",
+      "launchedAt": "2026-09-22T11:49:59+08:00",
+      "args": [
+        "--new-instance",
+        "--no-remote",
+        "--marionette",
+        "--profile",
+        "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-pref-force-disabled-r1",
+        "http://127.0.0.1:45285/page?n=15000&m=10000&f=120&k=1000&t=3000&batch=400&token=ffhd-headed-pref-force-disabled-r1-1790048978375"
+      ],
+      "logFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/logs/headed-pref-force-disabled-r1.log",
+      "loadBefore": "6.55 6.41 5.97 5/3255 531164",
+      "loadavgDuringResult": "6.39 6.38 5.97 4/3526 531977",
+      "busWatch": [],
+      "atspi": null,
+      "rootAccessible": null,
+      "result": {
+        "token": "ffhd-headed-pref-force-disabled-r1-1790048978375",
+        "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "params": {
+          "n": 15000,
+          "m": 10000,
+          "f": 120,
+          "k": 1000,
+          "t": 3000,
+          "batch": 400
+        },
+        "hardwareConcurrency": 32,
+        "visibilityState": "visible",
+        "phases": {
+          "build": 38,
+          "read1": 121,
+          "mutate": 25,
+          "animate": 2021,
+          "read2": 9
+        },
+        "frames": {
+          "totalMs": 2021,
+          "frames": 120,
+          "count": 120,
+          "mean": 16.8,
+          "p50": 17,
+          "p90": 18,
+          "p95": 18,
+          "p99": 25,
+          "max": 30,
+          "over33": 0,
+          "over50": 0,
+          "over100": 0
+        },
+        "longTasks": {
+          "count": 0,
+          "total": 0,
+          "max": 0
+        },
+        "errors": [],
+        "visibilityStateDuringAnimate": "visible",
+        "throughput": {
+          "ms": 3000,
+          "iterations": 2231200,
+          "batches": 5578,
+          "perSec": 743733
+        },
+        "reflow": {
+          "ms": 3003,
+          "iterations": 215600,
+          "batches": 539,
+          "perSec": 71795,
+          "sink": 177870000
+        },
+        "domNodes": 45009,
+        "ok": true,
+        "receivedAt": "2026-09-22T03:50:08.966Z"
+      },
+      "cpuAtResult": {
+        "cpuS": 11.28,
+        "procs": 10
+      },
+      "cpuAtEnd": {
+        "cpuS": 0,
+        "procs": 1
+      },
+      "wallMs": 12754,
+      "timedOut": false,
+      "notes": [],
+      "procEnviron": {
+        "root": {
+          "readable": true,
+          "count": 100,
+          "a11y": {
+            "ACCESSIBILITY_ENABLED": "1",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": "gail:atk-bridge",
+            "QT_ACCESSIBILITY": "1"
+          },
+          "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-pref-force-disabled-r1",
+          "hasDisplay": true,
+          "gsettings": "memory"
+        },
+        "children": [
+          {
+            "pid": 531327,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 111,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-pref-force-disabled-r1",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 531366,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 119,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-pref-force-disabled-r1",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 531378,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 117,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": null,
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          }
+        ]
+      },
+      "chromeReadback": {
+        "port": 3054,
+        "ok": true,
+        "error": null,
+        "result": {
+          "pref_force_disabled": 1,
+          "a11yService": "ABSENT",
+          "a11yServiceErr": "NS_ERROR_XPC_GS_RETURNED_FAILURE",
+          "appName": "Firefox",
+          "appVersion": "155.0.1",
+          "env": {
+            "ACCESSIBILITY_ENABLED": "1",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": "gail:atk-bridge"
+          }
+        },
+        "chromeScopeTried": true,
+        "hello": {
+          "applicationType": "gecko",
+          "marionetteProtocol": 3
+        },
+        "session": {
+          "error": null,
+          "resultId": true
+        }
+      },
+      "busOnAfterRun": false,
+      "busName": null,
+      "effectivePrefs": {
+        "user_js": [
+          "user_pref(\"accessibility.force_disabled\", 1);"
+        ],
+        "prefs_js": [
+          "user_pref(\"accessibility.force_disabled\", 1);"
+        ]
+      },
+      "ourExes": [
+        "/snap/firefox/8863/usr/lib/firefox/firefox"
+      ],
+      "leftoverPids": [],
+      "killWasScopedToOwnGroup": true,
+      "profileLeakProcs": [],
+      "censusAfter": 42,
+      "loadAfter": "6.20 6.34 5.96 6/3261 532044",
+      "censusBefore": 42,
+      "interlock": {
+        "foreignProbeBrowsersBefore": [
+          {
+            "pid": 495445,
+            "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --new-instance --no-remote --marionette --profile /home/CNS2026495165/dsh/.wo"
+          }
+        ],
+        "foreignWaitMs": 21111,
+        "noForeignProbeBrowser": false,
+        "lockStillOurs": false,
+        "lockToken": "NOLOCK-50783",
+        "loadavgAtRun": "6.20 6.34 5.96 5/3261 532044"
+      },
+      "userBrowsersRunning": 41
+    },
+    {
+      "condition": "env-cleared",
+      "rep": 1,
+      "mode": "headed",
+      "token": "ffhd-headed-env-cleared-r1-1790049015025",
+      "rootPid": 532392,
+      "profileDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-cleared-r1",
+      "userJs": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-cleared-r1/user.js",
+      "homeDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-cleared-r1",
+      "envPassed": {
+        "ACCESSIBILITY_ENABLED": null,
+        "GNOME_ACCESSIBILITY": null,
+        "GTK_MODULES": null
+      },
+      "dbusSessionBusAddress": "unix:path=/run/user/1001/bus",
+      "gsettingsBackend": "memory",
+      "launchedAt": "2026-09-22T11:50:36+08:00",
+      "args": [
+        "--new-instance",
+        "--no-remote",
+        "--marionette",
+        "--profile",
+        "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-cleared-r1",
+        "http://127.0.0.1:45285/page?n=15000&m=10000&f=120&k=1000&t=3000&batch=400&token=ffhd-headed-env-cleared-r1-1790049015025"
+      ],
+      "logFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/logs/headed-env-cleared-r1.log",
+      "loadBefore": "6.01 6.29 5.95 5/3282 532392",
+      "loadavgDuringResult": "6.31 6.34 5.97 10/3540 533136",
+      "busWatch": [
+        {
+          "at": "2026-09-22T11:50:37+08:00",
+          "tMs": 1140,
+          "busName": ":1.3528",
+          "onBus": true
+        }
+      ],
+      "atspi": null,
+      "rootAccessible": {
+        "busName": ":1.3528",
+        "name": "Firefox",
+        "role": "application",
+        "childCount": 1
+      },
+      "result": {
+        "token": "ffhd-headed-env-cleared-r1-1790049015025",
+        "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "params": {
+          "n": 15000,
+          "m": 10000,
+          "f": 120,
+          "k": 1000,
+          "t": 3000,
+          "batch": 400
+        },
+        "hardwareConcurrency": 32,
+        "visibilityState": "visible",
+        "phases": {
+          "build": 40,
+          "read1": 120,
+          "mutate": 25,
+          "animate": 4027,
+          "read2": 17
+        },
+        "frames": {
+          "totalMs": 4027,
+          "frames": 120,
+          "count": 120,
+          "mean": 33.475,
+          "p50": 26,
+          "p90": 51,
+          "p95": 61,
+          "p99": 67,
+          "max": 152,
+          "over33": 55,
+          "over50": 12,
+          "over100": 1
+        },
+        "longTasks": {
+          "count": 0,
+          "total": 0,
+          "max": 0
+        },
+        "errors": [],
+        "visibilityStateDuringAnimate": "visible",
+        "throughput": {
+          "ms": 3002,
+          "iterations": 428400,
+          "batches": 1071,
+          "perSec": 142705
+        },
+        "reflow": {
+          "ms": 3008,
+          "iterations": 118000,
+          "batches": 295,
+          "perSec": 39229,
+          "sink": 97350000
+        },
+        "domNodes": 45009,
+        "ok": true,
+        "receivedAt": "2026-09-22T03:50:47.732Z"
+      },
+      "cpuAtResult": {
+        "cpuS": 16.05,
+        "procs": 10
+      },
+      "cpuAtEnd": {
+        "cpuS": 0,
+        "procs": 1
+      },
+      "wallMs": 11653,
+      "timedOut": false,
+      "notes": [],
+      "procEnviron": {
+        "root": {
+          "readable": true,
+          "count": 98,
+          "a11y": {
+            "ACCESSIBILITY_ENABLED": null,
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": null,
+            "QT_ACCESSIBILITY": "1"
+          },
+          "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-cleared-r1",
+          "hasDisplay": true,
+          "gsettings": "memory"
+        },
+        "children": [
+          {
+            "pid": 532497,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 109,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": null,
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": null,
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-cleared-r1",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 532535,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 117,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": null,
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": null,
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-cleared-r1",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 532548,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 115,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": null,
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": null,
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": null,
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          }
+        ]
+      },
+      "chromeReadback": {
+        "port": 3061,
+        "ok": true,
+        "error": null,
+        "result": {
+          "pref_force_disabled": 0,
+          "a11yService": "REGISTERED",
+          "appName": "Firefox",
+          "appVersion": "155.0.1",
+          "env": {
+            "ACCESSIBILITY_ENABLED": "",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": ""
+          }
+        },
+        "chromeScopeTried": true,
+        "hello": {
+          "applicationType": "gecko",
+          "marionetteProtocol": 3
+        },
+        "session": {
+          "error": null,
+          "resultId": true
+        }
+      },
+      "busOnAfterRun": true,
+      "busName": ":1.3528",
+      "effectivePrefs": {
+        "user_js": [],
+        "prefs_js": []
+      },
+      "ourExes": [
+        "/snap/firefox/8863/usr/lib/firefox/firefox"
+      ],
+      "leftoverPids": [],
+      "killWasScopedToOwnGroup": true,
+      "profileLeakProcs": [],
+      "censusAfter": 43,
+      "loadAfter": "6.28 6.34 5.97 3/3270 533162",
+      "censusBefore": 43,
+      "interlock": {
+        "foreignProbeBrowsersBefore": [
+          {
+            "pid": 495445,
+            "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --new-instance --no-remote --marionette --profile /home/CNS2026495165/dsh/.wo"
+          }
+        ],
+        "foreignWaitMs": 21139,
+        "noForeignProbeBrowser": false,
+        "lockStillOurs": false,
+        "lockToken": "NOLOCK-50783",
+        "loadavgAtRun": "6.28 6.34 5.97 3/3270 533162"
+      },
+      "userBrowsersRunning": 42
+    },
+    {
+      "condition": "env-default",
+      "rep": 2,
+      "mode": "headed",
+      "token": "ffhd-headed-env-default-r2-1790049050707",
+      "rootPid": 533599,
+      "profileDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r2",
+      "userJs": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r2/user.js",
+      "homeDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-default-r2",
+      "envPassed": {
+        "ACCESSIBILITY_ENABLED": "1",
+        "GNOME_ACCESSIBILITY": "1",
+        "GTK_MODULES": "gail:atk-bridge"
+      },
+      "dbusSessionBusAddress": "unix:path=/run/user/1001/bus",
+      "gsettingsBackend": "memory",
+      "launchedAt": "2026-09-22T11:51:11+08:00",
+      "args": [
+        "--new-instance",
+        "--no-remote",
+        "--marionette",
+        "--profile",
+        "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r2",
+        "http://127.0.0.1:45285/page?n=15000&m=10000&f=120&k=1000&t=3000&batch=400&token=ffhd-headed-env-default-r2-1790049050707"
+      ],
+      "logFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/logs/headed-env-default-r2.log",
+      "loadBefore": "6.28 6.33 5.98 4/3177 533599",
+      "loadavgDuringResult": "6.32 6.34 5.99 3/3445 534072",
+      "busWatch": [
+        {
+          "at": "2026-09-22T11:51:12+08:00",
+          "tMs": 1134,
+          "busName": ":1.3575",
+          "onBus": true
+        }
+      ],
+      "atspi": null,
+      "rootAccessible": {
+        "busName": ":1.3575",
+        "name": "Firefox",
+        "role": "application",
+        "childCount": 1
+      },
+      "result": {
+        "token": "ffhd-headed-env-default-r2-1790049050707",
+        "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "params": {
+          "n": 15000,
+          "m": 10000,
+          "f": 120,
+          "k": 1000,
+          "t": 3000,
+          "batch": 400
+        },
+        "hardwareConcurrency": 32,
+        "visibilityState": "visible",
+        "phases": {
+          "build": 42,
+          "read1": 120,
+          "mutate": 30,
+          "animate": 3734,
+          "read2": 12
+        },
+        "frames": {
+          "totalMs": 3734,
+          "frames": 120,
+          "count": 120,
+          "mean": 31.042,
+          "p50": 23,
+          "p90": 42,
+          "p95": 54,
+          "p99": 60,
+          "max": 143,
+          "over33": 58,
+          "over50": 7,
+          "over100": 1
+        },
+        "longTasks": {
+          "count": 0,
+          "total": 0,
+          "max": 0
+        },
+        "errors": [],
+        "visibilityStateDuringAnimate": "visible",
+        "throughput": {
+          "ms": 3001,
+          "iterations": 454800,
+          "batches": 1137,
+          "perSec": 151549
+        },
+        "reflow": {
+          "ms": 3006,
+          "iterations": 132400,
+          "batches": 331,
+          "perSec": 44045,
+          "sink": 109230000
+        },
+        "domNodes": 45009,
+        "ok": true,
+        "receivedAt": "2026-09-22T03:51:23.081Z"
+      },
+      "cpuAtResult": {
+        "cpuS": 15.71,
+        "procs": 10
+      },
+      "cpuAtEnd": {
+        "cpuS": 0,
+        "procs": 1
+      },
+      "wallMs": 11646,
+      "timedOut": false,
+      "notes": [],
+      "procEnviron": {
+        "root": {
+          "readable": true,
+          "count": 100,
+          "a11y": {
+            "ACCESSIBILITY_ENABLED": "1",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": "gail:atk-bridge",
+            "QT_ACCESSIBILITY": "1"
+          },
+          "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-default-r2",
+          "hasDisplay": true,
+          "gsettings": "memory"
+        },
+        "children": [
+          {
+            "pid": 533692,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 111,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-default-r2",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 533733,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 119,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-default-r2",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 533750,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 117,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": null,
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          }
+        ]
+      },
+      "chromeReadback": {
+        "port": 3060,
+        "ok": true,
+        "error": null,
+        "result": {
+          "pref_force_disabled": 0,
+          "a11yService": "REGISTERED",
+          "appName": "Firefox",
+          "appVersion": "155.0.1",
+          "env": {
+            "ACCESSIBILITY_ENABLED": "1",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": "gail:atk-bridge"
+          }
+        },
+        "chromeScopeTried": true,
+        "hello": {
+          "applicationType": "gecko",
+          "marionetteProtocol": 3
+        },
+        "session": {
+          "error": null,
+          "resultId": true
+        }
+      },
+      "busOnAfterRun": true,
+      "busName": ":1.3575",
+      "effectivePrefs": {
+        "user_js": [],
+        "prefs_js": []
+      },
+      "ourExes": [
+        "/snap/firefox/8863/usr/lib/firefox/firefox"
+      ],
+      "leftoverPids": [],
+      "killWasScopedToOwnGroup": true,
+      "profileLeakProcs": [],
+      "censusAfter": 37,
+      "loadAfter": "6.29 6.33 5.99 4/3176 534098",
+      "censusBefore": 37,
+      "interlock": {
+        "foreignProbeBrowsersBefore": [
+          {
+            "pid": 495445,
+            "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --new-instance --no-remote --marionette --profile /home/CNS2026495165/dsh/.wo"
+          }
+        ],
+        "foreignWaitMs": 21120,
+        "noForeignProbeBrowser": false,
+        "lockStillOurs": false,
+        "lockToken": "NOLOCK-50783",
+        "loadavgAtRun": "6.29 6.33 5.99 4/3176 534098"
+      },
+      "userBrowsersRunning": 36
+    },
+    {
+      "condition": "pref-force-disabled",
+      "rep": 2,
+      "mode": "headed",
+      "token": "ffhd-headed-pref-force-disabled-r2-1790049086260",
+      "rootPid": 534627,
+      "profileDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-pref-force-disabled-r2",
+      "userJs": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-pref-force-disabled-r2/user.js",
+      "homeDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-pref-force-disabled-r2",
+      "envPassed": {
+        "ACCESSIBILITY_ENABLED": "1",
+        "GNOME_ACCESSIBILITY": "1",
+        "GTK_MODULES": "gail:atk-bridge"
+      },
+      "dbusSessionBusAddress": "unix:path=/run/user/1001/bus",
+      "gsettingsBackend": "memory",
+      "launchedAt": "2026-09-22T11:51:47+08:00",
+      "args": [
+        "--new-instance",
+        "--no-remote",
+        "--marionette",
+        "--profile",
+        "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-pref-force-disabled-r2",
+        "http://127.0.0.1:45285/page?n=15000&m=10000&f=120&k=1000&t=3000&batch=400&token=ffhd-headed-pref-force-disabled-r2-1790049086260"
+      ],
+      "logFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/logs/headed-pref-force-disabled-r2.log",
+      "loadBefore": "6.01 6.26 5.97 6/3174 534627",
+      "loadavgDuringResult": "5.99 6.25 5.97 3/3475 535419",
+      "busWatch": [],
+      "atspi": null,
+      "rootAccessible": null,
+      "result": {
+        "token": "ffhd-headed-pref-force-disabled-r2-1790049086260",
+        "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "params": {
+          "n": 15000,
+          "m": 10000,
+          "f": 120,
+          "k": 1000,
+          "t": 3000,
+          "batch": 400
+        },
+        "hardwareConcurrency": 32,
+        "visibilityState": "visible",
+        "phases": {
+          "build": 39,
+          "read1": 114,
+          "mutate": 29,
+          "animate": 2012,
+          "read2": 9
+        },
+        "frames": {
+          "totalMs": 2012,
+          "frames": 120,
+          "count": 120,
+          "mean": 16.733,
+          "p50": 17,
+          "p90": 18,
+          "p95": 18,
+          "p99": 20,
+          "max": 23,
+          "over33": 0,
+          "over50": 0,
+          "over100": 0
+        },
+        "longTasks": {
+          "count": 0,
+          "total": 0,
+          "max": 0
+        },
+        "errors": [],
+        "visibilityStateDuringAnimate": "visible",
+        "throughput": {
+          "ms": 3000,
+          "iterations": 2006400,
+          "batches": 5016,
+          "perSec": 668800
+        },
+        "reflow": {
+          "ms": 3004,
+          "iterations": 188000,
+          "batches": 470,
+          "perSec": 62583,
+          "sink": 155100000
+        },
+        "domNodes": 45009,
+        "ok": true,
+        "receivedAt": "2026-09-22T03:51:56.989Z"
+      },
+      "cpuAtResult": {
+        "cpuS": 11.11,
+        "procs": 10
+      },
+      "cpuAtEnd": {
+        "cpuS": 0,
+        "procs": 1
+      },
+      "wallMs": 12765,
+      "timedOut": false,
+      "notes": [],
+      "procEnviron": {
+        "root": {
+          "readable": true,
+          "count": 100,
+          "a11y": {
+            "ACCESSIBILITY_ENABLED": "1",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": "gail:atk-bridge",
+            "QT_ACCESSIBILITY": "1"
+          },
+          "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-pref-force-disabled-r2",
+          "hasDisplay": true,
+          "gsettings": "memory"
+        },
+        "children": [
+          {
+            "pid": 534723,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 111,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-pref-force-disabled-r2",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 534768,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 119,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-pref-force-disabled-r2",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 534775,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 117,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": null,
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          }
+        ]
+      },
+      "chromeReadback": {
+        "port": 3067,
+        "ok": true,
+        "error": null,
+        "result": {
+          "pref_force_disabled": 1,
+          "a11yService": "ABSENT",
+          "a11yServiceErr": "NS_ERROR_XPC_GS_RETURNED_FAILURE",
+          "appName": "Firefox",
+          "appVersion": "155.0.1",
+          "env": {
+            "ACCESSIBILITY_ENABLED": "1",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": "gail:atk-bridge"
+          }
+        },
+        "chromeScopeTried": true,
+        "hello": {
+          "applicationType": "gecko",
+          "marionetteProtocol": 3
+        },
+        "session": {
+          "error": null,
+          "resultId": true
+        }
+      },
+      "busOnAfterRun": false,
+      "busName": null,
+      "effectivePrefs": {
+        "user_js": [
+          "user_pref(\"accessibility.force_disabled\", 1);"
+        ],
+        "prefs_js": [
+          "user_pref(\"accessibility.force_disabled\", 1);"
+        ]
+      },
+      "ourExes": [
+        "/snap/firefox/8863/usr/lib/firefox/firefox"
+      ],
+      "leftoverPids": [],
+      "killWasScopedToOwnGroup": true,
+      "profileLeakProcs": [],
+      "censusAfter": 37,
+      "loadAfter": "5.99 6.25 5.97 3/3209 535440",
+      "censusBefore": 37,
+      "interlock": {
+        "foreignProbeBrowsersBefore": [
+          {
+            "pid": 495445,
+            "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --new-instance --no-remote --marionette --profile /home/CNS2026495165/dsh/.wo"
+          }
+        ],
+        "foreignWaitMs": 21108,
+        "noForeignProbeBrowser": false,
+        "lockStillOurs": false,
+        "lockToken": "NOLOCK-50783",
+        "loadavgAtRun": "5.99 6.25 5.97 3/3209 535440"
+      },
+      "userBrowsersRunning": 36
+    },
+    {
+      "condition": "env-cleared",
+      "rep": 2,
+      "mode": "headed",
+      "token": "ffhd-headed-env-cleared-r2-1790049122947",
+      "rootPid": 535631,
+      "profileDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-cleared-r2",
+      "userJs": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-cleared-r2/user.js",
+      "homeDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-cleared-r2",
+      "envPassed": {
+        "ACCESSIBILITY_ENABLED": null,
+        "GNOME_ACCESSIBILITY": null,
+        "GTK_MODULES": null
+      },
+      "dbusSessionBusAddress": "unix:path=/run/user/1001/bus",
+      "gsettingsBackend": "memory",
+      "launchedAt": "2026-09-22T11:52:24+08:00",
+      "args": [
+        "--new-instance",
+        "--no-remote",
+        "--marionette",
+        "--profile",
+        "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-cleared-r2",
+        "http://127.0.0.1:45285/page?n=15000&m=10000&f=120&k=1000&t=3000&batch=400&token=ffhd-headed-env-cleared-r2-1790049122947"
+      ],
+      "logFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/logs/headed-env-cleared-r2.log",
+      "loadBefore": "5.78 6.17 5.95 6/3229 535631",
+      "loadavgDuringResult": "6.11 6.23 5.97 5/3457 536085",
+      "busWatch": [
+        {
+          "at": "2026-09-22T11:52:25+08:00",
+          "tMs": 1151,
+          "busName": ":1.3916",
+          "onBus": true
+        }
+      ],
+      "atspi": null,
+      "rootAccessible": {
+        "busName": ":1.3916",
+        "name": "Firefox",
+        "role": "application",
+        "childCount": 1
+      },
+      "result": {
+        "token": "ffhd-headed-env-cleared-r2-1790049122947",
+        "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "params": {
+          "n": 15000,
+          "m": 10000,
+          "f": 120,
+          "k": 1000,
+          "t": 3000,
+          "batch": 400
+        },
+        "hardwareConcurrency": 32,
+        "visibilityState": "visible",
+        "phases": {
+          "build": 38,
+          "read1": 116,
+          "mutate": 30,
+          "animate": 4129,
+          "read2": 14
+        },
+        "frames": {
+          "totalMs": 4129,
+          "frames": 120,
+          "count": 120,
+          "mean": 34.325,
+          "p50": 26,
+          "p90": 47,
+          "p95": 62,
+          "p99": 69,
+          "max": 144,
+          "over33": 55,
+          "over50": 8,
+          "over100": 1
+        },
+        "longTasks": {
+          "count": 0,
+          "total": 0,
+          "max": 0
+        },
+        "errors": [],
+        "visibilityStateDuringAnimate": "visible",
+        "throughput": {
+          "ms": 3001,
+          "iterations": 412000,
+          "batches": 1030,
+          "perSec": 137288
+        },
+        "reflow": {
+          "ms": 3002,
+          "iterations": 115600,
+          "batches": 289,
+          "perSec": 38508,
+          "sink": 95370000
+        },
+        "domNodes": 45009,
+        "ok": true,
+        "receivedAt": "2026-09-22T03:52:35.831Z"
+      },
+      "cpuAtResult": {
+        "cpuS": 16.38,
+        "procs": 10
+      },
+      "cpuAtEnd": {
+        "cpuS": 0,
+        "procs": 1
+      },
+      "wallMs": 12164,
+      "timedOut": false,
+      "notes": [],
+      "procEnviron": {
+        "root": {
+          "readable": true,
+          "count": 98,
+          "a11y": {
+            "ACCESSIBILITY_ENABLED": null,
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": null,
+            "QT_ACCESSIBILITY": "1"
+          },
+          "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-cleared-r2",
+          "hasDisplay": true,
+          "gsettings": "memory"
+        },
+        "children": [
+          {
+            "pid": 535731,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 109,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": null,
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": null,
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-cleared-r2",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 535775,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 117,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": null,
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": null,
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-cleared-r2",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 535796,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 115,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": null,
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": null,
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": null,
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          }
+        ]
+      },
+      "chromeReadback": {
+        "port": 3074,
+        "ok": true,
+        "error": null,
+        "result": {
+          "pref_force_disabled": 0,
+          "a11yService": "REGISTERED",
+          "appName": "Firefox",
+          "appVersion": "155.0.1",
+          "env": {
+            "ACCESSIBILITY_ENABLED": "",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": ""
+          }
+        },
+        "chromeScopeTried": true,
+        "hello": {
+          "applicationType": "gecko",
+          "marionetteProtocol": 3
+        },
+        "session": {
+          "error": null,
+          "resultId": true
+        }
+      },
+      "busOnAfterRun": true,
+      "busName": ":1.3916",
+      "effectivePrefs": {
+        "user_js": [],
+        "prefs_js": []
+      },
+      "ourExes": [
+        "/snap/firefox/8863/usr/lib/firefox/firefox"
+      ],
+      "leftoverPids": [],
+      "killWasScopedToOwnGroup": true,
+      "profileLeakProcs": [],
+      "censusAfter": 37,
+      "loadAfter": "6.10 6.22 5.97 4/3189 536112",
+      "censusBefore": 37,
+      "interlock": {
+        "foreignProbeBrowsersBefore": [
+          {
+            "pid": 495445,
+            "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --new-instance --no-remote --marionette --profile /home/CNS2026495165/dsh/.wo"
+          }
+        ],
+        "foreignWaitMs": 21144,
+        "noForeignProbeBrowser": false,
+        "lockStillOurs": false,
+        "lockToken": "NOLOCK-50783",
+        "loadavgAtRun": "6.10 6.22 5.97 4/3189 536112"
+      },
+      "userBrowsersRunning": 36
+    },
+    {
+      "condition": "env-default",
+      "rep": 3,
+      "mode": "headed",
+      "token": "ffhd-headed-env-default-r3-1790049159075",
+      "rootPid": 536427,
+      "profileDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r3",
+      "userJs": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r3/user.js",
+      "homeDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-default-r3",
+      "envPassed": {
+        "ACCESSIBILITY_ENABLED": "1",
+        "GNOME_ACCESSIBILITY": "1",
+        "GTK_MODULES": "gail:atk-bridge"
+      },
+      "dbusSessionBusAddress": "unix:path=/run/user/1001/bus",
+      "gsettingsBackend": "memory",
+      "launchedAt": "2026-09-22T11:53:00+08:00",
+      "args": [
+        "--new-instance",
+        "--no-remote",
+        "--marionette",
+        "--profile",
+        "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-default-r3",
+        "http://127.0.0.1:45285/page?n=15000&m=10000&f=120&k=1000&t=3000&batch=400&token=ffhd-headed-env-default-r3-1790049159075"
+      ],
+      "logFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/logs/headed-env-default-r3.log",
+      "loadBefore": "5.95 6.18 5.96 11/3178 536427",
+      "loadavgDuringResult": "6.35 6.25 5.99 5/3442 537072",
+      "busWatch": [
+        {
+          "at": "2026-09-22T11:53:01+08:00",
+          "tMs": 1149,
+          "busName": ":1.3963",
+          "onBus": true
+        }
+      ],
+      "atspi": null,
+      "rootAccessible": {
+        "busName": ":1.3963",
+        "name": "Firefox",
+        "role": "application",
+        "childCount": 1
+      },
+      "result": {
+        "token": "ffhd-headed-env-default-r3-1790049159075",
+        "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "params": {
+          "n": 15000,
+          "m": 10000,
+          "f": 120,
+          "k": 1000,
+          "t": 3000,
+          "batch": 400
+        },
+        "hardwareConcurrency": 32,
+        "visibilityState": "visible",
+        "phases": {
+          "build": 42,
+          "read1": 122,
+          "mutate": 31,
+          "animate": 4344,
+          "read2": 16
+        },
+        "frames": {
+          "totalMs": 4344,
+          "frames": 120,
+          "count": 120,
+          "mean": 36.117,
+          "p50": 28,
+          "p90": 54,
+          "p95": 61,
+          "p99": 77,
+          "max": 168,
+          "over33": 55,
+          "over50": 15,
+          "over100": 1
+        },
+        "longTasks": {
+          "count": 0,
+          "total": 0,
+          "max": 0
+        },
+        "errors": [],
+        "visibilityStateDuringAnimate": "visible",
+        "throughput": {
+          "ms": 3002,
+          "iterations": 385600,
+          "batches": 964,
+          "perSec": 128448
+        },
+        "reflow": {
+          "ms": 3000,
+          "iterations": 106000,
+          "batches": 265,
+          "perSec": 35333,
+          "sink": 87450000
+        },
+        "domNodes": 45009,
+        "ok": true,
+        "receivedAt": "2026-09-22T03:53:12.240Z"
+      },
+      "cpuAtResult": {
+        "cpuS": 16.9,
+        "procs": 10
+      },
+      "cpuAtEnd": {
+        "cpuS": 0,
+        "procs": 1
+      },
+      "wallMs": 12160,
+      "timedOut": false,
+      "notes": [],
+      "procEnviron": {
+        "root": {
+          "readable": true,
+          "count": 100,
+          "a11y": {
+            "ACCESSIBILITY_ENABLED": "1",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": "gail:atk-bridge",
+            "QT_ACCESSIBILITY": "1"
+          },
+          "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-default-r3",
+          "hasDisplay": true,
+          "gsettings": "memory"
+        },
+        "children": [
+          {
+            "pid": 536524,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 111,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-default-r3",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 536566,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 119,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-default-r3",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 536599,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 117,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": "1",
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": "gail:atk-bridge",
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": null,
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          }
+        ]
+      },
+      "chromeReadback": {
+        "port": 3073,
+        "ok": true,
+        "error": null,
+        "result": {
+          "pref_force_disabled": 0,
+          "a11yService": "REGISTERED",
+          "appName": "Firefox",
+          "appVersion": "155.0.1",
+          "env": {
+            "ACCESSIBILITY_ENABLED": "1",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": "gail:atk-bridge"
+          }
+        },
+        "chromeScopeTried": true,
+        "hello": {
+          "applicationType": "gecko",
+          "marionetteProtocol": 3
+        },
+        "session": {
+          "error": null,
+          "resultId": true
+        }
+      },
+      "busOnAfterRun": true,
+      "busName": ":1.3963",
+      "effectivePrefs": {
+        "user_js": [],
+        "prefs_js": []
+      },
+      "ourExes": [
+        "/snap/firefox/8863/usr/lib/firefox/firefox"
+      ],
+      "leftoverPids": [],
+      "killWasScopedToOwnGroup": true,
+      "profileLeakProcs": [],
+      "censusAfter": 37,
+      "loadAfter": "6.32 6.25 5.99 5/3181 537201",
+      "censusBefore": 36,
+      "interlock": {
+        "foreignProbeBrowsersBefore": [
+          {
+            "pid": 495445,
+            "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --new-instance --no-remote --marionette --profile /home/CNS2026495165/dsh/.wo"
+          }
+        ],
+        "foreignWaitMs": 21119,
+        "noForeignProbeBrowser": false,
+        "lockStillOurs": false,
+        "lockToken": "NOLOCK-50783",
+        "loadavgAtRun": "6.32 6.25 5.99 5/3181 537201"
+      },
+      "userBrowsersRunning": 36
+    },
+    {
+      "condition": "pref-force-disabled",
+      "rep": 3,
+      "mode": "headed",
+      "token": "ffhd-headed-pref-force-disabled-r3-1790049195219",
+      "rootPid": 537726,
+      "profileDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-pref-force-disabled-r3",
+      "userJs": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-pref-force-disabled-r3/user.js",
+      "homeDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-pref-force-disabled-r3",
+      "envPassed": {
+        "ACCESSIBILITY_ENABLED": "1",
+        "GNOME_ACCESSIBILITY": "1",
+        "GTK_MODULES": "gail:atk-bridge"
+      },
+      "dbusSessionBusAddress": "unix:path=/run/user/1001/bus",
+      "gsettingsBackend": "memory",
+      "launchedAt": "2026-09-22T11:53:36+08:00",
+      "args": [
+        "--new-instance",
+        "--no-remote",
+        "--marionette",
+        "--profile",
+        "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-pref-force-disabled-r3",
+        "http://127.0.0.1:45285/page?n=15000&m=10000&f=120&k=1000&t=3000&batch=400&token=ffhd-headed-pref-force-disabled-r3-1790049195219"
+      ],
+      "logFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/logs/headed-pref-force-disabled-r3.log",
+      "loadBefore": "6.01 6.18 5.98 5/3266 537726",
+      "loadavgDuringResult": "6.00 6.17 5.98 3/3282 538633",
+      "busWatch": [],
+      "atspi": null,
+      "rootAccessible": null,
+      "result": {
+        "token": "ffhd-headed-pref-force-disabled-r3-1790049195219",
+        "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "params": {
+          "n": 15000,
+          "m": 10000,
+          "f": 120,
+          "k": 1000,
+          "t": 3000,
+          "batch": 400
+        },
+        "hardwareConcurrency": 32,
+        "visibilityState": "visible",
+        "phases": {
+          "build": 42,
+          "read1": 117,
+          "mutate": 21,
+          "animate": 2257,
+          "read2": 9
+        },
+        "frames": {
+          "totalMs": 2257,
+          "frames": 120,
+          "count": 120,
+          "mean": 18.767,
+          "p50": 17,
+          "p90": 22,
+          "p95": 39,
+          "p99": 48,
+          "max": 58,
+          "over33": 8,
+          "over50": 1,
+          "over100": 0
+        },
+        "longTasks": {
+          "count": 0,
+          "total": 0,
+          "max": 0
+        },
+        "errors": [],
+        "visibilityStateDuringAnimate": "visible",
+        "throughput": {
+          "ms": 3000,
+          "iterations": 2047200,
+          "batches": 5118,
+          "perSec": 682400
+        },
+        "reflow": {
+          "ms": 3001,
+          "iterations": 202800,
+          "batches": 507,
+          "perSec": 67577,
+          "sink": 167310000
+        },
+        "domNodes": 45009,
+        "ok": true,
+        "receivedAt": "2026-09-22T03:53:46.121Z"
+      },
+      "cpuAtResult": {
+        "cpuS": 0,
+        "procs": 1
+      },
+      "cpuAtEnd": {
+        "cpuS": 0,
+        "procs": 1
+      },
+      "wallMs": 13248,
+      "timedOut": false,
+      "notes": [
+        "sigterm: ESRCH"
+      ],
+      "procEnviron": {
+        "root": {
+          "readable": false,
+          "error": "ENOENT"
+        },
+        "children": []
+      },
+      "chromeReadback": {
+        "port": 3080,
+        "ok": false,
+        "error": "timeout",
+        "result": null,
+        "chromeScopeTried": true,
+        "hello": null
+      },
+      "busOnAfterRun": false,
+      "busName": null,
+      "effectivePrefs": {
+        "user_js": [
+          "user_pref(\"accessibility.force_disabled\", 1);"
+        ],
+        "prefs_js": [
+          "user_pref(\"accessibility.force_disabled\", 1);"
+        ]
+      },
+      "ourExes": [],
+      "leftoverPids": [],
+      "killWasScopedToOwnGroup": true,
+      "profileLeakProcs": [],
+      "censusAfter": 43,
+      "loadAfter": "5.76 6.12 5.96 5/3293 538829",
+      "censusBefore": 43,
+      "interlock": {
+        "foreignProbeBrowsersBefore": [
+          {
+            "pid": 495445,
+            "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --new-instance --no-remote --marionette --profile /home/CNS2026495165/dsh/.wo"
+          }
+        ],
+        "foreignWaitMs": 21178,
+        "noForeignProbeBrowser": false,
+        "lockStillOurs": false,
+        "lockToken": "NOLOCK-50783",
+        "loadavgAtRun": "5.76 6.12 5.96 5/3293 538829"
+      },
+      "userBrowsersRunning": 42
+    },
+    {
+      "condition": "env-cleared",
+      "rep": 3,
+      "mode": "headed",
+      "token": "ffhd-headed-env-cleared-r3-1790049241240",
+      "rootPid": 539218,
+      "profileDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-cleared-r3",
+      "userJs": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-cleared-r3/user.js",
+      "homeDir": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-cleared-r3",
+      "envPassed": {
+        "ACCESSIBILITY_ENABLED": null,
+        "GNOME_ACCESSIBILITY": null,
+        "GTK_MODULES": null
+      },
+      "dbusSessionBusAddress": "unix:path=/run/user/1001/bus",
+      "gsettingsBackend": "memory",
+      "launchedAt": "2026-09-22T11:54:22+08:00",
+      "args": [
+        "--new-instance",
+        "--no-remote",
+        "--marionette",
+        "--profile",
+        "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/headed-env-cleared-r3",
+        "http://127.0.0.1:45285/page?n=15000&m=10000&f=120&k=1000&t=3000&batch=400&token=ffhd-headed-env-cleared-r3-1790049241240"
+      ],
+      "logFile": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/logs/headed-env-cleared-r3.log",
+      "loadBefore": "5.62 6.06 5.95 5/3179 539218",
+      "loadavgDuringResult": "5.78 6.07 5.95 5/3469 539679",
+      "busWatch": [
+        {
+          "at": "2026-09-22T11:54:23+08:00",
+          "tMs": 1143,
+          "busName": ":1.4304",
+          "onBus": true
+        }
+      ],
+      "atspi": null,
+      "rootAccessible": {
+        "busName": ":1.4304",
+        "name": "Firefox",
+        "role": "application",
+        "childCount": 1
+      },
+      "result": {
+        "token": "ffhd-headed-env-cleared-r3-1790049241240",
+        "ua": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "params": {
+          "n": 15000,
+          "m": 10000,
+          "f": 120,
+          "k": 1000,
+          "t": 3000,
+          "batch": 400
+        },
+        "hardwareConcurrency": 32,
+        "visibilityState": "visible",
+        "phases": {
+          "build": 39,
+          "read1": 119,
+          "mutate": 30,
+          "animate": 4164,
+          "read2": 16
+        },
+        "frames": {
+          "totalMs": 4164,
+          "frames": 120,
+          "count": 120,
+          "mean": 34.625,
+          "p50": 25,
+          "p90": 54,
+          "p95": 65,
+          "p99": 151,
+          "max": 155,
+          "over33": 46,
+          "over50": 12,
+          "over100": 2
+        },
+        "longTasks": {
+          "count": 0,
+          "total": 0,
+          "max": 0
+        },
+        "errors": [],
+        "visibilityStateDuringAnimate": "visible",
+        "throughput": {
+          "ms": 3000,
+          "iterations": 348800,
+          "batches": 872,
+          "perSec": 116267
+        },
+        "reflow": {
+          "ms": 3013,
+          "iterations": 98800,
+          "batches": 247,
+          "perSec": 32791,
+          "sink": 81510000
+        },
+        "domNodes": 45009,
+        "ok": true,
+        "receivedAt": "2026-09-22T03:54:34.116Z"
+      },
+      "cpuAtResult": {
+        "cpuS": 17.23,
+        "procs": 10
+      },
+      "cpuAtEnd": {
+        "cpuS": 0,
+        "procs": 1
+      },
+      "wallMs": 12154,
+      "timedOut": false,
+      "notes": [],
+      "procEnviron": {
+        "root": {
+          "readable": true,
+          "count": 98,
+          "a11y": {
+            "ACCESSIBILITY_ENABLED": null,
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": null,
+            "QT_ACCESSIBILITY": "1"
+          },
+          "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-cleared-r3",
+          "hasDisplay": true,
+          "gsettings": "memory"
+        },
+        "children": [
+          {
+            "pid": 539312,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 109,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": null,
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": null,
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-cleared-r3",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 539350,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 117,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": null,
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": null,
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": "/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/firefox-a11y/proof/profiles/home/headed-env-cleared-r3",
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          },
+          {
+            "pid": 539370,
+            "comm": "/snap/firefox/8863/usr/lib/firefox/firef",
+            "env": {
+              "readable": true,
+              "count": 115,
+              "a11y": {
+                "ACCESSIBILITY_ENABLED": null,
+                "GNOME_ACCESSIBILITY": "1",
+                "GTK_MODULES": null,
+                "QT_ACCESSIBILITY": "1"
+              },
+              "HOME": null,
+              "hasDisplay": true,
+              "gsettings": "memory"
+            }
+          }
+        ]
+      },
+      "chromeReadback": {
+        "port": 3087,
+        "ok": true,
+        "error": null,
+        "result": {
+          "pref_force_disabled": 0,
+          "a11yService": "REGISTERED",
+          "appName": "Firefox",
+          "appVersion": "155.0.1",
+          "env": {
+            "ACCESSIBILITY_ENABLED": "",
+            "GNOME_ACCESSIBILITY": "1",
+            "GTK_MODULES": ""
+          }
+        },
+        "chromeScopeTried": true,
+        "hello": {
+          "applicationType": "gecko",
+          "marionetteProtocol": 3
+        },
+        "session": {
+          "error": null,
+          "resultId": true
+        }
+      },
+      "busOnAfterRun": true,
+      "busName": ":1.4304",
+      "effectivePrefs": {
+        "user_js": [],
+        "prefs_js": []
+      },
+      "ourExes": [
+        "/snap/firefox/8863/usr/lib/firefox/firefox"
+      ],
+      "leftoverPids": [],
+      "killWasScopedToOwnGroup": true,
+      "profileLeakProcs": [],
+      "censusAfter": 37,
+      "loadAfter": "5.78 6.07 5.95 6/3195 539696",
+      "censusBefore": 37,
+      "interlock": {
+        "foreignProbeBrowsersBefore": [
+          {
+            "pid": 495445,
+            "cmdline": "/snap/firefox/8863/usr/lib/firefox/firefox --new-instance --no-remote --marionette --profile /home/CNS2026495165/dsh/.wo"
+          }
+        ],
+        "foreignWaitMs": 21162,
+        "noForeignProbeBrowser": false,
+        "lockStillOurs": false,
+        "lockToken": "NOLOCK-50783",
+        "loadavgAtRun": "5.78 6.07 5.95 5/3195 539696"
+      },
+      "userBrowsersRunning": 36
+    }
+  ],
+  "hostLoadStart": "7.13 6.47 5.97 5/3431 530406",
+  "hostLoadEnd": "5.78 6.07 5.95 6/3195 539696",
+  "lock": {
+    "waitedMs": 60975,
+    "attempts": 22,
+    "preemptions": []
+  }
+}

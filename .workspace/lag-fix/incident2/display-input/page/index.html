@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>follow-cursor cost probe</title>
+<style>
+  html,body{margin:0;padding:0;background:#0f1317;color:#c9d4de;font:12px/1.35 monospace;overflow:hidden;width:100%;height:100%}
+  #stage{position:fixed;left:0;top:0;right:0;bottom:0;overflow:hidden}
+  #cv{position:absolute;left:0;top:0;width:800px;height:600px;background:#1b232b}
+  #box{position:absolute;left:40px;top:40px;width:200px;height:200px;border-radius:10px;
+       background:linear-gradient(135deg,#2f8fd8,#d84f8f);z-index:2;will-change:auto}
+  #hud{position:absolute;right:6px;bottom:6px;font-size:11px;color:#5f7f6f;z-index:3}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="cv" width="800" height="600"></canvas>
+  <div id="box"></div>
+  <div id="hud">idle</div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var box = document.getElementById('box');
+  var cv = document.getElementById('cv');
+  var ctx = cv.getContext('2d', { alpha: false });
+  var hud = document.getElementById('hud');
+
+  // ---------------------------------------------------------------- state
+  var S = {
+    impl: null,
+    boxMode: 'small',
+    record: false,
+    rafTs: [],
+    rafMarkStart: 0,
+    rafMarkEnd: 0,
+    longtasks: [],
+    evtCount: 0,
+    busy: 0,            // accumulated (dispatch->return) ns-equivalent ms
+    dispatchTs: [],     // absolute t at each dispatch (for real interval stats)
+    pending: null,
+    writeBusy: 0,
+    writeCount: 0,
+    evSinceFrame: 0,
+    evPerFrameHist: {},
+    coalescedHist: {},
+    synthCoalescedSample: null,
+    pointerEvents: 0,
+    mouseEvents: 0,
+    layoutReads: 0,
+    px: 0, py: 0
+  };
+
+  var longtaskSupported = false;
+  try {
+    var po = new PerformanceObserver(function (list) {
+      var es = list.getEntries();
+      for (var i = 0; i < es.length; i++) S.longtasks.push({ start: es[i].startTime, dur: es[i].duration });
+    });
+    po.observe({ entryTypes: ['longtask'] });
+    longtaskSupported = true;
+  } catch (e) { longtaskSupported = false; }
+
+  // ------------------------------------------------------------ frame loop
+  function frameLoop(ts) {
+    if (S.record) {
+      S.rafTs.push(ts);
+      // events merged into this frame (equivalent of coalescing for synthetic input)
+      var k = String(S.evSinceFrame);
+      S.evPerFrameHist[k] = (S.evPerFrameHist[k] || 0) + 1;
+      S.evSinceFrame = 0;
+    }
+    if (S.pending) {
+      var a = performance.now();
+      box.style.transform = 'translate3d(' + S.pending.x + 'px,' + S.pending.y + 'px,0)';
+      S.writeBusy += performance.now() - a;
+      S.writeCount++;
+      S.pending = null;
+    }
+    requestAnimationFrame(frameLoop);
+  }
+  requestAnimationFrame(frameLoop);
+
+  // -------------------------------------------------------------- handlers
+  function onMove(ev) {
+    S.evtCount++;
+    if (S.impl === 'null-handler') return;
+
+    var tx = (ev.clientX % 400) + 40;
+    var ty = (ev.clientY % 300) + 40;
+
+    if (S.impl === 'perEvent-noRaf') {
+      box.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0)';
+    } else if (S.impl === 'perEvent-raf') {
+      S.pending = { x: tx, y: ty };
+      S.evSinceFrame++;
+    } else if (S.impl === 'layout-thrash') {
+      box.style.left = tx + 'px';
+      box.style.top = ty + 'px';
+      S.px = box.offsetWidth; // forced synchronous layout
+      S.layoutReads++;
+    } else if (S.impl === 'canvas-2d') {
+      ctx.fillStyle = '#1b232b';
+      ctx.fillRect(0, 0, 800, 600);
+      ctx.fillStyle = '#2f8fd8';
+      ctx.beginPath();
+      ctx.arc((ev.clientX % 760) + 20, (ev.clientY % 560) + 20, 18, 0, 6.28318);
+      ctx.fill();
+      ctx.fillStyle = '#d84f8f';
+      ctx.fillRect((ev.clientX % 700) + 40, (ev.clientY % 500) + 40, 40, 40);
+      ctx.fillStyle = '#c9d4de';
+      ctx.font = '14px monospace';
+      ctx.fillText('e' + S.evtCount, 10, 24);
+    }
+  }
+  document.addEventListener('mousemove', onMove, { passive: true, capture: false });
+  document.addEventListener('pointermove', function (ev) {
+    S.pointerEvents++;
+    // coalescing probe on real (CDP-injected) pointer events
+    var n = -1;
+    if (typeof ev.getCoalescedEvents === 'function') {
+      try { n = ev.getCoalescedEvents().length; } catch (e) { n = -2; }
+    }
+    var key = String(n);
+    S.coalescedHist[key] = (S.coalescedHist[key] || 0) + 1;
+  }, { passive: true });
+
+  // ------------------------------------------------------------- utilities
+  function reset(impl, boxMode) {
+    S.impl = impl;
+    S.boxMode = boxMode;
+    box.style.transform = 'none';
+    box.style.left = '40px';
+    box.style.top = '40px';
+    if (boxMode === 'full') {
+      box.style.width = window.innerWidth + 'px';
+      box.style.height = window.innerHeight + 'px';
+      box.style.left = '0px';
+      box.style.top = '0px';
+      box.style.borderRadius = '0px';
+    } else {
+      box.style.width = '200px';
+      box.style.height = '200px';
+    }
+    S.rafTs = []; S.evtCount = 0; S.busy = 0; S.dispatchTs = [];
+    S.pending = null; S.writeBusy = 0; S.writeCount = 0; S.evSinceFrame = 0;
+    S.evPerFrameHist = {}; S.pointerEvents = 0; S.mouseEvents = 0; S.layoutReads = 0;
+  }
+
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  function makeYielder() {
+    var ch = new MessageChannel();
+    var pending = null;
+    ch.port1.onmessage = function () { var r = pending; pending = null; if (r) r(); };
+    return function () {
+      return new Promise(function (res) { pending = res; ch.port2.postMessage(0); });
+    };
+  }
+
+  function dispatchOne(impl, i) {
+    var x = 60 + ((i * 7) % 1180);
+    var y = 50 + ((i * 3) % 680);
+    var ev = new MouseEvent('mousemove', { clientX: x, clientY: y, bubbles: true, cancelable: false, view: window });
+    document.getElementById('stage').dispatchEvent(ev);
+  }
+
+  // ------------------------------------------------------------- main runs
+  async function measureRun(opts) {
+    var impl = opts.impl, count = opts.count || 3000, intervalMs = opts.intervalMs || 1;
+    var pace = opts.pace || 'mc', boxMode = opts.boxMode || 'small';
+    var maxCatch = opts.maxCatch || 250;
+
+    reset(impl, boxMode);
+    await sleep(400);
+    S.record = true;
+    await sleep(250); // idle warm-up frames, not analysed
+    S.rafMarkStart = S.rafTs.length;
+    S.longtasks = [];
+
+    var tWall0 = performance.now();
+    var catchHits = 0, maxBatch = 0;
+
+    if (count === 0) {
+      await sleep(opts.idleMs || 3000);
+    } else if (pace === 'burst') {
+      var b0 = performance.now();
+      for (var j = 0; j < count; j++) dispatchOne(impl, j);
+      S.busy = performance.now() - b0;
+      S.dispatchTs.push(b0);
+    } else {
+      var yielder = makeYielder();
+      var t0 = performance.now();
+      var i = 0;
+      while (i < count) {
+        var now = performance.now();
+        var due = Math.floor((now - t0) / intervalMs) + 1;
+        if (due > i + maxCatch) { due = i + maxCatch; catchHits++; }
+        var batch = 0;
+        while (i < due && i < count) {
+          var a = performance.now();
+          dispatchOne(impl, i);
+          var b = performance.now();
+          S.busy += (b - a);
+          S.dispatchTs.push(a);
+          i++; batch++;
+        }
+        if (batch > maxBatch) maxBatch = batch;
+        await yielder();
+      }
+    }
+    var tWall1 = performance.now();
+    S.rafMarkEnd = S.rafTs.length;
+    S.record = false;
+    await sleep(250);
+
+    // ------------------------------------------------------------- summarise
+    var frames = S.rafTs.slice(S.rafMarkStart, S.rafMarkEnd);
+    var iv = [];
+    for (var k = 1; k < frames.length; k++) iv.push(frames[k] - frames[k - 1]);
+    var ivSorted = iv.slice().sort(function (a, b) { return a - b; });
+    function pct(arr, p) {
+      if (!arr.length) return null;
+      var idx = Math.min(arr.length - 1, Math.floor(p * (arr.length - 1)));
+      return arr[idx];
+    }
+    function fracAbove(arr, thr) {
+      if (!arr.length) return null;
+      var c = 0; for (var q = 0; q < arr.length; q++) if (arr[q] > thr) c++;
+      return c / arr.length;
+    }
+    var dts = S.dispatchTs;
+    var eiv = [];
+    for (var m = 1; m < dts.length; m++) eiv.push(dts[m] - dts[m - 1]);
+    var eivSorted = eiv.slice().sort(function (a, b) { return a - b; });
+
+    var ltTotal = 0, ltMax = 0;
+    for (var n = 0; n < S.longtasks.length; n++) {
+      ltTotal += S.longtasks[n].dur;
+      if (S.longtasks[n].dur > ltMax) ltMax = S.longtasks[n].dur;
+    }
+
+    var wall = tWall1 - tWall0;
+    var res = {
+      impl: impl, pace: pace, boxMode: boxMode, requestedCount: count, intervalMs: intervalMs,
+      dispatched: count,
+      eventsReceived: S.evtCount,
+      wallMs: wall,
+      achievedEventsPerSec: count > 0 ? count / (wall / 1000) : null,
+      busyMs: S.busy,
+      usPerEvent: count > 0 ? (S.busy * 1000) / count : null,
+      msPer1000Events: count > 0 ? (S.busy / count) * 1000 : null,
+      rafWriteCount: S.writeCount,
+      rafWriteBusyMs: S.writeBusy,
+      rafWriteUsPerCall: S.writeCount ? (S.writeBusy * 1000) / S.writeCount : null,
+      layoutReads: S.layoutReads,
+      catchUpBatchHits: catchHits,
+      maxBatch: maxBatch,
+      longtaskSupported: longtaskSupported,
+      longtaskCount: S.longtasks.length,
+      longtaskTotalMs: ltTotal,
+      longtaskMaxMs: ltMax,
+      frames: frames.length,
+      frameIntervalMs: {
+        min: ivSorted.length ? ivSorted[0] : null,
+        p50: pct(ivSorted, 0.5), p95: pct(ivSorted, 0.95), p99: pct(ivSorted, 0.99),
+        max: ivSorted.length ? ivSorted[ivSorted.length - 1] : null,
+        mean: iv.length ? iv.reduce(function (a, b) { return a + b; }, 0) / iv.length : null
+      },
+      frameOver16_7Frac: fracAbove(iv, 16.7),
+      frameOver33Frac: fracAbove(iv, 33.0),
+      frameOver50Frac: fracAbove(iv, 50.0),
+      effFpsFromFrames: frames.length >= 2 ? (frames.length - 1) * 1000 / (frames[frames.length - 1] - frames[0]) : null,
+      eventIntervalMs: {
+        p50: pct(eivSorted, 0.5), p95: pct(eivSorted, 0.95), max: eivSorted.length ? eivSorted[eivSorted.length - 1] : null
+      },
+      evPerFrameHist: S.evPerFrameHist
+    };
+    return res;
+  }
+
+  // -------------------------------------------------------------- CDP input
+  async function cdpWindowStart() {
+    reset(S.impl === null ? 'null-handler' : S.impl, 'small');
+    S.rafTs = []; S.evtCount = 0; S.busy = 0; S.dispatchTs = []; S.longtasks = [];
+    S.pointerEvents = 0; S.mouseEvents = 0; S.coalescedHist = {}; S.evPerFrameHist = {};
+    S.record = true;
+    return true;
+  }
+  async function cdpWindowEnd(moves) {
+    S.record = false;
+    await sleep(300);
+    var iv = [];
+    for (var k = 1; k < S.rafTs.length; k++) iv.push(S.rafTs[k] - S.rafTs[k - 1]);
+    var ivSorted = iv.slice().sort(function (a, b) { return a - b; });
+    function pct(arr, p) { return arr.length ? arr[Math.min(arr.length - 1, Math.floor(p * (arr.length - 1)))] : null; }
+    function fracAbove(arr, t) { if (!arr.length) return null; var c = 0; for (var q = 0; q < arr.length; q++) if (arr[q] > t) c++; return c / arr.length; }
+    var ltTotal = 0, ltMax = 0;
+    for (var n = 0; n < S.longtasks.length; n++) { ltTotal += S.longtasks[n].dur; if (S.longtasks[n].dur > ltMax) ltMax = S.longtasks[n].dur; }
+    return {
+      cdpMovesInjected: moves,
+      mousemoveReceived: S.evtCount,
+      pointermoveReceived: S.pointerEvents,
+      coalescedHist: S.coalescedHist,
+      frames: S.rafTs.length,
+      frameIntervalMs: { p50: pct(ivSorted, .5), p95: pct(ivSorted, .95), p99: pct(ivSorted, .99), max: ivSorted.length ? ivSorted[ivSorted.length - 1] : null, mean: iv.length ? iv.reduce(function (a, b) { return a + b; }, 0) / iv.length : null },
+      frameOver16_7Frac: fracAbove(iv, 16.7),
+      frameOver50Frac: fracAbove(iv, 50.0),
+      longtaskCount: S.longtasks.length, longtaskTotalMs: ltTotal, longtaskMaxMs: ltMax,
+      handlerBusyMs: S.busy, usPerEvent: S.evtCount ? S.busy * 1000 / S.evtCount : null
+    };
+  }
+
+  // ------------------------------------------------------------ facts & co
+  function displayFacts() {
+    function mm(q) { try { return window.matchMedia(q).matches; } catch (e) { return null; } }
+    var vv = window.visualViewport;
+    return {
+      devicePixelRatio: window.devicePixelRatio,
+      screenWidth: screen.width, screenHeight: screen.height,
+      screenAvailWidth: screen.availWidth, screenAvailHeight: screen.availHeight,
+      innerWidth: window.innerWidth, innerHeight: window.innerHeight,
+      outerWidth: window.outerWidth, outerHeight: window.outerHeight,
+      screenLeft: window.screenLeft, screenTop: window.screenTop,
+      visualViewportScale: vv ? vv.scale : null,
+      visualViewportWidth: vv ? vv.width : null,
+      visualViewportHeight: vv ? vv.height : null,
+      res1dppx: mm('(resolution: 1dppx)'),
+      res2dppx: mm('(resolution: 2dppx)'),
+      res15dppx: mm('(min-resolution: 1.5dppx)'),
+      hardwareConcurrency: navigator.hardwareConcurrency,
+      deviceMemory: navigator.deviceMemory || null,
+      userAgent: navigator.userAgent,
+      crossOriginIsolated: window.crossOriginIsolated,
+      colorDepth: screen.colorDepth,
+      timerResolutionUs: measureTimerResolution()
+    };
+  }
+
+  function measureTimerResolution() {
+    var deltas = [], last = performance.now(), guard = 0;
+    while (deltas.length < 200 && guard++ < 2000000) {
+      var t = performance.now();
+      if (t !== last) { deltas.push(t - last); last = t; }
+    }
+    deltas.sort(function (a, b) { return a - b; });
+    return { samples: deltas.length, minMs: deltas.length ? deltas[0] : null, medianMs: deltas.length ? deltas[Math.floor(deltas.length / 2)] : null };
+  }
+
+  function glInfo() {
+    var c = document.createElement('canvas');
+    var gl = c.getContext('webgl2') || c.getContext('webgl') || c.getContext('experimental-webgl');
+    if (!gl) return { webgl: false };
+    var dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    var out = {
+      webgl: true,
+      version: gl.getParameter(gl.VERSION),
+      vendor: gl.getParameter(gl.VENDOR),
+      renderer: gl.getParameter(gl.RENDERER),
+      unmaskedVendor: dbg ? gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL) : null,
+      unmaskedRenderer: dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : null,
+      maxTexture: gl.getParameter(gl.MAX_TEXTURE_SIZE)
+    };
+    var lose = gl.getExtension('WEBGL_lose_context'); if (lose) lose.loseContext();
+    return out;
+  }
+
+  function canvas2dInfo() {
+    var g = ctx;
+    return {
+      hasCtx: !!g,
+      attributes: g ? (function () { try { return g.getContextAttributes(); } catch (e) { return null; } })() : null,
+      backingStore: { w: cv.width, h: cv.height },
+      cssSize: { w: cv.clientWidth, h: cv.clientHeight }
+    };
+  }
+
+  function pageInfo() {
+    return {
+      url: location.href,
+      dpr: window.devicePixelRatio,
+      viewport: { w: window.innerWidth, h: window.innerHeight },
+      viewportBackingPixels: window.innerWidth * window.devicePixelRatio * window.innerHeight * window.devicePixelRatio
+    };
+  }
+
+  window.__P = {
+    ready: true,
+    displayFacts: displayFacts,
+    glInfo: glInfo,
+    canvas2dInfo: canvas2dInfo,
+    pageInfo: pageInfo,
+    measureRun: measureRun,
+    cdpWindowStart: cdpWindowStart,
+    cdpWindowEnd: cdpWindowEnd,
+    reset: reset,
+    stop: function () { S.record = false; S.impl = 'null-handler'; },
+    hudSet: function (t) { hud.textContent = t; }
+  };
+})();
+</script>
+</body>
+</html>

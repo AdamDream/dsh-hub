@@ -1,0 +1,45 @@
+=== usb topology (Lsusb) ===
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/12p, 480M
+    |__ Port 002: Dev 002, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 002: Dev 002, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 003: Dev 003, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 003: Dev 003, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 005: Dev 004, If 0, Class=Communications, Driver=xr_serial, 12M
+    |__ Port 005: Dev 004, If 1, Class=CDC Data, Driver=xr_serial, 12M
+    |__ Port 006: Dev 005, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 006: Dev 005, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 009: Dev 006, If 0, Class=Wireless, Driver=btusb, 12M
+    |__ Port 009: Dev 006, If 1, Class=Wireless, Driver=btusb, 12M
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/5p, 20000M/x2
+/:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/2p, 480M
+/:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/2p, 20000M/x2
+/:  Bus 005.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/2p, 480M
+/:  Bus 006.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/2p, 10000M
+/:  Bus 007.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/2p, 480M
+    |__ Port 002: Dev 002, If 0, Class=Hub, Driver=hub/4p, 480M
+/:  Bus 008.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/2p, 10000M
+    |__ Port 002: Dev 002, If 0, Class=Hub, Driver=hub/4p, 5000M
+        |__ Port 003: Dev 003, If 0, Class=Vendor Specific Class, Driver=mt7921u, 5000M
+/:  Bus 009.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/1p, 480M
+    |__ Port 001: Dev 002, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 003: Dev 003, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+        |__ Port 003: Dev 003, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+/:  Bus 010.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/0p, 5000M
+
+=== controller pci mapping ===
+usb1 -> pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb1
+usb10 -> pci0000:00/0000:00:08.3/0000:74:00.0/usb10
+usb2 -> pci0000:00/0000:00:02.1/0000:03:00.0/0000:04:0c.0/0000:0d:00.0/usb2
+usb3 -> pci0000:00/0000:00:02.2/0000:0f:00.0/0000:10:02.0/0000:71:00.0/usb3
+usb4 -> pci0000:00/0000:00:02.2/0000:0f:00.0/0000:10:02.0/0000:71:00.0/usb4
+usb5 -> pci0000:00/0000:00:08.1/0000:73:00.3/usb5
+usb6 -> pci0000:00/0000:00:08.1/0000:73:00.3/usb6
+usb7 -> pci0000:00/0000:00:08.1/0000:73:00.4/usb7
+usb8 -> pci0000:00/0000:00:08.1/0000:73:00.4/usb8
+usb9 -> pci0000:00/0000:00:08.3/0000:74:00.0/usb9
+
+=== 0d:00.0 / 73:00.4 / 74:00.0 device ids ===
+0000:0d:00.0: vendor=0x1022 device=0x43fc
+0000:73:00.4: vendor=0x1022 device=0x15b7
+0000:74:00.0: vendor=0x1022 device=0x15b8
+0000:73:00.3: vendor=0x1022 device=0x15b6

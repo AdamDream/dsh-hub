@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "line": "conditions-matrix",
+    "agent": "incident2-conditions",
+    "label": "m4-D6-frostoff",
+    "url": "http://127.0.0.1:3080",
+    "startedAt": "2026-09-22T10:52:43+08:00",
+    "hostPid": 10806,
+    "hostPidAlive": true,
+    "prereg": {
+      "jank_frames_gt50_post": 3,
+      "jank_longest_task_ms": 100,
+      "jank_click_to_panel_ms": 300,
+      "smooth_frames_gt50_post": 1,
+      "smooth_longest_task_ms": 50,
+      "smooth_click_to_panel_ms": 200
+    },
+    "design": "OFAT：BASE 为参照，每个 cell 只改一个因子；每 cell 每次 rep 为全新 context+page",
+    "criteria": "click→面板可见耗时 + 点击前后各 3s 的 >50ms 帧数与最长任务",
+    "discipline": "只点 设置/关闭/设置页导航/侧栏会话标题；不点 保存/应用/删除/移除壁纸/模型切换；不 pkill",
+    "cells": [
+      {
+        "id": "D6-frostoff",
+        "dim": "6-wallpaper",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "current",
+          "wallpaper": "frost-off",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      }
+    ],
+    "reps": 2
+  },
+  "lock": {
+    "ok": true,
+    "waitedSec": 65,
+    "preempted": [],
+    "acquired": true
+  },
+  "environment": {
+    "atStart": {
+      "total": 1,
+      "pids": [
+        300850
+      ],
+      "own": 1,
+      "foreign": 0,
+      "foreign_tenants": 0,
+      "host_derived": 0,
+      "foreign_pids": [],
+      "tenant_detail": [],
+      "host_derived_detail": [],
+      "gate_strict_passed": true,
+      "gate_tenants_passed": true,
+      "loadavg": 3.7,
+      "own_pids": [
+        300850
+      ]
+    },
+    "atEnd": null
+  },
+  "reps": [],
+  "summary": {},
+  "terminated": {
+    "signal": "SIGTERM",
+    "at": "2026-09-22T10:53:57+08:00"
+  },
+  "instrumentSelfCheck": {
+    "ownByDelta": [
+      300850
+    ],
+    "ownByAncestry": [
+      300850
+    ],
+    "used": [
+      300850
+    ],
+    "agree": true,
+    "detectionWorks": true
+  },
+  "finishedAt": "2026-09-22T10:53:57+08:00",
+  "log": [
+    "[10:52:43] pre-launch real browser instances: 0",
+    "[10:52:43] LOCK held by incident2-theme-open (age 0.0min, ownPid 287771/true); retry in 2s (elapsed 0s)",
+    "[10:52:45] LOCK held by incident2-theme-open (age 0.0min, ownPid 287771/true); retry in 2s (elapsed 2s)",
+    "[10:52:47] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.0min, ownPid 299905/true); retry in 2s (elapsed 4s)",
+    "[10:52:49] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.0min, ownPid 299905/true); retry in 2s (elapsed 6s)",
+    "[10:52:52] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.1min, ownPid 299905/true); retry in 3s (elapsed 9s)",
+    "[10:52:54] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.1min, ownPid 299905/true); retry in 3s (elapsed 11s)",
+    "[10:52:57] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 299905/true); retry in 3s (elapsed 15s)",
+    "[10:53:00] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 299905/true); retry in 2s (elapsed 17s)",
+    "[10:53:02] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.3min, ownPid 299905/true); retry in 2s (elapsed 19s)",
+    "[10:53:05] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.3min, ownPid 299905/true); retry in 3s (elapsed 22s)",
+    "[10:53:08] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.3min, ownPid 299905/true); retry in 3s (elapsed 25s)",
+    "[10:53:10] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.0min, ownPid 300272/true); retry in 2s (elapsed 27s)",
+    "[10:53:13] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.0min, ownPid 300272/true); retry in 2s (elapsed 30s)",
+    "[10:53:15] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.1min, ownPid 300272/true); retry in 2s (elapsed 32s)",
+    "[10:53:16] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.1min, ownPid 300272/true); retry in 3s (elapsed 34s)",
+    "[10:53:19] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 300272/true); retry in 3s (elapsed 36s)",
+    "[10:53:22] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 300272/true); retry in 3s (elapsed 39s)",
+    "[10:53:24] LOCK held by incident2-host-click (age 0.0min, ownPid 299506/true); retry in 2s (elapsed 41s)",
+    "[10:53:27] LOCK held by incident2-host-click (age 0.1min, ownPid 299506/true); retry in 2s (elapsed 44s)",
+    "[10:53:29] LOCK held by incident2-host-click (age 0.1min, ownPid 299506/true); retry in 3s (elapsed 46s)",
+    "[10:53:32] LOCK held by incident2-host-click (age 0.1min, ownPid 299506/true); retry in 2s (elapsed 49s)",
+    "[10:53:35] LOCK held by incident2-host-click (age 0.2min, ownPid 299506/true); retry in 2s (elapsed 52s)",
+    "[10:53:37] LOCK held by incident2-theme-open (age 0.0min, ownPid 300505/true); retry in 3s (elapsed 54s)",
+    "[10:53:40] LOCK held by incident2-theme-open (age 0.1min, ownPid 300505/true); retry in 3s (elapsed 57s)",
+    "[10:53:43] LOCK held by incident2-theme-open (age 0.1min, ownPid 300505/true); retry in 3s (elapsed 60s)",
+    "[10:53:45] LOCK held by incident2-theme-open (age 0.2min, ownPid 300505/true); retry in 2s (elapsed 62s)",
+    "[10:53:47] LOCK acquired after 65s",
+    "[10:53:47] launching chromium (headless)",
+    "[10:53:48] own browser instances = 1 (delta=1 ancestry=1 agree=true)",
+    "[10:53:48] cell D6-frostoff rep 1/2",
+    "[10:53:57] signal SIGTERM: closing browser → releasing lock → flushing artifact"
+  ]
+}

@@ -1,0 +1,49 @@
+############ targeted zstd CLI search (text files in workspace only, binaries skipped) ############
+/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/host-click/report.mjs:102:  w('**因果线索（未证实，不作结论）**：10:25 前后抓到 `zstd -19 -c` 以 100% CPU 运行，且其父进程是**宿主 10806 直接 spawn 的 bash**；');
+/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/host-click/report-sandbox/audit.md:87:**因果线索（未证实，不作结论）**：10:25 前后抓到 `zstd -19 -c` 以 100% CPU 运行，且其父进程是**宿主 10806 直接 spawn 的 bash**；
+/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/host-click/report-sandbox/report.mjs:102:  w('**因果线索（未证实，不作结论）**：10:25 前后抓到 `zstd -19 -c` 以 100% CPU 运行，且其父进程是**宿主 10806 直接 spawn 的 bash**；');
+/home/CNS2026495165/dsh/.workspace/lag-fix/incident2/sys-stalls/raw/dsh-zstd-level2.txt:71:############ system-wide search: scripts invoking 'zstd -19' ############
+(search 1 done)
+--- any 'zstd' invocation (any level) in workspace scripts ---
+/home/CNS2026495165/dsh/.workspace/settings-lag/scan_sessions.sh:6:  f=$(ls "$d"/session.jsonl.zstd "$d"/session.v3.jsonl.zstd 2>/dev/null | head -1)
+/home/CNS2026495165/dsh/.workspace/settings-lag/scan_sessions.sh:11:  counts=$(zstdcat -q "$f" 2>/dev/null | awk '
+/home/CNS2026495165/dsh/.workspace/settings-lag/census-subagent.mjs:2:// Reads only the first zstd frame's first line (the session header) per session dir.
+/home/CNS2026495165/dsh/.workspace/settings-lag/census-subagent.mjs:25:    const f = join(d.dir, 'session.jsonl.zstd');
+/home/CNS2026495165/dsh/.workspace/settings-lag/census-subagent.mjs:30:  // One zstd -dc per file; head -c 4000 keeps only the header line, then zstd exits on SIGPIPE.
+/home/CNS2026495165/dsh/.workspace/settings-lag/census-subagent.mjs:32:    files.map(f => `printf '%s\\t' ${JSON.stringify(f.file)}; zstd -dc ${JSON.stringify(f.file)} 2>/dev/null | head -c 4000 | head -n 1`).join('\n')
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/probe-b1-cold-order.mjs:14: *   2. 缓冲区里只解**第一个 zstd frame**（该 frame 按设计恰好只含 header 行：
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/probe-b1-cold-order.mjs:83:/** 在 <=8KB 缓冲内定位**第一个完整** zstd frame；不完整则返回 null（调用方放弃该条，不追加读取）。 */
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/probe-b1-cold-order.mjs:151:      const f = join(pdir, s.name, 'session.jsonl.zstd');
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-b1/probe-b1-cold-order.mjs:152:      try { if (statSync(f).isFile()) out.push(f); } catch { /* 非 zstd 或缺失 */ }
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/lib-noig3/zstd.js:1://#region lib/zstd.js
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/lib-noig3/zstd.js:5: * dsh session artifacts (`~/.dsh/sessions/…/session.jsonl.zstd`) are NOT a
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/lib-noig3/zstd.js:6: * single zstd stream: the host (`@deepseek-ai/dsh-session-persistence-jsonl`)
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/lib-noig3/zstd.js:8: * file is a concatenation of zstd frames. `zstdDecompressSync(整文件)` only
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/lib-noig3/zstd.js:22: * @module dsh-usage/zstd
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/lib-noig3/zstd.js:32: * Locate complete zstd frames without decompressing their blocks. Invalid
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/lib-noig3/zstd.js:101: * Decode a buffer of concatenated zstd frames into plaintext.
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/lib-noig3/zstd.js:124: * @param {string} filePath - absolute path to `session.jsonl.zstd`.
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/lib-noig3/ingest-dsh.js:3: * dsh session-log ingestion (AUDIT U06). Source: `~/.dsh/sessions/…/session.jsonl.zstd`
+/home/CNS2026495165/dsh/.workspace/lag-fix/exec-ingest/scratch/lib-noig3/ingest-dsh.js:4: * (multi-frame zstd, see lib/zstd.js). Folding is idempotent: every pass
+(search 2 done)
+
+############ thread/process census ############
+total threads (kernel view): 163175
+total procs: 689
+--- threads per heavy proc ---
+pid=10806 threads=12 state=R node /home/CNS2026495165/.npm-global/bin/dsh web 
+pid=9042 threads=121 state=S /snap/firefox/8863/usr/lib/firefox/firefox 
+pid=10350 threads=29 state=Web /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser 
+pid=4139 threads=27 state=S /usr/bin/gnome-shell 
+pid=3884 threads=13 state=S /usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1001/gdm/Xauthorit
+
+############ runnable vs D-state right now ############
+R=5 D=2 ; loadavg=7.19 6.10 4.90 4/3136 102341
+    713 D    -                    [kworker/u129:17+events_unbound]
+   2085 D    -                    [.Ocular]
+  32885 D    -                    [kworker/u128:0+mt76]
+  95505 D    -                    [kworker/u128:2+phy0]
+
+############ dsh web host own CPU ticks delta (10s) ############
+dsh web ticks over 10s: 1198  => 11980 % of one core
+threads now: 12

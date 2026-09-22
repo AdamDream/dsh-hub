@@ -1,0 +1,1697 @@
+{
+  "face": "面4 主题 rAF 延后（theme-color meta 写回：延后到下一个 rAF vs 帧内同步）",
+  "generated_at": "2026-09-22T10:43:39.672128+08:00",
+  "instrument": {
+    "runner": "sub/raf-face-runner.mjs",
+    "page_stub": "sub/raf-face-pagestub.js",
+    "theme_arm_windows": [
+      "raf-theme-sync-r1",
+      "raf-theme-sync-r2",
+      "raf-theme-sync-r3"
+    ],
+    "base_arm_windows": [
+      "raf-base-r1",
+      "raf-base-r2",
+      "raf-base-r3"
+    ],
+    "external_control_windows": [
+      "base-r1",
+      "probe-base",
+      "reg-base-r1",
+      "reg-base-r2",
+      "reg-base-r3"
+    ],
+    "params": {
+      "settle_ms": 6000,
+      "dwell_ms": 6000,
+      "gatemax_ms": 180000
+    }
+  },
+  "A_stub_effect": {
+    "theme_effectiveStrict": {
+      "raf-theme-sync-r1": true,
+      "raf-theme-sync-r2": true,
+      "raf-theme-sync-r3": true
+    },
+    "base_effectiveStrict": {
+      "raf-base-r1": true,
+      "raf-base-r2": true,
+      "raf-base-r3": true
+    },
+    "theme_all_effective": true,
+    "pathReachableClick_theme": {
+      "raf-theme-sync-r1": {
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": false
+      },
+      "raf-theme-sync-r2": {
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": false
+      },
+      "raf-theme-sync-r3": {
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": false
+      }
+    },
+    "pathReachableClick_base": {
+      "raf-base-r1": {
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": false
+      },
+      "raf-base-r2": {
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": false
+      },
+      "raf-base-r3": {
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": false
+      }
+    }
+  },
+  "B_production_raf_calls": {
+    "per_window": {
+      "raf-theme-sync-r1": {
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 363,
+        "rafCallsTotal": 367,
+        "rafByHeartbeat": 365,
+        "rafByHeartbeatInClick": 365,
+        "rafByProdThemeDefer": 1,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafMountProdDefer": 1,
+        "rafMountOther": 1,
+        "rafMountHeartbeat": 0,
+        "rafClickDeltaProdDefer": 0,
+        "rafClickDeltaHeartbeat": 365,
+        "rafClickDeltaTotal": 365,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>"
+        ],
+        "rafOtherSamplesTop": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "rafTotalPerS": 60.29,
+        "tcRafScheduled": 367,
+        "mountTcRafScheduled": 2
+      },
+      "raf-theme-sync-r2": {
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 363,
+        "rafCallsTotal": 367,
+        "rafByHeartbeat": 365,
+        "rafByHeartbeatInClick": 365,
+        "rafByProdThemeDefer": 1,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafMountProdDefer": 1,
+        "rafMountOther": 1,
+        "rafMountHeartbeat": 0,
+        "rafClickDeltaProdDefer": 0,
+        "rafClickDeltaHeartbeat": 365,
+        "rafClickDeltaTotal": 365,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>"
+        ],
+        "rafOtherSamplesTop": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "rafTotalPerS": 60.27,
+        "tcRafScheduled": 367,
+        "mountTcRafScheduled": 2
+      },
+      "raf-theme-sync-r3": {
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 365,
+        "rafCallsTotal": 368,
+        "rafByHeartbeat": 366,
+        "rafByHeartbeatInClick": 366,
+        "rafByProdThemeDefer": 1,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafMountProdDefer": 1,
+        "rafMountOther": 1,
+        "rafMountHeartbeat": 0,
+        "rafClickDeltaProdDefer": 0,
+        "rafClickDeltaHeartbeat": 366,
+        "rafClickDeltaTotal": 366,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>"
+        ],
+        "rafOtherSamplesTop": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "rafTotalPerS": 60.14,
+        "tcRafScheduled": 368,
+        "mountTcRafScheduled": 2
+      }
+    },
+    "base_per_window": {
+      "raf-base-r1": {
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 364,
+        "rafCallsTotal": 369,
+        "rafByHeartbeat": 366,
+        "rafByHeartbeatInClick": 366,
+        "rafByProdThemeDefer": 2,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafMountProdDefer": 2,
+        "rafMountOther": 1,
+        "rafMountHeartbeat": 0,
+        "rafClickDeltaProdDefer": 0,
+        "rafClickDeltaHeartbeat": 366,
+        "rafClickDeltaTotal": 366,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a:555:16"
+        ],
+        "rafOtherSamplesTop": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "rafTotalPerS": 60.37,
+        "tcRafScheduled": 369,
+        "mountTcRafScheduled": 3
+      },
+      "raf-base-r2": {
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 363,
+        "rafCallsTotal": 368,
+        "rafByHeartbeat": 365,
+        "rafByHeartbeatInClick": 365,
+        "rafByProdThemeDefer": 2,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafMountProdDefer": 2,
+        "rafMountOther": 1,
+        "rafMountHeartbeat": 0,
+        "rafClickDeltaProdDefer": 0,
+        "rafClickDeltaHeartbeat": 365,
+        "rafClickDeltaTotal": 365,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a:555:16"
+        ],
+        "rafOtherSamplesTop": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "rafTotalPerS": 60.28,
+        "tcRafScheduled": 368,
+        "mountTcRafScheduled": 3
+      },
+      "raf-base-r3": {
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 361,
+        "rafCallsTotal": 366,
+        "rafByHeartbeat": 363,
+        "rafByHeartbeatInClick": 363,
+        "rafByProdThemeDefer": 2,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafMountProdDefer": 2,
+        "rafMountOther": 1,
+        "rafMountHeartbeat": 0,
+        "rafClickDeltaProdDefer": 0,
+        "rafClickDeltaHeartbeat": 363,
+        "rafClickDeltaTotal": 363,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a:555:16"
+        ],
+        "rafOtherSamplesTop": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "rafTotalPerS": 59.81,
+        "tcRafScheduled": 366,
+        "mountTcRafScheduled": 3
+      }
+    },
+    "prod_defer_seen": true,
+    "prod_defer_seen_in_click": false,
+    "prod_defer_seen_any_arm": true,
+    "prod_stack_samples": [
+      "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+      "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+      "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+      "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>"
+    ],
+    "other_callers_top": {
+      "raf-theme-sync-r1": {
+        "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+      },
+      "raf-theme-sync-r2": {
+        "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+      },
+      "raf-theme-sync-r3": {
+        "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+      },
+      "raf-base-r1": {
+        "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+      },
+      "raf-base-r2": {
+        "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+      },
+      "raf-base-r3": {
+        "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+      }
+    },
+    "sync_executed_prod": {
+      "raf-theme-sync-r1": 1,
+      "raf-theme-sync-r2": 1,
+      "raf-theme-sync-r3": 1
+    },
+    "sync_executed_prod_in_click": {
+      "raf-theme-sync-r1": 0,
+      "raf-theme-sync-r2": 0,
+      "raf-theme-sync-r3": 0
+    }
+  },
+  "C_theme_sync_vs_base": {
+    "msToVisible": {
+      "theme_median": 16.3,
+      "theme_values": [
+        16.3,
+        18.1,
+        15.2
+      ],
+      "theme_iqr": 2.9,
+      "base_median": 16.7,
+      "base_values": [
+        16.7,
+        13.1,
+        20.4
+      ],
+      "base_iqr": 7.3,
+      "rel_diff_pct": -2.4,
+      "abs_diff": -0.4,
+      "external_base_values": [
+        16.6,
+        14,
+        17.7,
+        22.7,
+        19.2
+      ],
+      "external_base_median": 17.7,
+      "external_base_iqr": 8.7,
+      "theme_median_clean": 15.2,
+      "theme_values_clean": [
+        15.2
+      ],
+      "base_median_clean": 16.75,
+      "base_values_clean": [
+        13.1,
+        20.4
+      ],
+      "external_base_labels": [
+        "base-r1",
+        "probe-base",
+        "reg-base-r1",
+        "reg-base-r2",
+        "reg-base-r3"
+      ]
+    },
+    "recalcMsPerS": {
+      "theme_median": 0.001,
+      "theme_values": [
+        0,
+        0.001,
+        0.006
+      ],
+      "theme_iqr": 0.006,
+      "base_median": 0.001,
+      "base_values": [
+        0.001,
+        0,
+        0.001
+      ],
+      "base_iqr": 0.001,
+      "rel_diff_pct": 0.0,
+      "abs_diff": 0.0,
+      "external_base_values": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "external_base_median": 0,
+      "external_base_iqr": 0,
+      "theme_median_clean": 0.006,
+      "theme_values_clean": [
+        0.006
+      ],
+      "base_median_clean": 0.001,
+      "base_values_clean": [
+        0,
+        0.001
+      ],
+      "external_base_labels": [
+        "base-r1",
+        "probe-base",
+        "reg-base-r1",
+        "reg-base-r2",
+        "reg-base-r3"
+      ]
+    },
+    "rafP99": {
+      "theme_median": 16.8,
+      "theme_values": [
+        16.8,
+        16.8,
+        16.8
+      ],
+      "theme_iqr": 0.0,
+      "base_median": 16.8,
+      "base_values": [
+        16.8,
+        16.8,
+        16.8
+      ],
+      "base_iqr": 0.0,
+      "rel_diff_pct": 0.0,
+      "abs_diff": 0.0,
+      "external_base_values": [
+        16.8,
+        16.8,
+        16.8,
+        16.8,
+        16.8
+      ],
+      "external_base_median": 16.8,
+      "external_base_iqr": 0.0,
+      "theme_median_clean": 16.8,
+      "theme_values_clean": [
+        16.8
+      ],
+      "base_median_clean": 16.8,
+      "base_values_clean": [
+        16.8,
+        16.8
+      ],
+      "external_base_labels": [
+        "base-r1",
+        "probe-base",
+        "reg-base-r1",
+        "reg-base-r2",
+        "reg-base-r3"
+      ]
+    },
+    "longtaskMaxMs": {
+      "theme_median": null,
+      "theme_values": [
+        null,
+        null,
+        null
+      ],
+      "theme_iqr": null,
+      "base_median": null,
+      "base_values": [
+        null,
+        null,
+        null
+      ],
+      "base_iqr": null,
+      "rel_diff_pct": null,
+      "abs_diff": null,
+      "external_base_values": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "external_base_median": null,
+      "external_base_iqr": null,
+      "theme_median_clean": null,
+      "theme_values_clean": [
+        null
+      ],
+      "base_median_clean": null,
+      "base_values_clean": [
+        null,
+        null
+      ],
+      "external_base_labels": [
+        "base-r1",
+        "probe-base",
+        "reg-base-r1",
+        "reg-base-r2",
+        "reg-base-r3"
+      ]
+    },
+    "taskBusyPct": {
+      "theme_median": 2.543,
+      "theme_values": [
+        2.346,
+        2.543,
+        16.612
+      ],
+      "theme_iqr": 14.266,
+      "base_median": 13.229,
+      "base_values": [
+        4.206,
+        13.229,
+        16.658
+      ],
+      "base_iqr": 12.452,
+      "rel_diff_pct": -80.8,
+      "abs_diff": -10.686,
+      "external_base_values": [
+        3.811,
+        2.74,
+        1.748,
+        0.86,
+        1.835
+      ],
+      "external_base_median": 1.835,
+      "external_base_iqr": 2.951,
+      "theme_median_clean": 16.612,
+      "theme_values_clean": [
+        16.612
+      ],
+      "base_median_clean": 14.944,
+      "base_values_clean": [
+        13.229,
+        16.658
+      ],
+      "external_base_labels": [
+        "base-r1",
+        "probe-base",
+        "reg-base-r1",
+        "reg-base-r2",
+        "reg-base-r3"
+      ]
+    },
+    "scriptMsPerS": {
+      "theme_median": 0.015,
+      "theme_values": [
+        0.014,
+        0.015,
+        0.138
+      ],
+      "theme_iqr": 0.124,
+      "base_median": 0.116,
+      "base_values": [
+        0.025,
+        0.116,
+        0.149
+      ],
+      "base_iqr": 0.124,
+      "rel_diff_pct": -87.1,
+      "abs_diff": -0.101,
+      "external_base_values": [
+        0.022,
+        0.015,
+        0.011,
+        0.005,
+        0.012
+      ],
+      "external_base_median": 0.012,
+      "external_base_iqr": 0.017,
+      "theme_median_clean": 0.138,
+      "theme_values_clean": [
+        0.138
+      ],
+      "base_median_clean": 0.133,
+      "base_values_clean": [
+        0.116,
+        0.149
+      ],
+      "external_base_labels": [
+        "base-r1",
+        "probe-base",
+        "reg-base-r1",
+        "reg-base-r2",
+        "reg-base-r3"
+      ]
+    },
+    "taskMsPerS": {
+      "theme_median": 0.025,
+      "theme_values": [
+        0.023,
+        0.025,
+        0.166
+      ],
+      "theme_iqr": 0.143,
+      "base_median": 0.132,
+      "base_values": [
+        0.042,
+        0.132,
+        0.167
+      ],
+      "base_iqr": 0.125,
+      "rel_diff_pct": -81.1,
+      "abs_diff": -0.107,
+      "external_base_values": [
+        0.038,
+        0.027,
+        0.017,
+        0.009,
+        0.018
+      ],
+      "external_base_median": 0.018,
+      "external_base_iqr": 0.029,
+      "theme_median_clean": 0.166,
+      "theme_values_clean": [
+        0.166
+      ],
+      "base_median_clean": 0.15,
+      "base_values_clean": [
+        0.132,
+        0.167
+      ],
+      "external_base_labels": [
+        "base-r1",
+        "probe-base",
+        "reg-base-r1",
+        "reg-base-r2",
+        "reg-base-r3"
+      ]
+    },
+    "rafTotalPerS": {
+      "theme_median": 60.27,
+      "theme_values": [
+        60.29,
+        60.27,
+        60.14
+      ],
+      "theme_iqr": 0.15,
+      "base_median": 60.28,
+      "base_values": [
+        60.37,
+        60.28,
+        59.81
+      ],
+      "base_iqr": 0.56,
+      "rel_diff_pct": -0.0,
+      "abs_diff": -0.01,
+      "external_base_values": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "external_base_median": 0.0,
+      "external_base_iqr": 0.0,
+      "theme_median_clean": 60.14,
+      "theme_values_clean": [
+        60.14
+      ],
+      "base_median_clean": 60.045,
+      "base_values_clean": [
+        60.28,
+        59.81
+      ],
+      "external_base_labels": [
+        "base-r1",
+        "probe-base",
+        "reg-base-r1",
+        "reg-base-r2",
+        "reg-base-r3"
+      ]
+    },
+    "mountRecalcStyleCount": {
+      "theme_median": 58,
+      "theme_values": [
+        58,
+        48,
+        230
+      ],
+      "theme_iqr": 182,
+      "base_median": 35,
+      "base_values": [
+        57,
+        26,
+        35
+      ],
+      "base_iqr": 31,
+      "rel_diff_pct": 65.7,
+      "abs_diff": 23,
+      "external_base_values": [
+        39,
+        57,
+        64,
+        67,
+        55
+      ],
+      "external_base_median": 57,
+      "external_base_iqr": 28,
+      "theme_median_clean": 230,
+      "theme_values_clean": [
+        230
+      ],
+      "base_median_clean": 30.5,
+      "base_values_clean": [
+        26,
+        35
+      ],
+      "external_base_labels": [
+        "base-r1",
+        "probe-base",
+        "reg-base-r1",
+        "reg-base-r2",
+        "reg-base-r3"
+      ]
+    },
+    "rafN": {
+      "theme_median": 363,
+      "theme_values": [
+        363,
+        363,
+        365
+      ],
+      "theme_iqr": 2,
+      "base_median": 363,
+      "base_values": [
+        364,
+        363,
+        361
+      ],
+      "base_iqr": 3,
+      "rel_diff_pct": 0.0,
+      "abs_diff": 0,
+      "external_base_values": [
+        363,
+        363,
+        363,
+        363,
+        364
+      ],
+      "external_base_median": 363,
+      "external_base_iqr": 1,
+      "theme_median_clean": 365,
+      "theme_values_clean": [
+        365
+      ],
+      "base_median_clean": 362.0,
+      "base_values_clean": [
+        363,
+        361
+      ],
+      "external_base_labels": [
+        "base-r1",
+        "probe-base",
+        "reg-base-r1",
+        "reg-base-r2",
+        "reg-base-r3"
+      ]
+    },
+    "mountScriptDuration": {
+      "theme_median": 0.057,
+      "theme_values": [
+        0.057,
+        0.045,
+        0.537
+      ],
+      "theme_iqr": 0.492,
+      "base_median": 0.833,
+      "base_values": [
+        0.057,
+        0.833,
+        1.016
+      ],
+      "base_iqr": 0.959,
+      "rel_diff_pct": -93.2,
+      "abs_diff": -0.776,
+      "external_base_values": [
+        0.114,
+        0.054,
+        0.059,
+        0.064,
+        0.062
+      ],
+      "external_base_median": 0.062,
+      "external_base_iqr": 0.06,
+      "theme_median_clean": 0.537,
+      "theme_values_clean": [
+        0.537
+      ],
+      "base_median_clean": 0.924,
+      "base_values_clean": [
+        0.833,
+        1.016
+      ],
+      "external_base_labels": [
+        "base-r1",
+        "probe-base",
+        "reg-base-r1",
+        "reg-base-r2",
+        "reg-base-r3"
+      ]
+    },
+    "recalcStyleCountClick": {
+      "theme_median": 9,
+      "theme_values": [
+        9,
+        9,
+        374
+      ],
+      "theme_iqr": 365,
+      "base_median": 9,
+      "base_values": [
+        9,
+        10,
+        9
+      ],
+      "base_iqr": 1,
+      "rel_diff_pct": 0.0,
+      "abs_diff": 0,
+      "external_base_values": [
+        9,
+        9,
+        9,
+        9,
+        9
+      ],
+      "external_base_median": 9,
+      "external_base_iqr": 0,
+      "theme_median_clean": 374,
+      "theme_values_clean": [
+        374
+      ],
+      "base_median_clean": 9.5,
+      "base_values_clean": [
+        10,
+        9
+      ],
+      "external_base_labels": [
+        "base-r1",
+        "probe-base",
+        "reg-base-r1",
+        "reg-base-r2",
+        "reg-base-r3"
+      ]
+    }
+  },
+  "noise_floor": {
+    "base_arm_iqr": {
+      "msToVisible": 7.3,
+      "recalcMsPerS": 0.001,
+      "rafP99": 0.0,
+      "longtaskMaxMs": null,
+      "taskBusyPct": 12.452,
+      "scriptMsPerS": 0.124,
+      "taskMsPerS": 0.125,
+      "rafTotalPerS": 0.56,
+      "mountRecalcStyleCount": 31,
+      "rafN": 3,
+      "mountScriptDuration": 0.959,
+      "recalcStyleCountClick": 1
+    },
+    "external_base_iqr": {
+      "msToVisible": 8.7,
+      "recalcMsPerS": 0,
+      "rafP99": 0.0,
+      "longtaskMaxMs": null,
+      "taskBusyPct": 2.951,
+      "scriptMsPerS": 0.017,
+      "taskMsPerS": 0.029,
+      "rafTotalPerS": 0.0,
+      "mountRecalcStyleCount": 28,
+      "rafN": 1,
+      "mountScriptDuration": 0.06,
+      "recalcStyleCountClick": 0
+    },
+    "theme_arm_iqr": {
+      "msToVisible": 2.9,
+      "recalcMsPerS": 0.006,
+      "rafP99": 0.0,
+      "longtaskMaxMs": null,
+      "taskBusyPct": 14.266,
+      "scriptMsPerS": 0.124,
+      "taskMsPerS": 0.143,
+      "rafTotalPerS": 0.15,
+      "mountRecalcStyleCount": 182,
+      "rafN": 2,
+      "mountScriptDuration": 0.492,
+      "recalcStyleCountClick": 365
+    },
+    "note": "噪声底：本器械 base 臂组内极差 + 外部 base 窗口（多种器械）极差 + theme 臂组内极差"
+  },
+  "contention": {
+    "per_window": {
+      "theme-sync/raf-theme-sync-r1": {
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 124995,
+        "exclusiveThroughout": false,
+        "censusStartForeign": 0,
+        "censusEndForeign": 1
+      },
+      "theme-sync/raf-theme-sync-r2": {
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 111595,
+        "exclusiveThroughout": false,
+        "censusStartForeign": 0,
+        "censusEndForeign": 2
+      },
+      "theme-sync/raf-theme-sync-r3": {
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 154629,
+        "exclusiveThroughout": true,
+        "censusStartForeign": 0,
+        "censusEndForeign": 0
+      },
+      "base/raf-base-r1": {
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 27664,
+        "exclusiveThroughout": false,
+        "censusStartForeign": 1,
+        "censusEndForeign": 1
+      },
+      "base/raf-base-r2": {
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 16420,
+        "exclusiveThroughout": true,
+        "censusStartForeign": 0,
+        "censusEndForeign": 0
+      },
+      "base/raf-base-r3": {
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 23,
+        "exclusiveThroughout": true,
+        "censusStartForeign": 0,
+        "censusEndForeign": 0
+      }
+    },
+    "note": "exclusiveThroughout=False ⇒ 本窗口运行期间同机存在 foreign 浏览器（同线兄弟 agent 竞态），busy%/ScriptMsPerS 等 CPU 侧口径会被抬高；msToVisible/rafP99/RecalcMsPerS/longtask 对之较不敏感。"
+  },
+  "D_verdict_evidence": {
+    "theme_click_meta_writes_all_zero": true,
+    "theme_click_defer_all_zero": true,
+    "theme_click_apply_all_false": true,
+    "base_click_meta_writes_all_zero": true
+  },
+  "repro_shared_harness_defect": [
+    {
+      "label": "raf-repro-sharedstub-theme-sync",
+      "control_realRaf": null,
+      "stubbed_sharedSyncRaf": null,
+      "interpretation": null,
+      "counter_delta": null
+    },
+    {
+      "label": "raf-repro-sharedstub-theme-sync",
+      "control_realRaf": null,
+      "stubbed_sharedSyncRaf": null,
+      "interpretation": null,
+      "counter_delta": null
+    }
+  ],
+  "per_window": {
+    "theme-sync": {
+      "raf-theme-sync-r1": {
+        "label": "raf-theme-sync-r1",
+        "cond": "theme-sync",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 124995,
+        "exclusiveThroughout": false,
+        "censusStartForeign": 0,
+        "censusEndForeign": 1,
+        "verdictHint": null,
+        "valid": true,
+        "wallS": 6.054,
+        "msToVisible": 16.3,
+        "recalcMsPerS": 0,
+        "scriptMsPerS": 0.014,
+        "taskMsPerS": 0.023,
+        "recalcStyleCountClick": 9,
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 363,
+        "longtaskMaxMs": null,
+        "longtaskN": 0,
+        "taskBusyPct": 2.346,
+        "mountRecalcStyleCount": 58,
+        "mountScriptDuration": 0.057,
+        "mountRecalcDuration": 0.027,
+        "stubEffectiveStrict": true,
+        "stubMountEffective": true,
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": false,
+        "rafCallsTotal": 367,
+        "rafByHeartbeat": 365,
+        "rafByHeartbeatInClick": 365,
+        "rafByProdThemeDefer": 1,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafMountProdDefer": 1,
+        "rafMountOther": 1,
+        "rafMountHeartbeat": 0,
+        "rafClickDeltaProdDefer": 0,
+        "rafClickDeltaHeartbeat": 365,
+        "rafClickDeltaTotal": 365,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>"
+        ],
+        "rafOtherSamplesTop": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "callsPerS": 60.62,
+        "rafTotalPerS": 60.29,
+        "syncExecutedProd": 1,
+        "syncExecutedProdInClick": 0,
+        "syncFallback": 365,
+        "syncFallbackInsideCallback": 364,
+        "metaWritesInRaf": 1,
+        "readsInRaf": 1,
+        "metaWritesInSyncRafCb": 1,
+        "readsInSyncRafCb": 1,
+        "metaContentWrites": 1,
+        "tcRafScheduled": 367,
+        "tcSyncInvoked": 1,
+        "tcRefreshRan": 1,
+        "mountTcRafScheduled": 2,
+        "mountMetaWrites": 1,
+        "pageErrors": [],
+        "consoleErrors": []
+      },
+      "raf-theme-sync-r2": {
+        "label": "raf-theme-sync-r2",
+        "cond": "theme-sync",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 111595,
+        "exclusiveThroughout": false,
+        "censusStartForeign": 0,
+        "censusEndForeign": 2,
+        "verdictHint": null,
+        "valid": true,
+        "wallS": 6.056,
+        "msToVisible": 18.1,
+        "recalcMsPerS": 0.001,
+        "scriptMsPerS": 0.015,
+        "taskMsPerS": 0.025,
+        "recalcStyleCountClick": 9,
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 363,
+        "longtaskMaxMs": null,
+        "longtaskN": 0,
+        "taskBusyPct": 2.543,
+        "mountRecalcStyleCount": 48,
+        "mountScriptDuration": 0.045,
+        "mountRecalcDuration": 0.019,
+        "stubEffectiveStrict": true,
+        "stubMountEffective": true,
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": false,
+        "rafCallsTotal": 367,
+        "rafByHeartbeat": 365,
+        "rafByHeartbeatInClick": 365,
+        "rafByProdThemeDefer": 1,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafMountProdDefer": 1,
+        "rafMountOther": 1,
+        "rafMountHeartbeat": 0,
+        "rafClickDeltaProdDefer": 0,
+        "rafClickDeltaHeartbeat": 365,
+        "rafClickDeltaTotal": 365,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>"
+        ],
+        "rafOtherSamplesTop": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "callsPerS": 60.6,
+        "rafTotalPerS": 60.27,
+        "syncExecutedProd": 1,
+        "syncExecutedProdInClick": 0,
+        "syncFallback": 365,
+        "syncFallbackInsideCallback": 364,
+        "metaWritesInRaf": 1,
+        "readsInRaf": 1,
+        "metaWritesInSyncRafCb": 1,
+        "readsInSyncRafCb": 1,
+        "metaContentWrites": 1,
+        "tcRafScheduled": 367,
+        "tcSyncInvoked": 1,
+        "tcRefreshRan": 1,
+        "mountTcRafScheduled": 2,
+        "mountMetaWrites": 1,
+        "pageErrors": [],
+        "consoleErrors": []
+      },
+      "raf-theme-sync-r3": {
+        "label": "raf-theme-sync-r3",
+        "cond": "theme-sync",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 154629,
+        "exclusiveThroughout": true,
+        "censusStartForeign": 0,
+        "censusEndForeign": 0,
+        "verdictHint": null,
+        "valid": true,
+        "wallS": 6.086,
+        "msToVisible": 15.2,
+        "recalcMsPerS": 0.006,
+        "scriptMsPerS": 0.138,
+        "taskMsPerS": 0.166,
+        "recalcStyleCountClick": 374,
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 365,
+        "longtaskMaxMs": null,
+        "longtaskN": 0,
+        "taskBusyPct": 16.612,
+        "mountRecalcStyleCount": 230,
+        "mountScriptDuration": 0.537,
+        "mountRecalcDuration": 0.04,
+        "stubEffectiveStrict": true,
+        "stubMountEffective": true,
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": false,
+        "rafCallsTotal": 368,
+        "rafByHeartbeat": 366,
+        "rafByHeartbeatInClick": 366,
+        "rafByProdThemeDefer": 1,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafMountProdDefer": 1,
+        "rafMountOther": 1,
+        "rafMountHeartbeat": 0,
+        "rafClickDeltaProdDefer": 0,
+        "rafClickDeltaHeartbeat": 366,
+        "rafClickDeltaTotal": 366,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>"
+        ],
+        "rafOtherSamplesTop": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "callsPerS": 60.47,
+        "rafTotalPerS": 60.14,
+        "syncExecutedProd": 1,
+        "syncExecutedProdInClick": 0,
+        "syncFallback": 366,
+        "syncFallbackInsideCallback": 365,
+        "metaWritesInRaf": 1,
+        "readsInRaf": 1,
+        "metaWritesInSyncRafCb": 1,
+        "readsInSyncRafCb": 1,
+        "metaContentWrites": 1,
+        "tcRafScheduled": 368,
+        "tcSyncInvoked": 1,
+        "tcRefreshRan": 1,
+        "mountTcRafScheduled": 2,
+        "mountMetaWrites": 1,
+        "pageErrors": [],
+        "consoleErrors": []
+      }
+    },
+    "base": {
+      "raf-base-r1": {
+        "label": "raf-base-r1",
+        "cond": "base",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 27664,
+        "exclusiveThroughout": false,
+        "censusStartForeign": 1,
+        "censusEndForeign": 1,
+        "verdictHint": null,
+        "valid": true,
+        "wallS": 6.063,
+        "msToVisible": 16.7,
+        "recalcMsPerS": 0.001,
+        "scriptMsPerS": 0.025,
+        "taskMsPerS": 0.042,
+        "recalcStyleCountClick": 9,
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 364,
+        "longtaskMaxMs": null,
+        "longtaskN": 0,
+        "taskBusyPct": 4.206,
+        "mountRecalcStyleCount": 57,
+        "mountScriptDuration": 0.057,
+        "mountRecalcDuration": 0.025,
+        "stubEffectiveStrict": true,
+        "stubMountEffective": true,
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": false,
+        "rafCallsTotal": 369,
+        "rafByHeartbeat": 366,
+        "rafByHeartbeatInClick": 366,
+        "rafByProdThemeDefer": 2,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafMountProdDefer": 2,
+        "rafMountOther": 1,
+        "rafMountHeartbeat": 0,
+        "rafClickDeltaProdDefer": 0,
+        "rafClickDeltaHeartbeat": 366,
+        "rafClickDeltaTotal": 366,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a:555:16"
+        ],
+        "rafOtherSamplesTop": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "callsPerS": 60.86,
+        "rafTotalPerS": 60.37,
+        "syncExecutedProd": 0,
+        "syncExecutedProdInClick": 0,
+        "syncFallback": 0,
+        "syncFallbackInsideCallback": 0,
+        "metaWritesInRaf": 2,
+        "readsInRaf": 2,
+        "metaWritesInSyncRafCb": 0,
+        "readsInSyncRafCb": 0,
+        "metaContentWrites": 2,
+        "tcRafScheduled": 369,
+        "tcSyncInvoked": 0,
+        "tcRefreshRan": 2,
+        "mountTcRafScheduled": 3,
+        "mountMetaWrites": 2,
+        "pageErrors": [],
+        "consoleErrors": []
+      },
+      "raf-base-r2": {
+        "label": "raf-base-r2",
+        "cond": "base",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 16420,
+        "exclusiveThroughout": true,
+        "censusStartForeign": 0,
+        "censusEndForeign": 0,
+        "verdictHint": null,
+        "valid": true,
+        "wallS": 6.055,
+        "msToVisible": 13.1,
+        "recalcMsPerS": 0,
+        "scriptMsPerS": 0.116,
+        "taskMsPerS": 0.132,
+        "recalcStyleCountClick": 10,
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 363,
+        "longtaskMaxMs": null,
+        "longtaskN": 0,
+        "taskBusyPct": 13.229,
+        "mountRecalcStyleCount": 26,
+        "mountScriptDuration": 0.833,
+        "mountRecalcDuration": 0.01,
+        "stubEffectiveStrict": true,
+        "stubMountEffective": true,
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": false,
+        "rafCallsTotal": 368,
+        "rafByHeartbeat": 365,
+        "rafByHeartbeatInClick": 365,
+        "rafByProdThemeDefer": 2,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafMountProdDefer": 2,
+        "rafMountOther": 1,
+        "rafMountHeartbeat": 0,
+        "rafClickDeltaProdDefer": 0,
+        "rafClickDeltaHeartbeat": 365,
+        "rafClickDeltaTotal": 365,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a:555:16"
+        ],
+        "rafOtherSamplesTop": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "callsPerS": 60.78,
+        "rafTotalPerS": 60.28,
+        "syncExecutedProd": 0,
+        "syncExecutedProdInClick": 0,
+        "syncFallback": 0,
+        "syncFallbackInsideCallback": 0,
+        "metaWritesInRaf": 2,
+        "readsInRaf": 2,
+        "metaWritesInSyncRafCb": 0,
+        "readsInSyncRafCb": 0,
+        "metaContentWrites": 2,
+        "tcRafScheduled": 368,
+        "tcSyncInvoked": 0,
+        "tcRefreshRan": 2,
+        "mountTcRafScheduled": 3,
+        "mountMetaWrites": 2,
+        "pageErrors": [],
+        "consoleErrors": []
+      },
+      "raf-base-r3": {
+        "label": "raf-base-r3",
+        "cond": "base",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 23,
+        "exclusiveThroughout": true,
+        "censusStartForeign": 0,
+        "censusEndForeign": 0,
+        "verdictHint": null,
+        "valid": true,
+        "wallS": 6.069,
+        "msToVisible": 20.4,
+        "recalcMsPerS": 0.001,
+        "scriptMsPerS": 0.149,
+        "taskMsPerS": 0.167,
+        "recalcStyleCountClick": 9,
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 361,
+        "longtaskMaxMs": null,
+        "longtaskN": 0,
+        "taskBusyPct": 16.658,
+        "mountRecalcStyleCount": 35,
+        "mountScriptDuration": 1.016,
+        "mountRecalcDuration": 0.014,
+        "stubEffectiveStrict": true,
+        "stubMountEffective": true,
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": false,
+        "rafCallsTotal": 366,
+        "rafByHeartbeat": 363,
+        "rafByHeartbeatInClick": 363,
+        "rafByProdThemeDefer": 2,
+        "rafByProdThemeDeferInClick": 0,
+        "rafByOther": 1,
+        "rafByOtherInClick": 0,
+        "rafMountProdDefer": 2,
+        "rafMountOther": 1,
+        "rafMountHeartbeat": 0,
+        "rafClickDeltaProdDefer": 0,
+        "rafClickDeltaHeartbeat": 363,
+        "rafClickDeltaTotal": 363,
+        "rafProdStackSamples": [
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- Ss.<anonymous>",
+          "window.requestAnimationFrame <- scheduleThemeColorRefresh <- ThemePresenter.apply <- http://127.0.0.1:3080/plugins/@deepseek-ai/dsh-client-ui-layout/client.js?rev=82cca1a6178a:555:16"
+        ],
+        "rafOtherSamplesTop": {
+          "window.requestAnimationFrame <- ResizeObserver.<anonymous>": 1
+        },
+        "callsPerS": 60.31,
+        "rafTotalPerS": 59.81,
+        "syncExecutedProd": 0,
+        "syncExecutedProdInClick": 0,
+        "syncFallback": 0,
+        "syncFallbackInsideCallback": 0,
+        "metaWritesInRaf": 2,
+        "readsInRaf": 2,
+        "metaWritesInSyncRafCb": 0,
+        "readsInSyncRafCb": 0,
+        "metaContentWrites": 2,
+        "tcRafScheduled": 366,
+        "tcSyncInvoked": 0,
+        "tcRefreshRan": 2,
+        "mountTcRafScheduled": 3,
+        "mountMetaWrites": 2,
+        "pageErrors": [],
+        "consoleErrors": []
+      }
+    },
+    "external_base": {
+      "probe-base": {
+        "label": "probe-base",
+        "cond": "base",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 87176,
+        "exclusiveThroughout": false,
+        "censusStartForeign": 0,
+        "censusEndForeign": 1,
+        "verdictHint": null,
+        "valid": true,
+        "wallS": 6.061,
+        "msToVisible": 16.6,
+        "recalcMsPerS": 0,
+        "scriptMsPerS": 0.022,
+        "taskMsPerS": 0.038,
+        "recalcStyleCountClick": 9,
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 363,
+        "longtaskMaxMs": null,
+        "longtaskN": 0,
+        "taskBusyPct": 3.811,
+        "mountRecalcStyleCount": 39,
+        "mountScriptDuration": 0.114,
+        "mountRecalcDuration": 0.018,
+        "stubEffectiveStrict": true,
+        "stubMountEffective": true,
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": null,
+        "rafCallsTotal": null,
+        "rafByHeartbeat": null,
+        "rafByHeartbeatInClick": null,
+        "rafByProdThemeDefer": null,
+        "rafByProdThemeDeferInClick": null,
+        "rafByOther": null,
+        "rafByOtherInClick": null,
+        "rafMountProdDefer": null,
+        "rafMountOther": null,
+        "rafMountHeartbeat": null,
+        "rafClickDeltaProdDefer": null,
+        "rafClickDeltaHeartbeat": null,
+        "rafClickDeltaTotal": null,
+        "rafProdStackSamples": null,
+        "rafOtherSamplesTop": null,
+        "callsPerS": null,
+        "rafTotalPerS": 0.0,
+        "syncExecutedProd": null,
+        "syncExecutedProdInClick": null,
+        "syncFallback": null,
+        "syncFallbackInsideCallback": null,
+        "metaWritesInRaf": 2,
+        "readsInRaf": 2,
+        "metaWritesInSyncRafCb": null,
+        "readsInSyncRafCb": null,
+        "metaContentWrites": 2,
+        "tcRafScheduled": 368,
+        "tcSyncInvoked": 0,
+        "tcRefreshRan": 2,
+        "mountTcRafScheduled": 3,
+        "mountMetaWrites": 2,
+        "pageErrors": [],
+        "consoleErrors": []
+      },
+      "base-r1": {
+        "label": "base-r1",
+        "cond": "base",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": 48082,
+        "exclusiveThroughout": true,
+        "censusStartForeign": 0,
+        "censusEndForeign": 0,
+        "verdictHint": null,
+        "valid": true,
+        "wallS": 6.059,
+        "msToVisible": 14,
+        "recalcMsPerS": 0,
+        "scriptMsPerS": 0.015,
+        "taskMsPerS": 0.027,
+        "recalcStyleCountClick": 9,
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 363,
+        "longtaskMaxMs": null,
+        "longtaskN": 0,
+        "taskBusyPct": 2.74,
+        "mountRecalcStyleCount": 57,
+        "mountScriptDuration": 0.054,
+        "mountRecalcDuration": 0.027,
+        "stubEffectiveStrict": true,
+        "stubMountEffective": true,
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": null,
+        "rafCallsTotal": null,
+        "rafByHeartbeat": null,
+        "rafByHeartbeatInClick": null,
+        "rafByProdThemeDefer": null,
+        "rafByProdThemeDeferInClick": null,
+        "rafByOther": null,
+        "rafByOtherInClick": null,
+        "rafMountProdDefer": null,
+        "rafMountOther": null,
+        "rafMountHeartbeat": null,
+        "rafClickDeltaProdDefer": null,
+        "rafClickDeltaHeartbeat": null,
+        "rafClickDeltaTotal": null,
+        "rafProdStackSamples": null,
+        "rafOtherSamplesTop": null,
+        "callsPerS": null,
+        "rafTotalPerS": 0.0,
+        "syncExecutedProd": null,
+        "syncExecutedProdInClick": null,
+        "syncFallback": null,
+        "syncFallbackInsideCallback": null,
+        "metaWritesInRaf": 2,
+        "readsInRaf": 2,
+        "metaWritesInSyncRafCb": null,
+        "readsInSyncRafCb": null,
+        "metaContentWrites": 2,
+        "tcRafScheduled": 368,
+        "tcSyncInvoked": 0,
+        "tcRefreshRan": 2,
+        "mountTcRafScheduled": 3,
+        "mountMetaWrites": 2,
+        "pageErrors": [],
+        "consoleErrors": []
+      },
+      "reg-base-r1": {
+        "label": "reg-base-r1",
+        "cond": "base",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": null,
+        "exclusiveThroughout": false,
+        "censusStartForeign": null,
+        "censusEndForeign": null,
+        "verdictHint": null,
+        "valid": true,
+        "wallS": 10.527,
+        "msToVisible": 17.7,
+        "recalcMsPerS": 0,
+        "scriptMsPerS": 0.011,
+        "taskMsPerS": 0.017,
+        "recalcStyleCountClick": 9,
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 363,
+        "longtaskMaxMs": null,
+        "longtaskN": 0,
+        "taskBusyPct": 1.748,
+        "mountRecalcStyleCount": 64,
+        "mountScriptDuration": 0.059,
+        "mountRecalcDuration": 0.028,
+        "stubEffectiveStrict": true,
+        "stubMountEffective": true,
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": null,
+        "rafCallsTotal": null,
+        "rafByHeartbeat": null,
+        "rafByHeartbeatInClick": null,
+        "rafByProdThemeDefer": null,
+        "rafByProdThemeDeferInClick": null,
+        "rafByOther": null,
+        "rafByOtherInClick": null,
+        "rafMountProdDefer": null,
+        "rafMountOther": null,
+        "rafMountHeartbeat": null,
+        "rafClickDeltaProdDefer": null,
+        "rafClickDeltaHeartbeat": null,
+        "rafClickDeltaTotal": null,
+        "rafProdStackSamples": null,
+        "rafOtherSamplesTop": null,
+        "callsPerS": null,
+        "rafTotalPerS": 0.0,
+        "syncExecutedProd": null,
+        "syncExecutedProdInClick": null,
+        "syncFallback": null,
+        "syncFallbackInsideCallback": null,
+        "metaWritesInRaf": null,
+        "readsInRaf": null,
+        "metaWritesInSyncRafCb": null,
+        "readsInSyncRafCb": null,
+        "metaContentWrites": null,
+        "tcRafScheduled": null,
+        "tcSyncInvoked": null,
+        "tcRefreshRan": null,
+        "mountTcRafScheduled": null,
+        "mountMetaWrites": null,
+        "pageErrors": [],
+        "consoleErrors": []
+      },
+      "reg-base-r2": {
+        "label": "reg-base-r2",
+        "cond": "base",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": null,
+        "exclusiveThroughout": false,
+        "censusStartForeign": null,
+        "censusEndForeign": null,
+        "verdictHint": null,
+        "valid": true,
+        "wallS": 19.998,
+        "msToVisible": 22.7,
+        "recalcMsPerS": 0,
+        "scriptMsPerS": 0.005,
+        "taskMsPerS": 0.009,
+        "recalcStyleCountClick": 9,
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 363,
+        "longtaskMaxMs": null,
+        "longtaskN": 0,
+        "taskBusyPct": 0.86,
+        "mountRecalcStyleCount": 67,
+        "mountScriptDuration": 0.064,
+        "mountRecalcDuration": 0.026,
+        "stubEffectiveStrict": true,
+        "stubMountEffective": true,
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": null,
+        "rafCallsTotal": null,
+        "rafByHeartbeat": null,
+        "rafByHeartbeatInClick": null,
+        "rafByProdThemeDefer": null,
+        "rafByProdThemeDeferInClick": null,
+        "rafByOther": null,
+        "rafByOtherInClick": null,
+        "rafMountProdDefer": null,
+        "rafMountOther": null,
+        "rafMountHeartbeat": null,
+        "rafClickDeltaProdDefer": null,
+        "rafClickDeltaHeartbeat": null,
+        "rafClickDeltaTotal": null,
+        "rafProdStackSamples": null,
+        "rafOtherSamplesTop": null,
+        "callsPerS": null,
+        "rafTotalPerS": 0.0,
+        "syncExecutedProd": null,
+        "syncExecutedProdInClick": null,
+        "syncFallback": null,
+        "syncFallbackInsideCallback": null,
+        "metaWritesInRaf": null,
+        "readsInRaf": null,
+        "metaWritesInSyncRafCb": null,
+        "readsInSyncRafCb": null,
+        "metaContentWrites": null,
+        "tcRafScheduled": null,
+        "tcSyncInvoked": null,
+        "tcRefreshRan": null,
+        "mountTcRafScheduled": null,
+        "mountMetaWrites": null,
+        "pageErrors": [],
+        "consoleErrors": []
+      },
+      "reg-base-r3": {
+        "label": "reg-base-r3",
+        "cond": "base",
+        "gate": "EXCLUSIVE",
+        "gateWaitedMs": null,
+        "exclusiveThroughout": false,
+        "censusStartForeign": null,
+        "censusEndForeign": null,
+        "verdictHint": null,
+        "valid": true,
+        "wallS": 8.993,
+        "msToVisible": 19.2,
+        "recalcMsPerS": 0,
+        "scriptMsPerS": 0.012,
+        "taskMsPerS": 0.018,
+        "recalcStyleCountClick": 9,
+        "rafP99": 16.8,
+        "rafP50": 16.7,
+        "rafN": 364,
+        "longtaskMaxMs": null,
+        "longtaskN": 0,
+        "taskBusyPct": 1.835,
+        "mountRecalcStyleCount": 55,
+        "mountScriptDuration": 0.062,
+        "mountRecalcDuration": 0.02,
+        "stubEffectiveStrict": true,
+        "stubMountEffective": true,
+        "reach_applyInClick": false,
+        "reach_refreshRan": true,
+        "reach_metaWritesInClick": 0,
+        "reach_computedReadsInClick": 0,
+        "reach_deferByProdInClick": null,
+        "rafCallsTotal": null,
+        "rafByHeartbeat": null,
+        "rafByHeartbeatInClick": null,
+        "rafByProdThemeDefer": null,
+        "rafByProdThemeDeferInClick": null,
+        "rafByOther": null,
+        "rafByOtherInClick": null,
+        "rafMountProdDefer": null,
+        "rafMountOther": null,
+        "rafMountHeartbeat": null,
+        "rafClickDeltaProdDefer": null,
+        "rafClickDeltaHeartbeat": null,
+        "rafClickDeltaTotal": null,
+        "rafProdStackSamples": null,
+        "rafOtherSamplesTop": null,
+        "callsPerS": null,
+        "rafTotalPerS": 0.0,
+        "syncExecutedProd": null,
+        "syncExecutedProdInClick": null,
+        "syncFallback": null,
+        "syncFallbackInsideCallback": null,
+        "metaWritesInRaf": null,
+        "readsInRaf": null,
+        "metaWritesInSyncRafCb": null,
+        "readsInSyncRafCb": null,
+        "metaContentWrites": null,
+        "tcRafScheduled": null,
+        "tcSyncInvoked": null,
+        "tcRefreshRan": null,
+        "mountTcRafScheduled": null,
+        "mountMetaWrites": null,
+        "pageErrors": [],
+        "consoleErrors": []
+      }
+    }
+  },
+  "verdict": {
+    "result": "FAIL",
+    "reason": "治疗已施加：theme 臂 3/3 个窗口观测到「生产 scheduleThemeColorRefresh 排的 rAF 被同步执行」(syncExecutedProd≥1，且全部发生在挂载相位)；点击相位：生产排的 rAF=0、meta content 写入=0、ThemePresenter.apply=0（base/theme-sync 两臂一致）⇒ 本路径上「延后的写回」根本没有进入点击帧；msToVisible: theme=15.2 base=16.75 Δ=-1.55 噪声(极差)=8.7；recalcMsPerS: theme=0.006 base=0.001 Δ=0.005 噪声(极差)=0.006；rafP99: theme=16.8 base=16.8 Δ=0.0 噪声(极差)=0.0；taskBusyPct: theme=16.612 base=14.944 Δ=1.668 噪声(极差)=14.266；longtaskMaxMs=两臂皆无（longtask 0 条）；无任何口径超出噪声 ⇒ 同步 vs 延后在点击帧无可测差异；结合点击相位零执行，疑虑在本路径上无法成立",
+    "legend": "PASS=疑虑成立(延后把成本推到点击帧)；FAIL=疑虑不成立；INCONCLUSIVE=证据不足"
+  }
+}

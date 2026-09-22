@@ -1,0 +1,55 @@
+=== stat /proc/9042 ===
+dr-xr-xr-x CNS2026495165 CNS2026495165 /proc/9042
+=== ls -la /proc/9042/ 2>&1 (head 30) ===
+ls: 无法读取符号链接 '/proc/9042/cwd': 权限不够
+ls: 无法读取符号链接 '/proc/9042/root': 权限不够
+ls: 无法读取符号链接 '/proc/9042/exe': 权限不够
+总计 0
+dr-xr-xr-x   9 CNS2026495165 CNS2026495165   0  9月 22 10:05 .
+dr-xr-xr-x 715 root          root            0  9月 22 10:01 ..
+-r--r--r--   1 CNS2026495165 CNS2026495165   0  9月 22 10:09 arch_status
+dr-xr-xr-x   2 CNS2026495165 CNS2026495165   0  9月 22 10:05 attr
+-rw-r--r--   1 CNS2026495165 CNS2026495165   0  9月 22 10:09 autogroup
+-r--------   1 CNS2026495165 CNS2026495165   0  9月 22 10:09 auxv
+-r--r--r--   1 CNS2026495165 CNS2026495165   0  9月 22 10:05 cgroup
+--w-------   1 CNS2026495165 CNS2026495165   0  9月 22 10:09 clear_refs
+-r--r--r--   1 CNS2026495165 CNS2026495165   0  9月 22 10:05 cmdline
+-rw-r--r--   1 CNS2026495165 CNS2026495165   0  9月 22 10:05 comm
+-rw-r--r--   1 CNS2026495165 CNS2026495165   0  9月 22 10:09 coredump_filter
+-r--r--r--   1 CNS2026495165 CNS2026495165   0  9月 22 10:09 cpu_resctrl_groups
+-r--r--r--   1 CNS2026495165 CNS2026495165   0  9月 22 10:09 cpuset
+lrwxrwxrwx   1 CNS2026495165 CNS2026495165   0  9月 22 10:09 cwd
+-r--------   1 CNS2026495165 CNS2026495165   0  9月 22 10:08 environ
+lrwxrwxrwx   1 CNS2026495165 CNS2026495165   0  9月 22 10:05 exe
+dr-x------   2 CNS2026495165 CNS2026495165 215  9月 22 10:05 fd
+dr-xr-xr-x   2 CNS2026495165 CNS2026495165   0  9月 22 10:09 fdinfo
+-rw-r--r--   1 CNS2026495165 CNS2026495165   0  9月 22 10:09 gid_map
+-r--------   1 CNS2026495165 CNS2026495165   0  9月 22 10:09 io
+-r--------   1 CNS2026495165 CNS2026495165   0  9月 22 10:09 ksm_merging_pages
+-r--------   1 CNS2026495165 CNS2026495165   0  9月 22 10:09 ksm_stat
+-r--r--r--   1 CNS2026495165 CNS2026495165   0  9月 22 10:09 latency
+-r--r--r--   1 CNS2026495165 CNS2026495165   0  9月 22 10:05 limits
+-rw-r--r--   1 CNS2026495165 CNS2026495165   0  9月 22 10:05 loginuid
+dr-x------   2 CNS2026495165 CNS2026495165   0  9月 22 10:09 map_files
+=== readlink /proc/9042/exe (stderr merged, exit code) ===
+exit=1
+--- plain readlink ---
+exit=1
+--- ls -l /proc/9042/exe ---
+ls: 无法读取符号链接 '/proc/9042/exe': 权限不够
+lrwxrwxrwx 1 CNS2026495165 CNS2026495165 0  9月 22 10:05 /proc/9042/exe
+exit=2
+=== /proc/9042/status (uid/gid/caps lines) ===
+Uid:	1001	1001	1001	1001
+Gid:	1001	1001	1001	1001
+Groups:	4 20 24 27 30 46 100 114 1001 
+CapPrm:	0000000000000000
+CapEff:	0000000000000000
+NoNewPrivs:	0
+Seccomp:	2
+Seccomp_filters:	2
+=== our own uid/groups ===
+uid=1001(CNS2026495165) gid=1001(CNS2026495165) 组=1001(CNS2026495165),4(adm),20(dialout),24(cdrom),27(sudo),30(dip),46(plugdev),100(users),114(lpadmin)
+uid=1001
+=== hidepid? mount | grep proc ===
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)

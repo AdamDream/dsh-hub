@@ -1,0 +1,699 @@
+{
+  "meta": {
+    "line": "conditions-matrix",
+    "agent": "incident2-conditions",
+    "label": "m2-D5-expanded",
+    "url": "http://127.0.0.1:3080",
+    "startedAt": "2026-09-22T10:42:31+08:00",
+    "hostPid": 10806,
+    "hostPidAlive": true,
+    "prereg": {
+      "jank_frames_gt50_post": 3,
+      "jank_longest_task_ms": 100,
+      "jank_click_to_panel_ms": 300,
+      "smooth_frames_gt50_post": 1,
+      "smooth_longest_task_ms": 50,
+      "smooth_click_to_panel_ms": 200
+    },
+    "design": "OFAT：BASE 为参照，每个 cell 只改一个因子；每 cell 每次 rep 为全新 context+page",
+    "criteria": "click→面板可见耗时 + 点击前后各 3s 的 >50ms 帧数与最长任务",
+    "discipline": "只点 设置/关闭/设置页导航/侧栏会话标题；不点 保存/应用/删除/移除壁纸/模型切换；不 pkill",
+    "cells": [
+      {
+        "id": "D5-expanded",
+        "dim": "5-scale",
+        "factors": {
+          "entry": "home",
+          "order": "first",
+          "load": "wait10",
+          "vp": "1440x900",
+          "scale": "expandAll",
+          "wallpaper": "on",
+          "theme": "current",
+          "cacheDisabled": false
+        }
+      }
+    ],
+    "reps": 2
+  },
+  "lock": {
+    "ok": true,
+    "waitedSec": 92,
+    "preempted": [],
+    "acquired": true
+  },
+  "environment": {
+    "atStart": {
+      "total": 1,
+      "pids": [
+        266407
+      ],
+      "own": 1,
+      "foreign": 0,
+      "foreign_tenants": 0,
+      "host_derived": 0,
+      "foreign_pids": [],
+      "tenant_detail": [],
+      "host_derived_detail": [],
+      "gate_strict_passed": true,
+      "gate_tenants_passed": true,
+      "loadavg": 7.46,
+      "own_pids": [
+        266407
+      ]
+    },
+    "atEnd": {
+      "total": 1,
+      "pids": [
+        266407
+      ],
+      "own": 1,
+      "foreign": 0,
+      "foreign_tenants": 0,
+      "host_derived": 0,
+      "foreign_pids": [],
+      "tenant_detail": [],
+      "host_derived_detail": [],
+      "gate_strict_passed": true,
+      "gate_tenants_passed": true,
+      "loadavg": 6.08,
+      "own_pids": [
+        266407
+      ]
+    }
+  },
+  "reps": [
+    {
+      "cell": "D5-expanded",
+      "dim": "5-scale",
+      "rep": 1,
+      "factors": {
+        "id": "D5-expanded",
+        "dim": "5-scale",
+        "entry": "home",
+        "order": "first",
+        "load": "wait10",
+        "vp": "1440x900",
+        "scale": "expandAll",
+        "wallpaper": "on",
+        "theme": "current",
+        "cacheDisabled": false
+      },
+      "startedAt": "2026-09-22T10:44:03+08:00",
+      "phases": [
+        {
+          "phase": "ready",
+          "ms": 1056
+        },
+        {
+          "phase": "after-load-wait",
+          "mode": "wait10",
+          "atMs": 11056
+        }
+      ],
+      "opens": [
+        {
+          "clickAt": 11102.8,
+          "panelAt": 11113,
+          "panelPaintAt": 11115.8,
+          "errors": [],
+          "clickToPanelMs": 10.2,
+          "clickToPaintMs": 13,
+          "pre": {
+            "frames": 180,
+            "over50": 0,
+            "maxIntervalMs": 16.8,
+            "spanMs": 2983.2
+          },
+          "post": {
+            "frames": 180,
+            "over50": 0,
+            "maxIntervalMs": 16.8,
+            "spanMs": 2983.2
+          },
+          "ltPre": {
+            "n": 0,
+            "maxMs": 0,
+            "totalMs": 0
+          },
+          "ltPost": {
+            "n": 0,
+            "maxMs": 0,
+            "totalMs": 0
+          },
+          "panelNodes": 168,
+          "dialogCount": 1,
+          "activeTab": null,
+          "clickErr": null,
+          "strategy": "settingsArea>button[aria-haspopup=dialog]",
+          "openIndex": 1,
+          "isFirstEverInPage": true,
+          "verdict": "SMOOTH"
+        }
+      ],
+      "validity": {
+        "domNodesOk": true,
+        "scaleLeverEffective": false,
+        "gate_passed": true,
+        "gate_strict_passed": true,
+        "anyPanelOpened": true
+      },
+      "levers": {
+        "entry": {
+          "ok": true,
+          "note": "home (no pre-navigation)"
+        },
+        "scale": {
+          "mode": "expandAll",
+          "before": {
+            "sessionRows": 2,
+            "groups": 11,
+            "expanders": 0
+          },
+          "after": {
+            "sessionRows": 2,
+            "groups": 11,
+            "expanders": 0
+          },
+          "effective": false,
+          "actions": []
+        }
+      },
+      "facts": {
+        "domNodes": 577,
+        "dialogCount": 0,
+        "panelNodes": 0,
+        "workspaceGroups": 11,
+        "sessionRows": 2,
+        "activeTab": null,
+        "bodyBg": "rgba(255, 255, 255, 0.88)",
+        "bodyBgImage": "none",
+        "bodyInlineBgBase": "rgba(255, 255, 255, 0.88)",
+        "bodyDarkAttr": false,
+        "htmlColorScheme": "light",
+        "url": "http://127.0.0.1:3080/",
+        "backdropFilterLayers": [],
+        "fullViewportBlurCount": 0,
+        "wallpaper": {
+          "found": true,
+          "inline": "position: fixed; inset: 0px; z-index: -1; pointer-events: none; width: 100%; height: 100%; background-size: co",
+          "bgImageLen": 89,
+          "filter": "none",
+          "writes": 0,
+          "sameValueWrites": 0
+        },
+        "layers": [
+          {
+            "tag": "DIV",
+            "id": null,
+            "cls": "",
+            "z": "-1",
+            "bg": "rgba(0, 0, 0, 0)",
+            "bf": "none",
+            "bgi": "url(\"http://127.0.0.1:3080/dsh-wallpaper/media/37758c1c-9ca8-47d2-bade",
+            "pointerEvents": "none"
+          }
+        ]
+      },
+      "concurrency": {
+        "atStart": {
+          "total": 1,
+          "pids": [
+            266407
+          ],
+          "own": 1,
+          "foreign": 0,
+          "foreign_tenants": 0,
+          "host_derived": 0,
+          "foreign_pids": [],
+          "tenant_detail": [],
+          "host_derived_detail": [],
+          "gate_strict_passed": true,
+          "gate_tenants_passed": true,
+          "loadavg": 7.46,
+          "own_pids": [
+            266407
+          ]
+        },
+        "atEnd": {
+          "total": 1,
+          "pids": [
+            266407
+          ],
+          "own": 1,
+          "foreign": 0,
+          "foreign_tenants": 0,
+          "host_derived": 0,
+          "foreign_pids": [],
+          "tenant_detail": [],
+          "host_derived_detail": [],
+          "gate_strict_passed": true,
+          "gate_tenants_passed": true,
+          "loadavg": 6.67,
+          "own_pids": [
+            266407
+          ]
+        },
+        "gate_tenants_passed": true,
+        "gate_strict_passed": true,
+        "gate_passed": true,
+        "foreign_tenants_max": 0,
+        "foreign_max": 0,
+        "host_derived_max": 0
+      },
+      "factsPanelOpen": {
+        "domNodes": 748,
+        "dialogCount": 1,
+        "panelNodes": 168,
+        "workspaceGroups": 11,
+        "sessionRows": 2,
+        "activeTab": null,
+        "bodyBg": "rgba(255, 255, 255, 0.88)",
+        "bodyBgImage": "none",
+        "bodyInlineBgBase": "rgba(255, 255, 255, 0.88)",
+        "bodyDarkAttr": false,
+        "htmlColorScheme": "light",
+        "url": "http://127.0.0.1:3080/",
+        "backdropFilterLayers": [
+          {
+            "tag": "DIV",
+            "cls": "VOzbGW_mask",
+            "bf": "blur(2px)",
+            "z": "auto",
+            "w": 1440,
+            "h": 900,
+            "fullViewport": true,
+            "opacity": "1",
+            "display": "block"
+          }
+        ],
+        "fullViewportBlurCount": 1,
+        "wallpaper": {
+          "found": true,
+          "inline": "position: fixed; inset: 0px; z-index: -1; pointer-events: none; width: 100%; height: 100%; background-size: co",
+          "bgImageLen": 89,
+          "filter": "none",
+          "writes": 0,
+          "sameValueWrites": 0
+        },
+        "layers": [
+          {
+            "tag": "DIV",
+            "id": null,
+            "cls": "",
+            "z": "-1",
+            "bg": "rgba(0, 0, 0, 0)",
+            "bf": "none",
+            "bgi": "url(\"http://127.0.0.1:3080/dsh-wallpaper/media/37758c1c-9ca8-47d2-bade",
+            "pointerEvents": "none"
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "cls": "VOzbGW_mask",
+            "z": "auto",
+            "bg": "rgba(0, 0, 0, 0.24)",
+            "bf": "blur(2px)",
+            "bgi": "none",
+            "pointerEvents": "auto"
+          }
+        ]
+      },
+      "verdict": "SMOOTH",
+      "primary": [
+        {
+          "openIndex": 1,
+          "clickToPanelMs": 10.2,
+          "framesGt50Post": 0,
+          "longestTaskPostMs": 0,
+          "verdict": "SMOOTH"
+        }
+      ]
+    },
+    {
+      "cell": "D5-expanded",
+      "dim": "5-scale",
+      "rep": 2,
+      "factors": {
+        "id": "D5-expanded",
+        "dim": "5-scale",
+        "entry": "home",
+        "order": "first",
+        "load": "wait10",
+        "vp": "1440x900",
+        "scale": "expandAll",
+        "wallpaper": "on",
+        "theme": "current",
+        "cacheDisabled": false
+      },
+      "startedAt": "2026-09-22T10:44:18+08:00",
+      "phases": [
+        {
+          "phase": "ready",
+          "ms": 1055
+        },
+        {
+          "phase": "after-load-wait",
+          "mode": "wait10",
+          "atMs": 11055
+        }
+      ],
+      "opens": [
+        {
+          "clickAt": 11106.1,
+          "panelAt": 11117.3,
+          "panelPaintAt": 11119.6,
+          "errors": [],
+          "clickToPanelMs": 11.2,
+          "clickToPaintMs": 13.5,
+          "pre": {
+            "frames": 180,
+            "over50": 0,
+            "maxIntervalMs": 16.8,
+            "spanMs": 2983.2
+          },
+          "post": {
+            "frames": 180,
+            "over50": 0,
+            "maxIntervalMs": 16.8,
+            "spanMs": 2983.3
+          },
+          "ltPre": {
+            "n": 0,
+            "maxMs": 0,
+            "totalMs": 0
+          },
+          "ltPost": {
+            "n": 0,
+            "maxMs": 0,
+            "totalMs": 0
+          },
+          "panelNodes": 168,
+          "dialogCount": 1,
+          "activeTab": null,
+          "clickErr": null,
+          "strategy": "settingsArea>button[aria-haspopup=dialog]",
+          "openIndex": 1,
+          "isFirstEverInPage": true,
+          "verdict": "SMOOTH"
+        }
+      ],
+      "validity": {
+        "domNodesOk": true,
+        "scaleLeverEffective": false,
+        "gate_passed": true,
+        "gate_strict_passed": true,
+        "anyPanelOpened": true
+      },
+      "levers": {
+        "entry": {
+          "ok": true,
+          "note": "home (no pre-navigation)"
+        },
+        "scale": {
+          "mode": "expandAll",
+          "before": {
+            "sessionRows": 2,
+            "groups": 11,
+            "expanders": 0
+          },
+          "after": {
+            "sessionRows": 2,
+            "groups": 11,
+            "expanders": 0
+          },
+          "effective": false,
+          "actions": []
+        }
+      },
+      "facts": {
+        "domNodes": 577,
+        "dialogCount": 0,
+        "panelNodes": 0,
+        "workspaceGroups": 11,
+        "sessionRows": 2,
+        "activeTab": null,
+        "bodyBg": "rgba(255, 255, 255, 0.88)",
+        "bodyBgImage": "none",
+        "bodyInlineBgBase": "rgba(255, 255, 255, 0.88)",
+        "bodyDarkAttr": false,
+        "htmlColorScheme": "light",
+        "url": "http://127.0.0.1:3080/",
+        "backdropFilterLayers": [],
+        "fullViewportBlurCount": 0,
+        "wallpaper": {
+          "found": true,
+          "inline": "position: fixed; inset: 0px; z-index: -1; pointer-events: none; width: 100%; height: 100%; background-size: co",
+          "bgImageLen": 89,
+          "filter": "none",
+          "writes": 0,
+          "sameValueWrites": 0
+        },
+        "layers": [
+          {
+            "tag": "DIV",
+            "id": null,
+            "cls": "",
+            "z": "-1",
+            "bg": "rgba(0, 0, 0, 0)",
+            "bf": "none",
+            "bgi": "url(\"http://127.0.0.1:3080/dsh-wallpaper/media/37758c1c-9ca8-47d2-bade",
+            "pointerEvents": "none"
+          }
+        ]
+      },
+      "concurrency": {
+        "atStart": {
+          "total": 1,
+          "pids": [
+            266407
+          ],
+          "own": 1,
+          "foreign": 0,
+          "foreign_tenants": 0,
+          "host_derived": 0,
+          "foreign_pids": [],
+          "tenant_detail": [],
+          "host_derived_detail": [],
+          "gate_strict_passed": true,
+          "gate_tenants_passed": true,
+          "loadavg": 6.67,
+          "own_pids": [
+            266407
+          ]
+        },
+        "atEnd": {
+          "total": 1,
+          "pids": [
+            266407
+          ],
+          "own": 1,
+          "foreign": 0,
+          "foreign_tenants": 0,
+          "host_derived": 0,
+          "foreign_pids": [],
+          "tenant_detail": [],
+          "host_derived_detail": [],
+          "gate_strict_passed": true,
+          "gate_tenants_passed": true,
+          "loadavg": 6.08,
+          "own_pids": [
+            266407
+          ]
+        },
+        "gate_tenants_passed": true,
+        "gate_strict_passed": true,
+        "gate_passed": true,
+        "foreign_tenants_max": 0,
+        "foreign_max": 0,
+        "host_derived_max": 0
+      },
+      "factsPanelOpen": {
+        "domNodes": 748,
+        "dialogCount": 1,
+        "panelNodes": 168,
+        "workspaceGroups": 11,
+        "sessionRows": 2,
+        "activeTab": null,
+        "bodyBg": "rgba(255, 255, 255, 0.88)",
+        "bodyBgImage": "none",
+        "bodyInlineBgBase": "rgba(255, 255, 255, 0.88)",
+        "bodyDarkAttr": false,
+        "htmlColorScheme": "light",
+        "url": "http://127.0.0.1:3080/",
+        "backdropFilterLayers": [
+          {
+            "tag": "DIV",
+            "cls": "VOzbGW_mask",
+            "bf": "blur(2px)",
+            "z": "auto",
+            "w": 1440,
+            "h": 900,
+            "fullViewport": true,
+            "opacity": "1",
+            "display": "block"
+          }
+        ],
+        "fullViewportBlurCount": 1,
+        "wallpaper": {
+          "found": true,
+          "inline": "position: fixed; inset: 0px; z-index: -1; pointer-events: none; width: 100%; height: 100%; background-size: co",
+          "bgImageLen": 89,
+          "filter": "none",
+          "writes": 0,
+          "sameValueWrites": 0
+        },
+        "layers": [
+          {
+            "tag": "DIV",
+            "id": null,
+            "cls": "",
+            "z": "-1",
+            "bg": "rgba(0, 0, 0, 0)",
+            "bf": "none",
+            "bgi": "url(\"http://127.0.0.1:3080/dsh-wallpaper/media/37758c1c-9ca8-47d2-bade",
+            "pointerEvents": "none"
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "cls": "VOzbGW_mask",
+            "z": "auto",
+            "bg": "rgba(0, 0, 0, 0.24)",
+            "bf": "blur(2px)",
+            "bgi": "none",
+            "pointerEvents": "auto"
+          }
+        ]
+      },
+      "verdict": "SMOOTH",
+      "primary": [
+        {
+          "openIndex": 1,
+          "clickToPanelMs": 11.2,
+          "framesGt50Post": 0,
+          "longestTaskPostMs": 0,
+          "verdict": "SMOOTH"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "D5-expanded": {
+      "dim": "5-scale",
+      "reps": 2,
+      "windowsValid": 2,
+      "windowsTotal": 2,
+      "gateAllPassed": true,
+      "firstOpen": {
+        "n": 2,
+        "clickToPanelMs": {
+          "median": 10.2,
+          "all": [
+            10.2,
+            11.2
+          ]
+        },
+        "framesGt50Post": {
+          "median": 0,
+          "all": [
+            0,
+            0
+          ]
+        },
+        "framesGt50Pre": {
+          "median": 0,
+          "all": [
+            0,
+            0
+          ]
+        },
+        "longestTaskPostMs": {
+          "median": 0,
+          "all": [
+            0,
+            0
+          ]
+        },
+        "longestTaskPreMs": {
+          "median": 0,
+          "all": [
+            0,
+            0
+          ]
+        },
+        "verdicts": [
+          "SMOOTH",
+          "SMOOTH"
+        ]
+      },
+      "reopen": null,
+      "cellVerdict": "SMOOTH",
+      "relativeToBase": null
+    }
+  },
+  "terminated": null,
+  "instrumentSelfCheck": {
+    "ownByDelta": [
+      266407
+    ],
+    "ownByAncestry": [
+      266407
+    ],
+    "used": [
+      266407
+    ],
+    "agree": true,
+    "detectionWorks": true
+  },
+  "finishedAt": "2026-09-22T10:44:32+08:00",
+  "log": [
+    "[10:42:31] pre-launch real browser instances: 0",
+    "[10:42:31] LOCK held by incident2-live-repro (age 0.0min, ownPid 160639/true); retry in 3s (elapsed 0s)",
+    "[10:42:34] LOCK held by incident2-live-repro (age 0.0min, ownPid 160639/true); retry in 2s (elapsed 3s)",
+    "[10:42:36] LOCK held by incident2-live-repro (age 0.1min, ownPid 160639/true); retry in 3s (elapsed 5s)",
+    "[10:42:39] LOCK held by incident2-live-repro (age 0.1min, ownPid 160639/true); retry in 2s (elapsed 8s)",
+    "[10:42:41] LOCK held by incident2-live-repro (age 0.2min, ownPid 160639/true); retry in 3s (elapsed 10s)",
+    "[10:42:45] LOCK held by incident2-theme-open (age 0.0min, ownPid 157088/true); retry in 2s (elapsed 13s)",
+    "[10:42:47] LOCK held by incident2-theme-open (age 0.0min, ownPid 157088/true); retry in 2s (elapsed 15s)",
+    "[10:42:48] LOCK held by incident2-theme-open (age 0.1min, ownPid 157088/true); retry in 2s (elapsed 17s)",
+    "[10:42:50] LOCK held by incident2-theme-open (age 0.1min, ownPid 157088/true); retry in 3s (elapsed 19s)",
+    "[10:42:53] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.0min, ownPid 249920/true); retry in 3s (elapsed 22s)",
+    "[10:42:56] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.1min, ownPid 249920/true); retry in 2s (elapsed 25s)",
+    "[10:42:58] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.1min, ownPid 249920/true); retry in 3s (elapsed 27s)",
+    "[10:43:01] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 249920/true); retry in 2s (elapsed 30s)",
+    "[10:43:03] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 249920/true); retry in 3s (elapsed 32s)",
+    "[10:43:06] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 249920/true); retry in 2s (elapsed 35s)",
+    "[10:43:07] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.3min, ownPid 249920/true); retry in 3s (elapsed 36s)",
+    "[10:43:10] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.3min, ownPid 249920/true); retry in 2s (elapsed 39s)",
+    "[10:43:12] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.3min, ownPid 249920/true); retry in 3s (elapsed 41s)",
+    "[10:43:15] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.4min, ownPid 249920/true); retry in 3s (elapsed 44s)",
+    "[10:43:17] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.4min, ownPid 249920/true); retry in 2s (elapsed 46s)",
+    "[10:43:20] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.5min, ownPid 249920/true); retry in 2s (elapsed 49s)",
+    "[10:43:22] LOCK held by incident2-theme-open (age 0.0min, ownPid 157088/false); retry in 3s (elapsed 51s)",
+    "[10:43:25] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.0min, ownPid 251477/true); retry in 2s (elapsed 54s)",
+    "[10:43:27] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.1min, ownPid 251477/true); retry in 3s (elapsed 56s)",
+    "[10:43:31] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.1min, ownPid 251477/true); retry in 2s (elapsed 59s)",
+    "[10:43:32] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 251477/true); retry in 3s (elapsed 61s)",
+    "[10:43:35] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 251477/true); retry in 3s (elapsed 64s)",
+    "[10:43:38] LOCK held by incident2-live-repro (age 0.0min, ownPid 263872/true); retry in 2s (elapsed 66s)",
+    "[10:43:40] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.0min, ownPid 265017/true); retry in 3s (elapsed 69s)",
+    "[10:43:43] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.1min, ownPid 265017/true); retry in 3s (elapsed 72s)",
+    "[10:43:46] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.1min, ownPid 265017/true); retry in 2s (elapsed 75s)",
+    "[10:43:48] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 265017/true); retry in 2s (elapsed 77s)",
+    "[10:43:50] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 265017/true); retry in 3s (elapsed 79s)",
+    "[10:43:53] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.2min, ownPid 265017/true); retry in 2s (elapsed 82s)",
+    "[10:43:55] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.3min, ownPid 265017/true); retry in 3s (elapsed 84s)",
+    "[10:43:58] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.3min, ownPid 265017/true); retry in 2s (elapsed 87s)",
+    "[10:44:00] LOCK held by incident2-regression (raf-face theme-sync A/B) (age 0.4min, ownPid 265017/true); retry in 3s (elapsed 89s)",
+    "[10:44:03] LOCK acquired after 92s",
+    "[10:44:03] launching chromium (headless)",
+    "[10:44:03] own browser instances = 1 (delta=1 ancestry=1 agree=true)",
+    "[10:44:03] cell D5-expanded rep 1/2",
+    "[10:44:18]   D5-expanded r1: #1 ctp=10.2 f>50=0 lt=0 SMOOTH | tenants-gate=true tenants=0 hostDerived=0 strict=true",
+    "[10:44:18] cell D5-expanded rep 2/2",
+    "[10:44:32]   D5-expanded r2: #1 ctp=11.2 f>50=0 lt=0 SMOOTH | tenants-gate=true tenants=0 hostDerived=0 strict=true",
+    "[10:44:32] done",
+    "[10:44:32] LOCK released"
+  ]
+}

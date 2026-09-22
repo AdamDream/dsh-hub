@@ -1,0 +1,91 @@
+### stat /var/lib/dpkg/status ###
+  文件：/var/lib/dpkg/status
+  大小：3140708   	块：6136       IO 块大小：4096   普通文件
+设备：259,2	Inode: 33693594    硬链接：1
+权限：(0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+访问时间：2026-09-22 10:50:11.243006156 +0800
+修改时间：2026-09-22 10:50:10.744987978 +0800
+变更时间：2026-09-22 10:50:10.747988088 +0800
+创建时间：2026-09-22 10:50:10.741354570 +0800
+
+### find /var/lib/dpkg/info -newermt 2026-09-18 ! -newermt 2026-09-23 ###
+/var/lib/dpkg/info
+/var/lib/dpkg/info/chatgpt.list
+/var/lib/dpkg/info/chatgpt.md5sums
+/var/lib/dpkg/info/google-chrome-stable.list
+/var/lib/dpkg/info/google-chrome-stable.md5sums
+/var/lib/dpkg/info/chatgpt.conffiles
+/var/lib/dpkg/info/chatgpt.postinst
+/var/lib/dpkg/info/chatgpt.postrm
+/var/lib/dpkg/info/chatgpt.prerm
+
+### dpkg -l nvidia/mesa/libdrm/xorg/kernel ###
+ii  libdrm-amdgpu1:amd64                             2.4.125-1ubuntu0.1~24.04.2               amd64        Userspace interface to amdgpu-specific kernel DRM services -- runtime
+ii  libdrm-common                                    2.4.125-1ubuntu0.1~24.04.2               all          Userspace interface to kernel DRM services -- common files
+ii  libdrm-dev:amd64                                 2.4.125-1ubuntu0.1~24.04.2               amd64        Userspace interface to kernel DRM services -- development files
+ii  libdrm-intel1:amd64                              2.4.125-1ubuntu0.1~24.04.2               amd64        Userspace interface to intel-specific kernel DRM services -- runtime
+ii  libdrm-nouveau2:amd64                            2.4.125-1ubuntu0.1~24.04.2               amd64        Userspace interface to nouveau-specific kernel DRM services -- runtime
+ii  libdrm-radeon1:amd64                             2.4.125-1ubuntu0.1~24.04.2               amd64        Userspace interface to radeon-specific kernel DRM services -- runtime
+ii  libdrm2:amd64                                    2.4.125-1ubuntu0.1~24.04.2               amd64        Userspace interface to kernel DRM services -- runtime
+ii  libegl-mesa0:amd64                               25.2.8-0ubuntu0.24.04.2                  amd64        free implementation of the EGL API -- Mesa vendor library
+ii  libegl1-mesa-dev:amd64                           25.2.8-0ubuntu0.24.04.2                  amd64        free implementation of the EGL API -- development files
+ii  libgl1-mesa-dev:amd64                            25.2.8-0ubuntu0.24.04.2                  amd64        transitional dummy package
+ii  libgl1-mesa-dri:amd64                            25.2.8-0ubuntu0.24.04.2                  amd64        free implementation of the OpenGL API -- DRI modules
+ii  libglu1-mesa:amd64                               9.0.2-1.1build1                          amd64        Mesa OpenGL utility library (GLU)
+ii  libglu1-mesa-dev:amd64                           9.0.2-1.1build1                          amd64        Mesa OpenGL utility library -- development files
+ii  libglx-mesa0:amd64                               25.2.8-0ubuntu0.24.04.2                  amd64        free implementation of the OpenGL API -- GLX vendor library
+ii  libnvidia-cfg1-595:amd64                         595.84-0ubuntu0.24.04.1                  amd64        NVIDIA binary OpenGL/GLX configuration library
+ii  libnvidia-common-595                             595.84-0ubuntu0.24.04.1                  amd64        Shared files used by the NVIDIA libraries
+ii  libnvidia-compute-595:amd64                      595.84-0ubuntu0.24.04.1                  amd64        NVIDIA libcompute package
+ii  libnvidia-decode-595:amd64                       595.84-0ubuntu0.24.04.1                  amd64        NVIDIA Video Decoding runtime libraries
+ii  libnvidia-egl-wayland1:amd64                     1:1.1.17-0ubuntu0~gpu24.04.1             amd64        Wayland EGL External Platform library -- shared library
+ii  libnvidia-encode-595:amd64                       595.84-0ubuntu0.24.04.1                  amd64        NVENC Video Encoding runtime library
+ii  libnvidia-extra-595:amd64                        595.84-0ubuntu0.24.04.1                  amd64        Extra libraries for the NVIDIA driver
+ii  libnvidia-fbc1-595:amd64                         595.84-0ubuntu0.24.04.1                  amd64        NVIDIA OpenGL-based Framebuffer Capture runtime library
+ii  libnvidia-gl-595:amd64                           595.84-0ubuntu0.24.04.1                  amd64        NVIDIA OpenGL/GLX/EGL/GLES GLVND libraries and Vulkan ICD
+ii  libosmesa6:amd64                                 25.1.7-1ubuntu2~24.04.2                  amd64        Mesa Off-screen rendering extension
+ii  libosmesa6-dev:amd64                             25.1.7-1ubuntu2~24.04.2                  amd64        Mesa Off-screen rendering extension -- development files
+ii  linux-firmware                                   20240318.git3b128b60-0ubuntu2.15         amd64        Firmware for Linux kernel drivers
+hi  linux-headers-6.14.0-27-generic                  6.14.0-27.27~24.04.1                     amd64        Linux kernel headers for version 6.14.0
+ii  linux-headers-generic-hwe-24.04                  6.14.0-27.27~24.04.1                     amd64        Generic Linux kernel headers
+hi  linux-image-6.14.0-27-generic                    6.14.0-27.27~24.04.1                     amd64        Signed kernel image generic
+ii  linux-image-generic-hwe-24.04                    6.14.0-27.27~24.04.1                     amd64        Generic Linux kernel image
+hi  linux-modules-6.14.0-27-generic                  6.14.0-27.27~24.04.1                     amd64        Linux kernel extra modules for version 6.14.0
+hi  linux-modules-extra-6.14.0-27-generic            6.14.0-27.27~24.04.1                     amd64        Linux kernel extra modules for version 6.14.0
+ii  mesa-common-dev:amd64                            25.2.8-0ubuntu0.24.04.2                  amd64        Developer documentation for Mesa
+ii  mesa-libgallium:amd64                            25.2.8-0ubuntu0.24.04.2                  amd64        shared infrastructure for Mesa drivers
+ii  mesa-va-drivers:amd64                            25.2.8-0ubuntu0.24.04.2                  amd64        Mesa VA-API video acceleration drivers
+ii  mesa-vdpau-drivers:amd64                         25.2.8-0ubuntu0.24.04.2                  amd64        Mesa VDPAU video acceleration drivers
+ii  mesa-vulkan-drivers:amd64                        25.2.8-0ubuntu0.24.04.2                  amd64        Mesa Vulkan graphics drivers
+ii  nvidia-compute-utils-595                         595.84-0ubuntu0.24.04.1                  amd64        NVIDIA compute utilities
+ii  nvidia-dkms-595-open                             595.84-0ubuntu0.24.04.1                  amd64        NVIDIA DKMS package (open kernel module)
+ii  nvidia-driver-590-open                           590.48.01-0ubuntu0.24.04.5               amd64        NVIDIA driver (open kernel) metapackage
+ii  nvidia-driver-595-open                           595.84-0ubuntu0.24.04.1                  amd64        NVIDIA driver (open kernel) metapackage
+ii  nvidia-firmware-595-595.84                       595.84-0ubuntu0.24.04.1                  amd64        Firmware files used by the kernel module
+ii  nvidia-kernel-common-595                         595.84-0ubuntu0.24.04.1                  amd64        Shared files used with the kernel module
+ii  nvidia-kernel-source-595-open                    595.84-0ubuntu0.24.04.1                  amd64        NVIDIA kernel source package
+ii  nvidia-prime                                     0.8.17.2                                 all          Tools to enable NVIDIA's Prime
+ii  nvidia-settings                                  510.47.03-0ubuntu4.24.04.1               amd64        Tool for configuring the NVIDIA graphics driver
+ii  nvidia-utils-590                                 590.48.01-0ubuntu0.24.04.5               amd64        NVIDIA driver support binaries
+ii  nvidia-utils-595                                 595.84-0ubuntu0.24.04.1                  amd64        NVIDIA driver support binaries
+ii  screen-resolution-extra                          0.18.3ubuntu0.24.04.1                    all          Extension for the nvidia-settings control panel
+ii  xserver-xorg                                     1:7.7+23ubuntu3                          amd64        X.Org X server
+ii  xserver-xorg-core                                2:21.1.12-1ubuntu1.4                     amd64        Xorg X server - core server
+ii  xserver-xorg-input-all                           1:7.7+23ubuntu3                          amd64        X.Org X server -- input driver metapackage
+ii  xserver-xorg-input-libinput                      1.4.0-1ubuntu24.04.1                     amd64        X.Org X server -- libinput input driver
+ii  xserver-xorg-input-wacom                         1:1.2.0-1ubuntu2                         amd64        X.Org X server -- Wacom input driver
+ii  xserver-xorg-legacy                              2:21.1.12-1ubuntu1.4                     amd64        setuid root Xorg server wrapper
+ii  xserver-xorg-video-all                           1:7.7+23ubuntu3                          amd64        X.Org X server -- output driver metapackage
+ii  xserver-xorg-video-amdgpu                        23.0.0-1build1                           amd64        X.Org X server -- AMDGPU display driver
+ii  xserver-xorg-video-ati                           1:22.0.0-1build1                         amd64        X.Org X server -- AMD/ATI display driver wrapper
+ii  xserver-xorg-video-fbdev                         1:0.5.0-2build2                          amd64        X.Org X server -- fbdev display driver
+ii  xserver-xorg-video-intel                         2:2.99.917+git20210115-1build1           amd64        X.Org X server -- Intel i8xx, i9xx display driver
+ii  xserver-xorg-video-nouveau                       1:1.0.17-2build1                         amd64        X.Org X server -- Nouveau display driver
+ii  xserver-xorg-video-nvidia-595                    595.84-0ubuntu0.24.04.1                  amd64        NVIDIA binary Xorg driver
+ii  xserver-xorg-video-qxl                           0.1.6-1build1                            amd64        X.Org X server -- QXL display driver
+ii  xserver-xorg-video-radeon                        1:22.0.0-1build1                         amd64        X.Org X server -- AMD/ATI Radeon display driver
+ii  xserver-xorg-video-vesa                          1:2.6.0-1                                amd64        X.Org X server -- VESA display driver
+ii  xserver-xorg-video-vmware                        1:13.4.0-1build1                         amd64        X.Org X server -- VMware display driver
+
+### dkms status ###
+nvidia/595.84, 6.14.0-27-generic, x86_64: installed

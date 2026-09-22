@@ -1,0 +1,34 @@
+=== journalctl -k: counts of key patterns (whole boot) ===
+trap int3      25
+traps:         25
+segfault       0
+amdgpu         58
+nvidia         13
+drm            38
+chrome         25
+codex          0
+electron       0
+firefox        2
+workqueue      4
+pm_runtime     4
+gpu            64
+GPU            64
+ring gfx       2
+GPU reset      0
+hang           27
+timeout        1
+iommu          58
+NVRM           1
+
+=== boot info ===
+9月 22 10:01:55 CNS202649516533 kernel: Linux version 6.14.0-27-generic (buildd@lcy02-amd64-120) (x86_64-linux-gnu-gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #27~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Jul 22 17:38:49 UTC 2 (Ubuntu 6.14.0-27.27~24.04.1-generic 6.14.6)
+9月 22 10:01:55 CNS202649516533 kernel: Command line: BOOT_IMAGE=/boot/vmlinuz-6.14.0-27-generic root=UUID=38c1adbf-c111-44ca-bb6b-7c041bea3a19 ro quiet splash vt.handoff=7
+9月 22 10:01:55 CNS202649516533 kernel: KERNEL supported cpus:
+9月 22 10:30:15 CNS202649516533 kernel: [drm] Unknown EDID CEA parser results
+9月 22 10:30:36 CNS202649516533 kernel: [drm] Unknown EDID CEA parser results
+9月 22 10:31:03 CNS202649516533 kernel: workqueue: pm_runtime_work hogged CPU for >10000us 11 times, consider switching to WQ_UNBOUND
+
+=== uptime ===
+ 10:31:33 up 29 min,  1 user,  load average: 6.09, 5.68, 4.61
+=== boot id / times ===
+         系统引导 2026-09-22 10:01

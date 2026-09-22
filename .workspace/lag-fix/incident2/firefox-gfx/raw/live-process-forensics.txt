@@ -1,0 +1,100 @@
+### LIVE FIREFOX PROCESS FORENSICS  (2026年 09月 22日 星期二 11:01:40 CST)
+### firefox pid 9042, uptime 55+ min, started 2026-09-22 ~10:05
+
+=== /proc/9042/status (VmRSS etc) ===
+Name:	firefox
+State:	S (sleeping)
+Uid:	1001	1001	1001	1001
+VmPeak:	40119592 kB
+VmHWM:	 1586680 kB
+VmRSS:	 1307048 kB
+Threads:	120
+
+=== /proc/9042/stat CPU (utime/stime ticks) ===
+utime=41301 stime=9582 num_threads=120
+
+=== thread names (comm), WR-filtered, EXACT BYTES ===
+      1 WRRende~ckend#0
+      1 WRRende~ckend#1
+      1 WRScene~derLP#0
+      1 WRScene~derLP#1
+      1 WRScene~ilder#0
+      1 WRScene~ilder#1
+      1 WRWorker#0
+      1 WRWorker#1
+      1 WRWorker#2
+      1 WRWorker#3
+      1 WRWorkerLP#0
+      1 WRWorkerLP#1
+      1 WRWorkerLP#2
+      1 WRWorkerLP#3
+      1 WRWorkerLP#4
+      1 WRWorkerLP#5
+      1 WRWorkerLP#6
+      1 WRWorkerLP#7
+
+=== WR worker pool breakdown ===
+      4 WRWorker
+      8 WRWorkerLP
+
+=== other compositing-related thread names ===
+Renderer
+WrGlyph~terizer
+Compositor
+CanvasRenderer
+ImageBridgeChld
+
+=== PROC ACCESS MATRIX for /proc/9042 (read-only probe) ===
+  READABLE : cmdline
+  READABLE : status
+  READABLE : stat
+  READABLE : statm
+  READABLE : limits
+  READABLE : cgroup
+  READABLE : mountinfo
+  DENIED   : environ
+  DENIED   : maps
+  DENIED   : smaps
+  DENIED   : io
+  DENIED   : fd
+  DENIED   : fdinfo/pagemap
+  DENIED   : root
+  NOTE: 'fd' is a DIRECTORY: ls lists 190 entries but EVERY readlink target is denied:
+ls: 无法读取符号链接 '/proc/9042/fd/0': 权限不够
+ls: 无法读取符号链接 '/proc/9042/fd/1': 权限不够
+ls: 无法读取符号链接 '/proc/9042/fd/2': 权限不够
+  => /dev/dri fd presence is NOT determinable (INCONCLUSIVE)
+
+=== per-thread CPU sample (6s window, machine 1.6% busy = idle) ===
+  see sample-threads.py output in audit.md; top consumers were WRRenderBackend#0 0.080s, Renderer 0.050s, Compositor 0.020s
+
+=== snap connections (GPU-relevant) ===
+browser-support           firefox:browser-sandbox           :browser-support                -
+content[gpu-2404]         firefox:gpu-2404                  mesa-2404:gpu-2404              -
+hardware-observe          firefox:hardware-observe          :hardware-observe               -
+opengl                    firefox:opengl                    :opengl                         -
+wayland                   firefox:wayland                   :wayland                        -
+x11                       firefox:x11                       :x11                            -
+
+=== snap revision ===
+名称       版本         修订版本  追踪               发布者        注记
+firefox  155.0.1-1  8863  latest/stable/…  mozilla**  -
+
+=== /dev/dri ===
+总计 0
+drwxr-xr-x   3 root root        140  9月 22 10:01 .
+drwxr-xr-x  20 root root       5020  9月 22 10:07 ..
+drwxr-xr-x   2 root root        120  9月 22 10:01 by-path
+crw-rw----+  1 root video  226,   1  9月 22 10:01 card1
+crw-rw----+  1 root video  226,   2  9月 22 10:01 card2
+crw-rw----+  1 root render 226, 128  9月 22 10:01 renderD128
+crw-rw----+  1 root render 226, 129  9月 22 10:01 renderD129
+
+=== mesa shader cache (snap) ===
+103
+fanout dirs; newest:
+总计 1700
+-rw-r--r--   1 CNS2026495165 CNS2026495165       0  9月 22 10:05 marker
+drwx------   2 CNS2026495165 CNS2026495165    4096  9月 21 11:59 26
+drwx------ 103 CNS2026495165 CNS2026495165    4096  9月 21 11:59 .
+drwx------   2 CNS2026495165 CNS2026495165    4096  9月 21 11:59 c8

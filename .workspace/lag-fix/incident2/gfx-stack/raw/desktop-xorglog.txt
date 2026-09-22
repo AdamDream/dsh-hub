@@ -1,0 +1,74 @@
+##### Xorg.1.log line count #####
+2790 /home/CNS2026495165/.local/share/xorg/Xorg.1.log
+
+##### counts in Xorg log #####
+Page flip        0
+flip             2
+Present          2
+damage           1
+drmMode          0
+timeout          0
+sync             958
+vblank           0
+AMDGPU(0)        1298
+NVIDIA           793
+OutputClass      5
+TearFree         1
+GPU screen       0
+fallback         9
+EE)              3
+WW)              13
+
+##### (EE) errors #####
+15:	(WW) warning, (EE) error, (NI) not implemented, (??) unknown.
+288:[    30.011] (EE) open /dev/dri/card0: No such file or directory
+296:[    30.011] (EE) open /dev/fb0: Permission denied
+
+##### OutputClass / GPU binding / providers #####
+63:[    29.310] (**) OutputClass "nvidia" ModulePath extended to "/usr/lib/x86_64-linux-gnu/nvidia/xorg,/usr/lib/xorg/modules"
+78:[    29.312] (II) Applying OutputClass "AMDgpu" to /dev/dri/card2
+80:[    29.312] (II) Applying OutputClass "nvidia" to /dev/dri/card1
+81:[    29.312] 	loading driver: nvidia
+84:[    29.777] (==) Matched nvidia as autoconfigured driver 2
+86:[    29.777] (==) Matched modesetting as autoconfigured driver 4
+108:[    30.008] (II) LoadModule: "nvidia"
+109:[    30.008] (II) Loading /usr/lib/x86_64-linux-gnu/nvidia/xorg/nvidia_drv.so
+110:[    30.008] (II) Module nvidia: vendor="NVIDIA Corporation"
+119:[    30.008] (II) LoadModule: "modesetting"
+120:[    30.008] (II) Loading /usr/lib/xorg/modules/drivers/modesetting_drv.so
+121:[    30.008] (II) Module modesetting: vendor="X.Org Foundation"
+262:[    30.009] (II) NVIDIA dlloader X Driver  595.84  Wed Jun 10 20:51:08 UTC 2026
+263:[    30.009] (II) NVIDIA Unified Driver for all Supported NVIDIA GPUs
+265:[    30.009] (II) NOUVEAU driver for NVIDIA chipset families :
+283:[    30.009] (II) modesetting: Driver for Modesetting Kernel Drivers: kms
+287:[    30.011] (WW) Falling back to old probe method for modesetting
+313:[    30.011] (II) Applying OutputClass "AMDgpu" options to /dev/dri/card2
+446:[    30.041] (==) NVIDIA(G0): Depth 24, (==) framebuffer bpp 32
+447:[    30.041] (==) NVIDIA(G0): RGB weight 888
+448:[    30.041] (==) NVIDIA(G0): Default visual is TrueColor
+449:[    30.041] (==) NVIDIA(G0): Using gamma correction (1.0, 1.0, 1.0)
+450:[    30.041] (**) Option "AllowNVIDIAGpuScreens"
+451:[    30.041] (II) Applying OutputClass "nvidia" options to /dev/dri/card1
+452:[    30.041] (**) NVIDIA(G0): Option "AllowEmptyInitialConfiguration"
+453:[    30.041] (**) NVIDIA(G0): Enabling 2D acceleration
+454:[    30.041] (II) Loading sub module "glxserver_nvidia"
+455:[    30.041] (II) LoadModule: "glxserver_nvidia"
+456:[    30.041] (II) Loading /usr/lib/x86_64-linux-gnu/nvidia/xorg/libglxserver_nvidia.so
+457:[    30.046] (II) Module glxserver_nvidia: vendor="NVIDIA Corporation"
+460:[    30.046] (II) NVIDIA GLX Module  595.84  Wed Jun 10 20:51:44 UTC 2026
+461:[    30.046] (II) NVIDIA: The X server supports PRIME Render Offload.
+462:[    30.050] (--) NVIDIA(0): Valid display device(s) on GPU-0 at PCI:1:0:0
+463:[    30.050] (--) NVIDIA(0):     DFP-0
+464:[    30.050] (--) NVIDIA(0):     DFP-1
+465:[    30.050] (--) NVIDIA(0):     DFP-2
+466:[    30.050] (--) NVIDIA(0):     DFP-3
+467:[    30.050] (--) NVIDIA(0):     DFP-4
+468:[    30.050] (--) NVIDIA(0):     DFP-5
+469:[    30.050] (--) NVIDIA(0):     DFP-6
+
+##### TearFree / flip / present #####
+331:[    30.038] (==) AMDGPU(0): TearFree property default: auto
+333:[    30.038] (==) AMDGPU(0): AsyncFlipSecondaries: disabled
+334:[    30.038] (II) AMDGPU(0): KMS Pageflipping: enabled
+525:[    30.067] (II) AMDGPU(0): Present extension enabled
+576:[    30.118] (II) Initializing extension Present

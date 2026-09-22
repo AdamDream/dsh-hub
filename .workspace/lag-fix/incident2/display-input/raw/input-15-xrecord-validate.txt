@@ -1,0 +1,10 @@
+XRecord 1.13, sizeof(LayoutA)=48 sizeof(LayoutB)=40
+--- FIRST event (must be category=4 XRecordStartOfData, data_len=0) ---
+LayoutA: id=0 category=2019969 server_time=0 client_seq=0 server_seq=4 data_len=0
+LayoutB: id=0 category=2019969 server_time=0 client_seq=0 data_len=4
+--> A.startOfData=no A.len0=YES | B.startOfData=no B.len0=no
+
+=== VALIDATION (events=569) ===
+LayoutA: startOfData=0/1  category_in_0_3=0/569  len_plausible=569/569
+LayoutB: startOfData=0/1  category_in_0_3=0/569  len_plausible=568/569
+VERDICT: NEITHER - inconclusive layout is correct
