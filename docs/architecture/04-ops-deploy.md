@@ -191,7 +191,7 @@ graph TD
 
 | 插件 | test 命令 | 测试文件数 | 备注 |
 | --- | --- | --- | --- |
-| `dsh-btw` | `vitest run` | **24**（`tests/**/*.spec.{ts,tsx}`） | **唯一在 `package.json` 声明 test 脚本的插件**；`check` 串起 lint→typecheck→test→build→smoke→publint；`passWithNoTests: false`（空测试集判失败） |
+| `dsh-btw` | `vitest run` | **25**（`tests/**/*.spec.{ts,tsx}`） | **唯一在 `package.json` 声明 test 脚本的插件**；`check` 串起 lint→typecheck→test→build→smoke→publint；`passWithNoTests: false`（空测试集判失败）。**2026-09-23 实测**：25 files / **250 passed / 2 skipped** |
 | `dsh-usage` | `node test/verify.mjs` | **3** | `package.json` **无 `scripts` 段**；验收脚本覆盖面宽（zstd / db / dsh 全量对账 / cc 全量对账 / rpc 9 端点…） |
 | `dsh-taste` | `node --test "test/*.test.js"` | **11** | 无 `scripts` 段；命令写在 README/REVIEW 中 |
 | `session-board` | `node --test` | **2** | 内层包无 `scripts` 段；命令只在提案档中给出 |
