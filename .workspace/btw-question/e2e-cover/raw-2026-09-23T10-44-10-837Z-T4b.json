@@ -1,0 +1,5034 @@
+{
+  "kind": "T4 corrected (checkbox deselect) + official parity",
+  "url": "http://127.0.0.1:3080",
+  "startedAt": "2026-09-23T10:44:10.838Z",
+  "stamp": "2026-09-23T10-44-10-837Z",
+  "sampleMs": 50,
+  "holdMs": 3000,
+  "phases": {
+    "A_official": {
+      "name": "A official card keyboard parity",
+      "assertions": [
+        {
+          "id": "official_a1_tab_reaches_option",
+          "pass": true,
+          "detail": {
+            "reachedAt": 2,
+            "anchor": {
+              "ok": true,
+              "tag": "BUTTON",
+              "cls": "Mbwy4a_iconButton",
+              "ariaLabel": "收起问题卡片",
+              "candidateCount": 6
+            },
+            "optionTabIndexes": [
+              {
+                "label": "继续",
+                "role": "radio",
+                "tabIndex": 0,
+                "hasTabindexAttr": false
+              },
+              {
+                "label": "停止",
+                "role": "radio",
+                "tabIndex": 0,
+                "hasTabindexAttr": false
+              }
+            ],
+            "containerRole": "radiogroup"
+          }
+        },
+        {
+          "id": "official_a2_space_selects",
+          "pass": true,
+          "detail": {
+            "focusedIndex": 0,
+            "before": {
+              "label": "继续",
+              "checked": "false",
+              "role": "radio"
+            },
+            "space1": {
+              "ticks": 59,
+              "onTicks": 59,
+              "ratio": "59/59",
+              "allOn": true,
+              "allOff": false,
+              "observedMs": 2980,
+              "first": {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              "last": {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              }
+            }
+          }
+        },
+        {
+          "id": "official_a3_space_again_keeps_radio_selected",
+          "pass": true,
+          "detail": {
+            "focusedIndex": 0,
+            "afterSpace1": {
+              "label": "继续",
+              "checked": "true",
+              "role": "radio"
+            },
+            "afterSpace2": {
+              "label": "继续",
+              "checked": "true",
+              "role": "radio"
+            },
+            "note": "官方 choose() 单选分支 return {selected:[label]} ⇒ radio 不可取消"
+          }
+        },
+        {
+          "id": "official_a4_arrows_noop",
+          "pass": true,
+          "detail": {
+            "unchanged": true,
+            "activeIndexBefore": 0,
+            "afterDown": 0,
+            "afterUp": 0,
+            "checksSame": true
+          }
+        }
+      ],
+      "attempt": 1,
+      "card": {
+        "found": true,
+        "questionKey": "q:cbe6b6d8-0f3f-4bc6-9390-463006fea35b",
+        "header": "确认",
+        "question": "是否继续？",
+        "containerRole": "radiogroup",
+        "options": [
+          {
+            "label": "继续",
+            "role": "radio",
+            "ariaChecked": "false",
+            "type": "button",
+            "tabIndex": 0,
+            "hasTabindexAttr": false,
+            "cls": "Mbwy4a_option",
+            "box": {
+              "x": 495,
+              "y": 699,
+              "w": 722,
+              "h": 42,
+              "right": 1217,
+              "bottom": 741
+            }
+          },
+          {
+            "label": "停止",
+            "role": "radio",
+            "ariaChecked": "false",
+            "type": "button",
+            "tabIndex": 0,
+            "hasTabindexAttr": false,
+            "cls": "Mbwy4a_option",
+            "box": {
+              "x": 495,
+              "y": 742,
+              "w": 722,
+              "h": 42,
+              "right": 1217,
+              "bottom": 784
+            }
+          }
+        ]
+      },
+      "anchor": {
+        "ok": true,
+        "tag": "BUTTON",
+        "cls": "Mbwy4a_iconButton",
+        "ariaLabel": "收起问题卡片",
+        "candidateCount": 6
+      },
+      "tabSequence": [
+        {
+          "step": 0,
+          "dir": "anchor",
+          "focus": {
+            "tag": "BUTTON",
+            "role": null,
+            "ariaLabel": "收起问题卡片",
+            "text": "",
+            "cls": "Mbwy4a_iconButton",
+            "btwOptionIndex": -1,
+            "officialOptionIndex": -1,
+            "inBtwOptionsRow": false,
+            "inOfficialOptionsRow": false
+          }
+        },
+        {
+          "step": 1,
+          "dir": "Tab",
+          "focus": {
+            "tag": "BUTTON",
+            "role": null,
+            "ariaLabel": "放弃整组问题",
+            "text": "",
+            "cls": "Mbwy4a_iconButton",
+            "btwOptionIndex": -1,
+            "officialOptionIndex": -1,
+            "inBtwOptionsRow": false,
+            "inOfficialOptionsRow": false
+          }
+        },
+        {
+          "step": 2,
+          "dir": "Tab",
+          "focus": {
+            "tag": "BUTTON",
+            "role": "radio",
+            "ariaLabel": "继续",
+            "text": "1继续",
+            "cls": "Mbwy4a_option",
+            "btwOptionIndex": -1,
+            "officialOptionIndex": 0,
+            "inBtwOptionsRow": false,
+            "inOfficialOptionsRow": true
+          }
+        }
+      ],
+      "reachedAt": 2,
+      "focusedIndex": 0,
+      "keyboard": {
+        "before": [
+          {
+            "label": "继续",
+            "checked": "false",
+            "role": "radio"
+          },
+          {
+            "label": "停止",
+            "checked": "false",
+            "role": "radio"
+          }
+        ],
+        "space1": {
+          "ticks": 59,
+          "onTicks": 59,
+          "ratio": "59/59",
+          "allOn": true,
+          "allOff": false,
+          "observedMs": 2980,
+          "first": {
+            "label": "继续",
+            "checked": "true",
+            "role": "radio"
+          },
+          "last": {
+            "label": "继续",
+            "checked": "true",
+            "role": "radio"
+          }
+        },
+        "space1Samples": [
+          {
+            "ms": 0,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 51,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 102,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 154,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 205,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 256,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 308,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 359,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 416,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 467,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 519,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 570,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 621,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 671,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 723,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 774,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 825,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 877,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 929,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 981,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1033,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1083,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1135,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1185,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1237,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1287,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1338,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1388,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1440,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1491,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1542,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1594,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1646,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1697,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1749,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1801,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1852,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1903,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1955,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2006,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2057,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2108,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2159,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2211,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2263,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2315,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2366,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2417,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2468,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2519,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2571,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2621,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2672,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2724,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2774,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2825,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2877,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2928,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2980,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          }
+        ],
+        "afterSpace1": [
+          {
+            "label": "继续",
+            "checked": "true",
+            "role": "radio"
+          },
+          {
+            "label": "停止",
+            "checked": "false",
+            "role": "radio"
+          }
+        ],
+        "afterSpace2": [
+          {
+            "label": "继续",
+            "checked": "true",
+            "role": "radio"
+          },
+          {
+            "label": "停止",
+            "checked": "false",
+            "role": "radio"
+          }
+        ],
+        "space2": {
+          "ticks": 59,
+          "onTicks": 59,
+          "ratio": "59/59",
+          "allOn": true,
+          "allOff": false,
+          "observedMs": 2968,
+          "first": {
+            "label": "继续",
+            "checked": "true",
+            "role": "radio"
+          },
+          "last": {
+            "label": "继续",
+            "checked": "true",
+            "role": "radio"
+          }
+        },
+        "space2Samples": [
+          {
+            "ms": 0,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 50,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 101,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 151,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 201,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 252,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 303,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 354,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 406,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 457,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 508,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 560,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 611,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 661,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 712,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 764,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 815,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 866,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 917,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 969,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1020,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1071,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1123,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1174,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1226,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1277,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1329,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1381,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1431,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1481,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1533,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1584,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1634,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1685,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1737,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1788,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1840,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1891,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1944,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 1995,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2047,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2098,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2149,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2201,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2252,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2303,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2354,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2405,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2457,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2508,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2559,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2611,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2662,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2713,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2764,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2815,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2866,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2917,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          },
+          {
+            "ms": 2968,
+            "states": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ]
+          }
+        ],
+        "afterSpace3": [
+          {
+            "label": "继续",
+            "checked": "true",
+            "role": "radio"
+          },
+          {
+            "label": "停止",
+            "checked": "false",
+            "role": "radio"
+          }
+        ],
+        "arrows": {
+          "before": {
+            "checks": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ],
+            "index": 0
+          },
+          "down": {
+            "checks": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ],
+            "focus": {
+              "tag": "BUTTON",
+              "role": "radio",
+              "ariaLabel": "继续",
+              "text": "1继续",
+              "cls": "Mbwy4a_option Mbwy4a_optionSelected",
+              "btwOptionIndex": -1,
+              "officialOptionIndex": 0,
+              "inBtwOptionsRow": false,
+              "inOfficialOptionsRow": true
+            }
+          },
+          "up": {
+            "checks": [
+              {
+                "label": "继续",
+                "checked": "true",
+                "role": "radio"
+              },
+              {
+                "label": "停止",
+                "checked": "false",
+                "role": "radio"
+              }
+            ],
+            "focus": {
+              "tag": "BUTTON",
+              "role": "radio",
+              "ariaLabel": "继续",
+              "text": "1继续",
+              "cls": "Mbwy4a_option Mbwy4a_optionSelected",
+              "btwOptionIndex": -1,
+              "officialOptionIndex": 0,
+              "inBtwOptionsRow": false,
+              "inOfficialOptionsRow": true
+            }
+          },
+          "idxKey": "officialOptionIndex",
+          "unchanged": true
+        }
+      },
+      "verdict": "PASS"
+    },
+    "B_btw_checkbox": {
+      "name": "B btw multi-select checkbox keyboard",
+      "assertions": [
+        {
+          "id": "btw_b1_tab_reaches_option",
+          "pass": true,
+          "detail": {
+            "reachedAt": 6,
+            "composerDisabled": true,
+            "anchor": {
+              "ok": true,
+              "tag": "DIV",
+              "cls": "SalQ5q_resizeHandle SalQ5q_resizeWidth",
+              "ariaLabel": "调整 btw 宽度",
+              "candidateCount": 12
+            },
+            "containerRole": "group",
+            "optionTabIndexes": [
+              {
+                "label": "香菜",
+                "role": "checkbox",
+                "tabIndex": 0,
+                "hasTabindexAttr": false
+              },
+              {
+                "label": "葱花",
+                "role": "checkbox",
+                "tabIndex": 0,
+                "hasTabindexAttr": false
+              },
+              {
+                "label": "辣椒",
+                "role": "checkbox",
+                "tabIndex": 0,
+                "hasTabindexAttr": false
+              }
+            ]
+          }
+        },
+        {
+          "id": "btw_b2_space_checks_and_persists",
+          "pass": true,
+          "detail": {
+            "focusedIndex": 0,
+            "before": {
+              "label": "香菜",
+              "checked": "false",
+              "role": "checkbox"
+            },
+            "space1": {
+              "ticks": 59,
+              "onTicks": 59,
+              "ratio": "59/59",
+              "allOn": true,
+              "allOff": false,
+              "observedMs": 2971,
+              "first": {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              "last": {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              }
+            }
+          }
+        },
+        {
+          "id": "btw_b3_space_toggles_off_checkbox",
+          "pass": true,
+          "detail": {
+            "focusedIndex": 0,
+            "afterSpace1": {
+              "label": "香菜",
+              "checked": "true",
+              "role": "checkbox"
+            },
+            "afterSpace2": {
+              "label": "香菜",
+              "checked": "false",
+              "role": "checkbox"
+            },
+            "space2": {
+              "ticks": 59,
+              "onTicks": 0,
+              "ratio": "0/59",
+              "allOn": false,
+              "allOff": true,
+              "observedMs": 2959,
+              "first": {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              "last": {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            },
+            "note": "多选 checkbox 语义下取消勾选生效（与单选 radio 行为相对照）"
+          }
+        },
+        {
+          "id": "btw_b4_space_rechecks",
+          "pass": true,
+          "detail": {
+            "afterSpace2": {
+              "label": "香菜",
+              "checked": "false",
+              "role": "checkbox"
+            },
+            "afterSpace3": {
+              "label": "香菜",
+              "checked": "true",
+              "role": "checkbox"
+            }
+          }
+        },
+        {
+          "id": "btw_b5_arrows_noop",
+          "pass": true,
+          "detail": {
+            "unchanged": true,
+            "checksSame": true,
+            "focusBefore": {
+              "checks": [
+                {
+                  "label": "香菜",
+                  "checked": "true",
+                  "role": "checkbox"
+                },
+                {
+                  "label": "葱花",
+                  "checked": "false",
+                  "role": "checkbox"
+                },
+                {
+                  "label": "辣椒",
+                  "checked": "false",
+                  "role": "checkbox"
+                }
+              ],
+              "index": 0
+            },
+            "focusAfterDown": {
+              "tag": "BUTTON",
+              "role": "checkbox",
+              "ariaLabel": null,
+              "text": "香菜",
+              "cls": "SalQ5q_questionOptionSelected",
+              "btwOptionIndex": 0,
+              "officialOptionIndex": -1,
+              "inBtwOptionsRow": true,
+              "inOfficialOptionsRow": false
+            },
+            "focusAfterUp": {
+              "tag": "BUTTON",
+              "role": "checkbox",
+              "ariaLabel": null,
+              "text": "香菜",
+              "cls": "SalQ5q_questionOptionSelected",
+              "btwOptionIndex": 0,
+              "officialOptionIndex": -1,
+              "inBtwOptionsRow": true,
+              "inOfficialOptionsRow": false
+            }
+          }
+        }
+      ],
+      "attempt": 1,
+      "card": {
+        "found": true,
+        "header": "配料",
+        "question": "你要加哪几种？",
+        "containerRole": "group",
+        "options": [
+          {
+            "label": "香菜",
+            "role": "checkbox",
+            "ariaChecked": "false",
+            "tabIndex": 0,
+            "hasTabindexAttr": false,
+            "box": {
+              "x": 1010,
+              "y": 509,
+              "w": 388,
+              "h": 40
+            }
+          },
+          {
+            "label": "葱花",
+            "role": "checkbox",
+            "ariaChecked": "false",
+            "tabIndex": 0,
+            "hasTabindexAttr": false,
+            "box": {
+              "x": 1010,
+              "y": 555,
+              "w": 388,
+              "h": 40
+            }
+          },
+          {
+            "label": "辣椒",
+            "role": "checkbox",
+            "ariaChecked": "false",
+            "tabIndex": 0,
+            "hasTabindexAttr": false,
+            "box": {
+              "x": 1010,
+              "y": 601,
+              "w": 388,
+              "h": 40
+            }
+          }
+        ]
+      },
+      "composerDisabled": true,
+      "anchorNote": "composer textarea disabled=true (待答状态) ⇒ 锚点回退为抽屉内第一个可聚焦元素",
+      "anchor": {
+        "ok": true,
+        "tag": "DIV",
+        "cls": "SalQ5q_resizeHandle SalQ5q_resizeWidth",
+        "ariaLabel": "调整 btw 宽度",
+        "candidateCount": 12
+      },
+      "tabSequence": [
+        {
+          "step": 0,
+          "dir": "anchor",
+          "focus": {
+            "tag": "DIV",
+            "role": "separator",
+            "ariaLabel": "调整 btw 宽度",
+            "text": "",
+            "cls": "SalQ5q_resizeHandle SalQ5q_resizeWidth",
+            "btwOptionIndex": -1,
+            "officialOptionIndex": -1,
+            "inBtwOptionsRow": false,
+            "inOfficialOptionsRow": false
+          }
+        },
+        {
+          "step": 1,
+          "dir": "Tab",
+          "focus": {
+            "tag": "DIV",
+            "role": "separator",
+            "ariaLabel": "调整 btw 高度",
+            "text": "",
+            "cls": "SalQ5q_resizeHandle SalQ5q_resizeHeightBottom",
+            "btwOptionIndex": -1,
+            "officialOptionIndex": -1,
+            "inBtwOptionsRow": false,
+            "inOfficialOptionsRow": false
+          }
+        },
+        {
+          "step": 2,
+          "dir": "Tab",
+          "focus": {
+            "tag": "BUTTON",
+            "role": null,
+            "ariaLabel": null,
+            "text": "▸跳转到其他 btw",
+            "cls": "SalQ5q_jumpToggle",
+            "btwOptionIndex": -1,
+            "officialOptionIndex": -1,
+            "inBtwOptionsRow": false,
+            "inOfficialOptionsRow": false
+          }
+        },
+        {
+          "step": 3,
+          "dir": "Tab",
+          "focus": {
+            "tag": "SELECT",
+            "role": null,
+            "ariaLabel": "模型",
+            "text": "deepseek-v4.1-flashglm-5.3deepseek-v4-pr",
+            "cls": "SalQ5q_modelSelect",
+            "btwOptionIndex": -1,
+            "officialOptionIndex": -1,
+            "inBtwOptionsRow": false,
+            "inOfficialOptionsRow": false
+          }
+        },
+        {
+          "step": 4,
+          "dir": "Tab",
+          "focus": {
+            "tag": "BUTTON",
+            "role": null,
+            "ariaLabel": "结束 btw",
+            "text": "×",
+            "cls": "SalQ5q_endButton",
+            "btwOptionIndex": -1,
+            "officialOptionIndex": -1,
+            "inBtwOptionsRow": false,
+            "inOfficialOptionsRow": false
+          }
+        },
+        {
+          "step": 5,
+          "dir": "Tab",
+          "focus": {
+            "tag": "BUTTON",
+            "role": null,
+            "ariaLabel": "收起 btw",
+            "text": "—",
+            "cls": "SalQ5q_iconButton",
+            "btwOptionIndex": -1,
+            "officialOptionIndex": -1,
+            "inBtwOptionsRow": false,
+            "inOfficialOptionsRow": false
+          }
+        },
+        {
+          "step": 6,
+          "dir": "Tab",
+          "focus": {
+            "tag": "BUTTON",
+            "role": "checkbox",
+            "ariaLabel": null,
+            "text": "香菜",
+            "cls": "SalQ5q_questionOption",
+            "btwOptionIndex": 0,
+            "officialOptionIndex": -1,
+            "inBtwOptionsRow": true,
+            "inOfficialOptionsRow": false
+          }
+        }
+      ],
+      "reachedAt": 6,
+      "focusedIndex": 0,
+      "keyboard": {
+        "before": [
+          {
+            "label": "香菜",
+            "checked": "false",
+            "role": "checkbox"
+          },
+          {
+            "label": "葱花",
+            "checked": "false",
+            "role": "checkbox"
+          },
+          {
+            "label": "辣椒",
+            "checked": "false",
+            "role": "checkbox"
+          }
+        ],
+        "space1": {
+          "ticks": 59,
+          "onTicks": 59,
+          "ratio": "59/59",
+          "allOn": true,
+          "allOff": false,
+          "observedMs": 2971,
+          "first": {
+            "label": "香菜",
+            "checked": "true",
+            "role": "checkbox"
+          },
+          "last": {
+            "label": "香菜",
+            "checked": "true",
+            "role": "checkbox"
+          }
+        },
+        "space1Samples": [
+          {
+            "ms": 0,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 52,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 103,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 154,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 206,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 256,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 307,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 358,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 410,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 461,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 512,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 564,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 616,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 667,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 719,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 770,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 821,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 872,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 923,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 974,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1025,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1076,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1127,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1178,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1230,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1281,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1332,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1383,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1434,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1484,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1535,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1587,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1638,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1688,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1740,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1791,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1842,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1893,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1943,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1995,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2051,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2102,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2152,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2203,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2253,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2309,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2361,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2412,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2462,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2513,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2563,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2615,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2666,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2716,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2767,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2818,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2869,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2920,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2971,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          }
+        ],
+        "afterSpace1": [
+          {
+            "label": "香菜",
+            "checked": "true",
+            "role": "checkbox"
+          },
+          {
+            "label": "葱花",
+            "checked": "false",
+            "role": "checkbox"
+          },
+          {
+            "label": "辣椒",
+            "checked": "false",
+            "role": "checkbox"
+          }
+        ],
+        "afterSpace2": [
+          {
+            "label": "香菜",
+            "checked": "false",
+            "role": "checkbox"
+          },
+          {
+            "label": "葱花",
+            "checked": "false",
+            "role": "checkbox"
+          },
+          {
+            "label": "辣椒",
+            "checked": "false",
+            "role": "checkbox"
+          }
+        ],
+        "space2": {
+          "ticks": 59,
+          "onTicks": 0,
+          "ratio": "0/59",
+          "allOn": false,
+          "allOff": true,
+          "observedMs": 2959,
+          "first": {
+            "label": "香菜",
+            "checked": "false",
+            "role": "checkbox"
+          },
+          "last": {
+            "label": "香菜",
+            "checked": "false",
+            "role": "checkbox"
+          }
+        },
+        "space2Samples": [
+          {
+            "ms": 0,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 51,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 101,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 152,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 203,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 253,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 305,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 355,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 406,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 457,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 508,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 559,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 609,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 660,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 711,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 762,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 813,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 864,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 915,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 966,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1017,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1068,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1119,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1172,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1224,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1275,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1325,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1376,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1427,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1479,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1530,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1580,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1632,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1683,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1734,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1784,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1835,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1886,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1937,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 1988,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2040,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2090,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2141,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2192,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2243,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2294,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2346,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2397,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2448,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2499,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2550,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2601,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2652,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2703,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2754,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2806,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2857,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2908,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          },
+          {
+            "ms": 2959,
+            "states": [
+              {
+                "label": "香菜",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ]
+          }
+        ],
+        "afterSpace3": [
+          {
+            "label": "香菜",
+            "checked": "true",
+            "role": "checkbox"
+          },
+          {
+            "label": "葱花",
+            "checked": "false",
+            "role": "checkbox"
+          },
+          {
+            "label": "辣椒",
+            "checked": "false",
+            "role": "checkbox"
+          }
+        ],
+        "arrows": {
+          "before": {
+            "checks": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ],
+            "index": 0
+          },
+          "down": {
+            "checks": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ],
+            "focus": {
+              "tag": "BUTTON",
+              "role": "checkbox",
+              "ariaLabel": null,
+              "text": "香菜",
+              "cls": "SalQ5q_questionOptionSelected",
+              "btwOptionIndex": 0,
+              "officialOptionIndex": -1,
+              "inBtwOptionsRow": true,
+              "inOfficialOptionsRow": false
+            }
+          },
+          "up": {
+            "checks": [
+              {
+                "label": "香菜",
+                "checked": "true",
+                "role": "checkbox"
+              },
+              {
+                "label": "葱花",
+                "checked": "false",
+                "role": "checkbox"
+              },
+              {
+                "label": "辣椒",
+                "checked": "false",
+                "role": "checkbox"
+              }
+            ],
+            "focus": {
+              "tag": "BUTTON",
+              "role": "checkbox",
+              "ariaLabel": null,
+              "text": "香菜",
+              "cls": "SalQ5q_questionOptionSelected",
+              "btwOptionIndex": 0,
+              "officialOptionIndex": -1,
+              "inBtwOptionsRow": true,
+              "inOfficialOptionsRow": false
+            }
+          },
+          "idxKey": "btwOptionIndex",
+          "unchanged": true
+        }
+      },
+      "verdict": "PASS"
+    }
+  },
+  "pageErrors": [],
+  "boot": {
+    "rev": "8d29bd300494",
+    "btwRev": "887a12106dcd",
+    "btwUrl": "/plugins/@local/dsh-btw/client.js?rev=887a12106dcd"
+  },
+  "finishedAt": "2026-09-23T10:44:39.394Z"
+}

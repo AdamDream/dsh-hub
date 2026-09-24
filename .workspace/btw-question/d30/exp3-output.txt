@@ -1,0 +1,27 @@
+=== 3a. host-side: real invoke() on the poisoned payload (no try/catch of ours) ===
+HOST THREW
+  name     : TypertGatewayError
+  code     : result-invalid
+  endpoint : sideChat/read
+  field    : result
+  message  : typert gateway: sideChat/read: business result failed boundary validation
+  cause    : ZodError | [ { "code": "unrecognized_keys", "keys": [ "detail" ], "path": [ "value", "pendingQuestion", "questions", 0 ], "message": "Unrecognized key: \"detail\"" } ]
+
+=== 3b. what the browser actually receives: real invokeRpc() -> rpcFailure() ===
+{
+ "ok": false,
+ "error": {
+  "code": "internal",
+  "message": "typert gateway: sideChat/read: business result failed boundary validation",
+  "details": {}
+ }
+}
+
+=== 3c. how dsh-btw client/poll() renders that failure ===
+controller.ts:691  if (!result.ok) throw new Error(remoteFailure(result.error))
+  -> thrown Error.message = "typert gateway: sideChat/read: business result failed boundary validation"
+  -> reaches controller.ts:741  console.warn('[dsh-btw] transcript read failed', error)
+  -> then controller.ts:742-746  delay = 1_200; setTimeout(..., delay);  NO publish, NO error phase
+
+=== 3d. control: the identical path with a LEGAL question (no extra key) ===
+invokeRpc ok? true | pendingQuestion delivered? true

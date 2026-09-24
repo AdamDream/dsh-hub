@@ -1,0 +1,12 @@
+=== baseline: as stored today ===
+strict read codec: FAIL (D30 reproduced)
+
+=== fix E: project each question to the declared key whitelist before returning ===
+projected question: [{"id":"q1","question":"是否继续？","options":[{"label":"继续"},{"label":"停止"}],"multi_select":false}]
+strict read codec: PASS
+
+=== fix E side effect: the model-visible intent is silently dropped ===
+multiSelect=true dropped -> DROPPED (card renders single-select)
+
+=== how fast the silent failure would log at 1200 ms backoff ===
+poll retry interval 1200 ms -> ~50 read attempts/min -> ~50 console.warn lines/min while the question stays pending

@@ -1,0 +1,22 @@
+=== drilled from production artifact: btwQuestionSchema declared keys ===
+["id","question","header","options","multi_select"]
+
+=== 8a. adversarial KEY inputs: raw vs question-level projection vs deep projection ===
+camelCase multiSelect            raw=FAIL  projectQuestion=PASS  deep=PASS
+official-only detail             raw=FAIL  projectQuestion=PASS  deep=PASS
+official-only intent             raw=FAIL  projectQuestion=PASS  deep=PASS
+nested junk object               raw=FAIL  projectQuestion=PASS  deep=PASS
+question extra + option extra    raw=FAIL  projectQuestion=PASS  deep=PASS
+option extra only                raw=PASS  projectQuestion=PASS  deep=PASS
+
+=== 8b. boundary: projection does NOT fix VALUE-constraint width gaps ===
+empty id                         after projection: FAIL
+empty question                   after projection: FAIL
+empty option label               after projection: FAIL
+empty questions array            after projection: FAIL
+
+=== 8c. drift lock feasibility: projection key list vs codec declared keys ===
+projection QUESTION_KEYS  : ["id","question","header","options","multi_select"]
+codec declared keys       : ["id","question","header","options","multi_select"]
+identical? true
+(zod v4 exposes .shape on strict objects => a unit test can assert set equality and fail on drift)

@@ -1,0 +1,104 @@
+=== compiled JSON schema of btw_ask_user.parameters ===
+{
+ "type": "object",
+ "properties": {
+  "questions": {
+   "type": "array",
+   "description": "Questions to ask the user before continuing.",
+   "items": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "Stable id for this question; echoed in the answer."
+     },
+     "question": {
+      "type": "string",
+      "description": "The specific question to ask the user."
+     },
+     "header": {
+      "type": "string",
+      "description": "Optional short heading for the question."
+     },
+     "options": {
+      "type": "array",
+      "description": "Optional choices to show the user.",
+      "items": {
+       "type": "object",
+       "additionalProperties": true,
+       "properties": {
+        "label": {
+         "type": "string",
+         "description": "Short user-facing option label."
+        },
+        "description": {
+         "type": "string",
+         "description": "One sentence explaining the tradeoff or impact."
+        }
+       },
+       "required": [
+        "label"
+       ]
+      }
+     },
+     "multi_select": {
+      "type": "boolean",
+      "description": "Whether the user may select more than one option. Defaults to false."
+     }
+    },
+    "required": [
+     "id",
+     "question"
+    ]
+   }
+  }
+ },
+ "required": [
+  "questions"
+ ]
+}
+
+root additionalProperties present? false
+items additionalProperties      = true
+option items additionalProperties = true
+
+=== 1a. static validation of the extra-key payload ===
+validateJsonSchemaValue violations: []
+validateArgs-style conclusion: VALID (no violation)
+
+=== 1b. real defineTool.execute path (as invoked at dsh-tools/lib/index.js:3181) ===
+tool.execute returned: {"answers":[]}
+execute received (times): 1
+arguments object identity preserved (same reference)? true
+what execute saw: {
+ "questions": [
+  {
+   "id": "q1",
+   "question": "Pick one",
+   "options": [
+    {
+     "label": "A",
+     "extra": 1
+    }
+   ],
+   "detail": "probe",
+   "multiSelect": true,
+   "multi_select": false
+  }
+ ],
+ "extraTopLevelKey": {
+  "nested": [
+   1,
+   2,
+   {
+    "deep": true
+   }
+  ]
+ }
+}
+extra keys survived to execute?  detail=probe  multiSelect=true  option.extra=1  topLevel.extraTopLevelKey={"nested":[1,2,{"deep":true}]}
+deep-equal to raw input? true
+
+=== 1c. negative control: additionalProperties:false DOES reject ===
+strict probe threw: ToolArgsError | invalid arguments: "questions[0].detail" is not a declared property (additionalProperties: false)

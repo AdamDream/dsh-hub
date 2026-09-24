@@ -1,0 +1,113 @@
+=== descriptor under test ===
+id          : @local/dsh-btw#sideChat/read
+result.mode : strict
+typeSymbol  : @local/dsh-btw#ReadSideChatResult
+
+=== experiment 6a: every sideChat/* result codec mode ===
+start       result.mode=strict  param.mode=strict
+read        result.mode=strict  param.mode=strict
+send        result.mode=strict  param.mode=strict
+answer      result.mode=strict  param.mode=strict
+cancel      result.mode=strict  param.mode=strict
+close       result.mode=strict  param.mode=strict
+setModel    result.mode=strict  param.mode=strict
+readImage   result.mode=strict  param.mode=strict
+listTree    result.mode=strict  param.mode=strict
+listProject result.mode=strict  param.mode=strict
+
+========================================================================
+CASE control: fully legal payload (multi_select)
+input.pendingQuestion: {"questionId":"9f1a2b3c-4d5e-4f60-8a9b-0c1d2e3f4a5c","questions":[{"id":"q1","question":"Pick one","header":"H","multi_select":true,"options":[{"label":"A","description":"d"},{"label":"B"}]}]}
+RESULT: PASS
+
+========================================================================
+CASE (a) question item extra key: detail
+input.pendingQuestion: {"questionId":"9f1a2b3c-4d5e-4f60-8a9b-0c1d2e3f4a5c","questions":[{"id":"q1","question":"Pick one","options":[{"label":"A"}],"detail":"x"}]}
+RESULT: FAIL
+error.message: [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "detail"
+    ],
+    "path": [
+      "value",
+      "pendingQuestion",
+      "questions",
+      0
+    ],
+    "message": "Unrecognized key: \"detail\""
+  }
+]
+issues: [
+ {
+  "code": "unrecognized_keys",
+  "keys": [
+   "detail"
+  ],
+  "path": [
+   "value",
+   "pendingQuestion",
+   "questions",
+   0
+  ],
+  "message": "Unrecognized key: \"detail\""
+ }
+]
+
+========================================================================
+CASE (b) question item camelCase: multiSelect
+input.pendingQuestion: {"questionId":"9f1a2b3c-4d5e-4f60-8a9b-0c1d2e3f4a5c","questions":[{"id":"q1","question":"Pick one","options":[{"label":"A"}],"multiSelect":true}]}
+RESULT: FAIL
+error.message: [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "multiSelect"
+    ],
+    "path": [
+      "value",
+      "pendingQuestion",
+      "questions",
+      0
+    ],
+    "message": "Unrecognized key: \"multiSelect\""
+  }
+]
+issues: [
+ {
+  "code": "unrecognized_keys",
+  "keys": [
+   "multiSelect"
+  ],
+  "path": [
+   "value",
+   "pendingQuestion",
+   "questions",
+   0
+  ],
+  "message": "Unrecognized key: \"multiSelect\""
+ }
+]
+
+========================================================================
+CASE (c) option item extra key: extra
+input.pendingQuestion: {"questionId":"9f1a2b3c-4d5e-4f60-8a9b-0c1d2e3f4a5c","questions":[{"id":"q1","question":"Pick one","options":[{"label":"A","extra":1}]}]}
+RESULT: PASS
+
+========================================================================
+THROW FORM: ZodError | [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "multiSelect"
+    ],
+    "path": [
+      "value",
+      "pendingQuestion",
+      "questions",
+      0
+    ],
+    "message": "Unrecognized key: \"multiSelect\""
+  }
+]

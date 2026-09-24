@@ -1,0 +1,22 @@
+=== 6a. which result schema can carry a stored question? ===
+read result accepts a legal pendingQuestion? true
+read result accepts the SAME payload WITHOUT pendingQuestion? true
+blast radius evidence: grep -n pendingQuestion src/shared/remote.ts  (only line 174, inside readSideChatResultSchema.value)
+
+=== 6b. tool DSL keyword subset: can minLength / minItems be expressed? ===
+minLength rejected: JsonSchemaError | unsupported JSON schema: schema.properties.a.minLength is not a supported keyword (subset: type/oneOf/properties/required/additionalProperties/items/enum/const + annotations)
+minItems rejected: JsonSchemaError | unsupported JSON schema: schema.minItems is not a supported keyword (subset: type/oneOf/properties/required/additionalProperties/items/enum/const + annotations)
+
+=== 6c. even with additionalProperties:false, VALUE-constraint width gaps remain ===
+empty id (codec requires min 1)
+   tool-schema (additionalProperties:false) => PASSES tool validation
+   strict read codec                  => FAILS  <== residual silent channel
+empty question (codec requires min 1)
+   tool-schema (additionalProperties:false) => PASSES tool validation
+   strict read codec                  => FAILS  <== residual silent channel
+empty questions array (codec requires min 1 item)
+   tool-schema (additionalProperties:false) => PASSES tool validation
+   strict read codec                  => FAILS  <== residual silent channel
+empty option label (codec requires min 1)
+   tool-schema (additionalProperties:false) => PASSES tool validation
+   strict read codec                  => FAILS  <== residual silent channel

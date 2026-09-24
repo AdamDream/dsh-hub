@@ -1,0 +1,1811 @@
+{
+  "name": "T1 multi-select real GUI interaction",
+  "startedAt": "2026-09-23T10:40:53.470Z",
+  "attempts": [
+    {
+      "n": 1,
+      "promptKind": "no-keyname",
+      "prompt": "请立刻调用 btw_ask_user 工具向我提一个问题：我希望可以同时勾选多个选项（多选，允许一次选中好几个），给出 3 个选项。header 写「饮品」，问题写「你想喝哪几种？」，三个选项分别是「咖啡」「茶」「果汁」。必须真实调用工具，不要用纯文字代替。",
+      "sentAt": "2026-09-23T10:40:53.470Z",
+      "composerEditable": true,
+      "cardAppeared": true,
+      "card": {
+        "ariaLabel": "侧边助手正在向你提问",
+        "box": {
+          "x": 995,
+          "y": 420,
+          "w": 418,
+          "h": 330,
+          "right": 1413,
+          "bottom": 750
+        },
+        "classList": "SalQ5q_questionCard",
+        "uuidAttrs": [],
+        "questions": [
+          {
+            "header": "饮品",
+            "question": "你想喝哪几种？",
+            "optionsWrapRole": "group",
+            "optionsWrapBox": {
+              "x": 1010,
+              "y": 509,
+              "w": 388,
+              "h": 153,
+              "right": 1398,
+              "bottom": 662
+            },
+            "optionCount": 3,
+            "options": [
+              {
+                "label": "咖啡",
+                "role": "checkbox",
+                "ariaChecked": "false",
+                "ariaPressed": null,
+                "type": "button",
+                "disabled": false,
+                "tabIndex": 0,
+                "cls": "SalQ5q_questionOption",
+                "selectedClass": false,
+                "checkCls": "SalQ5q_questionOptionCheck",
+                "checkCheckedClass": false,
+                "checkSvgCount": 0,
+                "checkBg": "rgba(0, 0, 0, 0)",
+                "checkColor": "rgb(15, 17, 21)",
+                "indexBadge": null,
+                "box": {
+                  "x": 1010,
+                  "y": 509,
+                  "w": 388,
+                  "h": 40,
+                  "right": 1398,
+                  "bottom": 549
+                }
+              },
+              {
+                "label": "茶",
+                "role": "checkbox",
+                "ariaChecked": "false",
+                "ariaPressed": null,
+                "type": "button",
+                "disabled": false,
+                "tabIndex": 0,
+                "cls": "SalQ5q_questionOption",
+                "selectedClass": false,
+                "checkCls": "SalQ5q_questionOptionCheck",
+                "checkCheckedClass": false,
+                "checkSvgCount": 0,
+                "checkBg": "rgba(0, 0, 0, 0)",
+                "checkColor": "rgb(15, 17, 21)",
+                "indexBadge": null,
+                "box": {
+                  "x": 1010,
+                  "y": 555,
+                  "w": 388,
+                  "h": 40,
+                  "right": 1398,
+                  "bottom": 595
+                }
+              },
+              {
+                "label": "果汁",
+                "role": "checkbox",
+                "ariaChecked": "false",
+                "ariaPressed": null,
+                "type": "button",
+                "disabled": false,
+                "tabIndex": 0,
+                "cls": "SalQ5q_questionOption",
+                "selectedClass": false,
+                "checkCls": "SalQ5q_questionOptionCheck",
+                "checkCheckedClass": false,
+                "checkSvgCount": 0,
+                "checkBg": "rgba(0, 0, 0, 0)",
+                "checkColor": "rgb(15, 17, 21)",
+                "indexBadge": null,
+                "box": {
+                  "x": 1010,
+                  "y": 601,
+                  "w": 388,
+                  "h": 40,
+                  "right": 1398,
+                  "bottom": 641
+                }
+              }
+            ],
+            "customInput": {
+              "ariaLabel": "自定义回答",
+              "placeholder": "输入你自己的回答…",
+              "value": ""
+            }
+          }
+        ],
+        "customInputs": [
+          {
+            "ariaLabel": "自定义回答",
+            "placeholder": "输入你自己的回答…",
+            "value": ""
+          }
+        ],
+        "submit": {
+          "text": "发送回答",
+          "disabled": false,
+          "box": {
+            "x": 1010,
+            "y": 709,
+            "w": 388,
+            "h": 28,
+            "right": 1398,
+            "bottom": 737
+          },
+          "sending": false
+        },
+        "textHead": "侧边助手正在向你提问\n饮品\n\n你想喝哪几种？\n\n咖啡\n茶\n果汁\n可多选\n发送回答"
+      },
+      "result": "card appeared"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a1_card_and_checkbox_role",
+      "pass": true,
+      "detail": {
+        "cardFound": true,
+        "optionCount": 3,
+        "optionsWrapRole": "group",
+        "roles": [
+          "checkbox",
+          "checkbox",
+          "checkbox"
+        ],
+        "labels": [
+          "咖啡",
+          "茶",
+          "果汁"
+        ]
+      }
+    },
+    {
+      "id": "a2_two_checked_persist_3s",
+      "pass": true,
+      "detail": {
+        "ticks": 59,
+        "allOnTicks": 59,
+        "ratio": "59/59",
+        "allOnAllTicks": true,
+        "firstOffAtMs": null,
+        "firstTick": [
+          {
+            "label": "咖啡",
+            "checked": "true",
+            "cls": true
+          },
+          {
+            "label": "茶",
+            "checked": "true",
+            "cls": true
+          },
+          {
+            "label": "果汁",
+            "checked": "false",
+            "cls": false
+          }
+        ],
+        "lastTick": [
+          {
+            "label": "咖啡",
+            "checked": "true",
+            "cls": true
+          },
+          {
+            "label": "茶",
+            "checked": "true",
+            "cls": true
+          },
+          {
+            "label": "果汁",
+            "checked": "false",
+            "cls": false
+          }
+        ],
+        "observedMs": 2967,
+        "sampleMs": 50,
+        "windowMs": 3000
+      }
+    },
+    {
+      "id": "a3_check_mark_appears_on_selected",
+      "pass": true,
+      "detail": {
+        "beforeCheckSvg": [
+          0,
+          0,
+          0
+        ],
+        "beforeCheckedClass": [
+          false,
+          false,
+          false
+        ],
+        "beforeCheckBg": [
+          "rgba(0, 0, 0, 0)",
+          "rgba(0, 0, 0, 0)",
+          "rgba(0, 0, 0, 0)"
+        ],
+        "after": [
+          {
+            "label": "咖啡",
+            "checked": "true",
+            "checkSvgCount": 1,
+            "checkCheckedClass": true,
+            "checkBg": "rgb(15, 17, 21)",
+            "selectedClass": true
+          },
+          {
+            "label": "茶",
+            "checked": "true",
+            "checkSvgCount": 1,
+            "checkCheckedClass": true,
+            "checkBg": "rgb(15, 17, 21)",
+            "selectedClass": true
+          },
+          {
+            "label": "果汁",
+            "checked": "false",
+            "checkSvgCount": 0,
+            "checkCheckedClass": false,
+            "checkBg": "rgba(0, 0, 0, 0)",
+            "selectedClass": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "a4_submit_card_gone_agent_continues",
+      "pass": true,
+      "detail": {
+        "submitClickOk": true,
+        "submitButtonBefore": {
+          "text": "发送回答",
+          "disabled": false,
+          "box": {
+            "x": 1010,
+            "y": 709,
+            "w": 388,
+            "h": 28,
+            "right": 1398,
+            "bottom": 737
+          },
+          "sending": false
+        },
+        "cardGone": true,
+        "cardGoneAfterMs": 1,
+        "transcriptChangedAfterSubmit": true,
+        "transcriptDeltaChars": -62,
+        "drawerTextTailAfter": "▸\n跳转到其他 btw\nbtw 侧聊\n只读\n\n临时问一句，主任务不跑偏。\n\ndeepseek-v4.1-flash\nglm-5.3\ndeepseek-v4-pro\n×\n—\n主任务已就绪\n继承内容仅作参考，主会话不会被写入这段追问。\n输出中…\n你\n\n请立刻调用 btw_ask_user 工具向我提一个问题：我希望可以同时勾选多个选项（多选，允许一次选中好几个），给出 3 个选项。header 写「饮品」，问题写「你想喝哪几种？」，三个选项分别是「咖啡」「茶」「果汁」。必须真实调用工具，不要用纯文字代替。\n\nShift + Enter\n跨任务、跨重启保留"
+      }
+    }
+  ],
+  "verdict": "PASS",
+  "producingAttempt": {
+    "n": 1,
+    "promptKind": "no-keyname"
+  },
+  "cardSnapshot": {
+    "ariaLabel": "侧边助手正在向你提问",
+    "box": {
+      "x": 995,
+      "y": 420,
+      "w": 418,
+      "h": 330,
+      "right": 1413,
+      "bottom": 750
+    },
+    "classList": "SalQ5q_questionCard",
+    "uuidAttrs": [],
+    "questions": [
+      {
+        "header": "饮品",
+        "question": "你想喝哪几种？",
+        "optionsWrapRole": "group",
+        "optionsWrapBox": {
+          "x": 1010,
+          "y": 509,
+          "w": 388,
+          "h": 153,
+          "right": 1398,
+          "bottom": 662
+        },
+        "optionCount": 3,
+        "options": [
+          {
+            "label": "咖啡",
+            "role": "checkbox",
+            "ariaChecked": "false",
+            "ariaPressed": null,
+            "type": "button",
+            "disabled": false,
+            "tabIndex": 0,
+            "cls": "SalQ5q_questionOption",
+            "selectedClass": false,
+            "checkCls": "SalQ5q_questionOptionCheck",
+            "checkCheckedClass": false,
+            "checkSvgCount": 0,
+            "checkBg": "rgba(0, 0, 0, 0)",
+            "checkColor": "rgb(15, 17, 21)",
+            "indexBadge": null,
+            "box": {
+              "x": 1010,
+              "y": 509,
+              "w": 388,
+              "h": 40,
+              "right": 1398,
+              "bottom": 549
+            }
+          },
+          {
+            "label": "茶",
+            "role": "checkbox",
+            "ariaChecked": "false",
+            "ariaPressed": null,
+            "type": "button",
+            "disabled": false,
+            "tabIndex": 0,
+            "cls": "SalQ5q_questionOption",
+            "selectedClass": false,
+            "checkCls": "SalQ5q_questionOptionCheck",
+            "checkCheckedClass": false,
+            "checkSvgCount": 0,
+            "checkBg": "rgba(0, 0, 0, 0)",
+            "checkColor": "rgb(15, 17, 21)",
+            "indexBadge": null,
+            "box": {
+              "x": 1010,
+              "y": 555,
+              "w": 388,
+              "h": 40,
+              "right": 1398,
+              "bottom": 595
+            }
+          },
+          {
+            "label": "果汁",
+            "role": "checkbox",
+            "ariaChecked": "false",
+            "ariaPressed": null,
+            "type": "button",
+            "disabled": false,
+            "tabIndex": 0,
+            "cls": "SalQ5q_questionOption",
+            "selectedClass": false,
+            "checkCls": "SalQ5q_questionOptionCheck",
+            "checkCheckedClass": false,
+            "checkSvgCount": 0,
+            "checkBg": "rgba(0, 0, 0, 0)",
+            "checkColor": "rgb(15, 17, 21)",
+            "indexBadge": null,
+            "box": {
+              "x": 1010,
+              "y": 601,
+              "w": 388,
+              "h": 40,
+              "right": 1398,
+              "bottom": 641
+            }
+          }
+        ],
+        "customInput": {
+          "ariaLabel": "自定义回答",
+          "placeholder": "输入你自己的回答…",
+          "value": ""
+        }
+      }
+    ],
+    "customInputs": [
+      {
+        "ariaLabel": "自定义回答",
+        "placeholder": "输入你自己的回答…",
+        "value": ""
+      }
+    ],
+    "submit": {
+      "text": "发送回答",
+      "disabled": false,
+      "box": {
+        "x": 1010,
+        "y": 709,
+        "w": 388,
+        "h": 28,
+        "right": 1398,
+        "bottom": 737
+      },
+      "sending": false
+    },
+    "textHead": "侧边助手正在向你提问\n饮品\n\n你想喝哪几种？\n\n咖啡\n茶\n果汁\n可多选\n发送回答"
+  },
+  "optionCount": 3,
+  "optionsWrapRole": "group",
+  "optionRoles": [
+    "checkbox",
+    "checkbox",
+    "checkbox"
+  ],
+  "clickedAt": "2026-09-23T10:40:58.269Z",
+  "samples": [
+    {
+      "ms": 1,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 53,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 103,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 155,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 207,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 257,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 309,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 360,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 412,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 464,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 515,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 566,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 619,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 670,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 721,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 773,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 824,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 876,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 926,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 978,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1028,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1078,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1129,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1180,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1231,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1282,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1333,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1383,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1433,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1484,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1535,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1586,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1636,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1688,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1738,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1789,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1841,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1892,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1943,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1995,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2046,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2098,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2149,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2199,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2249,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2300,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2352,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2402,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2453,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2504,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2555,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2607,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2659,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2709,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2760,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2811,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2863,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2916,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2967,
+      "states": [
+        {
+          "label": "咖啡",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "茶",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "果汁",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    }
+  ],
+  "sampleSummary": {
+    "ticks": 59,
+    "allOnTicks": 59,
+    "ratio": "59/59",
+    "allOnAllTicks": true,
+    "firstOffAtMs": null,
+    "firstTick": [
+      {
+        "label": "咖啡",
+        "checked": "true",
+        "cls": true
+      },
+      {
+        "label": "茶",
+        "checked": "true",
+        "cls": true
+      },
+      {
+        "label": "果汁",
+        "checked": "false",
+        "cls": false
+      }
+    ],
+    "lastTick": [
+      {
+        "label": "咖啡",
+        "checked": "true",
+        "cls": true
+      },
+      {
+        "label": "茶",
+        "checked": "true",
+        "cls": true
+      },
+      {
+        "label": "果汁",
+        "checked": "false",
+        "cls": false
+      }
+    ],
+    "observedMs": 2967
+  },
+  "afterClickSnapshot": {
+    "ariaLabel": "侧边助手正在向你提问",
+    "box": {
+      "x": 995,
+      "y": 420,
+      "w": 418,
+      "h": 330,
+      "right": 1413,
+      "bottom": 750
+    },
+    "classList": "SalQ5q_questionCard",
+    "uuidAttrs": [],
+    "questions": [
+      {
+        "header": "饮品",
+        "question": "你想喝哪几种？",
+        "optionsWrapRole": "group",
+        "optionsWrapBox": {
+          "x": 1010,
+          "y": 509,
+          "w": 388,
+          "h": 153,
+          "right": 1398,
+          "bottom": 662
+        },
+        "optionCount": 3,
+        "options": [
+          {
+            "label": "咖啡",
+            "role": "checkbox",
+            "ariaChecked": "true",
+            "ariaPressed": null,
+            "type": "button",
+            "disabled": false,
+            "tabIndex": 0,
+            "cls": "SalQ5q_questionOptionSelected",
+            "selectedClass": true,
+            "checkCls": "SalQ5q_questionOptionCheck SalQ5q_questionOptionCheckChecked",
+            "checkCheckedClass": true,
+            "checkSvgCount": 1,
+            "checkBg": "rgb(15, 17, 21)",
+            "checkColor": "rgb(255, 255, 255)",
+            "indexBadge": null,
+            "box": {
+              "x": 1010,
+              "y": 509,
+              "w": 388,
+              "h": 40,
+              "right": 1398,
+              "bottom": 549
+            }
+          },
+          {
+            "label": "茶",
+            "role": "checkbox",
+            "ariaChecked": "true",
+            "ariaPressed": null,
+            "type": "button",
+            "disabled": false,
+            "tabIndex": 0,
+            "cls": "SalQ5q_questionOptionSelected",
+            "selectedClass": true,
+            "checkCls": "SalQ5q_questionOptionCheck SalQ5q_questionOptionCheckChecked",
+            "checkCheckedClass": true,
+            "checkSvgCount": 1,
+            "checkBg": "rgb(15, 17, 21)",
+            "checkColor": "rgb(255, 255, 255)",
+            "indexBadge": null,
+            "box": {
+              "x": 1010,
+              "y": 555,
+              "w": 388,
+              "h": 40,
+              "right": 1398,
+              "bottom": 595
+            }
+          },
+          {
+            "label": "果汁",
+            "role": "checkbox",
+            "ariaChecked": "false",
+            "ariaPressed": null,
+            "type": "button",
+            "disabled": false,
+            "tabIndex": 0,
+            "cls": "SalQ5q_questionOption",
+            "selectedClass": false,
+            "checkCls": "SalQ5q_questionOptionCheck",
+            "checkCheckedClass": false,
+            "checkSvgCount": 0,
+            "checkBg": "rgba(0, 0, 0, 0)",
+            "checkColor": "rgb(15, 17, 21)",
+            "indexBadge": null,
+            "box": {
+              "x": 1010,
+              "y": 601,
+              "w": 388,
+              "h": 40,
+              "right": 1398,
+              "bottom": 641
+            }
+          }
+        ],
+        "customInput": {
+          "ariaLabel": "自定义回答",
+          "placeholder": "输入你自己的回答…",
+          "value": ""
+        }
+      }
+    ],
+    "customInputs": [
+      {
+        "ariaLabel": "自定义回答",
+        "placeholder": "输入你自己的回答…",
+        "value": ""
+      }
+    ],
+    "submit": {
+      "text": "发送回答",
+      "disabled": false,
+      "box": {
+        "x": 1010,
+        "y": 709,
+        "w": 388,
+        "h": 28,
+        "right": 1398,
+        "bottom": 737
+      },
+      "sending": false
+    },
+    "textHead": "侧边助手正在向你提问\n饮品\n\n你想喝哪几种？\n\n咖啡\n茶\n果汁\n可多选\n发送回答"
+  },
+  "submitButtonBefore": {
+    "text": "发送回答",
+    "disabled": false,
+    "box": {
+      "x": 1010,
+      "y": 709,
+      "w": 388,
+      "h": 28,
+      "right": 1398,
+      "bottom": 737
+    },
+    "sending": false
+  },
+  "submittedAt": "2026-09-23T10:41:01.503Z",
+  "snapshotRightAfterSubmit": {
+    "cardCount": 0,
+    "submit": null,
+    "drawerTextTail": "▸\n跳转到其他 btw\nbtw 侧聊\n只读\n\n临时问一句，主任务不跑偏。\n\ndeepseek-v4.1-flash\nglm-5.3\ndeepseek-v4-pro\n×\n—\n主任务已就绪\n继承内容仅作参考，主会话不会被写入这段追问。\n输出中…\n你\n\n请立刻调用 btw_ask_user 工具向我提一个问题：我希望可以同时勾选多个选项（多选，允许一次选中好几个），给出 3 个选项。header 写「饮品」，问题写「你想喝哪几种？」，三个选项分别是「咖啡」「茶」「果汁」。必须真实调用工具，不要用纯文字代替。\n\nShift + Enter\n跨任务、跨重启保留"
+  },
+  "cardGoneAfterMs": 1,
+  "transcriptChangedAfterSubmit": true,
+  "transcriptDeltaChars": -62
+}

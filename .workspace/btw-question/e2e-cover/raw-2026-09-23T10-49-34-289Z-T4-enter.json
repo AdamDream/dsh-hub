@@ -1,0 +1,105 @@
+{
+  "kind": "T4 tail: Enter key on option row",
+  "url": "http://127.0.0.1:3080",
+  "startedAt": "2026-09-23T10:49:34.289Z",
+  "stamp": "2026-09-23T10-49-34-289Z",
+  "pageErrors": [],
+  "boot": {
+    "rev": "8d29bd300494",
+    "btwRev": "887a12106dcd"
+  },
+  "roles": "group",
+  "cardBefore": 1,
+  "reachedAt": 6,
+  "focusAtReach": {
+    "tag": "BUTTON",
+    "text": "盐",
+    "optionIndex": 0,
+    "inOptionsRow": true
+  },
+  "beforeEnter": [
+    {
+      "label": "盐",
+      "checked": "false",
+      "role": "checkbox"
+    },
+    {
+      "label": "糖",
+      "checked": "false",
+      "role": "checkbox"
+    }
+  ],
+  "afterEnter": [
+    {
+      "label": "盐",
+      "checked": "true",
+      "role": "checkbox"
+    },
+    {
+      "label": "糖",
+      "checked": "false",
+      "role": "checkbox"
+    }
+  ],
+  "cardAfterEnter": 1,
+  "focusAfterEnter": {
+    "tag": "BUTTON",
+    "text": "盐",
+    "optionIndex": 0,
+    "inOptionsRow": true
+  },
+  "afterEnter2": [
+    {
+      "label": "盐",
+      "checked": "false",
+      "role": "checkbox"
+    },
+    {
+      "label": "糖",
+      "checked": "false",
+      "role": "checkbox"
+    }
+  ],
+  "cardAfterEnter2": 1,
+  "afterShiftTab": {
+    "tag": "BUTTON",
+    "text": "—",
+    "optionIndex": -1,
+    "inOptionsRow": false
+  },
+  "assertions": [
+    {
+      "id": "enter_toggles_checkbox",
+      "pass": true,
+      "detail": {
+        "focusedIndex": 0,
+        "before": {
+          "label": "盐",
+          "checked": "false",
+          "role": "checkbox"
+        },
+        "afterEnter": {
+          "label": "盐",
+          "checked": "true",
+          "role": "checkbox"
+        },
+        "afterEnter2": {
+          "label": "盐",
+          "checked": "false",
+          "role": "checkbox"
+        }
+      }
+    },
+    {
+      "id": "enter_does_not_submit_card",
+      "pass": true,
+      "detail": {
+        "cardBefore": 1,
+        "cardAfterEnter": 1,
+        "cardAfterEnter2": 1
+      }
+    }
+  ],
+  "verdict": "PASS",
+  "finishedAt": "2026-09-23T10:49:41.481Z"
+}

@@ -1,0 +1,1566 @@
+{
+  "name": "T4 option-row keyboard navigation and focus order",
+  "startedAt": "2026-09-23T10:41:20.268Z",
+  "assertions": [
+    {
+      "id": "a1_focus_reaches_option_row",
+      "pass": true,
+      "detail": {
+        "reached": {
+          "path": "Tab",
+          "steps": 8
+        },
+        "anchorPath": "drawer-first-focusable",
+        "anchorFocus": {
+          "tag": "DIV",
+          "role": "separator",
+          "ariaLabel": "调整 btw 宽度",
+          "placeholder": null,
+          "text": "",
+          "cls": "SalQ5q_resizeHandle SalQ5q_resizeWidth",
+          "inOptionsRow": false,
+          "isOptionButton": false
+        },
+        "stepsWalked": 8,
+        "focusSequence": [
+          {
+            "step": 0,
+            "direction": "anchor",
+            "tag": "DIV",
+            "role": "separator",
+            "ariaLabel": "调整 btw 宽度",
+            "text": "",
+            "cls": "SalQ5q_resizeHandle SalQ5q_resizeWidth",
+            "inOptionsRow": false
+          },
+          {
+            "step": 1,
+            "direction": "Tab",
+            "tag": "DIV",
+            "role": "separator",
+            "ariaLabel": "调整 btw 高度",
+            "text": "",
+            "cls": "SalQ5q_resizeHandle SalQ5q_resizeHeightBottom",
+            "inOptionsRow": false
+          },
+          {
+            "step": 2,
+            "direction": "Tab",
+            "tag": "BUTTON",
+            "role": null,
+            "ariaLabel": null,
+            "text": "▸跳转到其他 btw",
+            "cls": "SalQ5q_jumpToggle",
+            "inOptionsRow": false
+          },
+          {
+            "step": 3,
+            "direction": "Tab",
+            "tag": "SELECT",
+            "role": null,
+            "ariaLabel": "模型",
+            "text": "deepseek-v4.1-flashglm-5.3deepseek-v4-pro",
+            "cls": "SalQ5q_modelSelect",
+            "inOptionsRow": false
+          },
+          {
+            "step": 4,
+            "direction": "Tab",
+            "tag": "BUTTON",
+            "role": null,
+            "ariaLabel": "结束 btw",
+            "text": "×",
+            "cls": "SalQ5q_endButton",
+            "inOptionsRow": false
+          },
+          {
+            "step": 5,
+            "direction": "Tab",
+            "tag": "BUTTON",
+            "role": null,
+            "ariaLabel": "收起 btw",
+            "text": "—",
+            "cls": "SalQ5q_iconButton",
+            "inOptionsRow": false
+          },
+          {
+            "step": 6,
+            "direction": "Tab",
+            "tag": "DIV",
+            "role": "button",
+            "ariaLabel": null,
+            "text": "btw_ask_user{\"answers\":[{\"id\":\"drinks\",\"selected\":",
+            "cls": "_row_9cl6j_10 SalQ5q_toolRowRow",
+            "inOptionsRow": false
+          },
+          {
+            "step": 7,
+            "direction": "Tab",
+            "tag": "DIV",
+            "role": "button",
+            "ariaLabel": null,
+            "text": "btw_ask_user运行中…",
+            "cls": "_row_9cl6j_10 SalQ5q_toolRowRow",
+            "inOptionsRow": false
+          },
+          {
+            "step": 8,
+            "direction": "Tab",
+            "tag": "BUTTON",
+            "role": "radio",
+            "ariaLabel": null,
+            "text": "1上午",
+            "cls": "SalQ5q_questionOption",
+            "inOptionsRow": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "a2_space_checks_and_persists",
+      "pass": true,
+      "detail": {
+        "focusedIndex": 0,
+        "focusedBefore": {
+          "label": "上午",
+          "checked": "false",
+          "cls": false
+        },
+        "ticks": 58,
+        "allOnTicks": 58,
+        "ratio": "58/58",
+        "allOnAllTicks": true,
+        "firstOffAtMs": null,
+        "firstTick": [
+          {
+            "label": "上午",
+            "checked": "true",
+            "cls": true
+          },
+          {
+            "label": "下午",
+            "checked": "false",
+            "cls": false
+          }
+        ],
+        "lastTick": [
+          {
+            "label": "上午",
+            "checked": "true",
+            "cls": true
+          },
+          {
+            "label": "下午",
+            "checked": "false",
+            "cls": false
+          }
+        ],
+        "observedMs": 2950
+      }
+    },
+    {
+      "id": "a3_space_toggles_back",
+      "pass": false,
+      "detail": {
+        "focusedIndex": 0,
+        "before": {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        "after": {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        "full": {
+          "before": [
+            {
+              "label": "上午",
+              "checked": "true",
+              "cls": true
+            },
+            {
+              "label": "下午",
+              "checked": "false",
+              "cls": false
+            }
+          ],
+          "after": [
+            {
+              "label": "上午",
+              "checked": "true",
+              "cls": true
+            },
+            {
+              "label": "下午",
+              "checked": "false",
+              "cls": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a4_arrows_do_not_change_selection_or_focus",
+      "pass": true,
+      "detail": {
+        "unchanged": true,
+        "checkedBefore": [
+          {
+            "label": "上午",
+            "checked": "true",
+            "cls": true
+          },
+          {
+            "label": "下午",
+            "checked": "false",
+            "cls": false
+          }
+        ],
+        "checkedAfterDown": [
+          {
+            "label": "上午",
+            "checked": "true",
+            "cls": true
+          },
+          {
+            "label": "下午",
+            "checked": "false",
+            "cls": false
+          }
+        ],
+        "checkedAfterUp": [
+          {
+            "label": "上午",
+            "checked": "true",
+            "cls": true
+          },
+          {
+            "label": "下午",
+            "checked": "false",
+            "cls": false
+          }
+        ],
+        "activeIndexBefore": 0,
+        "activeIndexAfterDown": 0,
+        "activeIndexAfterUp": 0,
+        "note": "expected: official dsh-client-ui-user-questions also has no roving tabindex / no arrow handling ⇒ 属与官方一致的偏差，非 btw 新缺陷"
+      }
+    }
+  ],
+  "verdict": "FAIL",
+  "cardAvailable": true,
+  "stateAtStart": [
+    {
+      "label": "上午",
+      "checked": "false",
+      "cls": false
+    },
+    {
+      "label": "下午",
+      "checked": "true",
+      "cls": true
+    }
+  ],
+  "resetByMouse": {
+    "index": 1,
+    "after": [
+      {
+        "label": "上午",
+        "checked": "false",
+        "cls": false
+      },
+      {
+        "label": "下午",
+        "checked": "true",
+        "cls": true
+      }
+    ]
+  },
+  "composerProbe": {
+    "disabled": true,
+    "tabIndex": 0,
+    "offsetParent": true
+  },
+  "composerFocusAttempt": {
+    "focused": {
+      "tag": "BUTTON",
+      "role": "radio",
+      "ariaLabel": null,
+      "placeholder": null,
+      "text": "2下午",
+      "cls": "SalQ5q_questionOptionSelected",
+      "inOptionsRow": true,
+      "isOptionButton": true
+    }
+  },
+  "anchorFallback": {
+    "ok": true,
+    "anchorTag": "DIV",
+    "anchorCls": "SalQ5q_resizeHandle SalQ5q_resizeWidth",
+    "anchorLabel": "调整 btw 宽度",
+    "candidateCount": 13
+  },
+  "anchorFallbackReason": "composer textarea not focusable (disabled=true) ⇒ fallback to first focusable element inside #dsh-btw-drawer",
+  "anchorPath": "drawer-first-focusable",
+  "anchorFocus": {
+    "tag": "DIV",
+    "role": "separator",
+    "ariaLabel": "调整 btw 宽度",
+    "placeholder": null,
+    "text": "",
+    "cls": "SalQ5q_resizeHandle SalQ5q_resizeWidth",
+    "inOptionsRow": false,
+    "isOptionButton": false
+  },
+  "tabSequenceFromDrawerHead": [
+    {
+      "step": 0,
+      "direction": "anchor",
+      "focus": {
+        "tag": "DIV",
+        "role": "separator",
+        "ariaLabel": "调整 btw 宽度",
+        "placeholder": null,
+        "text": "",
+        "cls": "SalQ5q_resizeHandle SalQ5q_resizeWidth",
+        "inOptionsRow": false,
+        "isOptionButton": false
+      }
+    },
+    {
+      "step": 1,
+      "direction": "Tab",
+      "focus": {
+        "tag": "DIV",
+        "role": "separator",
+        "ariaLabel": "调整 btw 高度",
+        "placeholder": null,
+        "text": "",
+        "cls": "SalQ5q_resizeHandle SalQ5q_resizeHeightBottom",
+        "inOptionsRow": false,
+        "isOptionButton": false
+      }
+    },
+    {
+      "step": 2,
+      "direction": "Tab",
+      "focus": {
+        "tag": "BUTTON",
+        "role": null,
+        "ariaLabel": null,
+        "placeholder": null,
+        "text": "▸跳转到其他 btw",
+        "cls": "SalQ5q_jumpToggle",
+        "inOptionsRow": false,
+        "isOptionButton": false
+      }
+    },
+    {
+      "step": 3,
+      "direction": "Tab",
+      "focus": {
+        "tag": "SELECT",
+        "role": null,
+        "ariaLabel": "模型",
+        "placeholder": null,
+        "text": "deepseek-v4.1-flashglm-5.3deepseek-v4-pro",
+        "cls": "SalQ5q_modelSelect",
+        "inOptionsRow": false,
+        "isOptionButton": false
+      }
+    },
+    {
+      "step": 4,
+      "direction": "Tab",
+      "focus": {
+        "tag": "BUTTON",
+        "role": null,
+        "ariaLabel": "结束 btw",
+        "placeholder": null,
+        "text": "×",
+        "cls": "SalQ5q_endButton",
+        "inOptionsRow": false,
+        "isOptionButton": false
+      }
+    },
+    {
+      "step": 5,
+      "direction": "Tab",
+      "focus": {
+        "tag": "BUTTON",
+        "role": null,
+        "ariaLabel": "收起 btw",
+        "placeholder": null,
+        "text": "—",
+        "cls": "SalQ5q_iconButton",
+        "inOptionsRow": false,
+        "isOptionButton": false
+      }
+    },
+    {
+      "step": 6,
+      "direction": "Tab",
+      "focus": {
+        "tag": "DIV",
+        "role": "button",
+        "ariaLabel": null,
+        "placeholder": null,
+        "text": "btw_ask_user{\"answers\":[{\"id\":\"drinks\",\"selected\":",
+        "cls": "_row_9cl6j_10 SalQ5q_toolRowRow",
+        "inOptionsRow": false,
+        "isOptionButton": false
+      }
+    },
+    {
+      "step": 7,
+      "direction": "Tab",
+      "focus": {
+        "tag": "DIV",
+        "role": "button",
+        "ariaLabel": null,
+        "placeholder": null,
+        "text": "btw_ask_user运行中…",
+        "cls": "_row_9cl6j_10 SalQ5q_toolRowRow",
+        "inOptionsRow": false,
+        "isOptionButton": false
+      }
+    },
+    {
+      "step": 8,
+      "direction": "Tab",
+      "focus": {
+        "tag": "BUTTON",
+        "role": "radio",
+        "ariaLabel": null,
+        "placeholder": null,
+        "text": "1上午",
+        "cls": "SalQ5q_questionOption",
+        "inOptionsRow": true,
+        "isOptionButton": true
+      }
+    }
+  ],
+  "focusSequenceTail": [
+    {
+      "step": 1,
+      "direction": "Tab",
+      "tag": "DIV",
+      "role": "separator",
+      "ariaLabel": "调整 btw 高度",
+      "text": "",
+      "inOptionsRow": false
+    },
+    {
+      "step": 2,
+      "direction": "Tab",
+      "tag": "BUTTON",
+      "role": null,
+      "ariaLabel": null,
+      "text": "▸跳转到其他 btw",
+      "inOptionsRow": false
+    },
+    {
+      "step": 3,
+      "direction": "Tab",
+      "tag": "SELECT",
+      "role": null,
+      "ariaLabel": "模型",
+      "text": "deepseek-v4.1-flashglm-5.3deepseek-v4-pro",
+      "inOptionsRow": false
+    },
+    {
+      "step": 4,
+      "direction": "Tab",
+      "tag": "BUTTON",
+      "role": null,
+      "ariaLabel": "结束 btw",
+      "text": "×",
+      "inOptionsRow": false
+    },
+    {
+      "step": 5,
+      "direction": "Tab",
+      "tag": "BUTTON",
+      "role": null,
+      "ariaLabel": "收起 btw",
+      "text": "—",
+      "inOptionsRow": false
+    },
+    {
+      "step": 6,
+      "direction": "Tab",
+      "tag": "DIV",
+      "role": "button",
+      "ariaLabel": null,
+      "text": "btw_ask_user{\"answers\":[{\"id\":\"drinks\",\"selected\":",
+      "inOptionsRow": false
+    },
+    {
+      "step": 7,
+      "direction": "Tab",
+      "tag": "DIV",
+      "role": "button",
+      "ariaLabel": null,
+      "text": "btw_ask_user运行中…",
+      "inOptionsRow": false
+    },
+    {
+      "step": 8,
+      "direction": "Tab",
+      "tag": "BUTTON",
+      "role": "radio",
+      "ariaLabel": null,
+      "text": "1上午",
+      "inOptionsRow": true
+    }
+  ],
+  "focusedIndex": 0,
+  "focusBeforeSpace": {
+    "tag": "BUTTON",
+    "role": "radio",
+    "ariaLabel": null,
+    "placeholder": null,
+    "text": "1上午",
+    "cls": "SalQ5q_questionOption",
+    "inOptionsRow": true,
+    "isOptionButton": true
+  },
+  "space1": {
+    "focusedIdx": 0,
+    "before": [
+      {
+        "label": "上午",
+        "checked": "false",
+        "cls": false
+      },
+      {
+        "label": "下午",
+        "checked": "true",
+        "cls": true
+      }
+    ],
+    "summary": {
+      "ticks": 58,
+      "allOnTicks": 58,
+      "ratio": "58/58",
+      "allOnAllTicks": true,
+      "firstOffAtMs": null,
+      "firstTick": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ],
+      "lastTick": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ],
+      "observedMs": 2950
+    }
+  },
+  "space1Samples": [
+    {
+      "ms": 1,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 52,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 103,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 154,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 205,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 256,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 307,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 358,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 409,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 460,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 511,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 562,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 614,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 665,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 716,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 767,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 818,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 870,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 921,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 971,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1022,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1073,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1125,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1177,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1229,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1280,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1332,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1383,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1435,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1494,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1546,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1596,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1647,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1698,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1762,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1814,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1865,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1916,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 1967,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2018,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2070,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2122,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2174,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2225,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2276,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2328,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2379,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2431,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2482,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2534,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2585,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2642,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2693,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2744,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2796,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2847,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2898,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    },
+    {
+      "ms": 2950,
+      "states": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ]
+    }
+  ],
+  "space2": {
+    "before": [
+      {
+        "label": "上午",
+        "checked": "true",
+        "cls": true
+      },
+      {
+        "label": "下午",
+        "checked": "false",
+        "cls": false
+      }
+    ],
+    "after": [
+      {
+        "label": "上午",
+        "checked": "true",
+        "cls": true
+      },
+      {
+        "label": "下午",
+        "checked": "false",
+        "cls": false
+      }
+    ]
+  },
+  "arrows": {
+    "beforeArrow": {
+      "checked": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ],
+      "activeIndex": 0,
+      "focus": {
+        "tag": "BUTTON",
+        "role": "radio",
+        "ariaLabel": null,
+        "placeholder": null,
+        "text": "1上午",
+        "cls": "SalQ5q_questionOptionSelected",
+        "inOptionsRow": true,
+        "isOptionButton": true
+      }
+    },
+    "afterDown": {
+      "checked": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ],
+      "activeIndex": 0,
+      "focus": {
+        "tag": "BUTTON",
+        "role": "radio",
+        "ariaLabel": null,
+        "placeholder": null,
+        "text": "1上午",
+        "cls": "SalQ5q_questionOptionSelected",
+        "inOptionsRow": true,
+        "isOptionButton": true
+      }
+    },
+    "afterUp": {
+      "checked": [
+        {
+          "label": "上午",
+          "checked": "true",
+          "cls": true
+        },
+        {
+          "label": "下午",
+          "checked": "false",
+          "cls": false
+        }
+      ],
+      "activeIndex": 0,
+      "focus": {
+        "tag": "BUTTON",
+        "role": "radio",
+        "ariaLabel": null,
+        "placeholder": null,
+        "text": "1上午",
+        "cls": "SalQ5q_questionOptionSelected",
+        "inOptionsRow": true,
+        "isOptionButton": true
+      }
+    }
+  },
+  "optionTabIndexes": [
+    {
+      "label": "上午",
+      "tabIndex": 0,
+      "hasTabindexAttr": false,
+      "role": "radio"
+    },
+    {
+      "label": "下午",
+      "tabIndex": 0,
+      "hasTabindexAttr": false,
+      "role": "radio"
+    }
+  ]
+}
