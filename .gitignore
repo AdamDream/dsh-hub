@@ -69,6 +69,30 @@ __pycache__/
 .workspace/lag-fix/**/raw/plugins/
 .workspace/lag-fix/**/served-client.js
 
+# ── 2026-09-23 推送就绪审计（T1）：止住「一次 git add -A 就把凭据 + 数 GiB 转储写进历史」的尾部风险
+# 审计实测：未跟踪 13 808 文件 / 5 599.9 MiB，`git add -A` 会一次性入库 3 个真实密钥。
+# 真实凭据（本机实测含 2 个 sk-* key、1 个 browser-session grant 密钥）——任何批次都不得入库：
+#   .workspace/lag-fix/exec-logdrift/iso/home/.credentials.yaml
+**/.credentials.yaml
+**/.credentials.yml
+# 私有索引备份：命中 parentTitle（会话标题）与 parentCwd（用户绝对路径）
+**/btw-index-backup-*.json
+# pnpm 内容寻址存储（553 文件 / 18.93 MB）：机器本地派生，`pnpm install` 可完整重建
+.pnpm-store/
+# file(1) 编译 magic 库：`file -bC -m <magic>` / `--comp` 会在 cwd 留下 <magic>.mgc
+*.mgc
+# 逐窗原始会话转储（program/ 内 8 512 个 *.zstd，单文件最大 22.8 MB，合计 4.7 GiB）：
+# 可脚本重生，结论与重生命令已入各 w*/audit.md 与 program/FINDINGS-INDEX.md
+.workspace/lag-fix/**/*.zstd
+# 逐窗 projectList 缓存快照（单份 11.5 MB，多份重复）
+.workspace/lag-fix/**/session_projcache.json
+.workspace/lag-fix/**/*_projcache.json
+# 修复前 lib/ 镜像与 profile 快照：本机回滚用，非仓库记录
+# （与既有 .workspace/backups/ 排除同例；可由 git show <rev>:<path> 或部署件重新取得）
+.workspace/lag-fix/**/preimage*/
+.workspace/lag-fix/btw-profile-preimage-*/
+.workspace/btw-question/preimage-*/
+
 # 重型逐窗 raw dump（2026-09-21 用户裁决：不入库，保留本地）
 # 依据：这些是可脚本重生的中间产物；结论与重生命令已写入各自 audit.md / report.md。
 # 注：权威独占批 campaign-cpuX.json 体积 <1MB，已入库。
