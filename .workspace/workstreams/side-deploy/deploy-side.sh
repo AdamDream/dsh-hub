@@ -42,8 +42,116 @@ SRC_SB="$SCRIPT_DIR/session-board"
 DST_USAGE="$FLAT/@local/dsh-usage"
 DST_SB="$FLAT/@deepseek-ai/dsh-session-board"
 
-DRY_RUN=false
-[ "${1:-}" = "--dry-run" ] && DRY_RUN=true
+# ── 2026-09-22 安全加固（协调者）──────────────────────────────────────────────
+# 原因：本脚本的 DST 指向**在产** deployed 位（$FLAT/@local/dsh-usage 与 @deepseek-ai/dsh-session-board），
+# 而 SRC（$SCRIPT_DIR/usage）是**旧快照**——它连 ingest-worker.js / ingest-runner.js 都不存在。
+# 旧默认 DRY_RUN=false ⇒ 一次误执行会把下列成果**静默整包回滚**：
+#   U-IG1（worker 化 ingest）、U-IG3 五项（区间对齐/ON CONFLICT/busy_timeout/temp_store/invalidate 导出）、
+#   U-CC1（CC 游标修复）、P0-b settings、hour 粒度、以及本轮 U-CB1/U-CB2。
+# 现改为：**默认 dry-run**，必须显式 `--apply` 才真正写盘。
+DRY_RUN=true
+case "${1:-}" in
+  --apply)   DRY_RUN=false ;;
+  --dry-run|"") DRY_RUN=true ;;
+  *) printf '[deploy-side] 未知参数 %s（用法：--dry-run 或 --apply）\n' "$1" >&2; exit 2 ;;
+esac
+if ! $DRY_RUN; then
+  printf '\n\033[1;31m⚠  --apply：即将用旧快照整包覆盖在产 deployed（不可静默撤销，仅能从 .bak-<时间戳> 恢复）\033[0m\n'
+  printf '   目标：%s\n         %s\n' "$DST_USAGE" "$DST_SB"
+  printf '   来源：%s（旧快照）\n' "$SRC_USAGE"
+  printf '   若只想预览：Ctrl-C 后改用 --dry-run\n\n'
+  sleep 5
+fi
+
+# ── 2026-09-22 exec-cold-batch (U-CB3 ③): 前置闸门 + 覆盖后复核 ─────────────────
+# 与协调者加固的**关系（增量，不覆盖）**：
+#   协调者的改动解决"**会不会**误跑"：默认 dry-run、必须 --apply、5 秒红字、未知参数 exit 2。
+#   本块解决剩下的一半——"跑起来时**会不会静默**"：
+#     ① 用记录的旧快照指纹证明 SRC 确实是旧快照，并把将丢失的单元逐条打出来；
+#     ② 证明 deployed 当前状态**确实已被备份**（备份缺失/为空 ⇒ 中止，避免"覆盖了但回不去"）；
+#     ③ 覆盖后立即复核 deployed == SRC（证明整包回滚**真的发生了**），并打印红字恢复指引。
+#   三处调用点：备份段之后 guard_deploy_preflight；两条 cp -r 之后 guard_deploy_postcopy。
+GUARD_SNAPSHOT_DB_MD5="a9a8e785b8864a847ae3979c003e81b1"   # side-deploy/usage/lib/db.js 实测
+GUARD_SNAPSHOT_INDEX_MD5="93fb667053ab0230437d7b2d518774a4" # side-deploy/usage/lib/index.js 实测
+GUARD_IG_DB_MD5="d187d44932b35a583119f6af97cd82d6"          # U-IG3 完成后的 db.js
+GUARD_CB_INDEX_MD5="eae532a7a7bd8c96ebd1abd9aff0f8c9"       # U-CB1+U-CB2 完成后的 index.js
+GUARD_DEPLOYED_DB=""
+GUARD_DEPLOYED_INDEX=""
+
+guard_md5_of() { if [ -f "$1" ]; then md5sum "$1" | cut -d' ' -f1; else printf 'ABSENT'; fi; }
+
+# 覆盖前状态的取样目录：**apply 模式下第 1 段已把 deployed mv 成 .bak-$TS**，所以
+# 真正代表"覆盖前"的是备份目录；dry-run 下备份还不存在，取 deployed 本体。
+guard_deployed_probe_dir() {
+  if [ -d "$DST_USAGE.bak-$TS" ]; then printf '%s' "$DST_USAGE.bak-$TS"; else printf '%s' "$DST_USAGE"; fi
+}
+
+guard_deploy_preflight() {
+  say "-- 前置闸门（U-CB3）--"
+  local src_db src_index
+  src_db="$(guard_md5_of "$SRC_USAGE/lib/db.js")"
+  src_index="$(guard_md5_of "$SRC_USAGE/lib/index.js")"
+  if [ "$src_db" = "$GUARD_SNAPSHOT_DB_MD5" ] && [ "$src_index" = "$GUARD_SNAPSHOT_INDEX_MD5" ]; then
+    say "   快照指纹匹配（db.js=$src_db index.js=$src_index）⇒ SRC 确认为旧快照。"
+  else
+    say "   WARN 快照指纹不匹配（db.js=$src_db index.js=$src_index）；期望 db.js=$GUARD_SNAPSHOT_DB_MD5 index.js=$GUARD_SNAPSHOT_INDEX_MD5"
+    say "        ⇒ SRC 已被改动，本次覆盖的后果需重新评估。"
+  fi
+  if [ ! -f "$SRC_USAGE/lib/ingest-worker.js" ] && [ ! -f "$SRC_USAGE/lib/ingest-runner.js" ]; then
+    say "   已确认 SRC 缺少 ingest-worker.js / ingest-runner.js ⇒ 本次覆盖将整包回滚下列成果："
+    say "     U-IG1(worker 化 ingest) / U-IG3(区间对齐·ON CONFLICT·busy_timeout·temp_store·invalidate 导出)"
+    say "     U-CC1(CC 游标) / P0-b settings / hour 粒度 / U-CB1(lastIngest 回写) / U-CB2(45s timer)"
+  else
+    say "   WARN SRC 含 worker 文件，可能不是旧快照 —— 人工复核后再继续。"
+  fi
+  local probe; probe="$(guard_deployed_probe_dir)"
+  GUARD_DEPLOYED_DB="$(guard_md5_of "$probe/lib/db.js")"
+  GUARD_DEPLOYED_INDEX="$(guard_md5_of "$probe/lib/index.js")"
+  say "   覆盖前 deployed（取样自 $probe）: db.js=$GUARD_DEPLOYED_DB index.js=$GUARD_DEPLOYED_INDEX"
+  if [ "$GUARD_DEPLOYED_DB" = "$GUARD_IG_DB_MD5" ]; then
+    say "   ⚠ 该 db.js 是 U-IG3 已修版本 ⇒ 覆盖后必须重新落地 U-IG3（否则静默回滚）。"
+  fi
+  if [ "$GUARD_DEPLOYED_INDEX" = "$GUARD_CB_INDEX_MD5" ]; then
+    say "   ⚠ 该 index.js 是 U-CB1+U-CB2 已落地版本 ⇒ 覆盖后必须重跑 apply-CB1-v1 / apply-CB2-v1。"
+  fi
+  # 备份存在性校验只在真正写盘的模式下有意义：dry-run 时第 1 段（mv）不会执行，
+  # 此处必须跳过，否则 dry-run 也会被误判为"无法回滚"而中止。
+  if $DRY_RUN; then
+    say "   （dry-run：未写盘，跳过备份存在性校验）"
+    return 0
+  fi
+  if [ ! -e "$DST_USAGE.bak-$TS" ]; then
+    say "   ERROR 备份 $DST_USAGE.bak-$TS 不存在 —— 覆盖后无法回滚，中止。"
+    exit 3
+  fi
+  if [ ! -s "$DST_USAGE.bak-$TS/lib/index.js" ] || [ ! -s "$DST_USAGE.bak-$TS/lib/db.js" ]; then
+    say "   ERROR 备份 $DST_USAGE.bak-$TS 的 lib/index.js 或 lib/db.js 缺失/为空 —— 备份不可用，中止。"
+    exit 3
+  fi
+  say "   备份校验通过：$DST_USAGE.bak-$TS（lib/index.js 与 lib/db.js 均存在且非空）"
+}
+
+guard_deploy_postcopy() {
+  if $DRY_RUN; then
+    say "-- 覆盖后复核（U-CB3）：dry-run 未写盘，跳过 --"
+    return 0
+  fi
+  say "-- 覆盖后复核（U-CB3）--"
+  local now_db now_index src_db src_index
+  now_db="$(guard_md5_of "$DST_USAGE/lib/db.js")"
+  now_index="$(guard_md5_of "$DST_USAGE/lib/index.js")"
+  src_db="$(guard_md5_of "$SRC_USAGE/lib/db.js")"
+  src_index="$(guard_md5_of "$SRC_USAGE/lib/index.js")"
+  say "   覆盖后 deployed: db.js=$now_db index.js=$now_index"
+  if [ "$now_db" = "$src_db" ] && [ "$now_index" = "$src_index" ]; then
+    say "   已确认 deployed == SRC ⇒ 整包回滚**确实发生**（不是静默部分覆盖）。"
+  else
+    say "   ERROR 覆盖后 deployed != SRC（$now_db/$now_index vs $src_db/$src_index）—— 状态未知，请人工核查。"
+    exit 4
+  fi
+  printf '\033[1;31m⚠ 恢复路径：备份在 %s.bak-%s；重新落地请重跑 apply-CB1-v1 / apply-CB2-v1（index.js）并重新落地 U-IG3（db.js）\033[0m\n' "$DST_USAGE" "$TS"
+  printf '\033[1;31m⚠ 本脚本无"已通过哈希校验"豁免：任何一次 --apply 都会整包覆盖在产 deployed。\033[0m\n'
+}
 
 say() { printf '%s\n' "$*"; }
 run() {
@@ -88,9 +196,11 @@ run cp -p "$PATCH" "$PATCH.bak-$TS"
 $DRY_RUN || say "   已备份 $PATCH -> $PATCH.bak-$TS"
 
 # --- 2. 拷贝两包到部署位 ------------------------------------------------------
+guard_deploy_preflight
 say "-- 2. 拷贝 --"
 run cp -r "$SRC_USAGE" "$DST_USAGE"
 run cp -r "$SRC_SB" "$DST_SB"
+guard_deploy_postcopy
 say "   已拷贝 usage 完整包（package.json/lib/cordis.patch.yml/LICENSE/README.md）"
 say "   已拷贝 session-board 完整包（package.json/lib/test/README.md/CONTRACT.md/install.sh）"
 
