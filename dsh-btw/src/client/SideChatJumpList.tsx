@@ -56,6 +56,11 @@ export function SideChatJumpList({
   const now = useMemo(() => Date.now(), [entries])
 
   useEffect(() => {
+    // w28 F3/P4: this component stays mounted while the drawer is collapsed, so an
+    // ungated fetch also fires on the re-render the close path triggers — measured
+    // one `sideChat/listTree` 10–31 ms after End that took 27–59 s and whose result
+    // nobody could see. Only fetch while the jump list is actually expanded.
+    if (!view.jumpOpen) return
     let cancelled = false
     setLoading(true)
     setError(null)
@@ -72,7 +77,7 @@ export function SideChatJumpList({
       if (!cancelled) setLoading(false)
     })
     return () => { cancelled = true }
-  }, [controller, parentSessionId, tab])
+  }, [controller, parentSessionId, tab, view.jumpOpen])
 
   const jump = async (entry: SideChatTreeEntry): Promise<void> => {
     const result = await controller.jumpTo(entry.parentSessionId as SessionId)

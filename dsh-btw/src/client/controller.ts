@@ -28,6 +28,14 @@ export interface SideChatClientState {
   readonly pendingQuestion?: BtwPendingQuestion
   readonly model?: BtwModel
   readonly error?: string
+  /**
+   * The last transcript-read failure, set once consecutive failures reach
+   * {@link READ_FAILURE_NOTICE_AT} and cleared by the next successful read.
+   * The phase stays `open` — polling continues and recovers by itself, unlike
+   * the terminal `error` phase. The copy the user sees is localized from this
+   * flag; the value itself carries the underlying reason for diagnostics.
+   */
+  readonly readError?: string
 }
 
 type OpeningDisposition = 'visible' | 'parked' | 'closed'
@@ -56,6 +64,13 @@ interface OptimisticSend {
 }
 
 const NOT_OPEN_MESSAGE = 'This side conversation is no longer open on the host (it may have restarted). Its saved history is kept — press Try again to resume it.'
+
+/**
+ * Consecutive transcript-read failures before the panel surfaces `readError`.
+ * One failure stays silent: a single dropped read is an ordinary hiccup and the
+ * very next poll usually recovers it.
+ */
+const READ_FAILURE_NOTICE_AT = 3
 
 const EMPTY_TRANSCRIPT = Object.freeze({
   seedLength: 0,
@@ -88,6 +103,8 @@ export class SideChatController {
   private readonly projectByParent = new Map<string, readonly SideChatTreeEntry[]>()
   private closing: Promise<void> | undefined
   private pollTimer: ReturnType<typeof setTimeout> | undefined
+  /** Consecutive read failures in the current poll chain (see `startPolling`). */
+  private readFailures = 0
   private readonly disposeList: () => void
   private readonly sessions: ISessions
 
@@ -171,7 +188,7 @@ export class SideChatController {
       }
       this.publish(openState)
       if (optimistic !== undefined) void this.admitOptimistic(optimistic, true)
-      void this.poll(openState.epoch)
+      this.startPolling(openState.epoch)
     } catch (error: unknown) {
       if (attempt.disposition === 'closed') return
       const optimistic = this.optimisticByToken.get(chatToken)
@@ -639,10 +656,13 @@ export class SideChatController {
 
       const value = result.value.value
       const { runningTool: previousRunningTool, error: previousError,
-        currentAction: previousCurrentAction, ...base } = attempt.parked
+        currentAction: previousCurrentAction, readError: previousReadError, ...base } = attempt.parked
       void previousRunningTool
       void previousError
       void previousCurrentAction
+      // A resumed conversation starts clean: the parked streak's notice is not
+      // re-shown, and `startPolling` restarts the count.
+      void previousReadError
       const restored: SideChatClientState = {
         ...base,
         epoch: this.nextEpoch(),
@@ -662,7 +682,7 @@ export class SideChatController {
         return
       }
       this.publish(restored)
-      void this.poll(restored.epoch)
+      this.startPolling(restored.epoch)
     } catch (error: unknown) {
       if (attempt.disposition === 'closed') return
       this.parkedByParent.set(key, attempt.parked)
@@ -679,6 +699,15 @@ export class SideChatController {
     } finally {
       if (this.restoringByParent.get(key) === attempt) this.restoringByParent.delete(key)
     }
+  }
+
+  /**
+   * Begin a fresh poll chain for a newly published state: a new conversation
+   * does not inherit the previous chain's failure streak.
+   */
+  private startPolling(epoch: number): void {
+    this.readFailures = 0
+    void this.poll(epoch)
   }
 
   private async poll(epoch: number): Promise<void> {
@@ -722,10 +751,14 @@ export class SideChatController {
       const running = value.running || (optimistic !== undefined && !(hostHasOptimistic && !value.running))
       delay = running ? 220 : 700
       const { runningTool: previousRunningTool, pendingQuestion: previousPendingQuestion,
-        currentAction: previousCurrentAction, ...baseState } = this.state
+        currentAction: previousCurrentAction, readError: previousReadError, ...baseState } = this.state
       void previousRunningTool
       void previousPendingQuestion
       void previousCurrentAction
+      // A read that lands ends the outage: the streak and the visible notice
+      // are cleared together, so the panel heals itself without user action.
+      void previousReadError
+      this.readFailures = 0
       this.publish({
         ...baseState,
         revision: value.revision,
@@ -740,6 +773,16 @@ export class SideChatController {
       })
     } catch (error: unknown) {
       console.warn('[dsh-btw] transcript read failed', error)
+      this.readFailures += 1
+      // Past the threshold the frozen snapshot is stated instead of hidden: the
+      // phase stays `open` so polling (and its 220/700/1200 ms backoff) keeps
+      // running and a later success clears the notice by itself.
+      const reason = error instanceof Error ? error.message : String(error)
+      if (this.readFailures >= READ_FAILURE_NOTICE_AT
+        && this.state.readError !== reason
+        && this.state.phase === 'open' && this.state.epoch === epoch && this.state.chatToken === token) {
+        this.publish({ ...this.state, readError: reason })
+      }
       delay = 1_200
     }
     if (this.state.phase === 'open' && this.state.epoch === epoch) {

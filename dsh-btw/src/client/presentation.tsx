@@ -145,9 +145,15 @@ export class SideChatPresentation {
   }
 
   async end(parentSessionId: string): Promise<void> {
+    // w28 F2/P3: clear the drawer's view state *before* awaiting the host close
+    // RPC. Drawer visibility requires `view.visible`, so clearing first removes the
+    // panel in the same commit and keeps it hidden even while a still-in-flight
+    // start/restore continuation publishes `open` (measured once in six: the panel
+    // left, came back +32 ms later, and only stayed away when the close RPC landed —
+    // up to 2661 ms of a panel that would not close).
+    this.viewStore.clear(parentSessionId)
     await this.controller.close()
     this.attachment?.service.closeTab(SIDE_CHAT_TAB_TYPE, { sessionId: parentSessionId })
-    this.viewStore.clear(parentSessionId)
   }
 
   attachBetterSidebar(candidate: BetterSidebarService): () => void {

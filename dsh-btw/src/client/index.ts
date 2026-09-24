@@ -12,6 +12,7 @@ import { SideChatViewStore } from './view-store.ts'
 import { en, NS, zh } from './locales.ts'
 import remoteContribution from './remote.ts'
 import { bindBtwSettings } from './btw-settings.ts'
+import { createDrawerSizeStore } from './drawer-size-store.ts'
 
 export const name = 'dsh-btw/client'
 export const inject = ['slots', 'sessions', 'remote', 'locale', 'settingsScope']
@@ -33,6 +34,11 @@ function installSideChat(ctx: ClientContext): void {
     settingsScope?: { bind<T>(spec: { namespace: string; decode?: (section: unknown) => T | undefined }): SettingsScope<T> }
   }).settingsScope)
   const presentation = new SideChatPresentation(ctx, controller, viewStore, settingsScope)
+  // Shared (apply-world) store handle: drawer width/height preference, persisted
+  // under the root scoped localStorage key `dsh.btw.drawerSize`. Root-scoped
+  // records are never pruned by the runtime, so the preference survives plugin
+  // reloads and host restarts within this browser.
+  const drawerSize = createDrawerSizeStore()
   ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'btw: client dictionaries')
   ctx.effect(() => () => { void controller.dispose() }, 'btw: controller lifecycle')
 
@@ -61,6 +67,7 @@ function installSideChat(ctx: ClientContext): void {
       id: 'dsh-btw.drawer',
       order: 100,
       locale: NS,
+      store: drawerSize,
       inject: () => {
         const parentSessionId = controller.getSnapshot().parentSessionId ?? controller.currentSessionId()!
         const activeParent = () => controller.getSnapshot().parentSessionId
@@ -83,13 +90,28 @@ function installSideChat(ctx: ClientContext): void {
     }, SideChatDrawer),
   )
 
+  /*<<dsh-exec-a11y:U-A11Y3:v1*/
+  // 可观测钩子（供真机 A/B 断言"候选确实被加载"）
+  ;(window as unknown as Record<string, unknown>).__dshA11yBtwChord = 'U-A11Y3:v1'
+  /** true when the chord must stay native because the user is typing in a field. */
+  function isEditableTarget(target: EventTarget | null): boolean {
+    if (target === null || !(target instanceof HTMLElement)) return false
+    if (target.isContentEditable) return true
+    const tag = target.tagName
+    return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT'
+  }
   ctx.effect(() => {
     const onKeyDown = (event: KeyboardEvent): void => {
       if (!(event.metaKey || event.ctrlKey) || !event.shiftKey || event.code !== 'Period') return
-      event.preventDefault()
+      // editable target: the key belongs to the field — never swallow it
+      if (isEditableTarget(event.target)) return
       const current = controller.currentSessionId()
-      if (current !== undefined) presentation.toggle(String(current))
+      // no session: semantic no-op — do not swallow the chord either
+      if (current === undefined) return
+      event.preventDefault()
+      presentation.toggle(String(current))
     }
+  /*>>dsh-exec-a11y:U-A11Y3:v1*/
     window.addEventListener('keydown', onKeyDown)
     return () => { window.removeEventListener('keydown', onKeyDown) }
   }, 'btw: keyboard shortcut')

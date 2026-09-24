@@ -41,6 +41,7 @@ vi.mock('@deepseek-ai/dsh-client-ui-primitives', () => ({
   },
   IconApiOutline14: () => <span />,
   IconBrowseOutline16: () => <span />,
+  IconCheckOutline14: () => <span data-icon="check" />,
   IconCloseOutline16: () => <span />,
   IconCodeOutline16: () => <span />,
   IconEditOutline16: () => <span />,
@@ -695,5 +696,219 @@ describe('SideChatSurface controls', () => {
     expect(select?.value).toBe('deepseek-v4.1-flash')
     expect([...(select?.options ?? [])].map(option => option.value))
       .toEqual(['deepseek-v4.1-flash', 'glm-5.3', 'deepseek-v4-pro'])
+  })
+})
+
+/**
+ * 2026-09-23 btw-question regression lock.
+ *
+ * Root cause: QuestionCard reset its drafts from a `useEffect` depending on
+ * `pendingQuestion.questions`. That array is rebuilt by every `sideChat/read`
+ * (JSON RPC + strict zod codec) and the controller re-publishes a snapshot
+ * every 220ms while a question is pending, so the selection was wiped ~4.5x/s.
+ * These cases re-render with a *content-identical but brand-new* object graph
+ * to emulate one such poll (C1 is the direct regression lock).
+ */
+describe('QuestionCard option rows', () => {
+  const QUESTION_ID = '11111111-1111-4111-8111-111111111111'
+
+  interface QuestionSpec {
+    id: string
+    question: string
+    options: { label: string, description?: string }[]
+    multi_select?: boolean
+  }
+
+  /** Builds a fresh pendingQuestion object graph on every call (new arrays/objects). */
+  function pending(questionId: string, questions: QuestionSpec[]): Record<string, unknown> {
+    return { questionId, questions: questions.map(question => ({ ...question, options: question.options.map(option => ({ ...option })) })) }
+  }
+
+  const SINGLE: QuestionSpec[] = [{
+    id: 'q1',
+    question: '是否继续？',
+    options: [{ label: '继续' }, { label: '停止' }],
+  }]
+
+  let mount: HTMLDivElement
+  let root: Root
+  let controller: SideChatController
+  let viewStore: SideChatViewStore
+
+  beforeEach(() => {
+    Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true })
+    mount = document.createElement('div')
+    document.body.append(mount)
+    viewStore = new SideChatViewStore()
+    viewStore.show('parent', 'drawer')
+    currentSnapshot = openSnapshot
+    controller = {
+      subscribe: () => () => {},
+      getSnapshot: () => currentSnapshot,
+      binding: () => undefined,
+      close: vi.fn(async () => {}),
+      send: vi.fn(async () => ({ ok: true as const })),
+      cancel: vi.fn(async () => ({ ok: true as const })),
+      retry: vi.fn(async () => {}),
+      answer: vi.fn(async () => ({ ok: true as const })),
+    } as unknown as SideChatController
+    root = createRoot(mount)
+  })
+
+  afterEach(() => {
+    act(() => { root.unmount() })
+    document.body.innerHTML = ''
+  })
+
+  function renderSurface(): void {
+    const t = ((key: string) => key) as never
+    act(() => {
+      root.render(
+        <SideChatSurface
+          parentSessionId={'parent' as never}
+          controller={controller}
+          viewStore={viewStore}
+          t={t}
+          surfaceMode="drawer"
+          onMinimize={() => { viewStore.minimize('parent') }}
+          onEnd={async (): Promise<void> => { await controller.close() }}
+        />,
+      )
+    })
+  }
+
+  function optionRows(): HTMLElement[] {
+    return [...mount.querySelectorAll<HTMLElement>('[class*="questionOptions"] > button')]
+  }
+
+  function checked(): (string | null)[] {
+    return optionRows().map(row => row.getAttribute('aria-checked'))
+  }
+
+  function clickOption(index: number): void {
+    act(() => { optionRows()[index]?.click() })
+  }
+
+  it('C1 keeps the selection when the same questionId arrives with a new questions array identity', () => {
+    currentSnapshot = { ...openSnapshot, pendingQuestion: pending(QUESTION_ID, SINGLE) } as never
+    renderSurface()
+
+    clickOption(0)
+    expect(optionRows()[0]?.getAttribute('aria-checked')).toBe('true')
+    expect(optionRows()[0]?.className).toContain('questionOptionSelected')
+
+    // Same content, brand-new arrays/objects: exactly what one 220ms poll does.
+    currentSnapshot = { ...openSnapshot, pendingQuestion: pending(QUESTION_ID, SINGLE) } as never
+    renderSurface()
+
+    expect(optionRows()[0]?.getAttribute('aria-checked')).toBe('true')
+    expect(optionRows()[0]?.className).toContain('questionOptionSelected')
+    expect(optionRows()[1]?.getAttribute('aria-checked')).toBe('false')
+  })
+
+  it('C2 resets the drafts when the questionId changes', () => {
+    currentSnapshot = { ...openSnapshot, pendingQuestion: pending(QUESTION_ID, SINGLE) } as never
+    renderSurface()
+    clickOption(0)
+    expect(checked()).toEqual(['true', 'false'])
+
+    currentSnapshot = {
+      ...openSnapshot,
+      pendingQuestion: pending('22222222-2222-4222-8222-222222222222', SINGLE),
+    } as never
+    renderSurface()
+
+    expect(checked()).toEqual(['false', 'false'])
+  })
+
+  it('C3 keeps single-select exclusive and multi-select additive', () => {
+    currentSnapshot = { ...openSnapshot, pendingQuestion: pending(QUESTION_ID, SINGLE) } as never
+    renderSurface()
+    clickOption(0)
+    clickOption(1)
+    expect(checked()).toEqual(['false', 'true'])
+
+    // A new questionId remounts the card, so this starts from clean drafts.
+    currentSnapshot = {
+      ...openSnapshot,
+      pendingQuestion: pending('33333333-3333-4333-8333-333333333333', [
+        { ...SINGLE[0] as QuestionSpec, multi_select: true },
+      ]),
+    } as never
+    renderSurface()
+    expect(checked()).toEqual(['false', 'false'])
+    clickOption(0)
+    clickOption(1)
+    expect(checked()).toEqual(['true', 'true'])
+  })
+
+  it('C4 exposes legal radio/checkbox ARIA without aria-pressed', () => {
+    currentSnapshot = { ...openSnapshot, pendingQuestion: pending(QUESTION_ID, SINGLE) } as never
+    renderSurface()
+
+    const singleGroup = mount.querySelector('[class*="questionOptions"]')
+    expect(singleGroup?.getAttribute('role')).toBe('radiogroup')
+    expect(optionRows().map(row => row.getAttribute('role'))).toEqual(['radio', 'radio'])
+    expect(mount.querySelectorAll('[aria-pressed]')).toHaveLength(0)
+
+    currentSnapshot = {
+      ...openSnapshot,
+      pendingQuestion: pending('44444444-4444-4444-8444-444444444444', [
+        { ...SINGLE[0] as QuestionSpec, multi_select: true },
+      ]),
+    } as never
+    renderSurface()
+
+    expect(mount.querySelector('[class*="questionOptions"]')?.getAttribute('role')).toBe('group')
+    expect(optionRows().map(row => row.getAttribute('role'))).toEqual(['checkbox', 'checkbox'])
+    expect(mount.querySelectorAll('[aria-pressed]')).toHaveLength(0)
+  })
+
+  it('C5 renders the index badge for single select and the checkbox for multi select', () => {
+    currentSnapshot = { ...openSnapshot, pendingQuestion: pending(QUESTION_ID, SINGLE) } as never
+    renderSurface()
+
+    const indices = [...mount.querySelectorAll<HTMLElement>('[class*="questionOptionIndex"]')]
+    expect(indices.map(node => node.textContent)).toEqual(['1', '2'])
+    expect(mount.querySelectorAll('[class*="questionOptionCheck"]')).toHaveLength(0)
+
+    currentSnapshot = {
+      ...openSnapshot,
+      pendingQuestion: pending('55555555-5555-4555-8555-555555555555', [
+        { ...SINGLE[0] as QuestionSpec, multi_select: true },
+      ]),
+    } as never
+    renderSurface()
+
+    const checks = [...mount.querySelectorAll<HTMLElement>('[class*="questionOptionCheck"]')]
+    expect(checks).toHaveLength(2)
+    expect(mount.querySelectorAll('[data-icon="check"]')).toHaveLength(0)
+
+    clickOption(0)
+    expect(mount.querySelectorAll('[data-icon="check"]')).toHaveLength(1)
+    expect(optionRows()[0]?.className).not.toContain('questionOptionCheckChecked')
+    expect(checks[0]?.className).toContain('questionOptionCheckChecked')
+  })
+
+  it('renders the frozen-snapshot notice without taking over the panel', () => {
+    renderSurface()
+    expect(mount.textContent).not.toContain('drawer.readRetrying')
+
+    currentSnapshot = { ...openSnapshot, readError: 'result-invalid' }
+    renderSurface()
+
+    // Localized copy plus the raw reason as hover detail only.
+    expect(mount.textContent).toContain('drawer.readRetrying')
+    expect(mount.querySelector('[title="result-invalid"]')).not.toBeNull()
+    // Non-blocking: the notice does not replace the composer or the controls.
+    expect(mount.querySelector('textarea')).not.toBeNull()
+    expect(mount.querySelector('[aria-label="drawer.end"]')).not.toBeNull()
+    expect(mount.textContent).not.toContain('drawer.error')
+
+    // The terminal error phase keeps its own block; a stale flag cannot double up.
+    currentSnapshot = { ...openSnapshot, phase: 'error', error: 'result-invalid', readError: 'result-invalid' }
+    renderSurface()
+    expect(mount.textContent).toContain('drawer.error')
+    expect(mount.textContent).not.toContain('drawer.readRetrying')
   })
 })

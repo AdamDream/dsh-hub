@@ -4,7 +4,7 @@ import {
 import { createPortal } from 'react-dom'
 import type { SessionFace, SessionId } from '@deepseek-ai/dsh-client-runtime/client'
 import {
-  Button, IconCloseOutline16, IconSendOutline16, IconStopFill16, MarkdownText, Modal,
+  Button, IconCheckOutline14, IconCloseOutline16, IconSendOutline16, IconStopFill16, MarkdownText, Modal,
 } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
 import type { BtwModel, BtwPendingQuestion, SideChatImageRef } from '../shared/remote.ts'
@@ -71,12 +71,14 @@ function QuestionCard({
   ))
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  useEffect(() => {
-    setDrafts(Object.fromEntries(
-      pendingQuestion.questions.map(question => [question.id, { selected: new Set<string>(), custom: '' }]),
-    ))
-    setError(null)
-  }, [pendingQuestion.questionId, pendingQuestion.questions])
+  // 2026-09-23 btw-question: the draft state is keyed by mount, not by the
+  // `pendingQuestion.questions` array identity. That array is rebuilt on every
+  // `sideChat/read` (JSON RPC + strict zod codec) and the controller re-publishes
+  // a new snapshot every 220ms while the question is pending, so a reset effect
+  // dependent on it wiped the selection ~4.5x/s. The caller keys this component
+  // with `questionId` (a host-minted uuid, never reused) so a new question
+  // remounts with clean drafts — the same mechanism the official
+  // `dsh-client-ui-user-questions` card uses (`key={question.key}`, zero effects).
 
   const toggle = (questionId: string, label: string, multiSelect: boolean): void => {
     setDrafts(previous => {
@@ -121,20 +123,36 @@ function QuestionCard({
             <p className={css.questionText}>{question.question}</p>
             {question.options !== undefined && question.options.length > 0 && (
               <div className={css.questionOptions} role={question.multi_select === true ? 'group' : 'radiogroup'}>
-                {question.options.map(option => {
+                {question.options.map((option, index) => {
                   const active = draft.selected.has(option.label)
+                  const multi = question.multi_select === true
                   return (
                     <button
                       key={option.label}
                       type="button"
-                      className={active ? css.questionOptionActive : css.questionOption}
-                      aria-pressed={active}
-                      onClick={() => { toggle(question.id, option.label, question.multi_select === true) }}
+                      role={multi ? 'checkbox' : 'radio'}
+                      aria-checked={active}
+                      className={active ? css.questionOptionSelected : css.questionOption}
+                      onClick={() => { toggle(question.id, option.label, multi) }}
                     >
-                      <span className={css.questionOptionLabel}>{option.label}</span>
-                      {option.description !== undefined && (
-                        <span className={css.questionOptionDescription}>{option.description}</span>
-                      )}
+                      {multi
+                        ? (
+                          <span
+                            className={active
+                              ? `${css.questionOptionCheck} ${css.questionOptionCheckChecked}`
+                              : css.questionOptionCheck}
+                            aria-hidden="true"
+                          >
+                            {active && <IconCheckOutline14 size={12} />}
+                          </span>
+                        )
+                        : <span className={css.questionOptionIndex} aria-hidden="true">{index + 1}</span>}
+                      <span className={css.questionOptionCopy}>
+                        <span className={css.questionOptionLabel}>{option.label}</span>
+                        {option.description !== undefined && (
+                          <span className={css.questionOptionDescription}>{option.description}</span>
+                        )}
+                      </span>
                     </button>
                   )
                 })}
@@ -487,6 +505,19 @@ export function SideChatSurface({
         <span className={css.contextNote}>{t('drawer.contextNote')}</span>
       </div>
 
+      {/*
+        Repeated transcript-read failures leave the snapshot frozen while the
+        panel stays open (the phase never becomes terminal). Say so above the
+        transcript: it is outside the scrolling area, so it cannot be scrolled
+        away and never covers the stop / end controls. The copy is localized;
+        the raw reason rides along as hover detail only.
+      */}
+      {state.readError !== undefined && state.phase !== 'error' && (
+        <div className={css.sendError} role="status" title={state.readError}>
+          {t('drawer.readRetrying')}
+        </div>
+      )}
+
       <div className={css.transcript} ref={scrollRef} aria-live="polite">
         {running && settings.ui?.banner !== false && (
           <div className={css.runningBanner} role="status" aria-live="polite">
@@ -583,7 +614,12 @@ export function SideChatSurface({
       </div>
 
       {interactive && state.pendingQuestion !== undefined && (
-        <QuestionCard pendingQuestion={state.pendingQuestion} controller={controller} t={t} />
+        <QuestionCard
+          key={state.pendingQuestion.questionId}
+          pendingQuestion={state.pendingQuestion}
+          controller={controller}
+          t={t}
+        />
       )}
 
       {interactive && (

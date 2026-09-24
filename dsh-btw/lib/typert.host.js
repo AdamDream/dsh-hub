@@ -1,4 +1,4 @@
-import { t as sideChatRemoteDescriptors } from "./remote-descriptors-D37stQ5y.js";
+import { t as sideChatRemoteDescriptors } from "./remote-descriptors-Cu5331mU.js";
 //#region src/typert.host.ts
 const TYPERT = {
 	package: "@local/dsh-btw",

@@ -5,7 +5,7 @@ export type SideChatLocaleKey =
   | 'drawer.mainRunning' | 'drawer.mainReady' | 'drawer.emptyTitle'
   | 'drawer.emptyBody' | 'drawer.placeholder' | 'drawer.send' | 'drawer.stop' | 'drawer.retry'
   | 'drawer.close' | 'drawer.discard' | 'drawer.you' | 'drawer.assistant' | 'drawer.thinking'
-  | 'drawer.contextNote' | 'drawer.error'
+  | 'drawer.contextNote' | 'drawer.error' | 'drawer.readRetrying'
   | 'drawer.questionTitle' | 'drawer.questionCustom' | 'drawer.questionCustomPlaceholder'
   | 'drawer.answer' | 'drawer.answering' | 'drawer.multiHint'
   | 'drawer.shortcut' | 'drawer.minimize' | 'drawer.end' | 'drawer.endTitle'
@@ -17,6 +17,7 @@ export type SideChatLocaleKey =
   | 'drawer.attachments' | 'drawer.attachmentRemove' | 'drawer.attachmentOpen'
   | 'drawer.lightboxClose'
   | 'drawer.bannerOutputting' | 'drawer.bannerCurrentAction' | 'drawer.toolRunning'
+  | 'drawer.resizeWidth' | 'drawer.resizeHeight' | 'drawer.resizeCorner' | 'drawer.resizeHint'
 
 declare module '@deepseek-ai/dsh-client-ui-slots' {
   interface LocaleNamespaceMap { 'btw': SideChatLocaleKey }
@@ -34,6 +35,7 @@ export const en: Record<SideChatLocaleKey, string> = {
   'drawer.thinking': 'Thinking',
   'drawer.contextNote': 'Inherited context is reference-only. The main conversation stays untouched.',
   'drawer.error': 'btw could not open',
+  'drawer.readRetrying': 'Live updates paused — retrying',
   'drawer.questionTitle': 'The side assistant is asking you',
   'drawer.questionCustom': 'Custom answer',
   'drawer.questionCustomPlaceholder': 'Type your own answer…',
@@ -55,6 +57,10 @@ export const en: Record<SideChatLocaleKey, string> = {
   'drawer.lightboxClose': 'Close preview',
   'drawer.bannerOutputting': 'Outputting…', 'drawer.bannerCurrentAction': 'current action',
   'drawer.toolRunning': 'Running…',
+  'drawer.resizeWidth': 'Resize btw width',
+  'drawer.resizeHeight': 'Resize btw height',
+  'drawer.resizeCorner': 'Resize btw width and height',
+  'drawer.resizeHint': 'Drag to resize · double-click to reset',
 }
 
 export const zh: Record<SideChatLocaleKey, string> = {
@@ -69,6 +75,7 @@ export const zh: Record<SideChatLocaleKey, string> = {
   'drawer.thinking': '思考中',
   'drawer.contextNote': '继承内容仅作参考，主会话不会被写入这段追问。',
   'drawer.error': 'btw 无法打开',
+  'drawer.readRetrying': '实时更新已暂停，正在重试',
   'drawer.questionTitle': '侧边助手正在向你提问',
   'drawer.questionCustom': '自定义回答',
   'drawer.questionCustomPlaceholder': '输入你自己的回答…',
@@ -90,4 +97,8 @@ export const zh: Record<SideChatLocaleKey, string> = {
   'drawer.lightboxClose': '关闭预览',
   'drawer.bannerOutputting': '输出中…', 'drawer.bannerCurrentAction': '当前动作',
   'drawer.toolRunning': '运行中…',
+  'drawer.resizeWidth': '调整 btw 宽度',
+  'drawer.resizeHeight': '调整 btw 高度',
+  'drawer.resizeCorner': '同时调整 btw 宽高',
+  'drawer.resizeHint': '拖拽调整尺寸 · 双击复位',
 }

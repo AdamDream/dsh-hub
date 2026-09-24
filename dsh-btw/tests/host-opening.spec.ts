@@ -16,6 +16,7 @@ vi.mock('@deepseek-ai/dsh-subagent', () => ({
 }))
 
 import { SideChatService, sanitizeBtwModel } from '../src/host/side-chat-service.ts'
+import { readSideChatResultSchema } from '../src/shared/remote.ts'
 
 let parentSequence = 0
 
@@ -483,5 +484,131 @@ describe('btw model resolution (v4-flash → v4.1-flash replacement)', () => {
     expect(sanitizeBtwModel('deepseek-v4.1-flash', ['deepseek-v4.1-flash'])).toBe('deepseek-v4.1-flash')
     // The legacy id maps onto its replacement even when listed in options.
     expect(sanitizeBtwModel('deepseek-v4-flash', ['deepseek-v4-flash', 'glm-5.3'])).toBe('deepseek-v4.1-flash')
+  })
+})
+
+describe('btw_ask_user argument codec lock (D30)', () => {
+  const contexts: Context[] = []
+
+  afterEach(async () => {
+    await Promise.all(contexts.splice(0).map(async ctx => ctx.fiber.dispose()))
+  })
+
+  /**
+   * The live entry the registered tool writes into. Reaching past the service
+   * surface is deliberate: the lock is about the *stored* pending question,
+   * not about what one read projection happens to show.
+   */
+  function pendingOf(service: SideChatService, token: string): unknown {
+    const byToken = (service as unknown as {
+      byToken: Map<string, { pendingQuestion?: unknown }>
+    }).byToken
+    return byToken.get(token)?.pendingQuestion
+  }
+
+  /** Open a side chat and hand back the `btw_ask_user` the child composed. */
+  async function askTool() {
+    const child = Promise.withResolvers<AgentHandle>()
+    const env = hostHarness(() => child.promise)
+    contexts.push(env.ctx)
+    const created = childHandle()
+    // `sideChat/read` reads the model off the persisted request header.
+    ;(created.handle.agent.session as { requestHeader?: () => unknown }).requestHeader = () => ({
+      config: { provider: 'adam', model: 'deepseek-v4.1-flash' },
+    })
+    await env.service.start({ parentSessionId: env.parentId, chatToken: TOKEN })
+    const register = vi.fn()
+    env.runSetup({ agent: created.handle.agent, on: vi.fn(), tools: { guard: vi.fn(), register } })
+    child.resolve(created.handle)
+    await Promise.resolve()
+    await Promise.resolve()
+    const tool = register.mock.calls[0]?.[0] as {
+      name: string
+      execute: (args: unknown, exec: { signal: AbortSignal }) => Promise<unknown>
+    }
+    expect(tool?.name).toBe('btw_ask_user')
+    return { env, tool }
+  }
+
+  const LEGAL_QUESTIONS = [{
+    id: 'q1',
+    question: 'Continue with the refactor?',
+    header: 'Step 2',
+    options: [{ label: '继续' }, { label: '停止', description: 'Stop here.' }],
+    multi_select: true,
+  }]
+
+  it('refuses a question item carrying an undeclared key instead of freezing the panel', async () => {
+    const { env, tool } = await askTool()
+    const call = tool.execute({
+      questions: [{ id: 'q1', question: 'Which scope?', options: [{ label: 'Repo only' }], multiSelect: true }],
+    }, { signal: new AbortController().signal })
+
+    // Nothing becomes pending: the guard runs before anything is stored.
+    expect(pendingOf(env.service, TOKEN)).toBeUndefined()
+    const failure = await call.then(() => undefined, (error: Error) => error)
+    expect(failure?.message).toContain('questions.0')
+    expect(failure?.message).toContain('multiSelect')
+    // The correctable hint: the wire spelling is snake_case.
+    expect(failure?.message).toContain('multi_select')
+    expect(failure?.message).toContain('label, description')
+    // Contract keys only — the submitted payload is never echoed back.
+    expect(failure?.message).not.toContain('Which scope?')
+    expect(pendingOf(env.service, TOKEN)).toBeUndefined()
+  })
+
+  it('refuses an undeclared option key (no silent strip at the tool boundary)', async () => {
+    const { env, tool } = await askTool()
+    const call = tool.execute({
+      questions: [{ id: 'q1', question: 'Which scope?', options: [{ label: 'A', extra: 1 }] }],
+    }, { signal: new AbortController().signal })
+
+    expect(pendingOf(env.service, TOKEN)).toBeUndefined()
+    const failure = await call.then(() => undefined, (error: Error) => error)
+    expect(failure?.message).toContain('questions.0.options.0')
+    expect(failure?.message).toContain('extra')
+    expect(pendingOf(env.service, TOKEN)).toBeUndefined()
+  })
+
+  // The tool's JSON-schema DSL cannot express `minLength` / `minItems`, so these
+  // four pass the model-facing schema and can only be caught by the codec.
+  const VALUE_CASES: [string, { questions: unknown[] }][] = [
+    ['an empty question id', { questions: [{ id: '', question: 'Which scope?' }] }],
+    ['an empty question text', { questions: [{ id: 'q1', question: '' }] }],
+    ['an empty option label', { questions: [{ id: 'q1', question: 'Which scope?', options: [{ label: '' }] }] }],
+    ['an empty question list', { questions: [] }],
+  ]
+
+  it.each(VALUE_CASES)('refuses %s that the read codec would reject', async (_label, args) => {
+    const { env, tool } = await askTool()
+    const call = tool.execute(args, { signal: new AbortController().signal })
+
+    expect(pendingOf(env.service, TOKEN)).toBeUndefined()
+    await expect(call).rejects.toThrow(/btw_ask_user: these arguments do not match/)
+    expect(pendingOf(env.service, TOKEN)).toBeUndefined()
+  })
+
+  it('stores only codec-valid questions and round-trips them through the read schema', async () => {
+    const { env, tool } = await askTool()
+    const controller = new AbortController()
+    const call = tool.execute({ questions: LEGAL_QUESTIONS }, { signal: controller.signal })
+    // The call blocks until the user answers; a teardown-driven rejection is
+    // expected in every path, so never let it surface as unhandled.
+    void call.catch(() => {})
+    await Promise.resolve()
+
+    expect(pendingOf(env.service, TOKEN)).toMatchObject({ questions: LEGAL_QUESTIONS })
+
+    // The invariant this locks: whatever lands in `pendingQuestion` is always
+    // parseable by the strict codec the client reads transcripts with.
+    const read = env.service.read({ chatToken: TOKEN })
+    const parsed = readSideChatResultSchema.safeParse(read)
+    expect(parsed.success).toBe(true)
+    expect(parsed.success && parsed.data.ok && parsed.data.value.pendingQuestion?.questions).toEqual(LEGAL_QUESTIONS)
+
+    // Cancelling the call settles it and clears the pending entry.
+    controller.abort()
+    await expect(call).rejects.toThrow(/cancelled/)
+    expect(pendingOf(env.service, TOKEN)).toBeUndefined()
   })
 })

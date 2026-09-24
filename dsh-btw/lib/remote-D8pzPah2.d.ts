@@ -226,7 +226,7 @@ declare const btwQuestionSchema: z.ZodObject<{
   options: z.ZodOptional<z.ZodArray<z.ZodObject<{
     label: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
-  }, z.core.$strip>>>;
+  }, z.core.$strict>>>;
   multi_select: z.ZodOptional<z.ZodBoolean>;
 }, z.core.$strict>;
 type BtwQuestion = z.infer<typeof btwQuestionSchema>;
@@ -240,7 +240,7 @@ declare const btwPendingQuestionSchema: z.ZodObject<{
     options: z.ZodOptional<z.ZodArray<z.ZodObject<{
       label: z.ZodString;
       description: z.ZodOptional<z.ZodString>;
-    }, z.core.$strip>>>;
+    }, z.core.$strict>>>;
     multi_select: z.ZodOptional<z.ZodBoolean>;
   }, z.core.$strict>>;
 }, z.core.$strict>;
@@ -306,7 +306,7 @@ declare const readSideChatResultSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
         options: z.ZodOptional<z.ZodArray<z.ZodObject<{
           label: z.ZodString;
           description: z.ZodOptional<z.ZodString>;
-        }, z.core.$strip>>>;
+        }, z.core.$strict>>>;
         multi_select: z.ZodOptional<z.ZodBoolean>;
       }, z.core.$strict>>;
     }, z.core.$strict>>;

@@ -138,10 +138,14 @@ export const btwQuestionSchema = z.object({
   id: z.string().min(1),
   question: z.string().min(1),
   header: z.string().optional(),
+  // Both levels are strict: an undeclared option key must not be silently
+  // stripped here while an undeclared question key is rejected. The tool
+  // boundary (`btw_ask_user.execute`) validates with this same schema, so the
+  // model gets a correctable error instead of a frozen panel (D30).
   options: z.array(z.object({
     label: z.string().min(1),
     description: z.string().optional(),
-  })).optional(),
+  }).strict()).optional(),
   multi_select: z.boolean().optional(),
 }).strict()
 export type BtwQuestion = z.infer<typeof btwQuestionSchema>

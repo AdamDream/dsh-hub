@@ -52,6 +52,8 @@ import type {
   StartSideChatRequest,
   StartSideChatResult,
 } from '../shared/remote.ts'
+import { btwPendingQuestionSchema } from '../shared/remote.ts'
+import type { ZodError } from 'zod'
 import {
   isSideChatToolAllowed,
   READ_ONLY_DENIAL,
@@ -381,6 +383,32 @@ function progressDigestLines(parent: Agent): string {
     lines.push('- The main agent has finished its latest turn; no work is in progress.')
   }
   return lines.join('\n')
+}
+
+/** Issue rows echoed back to the model; beyond this the count is summarized. */
+const ASK_BACK_ISSUE_LIMIT = 5
+
+/**
+ * Correctable rejection text for `btw_ask_user` arguments that the outbound
+ * strict codec would refuse (D30). It names the offending paths and codes and
+ * the legal key set — including the snake_case `multi_select` spelling — but
+ * never echoes the submitted payload itself.
+ */
+function askBackArgumentMessage(error: ZodError): string {
+  const rows = error.issues.slice(0, ASK_BACK_ISSUE_LIMIT).map(issue => {
+    const path = issue.path.length === 0 ? '(root)' : issue.path.map(segment => String(segment)).join('.')
+    const keys = 'keys' in issue && Array.isArray(issue.keys) ? ` [${issue.keys.map(key => String(key)).join(', ')}]` : ''
+    return `- ${path}${keys}: ${issue.code} — ${issue.message}`
+  })
+  const overflow = error.issues.length > ASK_BACK_ISSUE_LIMIT
+    ? `\n… (${error.issues.length} total)`
+    : ''
+  return 'btw_ask_user: these arguments do not match the btw question wire protocol, '
+    + 'so the panel could not display them. Fix them and call again.\n'
+    + rows.join('\n') + overflow + '\n'
+    + 'Allowed keys — question: id, question, header, options, multi_select; '
+    + 'option: label, description. The multi-select key is snake_case `multi_select` (not `multiSelect`); '
+    + 'every `id`, `question`, and option `label` must be non-empty, and `questions` must not be empty.'
 }
 
 interface LiveSideChat {
@@ -963,8 +991,19 @@ export class SideChatService extends TypertRemoteService {
           throw new Error('btw_ask_user: another question is already waiting for the user in this panel. '
             + 'Wait for its answer before asking again.')
         }
+        // Fail closed at the tool boundary (D30): the arguments are validated
+        // with the very schema the transcript codec parses on `sideChat/read`,
+        // so a payload the wire would reject can never become a pending
+        // question the panel is unable to display. The JSON-schema DSL this
+        // tool exposes to the model cannot express `minLength`/`minItems`, so
+        // this check — not a narrower `additionalProperties` — is what keeps
+        // the value dimension (empty ids, empty questions, empty option lists)
+        // honest. The error stays correctable: paths, codes, and the legal
+        // snake_case key list go back to the model; the payload is never echoed.
+        const questionId = randomUUID()
+        const checked = btwPendingQuestionSchema.safeParse({ questionId, questions })
+        if (!checked.success) throw new Error(askBackArgumentMessage(checked.error))
         return await new Promise<{ answers: { id: string, selected: string[], custom?: string }[] }>((resolve, reject) => {
-          const questionId = randomUUID()
           const settle = () => {
             if (entry.pendingQuestion?.questionId === questionId) entry.pendingQuestion = undefined
             exec.signal.removeEventListener('abort', onAbort)
@@ -977,7 +1016,9 @@ export class SideChatService extends TypertRemoteService {
           exec.signal.addEventListener('abort', onAbort, { once: true })
           entry.pendingQuestion = {
             questionId,
-            questions,
+            // The parsed object graph, so `pendingQuestion` always satisfies
+            // the outbound codec by construction.
+            questions: checked.data.questions,
             resolve: answers => {
               settle()
               resolve({

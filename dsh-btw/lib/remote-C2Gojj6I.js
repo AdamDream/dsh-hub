@@ -133,7 +133,7 @@ const btwQuestionSchema = z.object({
 	options: z.array(z.object({
 		label: z.string().min(1),
 		description: z.string().optional()
-	})).optional(),
+	}).strict()).optional(),
 	multi_select: z.boolean().optional()
 }).strict();
 /** The question currently blocking the child agent, surfaced through sideChat/read. */
@@ -277,4 +277,4 @@ const listSideChatProjectResultSchema = z.discriminatedUnion("ok", [z.object({
 	error: sideChatErrorSchema
 }).strict()]);
 //#endregion
-export { setSideChatModelRequestSchema as _, closeSideChatRequestSchema as a, startSideChatRequestSchema as b, listSideChatProjectResultSchema as c, readSideChatImageRequestSchema as d, readSideChatImageResultSchema as f, sendSideChatResultSchema as g, sendSideChatRequestSchema as h, cancelSideChatResultSchema as i, listSideChatTreeRequestSchema as l, readSideChatResultSchema as m, answerSideChatResultSchema as n, closeSideChatResultSchema as o, readSideChatRequestSchema as p, cancelSideChatRequestSchema as r, listSideChatProjectRequestSchema as s, answerSideChatRequestSchema as t, listSideChatTreeResultSchema as u, setSideChatModelResultSchema as v, startSideChatResultSchema as x, sideChatImageMediaTypeSchema as y };
+export { startSideChatResultSchema as S, sendSideChatResultSchema as _, cancelSideChatResultSchema as a, sideChatImageMediaTypeSchema as b, listSideChatProjectRequestSchema as c, listSideChatTreeResultSchema as d, readSideChatImageRequestSchema as f, sendSideChatRequestSchema as g, readSideChatResultSchema as h, cancelSideChatRequestSchema as i, listSideChatProjectResultSchema as l, readSideChatRequestSchema as m, answerSideChatResultSchema as n, closeSideChatRequestSchema as o, readSideChatImageResultSchema as p, btwPendingQuestionSchema as r, closeSideChatResultSchema as s, answerSideChatRequestSchema as t, listSideChatTreeRequestSchema as u, setSideChatModelRequestSchema as v, startSideChatRequestSchema as x, setSideChatModelResultSchema as y };

@@ -801,3 +801,93 @@ describe('SideChatController jump list (U-K)', () => {
     await controller.dispose()
   })
 })
+
+describe('SideChatController frozen-snapshot notice (D30 follow-up)', () => {
+  it('stays silent for one dropped read and surfaces the outage only after three', async () => {
+    vi.useFakeTimers()
+    const env = harness()
+    let reads = 0
+    const remote = {
+      start: vi.fn(async ({ chatToken }: { chatToken: string }) => success(chatToken)),
+      // Exactly the D30 wire symptom: the client codec refuses the whole read.
+      read: vi.fn(async ({ chatToken }: { chatToken: string }) => {
+        reads += 1
+        if (reads <= 3) throw new Error('result-invalid')
+        return readResult(chatToken, [{ id: 'm1', role: 'assistant', text: 'Recovered.' }])
+      }),
+      close: vi.fn(async () => closeResult()),
+    } as unknown as SideChatRemoteNamespace
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const controller = new SideChatController(env.ctx, remote)
+
+    await controller.open('parent' as SessionId)
+    await vi.advanceTimersByTimeAsync(0)
+
+    // (1) A single failure stays invisible: no notice, no terminal phase.
+    expect(reads).toBe(1)
+    expect(controller.getSnapshot()).toMatchObject({ phase: 'open' })
+    expect(controller.getSnapshot().readError).toBeUndefined()
+    expect(controller.getSnapshot().error).toBeUndefined()
+
+    // (2) Second failure: still below the threshold, still polling.
+    await vi.advanceTimersByTimeAsync(1_200)
+    expect(reads).toBe(2)
+    expect(controller.getSnapshot().readError).toBeUndefined()
+
+    // (3) Third consecutive failure crosses it: the frozen snapshot is stated.
+    await vi.advanceTimersByTimeAsync(1_200)
+    expect(reads).toBe(3)
+    expect(controller.getSnapshot().readError).toBe('result-invalid')
+    // Not the terminal error branch: polling keeps running so a later success
+    // recovers without the user pressing anything.
+    expect(controller.getSnapshot().phase).toBe('open')
+
+    // (4) The next successful read clears the notice by itself.
+    await vi.advanceTimersByTimeAsync(1_200)
+    expect(reads).toBe(4)
+    expect(controller.getSnapshot().readError).toBeUndefined()
+    expect(controller.getSnapshot()).toMatchObject({
+      phase: 'open',
+      messages: [{ id: 'm1', role: 'assistant', text: 'Recovered.' }],
+    })
+
+    warn.mockRestore()
+    await controller.dispose()
+    vi.useRealTimers()
+  })
+
+  it('does not carry a failure streak into a newly opened conversation', async () => {
+    vi.useFakeTimers()
+    const env = harness()
+    let reads = 0
+    const remote = {
+      start: vi.fn(async ({ chatToken }: { chatToken: string }) => success(chatToken)),
+      read: vi.fn(async ({ chatToken }: { chatToken: string }) => {
+        reads += 1
+        if (reads <= 3) throw new Error('result-invalid')
+        return readResult(chatToken)
+      }),
+      close: vi.fn(async () => closeResult()),
+    } as unknown as SideChatRemoteNamespace
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const controller = new SideChatController(env.ctx, remote)
+
+    await controller.open('parent' as SessionId)
+    await vi.advanceTimersByTimeAsync(0)
+    await vi.advanceTimersByTimeAsync(1_200)
+    await vi.advanceTimersByTimeAsync(1_200)
+    expect(controller.getSnapshot().readError).toBe('result-invalid')
+
+    // Retry closes and reopens: the fresh chain starts from zero failures, so
+    // the first failure of the new conversation is silent again.
+    await controller.retry()
+    expect(controller.getSnapshot().readError).toBeUndefined()
+    await vi.advanceTimersByTimeAsync(0)
+    expect(controller.getSnapshot().phase).toBe('open')
+    expect(controller.getSnapshot().readError).toBeUndefined()
+
+    warn.mockRestore()
+    await controller.dispose()
+    vi.useRealTimers()
+  })
+})

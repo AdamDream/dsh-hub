@@ -8,8 +8,15 @@ window.__ModuleLoader__.load({
 		let react_jsx_runtime = require("react/jsx-runtime");
 		let react_dom = require("react-dom");
 		let _deepseek_ai_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
+		let _deepseek_ai_dsh_client_runtime_client = require("@deepseek-ai/dsh-client-runtime/client");
 		//#region src/client/controller.ts
 		const NOT_OPEN_MESSAGE = "This side conversation is no longer open on the host (it may have restarted). Its saved history is kept — press Try again to resume it.";
+		/**
+		* Consecutive transcript-read failures before the panel surfaces `readError`.
+		* One failure stays silent: a single dropped read is an ordinary hiccup and the
+		* very next poll usually recovers it.
+		*/
+		const READ_FAILURE_NOTICE_AT = 3;
 		const EMPTY_TRANSCRIPT = Object.freeze({
 			seedLength: 0,
 			revision: 0,
@@ -43,6 +50,8 @@ window.__ModuleLoader__.load({
 			projectByParent = /* @__PURE__ */ new Map();
 			closing;
 			pollTimer;
+			/** Consecutive read failures in the current poll chain (see `startPolling`). */
+			readFailures = 0;
 			disposeList;
 			sessions;
 			constructor(ctx, remote) {
@@ -123,7 +132,7 @@ window.__ModuleLoader__.load({
 					}
 					this.publish(openState);
 					if (optimistic !== void 0) this.admitOptimistic(optimistic, true);
-					this.poll(openState.epoch);
+					this.startPolling(openState.epoch);
 				} catch (error) {
 					if (attempt.disposition === "closed") return;
 					const optimistic = this.optimisticByToken.get(chatToken);
@@ -624,7 +633,7 @@ window.__ModuleLoader__.load({
 						throw new Error(result.value.error.message);
 					}
 					const value = result.value.value;
-					const { runningTool: previousRunningTool, error: previousError, currentAction: previousCurrentAction, ...base } = attempt.parked;
+					const { runningTool: previousRunningTool, error: previousError, currentAction: previousCurrentAction, readError: previousReadError, ...base } = attempt.parked;
 					const restored = {
 						...base,
 						epoch: this.nextEpoch(),
@@ -644,7 +653,7 @@ window.__ModuleLoader__.load({
 						return;
 					}
 					this.publish(restored);
-					this.poll(restored.epoch);
+					this.startPolling(restored.epoch);
 				} catch (error) {
 					if (attempt.disposition === "closed") return;
 					this.parkedByParent.set(key, attempt.parked);
@@ -659,6 +668,14 @@ window.__ModuleLoader__.load({
 				} finally {
 					if (this.restoringByParent.get(key) === attempt) this.restoringByParent.delete(key);
 				}
+			}
+			/**
+			* Begin a fresh poll chain for a newly published state: a new conversation
+			* does not inherit the previous chain's failure streak.
+			*/
+			startPolling(epoch) {
+				this.readFailures = 0;
+				this.poll(epoch);
 			}
 			async poll(epoch) {
 				this.stopPolling();
@@ -693,7 +710,8 @@ window.__ModuleLoader__.load({
 					const messages = optimistic === void 0 || hostHasOptimistic && !value.running ? value.messages : this.mergeOptimisticMessages(value.messages, optimistic);
 					const running = value.running || optimistic !== void 0 && !(hostHasOptimistic && !value.running);
 					delay = running ? 220 : 700;
-					const { runningTool: previousRunningTool, pendingQuestion: previousPendingQuestion, currentAction: previousCurrentAction, ...baseState } = this.state;
+					const { runningTool: previousRunningTool, pendingQuestion: previousPendingQuestion, currentAction: previousCurrentAction, readError: previousReadError, ...baseState } = this.state;
+					this.readFailures = 0;
 					this.publish({
 						...baseState,
 						revision: value.revision,
@@ -708,6 +726,12 @@ window.__ModuleLoader__.load({
 					});
 				} catch (error) {
 					console.warn("[dsh-btw] transcript read failed", error);
+					this.readFailures += 1;
+					const reason = error instanceof Error ? error.message : String(error);
+					if (this.readFailures >= READ_FAILURE_NOTICE_AT && this.state.readError !== reason && this.state.phase === "open" && this.state.epoch === epoch && this.state.chatToken === token) this.publish({
+						...this.state,
+						readError: reason
+					});
 					delay = 1200;
 				}
 				if (this.state.phase === "open" && this.state.epoch === epoch) this.pollTimer = setTimeout(() => {
@@ -789,6 +813,7 @@ window.__ModuleLoader__.load({
 			"drawer.thinking": "Thinking",
 			"drawer.contextNote": "Inherited context is reference-only. The main conversation stays untouched.",
 			"drawer.error": "btw could not open",
+			"drawer.readRetrying": "Live updates paused — retrying",
 			"drawer.questionTitle": "The side assistant is asking you",
 			"drawer.questionCustom": "Custom answer",
 			"drawer.questionCustomPlaceholder": "Type your own answer…",
@@ -822,7 +847,11 @@ window.__ModuleLoader__.load({
 			"drawer.lightboxClose": "Close preview",
 			"drawer.bannerOutputting": "Outputting…",
 			"drawer.bannerCurrentAction": "current action",
-			"drawer.toolRunning": "Running…"
+			"drawer.toolRunning": "Running…",
+			"drawer.resizeWidth": "Resize btw width",
+			"drawer.resizeHeight": "Resize btw height",
+			"drawer.resizeCorner": "Resize btw width and height",
+			"drawer.resizeHint": "Drag to resize · double-click to reset"
 		};
 		const zh = {
 			"button.open": "打开 btw",
@@ -845,6 +874,7 @@ window.__ModuleLoader__.load({
 			"drawer.thinking": "思考中",
 			"drawer.contextNote": "继承内容仅作参考，主会话不会被写入这段追问。",
 			"drawer.error": "btw 无法打开",
+			"drawer.readRetrying": "实时更新已暂停，正在重试",
 			"drawer.questionTitle": "侧边助手正在向你提问",
 			"drawer.questionCustom": "自定义回答",
 			"drawer.questionCustomPlaceholder": "输入你自己的回答…",
@@ -878,7 +908,11 @@ window.__ModuleLoader__.load({
 			"drawer.lightboxClose": "关闭预览",
 			"drawer.bannerOutputting": "输出中…",
 			"drawer.bannerCurrentAction": "当前动作",
-			"drawer.toolRunning": "运行中…"
+			"drawer.toolRunning": "运行中…",
+			"drawer.resizeWidth": "调整 btw 宽度",
+			"drawer.resizeHeight": "调整 btw 高度",
+			"drawer.resizeCorner": "同时调整 btw 宽高",
+			"drawer.resizeHint": "拖拽调整尺寸 · 双击复位"
 		};
 		//#endregion
 		//#region src/client/SideChatSign.tsx
@@ -932,7 +966,7 @@ window.__ModuleLoader__.load({
 		}
 		//#endregion
 		//#region \0dsh-btw-css:src/client/side-chat.module.css.mjs
-		const css = ".SalQ5q_headerButton,.SalQ5q_headerButtonActive{white-space:nowrap;gap:6px}.SalQ5q_headerButtonActive{border-color:color-mix(in srgb, #b7e85b 60%, var(--dsw-alias-border-l1));background:#b7e85b1a}.SalQ5q_placementRoot{pointer-events:none;position:absolute;inset:0}.SalQ5q_safeAreaProbe{width:0;height:0;padding-top:calc(env(safe-area-inset-top,0px) + var(--dsh-btw-reserve-top,0px));padding-right:calc(env(safe-area-inset-right,0px) + var(--dsh-btw-reserve-right,0px));padding-bottom:calc(env(safe-area-inset-bottom,0px) + var(--dsh-btw-reserve-bottom,0px));padding-left:calc(env(safe-area-inset-left,0px) + var(--dsh-btw-reserve-left,0px));visibility:hidden;pointer-events:none;position:absolute}.SalQ5q_mobileScrim{pointer-events:auto;background:#0507088a;border:0;display:none;position:absolute;inset:0}.SalQ5q_drawer{top:var(--side-chat-top);left:var(--side-chat-left);box-sizing:border-box;width:var(--side-chat-width);height:var(--side-chat-height);max-height:var(--side-chat-max-height);border:1px solid var(--dsw-alias-border-l1);background:color-mix(in srgb, var(--dsw-alias-bg-base) 96%, #0b0d0e 4%);min-width:0;color:var(--dsw-alias-label-primary);pointer-events:auto;border-radius:16px;flex-direction:column;animation:.18s cubic-bezier(.2,.8,.2,1) SalQ5q_drawer-in;display:flex;position:absolute;overflow:hidden;box-shadow:-18px 12px 70px #1219153d,-1px 0 #b7e85b14}.SalQ5q_surface{flex-direction:column;flex:1;min-width:0;min-height:0;display:flex}.SalQ5q_drawerHeader{border-bottom:1px solid var(--dsw-alias-border-l2);justify-content:space-between;align-items:center;gap:16px;min-height:68px;padding:12px 14px 12px 16px;display:flex}.SalQ5q_titleCluster{align-items:center;gap:12px;min-width:0;display:flex}.SalQ5q_titleCluster>div{min-width:0}.SalQ5q_titleCluster p{color:var(--dsw-alias-label-tertiary);text-overflow:ellipsis;white-space:nowrap;margin:2px 0 0;font-size:11px;line-height:15px;overflow:hidden}.SalQ5q_titleLine{align-items:center;gap:8px;display:flex}.SalQ5q_titleLine strong{letter-spacing:-.01em;font-size:14px;font-weight:620}.SalQ5q_railMark{box-sizing:border-box;border:1px solid color-mix(in srgb, #b7e85b 30%, var(--dsw-alias-border-l1));width:28px;height:28px;color:var(--dsw-alias-label-tertiary);background:#b7e85b14;border-radius:8px;flex:none;padding:6px;display:block}.SalQ5q_readOnlyBadge{color:#161a13;font-family:var(--ds-font-family-code);letter-spacing:.08em;background:#b7e85b;border-radius:999px;padding:2px 6px;font-size:9px;font-weight:700;line-height:14px}.SalQ5q_headerActions{flex:none;align-items:center;gap:4px;display:flex}.SalQ5q_endButton{width:30px;height:30px;color:var(--dsw-alias-label-tertiary);cursor:pointer;font:inherit;background:0 0;border:1px solid #0000;border-radius:999px;place-items:center;padding:0;display:grid}.SalQ5q_endButton:hover{border-color:color-mix(in srgb, var(--dsw-alias-state-error-primary) 35%, transparent);background:color-mix(in srgb, var(--dsw-alias-state-error-primary) 8%, transparent);color:var(--dsw-alias-state-error-primary)}.SalQ5q_endButton:active{transform:translateY(1px)}.SalQ5q_headerGlyph{font-size:18px;font-weight:400;line-height:1}.SalQ5q_iconButton{width:30px;height:30px;color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border:0;border-radius:999px;flex:none;place-items:center;display:grid}.SalQ5q_iconButton:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.SalQ5q_iconButton:active{transform:translateY(1px)}.SalQ5q_modelSelect{border:1px solid color-mix(in srgb, var(--dsw-alias-label-secondary) 30%, transparent);height:30px;color:var(--dsw-alias-label-secondary);font:inherit;cursor:pointer;background:0 0;border-radius:999px;flex:none;padding:0 6px;font-size:12px}.SalQ5q_modelSelect:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.SalQ5q_modelSelect:disabled{opacity:.5;cursor:default}.SalQ5q_parentStatus{border-bottom:1px solid var(--dsw-alias-border-l2);min-height:36px;color:var(--dsw-alias-label-secondary);align-items:center;gap:7px;padding:7px 16px;font-size:11px;display:flex}.SalQ5q_statusDot,.SalQ5q_statusDotRunning{background:var(--dsw-alias-label-quaternary);border-radius:50%;flex:none;width:6px;height:6px}.SalQ5q_statusDotRunning{background:#b7e85b;box-shadow:0 0 0 3px #b7e85b21}.SalQ5q_contextNote{color:var(--dsw-alias-label-quaternary);text-overflow:ellipsis;white-space:nowrap;margin-left:auto;overflow:hidden}.SalQ5q_transcript{overscroll-behavior:contain;scrollbar-color:var(--dsw-alias-border-l1) transparent;flex-direction:column;flex:1;gap:18px;min-height:0;padding:22px 18px 32px;display:flex;overflow-y:auto}.SalQ5q_emptyState{flex-direction:column;flex:1;justify-content:center;align-items:flex-start;max-width:310px;min-height:100%;margin:0 auto;display:flex}.SalQ5q_emptyState .SalQ5q_railMark{border-radius:12px;width:42px;height:42px;margin-bottom:22px;padding:8px}.SalQ5q_emptyState strong{letter-spacing:-.035em;max-width:260px;font-size:26px;font-weight:560;line-height:1.05}.SalQ5q_emptyState p{color:var(--dsw-alias-label-tertiary);margin:12px 0 0;font-size:13px;line-height:20px}.SalQ5q_errorState{max-width:330px;margin:auto}.SalQ5q_errorRule{background:#e9705b;width:44px;height:3px;margin-bottom:18px;display:block}.SalQ5q_errorState strong{font-size:17px}.SalQ5q_errorState p{color:var(--dsw-alias-label-tertiary);margin:8px 0 16px;font-size:12px;line-height:19px}.SalQ5q_userMessage,.SalQ5q_assistantMessage{max-width:92%;font-size:13px;line-height:21px}.SalQ5q_userMessage{background:color-mix(in srgb, var(--dsw-alias-fill-tsp-secondary) 80%, #b7e85b 5%);border-radius:12px 12px 3px;align-self:flex-end;padding:11px 13px}.SalQ5q_assistantMessage{border-left:2px solid #b7e85bb8;align-self:flex-start;padding-left:12px}.SalQ5q_userMessage p,.SalQ5q_assistantMessage p{white-space:pre-wrap;margin:0}.SalQ5q_messageMeta{color:var(--dsw-alias-label-quaternary);font-family:var(--ds-font-family-code);margin-bottom:5px;font-size:10px;line-height:14px}.SalQ5q_runningBanner{z-index:2;border:1px solid color-mix(in srgb, #b7e85b 24%, var(--dsw-alias-border-l1));background:color-mix(in srgb, var(--dsw-alias-bg-base) 90%, transparent);border-radius:999px;flex:none;align-self:flex-start;align-items:center;padding:3px 8px;display:inline-flex;position:sticky;top:0}.SalQ5q_runningBannerText{white-space:nowrap;height:20px;font:var(--dsw-font-s-strong-14);color:#0000;-webkit-text-fill-color:transparent;background:linear-gradient(90deg,#b7e85b 0% 40%,#d9f39a 50%,#b7e85b 60% 100%) 100% 0/250% 100%;-webkit-background-clip:text;background-clip:text;align-items:center;animation:1.8s linear infinite SalQ5q_btw-banner-shimmer;display:inline-flex}@keyframes SalQ5q_btw-banner-shimmer{to{background-position:0 0}}.SalQ5q_messageTools{flex-direction:column;gap:4px;margin-top:10px;display:flex}.SalQ5q_toolRow{border-radius:6px}.SalQ5q_toolRowRow{position:relative;overflow:hidden}.SalQ5q_toolRow[data-state=running] .SalQ5q_toolRowRow:after{content:\"\";pointer-events:none;background:linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--dsw-alias-bg-base) 60%, transparent) 55%, transparent 100%);width:300px;animation:2.6s ease-out infinite SalQ5q_btw-tool-row-sweep;position:absolute;top:0;bottom:0;left:-300px}@keyframes SalQ5q_btw-tool-row-sweep{0%{left:-300px}90%,to{left:100%}}.SalQ5q_toolRowLeading{flex-shrink:0}.SalQ5q_toolRowChevron{color:var(--dsw-alias-label-secondary)}.SalQ5q_toolRowTitle{font-weight:400}.SalQ5q_toolRowSep{background:var(--dsw-alias-label-caption);border-radius:1px;flex:none;width:2px;height:2px;margin:0 8px}.SalQ5q_toolRowSummary{min-width:0;color:var(--dsw-alias-label-tertiary);text-overflow:ellipsis;white-space:nowrap;flex:auto;font-size:14px;line-height:24px;overflow:hidden}.SalQ5q_toolRowErrorSummary{color:var(--dsw-alias-state-error-primary)}.SalQ5q_toolRowIoCard{border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-markdown-code-block);font:var(--dsw-font-markdown-code-block-small);border-radius:12px;flex-direction:column;margin:4px 0 4px 4px;display:flex}.SalQ5q_toolRowIoSection{grid-template-columns:max-content 1fr;align-items:baseline;column-gap:14px;max-height:150px;padding:12px 16px;display:grid;overflow-y:auto}.SalQ5q_toolRowIoLabel{color:var(--dsw-alias-label-caption);align-self:start;position:sticky;top:0}.SalQ5q_toolRowIoDivider{background:var(--dsw-alias-border-l2);flex:none;height:1px}.SalQ5q_toolRowIoText{min-width:0;color:var(--dsw-alias-label-secondary);white-space:pre-wrap;word-break:break-word}.SalQ5q_toolRowIoText[data-error]{color:var(--dsw-alias-state-error-primary)}.SalQ5q_questionCard{border:1px solid color-mix(in srgb, #b7e85b 45%, var(--dsw-alias-border-l1));background:color-mix(in srgb, var(--dsw-alias-bg-module-platform) 92%, #b7e85b 8%);border-radius:12px;flex-direction:column;flex:none;gap:10px;margin:0 14px 12px;padding:12px 14px;display:flex}.SalQ5q_questionHead{color:var(--dsw-alias-label-primary);align-items:center;gap:8px;font-size:12px;display:flex}.SalQ5q_questionHead strong{font-weight:600}.SalQ5q_questionDot{background:#b7e85b;border-radius:50%;flex:none;width:7px;height:7px;animation:1.6s ease-in-out infinite SalQ5q_btwQuestionPulse;box-shadow:0 0 0 3px #b7e85b2e}@keyframes SalQ5q_btwQuestionPulse{0%,to{box-shadow:0 0 0 3px #b7e85b2e}50%{box-shadow:0 0 0 5px #b7e85b14}}.SalQ5q_questionItem{flex-direction:column;gap:7px;display:flex}.SalQ5q_questionHeader{color:var(--dsw-alias-label-quaternary);font-family:var(--ds-font-family-code);letter-spacing:.06em;text-transform:uppercase;font-size:10px}.SalQ5q_questionText{color:var(--dsw-alias-label-primary);white-space:pre-wrap;margin:0;font-size:13px;line-height:20px}.SalQ5q_questionOptions{flex-direction:column;gap:6px;display:flex}.SalQ5q_questionOption,.SalQ5q_questionOptionActive{border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);cursor:pointer;font:inherit;text-align:left;background:0 0;border-radius:10px;flex-direction:column;gap:3px;padding:8px 11px;display:flex}.SalQ5q_questionOption:hover{background:var(--dsw-alias-interactive-bg-hover)}.SalQ5q_questionOptionActive{border-color:color-mix(in srgb, #b7e85b 60%, var(--dsw-alias-border-l1));color:var(--dsw-alias-label-primary);background:#b7e85b1f}.SalQ5q_questionOptionLabel{font-size:12.5px;line-height:18px}.SalQ5q_questionOptionDescription{color:var(--dsw-alias-label-tertiary);font-size:11px;line-height:16px}.SalQ5q_questionHint{color:var(--dsw-alias-label-quaternary);font-size:10px}.SalQ5q_questionInput{box-sizing:border-box;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);width:100%;color:var(--dsw-alias-label-primary);font:inherit;border-radius:9px;padding:7px 10px;font-size:12.5px}.SalQ5q_questionInput:focus{border-color:color-mix(in srgb, #b7e85b 55%, var(--dsw-alias-border-l1));outline:0}.SalQ5q_questionInput::placeholder{color:var(--dsw-alias-label-quaternary)}.SalQ5q_questionError{color:var(--dsw-alias-state-error-primary);font-size:11px;line-height:16px}.SalQ5q_composerArea{background:color-mix(in srgb, var(--dsw-alias-bg-base) 94%, transparent);padding:0 14px 12px}.SalQ5q_composer{border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-module-platform);border-radius:12px;align-items:flex-end;gap:8px;min-height:74px;padding:10px 10px 9px 13px;transition:border-color .12s,box-shadow .12s;display:flex}.SalQ5q_composer:focus-within{border-color:color-mix(in srgb, #b7e85b 55%, var(--dsw-alias-border-l1));box-shadow:0 0 0 3px #b7e85b14}.SalQ5q_composer textarea{resize:none;width:100%;min-height:44px;color:var(--dsw-alias-label-primary);font:inherit;background:0 0;border:0;outline:0;font-size:13px;line-height:20px}.SalQ5q_composer textarea::placeholder{color:var(--dsw-alias-label-tertiary)}.SalQ5q_composer textarea:disabled{opacity:.56}.SalQ5q_sendButton{color:#151912;cursor:pointer;background:#b7e85b;border:0;border-radius:999px;flex:none;place-items:center;width:30px;height:30px;display:grid}.SalQ5q_sendButton:hover:not(:disabled){background:#c7ef7e}.SalQ5q_sendButton:active:not(:disabled){transform:translateY(1px)}.SalQ5q_sendButton:disabled{cursor:not-allowed;opacity:.3}.SalQ5q_composerFoot{color:var(--dsw-alias-label-quaternary);flex-wrap:wrap;justify-content:space-between;gap:3px 12px;padding:6px 2px 0;font-size:9px;line-height:12px;display:flex}.SalQ5q_composerFoot span:last-child{text-align:right;margin-left:auto}.SalQ5q_sendError{color:var(--dsw-alias-state-error-primary);margin:0 2px 7px;font-size:11px;line-height:16px}.SalQ5q_confirmationFooter{justify-content:flex-end;align-items:center;gap:8px;display:flex}.SalQ5q_destructiveButton{border-color:var(--dsw-alias-state-error-primary);background:var(--dsw-alias-state-error-primary);color:var(--dsw-alias-label-primary-foreground)}.SalQ5q_destructiveButton:hover:not(:disabled){filter:brightness(1.06)}@keyframes SalQ5q_drawer-in{0%{opacity:0;transform:scale(.99)}to{opacity:1;transform:none}}.SalQ5q_placementRoot[data-placement-mode=bottom-sheet] .SalQ5q_drawer{border-radius:16px 16px 0 0}.SalQ5q_jumpList{border-bottom:1px solid var(--dsw-alias-border-l2);background:color-mix(in srgb, var(--dsw-alias-bg-module-platform) 55%, transparent);flex:none}.SalQ5q_jumpToggle{width:100%;min-height:34px;color:var(--dsw-alias-label-secondary);cursor:pointer;font:inherit;text-align:left;background:0 0;border:0;align-items:center;gap:8px;padding:0 14px;font-size:11.5px;display:flex}.SalQ5q_jumpToggle:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.SalQ5q_jumpCaret{width:10px;color:var(--dsw-alias-label-quaternary);flex:none;font-size:10px}.SalQ5q_jumpBody{flex-direction:column;gap:8px;max-height:240px;padding:0 14px 12px;display:flex;overflow-y:auto}.SalQ5q_jumpTabs{background:color-mix(in srgb, var(--dsw-alias-fill-tsp-secondary) 70%, transparent);border-radius:9px;flex:none;gap:4px;padding:2px;display:flex}.SalQ5q_jumpTab,.SalQ5q_jumpTabActive{color:var(--dsw-alias-label-tertiary);cursor:pointer;font:inherit;background:0 0;border:0;border-radius:7px;flex:1;padding:5px 8px;font-size:11px}.SalQ5q_jumpTab:hover{color:var(--dsw-alias-label-primary)}.SalQ5q_jumpTabActive{background:var(--dsw-alias-bg-module-platform);color:var(--dsw-alias-label-primary);box-shadow:0 0 0 1px var(--dsw-alias-border-l1)}.SalQ5q_jumpHint{color:var(--dsw-alias-label-quaternary);padding:10px 2px;font-size:11px;line-height:16px}.SalQ5q_jumpEntries{flex-direction:column;gap:6px;margin:0;padding:0;list-style:none;display:flex}.SalQ5q_jumpEntry,.SalQ5q_jumpEntryActive{border:1px solid var(--dsw-alias-border-l2);width:100%;color:var(--dsw-alias-label-secondary);cursor:pointer;font:inherit;text-align:left;background:0 0;border-radius:10px;flex-direction:column;gap:3px;padding:8px 10px;display:flex}.SalQ5q_jumpEntry:hover{background:var(--dsw-alias-interactive-bg-hover)}.SalQ5q_jumpEntryActive{border-color:color-mix(in srgb, #b7e85b 60%, var(--dsw-alias-border-l1));color:var(--dsw-alias-label-primary);background:#b7e85b1a}.SalQ5q_jumpEntryTitle{text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;font-weight:560;line-height:18px;overflow:hidden}.SalQ5q_jumpEntryMeta{color:var(--dsw-alias-label-quaternary);font-size:10px;line-height:14px}.SalQ5q_jumpEntryPreview{color:var(--dsw-alias-label-tertiary);text-overflow:ellipsis;white-space:nowrap;font-size:11px;line-height:16px;overflow:hidden}.SalQ5q_attachmentRail{flex-wrap:wrap;align-items:center;gap:8px;margin:0 2px 8px;display:flex}.SalQ5q_attachmentThumb{border:1px solid var(--dsw-alias-border-l2);border-radius:9px;width:46px;height:46px;position:relative;overflow:hidden}.SalQ5q_attachmentThumb img{object-fit:cover;width:100%;height:100%;display:block}.SalQ5q_attachmentRemove{color:#fff;cursor:pointer;background:#050708ad;border:0;border-radius:999px;place-items:center;width:16px;height:16px;padding:0;font-size:10px;line-height:1;display:grid;position:absolute;top:2px;right:2px}.SalQ5q_attachmentRemove:hover{background:var(--dsw-alias-state-error-primary)}.SalQ5q_attachmentCount{color:var(--dsw-alias-label-quaternary);font-family:var(--ds-font-family-code);font-size:10px}.SalQ5q_messageImages{flex-wrap:wrap;gap:7px;margin-top:9px;display:flex}.SalQ5q_messageImageButton{border:1px solid var(--dsw-alias-border-l2);cursor:zoom-in;background:0 0;border-radius:9px;padding:0;display:block;position:relative}.SalQ5q_messageImageButton:hover{border-color:color-mix(in srgb, #b7e85b 55%, var(--dsw-alias-border-l1))}.SalQ5q_messageImage{object-fit:cover;border-radius:8px;width:84px;height:84px;display:block}.SalQ5q_messageImagePlaceholder{background:var(--dsw-alias-fill-tsp-secondary);border-radius:8px;width:84px;height:84px;display:block}.SalQ5q_messageImageBadge{z-index:1;pointer-events:none;color:#000;font-family:var(--ds-font-family-code);background:#fff;border-radius:6px;padding:0 4px;font-size:10px;line-height:14px;position:absolute;top:4px;left:4px}.SalQ5q_lightboxRoot{z-index:1000;justify-content:center;align-items:center;padding:40px;display:flex;position:fixed;inset:0}.SalQ5q_lightboxMask{background:var(--dsw-alias-bg-mask-1);backdrop-filter:var(--dsw-mask-blur);position:absolute;inset:0}.SalQ5q_lightboxDialog{z-index:1;justify-content:center;align-items:center;max-width:min(1600px,94vw);max-height:calc(100vh - 80px);display:flex;position:relative}.SalQ5q_lightboxClose{border:1px solid var(--dsw-alias-border-l2);background:color-mix(in srgb, var(--dsw-alias-bg-layer-2) 88%, transparent);width:32px;height:32px;color:var(--dsw-alias-label-secondary);cursor:pointer;border-radius:999px;flex:none;place-items:center;display:grid;position:absolute;top:-40px;right:0}.SalQ5q_lightboxClose:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.SalQ5q_lightboxImage{object-fit:contain;max-width:min(1600px,94vw);max-height:calc(100vh - 80px);box-shadow:var(--dsw-shadow-lv3);border-radius:10px;display:block}.SalQ5q_lightboxPlaceholder{background:var(--dsw-alias-fill-tsp-secondary);border-radius:10px;width:min(560px,82vw);height:320px;display:block}@media (width<=720px){.SalQ5q_placementRoot[data-placement-mode=bottom-sheet] .SalQ5q_mobileScrim{display:block}.SalQ5q_contextNote{display:none}}@media (width<=980px){.SalQ5q_headerButtonLabel{display:none}}@media (prefers-reduced-motion:reduce){.SalQ5q_drawer{animation:none}.SalQ5q_transcript{scroll-behavior:auto}.SalQ5q_runningBannerText{background-position:0 0;background-size:100% 100%;animation:none}.SalQ5q_toolRow[data-state=running] .SalQ5q_toolRowRow:after{animation:none;display:none}}";
+		const css = ".SalQ5q_headerButton,.SalQ5q_headerButtonActive{white-space:nowrap;gap:6px}.SalQ5q_headerButtonActive{border-color:color-mix(in srgb, #b7e85b 60%, var(--dsw-alias-border-l1));background:#b7e85b1a}.SalQ5q_placementRoot{pointer-events:none;position:absolute;inset:0}.SalQ5q_safeAreaProbe{width:0;height:0;padding-top:calc(env(safe-area-inset-top,0px) + var(--dsh-btw-reserve-top,0px));padding-right:calc(env(safe-area-inset-right,0px) + var(--dsh-btw-reserve-right,0px));padding-bottom:calc(env(safe-area-inset-bottom,0px) + var(--dsh-btw-reserve-bottom,0px));padding-left:calc(env(safe-area-inset-left,0px) + var(--dsh-btw-reserve-left,0px));visibility:hidden;pointer-events:none;position:absolute}.SalQ5q_mobileScrim{pointer-events:auto;background:#0507088a;border:0;display:none;position:absolute;inset:0}.SalQ5q_drawer{top:var(--side-chat-top);left:var(--side-chat-left);box-sizing:border-box;width:var(--side-chat-width);height:var(--side-chat-height);max-height:var(--side-chat-max-height);border:1px solid var(--dsw-alias-border-l1);background:color-mix(in srgb, var(--dsw-alias-bg-base) 96%, #0b0d0e 4%);min-width:0;color:var(--dsw-alias-label-primary);pointer-events:auto;border-radius:16px;flex-direction:column;animation:.18s cubic-bezier(.2,.8,.2,1) SalQ5q_drawer-in;display:flex;position:absolute;overflow:hidden;box-shadow:-18px 12px 70px #1219153d,-1px 0 #b7e85b14}.SalQ5q_surface{flex-direction:column;flex:1;min-width:0;min-height:0;display:flex}.SalQ5q_drawerHeader{border-bottom:1px solid var(--dsw-alias-border-l2);justify-content:space-between;align-items:center;gap:16px;min-height:68px;padding:12px 14px 12px 16px;display:flex}.SalQ5q_titleCluster{align-items:center;gap:12px;min-width:0;display:flex}.SalQ5q_titleCluster>div{min-width:0}.SalQ5q_titleCluster p{color:var(--dsw-alias-label-tertiary);text-overflow:ellipsis;white-space:nowrap;margin:2px 0 0;font-size:11px;line-height:15px;overflow:hidden}.SalQ5q_titleLine{align-items:center;gap:8px;display:flex}.SalQ5q_titleLine strong{letter-spacing:-.01em;font-size:14px;font-weight:620}.SalQ5q_railMark{box-sizing:border-box;border:1px solid color-mix(in srgb, #b7e85b 30%, var(--dsw-alias-border-l1));width:28px;height:28px;color:var(--dsw-alias-label-tertiary);background:#b7e85b14;border-radius:8px;flex:none;padding:6px;display:block}.SalQ5q_readOnlyBadge{color:#161a13;font-family:var(--ds-font-family-code);letter-spacing:.08em;background:#b7e85b;border-radius:999px;padding:2px 6px;font-size:9px;font-weight:700;line-height:14px}.SalQ5q_headerActions{flex:none;align-items:center;gap:4px;display:flex}.SalQ5q_endButton{width:30px;height:30px;color:var(--dsw-alias-label-tertiary);cursor:pointer;font:inherit;background:0 0;border:1px solid #0000;border-radius:999px;place-items:center;padding:0;display:grid}.SalQ5q_endButton:hover{border-color:color-mix(in srgb, var(--dsw-alias-state-error-primary) 35%, transparent);background:color-mix(in srgb, var(--dsw-alias-state-error-primary) 8%, transparent);color:var(--dsw-alias-state-error-primary)}.SalQ5q_endButton:active{transform:translateY(1px)}.SalQ5q_headerGlyph{font-size:18px;font-weight:400;line-height:1}.SalQ5q_iconButton{width:30px;height:30px;color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border:0;border-radius:999px;flex:none;place-items:center;display:grid}.SalQ5q_iconButton:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.SalQ5q_iconButton:active{transform:translateY(1px)}.SalQ5q_modelSelect{border:1px solid color-mix(in srgb, var(--dsw-alias-label-secondary) 30%, transparent);height:30px;color:var(--dsw-alias-label-secondary);font:inherit;cursor:pointer;background:0 0;border-radius:999px;flex:none;padding:0 6px;font-size:12px}.SalQ5q_modelSelect:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.SalQ5q_modelSelect:disabled{opacity:.5;cursor:default}.SalQ5q_parentStatus{border-bottom:1px solid var(--dsw-alias-border-l2);min-height:36px;color:var(--dsw-alias-label-secondary);align-items:center;gap:7px;padding:7px 16px;font-size:11px;display:flex}.SalQ5q_statusDot,.SalQ5q_statusDotRunning{background:var(--dsw-alias-label-quaternary);border-radius:50%;flex:none;width:6px;height:6px}.SalQ5q_statusDotRunning{background:#b7e85b;box-shadow:0 0 0 3px #b7e85b21}.SalQ5q_contextNote{color:var(--dsw-alias-label-quaternary);text-overflow:ellipsis;white-space:nowrap;margin-left:auto;overflow:hidden}.SalQ5q_transcript{overscroll-behavior:contain;scrollbar-color:var(--dsw-alias-border-l1) transparent;flex-direction:column;flex:1;gap:18px;min-height:0;padding:22px 18px 32px;display:flex;overflow-y:auto}.SalQ5q_emptyState{flex-direction:column;flex:1;justify-content:center;align-items:flex-start;max-width:310px;min-height:100%;margin:0 auto;display:flex}.SalQ5q_emptyState .SalQ5q_railMark{border-radius:12px;width:42px;height:42px;margin-bottom:22px;padding:8px}.SalQ5q_emptyState strong{letter-spacing:-.035em;max-width:260px;font-size:26px;font-weight:560;line-height:1.05}.SalQ5q_emptyState p{color:var(--dsw-alias-label-tertiary);margin:12px 0 0;font-size:13px;line-height:20px}.SalQ5q_errorState{max-width:330px;margin:auto}.SalQ5q_errorRule{background:#e9705b;width:44px;height:3px;margin-bottom:18px;display:block}.SalQ5q_errorState strong{font-size:17px}.SalQ5q_errorState p{color:var(--dsw-alias-label-tertiary);margin:8px 0 16px;font-size:12px;line-height:19px}.SalQ5q_userMessage,.SalQ5q_assistantMessage{max-width:92%;font-size:13px;line-height:21px}.SalQ5q_userMessage{background:color-mix(in srgb, var(--dsw-alias-fill-tsp-secondary) 80%, #b7e85b 5%);border-radius:12px 12px 3px;align-self:flex-end;padding:11px 13px}.SalQ5q_assistantMessage{border-left:2px solid #b7e85bb8;align-self:flex-start;padding-left:12px}.SalQ5q_userMessage p,.SalQ5q_assistantMessage p{white-space:pre-wrap;margin:0}.SalQ5q_messageMeta{color:var(--dsw-alias-label-quaternary);font-family:var(--ds-font-family-code);margin-bottom:5px;font-size:10px;line-height:14px}.SalQ5q_runningBanner{z-index:2;border:1px solid color-mix(in srgb, #b7e85b 24%, var(--dsw-alias-border-l1));background:color-mix(in srgb, var(--dsw-alias-bg-base) 90%, transparent);border-radius:999px;flex:none;align-self:flex-start;align-items:center;padding:3px 8px;display:inline-flex;position:sticky;top:0}.SalQ5q_runningBannerText{white-space:nowrap;height:20px;font:var(--dsw-font-s-strong-14);color:#0000;-webkit-text-fill-color:transparent;background:linear-gradient(90deg,#b7e85b 0% 40%,#d9f39a 50%,#b7e85b 60% 100%) 100% 0/250% 100%;-webkit-background-clip:text;background-clip:text;align-items:center;animation:1.8s linear infinite SalQ5q_btw-banner-shimmer;display:inline-flex}@keyframes SalQ5q_btw-banner-shimmer{to{background-position:0 0}}.SalQ5q_messageTools{flex-direction:column;gap:4px;margin-top:10px;display:flex}.SalQ5q_toolRow{border-radius:6px}.SalQ5q_toolRowRow{position:relative;overflow:hidden}.SalQ5q_toolRow[data-state=running] .SalQ5q_toolRowRow:after{content:\"\";pointer-events:none;background:linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--dsw-alias-bg-base) 60%, transparent) 55%, transparent 100%);width:300px;animation:2.6s ease-out infinite SalQ5q_btw-tool-row-sweep;position:absolute;top:0;bottom:0;left:-300px}@keyframes SalQ5q_btw-tool-row-sweep{0%{left:-300px}90%,to{left:100%}}.SalQ5q_toolRowLeading{flex-shrink:0}.SalQ5q_toolRowChevron{color:var(--dsw-alias-label-secondary)}.SalQ5q_toolRowTitle{font-weight:400}.SalQ5q_toolRowSep{background:var(--dsw-alias-label-caption);border-radius:1px;flex:none;width:2px;height:2px;margin:0 8px}.SalQ5q_toolRowSummary{min-width:0;color:var(--dsw-alias-label-tertiary);text-overflow:ellipsis;white-space:nowrap;flex:auto;font-size:14px;line-height:24px;overflow:hidden}.SalQ5q_toolRowErrorSummary{color:var(--dsw-alias-state-error-primary)}.SalQ5q_toolRowIoCard{border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-markdown-code-block);font:var(--dsw-font-markdown-code-block-small);border-radius:12px;flex-direction:column;margin:4px 0 4px 4px;display:flex}.SalQ5q_toolRowIoSection{grid-template-columns:max-content 1fr;align-items:baseline;column-gap:14px;max-height:150px;padding:12px 16px;display:grid;overflow-y:auto}.SalQ5q_toolRowIoLabel{color:var(--dsw-alias-label-caption);align-self:start;position:sticky;top:0}.SalQ5q_toolRowIoDivider{background:var(--dsw-alias-border-l2);flex:none;height:1px}.SalQ5q_toolRowIoText{min-width:0;color:var(--dsw-alias-label-secondary);white-space:pre-wrap;word-break:break-word}.SalQ5q_toolRowIoText[data-error]{color:var(--dsw-alias-state-error-primary)}.SalQ5q_questionCard{border:1px solid color-mix(in srgb, #b7e85b 45%, var(--dsw-alias-border-l1));background:color-mix(in srgb, var(--dsw-alias-bg-module-platform) 92%, #b7e85b 8%);border-radius:12px;flex-direction:column;flex:none;gap:10px;margin:0 14px 12px;padding:12px 14px;display:flex}.SalQ5q_questionHead{color:var(--dsw-alias-label-primary);align-items:center;gap:8px;font-size:12px;display:flex}.SalQ5q_questionHead strong{font-weight:600}.SalQ5q_questionDot{background:#b7e85b;border-radius:50%;flex:none;width:7px;height:7px;animation:1.6s ease-in-out infinite SalQ5q_btwQuestionPulse;box-shadow:0 0 0 3px #b7e85b2e}@keyframes SalQ5q_btwQuestionPulse{0%,to{box-shadow:0 0 0 3px #b7e85b2e}50%{box-shadow:0 0 0 5px #b7e85b14}}.SalQ5q_questionItem{flex-direction:column;gap:7px;display:flex}.SalQ5q_questionHeader{color:var(--dsw-alias-label-quaternary);font-family:var(--ds-font-family-code);letter-spacing:.06em;text-transform:uppercase;font-size:10px}.SalQ5q_questionText{color:var(--dsw-alias-label-primary);white-space:pre-wrap;margin:0;font-size:13px;line-height:20px}.SalQ5q_questionOptions{flex-direction:column;gap:6px;display:flex}.SalQ5q_questionOption,.SalQ5q_questionOptionSelected{border:1px solid var(--dsw-alias-border-l2);width:100%;min-height:40px;color:var(--dsw-alias-label-primary);cursor:pointer;font:inherit;text-align:left;background:0 0;border-radius:12px;flex-direction:row;align-items:flex-start;gap:8px;padding:8px 12px 8px 8px;transition:background-color .12s,border-color .12s;display:flex}.SalQ5q_questionOption:hover:not(:disabled):not(.SalQ5q_questionOptionSelected){background:var(--dsw-alias-interactive-bg-hover)}.SalQ5q_questionOptionSelected{background:var(--dsw-alias-interactive-bg-hover);border-color:var(--dsw-alias-border-l2);color:var(--dsw-alias-label-primary)}.SalQ5q_questionOptionIndex{background:var(--dsw-alias-bg-overlay);width:20px;height:20px;color:var(--dsw-alias-label-secondary);border-radius:6px;flex:0 0 20px;place-items:center;margin-top:2px;font-size:12px;font-weight:500;line-height:18px;display:grid}.SalQ5q_questionOptionSelected .SalQ5q_questionOptionIndex{color:var(--dsw-alias-label-primary);background:#b7e85b}.SalQ5q_questionOptionCheck{flex:0 0 20px;place-items:center;width:20px;height:20px;margin-top:2px;display:grid}.SalQ5q_questionOptionCheck:before{content:\"\";border:1px solid var(--dsw-alias-border-l4);border-radius:4px;grid-area:1/1;width:14px;height:14px;transition:background-color .12s,border-color .12s}.SalQ5q_questionOptionCheck>svg{grid-area:1/1}.SalQ5q_questionOptionCheckChecked{color:var(--dsw-alias-label-primary-foreground)}.SalQ5q_questionOptionCheckChecked:before{border-color:var(--dsw-alias-label-primary);background:var(--dsw-alias-label-primary)}.SalQ5q_questionOptionCopy{flex-direction:column;flex:1;gap:3px;min-width:0;display:flex}.SalQ5q_questionOptionLabel{font-size:13px;font-weight:500;line-height:20px}.SalQ5q_questionOptionDescription{color:var(--dsw-alias-label-tertiary);font-size:11px;line-height:16px}.SalQ5q_questionHint{color:var(--dsw-alias-label-quaternary);font-size:10px}.SalQ5q_questionInput{box-sizing:border-box;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);width:100%;color:var(--dsw-alias-label-primary);font:inherit;border-radius:9px;padding:7px 10px;font-size:12.5px}.SalQ5q_questionInput:focus{border-color:color-mix(in srgb, #b7e85b 55%, var(--dsw-alias-border-l1));outline:0}.SalQ5q_questionInput::placeholder{color:var(--dsw-alias-label-quaternary)}.SalQ5q_questionError{color:var(--dsw-alias-state-error-primary);font-size:11px;line-height:16px}.SalQ5q_composerArea{background:color-mix(in srgb, var(--dsw-alias-bg-base) 94%, transparent);padding:0 14px 12px}.SalQ5q_composer{border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-module-platform);border-radius:12px;align-items:flex-end;gap:8px;min-height:74px;padding:10px 10px 9px 13px;transition:border-color .12s,box-shadow .12s;display:flex}.SalQ5q_composer:focus-within{border-color:color-mix(in srgb, #b7e85b 55%, var(--dsw-alias-border-l1));box-shadow:0 0 0 3px #b7e85b14}.SalQ5q_composer textarea{resize:none;width:100%;min-height:44px;color:var(--dsw-alias-label-primary);font:inherit;background:0 0;border:0;outline:0;font-size:13px;line-height:20px}.SalQ5q_composer textarea::placeholder{color:var(--dsw-alias-label-tertiary)}.SalQ5q_composer textarea:disabled{opacity:.56}.SalQ5q_sendButton{color:#151912;cursor:pointer;background:#b7e85b;border:0;border-radius:999px;flex:none;place-items:center;width:30px;height:30px;display:grid}.SalQ5q_sendButton:hover:not(:disabled){background:#c7ef7e}.SalQ5q_sendButton:active:not(:disabled){transform:translateY(1px)}.SalQ5q_sendButton:disabled{cursor:not-allowed;opacity:.3}.SalQ5q_composerFoot{color:var(--dsw-alias-label-quaternary);flex-wrap:wrap;justify-content:space-between;gap:3px 12px;padding:6px 2px 0;font-size:9px;line-height:12px;display:flex}.SalQ5q_composerFoot span:last-child{text-align:right;margin-left:auto}.SalQ5q_sendError{color:var(--dsw-alias-state-error-primary);margin:0 2px 7px;font-size:11px;line-height:16px}.SalQ5q_confirmationFooter{justify-content:flex-end;align-items:center;gap:8px;display:flex}.SalQ5q_destructiveButton{border-color:var(--dsw-alias-state-error-primary);background:var(--dsw-alias-state-error-primary);color:var(--dsw-alias-label-primary-foreground)}.SalQ5q_destructiveButton:hover:not(:disabled){filter:brightness(1.06)}.SalQ5q_resizeHandle{z-index:7;touch-action:none;-webkit-user-select:none;user-select:none;background:0 0;border:0;padding:0;position:absolute}.SalQ5q_resizeHandle:after{content:\"\";background:var(--dsw-alias-state-business-primary,#b7e85b);opacity:0;border-radius:999px;transition:opacity .12s;position:absolute}.SalQ5q_resizeHandle:hover:after,.SalQ5q_resizeHandle[data-dragging=true]:after{opacity:.55}.SalQ5q_resizeHandle:focus-visible{outline:2px solid var(--dsw-alias-state-business-primary,#b7e85b);outline-offset:-2px}.SalQ5q_resizeWidth{cursor:col-resize;width:8px;top:0;bottom:0;left:0}.SalQ5q_resizeWidth:after{width:4px;height:32px;top:50%;left:2px;transform:translateY(-50%)}.SalQ5q_resizeHeightBottom{cursor:row-resize;height:8px;bottom:0;left:0;right:0}.SalQ5q_resizeHeightBottom:after{width:32px;height:4px;top:2px;left:50%;transform:translate(-50%)}.SalQ5q_resizeHeightTop{cursor:row-resize;height:8px;top:0;left:0;right:0}.SalQ5q_resizeHeightTop:after{width:32px;height:4px;bottom:2px;left:50%;transform:translate(-50%)}.SalQ5q_resizeCorner{cursor:nwse-resize;width:18px;height:18px;bottom:6px;left:6px}.SalQ5q_resizeCorner:after{border-right:2px solid var(--dsw-alias-state-business-primary,#b7e85b);border-bottom:2px solid var(--dsw-alias-state-business-primary,#b7e85b);background:0 0;border-radius:0 0 4px;width:12px;height:12px;bottom:2px;right:2px}@media (width<=719.98px){.SalQ5q_resizeHandle{display:none}}@keyframes SalQ5q_drawer-in{0%{opacity:0;transform:scale(.99)}to{opacity:1;transform:none}}.SalQ5q_placementRoot[data-placement-mode=bottom-sheet] .SalQ5q_drawer{border-radius:16px 16px 0 0}.SalQ5q_jumpList{border-bottom:1px solid var(--dsw-alias-border-l2);background:color-mix(in srgb, var(--dsw-alias-bg-module-platform) 55%, transparent);flex:none}.SalQ5q_jumpToggle{width:100%;min-height:34px;color:var(--dsw-alias-label-secondary);cursor:pointer;font:inherit;text-align:left;background:0 0;border:0;align-items:center;gap:8px;padding:0 14px;font-size:11.5px;display:flex}.SalQ5q_jumpToggle:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.SalQ5q_jumpCaret{width:10px;color:var(--dsw-alias-label-quaternary);flex:none;font-size:10px}.SalQ5q_jumpBody{flex-direction:column;gap:8px;max-height:240px;padding:0 14px 12px;display:flex;overflow-y:auto}.SalQ5q_jumpTabs{background:color-mix(in srgb, var(--dsw-alias-fill-tsp-secondary) 70%, transparent);border-radius:9px;flex:none;gap:4px;padding:2px;display:flex}.SalQ5q_jumpTab,.SalQ5q_jumpTabActive{color:var(--dsw-alias-label-tertiary);cursor:pointer;font:inherit;background:0 0;border:0;border-radius:7px;flex:1;padding:5px 8px;font-size:11px}.SalQ5q_jumpTab:hover{color:var(--dsw-alias-label-primary)}.SalQ5q_jumpTabActive{background:var(--dsw-alias-bg-module-platform);color:var(--dsw-alias-label-primary);box-shadow:0 0 0 1px var(--dsw-alias-border-l1)}.SalQ5q_jumpHint{color:var(--dsw-alias-label-quaternary);padding:10px 2px;font-size:11px;line-height:16px}.SalQ5q_jumpEntries{flex-direction:column;gap:6px;margin:0;padding:0;list-style:none;display:flex}.SalQ5q_jumpEntry,.SalQ5q_jumpEntryActive{border:1px solid var(--dsw-alias-border-l2);width:100%;color:var(--dsw-alias-label-secondary);cursor:pointer;font:inherit;text-align:left;background:0 0;border-radius:10px;flex-direction:column;gap:3px;padding:8px 10px;display:flex}.SalQ5q_jumpEntry:hover{background:var(--dsw-alias-interactive-bg-hover)}.SalQ5q_jumpEntryActive{border-color:color-mix(in srgb, #b7e85b 60%, var(--dsw-alias-border-l1));color:var(--dsw-alias-label-primary);background:#b7e85b1a}.SalQ5q_jumpEntryTitle{text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;font-weight:560;line-height:18px;overflow:hidden}.SalQ5q_jumpEntryMeta{color:var(--dsw-alias-label-quaternary);font-size:10px;line-height:14px}.SalQ5q_jumpEntryPreview{color:var(--dsw-alias-label-tertiary);text-overflow:ellipsis;white-space:nowrap;font-size:11px;line-height:16px;overflow:hidden}.SalQ5q_attachmentRail{flex-wrap:wrap;align-items:center;gap:8px;margin:0 2px 8px;display:flex}.SalQ5q_attachmentThumb{border:1px solid var(--dsw-alias-border-l2);border-radius:9px;width:46px;height:46px;position:relative;overflow:hidden}.SalQ5q_attachmentThumb img{object-fit:cover;width:100%;height:100%;display:block}.SalQ5q_attachmentRemove{color:#fff;cursor:pointer;background:#050708ad;border:0;border-radius:999px;place-items:center;width:16px;height:16px;padding:0;font-size:10px;line-height:1;display:grid;position:absolute;top:2px;right:2px}.SalQ5q_attachmentRemove:hover{background:var(--dsw-alias-state-error-primary)}.SalQ5q_attachmentCount{color:var(--dsw-alias-label-quaternary);font-family:var(--ds-font-family-code);font-size:10px}.SalQ5q_messageImages{flex-wrap:wrap;gap:7px;margin-top:9px;display:flex}.SalQ5q_messageImageButton{border:1px solid var(--dsw-alias-border-l2);cursor:zoom-in;background:0 0;border-radius:9px;padding:0;display:block;position:relative}.SalQ5q_messageImageButton:hover{border-color:color-mix(in srgb, #b7e85b 55%, var(--dsw-alias-border-l1))}.SalQ5q_messageImage{object-fit:cover;border-radius:8px;width:84px;height:84px;display:block}.SalQ5q_messageImagePlaceholder{background:var(--dsw-alias-fill-tsp-secondary);border-radius:8px;width:84px;height:84px;display:block}.SalQ5q_messageImageBadge{z-index:1;pointer-events:none;color:#000;font-family:var(--ds-font-family-code);background:#fff;border-radius:6px;padding:0 4px;font-size:10px;line-height:14px;position:absolute;top:4px;left:4px}.SalQ5q_lightboxRoot{z-index:1000;justify-content:center;align-items:center;padding:40px;display:flex;position:fixed;inset:0}.SalQ5q_lightboxMask{background:var(--dsw-alias-bg-mask-1);backdrop-filter:var(--dsw-mask-blur);position:absolute;inset:0}.SalQ5q_lightboxDialog{z-index:1;justify-content:center;align-items:center;max-width:min(1600px,94vw);max-height:calc(100vh - 80px);display:flex;position:relative}.SalQ5q_lightboxClose{border:1px solid var(--dsw-alias-border-l2);background:color-mix(in srgb, var(--dsw-alias-bg-layer-2) 88%, transparent);width:32px;height:32px;color:var(--dsw-alias-label-secondary);cursor:pointer;border-radius:999px;flex:none;place-items:center;display:grid;position:absolute;top:-40px;right:0}.SalQ5q_lightboxClose:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.SalQ5q_lightboxImage{object-fit:contain;max-width:min(1600px,94vw);max-height:calc(100vh - 80px);box-shadow:var(--dsw-shadow-lv3);border-radius:10px;display:block}.SalQ5q_lightboxPlaceholder{background:var(--dsw-alias-fill-tsp-secondary);border-radius:10px;width:min(560px,82vw);height:320px;display:block}@media (width<=720px){.SalQ5q_placementRoot[data-placement-mode=bottom-sheet] .SalQ5q_mobileScrim{display:block}.SalQ5q_contextNote{display:none}}@media (width<=980px){.SalQ5q_headerButtonLabel{display:none}}@media (prefers-reduced-motion:reduce){.SalQ5q_drawer{animation:none}.SalQ5q_resizeHandle:after{transition:none}.SalQ5q_transcript{scroll-behavior:auto}.SalQ5q_runningBannerText{background-position:0 0;background-size:100% 100%;animation:none}.SalQ5q_toolRow[data-state=running] .SalQ5q_toolRowRow:after{animation:none;display:none}}";
 		const tagId = "@local/dsh-btw/side-chat.module.css";
 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
 			const tag = document.createElement("style");
@@ -1009,13 +1043,22 @@ window.__ModuleLoader__.load({
 			"questionInput": "SalQ5q_questionInput",
 			"questionItem": "SalQ5q_questionItem",
 			"questionOption": "SalQ5q_questionOption",
-			"questionOptionActive": "SalQ5q_questionOptionActive",
+			"questionOptionCheck": "SalQ5q_questionOptionCheck",
+			"questionOptionCheckChecked": "SalQ5q_questionOptionCheckChecked",
+			"questionOptionCopy": "SalQ5q_questionOptionCopy",
 			"questionOptionDescription": "SalQ5q_questionOptionDescription",
+			"questionOptionIndex": "SalQ5q_questionOptionIndex",
 			"questionOptionLabel": "SalQ5q_questionOptionLabel",
+			"questionOptionSelected": "SalQ5q_questionOptionSelected",
 			"questionOptions": "SalQ5q_questionOptions",
 			"questionText": "SalQ5q_questionText",
 			"railMark": "SalQ5q_railMark",
 			"readOnlyBadge": "SalQ5q_readOnlyBadge",
+			"resizeCorner": "SalQ5q_resizeCorner",
+			"resizeHandle": "SalQ5q_resizeHandle",
+			"resizeHeightBottom": "SalQ5q_resizeHeightBottom",
+			"resizeHeightTop": "SalQ5q_resizeHeightTop",
+			"resizeWidth": "SalQ5q_resizeWidth",
 			"runningBanner": "SalQ5q_runningBanner",
 			"runningBannerText": "SalQ5q_runningBannerText",
 			"safeAreaProbe": "SalQ5q_safeAreaProbe",
@@ -1235,13 +1278,6 @@ window.__ModuleLoader__.load({
 			}])));
 			const [sending, setSending] = (0, react.useState)(false);
 			const [error, setError] = (0, react.useState)(null);
-			(0, react.useEffect)(() => {
-				setDrafts(Object.fromEntries(pendingQuestion.questions.map((question) => [question.id, {
-					selected: /* @__PURE__ */ new Set(),
-					custom: ""
-				}])));
-				setError(null);
-			}, [pendingQuestion.questionId, pendingQuestion.questions]);
 			const toggle = (questionId, label, multiSelect) => {
 				setDrafts((previous) => {
 					const draft = previous[questionId] ?? {
@@ -1316,21 +1352,34 @@ window.__ModuleLoader__.load({
 								question.options !== void 0 && question.options.length > 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 									className: side_chat_module_css_default.questionOptions,
 									role: question.multi_select === true ? "group" : "radiogroup",
-									children: [question.options.map((option) => {
+									children: [question.options.map((option, index) => {
 										const active = draft.selected.has(option.label);
+										const multi = question.multi_select === true;
 										return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("button", {
 											type: "button",
-											className: active ? side_chat_module_css_default.questionOptionActive : side_chat_module_css_default.questionOption,
-											"aria-pressed": active,
+											role: multi ? "checkbox" : "radio",
+											"aria-checked": active,
+											className: active ? side_chat_module_css_default.questionOptionSelected : side_chat_module_css_default.questionOption,
 											onClick: () => {
-												toggle(question.id, option.label, question.multi_select === true);
+												toggle(question.id, option.label, multi);
 											},
-											children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-												className: side_chat_module_css_default.questionOptionLabel,
-												children: option.label
-											}), option.description !== void 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-												className: side_chat_module_css_default.questionOptionDescription,
-												children: option.description
+											children: [multi ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: active ? `${side_chat_module_css_default.questionOptionCheck} ${side_chat_module_css_default.questionOptionCheckChecked}` : side_chat_module_css_default.questionOptionCheck,
+												"aria-hidden": "true",
+												children: active && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconCheckOutline14, { size: 12 })
+											}) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: side_chat_module_css_default.questionOptionIndex,
+												"aria-hidden": "true",
+												children: index + 1
+											}), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+												className: side_chat_module_css_default.questionOptionCopy,
+												children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+													className: side_chat_module_css_default.questionOptionLabel,
+													children: option.label
+												}), option.description !== void 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+													className: side_chat_module_css_default.questionOptionDescription,
+													children: option.description
+												})]
 											})]
 										}, option.label);
 									}), question.multi_select === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
@@ -1697,6 +1746,12 @@ window.__ModuleLoader__.load({
 							})
 						]
 					}),
+					state.readError !== void 0 && state.phase !== "error" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+						className: side_chat_module_css_default.sendError,
+						role: "status",
+						title: state.readError,
+						children: t("drawer.readRetrying")
+					}),
 					/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 						className: side_chat_module_css_default.transcript,
 						ref: scrollRef,
@@ -1805,7 +1860,7 @@ window.__ModuleLoader__.load({
 						pendingQuestion: state.pendingQuestion,
 						controller,
 						t
-					}),
+					}, state.pendingQuestion.questionId),
 					interactive && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("footer", {
 						className: side_chat_module_css_default.composerArea,
 						children: [
@@ -2003,9 +2058,9 @@ window.__ModuleLoader__.load({
 				if (mode === "better-sidebar") this.attachment?.service.closeTab(SIDE_CHAT_TAB_TYPE, { sessionId: parentSessionId });
 			}
 			async end(parentSessionId) {
+				this.viewStore.clear(parentSessionId);
 				await this.controller.close();
 				this.attachment?.service.closeTab(SIDE_CHAT_TAB_TYPE, { sessionId: parentSessionId });
-				this.viewStore.clear(parentSessionId);
 			}
 			attachBetterSidebar(candidate) {
 				this.attachment?.dispose();
@@ -2116,6 +2171,7 @@ window.__ModuleLoader__.load({
 			const [error, setError] = (0, react.useState)(null);
 			const now = (0, react.useMemo)(() => Date.now(), [entries]);
 			(0, react.useEffect)(() => {
+				if (!view.jumpOpen) return;
 				let cancelled = false;
 				setLoading(true);
 				setError(null);
@@ -2135,7 +2191,8 @@ window.__ModuleLoader__.load({
 			}, [
 				controller,
 				parentSessionId,
-				tab
+				tab,
+				view.jumpOpen
 			]);
 			const jump = async (entry) => {
 				const result = await controller.jumpTo(entry.parentSessionId);
@@ -2231,6 +2288,308 @@ window.__ModuleLoader__.load({
 						})
 					})]
 				})]
+			});
+		}
+		/** Storage-only sanity ceiling; the real clamp happens at render time (INV-2). */
+		const MAX_WIDTH_ABS = 1e4;
+		const MAX_HEIGHT_ABS = 1e4;
+		/** Clamp a persisted width to a sane absolute range (never trusts storage). */
+		function clampStoredWidth(px) {
+			return Math.round(Math.min(MAX_WIDTH_ABS, Math.max(360, px)));
+		}
+		/** Clamp a persisted height to a sane absolute range (never trusts storage). */
+		function clampStoredHeight(px) {
+			return Math.round(Math.min(MAX_HEIGHT_ABS, Math.max(240, px)));
+		}
+		/** Whether any axis carries an explicit preference. */
+		function hasExplicitSize(size) {
+			return size !== void 0 && (size.width !== null || size.height !== null);
+		}
+		//#endregion
+		//#region src/client/SideChatResizeHandle.tsx
+		/**
+		* Drag handles for the btw drawer.
+		*
+		* Shapes the audit asked for (and that the two in-repo precedents provide
+		* between them, see `ui-trajectory`'s details handle and `ui-layout`'s
+		* `DragHandle`):
+		*   - left edge  -> width      (`role="separator"`, vertical, arrow left = wider)
+		*   - far edge   -> height     (`role="separator"`, horizontal; bottom edge in
+		*                              `right`/`compact-right`, top edge in `bottom-sheet`)
+		*   - corner     -> both axes  (pointer-only convenience: both axes stay
+		*                              reachable from the keyboard through the two
+		*                              separators, so it is hidden from the a11y tree)
+		*
+		* Two invariants this component exists to protect:
+		*  1. the live size goes into `sizeRef.current` + `remeasure()` — never into
+		*     React state, never into a `useOverlayPlacement` dependency (a size in the
+		*     dep list would rebuild five observers per frame);
+		*  2. the store is committed exactly once, on `pointerup` (keyboard steps and
+		*     reset commit immediately, one action call each).
+		*/
+		const clamp$1 = (value, minimum, maximum) => Math.min(maximum, Math.max(minimum, value));
+		function SideChatResizeHandle(props) {
+			const { kind, heightEdge, mode, width, height, minWidth, maxWidth, minHeight, maxHeight, sizeRef, remeasure, commit, reset, label, hint } = props;
+			const elementRef = (0, react.useRef)(null);
+			const dragRef = (0, react.useRef)(null);
+			const frameRef = (0, react.useRef)(null);
+			const pendingRef = (0, react.useRef)(null);
+			const liveRef = (0, react.useRef)({
+				width,
+				height,
+				minWidth,
+				maxWidth,
+				minHeight,
+				maxHeight,
+				sizeRef,
+				remeasure,
+				commit
+			});
+			liveRef.current = {
+				width,
+				height,
+				minWidth,
+				maxWidth,
+				minHeight,
+				maxHeight,
+				sizeRef,
+				remeasure,
+				commit
+			};
+			const resolve = (0, react.useCallback)((startX, startY, startWidth, startHeight, x, y) => {
+				const live = liveRef.current;
+				let nextWidth = startWidth;
+				let nextHeight = startHeight;
+				if (kind !== "height") nextWidth = clamp$1(startWidth + (startX - x), live.minWidth, live.maxWidth);
+				if (kind !== "width") {
+					const outward = heightEdge === "top" ? startY - y : y - startY;
+					nextHeight = clamp$1(startHeight + outward, live.minHeight, live.maxHeight);
+				}
+				return {
+					width: kind === "height" ? live.sizeRef.current.width : Math.round(nextWidth),
+					height: kind === "width" ? live.sizeRef.current.height : Math.round(nextHeight)
+				};
+			}, [heightEdge, kind]);
+			const apply = (0, react.useCallback)((x, y) => {
+				const drag = dragRef.current;
+				if (drag === null) return;
+				const next = resolve(drag.startX, drag.startY, drag.startWidth, drag.startHeight, x, y);
+				if (sizeRef.current.width === next.width && sizeRef.current.height === next.height) return;
+				sizeRef.current = next;
+				remeasure();
+			}, [
+				remeasure,
+				resolve,
+				sizeRef
+			]);
+			const flush = (0, react.useCallback)(() => {
+				frameRef.current = null;
+				const pending = pendingRef.current;
+				pendingRef.current = null;
+				if (pending !== null) apply(pending.x, pending.y);
+			}, [apply]);
+			const finish = (0, react.useCallback)((rollback) => {
+				const drag = dragRef.current;
+				if (drag === null) return;
+				dragRef.current = null;
+				drag.detachEscape();
+				if (frameRef.current !== null) {
+					cancelAnimationFrame(frameRef.current);
+					frameRef.current = null;
+				}
+				pendingRef.current = null;
+				if (elementRef.current !== null) delete elementRef.current.dataset.dragging;
+				if (rollback) {
+					sizeRef.current = drag.before;
+					remeasure();
+					return;
+				}
+				const final = sizeRef.current;
+				commit({
+					width: kind === "height" ? drag.before.width : final.width,
+					height: kind === "width" ? drag.before.height : final.height
+				});
+			}, [
+				commit,
+				kind,
+				remeasure,
+				sizeRef
+			]);
+			const onPointerDown = (0, react.useCallback)((event) => {
+				if (event.button !== 0) return;
+				const live = liveRef.current;
+				const onEscape = (key) => {
+					if (key.key !== "Escape") return;
+					key.preventDefault();
+					key.stopPropagation();
+					finish(true);
+				};
+				window.addEventListener("keydown", onEscape, true);
+				dragRef.current = {
+					pointerId: event.pointerId,
+					startX: event.clientX,
+					startY: event.clientY,
+					startWidth: live.width,
+					startHeight: live.height,
+					before: { ...live.sizeRef.current },
+					detachEscape: () => {
+						window.removeEventListener("keydown", onEscape, true);
+					}
+				};
+				if (elementRef.current !== null) elementRef.current.dataset.dragging = "true";
+				try {
+					event.currentTarget.setPointerCapture(event.pointerId);
+				} catch {}
+				event.preventDefault();
+			}, [finish]);
+			const onPointerMove = (0, react.useCallback)((event) => {
+				const drag = dragRef.current;
+				if (drag === null || drag.pointerId !== event.pointerId) return;
+				pendingRef.current = {
+					x: event.clientX,
+					y: event.clientY
+				};
+				frameRef.current ??= requestAnimationFrame(flush);
+			}, [flush]);
+			const onPointerUp = (0, react.useCallback)((event) => {
+				const drag = dragRef.current;
+				if (drag === null || drag.pointerId !== event.pointerId) return;
+				pendingRef.current = {
+					x: event.clientX,
+					y: event.clientY
+				};
+				frameRef.current = null;
+				const pending = pendingRef.current;
+				pendingRef.current = null;
+				if (pending !== null) apply(pending.x, pending.y);
+				try {
+					event.currentTarget.releasePointerCapture(event.pointerId);
+				} catch {}
+				finish(false);
+			}, [apply, finish]);
+			const onPointerCancel = (0, react.useCallback)((event) => {
+				const drag = dragRef.current;
+				if (drag === null || drag.pointerId !== event.pointerId) return;
+				finish(true);
+			}, [finish]);
+			(0, react.useEffect)(() => () => {
+				dragRef.current?.detachEscape();
+				if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+				dragRef.current = null;
+			}, []);
+			/** Write + render + persist one keyboard step (one action call per key press). */
+			const push = (0, react.useCallback)((nextWidth, nextHeight) => {
+				const live = liveRef.current;
+				const current = live.sizeRef.current;
+				const next = {
+					width: kind === "height" ? current.width : clamp$1(Math.round(nextWidth ?? current.width ?? live.width), live.minWidth, live.maxWidth),
+					height: kind === "width" ? current.height : clamp$1(Math.round(nextHeight ?? current.height ?? live.height), live.minHeight, live.maxHeight)
+				};
+				live.sizeRef.current = next;
+				live.remeasure();
+				live.commit(next);
+			}, [kind]);
+			const step = (0, react.useCallback)((deltaWidth, deltaHeight, coarse) => {
+				const live = liveRef.current;
+				const current = live.sizeRef.current;
+				const amount = coarse ? 64 : 16;
+				push(kind === "height" ? null : (current.width ?? live.width) + deltaWidth * amount, kind === "width" ? null : (current.height ?? live.height) + deltaHeight * amount);
+			}, [kind, push]);
+			const goTo = (0, react.useCallback)((extreme) => {
+				const live = liveRef.current;
+				push(kind === "height" ? null : extreme === "min" ? live.minWidth : live.maxWidth, kind === "width" ? null : extreme === "min" ? live.minHeight : live.maxHeight);
+			}, [kind, push]);
+			const onKeyDown = (0, react.useCallback)((event) => {
+				const coarse = event.shiftKey;
+				const goWidth = kind !== "height";
+				const goHeight = kind !== "width";
+				const heightSign = heightEdge === "top" ? -1 : 1;
+				switch (event.key) {
+					case "ArrowLeft":
+						if (!goWidth) return;
+						event.preventDefault();
+						step(1, 0, coarse);
+						return;
+					case "ArrowRight":
+						if (!goWidth) return;
+						event.preventDefault();
+						step(-1, 0, coarse);
+						return;
+					case "ArrowUp":
+						if (!goHeight) return;
+						event.preventDefault();
+						step(0, -heightSign, coarse);
+						return;
+					case "ArrowDown":
+						if (!goHeight) return;
+						event.preventDefault();
+						step(0, heightSign, coarse);
+						return;
+					case "Home":
+						event.preventDefault();
+						goTo("min");
+						return;
+					case "End":
+						event.preventDefault();
+						goTo("max");
+						return;
+					case "Enter":
+					case " ":
+					case "Spacebar":
+						event.preventDefault();
+						reset();
+						return;
+				}
+			}, [
+				goTo,
+				heightEdge,
+				kind,
+				reset,
+				step
+			]);
+			const shownWidth = Math.round(width);
+			const shownHeight = Math.round(height);
+			const className = [
+				side_chat_module_css_default.resizeHandle,
+				kind === "width" ? side_chat_module_css_default.resizeWidth : "",
+				kind === "height" ? heightEdge === "top" ? side_chat_module_css_default.resizeHeightTop : side_chat_module_css_default.resizeHeightBottom : "",
+				kind === "corner" ? side_chat_module_css_default.resizeCorner : ""
+			].filter(Boolean).join(" ");
+			if (kind === "corner") return /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+				ref: elementRef,
+				className,
+				"data-dsh-btw-handle": "corner",
+				"aria-hidden": "true",
+				title: hint,
+				onPointerDown,
+				onPointerMove,
+				onPointerUp,
+				onPointerCancel,
+				onDoubleClick: reset
+			});
+			const isWidth = kind === "width";
+			return /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+				ref: elementRef,
+				className,
+				"data-dsh-btw-handle": kind,
+				"data-placement-mode": mode,
+				"data-height-edge": heightEdge,
+				role: "separator",
+				tabIndex: 0,
+				"aria-orientation": isWidth ? "vertical" : "horizontal",
+				"aria-controls": "dsh-btw-drawer",
+				"aria-label": label,
+				"aria-valuenow": isWidth ? shownWidth : shownHeight,
+				"aria-valuemin": isWidth ? Math.round(minWidth) : Math.round(minHeight),
+				"aria-valuemax": isWidth ? Math.round(maxWidth) : Math.round(maxHeight),
+				"aria-valuetext": `${isWidth ? shownWidth : shownHeight}px`,
+				title: hint,
+				onPointerDown,
+				onPointerMove,
+				onPointerUp,
+				onPointerCancel,
+				onKeyDown,
+				onDoubleClick: reset
 			});
 		}
 		//#endregion
@@ -2333,6 +2692,29 @@ window.__ModuleLoader__.load({
 				bottom: vertical.end
 			};
 		}
+		/**
+		* The size envelope actually enforced for one input. Read-only projection of the
+		* same rules the explicit branches apply, so the drag handles can publish honest
+		* `aria-valuemin`/`aria-valuemax` values. Purely additive: nothing else in the
+		* solver depends on it, and it changes no placement output.
+		*/
+		function computeOverlaySizeBounds(input) {
+			const work = workArea(input);
+			const availableWidth = work.right - work.left;
+			const availableHeight = work.bottom - work.top;
+			const hardMaximum = Math.max(input.minWidth, availableWidth - COMPACT_CONTENT_PEEK);
+			const softMaximum = input.maxWidth ?? Number.POSITIVE_INFINITY;
+			return {
+				minWidth: input.minWidth,
+				maxWidth: Math.max(input.minWidth, Math.min(hardMaximum, softMaximum)),
+				minHeight: Math.max(0, input.minHeight ?? 0),
+				maxHeight: Math.max(0, availableHeight)
+			};
+		}
+		/** Degenerate work areas keep the pre-existing automatic behavior verbatim. */
+		function explicitFeasible(input, work) {
+			return work.right - work.left >= input.minWidth && work.bottom - work.top >= Math.max(0, input.minHeight ?? 0);
+		}
 		function normalizedObstacles(input, work) {
 			const margin = Math.max(12, input.safeMargin);
 			const values = [];
@@ -2380,6 +2762,46 @@ window.__ModuleLoader__.load({
 			};
 		}
 		function chooseRight(input, work, obstacles) {
+			return input.explicitSize === true ? chooseRightExplicit(input, work, obstacles) : chooseRightAutomatic(input, work, obstacles);
+		}
+		/**
+		* Mode label and family verdict for the explicit path, computed WITHOUT looking
+		* at the dragged size: the verdict only depends on lane widths and the fixed
+		* automatic baseline. That is what keeps `data-placement-mode` constant for the
+		* whole gesture (no rubber-banding, no mid-drag mode switch) and keeps the
+		* explicit drawer in the same family the automatic layout would have chosen.
+		*/
+		function explicitVerdict(input, lanes) {
+			if (lanes.some((lane) => lane.end - lane.start >= 784)) return {
+				mode: "right",
+				reason: "regular-side-fit"
+			};
+			return lanes.some((lane) => {
+				const laneWidth = floorQuantum(lane.end - lane.start);
+				return Math.min(COMPACT_PREFERRED_WIDTH, floorQuantum(laneWidth - COMPACT_CONTENT_PEEK - MODE_RESERVE)) >= input.minWidth;
+			}) ? {
+				mode: "compact-right",
+				reason: "compact-side-fit"
+			} : null;
+		}
+		function chooseRightExplicit(input, work, obstacles) {
+			const lanes = horizontalLanes(work, obstacles);
+			const verdict = explicitVerdict(input, lanes);
+			if (verdict === null) return null;
+			const lane = [...lanes].sort((first, second) => second.end - first.end || second.end - second.start - (first.end - first.start) || first.start - second.start)[0];
+			if (lane === void 0) return null;
+			const bounds = computeOverlaySizeBounds(input);
+			const wantWidth = floorQuantum(clamp(input.desiredWidth, bounds.minWidth, bounds.maxWidth));
+			const wantHeight = roundQuantum(clamp(input.desiredHeight ?? bounds.maxHeight, bounds.minHeight, bounds.maxHeight));
+			const laneWidth = lane.end - lane.start;
+			return finish(input, fromEdges({
+				left: lane.end - wantWidth,
+				top: work.top,
+				right: lane.end,
+				bottom: work.top + wantHeight
+			}), verdict.mode, wantWidth > laneWidth - MODE_RESERVE, verdict.reason);
+		}
+		function chooseRightAutomatic(input, work, obstacles) {
 			const lanes = horizontalLanes(work, obstacles);
 			const availableHeight = work.bottom - work.top;
 			const desiredWidth = floorQuantum(input.desiredWidth);
@@ -2407,9 +2829,19 @@ window.__ModuleLoader__.load({
 			}).sort((first, second) => second.rect.left + second.rect.width - (first.rect.left + first.rect.width) || second.rect.width - first.rect.width || first.rect.left - second.rect.left);
 			return compact[0] === void 0 ? null : finish(input, compact[0].rect, "compact-right", false, "compact-side-fit");
 		}
-		function sheetHeight(work) {
+		function sheetHeight(work, input) {
 			const available = work.bottom - work.top;
+			if (input.explicitSize === true) {
+				const minimum = Math.min(Math.max(0, input.minHeight ?? 0), available);
+				return roundQuantum(clamp(input.desiredHeight ?? available, minimum, available));
+			}
 			return Math.min(available, clamp(roundQuantum(available * BOTTOM_SHEET_RATIO), Math.min(BOTTOM_SHEET_MIN_HEIGHT, available), BOTTOM_SHEET_MAX_HEIGHT));
+		}
+		/** Sheet width: the explicit preference when dragging, the sheet contract otherwise. */
+		function sheetWidth(laneWidth, input, bounds) {
+			const maximum = floorQuantum(laneWidth);
+			if (input.explicitSize === true) return Math.min(maximum, floorQuantum(bounds.maxWidth));
+			return Math.min(BOTTOM_SHEET_MAX_WIDTH, maximum);
 		}
 		function panelLanes(work, obstacles) {
 			const workHeight = work.bottom - work.top;
@@ -2432,7 +2864,8 @@ window.__ModuleLoader__.load({
 			return work.bottom - (first.top + first.height) - (work.bottom - (second.top + second.height)) || second.width - first.width || second.height - first.height || second.left + second.width - (first.left + first.width) || first.left - second.left || first.top - second.top;
 		}
 		function chooseSheet(input, work, obstacles) {
-			const targetHeight = sheetHeight(work);
+			const targetHeight = sheetHeight(work, input);
+			const bounds = computeOverlaySizeBounds(input);
 			const availableHeight = Math.max(0, work.bottom - work.top);
 			const minimumHeight = Math.min(BOTTOM_SHEET_MIN_HEIGHT, availableHeight);
 			const sheetObstacles = Math.min(input.viewport.width, input.frame.width) <= NARROW_SHEET_BREAKPOINT ? obstacles.filter((obstacle) => {
@@ -2451,7 +2884,7 @@ window.__ModuleLoader__.load({
 					end: obstacle.right
 				})));
 				for (const freeLane of freeAtThisHeight) {
-					const width = Math.min(BOTTOM_SHEET_MAX_WIDTH, floorQuantum(freeLane.end - freeLane.start));
+					const width = sheetWidth(freeLane.end - freeLane.start, input, bounds);
 					if (width < input.minWidth) continue;
 					const rect = fromEdges({
 						left: freeLane.end - width,
@@ -2463,7 +2896,7 @@ window.__ModuleLoader__.load({
 				}
 			}
 			for (const lane of sideSafeLanes) {
-				const width = Math.min(BOTTOM_SHEET_MAX_WIDTH, floorQuantum(lane.end - lane.start));
+				const width = sheetWidth(lane.end - lane.start, input, bounds);
 				if (width < input.minWidth) continue;
 				const right = lane.end;
 				const left = right - width;
@@ -2488,7 +2921,7 @@ window.__ModuleLoader__.load({
 				end: work.right
 			}] : sideSafeLanes) {
 				const laneWidth = Math.max(0, lane.end - lane.start);
-				const widths = [...new Set([Math.min(BOTTOM_SHEET_MAX_WIDTH, floorQuantum(laneWidth)), Math.min(floorQuantum(laneWidth), input.minWidth)].filter((width) => width > 0))];
+				const widths = [...new Set([sheetWidth(laneWidth, input, bounds), Math.min(floorQuantum(laneWidth), input.minWidth)].filter((width) => width > 0))];
 				for (const width of widths) {
 					const xValues = [
 						lane.start,
@@ -2516,6 +2949,10 @@ window.__ModuleLoader__.load({
 		function computeOverlayPlacement(input) {
 			const work = workArea(input);
 			const obstacles = normalizedObstacles(input, work);
+			if (input.explicitSize === true && !explicitFeasible(input, work)) return computeOverlayPlacement({
+				...input,
+				explicitSize: false
+			});
 			return chooseRight(input, work, obstacles) ?? chooseSheet(input, work, obstacles);
 		}
 		//#endregion
@@ -2661,61 +3098,133 @@ window.__ModuleLoader__.load({
 			]);
 			const viewport = visualViewportRect();
 			const safeArea = safeInsets(root);
-			const desiredWidth = options.desiredWidth ?? 448;
 			const minWidth = options.minWidth ?? 360;
 			const safeMargin = options.safeMargin ?? 12;
+			const { desiredWidth, desiredHeight, explicitSize } = explicitSizeInput(options);
+			const placementInput = () => ({
+				frame: frameRect,
+				viewport,
+				desiredWidth,
+				minWidth,
+				safeMargin,
+				safeArea,
+				occupied,
+				...desiredHeight === void 0 ? {} : { desiredHeight },
+				...options.minHeight === void 0 ? {} : { minHeight: options.minHeight },
+				...options.maxWidth === void 0 ? {} : { maxWidth: options.maxWidth },
+				...explicitSize ? { explicitSize: true } : {}
+			});
 			return {
 				frame: frameRect,
 				viewport,
 				safeArea,
 				occupied,
-				compute: () => computeOverlayPlacement({
-					frame: frameRect,
-					viewport,
-					desiredWidth,
-					minWidth,
-					safeMargin,
-					safeArea,
-					occupied
-				})
+				compute: () => computeOverlayPlacement(placementInput()),
+				bounds: () => computeOverlaySizeBounds(placementInput())
 			};
 		}
-		function fallbackPlacement(options) {
+		/**
+		* Resolve the explicit-size input from the live size ref.
+		*
+		* Two guards, both deliberate:
+		*  1. `null` on BOTH axes = untouched automatic placement (the solver's
+		*     non-explicit path, byte-for-byte today's behavior);
+		*  2. below `HANDLE_MIN_VIEWPORT` the explicit preference is not rendered at
+		*     all, so a narrow window keeps the bottom-sheet + scrim behavior it has
+		*     today. The stored preference is NOT rewritten (INV-2) — widening the
+		*     window brings the user's size straight back.
+		*/
+		function explicitSizeInput(options) {
+			const base = options.desiredWidth ?? 448;
+			const size = options.sizeRef?.current;
+			const wideEnough = typeof window === "undefined" || window.innerWidth >= 720;
+			if (!hasExplicitSize(size) || !wideEnough) return {
+				desiredWidth: base,
+				desiredHeight: void 0,
+				explicitSize: false
+			};
+			return {
+				desiredWidth: size?.width ?? base,
+				desiredHeight: size?.height ?? void 0,
+				explicitSize: true
+			};
+		}
+		/** Synthetic full-window input used before the first real measurement. */
+		function fallbackInput(options) {
 			const frame = {
 				left: 0,
 				top: 0,
 				width: typeof window === "undefined" ? FALLBACK_WIDTH : Math.max(1, window.innerWidth),
 				height: typeof window === "undefined" ? FALLBACK_HEIGHT : Math.max(1, window.innerHeight)
 			};
-			return computeOverlayPlacement({
+			const { desiredWidth, desiredHeight, explicitSize } = explicitSizeInput(options);
+			return {
 				frame,
 				viewport: frame,
-				desiredWidth: options.desiredWidth ?? 448,
+				desiredWidth,
 				minWidth: options.minWidth ?? 360,
 				safeMargin: options.safeMargin ?? 12,
 				safeArea: ZERO_INSETS,
-				occupied: []
-			});
+				occupied: [],
+				...desiredHeight === void 0 ? {} : { desiredHeight },
+				...options.minHeight === void 0 ? {} : { minHeight: options.minHeight },
+				...options.maxWidth === void 0 ? {} : { maxWidth: options.maxWidth },
+				...explicitSize ? { explicitSize: true } : {}
+			};
+		}
+		function fallbackPlacement(options) {
+			return computeOverlayPlacement(fallbackInput(options));
 		}
 		function samePlacement(first, second) {
 			return first.mode === second.mode && first.left === second.left && first.top === second.top && first.right === second.right && first.bottom === second.bottom && first.width === second.width && first.height === second.height && first.degraded === second.degraded && first.reason === second.reason;
 		}
+		/**
+		* Measure the overlay placement for `rootRef`.
+		*
+		* OBSERVER DISCIPLINE (load-bearing): the layout effect below constructs a
+		* ResizeObserver, a MutationObserver and three visual-viewport/window listeners
+		* and observes `document.body`. Because the whole observer set is rebuilt on
+		* every effect run, the live size preference must NOT enter the dependency
+		* list: a drag would otherwise tear down and rebuild five observers per frame.
+		* The size therefore travels through `options.sizeRef` (a stable identity, read
+		* inside `measure()`) and the caller asks for a re-measure through the returned
+		* imperative `remeasure()`. The store is only committed on `pointerup`.
+		*/
+		function sameBounds(first, second) {
+			return first.minWidth === second.minWidth && first.maxWidth === second.maxWidth && first.minHeight === second.minHeight && first.maxHeight === second.maxHeight;
+		}
 		function useOverlayPlacement(rootRef, options = {}) {
 			const [placement, setPlacement] = (0, react.useState)(() => fallbackPlacement(options));
+			const [bounds, setBounds] = (0, react.useState)(() => computeOverlaySizeBounds(fallbackInput(options)));
 			const selectorKey = options.avoidSelectors?.join("\n") ?? "";
 			const desiredWidth = options.desiredWidth ?? 448;
 			const minWidth = options.minWidth ?? 360;
+			const minHeight = options.minHeight;
+			const maxWidth = options.maxWidth;
 			const safeMargin = options.safeMargin ?? 12;
 			const enabled = options.enabled ?? true;
+			const sizeRef = options.sizeRef;
+			const desiredWidthRef = (0, react.useRef)(desiredWidth);
+			desiredWidthRef.current = desiredWidth;
+			const sizeRefLive = (0, react.useRef)(sizeRef);
+			sizeRefLive.current = sizeRef;
+			const remeasureRef = (0, react.useRef)(() => {});
+			const remeasure = (0, react.useCallback)(() => {
+				remeasureRef.current();
+			}, []);
 			(0, react.useLayoutEffect)(() => {
 				const root = rootRef.current;
 				if (!enabled || root === null) return;
-				const stableOptions = {
-					desiredWidth,
+				const liveOptions = () => ({
+					desiredWidth: desiredWidthRef.current,
 					minWidth,
 					safeMargin,
+					...sizeRefLive.current === void 0 ? {} : { sizeRef: sizeRefLive.current },
+					...minHeight === void 0 ? {} : { minHeight },
+					...maxWidth === void 0 ? {} : { maxWidth },
 					avoidSelectors: selectorKey === "" ? [] : selectorKey.split("\n")
-				};
+				});
+				const stableOptions = liveOptions();
 				let frameRequest = null;
 				let disposed = false;
 				const observed = /* @__PURE__ */ new Set();
@@ -2742,13 +3251,17 @@ window.__ModuleLoader__.load({
 					frameRequest = null;
 					if (disposed) return;
 					observeCurrentElements();
-					const next = collectOverlayGeometry(root, stableOptions).compute();
+					const geometry = collectOverlayGeometry(root, liveOptions());
+					const next = geometry.compute();
+					const nextBounds = geometry.bounds();
 					setPlacement((current) => samePlacement(current, next) ? current : next);
+					setBounds((current) => sameBounds(current, nextBounds) ? current : nextBounds);
 				};
 				function schedule() {
 					if (disposed || frameRequest !== null) return;
 					frameRequest = requestAnimationFrame(measure);
 				}
+				remeasureRef.current = schedule;
 				const initial = observeCurrentElements();
 				const mutationObserver = new MutationObserver((records) => {
 					if (records.some((record) => {
@@ -2792,14 +3305,19 @@ window.__ModuleLoader__.load({
 					visual?.removeEventListener("scroll", schedule);
 				};
 			}, [
-				desiredWidth,
 				enabled,
 				minWidth,
+				minHeight,
+				maxWidth,
 				rootRef,
 				safeMargin,
 				selectorKey
 			]);
-			return placement;
+			return {
+				...placement,
+				bounds,
+				remeasure
+			};
 		}
 		function overlayPlacementStyle(placement) {
 			return {
@@ -2814,7 +3332,13 @@ window.__ModuleLoader__.load({
 		}
 		//#endregion
 		//#region src/client/SideChatDrawer.tsx
-		function SideChatDrawer({ controller, viewStore, parentSessionId, settingsScope, t, onMinimize, onEnd }) {
+		const NOOP_SIZE_ACTIONS = {
+			setWidth: (_px) => {},
+			setHeight: (_px) => {},
+			setSize: (_width, _height) => {},
+			reset: () => {}
+		};
+		function SideChatDrawer({ controller, viewStore, parentSessionId, settingsScope, useStore, actions, t, onMinimize, onEnd }) {
 			const state = (0, react.useSyncExternalStore)(controller.subscribe, controller.getSnapshot, controller.getSnapshot);
 			const activeParentSessionId = state.parentSessionId ?? parentSessionId;
 			const parentKey = String(activeParentSessionId);
@@ -2823,7 +3347,43 @@ window.__ModuleLoader__.load({
 			const view = (0, react.useSyncExternalStore)(subscribeView, getView, getView);
 			const placementRootRef = (0, react.useRef)(null);
 			const visible = state.phase !== "closed" && state.parentSessionId !== void 0 && String(state.parentSessionId) === parentKey && view.visible && view.presentation === "drawer";
-			const placement = useOverlayPlacement(placementRootRef, { enabled: visible });
+			const seat = (0, react.useRef)({
+				useStore,
+				actions
+			}).current;
+			const storedWidth = seat.useStore === void 0 ? null : seat.useStore((state) => state.width);
+			const storedHeight = seat.useStore === void 0 ? null : seat.useStore((state) => state.height);
+			const sizeActions = seat.actions ?? NOOP_SIZE_ACTIONS;
+			(0, react.useEffect)(() => {
+				if (seat.useStore === void 0) console.warn("[dsh-btw] drawer mounted without the drawer-size store seat: sizing stays automatic");
+			}, [seat]);
+			const sizeRef = (0, react.useRef)({
+				width: storedWidth,
+				height: storedHeight
+			});
+			const { remeasure, bounds, ...placement } = useOverlayPlacement(placementRootRef, {
+				enabled: visible,
+				sizeRef,
+				minHeight: 240,
+				maxWidth: 960
+			});
+			(0, react.useEffect)(() => {
+				sizeRef.current = {
+					width: storedWidth,
+					height: storedHeight
+				};
+				remeasure();
+			}, [
+				remeasure,
+				storedHeight,
+				storedWidth
+			]);
+			const commitSize = (0, react.useCallback)((size) => {
+				sizeActions.setSize(size.width, size.height);
+			}, [sizeActions]);
+			const resetSize = (0, react.useCallback)(() => {
+				sizeActions.reset();
+			}, [sizeActions]);
 			(0, react.useEffect)(() => {
 				if (!visible) return;
 				const onKeyDown = (event) => {
@@ -2857,25 +3417,80 @@ window.__ModuleLoader__.load({
 						onClick: onMinimize
 					}),
 					/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("aside", {
+						id: "dsh-btw-drawer",
 						className: side_chat_module_css_default.drawer,
 						"data-dsh-btw-drawer": true,
 						role: "complementary",
 						"aria-label": t("drawer.title"),
-						children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)(SideChatJumpList, {
-							parentSessionId: activeParentSessionId,
-							controller,
-							viewStore,
-							t
-						}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(SideChatSurface, {
-							parentSessionId: activeParentSessionId,
-							controller,
-							viewStore,
-							t,
-							surfaceMode: "drawer",
-							settingsScope,
-							onMinimize,
-							onEnd
-						})]
+						children: [
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(SideChatResizeHandle, {
+								kind: "width",
+								heightEdge: placement.mode === "bottom-sheet" ? "top" : "bottom",
+								mode: placement.mode,
+								width: placement.width,
+								height: placement.height,
+								minWidth: 360,
+								maxWidth: bounds.maxWidth,
+								minHeight: 240,
+								maxHeight: bounds.maxHeight,
+								sizeRef,
+								remeasure,
+								commit: commitSize,
+								reset: resetSize,
+								label: t("drawer.resizeWidth"),
+								hint: t("drawer.resizeHint")
+							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(SideChatResizeHandle, {
+								kind: "height",
+								heightEdge: placement.mode === "bottom-sheet" ? "top" : "bottom",
+								mode: placement.mode,
+								width: placement.width,
+								height: placement.height,
+								minWidth: 360,
+								maxWidth: bounds.maxWidth,
+								minHeight: 240,
+								maxHeight: bounds.maxHeight,
+								sizeRef,
+								remeasure,
+								commit: commitSize,
+								reset: resetSize,
+								label: t("drawer.resizeHeight"),
+								hint: t("drawer.resizeHint")
+							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(SideChatResizeHandle, {
+								kind: "corner",
+								heightEdge: placement.mode === "bottom-sheet" ? "top" : "bottom",
+								mode: placement.mode,
+								width: placement.width,
+								height: placement.height,
+								minWidth: 360,
+								maxWidth: bounds.maxWidth,
+								minHeight: 240,
+								maxHeight: bounds.maxHeight,
+								sizeRef,
+								remeasure,
+								commit: commitSize,
+								reset: resetSize,
+								label: t("drawer.resizeCorner"),
+								hint: t("drawer.resizeHint")
+							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(SideChatJumpList, {
+								parentSessionId: activeParentSessionId,
+								controller,
+								viewStore,
+								t
+							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(SideChatSurface, {
+								parentSessionId: activeParentSessionId,
+								controller,
+								viewStore,
+								t,
+								surfaceMode: "drawer",
+								settingsScope,
+								onMinimize,
+								onEnd
+							})
+						]
 					})
 				]
 			});
@@ -8393,7 +9008,7 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 			options: array(object({
 				label: string().min(1),
 				description: string().optional()
-			})).optional(),
+			}).strict()).optional(),
 			multi_select: boolean().optional()
 		}).strict();
 		/** The question currently blocking the child agent, surfaced through sideChat/read. */
@@ -8586,6 +9201,56 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 			])
 		};
 		//#endregion
+		//#region src/client/drawer-size-store.ts
+		/**
+		* Drawer-size store handle factory.
+		*
+		* Mirrors the host's own `createLayoutStore` precedent
+		* (`@deepseek-ai/dsh-client-ui-layout/lib/client.js`): the module exports the
+		* FACTORY only — a module-level handle would pin the store identity in the
+		* module cache (a de-facto singleton surviving plugin reloads). The handle is
+		* built in apply world and handed to the `shell.overlay` registration's `store`
+		* seat; the framework instantiates it per entry/scope and exposes `useStore` /
+		* `actions` to the drawer component.
+		*
+		* Persistence rides the framework's mechanical channel: `persist` names a
+		* localStorage key filled by `attachPersistence` (root-scoped keys are never
+		* pruned — `dsh-client-runtime` only clears session-scoped records), so a drag
+		* survives refresh, plugin reload and host restart within this browser.
+		*/
+		function createDrawerSizeStore() {
+			return (0, _deepseek_ai_dsh_client_runtime_client.defineStore)({
+				init: () => ({
+					width: null,
+					height: null
+				}),
+				persist: "dsh.btw.drawerSize",
+				actions: {
+					/** `null` restores the automatic placement for this axis. */
+					setWidth: (draft, px) => {
+						draft.width = px === null ? null : clampStoredWidth(px);
+					},
+					setHeight: (draft, px) => {
+						draft.height = px === null ? null : clampStoredHeight(px);
+					},
+					/**
+					* Both axes in ONE store update. The corner handle must commit a single
+					* gesture as a single write (A3): two separate actions would fire the
+					* persistence subscriber twice and write localStorage twice.
+					*/
+					setSize: (draft, width, height) => {
+						draft.width = width === null ? null : clampStoredWidth(width);
+						draft.height = height === null ? null : clampStoredHeight(height);
+					},
+					/** Double-click / Enter / Space on any handle restores full auto. */
+					reset: (draft) => {
+						draft.width = null;
+						draft.height = null;
+					}
+				}
+			});
+		}
+		//#endregion
 		//#region src/client/index.ts
 		const name = "dsh-btw/client";
 		const inject = [
@@ -8607,6 +9272,7 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 			const viewStore = new SideChatViewStore();
 			const settingsScope = bindBtwSettings(ctx.settingsScope);
 			const presentation = new SideChatPresentation(ctx, controller, viewStore, settingsScope);
+			const drawerSize = createDrawerSizeStore();
 			ctx.effect(() => ctx.locale.register("btw", {
 				zh,
 				en
@@ -8633,6 +9299,7 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 				id: "dsh-btw.drawer",
 				order: 100,
 				locale: "btw",
+				store: drawerSize,
 				inject: () => {
 					const parentSessionId = controller.getSnapshot().parentSessionId ?? controller.currentSessionId();
 					const activeParent = () => controller.getSnapshot().parentSessionId;
@@ -8653,12 +9320,22 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 					};
 				}
 			}, SideChatDrawer));
+			window.__dshA11yBtwChord = "U-A11Y3:v1";
+			/** true when the chord must stay native because the user is typing in a field. */
+			function isEditableTarget(target) {
+				if (target === null || !(target instanceof HTMLElement)) return false;
+				if (target.isContentEditable) return true;
+				const tag = target.tagName;
+				return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
+			}
 			ctx.effect(() => {
 				const onKeyDown = (event) => {
 					if (!(event.metaKey || event.ctrlKey) || !event.shiftKey || event.code !== "Period") return;
-					event.preventDefault();
+					if (isEditableTarget(event.target)) return;
 					const current = controller.currentSessionId();
-					if (current !== void 0) presentation.toggle(String(current));
+					if (current === void 0) return;
+					event.preventDefault();
+					presentation.toggle(String(current));
 				};
 				window.addEventListener("keydown", onKeyDown);
 				return () => {

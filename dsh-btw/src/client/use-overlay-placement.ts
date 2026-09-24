@@ -1,10 +1,15 @@
-import { useLayoutEffect, useState, type CSSProperties, type RefObject } from 'react'
+import { useCallback, useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from 'react'
 import {
   computeOverlayPlacement,
+  computeOverlaySizeBounds,
+  DEFAULT_DESIRED_WIDTH,
   type Insets,
   type OverlayPlacement,
+  type OverlayPlacementInput,
+  type OverlaySizeBounds,
   type RectLike,
 } from './overlay-placement.ts'
+import { HANDLE_MIN_VIEWPORT, hasExplicitSize, type DrawerSize, type DrawerSizeRef } from './drawer-size.ts'
 
 export const DEFAULT_AVOID_SELECTORS = [
   '[data-dsh-btw-avoid]',
@@ -18,6 +23,16 @@ export interface OverlayPlacementOptions {
   minWidth?: number
   safeMargin?: number
   enabled?: boolean
+  /**
+   * Live size preference. Read inside `measure()` only — a ref is a stable
+   * identity, so it can never enter the effect dependency list (see the
+   * observer-discipline note on {@link useOverlayPlacement}).
+   */
+  sizeRef?: DrawerSizeRef
+  /** Floor for the explicit height (only meaningful with `sizeRef`). */
+  minHeight?: number
+  /** Soft ceiling for the explicit width (only meaningful with `sizeRef`). */
+  maxWidth?: number
 }
 
 export interface OverlayGeometry {
@@ -26,6 +41,17 @@ export interface OverlayGeometry {
   safeArea: Insets
   occupied: RectLike[]
   compute(): OverlayPlacement
+  /** Size envelope enforced for this input (a11y bounds; not a placement). */
+  bounds(): OverlaySizeBounds
+}
+
+/**
+ * Hook result: the placement plus the enforced size envelope and the imperative
+ * re-measure entry point a drag uses between pointerdown and pointerup.
+ */
+export interface OverlayPlacementResult extends OverlayPlacement {
+  bounds: OverlaySizeBounds
+  remeasure(): void
 }
 
 export type OverlayPlacementStyle = CSSProperties & Record<string, string | number | undefined>
@@ -192,40 +218,87 @@ export function collectOverlayGeometry(
   ])
   const viewport = visualViewportRect()
   const safeArea = safeInsets(root)
-  const desiredWidth = options.desiredWidth ?? 448
   const minWidth = options.minWidth ?? 360
   const safeMargin = options.safeMargin ?? 12
+  const { desiredWidth, desiredHeight, explicitSize } = explicitSizeInput(options)
+
+  const placementInput = (): OverlayPlacementInput => ({
+    frame: frameRect,
+    viewport,
+    desiredWidth,
+    minWidth,
+    safeMargin,
+    safeArea,
+    occupied,
+    ...(desiredHeight === undefined ? {} : { desiredHeight }),
+    ...(options.minHeight === undefined ? {} : { minHeight: options.minHeight }),
+    ...(options.maxWidth === undefined ? {} : { maxWidth: options.maxWidth }),
+    ...(explicitSize ? { explicitSize: true } : {}),
+  })
 
   return {
     frame: frameRect,
     viewport,
     safeArea,
     occupied,
-    compute: () => computeOverlayPlacement({
-      frame: frameRect,
-      viewport,
-      desiredWidth,
-      minWidth,
-      safeMargin,
-      safeArea,
-      occupied,
-    }),
+    compute: () => computeOverlayPlacement(placementInput()),
+    bounds: () => computeOverlaySizeBounds(placementInput()),
   }
 }
 
-function fallbackPlacement(options: OverlayPlacementOptions): OverlayPlacement {
+/**
+ * Resolve the explicit-size input from the live size ref.
+ *
+ * Two guards, both deliberate:
+ *  1. `null` on BOTH axes = untouched automatic placement (the solver's
+ *     non-explicit path, byte-for-byte today's behavior);
+ *  2. below `HANDLE_MIN_VIEWPORT` the explicit preference is not rendered at
+ *     all, so a narrow window keeps the bottom-sheet + scrim behavior it has
+ *     today. The stored preference is NOT rewritten (INV-2) — widening the
+ *     window brings the user's size straight back.
+ */
+function explicitSizeInput(options: OverlayPlacementOptions): {
+  desiredWidth: number
+  desiredHeight: number | undefined
+  explicitSize: boolean
+} {
+  const base = options.desiredWidth ?? DEFAULT_DESIRED_WIDTH
+  const size: DrawerSize | undefined = options.sizeRef?.current
+  const wideEnough = typeof window === 'undefined'
+    || window.innerWidth >= HANDLE_MIN_VIEWPORT
+  if (!hasExplicitSize(size) || !wideEnough) {
+    return { desiredWidth: base, desiredHeight: undefined, explicitSize: false }
+  }
+  return {
+    desiredWidth: size?.width ?? base,
+    desiredHeight: size?.height ?? undefined,
+    explicitSize: true,
+  }
+}
+
+/** Synthetic full-window input used before the first real measurement. */
+function fallbackInput(options: OverlayPlacementOptions): OverlayPlacementInput {
   const width = typeof window === 'undefined' ? FALLBACK_WIDTH : Math.max(1, window.innerWidth)
   const height = typeof window === 'undefined' ? FALLBACK_HEIGHT : Math.max(1, window.innerHeight)
   const frame = { left: 0, top: 0, width, height }
-  return computeOverlayPlacement({
+  const { desiredWidth, desiredHeight, explicitSize } = explicitSizeInput(options)
+  return {
     frame,
     viewport: frame,
-    desiredWidth: options.desiredWidth ?? 448,
+    desiredWidth,
     minWidth: options.minWidth ?? 360,
     safeMargin: options.safeMargin ?? 12,
     safeArea: ZERO_INSETS,
     occupied: [],
-  })
+    ...(desiredHeight === undefined ? {} : { desiredHeight }),
+    ...(options.minHeight === undefined ? {} : { minHeight: options.minHeight }),
+    ...(options.maxWidth === undefined ? {} : { maxWidth: options.maxWidth }),
+    ...(explicitSize ? { explicitSize: true } : {}),
+  }
+}
+
+function fallbackPlacement(options: OverlayPlacementOptions): OverlayPlacement {
+  return computeOverlayPlacement(fallbackInput(options))
 }
 
 function samePlacement(first: OverlayPlacement, second: OverlayPlacement): boolean {
@@ -240,27 +313,62 @@ function samePlacement(first: OverlayPlacement, second: OverlayPlacement): boole
     && first.reason === second.reason
 }
 
+/**
+ * Measure the overlay placement for `rootRef`.
+ *
+ * OBSERVER DISCIPLINE (load-bearing): the layout effect below constructs a
+ * ResizeObserver, a MutationObserver and three visual-viewport/window listeners
+ * and observes `document.body`. Because the whole observer set is rebuilt on
+ * every effect run, the live size preference must NOT enter the dependency
+ * list: a drag would otherwise tear down and rebuild five observers per frame.
+ * The size therefore travels through `options.sizeRef` (a stable identity, read
+ * inside `measure()`) and the caller asks for a re-measure through the returned
+ * imperative `remeasure()`. The store is only committed on `pointerup`.
+ */
+function sameBounds(first: OverlaySizeBounds, second: OverlaySizeBounds): boolean {
+  return first.minWidth === second.minWidth
+    && first.maxWidth === second.maxWidth
+    && first.minHeight === second.minHeight
+    && first.maxHeight === second.maxHeight
+}
+
 export function useOverlayPlacement(
   rootRef: RefObject<HTMLElement | null>,
   options: OverlayPlacementOptions = {},
-): OverlayPlacement {
+): OverlayPlacementResult {
   const [placement, setPlacement] = useState(() => fallbackPlacement(options))
+  const [bounds, setBounds] = useState<OverlaySizeBounds>(() => computeOverlaySizeBounds(fallbackInput(options)))
   const selectorKey = options.avoidSelectors?.join('\n') ?? ''
-  const desiredWidth = options.desiredWidth ?? 448
+  const desiredWidth = options.desiredWidth ?? DEFAULT_DESIRED_WIDTH
   const minWidth = options.minWidth ?? 360
+  const minHeight = options.minHeight
+  const maxWidth = options.maxWidth
   const safeMargin = options.safeMargin ?? 12
   const enabled = options.enabled ?? true
+  const sizeRef = options.sizeRef
+  // Stable live views: read at measure time, never an effect dependency.
+  const desiredWidthRef = useRef(desiredWidth)
+  desiredWidthRef.current = desiredWidth
+  const sizeRefLive = useRef(sizeRef)
+  sizeRefLive.current = sizeRef
+
+  const remeasureRef = useRef<() => void>(() => { /* replaced by the effect */ })
+  const remeasure = useCallback(() => { remeasureRef.current() }, [])
 
   useLayoutEffect(() => {
     const root = rootRef.current
     if (!enabled || root === null) return
 
-    const stableOptions: OverlayPlacementOptions = {
-      desiredWidth,
+    const liveOptions = (): OverlayPlacementOptions => ({
+      desiredWidth: desiredWidthRef.current,
       minWidth,
       safeMargin,
+      ...(sizeRefLive.current === undefined ? {} : { sizeRef: sizeRefLive.current }),
+      ...(minHeight === undefined ? {} : { minHeight }),
+      ...(maxWidth === undefined ? {} : { maxWidth }),
       avoidSelectors: selectorKey === '' ? [] : selectorKey.split('\n'),
-    }
+    })
+    const stableOptions = liveOptions()
     let frameRequest: number | null = null
     let disposed = false
     const observed = new Set<Element>()
@@ -287,13 +395,17 @@ export function useOverlayPlacement(
       frameRequest = null
       if (disposed) return
       observeCurrentElements()
-      const next = collectOverlayGeometry(root, stableOptions).compute()
+      const geometry = collectOverlayGeometry(root, liveOptions())
+      const next = geometry.compute()
+      const nextBounds = geometry.bounds()
       setPlacement(current => samePlacement(current, next) ? current : next)
+      setBounds(current => sameBounds(current, nextBounds) ? current : nextBounds)
     }
     function schedule(): void {
       if (disposed || frameRequest !== null) return
       frameRequest = requestAnimationFrame(measure)
     }
+    remeasureRef.current = schedule
 
     const initial = observeCurrentElements()
     const mutationObserver = new MutationObserver(records => {
@@ -337,9 +449,11 @@ export function useOverlayPlacement(
       visual?.removeEventListener('resize', schedule)
       visual?.removeEventListener('scroll', schedule)
     }
-  }, [desiredWidth, enabled, minWidth, rootRef, safeMargin, selectorKey])
+    // NOTE: `desiredWidth` and the live size are deliberately NOT dependencies —
+    // see the observer-discipline note above (D1/D2 acceptance criterion).
+  }, [enabled, minWidth, minHeight, maxWidth, rootRef, safeMargin, selectorKey])
 
-  return placement
+  return { ...placement, bounds, remeasure }
 }
 
 export function overlayPlacementStyle(placement: OverlayPlacement): OverlayPlacementStyle {

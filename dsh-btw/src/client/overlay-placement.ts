@@ -20,6 +20,29 @@ export interface OverlayPlacementInput {
   safeMargin: number
   safeArea: Insets
   occupied: readonly RectLike[]
+  /**
+   * Explicit-size mode (all optional; omitted/`false` = today's automatic
+   * placement, computed by the same code paths as before this field existed).
+   *
+   * `desiredWidth` carries the user's width preference in both modes; the
+   * automatic 448 baseline is only used for the width of the automatic
+   * placement and for the (size-independent) mode label.
+   */
+  desiredHeight?: number
+  /** Floor for the explicit height; ignored unless `explicitSize` is true. */
+  minHeight?: number
+  /** Soft ceiling for the explicit width — never widen the drawer past this. */
+  maxWidth?: number
+  /** Single structural guard: every explicit-only branch sits behind this. */
+  explicitSize?: boolean
+}
+
+/** Size ceilings/floors actually enforced for one input (also feeds a11y bounds). */
+export interface OverlaySizeBounds {
+  minWidth: number
+  maxWidth: number
+  minHeight: number
+  maxHeight: number
 }
 
 export type OverlayPlacementMode = 'right' | 'compact-right' | 'bottom-sheet'
@@ -56,6 +79,8 @@ interface Lane { start: number; end: number }
 const QUANTUM = 4
 const REGULAR_CONTENT_PEEK = 320
 const COMPACT_CONTENT_PEEK = 240
+/** Automatic-placement baseline width (the default `desiredWidth` of the hook). */
+export const DEFAULT_DESIRED_WIDTH = 448
 const MODE_RESERVE = 16
 const COMPACT_PREFERRED_WIDTH = 400
 const BOTTOM_SHEET_RATIO = 0.48
@@ -166,6 +191,34 @@ function workArea(input: OverlayPlacementInput): Edges {
   return { left: horizontal.start, top: vertical.start, right: horizontal.end, bottom: vertical.end }
 }
 
+/**
+ * The size envelope actually enforced for one input. Read-only projection of the
+ * same rules the explicit branches apply, so the drag handles can publish honest
+ * `aria-valuemin`/`aria-valuemax` values. Purely additive: nothing else in the
+ * solver depends on it, and it changes no placement output.
+ */
+export function computeOverlaySizeBounds(input: OverlayPlacementInput): OverlaySizeBounds {
+  const work = workArea(input)
+  const availableWidth = work.right - work.left
+  const availableHeight = work.bottom - work.top
+  // Hard rule (unchanged): the drawer is an overlay, so width is the only lever
+  // that keeps the main area usable — at least COMPACT_CONTENT_PEEK px stay free.
+  const hardMaximum = Math.max(input.minWidth, availableWidth - COMPACT_CONTENT_PEEK)
+  const softMaximum = input.maxWidth ?? Number.POSITIVE_INFINITY
+  return {
+    minWidth: input.minWidth,
+    maxWidth: Math.max(input.minWidth, Math.min(hardMaximum, softMaximum)),
+    minHeight: Math.max(0, input.minHeight ?? 0),
+    maxHeight: Math.max(0, availableHeight),
+  }
+}
+
+/** Degenerate work areas keep the pre-existing automatic behavior verbatim. */
+function explicitFeasible(input: OverlayPlacementInput, work: Edges): boolean {
+  return work.right - work.left >= input.minWidth
+    && work.bottom - work.top >= Math.max(0, input.minHeight ?? 0)
+}
+
 function normalizedObstacles(input: OverlayPlacementInput, work: Edges): Edges[] {
   const margin = Math.max(12, input.safeMargin)
   const values: Edges[] = []
@@ -228,6 +281,76 @@ function finish(
 }
 
 function chooseRight(input: OverlayPlacementInput, work: Edges, obstacles: readonly Edges[]): OverlayPlacement | null {
+  return input.explicitSize === true
+    ? chooseRightExplicit(input, work, obstacles)
+    : chooseRightAutomatic(input, work, obstacles)
+}
+
+/**
+ * Mode label and family verdict for the explicit path, computed WITHOUT looking
+ * at the dragged size: the verdict only depends on lane widths and the fixed
+ * automatic baseline. That is what keeps `data-placement-mode` constant for the
+ * whole gesture (no rubber-banding, no mid-drag mode switch) and keeps the
+ * explicit drawer in the same family the automatic layout would have chosen.
+ */
+function explicitVerdict(
+  input: OverlayPlacementInput,
+  lanes: readonly Lane[],
+): { mode: OverlayPlacementMode; reason: OverlayPlacementReason } | null {
+  const roomy = lanes.some(lane =>
+    lane.end - lane.start >= DEFAULT_DESIRED_WIDTH + REGULAR_CONTENT_PEEK + MODE_RESERVE)
+  if (roomy) return { mode: 'right', reason: 'regular-side-fit' }
+  const compact = lanes.some(lane => {
+    const laneWidth = floorQuantum(lane.end - lane.start)
+    return Math.min(COMPACT_PREFERRED_WIDTH, floorQuantum(laneWidth - COMPACT_CONTENT_PEEK - MODE_RESERVE))
+      >= input.minWidth
+  })
+  return compact ? { mode: 'compact-right', reason: 'compact-side-fit' } : null
+}
+
+function chooseRightExplicit(
+  input: OverlayPlacementInput,
+  work: Edges,
+  obstacles: readonly Edges[],
+): OverlayPlacement | null {
+  const lanes = horizontalLanes(work, obstacles)
+  const verdict = explicitVerdict(input, lanes)
+  // No lane can host a side drawer at all: hand over to the sheet family (which
+  // honors the explicit height) instead of forcing a mode switch by returning
+  // null from the whole computation.
+  if (verdict === null) return null
+  // The widest free lane, same preference order as the automatic path. The
+  // explicit path must always produce a placement: a null here would switch the
+  // mode mid-gesture (right column -> bottom sheet).
+  const lane = [...lanes].sort((first, second) =>
+    second.end - first.end || (second.end - second.start) - (first.end - first.start) || first.start - second.start)[0]
+  if (lane === undefined) return null
+
+  const bounds = computeOverlaySizeBounds(input)
+  const wantWidth = floorQuantum(clamp(input.desiredWidth, bounds.minWidth, bounds.maxWidth))
+  const wantHeight = roundQuantum(clamp(input.desiredHeight ?? bounds.maxHeight, bounds.minHeight, bounds.maxHeight))
+  const laneWidth = lane.end - lane.start
+  return finish(
+    input,
+    fromEdges({
+      // Right-anchored (same lane edge as the automatic path) and TOP-anchored:
+      // changing the height grows the drawer downward and never moves its top.
+      left: lane.end - wantWidth,
+      top: work.top,
+      right: lane.end,
+      bottom: work.top + wantHeight,
+    }),
+    verdict.mode,
+    wantWidth > laneWidth - MODE_RESERVE,
+    verdict.reason,
+  )
+}
+
+function chooseRightAutomatic(
+  input: OverlayPlacementInput,
+  work: Edges,
+  obstacles: readonly Edges[],
+): OverlayPlacement | null {
   const lanes = horizontalLanes(work, obstacles)
   const availableHeight = work.bottom - work.top
   const desiredWidth = floorQuantum(input.desiredWidth)
@@ -270,13 +393,24 @@ function chooseRight(input: OverlayPlacementInput, work: Edges, obstacles: reado
     : finish(input, compact[0].rect, 'compact-right', false, 'compact-side-fit')
 }
 
-function sheetHeight(work: Edges): number {
+function sheetHeight(work: Edges, input: OverlayPlacementInput): number {
   const available = work.bottom - work.top
+  if (input.explicitSize === true) {
+    const minimum = Math.min(Math.max(0, input.minHeight ?? 0), available)
+    return roundQuantum(clamp(input.desiredHeight ?? available, minimum, available))
+  }
   return Math.min(available, clamp(
     roundQuantum(available * BOTTOM_SHEET_RATIO),
     Math.min(BOTTOM_SHEET_MIN_HEIGHT, available),
     BOTTOM_SHEET_MAX_HEIGHT,
   ))
+}
+
+/** Sheet width: the explicit preference when dragging, the sheet contract otherwise. */
+function sheetWidth(laneWidth: number, input: OverlayPlacementInput, bounds: OverlaySizeBounds): number {
+  const maximum = floorQuantum(laneWidth)
+  if (input.explicitSize === true) return Math.min(maximum, floorQuantum(bounds.maxWidth))
+  return Math.min(BOTTOM_SHEET_MAX_WIDTH, maximum)
 }
 
 function panelLanes(work: Edges, obstacles: readonly Edges[]): Lane[] {
@@ -317,7 +451,8 @@ function sheetOrder(work: Edges, first: RectLike, second: RectLike): number {
 }
 
 function chooseSheet(input: OverlayPlacementInput, work: Edges, obstacles: readonly Edges[]): OverlayPlacement {
-  const targetHeight = sheetHeight(work)
+  const targetHeight = sheetHeight(work, input)
+  const bounds = computeOverlaySizeBounds(input)
   const availableHeight = Math.max(0, work.bottom - work.top)
   const minimumHeight = Math.min(BOTTOM_SHEET_MIN_HEIGHT, availableHeight)
   const narrowViewport = Math.min(input.viewport.width, input.frame.width) <= NARROW_SHEET_BREAKPOINT
@@ -349,7 +484,7 @@ function chooseSheet(input: OverlayPlacementInput, work: Edges, obstacles: reado
         overlappingY.map(obstacle => ({ start: obstacle.left, end: obstacle.right })),
       )
       for (const freeLane of freeAtThisHeight) {
-        const width = Math.min(BOTTOM_SHEET_MAX_WIDTH, floorQuantum(freeLane.end - freeLane.start))
+        const width = sheetWidth(freeLane.end - freeLane.start, input, bounds)
         if (width < input.minWidth) continue
         const rect = fromEdges({
           left: freeLane.end - width,
@@ -365,7 +500,7 @@ function chooseSheet(input: OverlayPlacementInput, work: Edges, obstacles: reado
   // A clean but shorter sheet is preferable to overlap when the requested
   // height cannot fit. Check vertical lanes for each maximum-width safe lane.
   for (const lane of sideSafeLanes) {
-    const width = Math.min(BOTTOM_SHEET_MAX_WIDTH, floorQuantum(lane.end - lane.start))
+    const width = sheetWidth(lane.end - lane.start, input, bounds)
     if (width < input.minWidth) continue
     const right = lane.end
     const left = right - width
@@ -389,7 +524,7 @@ function chooseSheet(input: OverlayPlacementInput, work: Edges, obstacles: reado
   for (const lane of sideSafeLanes.length === 0 ? [{ start: work.left, end: work.right }] : sideSafeLanes) {
     const laneWidth = Math.max(0, lane.end - lane.start)
     const widths = [...new Set([
-      Math.min(BOTTOM_SHEET_MAX_WIDTH, floorQuantum(laneWidth)),
+      sheetWidth(laneWidth, input, bounds),
       Math.min(floorQuantum(laneWidth), input.minWidth),
     ].filter(width => width > 0))]
     for (const width of widths) {
@@ -431,5 +566,11 @@ function chooseSheet(input: OverlayPlacementInput, work: Edges, obstacles: reado
 export function computeOverlayPlacement(input: OverlayPlacementInput): OverlayPlacement {
   const work = workArea(input)
   const obstacles = normalizedObstacles(input, work)
+  // Extreme narrow/degenerate work areas: fall back to the untouched automatic
+  // placement (the explicit wants cannot be honored there, and pretending
+  // otherwise would park the drawer off-screen).
+  if (input.explicitSize === true && !explicitFeasible(input, work)) {
+    return computeOverlayPlacement({ ...input, explicitSize: false })
+  }
   return chooseRight(input, work, obstacles) ?? chooseSheet(input, work, obstacles)
 }

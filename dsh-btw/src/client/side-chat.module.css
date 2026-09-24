@@ -343,10 +343,33 @@
 .questionHeader { color: var(--dsw-alias-label-quaternary); font-family: var(--ds-font-family-code); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
 .questionText { margin: 0; color: var(--dsw-alias-label-primary); font-size: 13px; line-height: 20px; white-space: pre-wrap; }
 .questionOptions { display: flex; flex-direction: column; gap: 6px; }
-.questionOption, .questionOptionActive { display: flex; flex-direction: column; gap: 3px; padding: 8px 11px; border: 1px solid var(--dsw-alias-border-l2); border-radius: 10px; background: transparent; color: var(--dsw-alias-label-secondary); cursor: pointer; font: inherit; text-align: left; }
-.questionOption:hover { background: var(--dsw-alias-interactive-bg-hover); }
-.questionOptionActive { border-color: color-mix(in srgb, #b7e85b 60%, var(--dsw-alias-border-l1)); background: color-mix(in srgb, #b7e85b 12%, transparent); color: var(--dsw-alias-label-primary); }
-.questionOptionLabel { font-size: 12.5px; line-height: 18px; }
+/* 2026-09-23 btw-question: option rows aligned with the official
+   dsh-client-ui-user-questions card (values extracted from its bundle). The
+   `.questionCard` shell keeps the btw green identity; the rows do not. */
+.questionOption, .questionOptionSelected { display: flex; flex-direction: row; align-items: flex-start; gap: 8px; width: 100%; min-height: 40px; padding: 8px 12px 8px 8px; border: 1px solid var(--dsw-alias-border-l2); border-radius: 12px; background: transparent; color: var(--dsw-alias-label-primary); cursor: pointer; font: inherit; text-align: left; transition: background-color .12s, border-color .12s; }
+.questionOption:hover:not(:disabled):not(.questionOptionSelected) { background: var(--dsw-alias-interactive-bg-hover); }
+/* 2026-09-23: base label colour is `--dsw-alias-label-primary`, matching the
+   official option (`color: inherit` in a card whose text is primary, measured
+   rgb(15,17,21) in both states). The pre-existing secondary grey made an
+   unselected row read as "disabled" (review finding) and was the last visual
+   divergence from the main-session card. */
+.questionOptionSelected { background: var(--dsw-alias-interactive-bg-hover); border-color: var(--dsw-alias-border-l2); color: var(--dsw-alias-label-primary); }
+.questionOptionIndex { flex: 0 0 20px; display: grid; place-items: center; width: 20px; height: 20px; margin-top: 2px; border-radius: 6px; background: var(--dsw-alias-bg-overlay); color: var(--dsw-alias-label-secondary); font-size: 12px; font-weight: 500; line-height: 18px; }
+/* 2026-09-23 (U8, user-decided): the official selected fill is a 6% neutral
+   overlay — on the btw green card shell it measured only ~13/255 mean delta and
+   read as "no visible selection". Selected rows now also flip the index badge to
+   a solid btw-green chip with a dark numeral (measured 65/255 mean delta in the
+   badge area, peak 221): colour is no longer the only cue, and the green keeps
+   the card's own identity instead of introducing a second hard accent. Option
+   fill/border stay on official tokens unchanged. */
+.questionOptionSelected .questionOptionIndex { background: #b7e85b; color: var(--dsw-alias-label-primary); }
+.questionOptionCheck { flex: 0 0 20px; display: grid; place-items: center; width: 20px; height: 20px; margin-top: 2px; }
+.questionOptionCheck::before { content: ''; grid-area: 1 / 1; width: 14px; height: 14px; border: 1px solid var(--dsw-alias-border-l4); border-radius: 4px; transition: background-color .12s, border-color .12s; }
+.questionOptionCheck > svg { grid-area: 1 / 1; }
+.questionOptionCheckChecked { color: var(--dsw-alias-label-primary-foreground); }
+.questionOptionCheckChecked::before { border-color: var(--dsw-alias-label-primary); background: var(--dsw-alias-label-primary); }
+.questionOptionCopy { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 3px; }
+.questionOptionLabel { font-size: 13px; font-weight: 500; line-height: 20px; }
 .questionOptionDescription { color: var(--dsw-alias-label-tertiary); font-size: 11px; line-height: 16px; }
 .questionHint { color: var(--dsw-alias-label-quaternary); font-size: 10px; }
 .questionInput { box-sizing: border-box; width: 100%; padding: 7px 10px; border: 1px solid var(--dsw-alias-border-l2); border-radius: 9px; background: var(--dsw-alias-bg-base); color: var(--dsw-alias-label-primary); font: inherit; font-size: 12.5px; }
@@ -382,6 +405,119 @@
 }
 .destructiveButton:hover:not(:disabled) {
   filter: brightness(1.06);
+}
+
+/* ---------------------------------------------------------------------------
+   Drag handles (width / height / corner). They live INSIDE `.drawer` because
+   `.drawer` is `overflow:hidden`; as children of `.drawer` they inherit its
+   `pointer-events:auto`. (`.placementRoot` is `pointer-events:none`, so a handle
+   moved out of `.drawer` would silently stop receiving pointers.)
+   Below 720px window width every handle is removed: narrow windows keep the
+   bottom-sheet + scrim semantics untouched (mirrored by HANDLE_MIN_VIEWPORT in
+   drawer-size.ts, which also stops applying the explicit size there).
+   --------------------------------------------------------------------------- */
+.resizeHandle {
+  position: absolute;
+  z-index: 7;
+  padding: 0;
+  border: 0;
+  background: none;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.resizeHandle::after {
+  content: '';
+  position: absolute;
+  background: var(--dsw-alias-state-business-primary, #b7e85b);
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.resizeHandle:hover::after,
+.resizeHandle[data-dragging='true']::after {
+  opacity: .55;
+}
+
+/* Never copy the upstream `outline:none` anti-pattern: the keyboard seat needs
+   a visible focus ring. */
+.resizeHandle:focus-visible {
+  outline: 2px solid var(--dsw-alias-state-business-primary, #b7e85b);
+  outline-offset: -2px;
+}
+
+.resizeWidth {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 8px;
+  cursor: col-resize;
+}
+
+.resizeWidth::after {
+  top: 50%;
+  left: 2px;
+  width: 4px;
+  height: 32px;
+  transform: translateY(-50%);
+}
+
+.resizeHeightBottom {
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 8px;
+  cursor: row-resize;
+}
+
+.resizeHeightBottom::after {
+  top: 2px;
+  left: 50%;
+  width: 32px;
+  height: 4px;
+  transform: translateX(-50%);
+}
+
+.resizeHeightTop {
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 8px;
+  cursor: row-resize;
+}
+
+.resizeHeightTop::after {
+  bottom: 2px;
+  left: 50%;
+  width: 32px;
+  height: 4px;
+  transform: translateX(-50%);
+}
+
+/* Inset >= 6px: `.drawer` has border-radius 16px and clips its descendants. */
+.resizeCorner {
+  bottom: 6px;
+  left: 6px;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+}
+
+.resizeCorner::after {
+  right: 2px;
+  bottom: 2px;
+  width: 12px;
+  height: 12px;
+  background: none;
+  border-right: 2px solid var(--dsw-alias-state-business-primary, #b7e85b);
+  border-bottom: 2px solid var(--dsw-alias-state-business-primary, #b7e85b);
+  border-radius: 0 0 4px 0;
+}
+
+@media (max-width: 719.98px) {
+  .resizeHandle { display: none; }
 }
 
 @keyframes drawer-in { from { opacity: 0; transform: scale(.99); } to { opacity: 1; transform: none; } }
@@ -569,6 +705,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .drawer { animation: none; }
+  .resizeHandle::after { transition: none; }
   .transcript { scroll-behavior: auto; }
   .runningBannerText { background-position: 0 0; background-size: 100% 100%; animation: none; }
   .toolRow[data-state='running'] .toolRowRow::after { display: none; animation: none; }
