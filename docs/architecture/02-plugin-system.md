@@ -180,3 +180,30 @@ bundles 层（dsh.profile.bundles 顺序，逐个应用其 dsh.bundle.patch）
 4. `bareModuleBaseUrl` 的实参来源未定位。
 5. `@deepseek-ai/dsh-session-board` 的运行时装单位未确证。
 6. `dsh-btw/lib/index.js`（约 65 KB）与 `dsh-taste/lib/index.js`（约 27 KB）未逐行通读，本文对其内部结构的描述属声明级。
+7. 本节 §8 的"全局用户根对所有工作区生效"结论为**源码 + 既有先例**推证，**未**在别的 cwd 起过新会话做端到端确认（沙箱内任何 `dsh` 启动都要写 `~/.dsh/profiles/`，被 EACCES 挡下）。
+
+---
+
+## 8. skill 发现根与优先级（2026-09-23 实测）
+
+skill 由插件 `@deepseek-ai/dsh-skill-filesystem` 的 provider 发现（包版本 `0.1.1-rc.2`，config schema：`includeDefaultRoots` 默认 `true` / `dshHome` / `agentsHome` / `customSkillDirs` 默认 `[]` / `bundledSkillDir`；`package/lib/index.js:33-36`）。三类根：
+
+| 根 | 路径 | 来源标记 | rank | 作用域 |
+| --- | --- | --- | --- | --- |
+| 项目 | `<projectRoot>/.dsh/skills` | `project-dsh` | 100 | **按 cwd**（`findProjectRoot(cwd)`） |
+| 项目 | `<projectRoot>/.agents/skills` | `project-agents` | 200 | 按 cwd |
+| 自定义 | `settings` 的 `customSkillDirs`（本部署未设） | `custom` | 300 | 全局 |
+| **用户** | `$DSH_HOME/skills`（= `~/.dsh/skills`，`skipSystem:true`） | `user-dsh` | 400 | **与 cwd 无关，所有工作区** |
+| 用户 | `$DSH_AGENTS_HOME/skills`（默认 `~/.agents/skills`） | `user-agents` | 500 | 与 cwd 无关 |
+| 插件 | `bundledSkillDir` / `ctx.skills.registerProvider`（如 `@local/dsh-pptmaster` 的 `skills/`） | `bundled` 等 | — | 全局，随插件 |
+
+证据：`.../dsh-skill-filesystem/lib/index.js:150-188`（`roots(cwd)`；项目两根受 `cwd !== undefined` 门控，**用户两根无条件加入**）、`:21-25`（rank 常量）。
+
+**三条硬事实（本部署实测）**
+
+1. 同一层内**同名 skill 只留高优先级那份**，被忽略者只打一条 `warn`：`dsh-skill/lib/index.js:319-323`（`skill "<name>" from <source> ignored because a higher-priority skill already exists`）。rank 数字**越小越优先**（项目 100 > 项目-agents 200 > custom 300 > 用户 400 > 用户-agents 500）。
+   ⇒ **不要在两处放同名 skill**（会静默出现"改了全局那份但在本项目不生效"）。
+2. **符号链接不可靠**：发现逻辑只接受 `entry.type === "directory"` 或 `.md` 文件（`:586-593`），而 fs 列目录把软链标为 `type: "symlink"`（`.../dsh-fs-local/lib/index.js:203` `pathLinkType`）⇒ 用软链挂 skill 目录会被静默跳过。跨根共享请用**真实目录**。
+3. `disable-model-invocation: true`（frontmatter）的 skill **不进模型可见目录**（例：`~/.dsh/skills/grill-me`），只在被显式点名时加载。
+
+**本部署现状**：`~/.dsh/skills/` = `grill-me`（手动）、`ppt-master`（含 `references/`、`scripts/`、`templates/`、`workflows/`）、`program-notebook`（2026-09-23 从本仓库 `.dsh/skills/` **移入**，使全部工作区可用；仓库内原副本已删除，避免第 1 条的遮蔽陷阱）。
