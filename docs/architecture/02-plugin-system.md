@@ -206,4 +206,4 @@ skill 由插件 `@deepseek-ai/dsh-skill-filesystem` 的 provider 发现（包版
 2. **符号链接不可靠**：发现逻辑只接受 `entry.type === "directory"` 或 `.md` 文件（`:586-593`），而 fs 列目录把软链标为 `type: "symlink"`（`.../dsh-fs-local/lib/index.js:203` `pathLinkType`）⇒ 用软链挂 skill 目录会被静默跳过。跨根共享请用**真实目录**。
 3. `disable-model-invocation: true`（frontmatter）的 skill **不进模型可见目录**（例：`~/.dsh/skills/grill-me`），只在被显式点名时加载。
 
-**本部署现状**：`~/.dsh/skills/` = `grill-me`（手动）、`ppt-master`（含 `references/`、`scripts/`、`templates/`、`workflows/`）、`program-notebook`（2026-09-23 从本仓库 `.dsh/skills/` **移入**，使全部工作区可用；仓库内原副本已删除，避免第 1 条的遮蔽陷阱）。
+**本部署现状**：`~/.dsh/skills/` = `grill-me`（手动）、`ppt-master`（含 `references/`、`scripts/`、`templates/`、`workflows/`）、`program-notebook`（2026-09-23 从本仓库 `.dsh/skills/` **移入**，使全部工作区可用；仓库内原副本已删除，避免第 1 条的遮蔽陷阱）、`session-handoff`（2026-09-25 新增：会话交接文档生成 + 接手双模式，v1.0.1；仓库内**非发现路径**的分发快照在 `agent-skills/session-handoff/`，两处须逐字节一致——见 `docs/program-notebook.md` §5.2）。

@@ -185,6 +185,7 @@ sequenceDiagram
 | `.workspace/probes/` | 探针脚本、一次性请求/响应捕获、settings 快照、预览图 |
 | `.workspace/backups/` | 备份（`.gitignore` 已排除，只作本机回滚用） |
 | `.workspace/workstreams/{sources,baseline-011,plugin-restore,side-deploy,…}` | 移植源副本、基线 tgz、恢复/支线部署批次 |
+| `agent-skills/` | **可分发的 skill 源码快照**（当前仅 `session-handoff/`：`SKILL.md` + `references/`，v1.0.1）。**非 DSH 发现路径**，不遮蔽 `~/.dsh/skills/` 权威副本；两处改动须手工同步并以 `shasum -a 256` 逐字节校验。验收证据与校验脚本见 `.workspace/session-handoff-skill/` |
 
 大型目录不逐文件罗列：模块级细节与调用链见 `docs/architecture/01..04`。
 
@@ -230,6 +231,7 @@ sequenceDiagram
 | `.workspace/workstreams/deploy/deploy-lag/README.md` §9 | 运行时热载能力矩阵（P0-a 实测固化） |
 | `examples/minimal-plugin/README.md` | 写第一个插件 |
 | `~/.dsh/skills/program-notebook/` | 本页的编写规范（skill 自述 + `references/`）。**2026-09-23 从本仓库 `.dsh/skills/` 移出**到全局用户根 ⇒ 对**全部工作区**生效（此前只在 `dsh` 工作区可见）；发现根与优先级见 `docs/architecture/02-plugin-system.md` §8 |
+| `~/.dsh/skills/session-handoff/` | **会话交接 skill**（2026-09-25 新增，v1.0.1）：把会话的工作内容/进展/目标整理成仓库根 `<前缀>_NEXT_SESSION_PROMPT.md`（头部 YAML + 勘误回写块 + §0–§9 + 不编号附录）供下一会话接手，并提供"接手模式"六步闸门；历史归档 `.dsh/handoffs/`（保留 20 份，已忽略）。仓库内分发快照 `agent-skills/session-handoff/`（非发现路径）；验收与修正记录见 `.workspace/session-handoff-skill/acceptance.md` |
 | `.workspace/lag-fix/research-v2/MEASUREMENT-STATUS.md` | **性能数字可信度单一事实源**：数据分级（可用＝比值/为零/占比；不可用＝绝对 ms）、协议失败实测、撤回清单、并发口径与锁释放顺序 |
 | `.workspace/lag-fix/exec-audit/BATCH-PLAN.md` | **落地批次计划**：单元清单／重启分组／闸门 G1–G5／写入者边界／测量协议 7 条 |
 | `.workspace/lag-fix/research-v2/theme-fix-ab/BEFORE.md` | 主题修复 A/B 的修复前基线（门禁全通过）与**重新推导后的判据** |
