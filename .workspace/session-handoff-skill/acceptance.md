@@ -126,3 +126,20 @@
 2. **skill 在其他机器/profile 的可用性**：仅在本机 `~/.dsh/skills`（rank 400）实测；若目标机器只用 `~/.agents/skills`（rank 500）需改放。
 3. **`description` 在 GUI 技能列表的截断**是否与 catalog 的 500 一致：未核实（本档只核 catalog 路径）。
 4. **验收 6（聚焦模式索引表行数）**：本次未进入聚焦模式，该分支只做了规范与脚本层面的静态检查，**未做端到端实测**。
+
+---
+
+## 验收后收口 —— 用户三项裁决的落地（2026-09-25 14:1x）
+
+用户裁决原句：**「第一，入库，第二，加注释，第三，维持」**，另就两处范围问题选择「两处都补」与「入 `.workspace` 证据 + 交接件；`research/` 维持不入」。
+
+| 裁决 | 落地动作 | 证据 |
+|---|---|---|
+| ① 入库 | `b84a71f0`：`.gitignore` + `agent-skills/session-handoff/`（5 文件 545 行）；`c5ac4c00`：证据 9 件 + 交接件 + 文档同步（12 文件 1974 行） | `git log --oneline`；两次提交均先 `git diff --cached --check` 通过、且只暂存显式路径（未牵连 peer 会话的 382 项改动） |
+| ② E 级加注释 | `annotate_unavailable.py` 给 **20 个** E 级条目加两行注释（说明"网关无渠道 + 保留备用"）；模型总数 53、`input` 声明 21 **均未被破坏**；幂等复检全跳过 | 备份 `settings.yaml.bak-eannotate-20260925-140933`；写后校验输出「注释块数 20 / 模型 53 / 声明 21」 |
+| ③ 维持 vision-adam | **无改动**（维持 `deepseek-v4.1-flash`） | 本次实测其为 A 级、零编造（8/8） |
+| 文档同步（两处） | `docs/architecture/02-plugin-system.md` §8「本部署现状」补 `session-handoff`；`docs/program-notebook.md` §5.2 补 `agent-skills/`、§6 补 session-handoff 索引行 | `git diff --numstat` = `1/1` 与 `2/0`，确认只有本次改动 |
+
+**本轮另修正一处我自己的事实错误**：E 级条目数在 `REPORT.md` 与交接件里被我先后写成 **22**，实测为 **20**（21 A + 7 C + 5 D + 20 E = 53，与 settings 清单自洽）。已在报告摘要表、报告 §四.5 标题、交接件 `§2`/`§5` 四处更正。
+
+**收口后的交接件自检**：`SECTIONS: PASS`、`budget counted=93 limit=100 PASS`、`checked=36 missing=0`、无空壳小节。

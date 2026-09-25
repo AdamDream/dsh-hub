@@ -55,10 +55,10 @@ shasum -a 256 ~/.dsh/skills/session-handoff/SKILL.md agent-skills/session-handof
 | 项 | 实测值 |
 |---|---|
 | 仓库 / 分支 / HEAD | `/home/CNS2026495165/dsh`、`main`、`fa118d91` [已核实：`git rev-parse`] |
-| 工作树规模 | `git status --short` **387 行（含本件自身 1 项）** = 355 `??` + 29 `M` + 3 `D` [已核实] |
-| **本会话改动（7 项，含验证产物 `receiver-sim-report.md`）** | `M .gitignore`、`?? agent-skills/`、`?? research/vision-probe/`、`?? research/vision-crosscheck/`、`?? .workspace/session-handoff-skill/`、`?? handoff-skill_NEXT_SESSION_PROMPT.md`（两份模拟接手报告生成后已移入 `.workspace/session-handoff-skill/`）[已核实：`git status --short -- <paths>`] |
+| 工作树规模 | `git status --short` **382 行（本件已入库，不再计入）** = 351 `??` + 28 `M` + 3 `D` [已核实] |
+| **本会话改动 → 已入库** | `b84a71f0`（`.gitignore` + `agent-skills/session-handoff/` 5 文件）、`c5ac4c00`（`.workspace/session-handoff-skill/` 9 件 + 本件 + 两处文档同步）；**未入库**：`research/vision-probe/`、`research/vision-crosscheck/`（该目录 0 跟踪，属既有惯例）[已核实：`git log --oneline`] |
 | 计数口径警告 | 本节数字是**生成时刻快照**；生成后本会话仍在写盘，**接手方重跑得到不同值是正常的**，不要据此判定"基线被其他会话改写"。 |
-| 本件自身 | 仓库根 `handoff-skill_NEXT_SESSION_PROMPT.md` **本次自生成，非待处理改动**（未跟踪，已按规范不加入 `.gitignore`）[已核实] |
+| 本件自身 | 仓库根 `handoff-skill_NEXT_SESSION_PROMPT.md` **本次自生成**，已于 `c5ac4c00` 入库（按规范不加入 `.gitignore`）[已核实] |
 | 同仓并行会话 | **存在且活跃**：另一会话在做 WorkBuddy 网关接入，并于 **11:52:33 改写 `~/.dsh/settings.yaml`（225→158 行）**，配套备份 `settings.yaml.bak-workbuddy/websearch/teardown-*` [已核实：`stat` + `ls -1t`] |
 | `settings.yaml` 行数演变 | 11:52:33 peer 改写后 **158 行** → 本会话 12:01 补 19 个 `input` 声明（158+19×3=**215**）→ 12:08 移除 1 个误声明（3 行）→ **212 行**［已核实：`wc -l`]。**关键**：本会话自己也改过该文件，212≠158 是本会话造成的，不是第三个会话。 |
 | skill 落盘 | 权威副本 `~/.dsh/skills/session-handoff/`（rank 400）+ 分发快照 `agent-skills/session-handoff/`，5 文件 SHA-256 两处全 MATCH [已核实：`shasum -a 256`] |
@@ -69,28 +69,21 @@ shasum -a 256 ~/.dsh/skills/session-handoff/SKILL.md agent-skills/session-handof
 
 ## §2 最高优先级任务清单
 
-**P0-1 完成 `session-handoff` skill 的端到端验收（验收 4：派干净上下文子代理模拟继任会话读本件）**
-- 判定标准：子代理**不追问用户**即能完成「前置核对 → 复述理解 → 指出歧义」；必须追问才开工 = 不达标，按其反馈改本件或 skill 正文后重验。
-- 前置闸门：`~/.dsh/skills/session-handoff/SKILL.md` 存在且与仓库快照 SHA 一致；不一致先停下报我。
+**P0-1 GUI 端到端验证图像直传**（唯一仍未验证的关键链路）
+- 判定标准：在界面粘贴一张截图，确认该模型的 `input` 声明与实际路径（原图直传 / 经 vision-adam 转文本）一致；判据与证据见 `research/vision-probe/REPORT.md`。
+- 前置闸门：`python3 research/vision-probe/analyze.py | tail -6` 末行须为 `>>> 一致性: PASS（相等）`。
 
-**P0-2 落地 vision 实测结论的收尾**
-- 判定标准：跑 `python3 research/vision-probe/analyze.py | tail -6`，末行必须是 `>>> 一致性: PASS（相等）`（当前实测 A 级 21 = 已声明 21）。该脚本已修为**读 `settings.yaml` 现况**；早前版本读 `models.json` 的"写入前快照"，会报出 19 条"需补声明"并**误导你重复写入**——该坑由接手方模拟实测抓到，见勘误块第 1 条。
-- 判定口径：A 级集合必须**恰好等于** `settings.yaml` 中声明 `image` 的集合，"需补"与"需移除"两个列表都必须为空。
-- 前置闸门：`settings.yaml` 未被其他会话改写（比对 `research/vision-probe/models.json` 的 53 个 id 与当前清单）。
+**P0-2 C 级不稳定的网关侧根因**（需网关访问权限；拿不到就明确记为受阻，**不要猜**）
+- 证据起点：`claude-opus-4-7` 同图连发呈两态、错态逐字节恒定（`20250522`，被 4 个模型共用）。
 
-**P1 决定本批改动是否入库与如何提交**
-- 判定标准：`git status --short -- .gitignore agent-skills` 的改动已提交或明确记录「暂不提交」；`.dsh/handoffs/` 仍被忽略（`git check-ignore -v .dsh/handoffs/x.md` 退出 0）。
-- 前置闸门：先由用户裁决（见 `§5` 需你裁决第 1 条），**不得自动提交**（skill 与 plan.md 均禁止自动 git 操作）。
-
-**P2 清理 `settings.yaml` 中网关不服务的 20 个 E 级条目**
-- 判定标准：E 级清单来自 `research/vision-probe/tiers.json`；每条要么删除、要么在注释里标「网关无渠道」。属未授权改动，须先获裁决。
+**原 P0/P1/P2 四项均已闭环**（两轮模拟接手、vision 声明一致性、入库、E 级注释），逐项证据见 `§3` 与 `§4`。
 
 ## §3 本会话已完成的工作
 
 - 交付 DSH skill `session-handoff`：5 个文件落 `agent-skills/session-handoff/` 并拷贝到用户级权威副本；`~/.dsh/AGENTS.md` 增补「交接协议」两行（117→121 行，既有行零改动）。证据：`.workspace/session-handoff-skill/exec.md`。
 - 完成 skill 的验收 2（`skill` 工具实测加载，热发现生效无需重启）与验收 5（5 文件 SHA-256 两处 MATCH）。
 - 完成 adam 网关 **53 个模型 × 4 探针**的 image 能力实测（跨 7 轮采样、共 400+ 次请求），产出 `research/vision-probe/REPORT.md`，并按实测把 `settings.yaml` 的 image 声明从 **3 → 21 个**（补采后回退了 1 个误声明：`gemini-3.1-flash-lite` 6 次中错 1 次，由 A 降 C）。
-- 过程产物（调研 4 份、审计 `audit.md`、方案 `plan.md`）全部落盘。详细时间线见附录 B。
+- 已入库两个提交：`b84a71f0`（skill 快照 + `.gitignore`）、`c5ac4c00`（验收证据 + 本件 + `docs/architecture/02-plugin-system.md` §8 与 `docs/program-notebook.md` §5.2/§6 的 skill 清单同步）。详细时间线见附录 B。
 
 ## §4 已裁决与权威四层
 
@@ -111,7 +104,11 @@ shasum -a 256 ~/.dsh/skills/session-handoff/SKILL.md agent-skills/session-handof
 | vision 声明口径 | `[选项裁决]` 只给实测 **A 级**模型补 `input: [text, image]` |
 | 图像能力测试范围 | 用户原句：「哦对，分别测试一下adam网关的各个模型的image能力，避免每次主会话粘贴图片的时候都需要先提前验证」→ `[选项裁决]` 51/53 个条目全测 |
 
-`[仅对话原文·未落盘]`：**无** —— 据你 12:01 前的确认，除上述已引用内容外没有其他关键裁决仅存在于对话中。
+| **本轮三项裁决** | 用户原句：「第一，入库，第二，加注释，第三，维持」→ ① 入库（两提交已落）② E 级不可用条目**加注释、不删除**（20 条已注释）③ **维持** `vision-adam = deepseek-v4.1-flash` |
+| skill 清单文档同步 | `[选项裁决]` 两处都补（`02-plugin-system.md` §8 + `program-notebook.md` §5.2/§6） |
+| 其余产物入库范围 | `[选项裁决]` 入 `.workspace` 证据 + 交接件；`research/` 维持不入 |
+
+`[仅对话原文·未落盘]`：**无** —— 据你 12:01 与 14:1x 两次确认，除上述已引用内容外没有其他关键裁决仅存在于对话中。
 
 **② 已授权**（范围以授权原句为准，不得扩大）
 - 提权写工作区外：`~/.dsh/skills/session-handoff/`（复制权威副本）与 `~/.dsh/AGENTS.md`（追加两行）。用户以选项裁决批准了该落盘方案。
@@ -127,15 +124,12 @@ shasum -a 256 ~/.dsh/skills/session-handoff/SKILL.md agent-skills/session-handof
 
 ## §5 待办与开放项
 
-**需你裁决**
-1. `agent-skills/session-handoff/`（skill 分发快照）与 `.gitignore` 改动**是否提交入库**？（我不自动提交）
-2. `settings.yaml` 里 20 个网关不服务的 E 级条目：**已按你的裁决加上注释**（不再需要裁决）
-3. `vision-adam` 后端是否维持 `deepseek-v4.1-flash`（本次实测 A 级、零编造）？实测另发现更轻的 A 级候选（`gemini-3.5-flash-lite`、`gpt-5.6-luna` 等）。
+**需你裁决**：**无** —— 三项已全部裁决（见 `§4` 末三行：入库 / E 级加注释 / 维持 `vision-adam`）。
 
 **开放项**
-- `§1` 已声明但**未在 GUI 端到端验证**：贴一张图确认「声明为 image 的模型走原图直传」（见附录 C 第 1 条）。
-- C 级不稳定（claude-opus 系 5 个 + `glm-5.3-flash`）的**根因未定位**：已确证同模型同图时对时错，但未查明是网关上游路由还是 Anthropic 格式转换丢图。
-- `claude-sonnet-4-6` 之外的 A 级模型多为 2 次观测（正确率 100% 但样本小），关键场合可追加重复轮。
+- **GUI 端到端未验证**：图像直传路径未在界面里真实贴图确认 → 已提升为 `§2` P0-1。
+- **C 级根因未定位**：需网关侧权限才能定论 → 已提升为 `§2` P0-2。
+- **产物留存**：`research/vision-probe`、`research/vision-crosscheck`（含 400+ 原始响应与竞品源码留档）按既有惯例未入库；若需长期留存请另行裁决。
 
 ## §6 已排除的死路与已证伪的假设
 
@@ -206,7 +200,7 @@ cd research/vision-probe && python3 sweep.py --workers 4 --max-tokens 1200 --out
 
 - **归类**（稳定，不随会话继续写盘而变化）：
   - 本次会话新增：`M .gitignore`、`?? agent-skills/`、`?? research/vision-probe/`、`?? research/vision-crosscheck/`、`?? .workspace/session-handoff-skill/`
-  - 本件自身与验证产物：`?? handoff-skill_NEXT_SESSION_PROMPT.md`（**本次自生成，非待处理改动**）；两份模拟接手报告**生成后已移入 `.workspace/session-handoff-skill/`**（`receiver-sim-report.md`、`receiver-sim-round2.md`），并以该路径为准
+  - 本件自身与验证产物：`handoff-skill_NEXT_SESSION_PROMPT.md`（**本次自生成**，已于 `c5ac4c00` 入库，故当前 `git status` 中**不再出现**）；两份模拟接手报告**生成后已移入 `.workspace/session-handoff-skill/`**（`receiver-sim-report.md`、`receiver-sim-round2.md`），并以该路径为准
   - 前序会话遗留：29 `M` + 3 `D` + 其余 `??`，与 `.workspace/lag-fix/`、`.workspace/workstreams/`、`docs/` 相关批次产物与文档同步
 - **逐行原文与总数**：`git status --short | tee .dsh/handoffs/.gs-snapshot.txt | wc -l`（落**工作区**而不是 `/tmp`；`/tmp` 的持久性取决于沙箱模式，见 `§7` 坑 2）。
 - **数字口径**：`§1` 给出的总数只对应生成时刻；本会话在本件生成后仍继续写盘，**接手方重跑必然更大**（实测：生成时 387 → 第二轮模拟报告落盘后 388），这不是"基线被改写"。
