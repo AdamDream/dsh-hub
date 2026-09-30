@@ -123,6 +123,13 @@ archive:
   - **N1 / N10 / N16**：本轮未复验。
   - **P0-C / P1**：已授权但**只有草案**，未落地。
 
+> **自检脚本**：canonical 本机副本在 `.dsh/checks/`（**未入仓**，上一轮落的）：`check-sections.sh` / `check-empty.sh` /
+> `probe-reachability.sh` / `trim-archive.sh`。本轮把前两个**连同溯源注释**复制进
+> `.workspace/audit-020/evidence/` 并入库（逻辑体与 canonical **逐字节相同**，已用 `diff` 忽略注释行验证）。
+> 另补一个 canonical 覆盖不到的强核对脚本 `.workspace/audit-020/evidence/check-refs.py`：规范探针的 PAT 只认
+> `.workspace/` / `docs/` / `research/` / `agent-skills/` / `~/` 前缀，**看不到** `p0a/`、`reports/`、`p0c/` 这类
+> 相对 `.workspace/audit-020/` 的短式引用 —— 本件引用大多是这个形状，故那个探针的 PASS 是弱信号。
+
 ## §9 一句话开启方式
 
 接手 `dsh-020_NEXT_SESSION_PROMPT.md`：先读 `.workspace/audit-020/reports/RESTART-AND-VERIFY-RUNBOOK.md`，
