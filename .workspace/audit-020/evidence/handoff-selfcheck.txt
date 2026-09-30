@@ -1,0 +1,45 @@
+# 交接件自检取证（2026-09-30 12:12，dsh-020）
+
+## 1) skill 规范探针 probe-reachability.sh（PAT 只认 .workspace/ docs/ research/ agent-skills/ ~/ 前缀）
+repo_root=/home/CNS2026495165/dsh
+MISSING: .workspace/btw-question/d30/2026-09-23T09-47-16-326Z-probe3-B-detail-
+MISSING: .workspace/btw-question/d30/2026-09-23T09-47-16-326Z-probe3-C-
+--- checked=412 missing=2
+REACHABILITY: FAIL
+exit=1
+
+## 2) 同上，但把附录 A 的逐字转储替换为指针后（测『本件正文引用的可达性』）
+repo_root=/home/CNS2026495165/dsh
+--- checked=8 missing=0
+REACHABILITY: PASS
+exit=0
+
+## 3) 强核对 check-refs.py（把 p0a/ reports/ p0c/ p1/ 等短式引用按 .workspace/audit-020/ 还原）
+doc            : dsh-020_NEXT_SESSION_PROMPT.md
+candidates     : 423
+reachable      : 421
+missing        : 2
+  MISSING: .workspace/btw-question/d30/2026-09-23T09-47-16-326Z-probe3-B-detail-   (-> /home/CNS2026495165/dsh/.workspace/btw-question/d30/2026-09-23T09-47-16-326Z-probe3-B-detail-)
+  MISSING: .workspace/btw-question/d30/2026-09-23T09-47-16-326Z-probe3-C-   (-> /home/CNS2026495165/dsh/.workspace/btw-question/d30/2026-09-23T09-47-16-326Z-probe3-C-)
+---
+REFS: FAIL
+exit=1
+
+## 4) 两条残留 MISSING 的存在性反证（判定为『探针断词假阴性』）
+根因：git status --short 非 -z 输出会把非 ASCII 路径转义成八进制（如 埋 = \345\237\213），
+      任何 [A-Za-z0-9._/-] 正则都会在反斜杠处断词，只剩一个**不存在的前缀**。
+      该断词类假阴性已登记在 skill generate-playbook.md 的「三条必须遵守的写法」第 3 条。
+
+实测：这两个文件在磁盘上真实存在（不是缺失）：
+      651822 B  .workspace/btw-question/d30/2026-09-23T09-47-16-326Z-probe3-B-detail-埋点契约.png
+      655404 B  .workspace/btw-question/d30/2026-09-23T09-47-16-326Z-probe3-C-驼峰-multiSelect.png
+
+  且它们是**其它会话**（btw 问答卡片线）的未跟踪产物，与本轮交付无关。
+
+## 5) 其余自检
+check-sections.sh：
+sections found: 0 1 2 3 4 5 9
+budget(§0-§5+§9) counted=84 limit=100 PASS
+SECTIONS: PASS
+空壳小节检查：
+EMPTY-CHECK DONE

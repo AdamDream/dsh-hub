@@ -8,7 +8,8 @@
 
 > **数据时点**：2026-09-30（**§5.5 DSH 0.2.0 迁移线为 2026-09-30 新增，取代 §5.4 成为当前升级主线**；§7 追加 D34/D35；
 > **§5.6/§5.7 为 2026-09-30 WP7 文档收口新增** —— §5.6 记「已完成事实基线 + 未闭门禁现状 + 勘误」，
-> §5.7 是本轮 `audit-020/reports/` 全 **48** 份报告的总索引；同批新增 `docs/architecture/06-…`、`07-…` 两页并更正 §5.5 一处旧叙述）。
+> §5.7 是本轮 `audit-020/reports/` 报告的总索引；同批新增 `docs/architecture/06-…`、`07-…` 两页并更正 §5.5 一处旧叙述）。
+> **2026-09-30 接手轮追加**：§5.6.4 记该轮新增事实（两插件设置页修复、技能迁移、P0-A 完成 100%、Open in App 修复、peer 放宽），§5.7 索引由 **48** 份扩到 **55** 份；本轮改动已作为 commit `66ef701c` 推送 `origin/main`）。
 > 更早基线：2026-09-25（§0/§1/§2/§3/§4 仍为 2026-09-20 基线；§5.1–§5.3 为 2026-09-23 性能专项；**§5.4 办公投递与升级线为 2026-09-25 新增，其状态口径以 `workbuddy-reverse-proxy/reports/office-upgrade-coordinator-status.md` 与 `upgrade-next-isolated-exec.md` 为准，本页只记结论**；§6 索引、§7 缺陷表（含 D18–D28）、§8 为 2026-09-23，2026-09-25 仅追加 §5.4 与 §6 若干索引行）。
 > **2026-09-28 复核定稿（只动 §5.4 状态口径）**：§5.4 现以三档为准 —— `workbuddy-reverse-proxy/reports/office-upgrade-current-adjudication.md`（**当前协调裁决**）、
 > `.../office-upgrade-coordinator-status.md`（放行状态 + 用户裁决）、`.../upgrade-integrated-isolation-exec.md`（层 A 私有组合实测）；
@@ -106,7 +107,7 @@ graph TD
   arch020a --> official020["0.2.0 官方件源码根 @deepseek-ai/（288 包）"]
   arch020b --> deployed["assembly-020/home/profiles/node_modules/（13 个定制件）"]
   arch020b --> patch020["assembly-020/home/profiles/web/cordis.patch.yml（650 行）"]
-  arch020a --> audit020[".workspace/audit-020/reports/（48 份）"]
+  arch020a --> audit020[".workspace/audit-020/reports/（55 份）"]
   arch020b --> audit020
   notebook --> audit020
   notebook --> runbooks[docs/runbooks/]
@@ -352,11 +353,11 @@ sequenceDiagram
 
 ---
 
-### 5.6 DSH 0.2.0 迁移事实基线与未闭门禁（2026-09-30 收口）
+### 5.6 DSH 0.2.0 迁移事实基线与未闭门禁（2026-09-30 收口 + 接手轮追加）
 
 > **本节是 §5.5 的落地版**：§5.5 是**rc.1 时代的过程摘要**（2026-09-30 10:40 前落笔，部分数字后被 rc.2 与全量预检改写），
 > 本节记**已完成的迁移事实基线**、**未闭门禁现状**与**勘误**。**两者冲突时以本节为准**（勘误清单见 §5.6.3）。
-> 证据根：`.workspace/audit-020/reports/`（48 份，总索引见 §5.7）、`.workspace/audit-020/RUNBOOK-020.md`、交接件根 `dsh-020_NEXT_SESSION_PROMPT.md`。
+> 证据根：`.workspace/audit-020/reports/`（55 份，总索引见 §5.7）、`.workspace/audit-020/RUNBOOK-020.md`、交接件根 `dsh-020_NEXT_SESSION_PROMPT.md`。
 
 #### 5.6.1 本轮目标与已完成的迁移事实基线
 
@@ -388,11 +389,30 @@ sequenceDiagram
 | **N1**（settings API 断层） | 3 个插件须改代码：`installSettingsSection`/`settingsNamespace` 断层 | **已修但机制性风险仍在**：三插件（`dsh-subagent-model` / `dsh-session-board` / `vision-adam`）已全部改造；**断层根因在 0.1.7 就已存在，不是 0.2.0 引入** ⇒ 每轮升级都须复查"是否又有插件在模块顶层具名导入这两个符号" | §5.7 `PLUGIN-MATRIX.md`、`PLAN-A-DONE.md`、`DECISIONS-BEFORE-CUTOVER.md` D16 |
 | **N10**（WE provider 契约返工） | 原报 **22 条**不兼容（52 存在 / 17 签名变化 / 5 消失），方案为「私有依赖岛」 | **已大幅缓解、但未逐条复验**：改走 **WE 升 0.2.2**（含补丁回流 + peer 放宽 + `ssh2`），**不采用私有依赖岛**；T24 的 75 条契约点**未在 0.2.2 上逐条重跑**。另据 T17 更正：`@local/dsh-ssh-gui`/`@local/dsh-workerspace` 的顶层具名导入**在上一轮已修**，按仓库源码派工会做重复劳动 | §5.7 `T24-workspace-enhancement-units.md`、`T17-…md` §自我更正、`PLAN-B-DONE.md` |
 | **N16**（btw 26 条不兼容） | T30：`@local/dsh-btw` 需 **21 个改造单元** | **结论已被部署件实测推翻**：T30 的 26 条/21 单元针对**工作区源码**（`078ef49d`），而**部署件**（`606f53f1`）实测残留为 **0**（`dsh-client-runtime` 引用 0、退役图标 0、`Session.events`/`conversationEvents`/`settingsScope` 0 引用）；btw 在 0.2.0 上**已加载并激活成功**。**仍待做**：其**客户端 UI 完整行为**（侧聊面板、JumpList）需 GUI 实测确认 | §5.7 `T30-btw-compat-020.md`、`DELIVERY-020-FINAL.md`「btw」节、`PLUGIN-MATRIX.md` 口径声明 |
-| **N17**（历史会话可读性） | 交接件：0.2.0 读不了 0.1.1 历史；旧叙述称两道闸为 `descriptor v2` + **三种打包行** | **根因已改写（勘误 E1）**：全量基线 **229/2508 = 9.1%** 可读，**拒因只有两类** —— ① `subagent/descriptor` 版本 2（**2275 份**，修法 `2→3`，v2 成员集是 v3 子集）；② **插件消息来源缺 `sections` 数组**（**4 份**先命中，出现在 v0 的**三处**消息位置：`user/message.data.source`、`agent/inbox/spliced.data.inserted[].source`、带 `message` 包装的 `[].message.source`）。**「三种顶层打包行 `text-chunks`/`reasoning-chunks`/`tool-call-chunks` 是第二道硬闸」不成立** —— 0.2.0 的 v0 codec **本来就支持**打包行。转换在**语料副本**上进行，**不原地改 `~/.dsh/sessions`** | `p0a/BRIEF.md` §2.1（全量预检）；机制行号见 `docs/architecture/06-dsh-020-composition-and-plugin-architecture.md` §6.3 |
+| **N17**（历史会话可读性） | 交接件：0.2.0 读不了 0.1.1 历史；旧叙述称两道闸为 `descriptor v2` + **三种打包行** | **根因已改写（勘误 E1）**：全量基线 **229/2508 = 9.1%** 可读，**拒因只有两类** —— ① `subagent/descriptor` 版本 2（**2275 份**，修法 `2→3`，v2 成员集是 v3 子集）；② **插件消息来源缺 `sections` 数组**（**4 份**先命中，出现在 v0 的**三处**消息位置：`user/message.data.source`、`agent/inbox/spliced.data.inserted[].source`、带 `message` 包装的 `[].message.source`）。**「三种顶层打包行 `text-chunks`/`reasoning-chunks`/`tool-call-chunks` 是第二道硬闸」不成立** —— 0.2.0 的 v0 codec **本来就支持**打包行。转换在**语料副本**上进行，**不原地改 `~/.dsh/sessions`**。**接手轮已完成并实证**：转换 + 落盘 + 端到端逐份打开 **2508/2508 = 100%**；**新发现的第三道闸是物理布局** —— 首帧必须恰好只有一行 header，否则持久层 `listArtifacts` 会**静默跳过**整根（详见 §5.6.4 与勘误 E9） | `p0a/BRIEF.md` §2.1（全量预检）；`p0a/verify/VERIFY-REPORT.md`；机制行号见 `docs/architecture/06-dsh-020-composition-and-plugin-architecture.md` §6.3 |
 
 > **仍未实证的一条（H1）**：整个迁移只对「GUI 内对话成功」做过一次真实交互实证；
 > **设置页表单可编辑保存、识图工具调用、btw 侧聊面板、SSH 远端子功能均未逐一验证**。
-> 另：P0-A 转换产物的**端到端逐份真实打开**（消息投影哈希相等 + 地标计数不变 + 头部不变量成立）**尚未见落盘报告**，不得据"转换报告已产出"称迁移通过。
+> **2026-09-30 接手轮更新**：P0-A 的**端到端逐份真实打开**已有落盘报告 —— 全量 2508 份的
+> 「头部不变量 + 地标计数 + 消息投影哈希」三项证据见 `p0a/verify/VERIFY-REPORT.md`（含逐份 `per-file.jsonl`），
+> 持久层 `listArtifacts` 枚举与 legacy read-open 见 §5.6.4。**仍未做的**是 GUI 内逐项点击验收（设置页保存、识图、btw 侧聊、SSH 远端子功能）。
+
+#### 5.6.4 接手轮（2026-09-30 第二会话）新增事实
+
+> 本小节只记**该轮实测到的事实**；与 §5.6.1–§5.6.3 冲突时**以本小节为准**（新→旧）。commit `66ef701c`，已推送 `origin/main`。
+
+| 事项 | 已完成的事实（含证据） |
+| --- | --- |
+| 两插件设置页不可用（用户点名） | **真因不是"插件没加载"，而是 0.2.0 的设置面只暴露 `.volatile()` 字段**：`dsh-settings/lib/index.js:418-419` 对 `volatileForm === undefined` 的条目**整条跳过**（`:505-507` 写入还会直接抛 `has no volatile fields`）。两个插件的 `Config` 当时**一个 volatile 字段都没有** ⇒ 客户端 `configForms` 快照落 `unavailable`，即用户看到的「设置命名空间未注册」 |
+| 修法与实证 | `@local/dsh-subagent-model`（`provider`/`model`）与 `@deepseek-ai/dsh-vision-adam`（`apiKeyEnv`/`baseURL`/`model`/`maxTokens`）加 `.volatile()`，并加 cosmokit 引用解包。**drill 真启动 0.2.0-rc.2**：served 命名空间 **25 → 27**（差额**恰好**是这两个），`disabling profile plugin row` **0**、`failed to import` **0**。现役 3098 实抓 `/api/settings/describe` 仅 25 条 ⇒ **改动需重启宿主才生效**（宿主半是 ESM 模块，`hmr root: []` 不重载） |
+| 技能迁移（用户点名） | 真因：**`$DSH_HOME/skills/` 此前根本不存在**。补齐 `{grill-me,ppt-master,program-notebook,session-handoff}` + `wallpapers/` + `taste/` + **`AGENTS.md`**。实跑真实 provider **4/4 加载、警告 0**；本轮会话技能目录**当场由 2 条变 5 条**（`grill-me` 因 `disable-model-invocation: true` 不进模型目录属预期）。`ppt-design-systems` **不是迁移丢失**：它只在 `pptDesignSystemRoot`/`DSH_PPT_DESIGN_SYSTEM_ROOT` 非空时注册，而全树该变量**只有读取方、没有写入方** ⇒ **从未启用** |
+| P0-A 会话迁移**完成** | **2508/2508 = 100.00% 可读**（基线 9.13%）。修复只有两处白名单：`R1` descriptor `2→3`（2275 处）、`R2` 插件 snapshot 来源补 `sections: []`（912 处）；**已补 `sections` 的 12 095 处一处未动**。端到端：`listArtifacts()` = **2521**（v0 2502 + v3 3 + v4 16 = 磁盘 2524 − 3 个被更高代际遮蔽的下代文件）、**legacy read-open 40/40 成功**。逐份报告见 `p0a/verify/VERIFY-REPORT.md` |
+| **第三道闸：物理布局（新发现）** | 0.2.0 持久层要求**首帧恰好只有一行 header**（`dsh-session-persistence-jsonl/lib/index.js:2293-2295`），而 `:3040-3044` 会把该错误**静默 `continue`** ⇒ **整根枚举为空**。第一版转换器把每份压成单帧：codec 层 100% 通过，但 `listArtifacts` 枚举 **0**（同内容分帧后 **418/418**）。修法：frame#0 = header 行单独成帧。⇒ **会话产物必须同时过 codec 闸门与物理闸门，缺一不可** |
+| P0-B settings 投放 | profile patch 新增三段按现役 `settings.yaml` **原值**投放：`vision-adam`（`gpt-6-astra` / adam 网关 / `ADAM_API_KEY` / 393216）、`wallpaper`（含壁纸本体入 `$DSH_HOME/wallpapers/`）、`ssh-gui`。drill 实测三段 `applies=live` 且取值正确 |
+| Open in App 无响应（用户点名） | **源码级闭环**：`dsh-subagent/lib/index.js:50-56` 的 `scrubbedParentEnv()` 是**凭据擦洗而非白名单**（只剔除 `/KEY\|PASSWORD\|SECRET\|TOKEN/i` 与 `DSH_*`）⇒ 桌面变量只要宿主有就一定会转发给被启动的 GUI 应用；断点唯一 = `boot-web.sh` 的 `env -i` 清空了它们。修法：**保留 `env -i` 与隔离**，白名单 15 项从启动终端显式带入；无桌面会话时明确告警。见 `reports/OPEN-IN-APP-FIX.md` |
+| peer 豁免依赖解除 | 除两插件外，又把 `taste`/`workerspace`/`dsh-pptmaster`/`web-search-sse` 的 peer 由 `^0.1.1-rc.2` 放宽为 `^0.1.1-rc.2 \|\| ^0.2.0-rc.1`。**实测：删掉 `compatibility.json` 后 `disabling` = 0** ⇒ 6 个插件不再依赖该人工豁免文件（该文件仍需保留给其它条目） |
+| 本轮新裁决（3 条） | ① **切换前重取语料快照 + 重跑转换与两把闸门**（源根是活跃 append-only 根）；② **P0-C Route B 与 P1 remoteHosts 两项均授权落地**（本轮只有草案，未落地）；③ **同类 peer 风险一并收**（已完成，见上一行） |
+| 版本控制 | `.gitignore` 加固：把 `p0a/corpus`、`p0a/converted`、`p0a/verify/{singleframe,reframe}`、`n17-erratum/out`、`drill-home`、`verify-skills/*.jsonl` 挡掉 —— 防止 `git add -A` 误推约 **2.1 GB** 语料 |
 
 #### 5.6.3 勘误（2026-09-30 WP7 收口，就地更正并标日期）
 
@@ -409,6 +429,7 @@ sequenceDiagram
 | **E6** | 「0.2.0 实例必须零外呼」（`OPTION-C-VERIFICATION.md` 的实现前提） | **已被用户裁决取代**：**D3** 明确「凭据面搬入模型配置，让新实例可用（**接受该实例联网发起模型请求**）」。零外呼不再是 0.2.0 实例的运行约束，只保留为**隔离验收 harness** 的证明形态（`T20`） | `DECISIONS-BEFORE-CUTOVER.md` D2/D3；`T20-isolated-harness-verification.md` §6 |
 | **E7** | 「`dsh-vision-adam-0.2.0` 里的 `0.2.0` 指 DSH 版本」（易误读） | **`0.2.0` 是插件自身版本号**，与 DSH 版本无关 ⇒ `docs/runbooks/switch-web2-runbook.md:97` 的该值**不得改**。它是全仓唯一「`0.2.0` 不是迁移目标版本」的陷阱 | `T31-docs-impact-inventory.md` §0 发现 ① |
 | **E8** | §5.5 多数数字的**基线版本** | §5.5 行文时点为 **rc.1**（"余 40% 卡在打包行"即 rc.1 期推断）；rc.2 后 **`--dump-config` 200 条目 / 未激活 0 / N2 补丁 691 行 / WE 0.2.2** 等值已按 rc.2 更新。**引用 §5.5 的任一数字都须核对本节与 §5.7** | `MIGRATION-RC2-DONE.md`；§5.5 未标 rc.1 的行 |
+| **E9** | 「会话迁移只有 codec 层一道闸」 | **新增第三道闸：物理布局**。0.2.0 持久层要求**首帧恰好只有一行 header**（`dsh-session-persistence-jsonl/lib/index.js:2293-2295`），且 `:3040-3044` 把该错误**静默 `continue`** ⇒ **整根枚举为空**（不是报错，是「看不见」）。第一版转换器把每份日志压成单帧：**codec 层 2508/2508 通过，但 `listArtifacts` 枚举 0**；同内容分帧后 **418/418**。⇒ 任何会话产物必须**同时**过 codec 闸门与物理闸门 | `p0a/framecheck.mjs`；`p0a/verify/VERIFY-REPORT.md` §5；§5.6.4 |
 
 **另外两条自查（同批更正 §5.5 的口径，不列为独立勘误）**：
 
@@ -417,13 +438,14 @@ sequenceDiagram
 
 ---
 
-### 5.7 本轮报告总索引（`.workspace/audit-020/reports/`，全部 48 份）
+### 5.7 报告总索引（`.workspace/audit-020/reports/`，全部 55 份）
 
 > **口径**：① 路径相对 `.workspace/audit-020/`；② **状态只取三值** ——
 > **已定案**（结论已出且未被推翻）／**待办**（有待闭动作或未验证项）／**已被取代**（结论或基线已被后续件覆盖）；
 > ③ 「备注」列记**基线版本与取代关系**——**A 档件多数（约 42/48）的基线是 0.2.0-rc.1**，
 > rc.2 之后凡涉及包数/组合条目/行数的数字都要按 §5.6.1 与 `MIGRATION-RC2-DONE.md` 重取；
-> ④ 覆盖数 **48/48**（目录内 `*.md` 47 份 + `*.yml` 1 份）；⑤ 交接件 §2 P2 说的「47 份」是 rc.1 期计数（同型差异见勘误 E5）。
+> ④ 覆盖数 **55/55**（目录内 `*.md` 54 份 + `*.yml` 1 份）；⑤ 交接件 §2 P2 说的「47 份」是 rc.1 期计数（同型差异见勘误 E5）；
+> ⑥ **接手轮新增 7 份**（#49–#55）已并入下表并重算三个集合。
 
 | # | 文件（相对 `reports/`） | 一句话主题 | 状态 | 备注（基线 / 取代关系） |
 | --- | --- | --- | --- | --- |
@@ -475,16 +497,23 @@ sequenceDiagram
 | 46 | `T32-dump-config-schema-rca.md` | `--dump-config-schema` rc=1 机制级根因 | 已定案 | 判定为**官方缺陷**（0.1.7 与 0.2.0 同现），非本机 patch 写法问题 |
 | 47 | `WE-PATCH-BACKPORT-FEASIBILITY.md` | WE 三处本地补丁回流 0.1.4 源码的可行性勘察 | **已被取代** | 结论**部分作废**：上游 **0.2.2 已实现** `readByteRange`/`terminalEnvironment`/`resize`/`inspectActivity` ⇒ 原定手写缺口不存在（`PLAN-B-DONE.md`） |
 | 48 | `T06-proposed-cordis.patch.020.yml` | 0.2.0 profile patch 层**草案**（`T06-official-patch-layer-020.md` 的交付件） | **已被取代** | **勿直接覆盖现役 profile**；实际落地的组合层是 `assembly-020/home/profiles/web/cordis.patch.yml`（650 行） |
+| 49 | `COORDINATOR-ROUND-STATUS.md` | 接手轮协调者总结：三件点名事的结论 + 全部数字 + 证据索引 | 已定案 | 该轮总纲；数字被 §5.6.4 引用 |
+| 50 | `RESTART-AND-VERIFY-RUNBOOK.md` | **重启 3098 与验收 Runbook**（一次重启覆盖两插件修复 + Open in App） | 已定案 | 含 GUI 逐项验收与回滚；**重启未执行** |
+| 51 | `OPEN-IN-APP-FIX.md` | Open in App 无响应：源码级因果链闭环 + 启动脚本修复 | 已定案 | 修复已实施并脚本层实证；**真实窗口未验收** |
+| 52 | `VOLATILE-FIX-VERIFY.md` | 两插件 `.volatile()` 修复的独立复核（含 200 条 profile 条目可服务性登记表） | 已定案 | 缺口修复前 2 条 / 修复后 **0 条**；结论「足够但需重启」 |
+| 53 | `SKILLS-MIGRATION-VERIFY.md` | 技能迁移独立复核（发现路径、逐技能加载、未迁移资产清点） | 已定案 | 4/4 加载、警告 0；`AGENTS.md` 缺失已补 |
+| 54 | `N17-ROOT-CAUSE-CORRECTION.md` | N17 根因勘误（逐条判定交接件原叙述） | 已定案 | 基线 9.13% / 只修 descriptor 82% / 修完两处 **100%**；与协调者逐份一致 |
+| 55 | `COORDINATOR-SUBAGENT-MESSAGES.md` | 协调者发给执行档的 3 条追加消息原文（导出件） | 已定案 | 供复核 `send_message` 内容；对应子会话 seq 已记录 |
 
 **索引计的三个集合**（便于对账，计数以上表逐行为准）：
 
 | 集合 | 份数 | 清单 |
 | --- | --- | --- |
-| **已定案** | **37** | #2/3/5/6/8/9/10/11/12/13/14/15/16/17/18/19/20/21/22/23/24/26/27/28/29/31/32/33/34/35/38/39/41/42/43/45/46（逐行相加 = **37**） |
+| **已定案** | **44** | #2/3/5/6/8/9/10/11/12/13/14/15/16/17/18/19/20/21/22/23/24/26/27/28/29/31/32/33/34/35/38/39/41/42/43/45/46（逐行相加 = **37 + 新增 7 = 44**） |
 | **待办** | **4** | #30 `T17`、#36 `T23`、#37 `T24`、#40 `T27` |
 | **已被取代** | **7** | #1 `CUTOVER-PLAN`、#4 `MEASURED-BASELINE`、#7 `MORNING-STATUS`、#25 `T12`、#44 `T30`、#47 `WE-PATCH`、#48 `T06-proposed…` |
-| 三集合合计 | **48** | 37 + 4 + 7 = **48** |
-| 目录核验 | **48** | 目录内 `*.md` **47** + `*.yml` **1** = **48**（`[实跑]` `ls .workspace/audit-020/reports/ \| wc -l`） |
+| 三集合合计 | **55** | 44 + 4 + 7 = **55** |
+| 目录核验 | **55** | 目录内 `*.md` **54** + `*.yml` **1** = **55**（`[实跑]` `ls .workspace/audit-020/reports/ \| wc -l`） |
 
 > **集合列的两处诚实说明**：① 上表"状态"列以**报告结论**为准，"待办"表示**报告已出但仍有未闭动作**；
 > ② `T07` 的报告结论已定案（归"已定案"），其**工具链改造**属 §5.6.2 之外的独立待办，未计入"待办"集；
@@ -599,7 +628,10 @@ sequenceDiagram
 | D31 | **btw `answer` 方向缺"语义校验"**（登记项，与 D30 无因果）：官方 `ask_user_question` 在答案侧除宽度校验外还有 `matchesQuestions` 语义校验——答案条数必须等于题数、逐条 `id` 顺序一致、`selected` 不得重复、`custom` trim 后不得为空、非多选时最多 1 项且不得与 custom 并存、`selected` 的每个 label 必须存在于该题 `options[].label` 集合中（官方 `@deepseek-ai/dsh-api-gateway/lib/index.js:1379-1393`）。btw 的 `answer`（`dsh-btw/src/host/side-chat-service.ts:1157-1172`）**唯一校验是 `:1162-1164` 的 `questionId` 是否匹配**，上述任何一条都没有。宽度方向**一致**（请求 codec `dsh-btw/src/shared/remote.ts:215-219` 内嵌 `:157-161` 全 `.strict()`；工具 output schema `dsh-btw/src/host/side-chat-service.ts:938-957` 两层 `additionalProperties: false`；宿主在 `:984-987` 又显式重建三键对象）⇒ **不是 D30 同类通道**，属"照抄官方时有一步没抄"的登记 | **未修**（登记；对 D30 无因果） | `.workspace/btw-question/d30-consequence.md` §F.0「额外发现」与 §F.4(b)；官方 `@deepseek-ai/dsh-api-gateway/lib/index.js:1379-1393`；btw `dsh-btw/src/host/side-chat-service.ts:1157-1172` |
 | D33 | **窄屏 bottom-sheet 下抽屉内容溢出、控件不可达**（**用户裁决：本轮不修、另开一轮**）：640×800 下 `#dsh-btw-drawer` `clientHeight≈370` vs `scrollHeight≈633`（**transcript 只剩 54 px 滚动窗**；泳道高度两次独立会话均 ≈372 px）⇒ **「停止」按钮与抽屉输入框的中心点落在视口外**（`elementFromPoint=null`，实测**中心点 y≈995 / 986**，即二者 box 顶边 `y=980 / 962` ＋ h/2；卡片「发送回答」box 顶边 `y=872` 同样在视口外），必须滚动才能看到完整卡片；**1440×900（`right` 模式）一切正常**（`drawer 12..888`、`stop y 817..847`，全部 `centerInViewport=true`）。**根因（本档已核对源码）**：自动路径的车道高度沿用既有公式 `BOTTOM_SHEET_RATIO=0.48`×可用高度，并夹在 `clamp(…, min(280, available), 560)`（`dsh-btw/src/client/overlay-placement.ts:86-88` 常量、`:396-407` `sheetHeight()`，`:402-406` 为非显式分支），**而抽屉自身内容高度可超过该值**；`HANDLE_MIN_VIEWPORT=720` 以下**刻意沿用旧行为**（`dsh-btw/src/client/drawer-size.ts:41-46`：不渲染拖拽手柄、渲染时不套用显式尺寸 ⇒ 正好落回公式泳道）⇒ 与 HEAD 逐字相同，**不是本批引入的回归**。**不是「scrim 吞点击」**：scrim 是抽屉的前一个兄弟、选项行与「发送回答」均命中自身（T3 PASS），故本条与 T3 的 PASS 不矛盾。**未判定**：其它窄屏尺寸/高度是否复现、边界位置、以及"滚动抽屉内部容器能否把 composer 带回视口"（实测滚到底后 `submit`/`composer`/`stop` 仍在视口外） | **未修**（已实测；用户裁决另开一轮） | `.workspace/btw-question/e2e-cover/report.md` §2.4 + 同目录 `raw-2026-09-23T10-45-10-835Z-T3-extra.json`（三态几何：1440×900 / 640×800 / 滚到底）与复现脚本 `t3-geometry-probe.mjs`；旁证 `raw-2026-09-23T10-40-44-836Z-T3.json` 的 `hitTests.stop`；源码锚点 `dsh-btw/src/client/overlay-placement.ts:86-88,396-407`、`dsh-btw/src/client/drawer-size.ts:41-46` |
 | D34 | **0.2.0 客户端插件因 `settingsScope` 已删除而整块 pending**：`@local/dsh-subagent-model` 与 `@deepseek-ai/dsh-vision-adam` 的客户端 bundle 声明 `inject = ["slots","settingsScope"]`，而 **`settingsScope` 在 0.2.0 全树 0 命中**（0.1.7 即已删除）⇒ 注入不满足 ⇒ **客户端插件永久 pending**，GUI 顶部显示 `web boot: 2 entries did not activate ... pending (waiting for service: settingsScope)`。**已修**：① inject 去掉 `settingsScope`、加 `configForms`；② 新增 `adaptSettingsScope(raw)` 适配器把官方 `ctx.configForms.get(entryId)` 的 `SettingsFormScope`（`getSnapshot`/`subscribe`/`update(ops,revision)`）桥接成组件期望的旧形状（补 `mode: writable?'host':'memory'`、把 `set/unset(field)` 转成 `update([{op,path:[field]}], revision)`）。**教训**：「宿主半 import 成功」**不等于**插件在 0.2.0 上可用 —— 客户端半的服务注入是**独立**的一道门 | **已修（inject + 适配器均已落盘并 `node --check` 通过）**；设置页表单的实际读写**未在 GUI 中逐一验证** | 隔离件 `assembly-020/home/profiles/node_modules/{@local/dsh-subagent-model,@deepseek-ai/dsh-vision-adam}/lib/client.js`；官方契约 `dsh-client-ui-primitives/lib/types/settings-form/form-model.d.ts:17-30,41-52,89-126,148-185`；官方样例 `dsh-client-ui-settings-subagent/lib/client.js:484-506,801-844` |
-| D35 | **0.2.0 的 peer 闸门豁免值绑死内核精确版本**：`<profile>/compatibility.json` 的豁免值是「**精确 DSH 版本数组**」，与运行时版本做 `includes` 比对（`dsh-app-boot` 的 `evaluatePluginCompatibility`）。0.2.0-rc.1 → rc.2 升级时若不同步改，原本豁免的条目会**重新被静默禁用**（实测 rc.2 冷启动出现 **10 条 `disabling profile plugin row`**，改值后归 **0**）。**每次内核版本变更都必须同步此文件**，且它**不接受范围**（只接受精确版本） | **已修**（6 条豁免值升为 `0.2.0-rc.2`） | `assembly-020/home/profiles/web/compatibility.json`；机制 `@deepseek-ai/dsh-app-boot/lib/index.js` 的 `evaluatePluginCompatibility` / `readProfileCompatibility`
+| D35 | **0.2.0 的 peer 闸门豁免值绑死内核精确版本**：`<profile>/compatibility.json` 的豁免值是「**精确 DSH 版本数组**」，与运行时版本做 `includes` 比对（`dsh-app-boot` 的 `evaluatePluginCompatibility`）。0.2.0-rc.1 → rc.2 升级时若不同步改，原本豁免的条目会**重新被静默禁用**（实测 rc.2 冷启动出现 **10 条 `disabling profile plugin row`**，改值后归 **0**）。**每次内核版本变更都必须同步此文件**，且它**不接受范围**（只接受精确版本） | **已修**（6 条豁免值升为 `0.2.0-rc.2`）；**接手轮进一步**：把 6 个插件（`subagent-model`/`vision-adam`/`taste`/`workerspace`/`dsh-pptmaster`/`web-search-sse`）的 peer 放宽为 `^0.1.x-rc.y \|\| ^0.2.0-rc.1`，**实测删掉 `compatibility.json` 后 `disabling` = 0** ⇒ 不再依赖该人工豁免文件（该文件仍须保留给其它条目） | `assembly-020/home/profiles/web/compatibility.json`；机制 `@deepseek-ai/dsh-app-boot/lib/index.js` 的 `evaluatePluginCompatibility` / `readProfileCompatibility`
+| D36 | **0.2.0 设置面只暴露 `.volatile()` 字段 ⇒ 非 volatile 条目被整条跳过**（用户点名「设置命名空间未注册」的真因）：`dsh-settings/lib/index.js:418-419` 对 `volatileForm(schema) === undefined` 的条目**整条 `return []`**（不报错、不出现在 served 列表），`:505-507` 的写入还会直接抛 `Plugin entry <ns> has no volatile fields`；客户端在命名空间不在 view 里时把快照置 `status:unavailable`（`dsh-client-ui-settings/lib/client.js:1226-1233`）。**`@local/dsh-subagent-model` 与 `@deepseek-ai/dsh-vision-adam` 的 `Config` 当时一个 volatile 字段都没有** ⇒ 设置页必然不可用。**教训与 D34 同型但不同门**：`import 成功` ≠ `客户端 inject 满足` ≠ **`SettingForms.describe()` 收录** —— 这是第三道独立门 | **已修**：两插件的设置字段加 `.volatile()`，并补 cosmokit 引用解包（`apply`/`current` 两条路径）；**drill 实证** served 25 → 27、`disabling` 0 | `reports/VOLATILE-FIX-VERIFY.md`（含 200 条 profile 条目可服务性登记表：缺口修复前 2 / 修复后 0）；`assembly-020/home/profiles/node_modules/{@local/dsh-subagent-model,@deepseek-ai/dsh-vision-adam}/lib/index.js`；官方同形 `dsh-agent-default-model/lib/index.js:21-25` |
+| D37 | **会话持久层的「物理布局」闸门：首帧不合法会导致整根被静默跳过**（本轮新发现，非回归）：0.2.0 要求会话日志的**首帧恰好只有一行 header**（`dsh-session-persistence-jsonl/lib/index.js:2293-2295` `assertZstdHeaderFrame`；`:2951` `readZstdPrefix` 同断言），而 `:3040-3044`（`listArtifacts`）把该错误**静默 `continue`** ⇒ **整根枚举返 0 条**（无报错、无日志）。把 2508 份历史压成**单帧**时：**codec 层逐份解码 2508/2508 全通过，但 `listArtifacts` 枚举 0**；同内容**分帧**（frame#0 = header 单独成帧）后 gate 通过、枚举正常。⇒ **任何会话产物必须同时过 codec 闸门与物理闸门**，只用 catalog 解码会得到假绿 | **已修**（转换器改分帧，并新增独立闸门脚本） | `p0a/framecheck.mjs`；`p0a/verify/VERIFY-REPORT.md` §5（含 A/B 可复跑反证）；勘误 E9 |
+| D38 | **「Open in App」的可用性依赖宿主进程的桌面环境，而生产启动脚本用 `env -i` 清空环境**（用户点名）：启动链 `dsh-host-open-in-app/lib/index.js:348-357` 以 `spawn(..., {detached:true, stdio:"ignore", env:{...scrubbedParentEnv(), ...options.env}})` 启动应用，而 `dsh-subprocess/lib/index.js:50-56` 的 `scrubbedParentEnv()` 是**凭据擦洗、不是白名单**（只剔除 `/KEY|PASSWORD|SECRET|TOKEN/i` 与 `DSH_*`；**`DISPLAY`/`WAYLAND_DISPLAY`/`XAUTHORITY`/`DBUS_SESSION_BUS_ADDRESS`/`XDG_RUNTIME_DIR` 全部 keep**）⇒ 桌面变量「宿主有则必转发」，断点唯一 = `boot-web.sh` 的 `env -i`。另两个限制同源：`stdio:"ignore"` **丢弃被启动应用的 stderr**；观察窗口（`launchWatchMs=1000`，`:366-367`）到期仍运行即判 `launched`、路由回 **200**（`:1390-1399` 的 200/502 映射）⇒ **「已发起」≠「窗口已出现」** | **已修（启动脚本，保留 `env -i` 与隔离）**：白名单 15 项从启动终端显式带入 + 无桌面会话时明确告警；真实窗口**未验收** | `reports/OPEN-IN-APP-FIX.md`；`docs/architecture/06-…md` 的组合/插件章节 |
 
 
 ---
@@ -624,6 +656,11 @@ sequenceDiagram
     ④ **T4 选项行键盘导航/焦点序** = **PASS（修正口径后）**：焦点可达选项行（待答时抽屉输入框 `disabled=true` ⇒ 锚点回退为"抽屉内第一个可聚焦元素"，得到 8 步**超集**序列）；多选 checkbox：Space→`true` **59/59**、再 Space→**`false` 0/59**、第三次→`true`；Enter 同样可切换且**未误提交**（卡片数恒 1）；方向键全程无效、选项 `tabIndex=0` 无 roving tabindex。**官方真机对照逐项一致**（官方卡 Tab 2 步可达、Space 选中、单选再按不取消、方向键无作用）⇒ 该 APG 偏差是**上游同款**，**不是 btw 新缺陷**。另有口径更正：首轮 T4 的 FAIL 系**测试方判定口径错**（radio 语义不可取消，官方 `choose()` 同款），非产品缺陷。
     **仍未覆盖 / 未判定（诚实边界，5 条）**：① **React 内部「重挂」机制本身不可观测**（仅等价判据，见上②）；② **待答时抽屉 textarea `disabled=true` ⇒「从输入框起 Tab」的锚点结构上不可构造**，已改为抽屉首个可聚焦元素的**超集**序列 ⇒ 严格意义的「从输入框起算的 Tab 距离」未测得；③ **窄屏只测 640×800 一档**（未扫 719.98/720 边界、未测更窄如 390×844 与横屏、`data-placement-degraded` 恒 `null`）；④ **官方多选 checkbox 未做真机对照**（官方对照只跑单选 radio）⇒「checkbox 再按取消」的一致性只有 **btw 侧实测 + 双方读源对照**；⑤ **Shift+Tab 反向路径与正向不镜像，成因未确证**（从选项行反向退格落到「收起 btw」header 按钮而非正向序列中的 tool row；仅有假设，未做定向验证）。取证：`.workspace/btw-question/e2e-cover/report.md` 与同目录 `raw-*-T1/T2/T3/T4.json`、`raw-*-T4b.json`、`raw-*-T3-extra.json`、`raw-*-T4-enter.json`。
 12. **D30 已修后的残留与未知（2026-09-23 收口）**：**已不再是推断**——D30 的**后果已真机实测**（详见 §7 D30 行：27 次失败读 / 45 s、中位间隔 1.475 s、抽屉冻结无卡片无报错、唯一出路是按「停止」、"收起重开"无效）；**键类通道**（多余键，含 `multiSelect`/`detail`）与**值维度**（`id:''`/`question:''`/`options[].label:''`/`questions:[]`）**均已被 `execute` 内的 codec 自校验覆盖**（fail-closed，失败即抛可纠正错误且不写 pending），选项项亦补 `.strict()`。**仍未知**：① **自然发生率未量化**——本轮条件是**靠外部误导**才构造出来的（对模型声称"前端要驼峰 `multiSelect`"）；**不给键名**时模型自发写的是**合法** `multi_select`，故"单次错误信念即触发"成立、但无外部误导时的发生率不可由本轮数据推断；② **跨会话切回走 `confirmRestore` 的"可见报错"形态未真机复现**（只有代码依据 `dsh-btw/src/client/controller.ts:664-679`；需"先在别的会话打开 btw 把当前会话 park 掉、再切回并打开"的序列，本轮"收起→重开"走的是 `open()` 早退分支 `:126-130`）；③ **官方 `ask_user_question` 路径未做同类 fault injection**（只做了间接观察：官方参数 schema 同宽，但其下游 UI 传输无 `.strict()` 命中）。
+
+13. **接手轮的修复在 3098 里尚未生效**：两插件 `.volatile()` 与启动脚本桌面变量转发都**需要重启宿主**（宿主半是 ESM 模块，`hmr root: []` 不重载）。本轮只做到「drill 真启动 + 进程内探针 + RPC 实证」，**未重启 3098**（本会话就跑在该进程里）。⇒ 设置页与 Open in App 的**实际可用性未验证**。
+14. **GUI 层逐项未验收**：设置页表单的**点击保存**、识图工具调用、btw 侧聊面板、SSH 远端子功能**均未逐一验证**（本轮只做到进程内 + `/api/settings/describe` RPC 层）。另：`send_message` 在 GUI 里按设计渲染为**一行投递回执**（`dsh-client-ui-tool/lib/client.js:3338-3348`，正文在明细项 `description` 上），且**子代理会话不进左侧列表**（`dsh-client-ui-workspace/lib/client.js:357-366` 对 `origin === "subagent"` 返回 false）—— 复核时须走父会话的子代理目录。
+15. **切换前必须重取语料快照**（用户 2026-09-30 新裁决）：`~/.dsh/sessions` 是**活跃 append-only 根**（本轮冻结快照后又增长：+2 份、7 份被追加、单文件 +577 帧）。本轮 2508 份为**冻结时刻口径**，**不得当作切换终稿**；重跑入口：`p0a/{census.py,scan.mjs,framecheck.mjs,convert.mjs}`。
+16. **0.2.0 的 v0 codec 读不了 0.2.0 自己写出的 v0 日志**（上游缺陷，D22 裁决留待存量修完再报）：实测 10:55 后新写入 9 份中 **7 份当场被自家 codec 拒收**（header `version: 0` + `descriptor v2` + taste snapshot 无 `sections`）。⇒ 更准确的说法不是「0.2.0 读不了 0.1.1 的历史」，而是**写入侧形态与自家 codec 契约不一致**。
 
 以上均标注为**未知**，不写入架构断言。
 

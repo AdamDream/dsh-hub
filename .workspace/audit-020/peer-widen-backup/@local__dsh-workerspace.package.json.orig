@@ -1,0 +1,46 @@
+{
+  "name": "@local/dsh-workerspace",
+  "version": "0.1.0",
+  "description": "DSH SoC/嵌入式薄插件（dsh-workerspace）：USB 串口收发+日志（stty/serialport 双后端）、烧录白名单封装（esptool/openocd/dfu-util/uuu/fastboot 模板 + 高危确认模态）、产物落盘 ~/.dsh/workerspace/。与底座 dsh-workspace-enhancement 分工：远程主机/交叉编译走底座，本插件只补 SoC 本地面。",
+  "license": "MIT",
+  "author": "CNS2026495165",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "soc",
+    "embedded",
+    "serial",
+    "flash",
+    "esptool",
+    "openocd",
+    "fastboot",
+    "uuu",
+    "dfu-util"
+  ],
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-credentials": "^0.1.1-rc.2",
+    "@deepseek-ai/dsh-fs": "^0.1.1-rc.2",
+    "@deepseek-ai/dsh-settings": "^0.1.1-rc.2",
+    "@deepseek-ai/dsh-subprocess": "^0.1.1-rc.2",
+    "@deepseek-ai/dsh-tools": "^0.1.1-rc.2",
+    "@deepseek-ai/dsh-user-approval": "^0.1.1-rc.2",
+    "@deepseek-ai/schemastery": "^3.18.1"
+  }
+}
