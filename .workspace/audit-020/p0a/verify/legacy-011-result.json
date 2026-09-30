@@ -1,0 +1,163 @@
+{
+  "module": "/home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-session-persistence-jsonl/lib/index.js",
+  "probe": {
+    "readZstdPrefixIsThisFree": true,
+    "summary": {
+      "corpus": {
+        "n": 2508,
+        "ok": 2505,
+        "fail": 3,
+        "classes": {
+          "SessionFormatUnsupportedError: session \"session-dNbcN-Na-NbN-aN-bfNbNfNdNe\" uses log format vN, but this harness reads only vN: the": 1,
+          "SessionFormatUnsupportedError: session \"session-NbbdNd-Nd-N-bNb-eNaNccN\" uses log format vN, but this harness reads only vN: the lo": 1,
+          "SessionFormatUnsupportedError: session \"session-bcNbN-NeNa-NdN-NdN-NcNeNce\" uses log format vN, but this harness reads only vN: the": 1
+        },
+        "totalEvents": 35123307,
+        "types": {
+          "permission/preset": 1040,
+          "sandbox/mode": 2663,
+          "approval/policy": 2663,
+          "subagent/descriptor": 2275,
+          "agent/inbox/spliced": 32062,
+          "turn/start": 8577,
+          "step/start": 169023,
+          "user/message": 33653,
+          "request/header": 3339,
+          "request/context": 2632,
+          "assistant/chunk": 34085630,
+          "assistant/message": 168430,
+          "step/end": 168963,
+          "turn/end": 8512,
+          "session/end-seed": 2684,
+          "session/title": 2222,
+          "tool/call": 207080,
+          "tool/result": 208001,
+          "llm/retry": 1753,
+          "llm/retry-started": 1745,
+          "todo/write": 1875,
+          "web/deepseek-search-llm-request": 3123,
+          "approval/asked": 304,
+          "approval/decided": 303,
+          "session/title-llm-request": 196,
+          "goal/change": 483,
+          "compaction/prune": 954,
+          "compaction/start": 203,
+          "compaction/summary": 176,
+          "compaction/end": 200,
+          "tool-workflow/run-start": 275,
+          "tool-workflow/agent-start": 712,
+          "command/run": 85,
+          "command/done": 84,
+          "tool-workflow/agent-end": 661,
+          "tool-workflow/run-end": 232,
+          "agent-preset/selected": 8,
+          "tool/code-dispatch-start": 243,
+          "tool/code-dispatch": 243
+        }
+      },
+      "converted": {
+        "n": 2508,
+        "ok": 2505,
+        "fail": 3,
+        "classes": {
+          "SessionFormatUnsupportedError: session \"session-dNbcN-Na-NbN-aN-bfNbNfNdNe\" uses log format vN, but this harness reads only vN: the": 1,
+          "SessionFormatUnsupportedError: session \"session-NbbdNd-Nd-N-bNb-eNaNccN\" uses log format vN, but this harness reads only vN: the lo": 1,
+          "SessionFormatUnsupportedError: session \"session-bcNbN-NeNa-NdN-NdN-NcNeNce\" uses log format vN, but this harness reads only vN: the": 1
+        },
+        "totalEvents": 35123307,
+        "types": {
+          "permission/preset": 1040,
+          "sandbox/mode": 2663,
+          "approval/policy": 2663,
+          "subagent/descriptor": 2275,
+          "agent/inbox/spliced": 32062,
+          "turn/start": 8577,
+          "step/start": 169023,
+          "user/message": 33653,
+          "request/header": 3339,
+          "request/context": 2632,
+          "assistant/chunk": 34085630,
+          "assistant/message": 168430,
+          "step/end": 168963,
+          "turn/end": 8512,
+          "session/end-seed": 2684,
+          "session/title": 2222,
+          "tool/call": 207080,
+          "tool/result": 208001,
+          "llm/retry": 1753,
+          "llm/retry-started": 1745,
+          "todo/write": 1875,
+          "web/deepseek-search-llm-request": 3123,
+          "approval/asked": 304,
+          "approval/decided": 303,
+          "session/title-llm-request": 196,
+          "goal/change": 483,
+          "compaction/prune": 954,
+          "compaction/start": 203,
+          "compaction/summary": 176,
+          "compaction/end": 200,
+          "tool-workflow/run-start": 275,
+          "tool-workflow/agent-start": 712,
+          "command/run": 85,
+          "command/done": 84,
+          "tool-workflow/agent-end": 661,
+          "tool-workflow/run-end": 232,
+          "agent-preset/selected": 8,
+          "tool/code-dispatch-start": 243,
+          "tool/code-dispatch": 243
+        }
+      },
+      "pair": {
+        "n": 2505,
+        "eventCountEqual": 2505,
+        "rawEqual": 226,
+        "strippedEqual": 2505,
+        "mismatches": [
+          {
+            "rel": "--home-CNS2026495165-RS--/session-d2bc0458-722a-4b78-a626-bf1b5f7d249e/session.v3.jsonl.zstd",
+            "decodeFailure": {
+              "corpus": "SessionFormatUnsupportedError: session \"session-dNbcN-Na-NbN-aN-bfNbNfNdNe\" uses log format vN, but this harness reads only vN: the",
+              "converted": "SessionFormatUnsupportedError: session \"session-dNbcN-Na-NbN-aN-bfNbNfNdNe\" uses log format vN, but this harness reads only vN: the"
+            }
+          },
+          {
+            "rel": "--home-CNS2026495165-dsh--/session-7bbd330d-027d-4758-b66b-e46a63cc9384/session.v3.jsonl.zstd",
+            "decodeFailure": {
+              "corpus": "SessionFormatUnsupportedError: session \"session-NbbdNd-Nd-N-bNb-eNaNccN\" uses log format vN, but this harness reads only vN: the lo",
+              "converted": "SessionFormatUnsupportedError: session \"session-NbbdNd-Nd-N-bNb-eNaNccN\" uses log format vN, but this harness reads only vN: the lo"
+            }
+          },
+          {
+            "rel": "--home-CNS2026495165-dsh--/session-bc0b7655-8e6a-4d10-9d91-03888c3e57ce/session.v3.jsonl.zstd",
+            "decodeFailure": {
+              "corpus": "SessionFormatUnsupportedError: session \"session-bcNbN-NeNa-NdN-NdN-NcNeNce\" uses log format vN, but this harness reads only vN: the",
+              "converted": "SessionFormatUnsupportedError: session \"session-bcNbN-NeNa-NdN-NdN-NcNeNce\" uses log format vN, but this harness reads only vN: the"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "formatPackages": {
+    "dsh-session-format-catalog": {
+      "exists": false,
+      "link": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-format-catalog"
+    },
+    "dsh-session-format": {
+      "exists": false,
+      "link": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-format"
+    },
+    "dsh-session-format-v0-to-v1": {
+      "exists": false,
+      "link": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-format-v0-to-v1"
+    },
+    "dsh-session-format-v1-to-v2": {
+      "exists": false,
+      "link": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-format-v1-to-v2"
+    },
+    "dsh-session-format-v2-to-v3": {
+      "exists": false,
+      "link": "/home/CNS2026495165/.npm-global/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-session-format-v2-to-v3"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# 0.2.0-rc.2 实例启动（生产形态：工作区内隔离根 + 伪装 HOME + 强制端口 + 零外呼）
+#
+# 用法：  bash boot-web.sh [PORT]        # 默认 3098
+# 停止：  Ctrl-C  （或另开终端 pkill -f 'port <PORT>'）
+#
+# 说明：
+#   - 输出同时打到终端与日志，**token URL 会直接显示在终端里**，无需翻日志。
+#   - 首次必须用带 ?token= 的 URL 打开；dsh 会用它换取 cookie，
+#     之后 http://127.0.0.1:<PORT>/ 直接可用。裸地址会返回
+#     "dsh web authentication required" —— 那是预期行为，不是故障。
+#   - 不加 netns 隔离：否则你的浏览器访问不到该端口。
+#     零外呼由 env -i（无环境凭据）+ DSH_TELEMETRY_MODE=DISABLED 保证。
+set -uo pipefail
+R=/home/CNS2026495165/dsh/.workspace/audit-020/assembly-020
+PORT="${1:-3098}"
+CLI="$R/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/lib/bin.js"
+LOG="$R/logs/web-$PORT.log"
+mkdir -p "$R/logs"
+
+echo "=== GATE: 端口 $PORT 必须空闲（bind-only 探针）==="
+node -e '
+const net=require("net");const p=Number(process.argv[1]);
+const s=net.createServer();
+s.once("error",e=>{console.log("PORT "+p+" => "+e.code);process.exit(e.code==="EADDRINUSE"?1:0)});
+s.listen(p,"127.0.0.1",()=>{console.log("PORT "+p+" => bind OK (free)");s.close();});
+' "$PORT" || { echo "ABORT: 端口被占用"; exit 9; }
+
+echo "=== 启动 0.2.0 web（port=$PORT）—— token URL 如下，首次请用它打开 ==="
+exec env -i \
+  HOME="$R/home" \
+  DSH_HOME="$R/home" \
+  PATH=/usr/bin:/bin \
+  DSH_TELEMETRY_MODE=DISABLED \
+  node "$CLI" --profile web --port "$PORT" 2>&1 | tee "$LOG"

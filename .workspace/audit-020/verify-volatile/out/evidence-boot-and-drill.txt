@@ -1,0 +1,27 @@
+# 现役 3098 宿主启动证据（只读摘录）
+
+## $A/logs/web-3098.log（3098 launcher 的 tee 输出；birth/mtime）
+2026-09-30 10:06:25.767382791 +0800 birth | 2026-09-30 11:03:18.475498334 +0800 mtime | /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/logs/web-3098.log
+$ grep -c 'disabling profile plugin row' $A/logs/web-3098.log => 0
+$ grep -n 'dsh web: http' => 
+18:dsh web: http://127.0.0.1:3098/?token=7p1qBjMTVAHrh5rWmCefpoYb1C_jsj-pryXoQSyTszg
+
+## $A/home/logs/dsh-host.jsonl（宿主 logfile exporter；/home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home 唯一）
+$ grep -c 'host log exporter active' => 21（最后一个 = 现役宿主 boot）
+"iso":"2026-09-30T02:31:20.017Z","type":"info","level":1,"name":"dsh-logfile","sn":2,"msg":"host log exporter active {\"file\":\"/home/CNS2026495165/dsh/.worksp
+"iso":"2026-09-30T02:34:48.411Z","type":"info","level":1,"name":"dsh-logfile","sn":2,"msg":"host log exporter active {\"file\":\"/home/CNS2026495165/dsh/.worksp
+$ 最后一个 boot marker 之后仍有条目（同进程持续写入）：
+  (见 out/evidence-timeline.txt)
+
+## 被修复文件 mtime（修复发生在宿主 boot 之后）
+2026-09-30 10:50:48.485988386 +0800 /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/profiles/node_modules/@local/dsh-subagent-model/lib/index.js
+2026-09-30 10:51:19.480853036 +0800 /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/profiles/node_modules/@deepseek-ai/dsh-vision-adam/lib/index.js
+
+## 另一执行档的 drill-home 实跑（11:09 boot，与我无关，只读引用）
+$A/drill-home/profiles/web/compatibility.json birth: 2026-09-30 11:09:20.221632299 +0800
+drill-3099.log(11:06, 无 compatibility.json): disabling profile plugin row "dsh-pptmaster" disabling profile plugin row "taste" disabling profile plugin row "vision-adam" disabling profile plugin row "web-search-sse" disabling profile plugin row "workerspace" 
+drill-3099.log probe: WATCH vision-adam => NOT-SERVED / SERVED-COUNT=SERVED-COUNT 24
+drill-3099-b.log(11:09): 0 条 disabling
+SERVED-COUNT 27
+WATCH vision-adam => served revision=0 applies=live value={"apiKeyEnv":"ADAM_API_KEY","baseURL":"https://llmapi.roboscience.xyz/v1","model":"gpt-6-astra","maxTokens":393216}
+WATCH subagent-model => served revision=0 applies=live value={"provider":"adam","model":"deepseek-v4-pro"}

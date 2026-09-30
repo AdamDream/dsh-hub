@@ -1,0 +1,37 @@
+PASS  H1   插件以 window.__ModuleLoader__.load({id, factory}) 形态自注册  [id=@local/dsh-remote-hosts]
+PASS  H2   插件 id 与目录名一致  [actual="@local/dsh-remote-hosts" expected="@local/dsh-remote-hosts"]
+PASS  H3   exports.apply / exports.inject 齐备  [inject=[slots, connection, locale]]
+PASS  H4   客户端 inject 含 slots（slot 面的前提）与 connection（RPC 面的前提）
+PASS  H5   apply 注册 4 个 effect（文案 / 类型 / 正文 / 标题各自可回滚）  [remote-hosts: dictionaries | remote-hosts: tab type | remote-hosts: tab body | remote-hosts: tab title]
+PASS  H6   localocale 只注册一个命名空间  [actual=1 expected=1]
+PASS  H7   zh / en 的 key-set 完全一致（官方 locales 纪律）  [actual="action.setCurrent,action.test,guide.description,guide.title,node.count,node.serial,node.serialTcp,node.ssh,rpc.unavailable,state.empty,state.error,state.loading,type.label" expected="action.setCurrent,action.test,guide.description,guide.title,node.count,node.serial,node.serialTcp,node.ssh,rpc.unavailable,state.empty,state.error,state.loading,type.label"]
+PASS  H8   sidebarRightTabs.register 恰好一次  [actual=1 expected=1]
+PASS  H9   类型定义不含契约外字段  [actual="(none)" expected="(none)"]
+PASS  H10  definition.id === 注册 key 的来源  [actual="@local/dsh-remote-hosts" expected="@local/dsh-remote-hosts"]
+PASS  H11  definition.kind 是页类型名  [actual="remote-hosts" expected="remote-hosts"]
+PASS  H12  页类型不给 patterns（页按 kind 打开，不做地址匹配）  [actual=undefined expected=undefined]
+PASS  H13  definition.title 是函数（惰性文案，官方 idiom）
+PASS  H14  definition.guide 是非空数组，入口带 id/order/title/description
+PASS  H15  slots.inject 恰好两处（正文 + 标题）  [actual=2 expected=2]
+PASS  H16  正文席位名 = sidebar.right.pane.tab（keyed）
+PASS  H17  标题席位名 = sidebar.right.pane.tab.title（keyed）
+PASS  H18  正文席位 key = 类型 id（不是 kind）  [actual="@local/dsh-remote-hosts" expected="@local/dsh-remote-hosts"]
+PASS  H19  标题席位 key = 类型 id  [actual="@local/dsh-remote-hosts" expected="@local/dsh-remote-hosts"]
+PASS  H20  正文 / 标题都是组件函数
+PASS  H21  没有任何注册落到已删除的旧席位 sidebar.workspaces.remoteHosts  [slots=[sidebar.right.pane.tab,sidebar.right.pane.tab.title]]
+PASS  H22  节点表走 ssh-gui 自己的 /ssh-gui 通道  [actual="/ssh-gui" expected="/ssh-gui"]
+PASS  H23  底座通道 = /api（**不是** 0.1.x 的 /dsw）  [actual="/api" expected="/api"]
+PASS  H24  dsw 命名空间拼接  [actual="dsw/conn.probe" expected="dsw/conn.probe"]
+PASS  H25  节点的 transport 显示名映射  [actual="node.serialTcp" expected="node.serialTcp"]
+PASS  H26  未知 transport 原样保留（不吞信息）  [actual="weird://" expected="weird://"]
+PASS  H27  normalizeNodes 白名单化（只留 id/name/transport/isCurrent）  [actual="id,isCurrent,name,transport" expected="id,isCurrent,name,transport"]
+PASS  H28  normalizeNodes 丢弃签名里的任何秘密字段值  [[{"id":"n","name":"N","transport":"ssh://","isCurrent":true}]]
+PASS  H29  nodeSummary 只数条数  [actual=1 expected=1]
+PASS  H30  空表 / 非对象输入不抛  [actual=0 expected=0]
+PASS  H31  正文可渲染（不抛），首帧是 loading 态
+PASS  H32  effect 落地后渲染出节点行（数据回路接通）
+PASS  H33  渲染树里没有秘密字段值（password / keyRef 均未泄出）
+PASS  H34  RPC 调用只用了 /ssh-gui 通道  [actual=true expected=true]
+PASS  H35  RPC endpoint = nodes.list  [actual="nodes.list" expected="nodes.list"]
+
+ALL PASS

@@ -1,0 +1,87 @@
+# WP3-A 对照表：dsh-settings 原生 volatileForm / isVolatilePath
+源码切片 sha256 输入：/home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-settings/lib/index.js:97-158（2684 字符，逐字实例化）
+
+## subagent-model 改前（volatile-fix-backup 原件）
+   文件: ./before/subagent-model.index.mjs
+   条目被 describe() 收录 (volatileForm !== undefined) = false
+   表单字段 = (无 → 命名空间不进 served 列表 → 客户端 status:'unavailable')
+   设置页写入路径 provider     isVolatilePath = false   ← write() 会抛 Config field ... is not volatile / entry has no volatile fields
+   设置页写入路径 model        isVolatilePath = false   ← write() 会抛 Config field ... is not volatile / entry has no volatile fields
+
+## subagent-model 改后（$A/home/profiles 现文件）
+   文件: /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/profiles/node_modules/@local/dsh-subagent-model/lib/index.js
+   条目被 describe() 收录 (volatileForm !== undefined) = true
+   表单字段 = provider:string, model:string
+   设置页写入路径 provider     isVolatilePath = true
+   设置页写入路径 model        isVolatilePath = true
+
+## vision-adam 改前（volatile-fix-backup 原件）
+   文件: ./before/vision-adam.index.mjs
+   条目被 describe() 收录 (volatileForm !== undefined) = false
+   表单字段 = (无 → 命名空间不进 served 列表 → 客户端 status:'unavailable')
+   设置页写入路径 model        isVolatilePath = false   ← write() 会抛 Config field ... is not volatile / entry has no volatile fields
+   设置页写入路径 baseURL      isVolatilePath = false   ← write() 会抛 Config field ... is not volatile / entry has no volatile fields
+   设置页写入路径 apiKeyEnv    isVolatilePath = false   ← write() 会抛 Config field ... is not volatile / entry has no volatile fields
+   设置页写入路径 maxTokens    isVolatilePath = false   ← write() 会抛 Config field ... is not volatile / entry has no volatile fields
+   （非设置页字段）apiKey         isVolatilePath = false   ← 预期 false：仍在 cordis.patch.yml 原生编辑
+   （非设置页字段）maxBytes       isVolatilePath = false   ← 预期 false：仍在 cordis.patch.yml 原生编辑
+   （非设置页字段）maxVideoBytes  isVolatilePath = false   ← 预期 false：仍在 cordis.patch.yml 原生编辑
+   （非设置页字段）xApiKey        isVolatilePath = false   ← 预期 false：仍在 cordis.patch.yml 原生编辑
+   （非设置页字段）sessionHeader  isVolatilePath = false   ← 预期 false：仍在 cordis.patch.yml 原生编辑
+
+## vision-adam 改后（$A/home/profiles 现文件）
+   文件: /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/profiles/node_modules/@deepseek-ai/dsh-vision-adam/lib/index.js
+   条目被 describe() 收录 (volatileForm !== undefined) = true
+   表单字段 = apiKeyEnv:string, baseURL:string, model:string, maxTokens:number
+   设置页写入路径 model        isVolatilePath = true
+   设置页写入路径 baseURL      isVolatilePath = true
+   设置页写入路径 apiKeyEnv    isVolatilePath = true
+   设置页写入路径 maxTokens    isVolatilePath = true
+   （非设置页字段）apiKey         isVolatilePath = false   ← 预期 false：仍在 cordis.patch.yml 原生编辑
+   （非设置页字段）maxBytes       isVolatilePath = false   ← 预期 false：仍在 cordis.patch.yml 原生编辑
+   （非设置页字段）maxVideoBytes  isVolatilePath = false   ← 预期 false：仍在 cordis.patch.yml 原生编辑
+   （非设置页字段）xApiKey        isVolatilePath = false   ← 预期 false：仍在 cordis.patch.yml 原生编辑
+   （非设置页字段）sessionHeader  isVolatilePath = false   ← 预期 false：仍在 cordis.patch.yml 原生编辑
+
+## 对照：官方 dsh-agent-default-model（volatile 官方同形参考）
+   文件: /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-default-model/lib/index.js
+   条目被 describe() 收录 (volatileForm !== undefined) = true
+   表单字段 = provider:string, model:string, reasoningEffort:string
+   设置页写入路径 provider     isVolatilePath = true
+   设置页写入路径 model        isVolatilePath = true
+   设置页写入路径 reasoningEffort isVolatilePath = true
+
+## 对照：@local/dsh-wallpaper（上一轮同规则修好的先例）
+   文件: /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/profiles/node_modules/@local/dsh-wallpaper/lib/index.js
+   条目被 describe() 收录 (volatileForm !== undefined) = true
+   表单字段 = global:object, pages:object
+   设置页写入路径 global       isVolatilePath = true
+   设置页写入路径 pages        isVolatilePath = true
+
+## 对照：@local/dsh-ssh-gui（上一轮同规则修好的先例）
+   文件: /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/profiles/node_modules/@local/dsh-ssh-gui/lib/index.js
+   条目被 describe() 收录 (volatileForm !== undefined) = true
+   表单字段 = file:object, exec:object, security:object, serial:object, nodes:object
+   设置页写入路径 file.maxBytes isVolatilePath = true
+   设置页写入路径 exec.timeoutMs isVolatilePath = true
+   设置页写入路径 security.confirmExec isVolatilePath = true
+
+## 对照：@local/dsh-logfile（非 volatile，预期不收录）
+   文件: /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/profiles/node_modules/@local/dsh-logfile/lib/index.js
+   条目被 describe() 收录 (volatileForm !== undefined) = false
+   表单字段 = (无 → 命名空间不进 served 列表 → 客户端 status:'unavailable')
+   设置页写入路径 level        isVolatilePath = false   ← write() 会抛 Config field ... is not volatile / entry has no volatile fields
+
+## 附：describe():436 投影链（projectForm(form, plainConfig(fiber.config))）在改后 Config 上的行为
+   subagent-model 改后（$A/home/profiles 现文件）
+     运行时 config 中的 volatile 引用字段 = [provider, model]  (typeof = object,object)
+     describe().value = {"provider":"adam","model":"deepseek-v4-pro"}
+     全部叶子为普通标量 = true
+   vision-adam 改后（$A/home/profiles 现文件）
+     运行时 config 中的 volatile 引用字段 = [apiKeyEnv, baseURL, model, maxTokens]  (typeof = object,object,object,object)
+     describe().value = {"apiKeyEnv":"ADAM_API_KEY","baseURL":"https://x/v1","model":"deepseek-v4-pro","maxTokens":100}
+     全部叶子为普通标量 = true
+   对照：官方 dsh-agent-default-model（volatile 官方同形参考）
+     运行时 config 中的 volatile 引用字段 = [provider, model, reasoningEffort]  (typeof = object,object,object)
+     describe().value = {"provider":"adam","model":"deepseek-v4-pro","reasoningEffort":"high"}
+     全部叶子为普通标量 = true

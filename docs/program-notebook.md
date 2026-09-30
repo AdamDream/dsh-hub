@@ -6,7 +6,10 @@
 它不是正文仓库：每个专题的完整内容在 `docs/architecture/`，证据在 `.workspace/reports/` 与
 `.workspace/` 下的部署批次目录里。
 
-> **数据时点**：2026-09-30（**§5.5 DSH 0.2.0 迁移线为 2026-09-30 新增，取代 §5.4 成为当前升级主线**；§7 追加 D34/D35）。更早基线：2026-09-25（§0/§1/§2/§3/§4 仍为 2026-09-20 基线；§5.1–§5.3 为 2026-09-23 性能专项；**§5.4 办公投递与升级线为 2026-09-25 新增，其状态口径以 `workbuddy-reverse-proxy/reports/office-upgrade-coordinator-status.md` 与 `upgrade-next-isolated-exec.md` 为准，本页只记结论**；§6 索引、§7 缺陷表（含 D18–D28）、§8 为 2026-09-23，2026-09-25 仅追加 §5.4 与 §6 若干索引行）。
+> **数据时点**：2026-09-30（**§5.5 DSH 0.2.0 迁移线为 2026-09-30 新增，取代 §5.4 成为当前升级主线**；§7 追加 D34/D35；
+> **§5.6/§5.7 为 2026-09-30 WP7 文档收口新增** —— §5.6 记「已完成事实基线 + 未闭门禁现状 + 勘误」，
+> §5.7 是本轮 `audit-020/reports/` 全 **48** 份报告的总索引；同批新增 `docs/architecture/06-…`、`07-…` 两页并更正 §5.5 一处旧叙述）。
+> 更早基线：2026-09-25（§0/§1/§2/§3/§4 仍为 2026-09-20 基线；§5.1–§5.3 为 2026-09-23 性能专项；**§5.4 办公投递与升级线为 2026-09-25 新增，其状态口径以 `workbuddy-reverse-proxy/reports/office-upgrade-coordinator-status.md` 与 `upgrade-next-isolated-exec.md` 为准，本页只记结论**；§6 索引、§7 缺陷表（含 D18–D28）、§8 为 2026-09-23，2026-09-25 仅追加 §5.4 与 §6 若干索引行）。
 > **2026-09-28 复核定稿（只动 §5.4 状态口径）**：§5.4 现以三档为准 —— `workbuddy-reverse-proxy/reports/office-upgrade-current-adjudication.md`（**当前协调裁决**）、
 > `.../office-upgrade-coordinator-status.md`（放行状态 + 用户裁决）、`.../upgrade-integrated-isolation-exec.md`（层 A 私有组合实测）；
 > P0/P1 的最新实测另见 `.../office-upgrade-p0-exec-20260929.md`（P0 执行档，判定"机制/局部通过、**目标未通过**"）与 `.../office-upgrade-p1-current-audit.md`（P1 在途）。
@@ -25,7 +28,7 @@
 | 文档写作约定（状态词汇 / 诚实边界 / 导航表 / 代码块规范） | 根 `DOC-STYLE.md`（Tier 0） |
 | 每项能力的**状态与起点**（带日期） | 根 `FEATURE-MAP.md`（Tier 2） |
 | **结构/数据流/运行流/配置链/缺陷摘要 + 全库索引** | **本页 `docs/program-notebook.md`（Tier 0 中枢）** |
-| 展开型专题（程序结构 / 插件体系 / 模型路由 / 运维部署 / **性能与操作体验专项** / **办公投递与 0.1.7 升级闸门**） | `docs/architecture/` 下的 `01-architecture-overview.md` … `05-performance-and-ux-program.md` + **`office-handoff.md`（2026-09-25 新增）**；**专题一律按文件名引用，不按编号区间**——新增件不占编号，写"编号连续区间"会指向不存在的文件 |
+| 展开型专题（程序结构 / 插件体系 / 模型路由 / 运维部署 / **性能与操作体验专项** / **办公投递与 0.1.7 升级闸门** / **0.2.0 组合与插件架构** / **本地定制清单**） | `docs/architecture/` 下的 `01-architecture-overview.md` … `05-performance-and-ux-program.md` + **`office-handoff.md`（2026-09-25 新增）** + **`06-dsh-020-composition-and-plugin-architecture.md`、`07-local-customization-inventory.md`（2026-09-30 新增）**；**专题一律按文件名引用，不按编号区间**——新增件不占编号，写"编号连续区间"会指向不存在的文件 |
 | 操作手册（按场景照做） | `docs/runbooks/` |
 | 审计 / 执行 / 复核 / 调研 / 事故 / 验收**证据**与其机器可读产物 | `.workspace/reports/`（Tier 3） |
 | **办公线 / 升级线**的审计、执行、裁决、调研证据与其议题入口 | `workbuddy-reverse-proxy/reports/` + 根 `office-upgrade_NEXT_SESSION_PROMPT.md`（**整目录未被 git 跟踪**，见 §5.4；与 `.workspace/reports/` 是**两个独立证据库**，勿混引） |
@@ -97,6 +100,15 @@ graph TD
   arch06 --> ohdocs["workbuddy-reverse-proxy/office-handoff/"]
   arch06 --> ohreports["workbuddy-reverse-proxy/reports/ 终审与隔离审计"]
   arch06 --> stopgate["workbuddy-reverse-proxy/UPGRADE-STOP-0.1.7.md（STOP 闸门）"]
+  notebook --> arch020a["docs/architecture/06 组合与插件架构（0.2.0）"]
+  notebook --> arch020b["docs/architecture/07 本地定制清单（0.2.0）"]
+  arch020a --> asm020[".workspace/audit-020/assembly-020/（rc.2 隔离组合）"]
+  arch020a --> official020["0.2.0 官方件源码根 @deepseek-ai/（288 包）"]
+  arch020b --> deployed["assembly-020/home/profiles/node_modules/（13 个定制件）"]
+  arch020b --> patch020["assembly-020/home/profiles/web/cordis.patch.yml（650 行）"]
+  arch020a --> audit020[".workspace/audit-020/reports/（48 份）"]
+  arch020b --> audit020
+  notebook --> audit020
   notebook --> runbooks[docs/runbooks/]
   notebook --> reports[".workspace/reports 证据库"]
   arch02 --> btw[dsh-btw]
@@ -330,7 +342,7 @@ sequenceDiagram
 | 本地插件（13 个） | 宿主半 **13/13 import 成功**；两处客户端半已迁 `settingsScope` → **`configForms`**（见 D34）。WE 升 **0.2.2**（含本地补丁回流 + 13 条 peer 放宽 + `ssh2` 链接） |
 | N2 子代理路由 | 官方 `dsh-tool-subagent` **无** settings 读取逻辑 ⇒ 「热路由」是**本地补丁**。rc.2 上已重打（`lib/index.js` **691 行**，官方 662），读 **`subagent-model` 条目的实时值**（`settings.describe()` 即热生效通道） |
 | settings 机制变更 | 0.1.7+ 删除 `installSettingsSection`/`settingsNamespace`；命名空间 = **profile 条目 id**；`settings.yaml` **只读一次即改名 `.imported`**，故**投放次序不可反** |
-| 历史会话可读性 | **N17（最高优先级未闭项）**：0.2.0 读不了 0.1.1 写出的历史。实测抽样 **3% 可读**；修 `descriptor v2→3` 后 **60%**；余 40% 卡在三种**顶层打包行**（`text-chunks`/`reasoning-chunks`/`tool-call-chunks`）。**根因**：packing 从 `dsh-session` 顶层行迁到 `dsh-llm` 的 `event.data.stream`，且旧位置解码器被移除。**用户已裁决：尝试把历史全部迁到 0.2.0** |
+| 历史会话可读性 | **N17（最高优先级未闭项）**：0.2.0 读不了 0.1.1 写出的历史。**⚠️ 本行 2026-09-30 的旧叙述（"抽样 3% / 修 descriptor 后 60% / 余 40% 卡在三种顶层打包行"）已被 P0-A 全量预检改写**：真实基线为**全量 2508 份中可读 229 份（9.1%）**，拒因只有两类 —— `subagent/descriptor` 版本 2（**2275 份**）与 `agent/inbox/spliced` 的插件来源缺 `sections` 数组（**4 份**）。**「三种顶层打包行是第二道硬闸」已被证伪**（0.2.0 的 v0 codec 本来就解码打包行）。**用户已裁决：尝试把历史全部迁到 0.2.0**。详见 **§5.6.3 勘误 E1** 与 §5.6.2 |
 | 转换工具（已实测可用） | `zstd` CLI（**按帧解码**；`zlib.zstdDecompressSync` 只解第一帧，会把 12 MB 读成 190 B）；0.1.1 的 `decodeStorageRecord`（零错误展开 65 145 打包行 → 1 364 372 事件）；0.2.0 的 `expandAssistantStream` |
 | GUI 实测状态 | **已实证**：实例 HTTP 200/37KB 真 UI、token→303/无 token→401、GUI 内对话成功（6 秒）。**未实证**：设置页表单可编辑保存、识图工具调用、btw 侧聊面板、SSH 远端子功能 |
 | 办公入口 Route B | 已查明**官方已有现成件** `@deepseek-ai/dsh-webhook`（内置动作入参 `{workspacePath,title,prompt,agentPreset,permissionPreset,model?}`），配套 `dsh-webhook-github` 给出**非 `/api` 精确路由**范式（绕开 cookie 门）。`workspace.list` 在 0.2.0 的替代品是 **`workspace/follow`（stream）** |
@@ -339,6 +351,144 @@ sequenceDiagram
 **证据入口**：`.workspace/audit-020/reports/DELIVERY-020-FINAL.md`（交付状态）、`MIGRATION-RC2-DONE.md`（rc.2 验收）、`DECISIONS-BEFORE-CUTOVER.md`（**25 条裁决**）、`MIGRATION-ASSESSMENT.md`（N1–N17 门禁）、`RUNBOOK-020.md`（操作手册）、`STAGE2-WORK-ORDER.md`（82 个执行单元）、`CUTOVER-PLAN-dual-instance.md`（切换预案）、`OFFICE-ROUTE-B-CAPABILITY-PROBE.md`（Route B 勘查）。
 
 ---
+
+### 5.6 DSH 0.2.0 迁移事实基线与未闭门禁（2026-09-30 收口）
+
+> **本节是 §5.5 的落地版**：§5.5 是**rc.1 时代的过程摘要**（2026-09-30 10:40 前落笔，部分数字后被 rc.2 与全量预检改写），
+> 本节记**已完成的迁移事实基线**、**未闭门禁现状**与**勘误**。**两者冲突时以本节为准**（勘误清单见 §5.6.3）。
+> 证据根：`.workspace/audit-020/reports/`（48 份，总索引见 §5.7）、`.workspace/audit-020/RUNBOOK-020.md`、交接件根 `dsh-020_NEXT_SESSION_PROMPT.md`。
+
+#### 5.6.1 本轮目标与已完成的迁移事实基线
+
+**目标**：把迁移锚点由 `0.1.7-rc.2` 改到 **`@deepseek-ai/dsh@0.2.0-rc.2`**，在**全新隔离根**内完成源码/配置/插件/会话数据兼容迁移与端到端验证；**用户 2026-09-30 裁决「尝试把历史全部迁到 0.2.0」**（覆盖原 D1 的「双实例并存」）。
+
+| 事项 | 已完成的事实（含证据） |
+| --- | --- |
+| 目标版本 | **`0.2.0-rc.2`**（npm `latest`+`next`，发布 `2026-09-29T09:56Z`）；rc.2 相对 rc.1：**包集合无增删（82→82）、74 个依赖升版、CLI `lib/` 仅 `bin.js` 与 3 个 `types/*.d.ts` 有差异**。破坏性项 **pi-ai `0.85.1`→`0.87.1`**（部分旧模型 ID 移除）**不影响本部署**：已配置的 **15 个模型 15/15 仍在** |
+| 迁移面为何极小 | **CLI `lib/**` 在 0.1.1 / 0.1.7 / 0.2.0 三版逐字节相同**（15 文件 sha256 全等）；仅 **55** 个官方包 `lib/` 有真实改动（`churn-lib-017-020.txt`）；**配置/settings schema 层同为"零代码变更"** |
+| 隔离组合 | `.workspace/audit-020/assembly-020/`：`prefix-cli-rc2/`（rc.2 CLI，**541 包 / 518 M / 288 个 `@deepseek-ai`**）+ `home/`（伪装 `DSH_HOME`）+ `boot-web.sh`（**生产形态**，token 直接打终端）；`prefix-cli/`（rc.1）**完整保留作回退** |
+| 组合规模（实测） | `--dump-config` **rc=0 / 200 条目**；peer 闸门禁用 **0**；未激活插件 **0**；客户端插件 pending **无** |
+| 插件面 | 宿主半 **13/13 import 成功**；**3 个 settings 断层插件修复**（`@local/dsh-subagent-model` 重写导出 `Config` + `ENTRY_ID="subagent-model"`、`@deepseek-ai/dsh-session-board` 换 live reader、`@deepseek-ai/dsh-vision-adam` 去旧 import） |
+| 客户端面（0.2.0 特有） | 两处客户端半由 `settingsScope`（**0.2.0 全树 0 命中**）改迁到 **`configForms`** + 新增 `adaptSettingsScope(raw)` 适配器（见 §7 D34） |
+| WE（第三方底座） | `dsh-workspace-enhancement` 升 **0.2.2**：3 处补丁回流（`row-badges`/`settings`/`index`，全在 `src/client/**`）+ **13 条 peer 放宽**为 `^0.1.5-rc.1 \|\| ^0.2.0-rc.1` + 补 `ssh2`；SSH 族全部激活 |
+| N2 子代理热路由 | 官方 `dsh-tool-subagent` **无 settings 读取逻辑** ⇒ 热路由是**本地补丁**；rc.2 上重打为 **`lib/index.js` 691 行**（官方 662），读 `subagent-model` 条目的实时值 |
+| peer 闸门处置 | `<profile>/compatibility.json` **6 条豁免值全部升为 `0.2.0-rc.2`**（rc.1→rc.2 未改会让 10 个条目被静默禁用） |
+| HTTP / GUI 实测 | 实例真实 UI **HTTP 200 / 37 326 B**；带 token `303`、无 token `401`；**GUI 内对话成功（6 秒）** |
+| 历史语料（迁移对象） | `~/.dsh/sessions` = **2508 份 `.zstd` + 3 个 `session.lock` / 1.23 GB / 21 工作区**；头部版本 **v0 = 2505 / v3 = 3**（**注意：交接件 §1 的 2507 为旧计数，见勘误 E5**）。`~/.dsh/attachments` = **995 对象 / 205 MB** |
+| 现役未污染 | `3080`（0.1.1-rc.2）、`3097`（0.1.7-rc.2）**全程未动**；现役 patch `513413e7…` / settings `0f19b0fe…` 与开工逐位一致 |
+| P0-A 会话迁移（本轮进行中） | 语料副本上完成**全量只读预检**与**可见性重扫**：基线 **229/2508 = 9.1% 可读**；转换报告 **2511 条**（log 2508 + copy 3），`changed` **2281** 条 = `R1:descriptor` **2275** + `R2:plugin`(补 `sections: []`) **456**。产物 `.workspace/audit-020/p0a/converted/sessions/`（20 项）+ `p0a/recon/`（`scan-before.jsonl` / `scan-after.jsonl` / `convert-report.jsonl`） |
+| 备份与回退 | `planA-backup/`（含 rc.2 官方 `dsh-tool-subagent` 原件、`compatibility.json.rc1`）、`we-build/we-0.1.2-migrated-backup/`、`volatile-fix-backup/`；回退 = 把 `boot-web.sh` 的 CLI 路径改回 `prefix-cli` + 豁免值改回 `0.2.0-rc.1` |
+
+#### 5.6.2 未闭门禁现状（N1 / N10 / N16 / N17）
+
+> **口径**：以下四项**均不得包装为"已通过"**。本节的"现状"只记**本轮核对到的事实**，展开与逐条单元以 §5.7 索引到的报告为准。
+
+| 门禁 | 原始口径 | **2026-09-30 现状** | 证据 |
+| --- | --- | --- | --- |
+| **N1**（settings API 断层） | 3 个插件须改代码：`installSettingsSection`/`settingsNamespace` 断层 | **已修但机制性风险仍在**：三插件（`dsh-subagent-model` / `dsh-session-board` / `vision-adam`）已全部改造；**断层根因在 0.1.7 就已存在，不是 0.2.0 引入** ⇒ 每轮升级都须复查"是否又有插件在模块顶层具名导入这两个符号" | §5.7 `PLUGIN-MATRIX.md`、`PLAN-A-DONE.md`、`DECISIONS-BEFORE-CUTOVER.md` D16 |
+| **N10**（WE provider 契约返工） | 原报 **22 条**不兼容（52 存在 / 17 签名变化 / 5 消失），方案为「私有依赖岛」 | **已大幅缓解、但未逐条复验**：改走 **WE 升 0.2.2**（含补丁回流 + peer 放宽 + `ssh2`），**不采用私有依赖岛**；T24 的 75 条契约点**未在 0.2.2 上逐条重跑**。另据 T17 更正：`@local/dsh-ssh-gui`/`@local/dsh-workerspace` 的顶层具名导入**在上一轮已修**，按仓库源码派工会做重复劳动 | §5.7 `T24-workspace-enhancement-units.md`、`T17-…md` §自我更正、`PLAN-B-DONE.md` |
+| **N16**（btw 26 条不兼容） | T30：`@local/dsh-btw` 需 **21 个改造单元** | **结论已被部署件实测推翻**：T30 的 26 条/21 单元针对**工作区源码**（`078ef49d`），而**部署件**（`606f53f1`）实测残留为 **0**（`dsh-client-runtime` 引用 0、退役图标 0、`Session.events`/`conversationEvents`/`settingsScope` 0 引用）；btw 在 0.2.0 上**已加载并激活成功**。**仍待做**：其**客户端 UI 完整行为**（侧聊面板、JumpList）需 GUI 实测确认 | §5.7 `T30-btw-compat-020.md`、`DELIVERY-020-FINAL.md`「btw」节、`PLUGIN-MATRIX.md` 口径声明 |
+| **N17**（历史会话可读性） | 交接件：0.2.0 读不了 0.1.1 历史；旧叙述称两道闸为 `descriptor v2` + **三种打包行** | **根因已改写（勘误 E1）**：全量基线 **229/2508 = 9.1%** 可读，**拒因只有两类** —— ① `subagent/descriptor` 版本 2（**2275 份**，修法 `2→3`，v2 成员集是 v3 子集）；② **插件消息来源缺 `sections` 数组**（**4 份**先命中，出现在 v0 的**三处**消息位置：`user/message.data.source`、`agent/inbox/spliced.data.inserted[].source`、带 `message` 包装的 `[].message.source`）。**「三种顶层打包行 `text-chunks`/`reasoning-chunks`/`tool-call-chunks` 是第二道硬闸」不成立** —— 0.2.0 的 v0 codec **本来就支持**打包行。转换在**语料副本**上进行，**不原地改 `~/.dsh/sessions`** | `p0a/BRIEF.md` §2.1（全量预检）；机制行号见 `docs/architecture/06-dsh-020-composition-and-plugin-architecture.md` §6.3 |
+
+> **仍未实证的一条（H1）**：整个迁移只对「GUI 内对话成功」做过一次真实交互实证；
+> **设置页表单可编辑保存、识图工具调用、btw 侧聊面板、SSH 远端子功能均未逐一验证**。
+> 另：P0-A 转换产物的**端到端逐份真实打开**（消息投影哈希相等 + 地标计数不变 + 头部不变量成立）**尚未见落盘报告**，不得据"转换报告已产出"称迁移通过。
+
+#### 5.6.3 勘误（2026-09-30 WP7 收口，就地更正并标日期）
+
+> **纪律**：本节**只更正 `docs/**` 里的叙述**；`.workspace/audit-020/reports/**` 下他人写的报告**一个字未改**
+> （原始断言保留在报告内，缺目以 `T11`/`T15`/`T31` 的**自我更正节**与本节记载为准）。
+
+| # | 旧叙述（出处） | **更正后的事实** | 证据 |
+| --- | --- | --- | --- |
+| **E1** | **「N17 余 40% 卡在三种打包行（`text-chunks`/`reasoning-chunks`/`tool-call-chunks`）」**（交接件 §2 P0-A、§5；§5.5 旧行） | **本轮已证伪**。① 0.2.0 的 **v0 codec 本来就解码打包行**（`PACKED_TAGS` / `scanRows` packed 分支 / `decodePackedRun` / `expandAssistantChunkRun`）；② 真正的第二道闸是**插件消息来源缺 `sections` 数组**，它在 v0 里出现在**三处**消息位置；③ 它的"写入侧既有形态"依据是 0.1.1 与 0.2.0 的 `dsh-taste/lib/learner.js` **逐字节相同**（`:219` 就是无 `sections` 的 snapshot 来源）⇒ 修法是**最小结构补全 `sections: []`**，不删字段、不改 `form` | `p0a/BRIEF.md` §2.1；机制行号见 `06-dsh-020-composition-and-plugin-architecture.md` §6.3 |
+| **E2** | 「0.2.0 依赖集合新增 `dsh-skill-office`、`dsh-tool-subagent-control`、`dsh-workflow-ptc`」（`PLAN.md:13`，`MEASURED-BASELINE.md` §3 同类转述） | **不成立**：三者在 `dsh@0.1.7-rc.2` 的 `dependencies` 中**已存在**。实际**真正新增的 `@deepseek-ai/*` 只有 5 个**（`dsh-client-product-analytics`、`dsh-client-ui-settings-session-log`、`dsh-experimental-schedule-bundle`、`dsh-host-product-telemetry-otel`、`dsh-otel`）+ CLI 顶层 `dsh`；**无非发布删除**。另 `package.json` 只有版本号差异**不算代码改动**（须按 `lib/` 全等判定——`dsh-tool-subagent-control` 即属此类） | `T11-skills-compat-020.md` §1.2、`T15-office-feature-020.md` §1.1、`T31-docs-impact-inventory.md` §0.5.2（三条独立同结论） |
+| **E3** | 「`btw` 有 26 条契约不兼容、需 21 个改造单元」（`T30`；交接件 §5 转述为 **N16**） | **对部署件不成立**：T30 分析的是**工作区源码**（`078ef49d`），**部署件**（`606f53f1`）实测残留 **0**；btw 在 0.2.0 上已激活。**正确用法**：凡"插件能不能用"的结论，**以部署件实测为准** | `DELIVERY-020-FINAL.md`「btw」节、`PLUGIN-MATRIX.md` 末尾「重要口径声明」 |
+| **E4** | 「`@local/dsh-ssh-gui` / `@local/dsh-workerspace` 在 0.2.0 上整行加载失败（顶层具名导入 settings API）」（`T17` §自我更正前的口径；`T04` 第 1 版同类） | **对部署件不成立**：两者的部署件**上一轮已改造完**（源码里保留「0.1.7 已无 `installSettingsSection`」注释，改用 `liveConfig()`/`cfg()`）⇒ **不是本轮阻塞项**。**真因定位仍有效**（顶层具名导入 ⇒ ESM 链接期失败），只是**已修**。按源码树派工会做重复劳动 | `PLUGIN-MATRIX.md` 口径声明表；`assembly-020/home/profiles/node_modules/@local/dsh-ssh-gui/lib/index.js:65,69`、`dsh-workerspace/lib/index.js:41` |
+| **E5** | 工作区会话计数 **2507**（交接件 §1，§5.5 同表行曾沿用） | **2508**：`.workspace/audit-020/p0a/recon/scan-before.jsonl` 逐行 = **2508** 条（v0 2505 / v3 3；另 3 个 `session.lock` 按字节复制，不计入日志数）。差 1 属采样时刻差异，**引用须带时点** | `[实跑]` `wc -l .workspace/audit-020/p0a/recon/scan-before.jsonl` = 2508；`p0a/BRIEF.md` §2.1 |
+| **E6** | 「0.2.0 实例必须零外呼」（`OPTION-C-VERIFICATION.md` 的实现前提） | **已被用户裁决取代**：**D3** 明确「凭据面搬入模型配置，让新实例可用（**接受该实例联网发起模型请求**）」。零外呼不再是 0.2.0 实例的运行约束，只保留为**隔离验收 harness** 的证明形态（`T20`） | `DECISIONS-BEFORE-CUTOVER.md` D2/D3；`T20-isolated-harness-verification.md` §6 |
+| **E7** | 「`dsh-vision-adam-0.2.0` 里的 `0.2.0` 指 DSH 版本」（易误读） | **`0.2.0` 是插件自身版本号**，与 DSH 版本无关 ⇒ `docs/runbooks/switch-web2-runbook.md:97` 的该值**不得改**。它是全仓唯一「`0.2.0` 不是迁移目标版本」的陷阱 | `T31-docs-impact-inventory.md` §0 发现 ① |
+| **E8** | §5.5 多数数字的**基线版本** | §5.5 行文时点为 **rc.1**（"余 40% 卡在打包行"即 rc.1 期推断）；rc.2 后 **`--dump-config` 200 条目 / 未激活 0 / N2 补丁 691 行 / WE 0.2.2** 等值已按 rc.2 更新。**引用 §5.5 的任一数字都须核对本节与 §5.7** | `MIGRATION-RC2-DONE.md`；§5.5 未标 rc.1 的行 |
+
+**另外两条自查（同批更正 §5.5 的口径，不列为独立勘误）**：
+
+- §5.5「迁移面为何极小」行的分母 **280** 未注明采样口径；rc.2 实树的 `@deepseek-ai` 包数 **288**，**两者不是同一口径，不得混算比率**。
+- §5.5「组合层差异」行所列增删（`otel` / `desktop-product-telemetry` / `product-analytics` / `ui-settings-log` 等）**与 E2 的真实新增包清单须一起读**：前者按**组合条目**计，后者按**包目录**计。
+
+---
+
+### 5.7 本轮报告总索引（`.workspace/audit-020/reports/`，全部 48 份）
+
+> **口径**：① 路径相对 `.workspace/audit-020/`；② **状态只取三值** ——
+> **已定案**（结论已出且未被推翻）／**待办**（有待闭动作或未验证项）／**已被取代**（结论或基线已被后续件覆盖）；
+> ③ 「备注」列记**基线版本与取代关系**——**A 档件多数（约 42/48）的基线是 0.2.0-rc.1**，
+> rc.2 之后凡涉及包数/组合条目/行数的数字都要按 §5.6.1 与 `MIGRATION-RC2-DONE.md` 重取；
+> ④ 覆盖数 **48/48**（目录内 `*.md` 47 份 + `*.yml` 1 份）；⑤ 交接件 §2 P2 说的「47 份」是 rc.1 期计数（同型差异见勘误 E5）。
+
+| # | 文件（相对 `reports/`） | 一句话主题 | 状态 | 备注（基线 / 取代关系） |
+| --- | --- | --- | --- | --- |
+| 1 | `CUTOVER-PLAN-dual-instance.md` | 双实例并存切换预案（选项 c：0.1.1 管历史、0.2.0 管新会话、零数据改写） | **已被取代** | 基线 rc.1；**D1 已被 2026-09-30「历史全部迁到 0.2.0」裁决覆盖**；§0.5 待裁决项仍未清 |
+| 2 | `DECISIONS-BEFORE-CUTOVER.md` | grill-me 六轮的 **D1–D25** 裁决记录（**不得重开**） | 已定案 | D1 为唯一例外（已被 09-30 裁决取代）；其余裁决仍有效 |
+| 3 | `DELIVERY-020-FINAL.md` | 0.2.0 迁移交付状态（B→A→btw 三批完成 + 未做清单） | 已定案 | 基线 rc.1 前缀；**验收表格已由 rc.2 件更新**，未做清单仍需读 |
+| 4 | `MEASURED-BASELINE.md` | 协调者实测硬基线（目标版本、CLI 零变化、依赖集合差异） | **已被取代** | 基线 rc.1；§3「新增 `dsh-skill-office` 等」**已证伪（E2）** |
+| 5 | `MIGRATION-ASSESSMENT.md` | 迁移评估**裁决版**：9 条迁移面 + **N1–N17** 全部门禁 | 已定案 | 基线 rc.1；N17 的 3%/60% 抽样**已被 P0-A 全量预检取代（E1）**；N16 对部署件**不成立（E3）** |
+| 6 | `MIGRATION-RC2-DONE.md` | 迁移到 **0.2.0-rc.2** 完成 + 验收表 + 回退方式 | 已定案 | **rc.2 权威件**（当前基线） |
+| 7 | `MORNING-STATUS.md` | 09-29 夜「明早交付状态」快照（一条启动命令 + 可用/未做） | **已被取代** | 基线 rc.1（`prefix-cli/`）；由 `DELIVERY-020-FINAL.md` 取代 |
+| 8 | `OFFICE-ROUTE-B-CAPABILITY-PROBE.md` | 官方是否对插件开放「文件→工作区+会话」能力面（Route B） | 已定案 | 结论：**已有官方现成件** `@deepseek-ai/dsh-webhook`；**接入未做**（§5.6.2 待办） |
+| 9 | `OPTION-C-VERIFICATION.md` | 选项 (c) 形态验收（0.1.1 全可读 vs 0.2.0 抽样 3%） | 已定案 | 基线 rc.1；**其"零外呼"实现前提已被 D3 取代（E6）**；抽样数字被 P0-A 取代 |
+| 10 | `PLAN-A-DONE.md` | 规划 A：3 个 settings 断层插件全部修复 + N2 宿主补丁 | 已定案 | 与 rc.2 的 691 行 N2 补丁一脉；三插件改动已并入组合 |
+| 11 | `PLAN-B-DONE.md` | 规划 B：WE 升 **0.2.2**（补丁回流 + peer 放宽 + `ssh2`） | 已定案 | 原定目标 0.1.4 改为 0.2.2 ⇒ 使 `WE-PATCH-BACKPORT-FEASIBILITY.md` 部分结论作废 |
+| 12 | `PLUGIN-MATRIX.md` | 本地插件 × 0.1.7/0.2.0 **import 面**实测矩阵（**13 个件**） | 已定案 | 基线 rc.1；**含"部署件 vs 源码树"口径声明**（§5.6.2 N16/N10 的关键依据） |
+| 13 | `STAGE2-WORK-ORDER.md` | 阶段二执行工单（去重 + 裁决 + 依赖排序的**执行单元**清单） | 已定案 | 上位件为 `MIGRATION-ASSESSMENT.md` + `RUNBOOK-020.md`；单元数随落地会变，**引用须带时点** |
+| 14 | `T01-upstream-package-delta.md` | 上游包级增量：**55 个有真实代码改动包**的分类 + 契约级结论 | 已定案 | 基线 0.1.7→rc.1；§1.6/§1.7 的依赖对照表**仍有效但非主交付** |
+| 15 | `T02-cli-boot-delta.md` | CLI 与启动引导层源码增量 | 已定案 | 结论：**代码零增量**（三版 `lib/**` 逐字节相同） |
+| 16 | `T03-settings-schema-delta.md` | 配置与 settings schema 层增量 | 已定案 | 结论：**零代码变更**；真正断层在 **0.1.1→0.1.7**（现役恰好是 0.1.1） |
+| 17 | `T04-plugin-api-compat.md` | 插件 API 兼容矩阵（**第 2 版**，diff 基准已从 0.1.1 重锚到 0.1.7） | 已定案 | 第 1 版把基准错设为 0.1.1 ⇒ **结论已实质改变**（旧"0.2.0 新不兼容点"实为**未清偿的 0.1.7 迁移债**） |
+| 18 | `T05-session-format-delta.md` | 会话数据代际与格式兼容（v0–v4、代际选择算法） | 已定案 | 结论：**0.1.7→0.2.0 会话格式零增量**；**chunk 类拒因的机制解释已被 P0-A 取代（E1）** |
+| 19 | `T06-official-patch-layer-020.md` | cordis patch 层在 0.2.0 的可用性 | 已定案 | 结论：patch 机制未变（`applyEntryPatches` 逐字节相同）；仅 `OPTIONAL_BUNDLES` 加一行 |
+| 20 | `T07-guard-toolchain-forward-compat.md` | guard 工具链对 0.2.0 的前向兼容（9 复用 / 13 改造 / 6 已失效） | 已定案 | 基线 rc.1；其**工具链改造尚未逐项落地**（独立待办） |
+| 21 | `T08-local-plugin-inventory.md` | 本地插件资产清点与**源-部署件对账**（13 个件、sha256 逐文件） | 已定案 | 权威「13 个件」口径来源之一；展开见 `docs/architecture/07-local-customization-inventory.md` |
+| 22 | `T09-isolated-root-install-path.md` | 全新隔离根安装路径勘察（家目录只读 ⇒ 必须用工作区内隔离根） | 已定案 | 结论：`~/.dsh-020` 双根方案**不可行**，改用 `.workspace/audit-020/assembly-020/` |
+| 23 | `T10-prior-migration-lessons.md` | 上一轮（0.1.1→0.1.7）迁移教训提炼（作战手册 + N1–N10 阅读笔记） | 已定案 | 方法学仍适用；⚠️ **其内部 N1–N10 与本页门禁编号 N1/N10 不是同一套**，勿混引 |
+| 24 | `T11-skills-compat-020.md` | 技能子系统（6 个包）0.1.7→0.2.0 增量 | 已定案 | 结论：**零功能增量**；**并更正协调者基线的"新增 `dsh-skill-office`"（E2）** |
+| 25 | `T12-session-resume-compat.md` | 会话恢复/冷恢复/复述与投影链变化 | **已被取代** | 其"迁移链全部放行、能继续"的推荐结论**被 T21 与 P0-A 的全库实测推翻**（机制审计部分仍成立） |
+| 26 | `T13-subagent-model-routing-compat.md` | 本地模型路由定制在 0.2.0 的可用性与机制变化 | 已定案 | 结论：热路由须走**宿主补丁** ⇒ 落地为 rc.2 的 691 行 N2 补丁 |
+| 27 | `T14-native-vs-local-overlap-020.md` | 官方原生能力 × 本机私有定制的重叠面变化 | 已定案 | 重叠面清单见 `docs/architecture/07-local-customization-inventory.md` §5 |
+| 28 | `T15-office-feature-020.md` | 官方 office 能力在 0.2.0 的形态 | 已定案 | 结论：**零功能增量**；**并独立复现 E2 更正** |
+| 29 | `T16-web-client-plugin-compat.md` | Web 前端与客户端插件加载机制/槽位/图标 | 已定案 | 结论：`settingsScope` 已删 ⇒ 客户端半须迁 `configForms`（§7 D34 来源） |
+| 30 | `T17-ssh-remote-workspace-020.md` | SSH / 远程工作区 / workspace-enhancement 族兼容 | **待办** | **自我更正两条已采纳**（E4）；WE 升 0.2.2 后未逐条复验；**ssh-gui 远端子功能未实测** |
+| 31 | `T18-deps-engines-security.md` | 依赖 / engines / 原生模块 / 安全面迁移风险 | 已定案 | 基线 rc.1；⚠️ rc.2 的 **pi-ai `0.85.1`→`0.87.1`** 是**该报告之后的新破坏性项**（本部署 15/15 模型不受影响） |
+| 32 | `T19-rollback-and-backup-plan.md` | 可回滚备份与迁移方案（含活跃 db 复制的未记录前提） | 已定案 | 结论：顺序 `cp` 活跃 db 不可靠，**须带前提条件**复述 |
+| 33 | `T20-isolated-harness-verification.md` | 隔离运行 harness（`unshare -rn` / 端口 / 存活 / 零模型证明） | 已定案 | 零外呼的**最强证明形态**（三层叠加）；与 T25 独立交叉验证 |
+| 34 | `T21-session-data-migration.md` | 会话数据面迁移与无损判据（**推翻 T12**） | 已定案 | 基线 rc.1；**"现役 90.6% 无法打开"已由 P0-A 全量口径取代为 9.1% 可读 / 2275+4 拒因（E1）** |
+| 35 | `T22-zero-model-operability.md` | 零模型请求模式下的可运行性 | 已定案 | 与 D3 并存：零外呼是 **harness 验收形态**，不是运行约束（E6） |
+| 36 | `T23-office-handoff-compat.md` | 办公入口 / office-handoff 在 0.2.0 的兼容性与迁移方案 | **待办** | 结论含**中断点在 0.1.7**；Route B 接入未做（§5.6.2 待办） |
+| 37 | `T24-workspace-enhancement-units.md` | WE 0.2.0 改造**交付单元清单**（75 条契约点） | **待办** | **方案已改**为升 0.2.2（不用私有依赖岛）；75 条**未在 0.2.2 上复验**（N10） |
+| 38 | `T25-isolated-020-boot-attempt.md` | 隔离根内 0.2.0 **真实安装 + 启动**实测 | 已定案 | 基线 rc.1（当时用 `unshare -rn`）；rc.2 生产形态已去掉 netns |
+| 39 | `T26-taste-compat-020.md` | taste 子系统在 0.1.7→0.2.0 的变化 | 已定案 | C1：**0.2.0 不发布 `@deepseek-ai/dsh-taste`**，历史上从未发布过版本（本机 taste 是**自写源码占官方命名空间**） |
+| 40 | `T27-npm-offline-packaging.md` | 离线安装包集与打包方案 | **待办** | 离线闭包**未用于交付**（rc.2 走独立前缀安装） |
+| 41 | `T28-ADDENDUM-theme-evidence-correction.md` | wallpaper/ui-theme 证据校正与 token 级细查（**不修改**主档） | 已定案 | 性质为**勘误补档**（避免并发写冲突），主档保留 |
+| 42 | `T28-wallpaper-theme-compat.md` | wallpaper/ui-theme 在 0.2.0 的兼容性 | 已定案 | 基线 rc.1；证据校正见上一条 `-ADDENDUM` |
+| 43 | `T29-020-release-intel.md` | 0.2.0 官方版本情报与破坏性变更（联网调研） | 已定案 | 每条外部声明带**可信度等级 + 本机可验证性**；**rc.2 情报不在其内** |
+| 44 | `T30-btw-compat-020.md` | btw 在 0.2.0 的兼容性与迁移工作量 | **已被取代** | **仅对工作区源码成立**：部署件实测残留 0，btw 已激活（**E3** / N16） |
+| 45 | `T31-docs-impact-inventory.md` | 文档与清单面影响盘点（209 处硬编码断言 / 17 份文件） | 已定案 | 含本轮勘误 E2/E7 的原始取证；**其"需更新的 16 份权威文档"清单尚未全部落地**（WP7 只覆盖 `docs/**`） |
+| 46 | `T32-dump-config-schema-rca.md` | `--dump-config-schema` rc=1 机制级根因 | 已定案 | 判定为**官方缺陷**（0.1.7 与 0.2.0 同现），非本机 patch 写法问题 |
+| 47 | `WE-PATCH-BACKPORT-FEASIBILITY.md` | WE 三处本地补丁回流 0.1.4 源码的可行性勘察 | **已被取代** | 结论**部分作废**：上游 **0.2.2 已实现** `readByteRange`/`terminalEnvironment`/`resize`/`inspectActivity` ⇒ 原定手写缺口不存在（`PLAN-B-DONE.md`） |
+| 48 | `T06-proposed-cordis.patch.020.yml` | 0.2.0 profile patch 层**草案**（`T06-official-patch-layer-020.md` 的交付件） | **已被取代** | **勿直接覆盖现役 profile**；实际落地的组合层是 `assembly-020/home/profiles/web/cordis.patch.yml`（650 行） |
+
+**索引计的三个集合**（便于对账，计数以上表逐行为准）：
+
+| 集合 | 份数 | 清单 |
+| --- | --- | --- |
+| **已定案** | **37** | #2/3/5/6/8/9/10/11/12/13/14/15/16/17/18/19/20/21/22/23/24/26/27/28/29/31/32/33/34/35/38/39/41/42/43/45/46（逐行相加 = **37**） |
+| **待办** | **4** | #30 `T17`、#36 `T23`、#37 `T24`、#40 `T27` |
+| **已被取代** | **7** | #1 `CUTOVER-PLAN`、#4 `MEASURED-BASELINE`、#7 `MORNING-STATUS`、#25 `T12`、#44 `T30`、#47 `WE-PATCH`、#48 `T06-proposed…` |
+| 三集合合计 | **48** | 37 + 4 + 7 = **48** |
+| 目录核验 | **48** | 目录内 `*.md` **47** + `*.yml` **1** = **48**（`[实跑]` `ls .workspace/audit-020/reports/ \| wc -l`） |
+
+> **集合列的两处诚实说明**：① 上表"状态"列以**报告结论**为准，"待办"表示**报告已出但仍有未闭动作**；
+> ② `T07` 的报告结论已定案（归"已定案"），其**工具链改造**属 §5.6.2 之外的独立待办，未计入"待办"集；
+> ③ 若集合行计数与逐行标值不符，**以逐行为准**（本页不掩饰对账差异）。
 
 ---
 
@@ -356,7 +506,9 @@ sequenceDiagram
 | `docs/architecture/03-model-routing-gateway.md` | provider/model 配置链、子代理路由合并层、网关、图像能力检测 |
 | `docs/architecture/04-ops-deploy.md` | 补丁重放 fail-closed 契约、重启、验收矩阵、测试架构、备份布局 |
 | `docs/architecture/05-performance-and-ux-program.md` | **性能与操作体验专项**：四问题前后对照、16 项落地、五条跨线重大发现、13 条更正清单、判据与口径纪律、落地/回滚地图 |
-| `docs/architecture/office-handoff.md`（文件名如此，**不占编号**，不存在"06-…"文件） | **办公投递与 0.1.7 升级闸门（2026-09-25 新增）**：Route A 运行流（含"本机复制 vs `/api` 仅登记"的职责分离、fd 作用域、journal 先于登记、两条回滚路径）、依赖与版本契约、权限边界、已裁决前提（N1/N2/Q1/Q2/Q3 凭据）、当前状态与残余必修项、证据索引、维护触发条件 |
+| `docs/architecture/office-handoff.md`（文件名如此，**不占编号**） | **办公投递与 0.1.7 升级闸门（2026-09-25 新增）**：Route A 运行流（含"本机复制 vs `/api` 仅登记"的职责分离、fd 作用域、journal 先于登记、两条回滚路径）、依赖与版本契约、权限边界、已裁决前提（N1/N2/Q1/Q2/Q3 凭据）、当前状态与残余必修项、证据索引、维护触发条件 |
+| `docs/architecture/06-dsh-020-composition-and-plugin-architecture.md` | **0.2.0 组合与插件架构（2026-09-30 新增）**：bundle/preset 四层 patch 叠加、`cordis.patch.yml` 条目语义与默认端口 3080 陷阱、`compatibility.json` peer 闸门、**命名空间 = profile 条目 id** 与 `.volatile()` 契约、技能发现根与 rank、会话代际 v0–v4 |
+| `docs/architecture/07-local-customization-inventory.md` | **本地定制清单（2026-09-30 新增）**：13 个定制件的版本/形态/挂载点/命名空间/键级取值、挂载的官方件、与官方面重叠的 8 处，以及「部署件 ≠ 源码树」纪律 |
 | `office-upgrade_NEXT_SESSION_PROMPT.md`（仓库根） | **办公/升级线的议题入口（跨会话交接件）**：事实基线、任务优先级 P0–P2、已裁决与权威四层、死路、历史坑、关键文件索引与开工只读核对 |
 | `workbuddy-reverse-proxy/office-handoff/README.md` | 办公投递交付物自身口径：链路、权限边界、`O_NOATIME` 诚实语义、风险表、自回滚边界 |
 | `workbuddy-reverse-proxy/reports/office-audit-adjudication.md` | 办公线**唯一权威输入**（r3）：G1 Route A、G2 同 UID 边界、G3 隔离写入验证计划、G4 精确单元、§12 实测回灌与勘误 |
@@ -396,6 +548,14 @@ sequenceDiagram
 | `.workspace/btw-question/e2e-cover/report.md` | **四项补测（T1 多选 / T2 换题重挂 / T3 窄屏选项行 / T4 键盘焦点序）真机报告** + D33 几何取证（`raw-*-T3-extra.json`、`t3-geometry-probe.mjs`）；被测版本取证与诚实清单（5 条仍未判定） |
 | `workbuddy-reverse-proxy/proto/`（**未跟踪、未被 ignore ⇒ 会随 `git add -A` 入库**） | 两条线的工具脚本：`session-copy-repair/`（**会话副本修复器** + 闸门库 + 自测）、`generation-preservation/`（P0 冻结/代次选择/不变量/还原演练/归因）、`dsh-0.1.7-isolated-home.sh`、`dsh-017-migrate-config.py` 等；**逐个写面与闸门见 §5.4「工具脚本写面登记」** |
 | `workbuddy-reverse-proxy/_audit/`（**被 `.gitignore:35` 命中 ⇒ 不入库**） | 私有证据根：`integrated-isolation-*/`、`ppt-vision-integration-*/`、`generation-preservation-*/`、`usage-v4-*/`、`settings-deploy-20260928-174103/`（**P0**，3098 已释放）、`p1-settings-deploy-20260928-182223/`（**P1 在途**）等，可重建、不入库 |
+| `docs/architecture/06-dsh-020-composition-and-plugin-architecture.md` | **0.2.0 的组合与插件架构（2026-09-30 新增）**：bundle/preset 分层与 `cordis.patch.yml` 条目语义、默认端口 3080 陷阱、`compatibility.json` peer 闸门、**settings 命名空间 = profile 条目 id** 与 `.volatile()` 契约、技能发现根与 rank、**会话代际 v0–v4 与 v0 打包行的真实解码路径** |
+| `docs/architecture/07-local-customization-inventory.md` | **本地定制清单（2026-09-30 新增）**：13 个定制件的版本/形态/挂载点/settings 命名空间与键级取值、挂载的官方件与 `disabled`/替代关系、与官方面的 8 处重叠，以及「部署件 ≠ 源码树」纪律 |
+| `.workspace/audit-020/reports/`（**48 份**） | **本轮 0.2.0 迁移的审计/裁决/交付证据库**：逐份文件名 + 一句话主题 + 状态（已定案/待办/已被取代）+ 基线版本与取代关系，见本页 **§5.7 总索引** |
+| `.workspace/audit-020/RUNBOOK-020.md`（695 行，**未跟踪**） | 0.2.0 迁移的**操作手册主干**（D6 裁决：以它为主干并入切换预案） |
+| `.workspace/audit-020/{PLAN.md, TRACKS.md}`（未跟踪） | 主计划（目标锚点 + 34 条轨道台账）与轨道清单；**其 §已核实事实的"新增 3 个依赖包"已证伪，见 §5.6.3 勘误 E2** |
+| `.workspace/audit-020/p0a/`（未跟踪） | **P0-A 会话迁移证据与产物**：`BRIEF.md`（共享事实基线）、`census.py`/`scan.mjs`/`convert.mjs`、`recon/{census,scan-before,scan-after,convert-report}.jsonl`、`corpus/`（只读输入）、`converted/sessions/`（转换产物） |
+| `.workspace/audit-020/assembly-020/`（未跟踪） | **0.2.0-rc.2 隔离组合根**（`prefix-cli-rc2/` + `home/` + `boot-web.sh`）；展开见 `docs/architecture/06-…md` 与 `07-…md` |
+| `dsh-020_NEXT_SESSION_PROMPT.md`（仓库根） | **0.2.0 迁移线的跨会话交接件**：事实基线、P0-A/P0-B/P0-C/P1/P2 任务、25 条裁决、未闭门禁；**其 §2/§5 的"三种打包行"叙述已被证伪，见 §5.6.3 勘误 E1** |
 
 ---
 
@@ -489,4 +649,10 @@ sequenceDiagram
 - **用户给出新裁决** → 同批更新 §5.4 与专题 §4 前提表，并核对 `reports/office-upgrade-coordinator-status.md` 的凭据口径（**不得**把已裁决项写回"待裁决/未知"）。
 - **新增宿主插件或新 patch 行** → 先过 0.1.7 兼容核对（见 §5.4 排序纪律），结论落进专题 §5.3。
 - **宿主或客户端渲染链结构性改动** → 复核 `docs/architecture/05` §6 的判据口径（`[data-slot]` 面积、`>33ms` 阈值、"机器安静"门禁等可能随之失效）。
+- **`audit-020/reports/` 新增、删除或结论被推翻** → 同批更新 **§5.7 总索引**（行 + 状态 + 备注）与 §5.6.1/§5.6.2，
+  **不得**只加行不标状态，也**不得**让"已被取代"的件继续出现在 §5.6 的现状表里。
+- **迁移目标版本再变（rc.2 → 更高）** → 重取 §5.6.1 的「目标版本 / 组合规模 / 插件面 / 历史语料」行，
+  并同步 `docs/architecture/06-…md`（peer 闸门豁免值、会话代际）与 `07-…md`（各件版本与键级取值）。
+- **N1/N10/N16/N17 任一状态变化** → 更新 §5.6.2 的现状列与 §5.7 对应报告行；**仍不得**把机制/局部 PASS 写成门禁通过。
+- **勘误被再次推翻或新增勘误** → 追加到 §5.6.3（**只增不改历史条目**），并在被更正的原文处加指向该条的行内标注。
 - 纯格式化、拼写、无行为影响的局部重命名 → 无需更新（但要在提交说明里给出判据）。

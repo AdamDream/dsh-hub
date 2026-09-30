@@ -1,0 +1,77 @@
+== E1: 语法检查（node --check，ESM） ==
+PASS  node --check p1/draft/dsh-remote-hosts/lib/client.js
+PASS  node --check p1/draft/dsh-remote-hosts/lib/index.js
+PASS  node --check p1/verify/check-contract.mjs
+PASS  node --check p1/verify/stub-harness.mjs
+
+== E2: 官方契约 / 历史存亡 / 通道对齐 / RCA 源码断言 ==
+PASS  B1   sidebar-right 包存在（0.2.0-rc.2 树）  [version=0.2.0-rc.2]
+PASS  B2   slots.d.ts 声明 sidebar.right.pane.tab / .title 且 kind=keyed  [both keyed seats declared]
+PASS  B3   client.js 以 ctx.reflect.provide 提供 sidebarRight / sidebarRightTabs  [reflect.provide x2]
+PASS  B4   rightbar.session 注册声明了 pane.tab / .title 子席位（第三方 register 的前提）  [occurrences=13]
+PASS  B5   dump020b.yaml：ui-sidebar-right 行存在且**未** disabled  [enabled (no disabled key)]
+PASS  B6   dsh-client-ui-workspace 0.2.0 树对 remoteHosts 命中数为 0（旧席位已消失）  [hits=0 version=0.2.0-rc.2]
+PASS  B7   官方实现例：sidebar-files 在同一两个席位注册（可照抄的骨架）  [register(type) + 2 keyed seats]
+PASS  A1   0.1.1-rc.2 ui-workspace 声明并渲染 sidebar.workspaces.remoteHosts  [version=0.1.1-rc.2 clientHits=2 dtsHits=1]
+PASS  A2   0.1.7-rc.2 ui-workspace 已删除该席位与渲染点（全树 0 命中）  [version=0.1.7-rc.2 hits=0]
+PASS  A3   0.2.0-rc.2 ui-workspace 同样 0 命中（与 0.1.7 同构）  [version=0.2.0-rc.2]
+PASS  A4   三份 ssh-gui client.js 逐字节相同（客户端从未改，改的是宿主侧环境）  [bytes=63253 identical]
+PASS  A5   ssh-gui 仍注册 sidebar.workspaces.remoteHosts（0.2.0 上该 inject 回调永不执行）  [one inject site]
+PASS  A6   slots.inject 语义：仅在槽被声明后才运行回调（静默失效的机制证据）  [inject() gates on specDynamic(key)]
+PASS  C1   nodes.json 形状 = {version, currentId, nodes[]}（不打印任何明文值）  [keys=currentId,nodes,version nodesLen=0 bytes=55]
+PASS  C2   WE 0.2.2 的 wire 身份：/api + 命名空间 dsw  [version=0.2.2]
+PASS  C3   WE 0.2.2 **不再** mount 旧 /dsw 通道（rpc.handle 命中 0）  [hits=0]
+PASS  C4   WE 0.1.2（0.1.1/0.1.7 现役版）确实 mount /dsw  [version=0.1.2 path=/home/CNS2026495165/dsh/.workspace/audit-020/we-build/we-0.1.2-migrated-backup/lib/web.js]
+PASS  C5   ssh-gui 硬编码 CH_DWS="/dsw" ⇒ 与 C2 不对齐（判定：misaligned）  [CH_DWS=/dsw vs host /api·dsw ⇒ 旧通道调用 404]
+PASS  C6   现役 0.1.1 根的 WE 仍是 0.1.2（⇒ /dsw 在 0.1.1 上活着，回归只在 0.2.0）  [liveWE=0.1.2]
+PASS  C7   mixed-provider RCA：dump020b.yaml 里 subprocess / fs-sandbox 行**未** disabled  [subprocess.disabled=false fs-sandbox.disabled=false（WE 的 cordis.patch.yml 本意是两者都 true）]
+PASS  C8   cordis 重复服务错误来自 reflector.provide（lib/index.js:813）  [provide() throws on duplicate service name]
+PASS  C9   WE plugin.js：先建 LocalSubprocessRuntime 再 ctx.set，失败即 warn + 纯 SSH 回退  [construct-then-set pattern]
+PASS  C10  运行期日志确实出现 mixed 告警 + 回退路径自身也失败（ssh-subprocess-runtime / ssh-file-system）  [mixedWarn=19 sshSubprocessFailures=19 sshFsFailures=19]
+PASS  C11  WE 客户端自己走 /api + dsw/<endpoint>（与 C2 自洽）  [client half aligned with host half]
+PASS  C12  RCA 关键环：profile 的 dsh.profile.bundles 里**没有** dsh-workspace-enhancement  [bundles=[@deepseek-ai/dsh-base, @deepseek-ai/dsh-web-app]]
+PASS  C13  dsh-base bundle 层才是 subprocess / fs-sandbox 两行的来源（enabled）  [both provider rows declared without disabled]
+PASS  C14  app-boot 只在 dsh.profile.bundles 声明的 bundle 上套用 dsh.bundle.patch  [bundle patch layer is bundle-list driven]
+
+27/27 checks passed
+
+== E3: 草案插件的桩调用 harness ==
+PASS  H1   插件以 window.__ModuleLoader__.load({id, factory}) 形态自注册  [id=@local/dsh-remote-hosts]
+PASS  H2   插件 id 与目录名一致  [actual="@local/dsh-remote-hosts" expected="@local/dsh-remote-hosts"]
+PASS  H3   exports.apply / exports.inject 齐备  [inject=[slots, connection, locale]]
+PASS  H4   客户端 inject 含 slots（slot 面的前提）与 connection（RPC 面的前提）
+PASS  H5   apply 注册 4 个 effect（文案 / 类型 / 正文 / 标题各自可回滚）  [remote-hosts: dictionaries | remote-hosts: tab type | remote-hosts: tab body | remote-hosts: tab title]
+PASS  H6   localocale 只注册一个命名空间  [actual=1 expected=1]
+PASS  H7   zh / en 的 key-set 完全一致（官方 locales 纪律）  [actual="action.setCurrent,action.test,guide.description,guide.title,node.count,node.serial,node.serialTcp,node.ssh,rpc.unavailable,state.empty,state.error,state.loading,type.label" expected="action.setCurrent,action.test,guide.description,guide.title,node.count,node.serial,node.serialTcp,node.ssh,rpc.unavailable,state.empty,state.error,state.loading,type.label"]
+PASS  H8   sidebarRightTabs.register 恰好一次  [actual=1 expected=1]
+PASS  H9   类型定义不含契约外字段  [actual="(none)" expected="(none)"]
+PASS  H10  definition.id === 注册 key 的来源  [actual="@local/dsh-remote-hosts" expected="@local/dsh-remote-hosts"]
+PASS  H11  definition.kind 是页类型名  [actual="remote-hosts" expected="remote-hosts"]
+PASS  H12  页类型不给 patterns（页按 kind 打开，不做地址匹配）  [actual=undefined expected=undefined]
+PASS  H13  definition.title 是函数（惰性文案，官方 idiom）
+PASS  H14  definition.guide 是非空数组，入口带 id/order/title/description
+PASS  H15  slots.inject 恰好两处（正文 + 标题）  [actual=2 expected=2]
+PASS  H16  正文席位名 = sidebar.right.pane.tab（keyed）
+PASS  H17  标题席位名 = sidebar.right.pane.tab.title（keyed）
+PASS  H18  正文席位 key = 类型 id（不是 kind）  [actual="@local/dsh-remote-hosts" expected="@local/dsh-remote-hosts"]
+PASS  H19  标题席位 key = 类型 id  [actual="@local/dsh-remote-hosts" expected="@local/dsh-remote-hosts"]
+PASS  H20  正文 / 标题都是组件函数
+PASS  H21  没有任何注册落到已删除的旧席位 sidebar.workspaces.remoteHosts  [slots=[sidebar.right.pane.tab,sidebar.right.pane.tab.title]]
+PASS  H22  节点表走 ssh-gui 自己的 /ssh-gui 通道  [actual="/ssh-gui" expected="/ssh-gui"]
+PASS  H23  底座通道 = /api（**不是** 0.1.x 的 /dsw）  [actual="/api" expected="/api"]
+PASS  H24  dsw 命名空间拼接  [actual="dsw/conn.probe" expected="dsw/conn.probe"]
+PASS  H25  节点的 transport 显示名映射  [actual="node.serialTcp" expected="node.serialTcp"]
+PASS  H26  未知 transport 原样保留（不吞信息）  [actual="weird://" expected="weird://"]
+PASS  H27  normalizeNodes 白名单化（只留 id/name/transport/isCurrent）  [actual="id,isCurrent,name,transport" expected="id,isCurrent,name,transport"]
+PASS  H28  normalizeNodes 丢弃签名里的任何秘密字段值  [[{"id":"n","name":"N","transport":"ssh://","isCurrent":true}]]
+PASS  H29  nodeSummary 只数条数  [actual=1 expected=1]
+PASS  H30  空表 / 非对象输入不抛  [actual=0 expected=0]
+PASS  H31  正文可渲染（不抛），首帧是 loading 态
+PASS  H32  effect 落地后渲染出节点行（数据回路接通）
+PASS  H33  渲染树里没有秘密字段值（password / keyRef 均未泄出）
+PASS  H34  RPC 调用只用了 /ssh-gui 通道  [actual=true expected=true]
+PASS  H35  RPC endpoint = nodes.list  [actual="nodes.list" expected="nodes.list"]
+
+ALL PASS
+
+ALL VERIFICATIONS PASSED (no web service started)

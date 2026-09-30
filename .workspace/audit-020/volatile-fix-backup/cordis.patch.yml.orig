@@ -1,0 +1,614 @@
+# Your patch layer for this dsh profile, applied after every bundle layer:
+# a top-level YAML array of loader patch entries (id-targeted config
+# overrides, disables, and insert lists; `!!js` expressions allowed).
+- insert:
+    - id: vision-adam
+      name: '@deepseek-ai/dsh-vision-adam'
+
+# 默认 agent preset 换成用户自建的 standard-glm（$DSH_HOME/.agent-presets/）：
+# 与官方 standard 唯一区别是 subagent / subagent_fork 的 agentOptions 固定
+# provider=adam、model=deepseek-v4-pro。
+# 组合变更的生效面（2026-09-17 源码核实修正，原文"需重启 DSH 后对新会话生效"是误解）：
+# `mount()` 只在**会话创建**时调用，而 `ensureStanding` 内有 compositionStamp
+# (mtimeMs+size) 重挂载检查 → **改动后新建的会话本来就能拿到新组合**；
+# 保持原代际的是"改动前已存在的会话及其子代理"（子代理走 composeFrom 复用父代）。
+# 要热换子代理模型请走 settings 段 `dsh-subagent:` / 设置页，而不是改 preset 文件。
+- id: agent-preset-registry
+  config:
+    default: standard-glm
+- insert:
+    - id: taste
+      name: '@deepseek-ai/dsh-taste'
+- insert:
+    - id: btw
+      name: '@local/dsh-btw'
+
+# 壁纸插件（@frog755/dsh-wallpaper 的本地 fork，静态图片版）：
+# per-page 覆盖 + 暗色遮罩 + URL/路径/上传来源，配置走 ~/.dsh/settings.yaml。
+- insert:
+    - id: wallpaper
+      name: '@local/dsh-wallpaper'
+# usage 插件（token 用量统计，web2 同款 @local/dsh-usage v0.1.0）；settings 命名空间 dsh-usage 由插件自注册（空 schema），无需 profile 配置
+- insert:
+    - id: usage
+      name: '@local/dsh-usage'
+
+# session-board 插件（会话状态看板 v0.1.0）；settings 命名空间 session-status-board 由插件自注册（默认 enabled=true / maxBoardTokens=500），无需 profile 配置
+- insert:
+    - id: session-status-board
+      name: '@deepseek-ai/dsh-session-board'
+
+# ---- dsh-workspace-enhancement 底座（SSH 远程开发 + 多工作区）——insert-only，未 disable 官方缝 ----
+- insert:
+    # ctx.ssh / ctx.subprocess / ctx.fs 三个远程 provider（占位连接，懒建立）
+    - id: ssh-remote
+      name: dsh-workspace-enhancement
+      config:
+        host: 127.0.0.1
+        port: 22
+        username: ssh
+        cwd: /tmp
+- insert:
+    # 本机/远程目录 browse 后端
+    - id: directory-picker-ssh
+      name: dsh-workspace-enhancement/picker
+      config:
+        maxEntries: 1000
+- insert:
+    # 多连接注册表 + /dsw RPC
+    - id: ssh-web-channel
+      name: dsh-workspace-enhancement/web
+      config:
+        maxEntries: 1000
+# ---- dsh-workerspace 薄插件（串口 + 烧录白名单）----
+- insert:
+    - id: workerspace
+      name: '@local/dsh-workerspace'
+- insert:
+    - id: dsh-pptmaster
+      name: '@local/dsh-pptmaster'
+      config:
+        root: !!js dshHomePath('office-ppt')
+- id: directory-picker
+  disabled: true
+- insert:
+    - id: directory-picker-browse
+      name: '@deepseek-ai/dsh-host-directory-picker-browse'
+
+# 禁用 dsh-workspace-enhancement 的 SSH 目录选择器，避免与 browse 后端重复注册 directoryPicker
+- id: directory-picker-ssh
+  disabled: true
+
+# ---- dsh-ssh-gui（原生 SSH 连接 GUI 薄插件）----
+- insert:
+    - id: ssh-gui
+      name: '@local/dsh-ssh-gui'
+
+# dsh-subagent-model（子代理默认模型）：0.2.0 起 settings 命名空间 = **profile 条目 id**，
+# 故条目 id 必须为 `subagent-model`（插件内 ENTRY_ID 与之对应）。
+# 消费侧：dsh-tool-subagent 的本地补丁在每次派发时读 `settings.describe()` 里该 id 的实时 value，
+# 用非空 provider/model 覆盖 preset 静态 agentOptions ⇒ 改值即热生效。
+# 留空（不写 config）即沿用插件默认 adam/deepseek-v4-pro。
+- insert:
+    - id: subagent-model
+      name: '@local/dsh-subagent-model'
+      config:
+        provider: adam
+        model: deepseek-v4-pro
+
+# ---- U-LD1：宿主日志文件出口（热①挂载；w20 audit §2.3 W-1 / §5 C1）----
+# 唯一作用：注册一个**声明了 levels 的文件 exporter**，把 warn/info/error 落进有界 JSONL。
+# 回滚：删掉下面这一条 insert（热面，秒级）或跑 apply-LogDrift-v1.mjs --rollback=U-LD1
+- insert:
+    - id: logfile
+      name: '@local/dsh-logfile'
+      config:
+        level: 2 # 必须显式：2 = error+info+warn（3 才含 debug）；不写就等于被级别过滤丢弃
+        maxBytes: 8388608 # 单文件上限 8 MiB
+        maxFiles: 3 # 保留 <file> + .1 + .2 ⇒ 硬顶 24 MiB
+        orphanWatch: true # U-LD2 巡检开关（独立回滚：置 false）
+
+# ---- web_search SSE 兼容层（本地插件 @local/dsh-web-search-sse）----
+# 目的：某些 Anthropic 兼容网关（实测 llmapi.roboscience.xyz / New API）在请求体带上
+# server-side 工具 web_search_20250305 时**强制返回 text/event-stream 且忽略 stream:false**，
+# 而官方 @deepseek-ai/dsh-web-search-deepseek 无条件 response.json() ⇒ 报
+# "unexpected token 'e', \"event: mes\"..." 。本插件为官方实现的派生物，只新增 SSE 组装，
+# 其余（请求形状/凭据解析/结果映射）与官方一致，provider id 为 deepseek-sse。
+# 回滚：删除下面两条 insert/override，并把 searchProvider 改回 deepseek-official。
+- insert:
+    - id: web-search-sse
+      name: '@local/dsh-web-search-sse'
+      config:
+        apiKeyEnv: DEEPSEEK_API_KEY
+        baseURL: https://llmapi.roboscience.xyz/v1
+        model: claude-opus-4-6
+        maxUses: 100000
+
+- id: ui-settings-general
+  config:
+    welcomeNoticeVersion: 2026-09-28.1
+
+- id: llm-pi-ai
+  config:
+    providers:
+      adam:
+        apiKeyEnv: ADAM_API_KEY
+        api: openai-completions
+        baseURL: https://llmapi.roboscience.xyz/v1
+        models:
+          - id: deepseek-v4-flash
+            contextWindow: 1000000
+            maxTokens: 990000
+          - id: deepseek-v4-pro
+            contextWindow: 1000000
+            input:
+              - text
+              - image
+          - id: glm-5.1
+            contextWindow: 202752
+          - id: glm-5.2
+            contextWindow: 1000000
+          - id: glm-4.7
+            contextWindow: 204800
+          - id: glm-5
+            contextWindow: 204800
+          - id: kimi-k3
+            contextWindow: 1048576
+          - id: qwen3.7-max
+            contextWindow: 1000000
+          - id: qwen3.7-plus
+            contextWindow: 1000000
+            input:
+              - text
+              - image
+          - id: glm-5.3
+            contextWindow: 1000000
+            maxTokens: 1000000
+          - id: glm-5.3-flash
+            contextWindow: 1000000
+            maxTokens: 1000000
+          - id: qwen3.8-flash
+            contextWindow: 1000000
+            input:
+              - text
+              - image
+          - id: qwen3.8-max
+            contextWindow: 1000000
+            input:
+              - text
+              - image
+          - id: claude-haiku-4-5-20251001
+            contextWindow: 200000
+          - id: claude-opus-4-5-20251101
+            contextWindow: 200000
+          - id: claude-opus-4-6
+            contextWindow: 1000000
+          - id: claude-opus-4-7
+            contextWindow: 1000000
+          - id: claude-opus-4-8
+            contextWindow: 1000000
+          - id: claude-opus-5
+            contextWindow: 1000000
+          - id: claude-sonnet-4-5-20250929
+            contextWindow: 1000000
+          - id: claude-sonnet-4-6
+            contextWindow: 1000000
+            input:
+              - text
+              - image
+          - id: claude-sonnet-5
+            contextWindow: 1000000
+          - id: gpt-5.4
+            contextWindow: 272000
+          - id: gpt-5.4-mini
+            contextWindow: 400000
+          - id: gpt-5.4-openai-compact
+            contextWindow: 1000000
+          - id: gpt-5.5-openai-compact
+            contextWindow: 1000000
+          - id: gpt-5.6-sol
+            contextWindow: 272000
+            input:
+              - text
+              - image
+          - id: gpt-5.6-terra
+            contextWindow: 272000
+            input:
+              - text
+              - image
+          - id: gpt-6-astra
+            contextWindow: 1000000
+            maxTokens: 1000000
+            input:
+              - text
+              - image
+          - id: gpt-5.5
+            contextWindow: 272000
+            input:
+              - text
+              - image
+          - id: gpt-5.6-luna
+            contextWindow: 272000
+            input:
+              - text
+              - image
+          - id: gemini-3.1-flash-image-preview
+            input:
+              - text
+              - image
+          - id: gemini-3.1-flash-image-preview-2k
+          - id: gemini-3.1-flash-image-preview-4k
+          - id: gemini-3.1-flash-lite
+            contextWindow: 1048576
+          - id: gemini-3.1-pro-preview
+            contextWindow: 1048576
+            input:
+              - text
+              - image
+          - id: gemini-3.5-flash
+            contextWindow: 1048576
+            input:
+              - text
+              - image
+          - id: gemini-3.5-flash-lite
+            contextWindow: 1048576
+            input:
+              - text
+              - image
+          - id: gemini-3.6-flash
+            contextWindow: 1048576
+            input:
+              - text
+              - image
+          - id: gemini-3-flash-preview
+            contextWindow: 1048576
+            input:
+              - text
+              - image
+          - id: gemini-3-pro-image-preview
+            contextWindow: 1048576
+          - id: gemini-3-pro-image-preview-2k
+            contextWindow: 1048576
+          - id: gemini-3-pro-image-preview-4k
+            contextWindow: 1048576
+          - id: gemini-3-flash
+            contextWindow: 1048576
+            input:
+              - text
+              - image
+          - id: kimi-k2.7-code
+            contextWindow: 262144
+          - id: kimi-k2.7-code-highspeed
+            contextWindow: 262144
+          - id: veo3.1-fast
+          - id: veo3.1-pro
+          - id: deepseek-v4.1-flash
+            contextWindow: 1000000
+            input:
+              - text
+              - image
+          - id: deepseek-v4-flash-vision-exp
+            contextWindow: 1000000
+            input:
+              - text
+              - image
+          - id: claude-opus-5-5
+          - id: gpt-6-sol
+            input:
+              - text
+              - image
+          - id: qwen3.8-max-0902
+            input:
+              - text
+              - image
+          - id: codex-auto-review
+            name: codex-auto-review
+
+- id: agent-default-model
+  config:
+    provider: adam
+    model: deepseek-v4-pro
+
+- id: web-search-deepseek
+  config:
+    baseURL: https://llmapi.roboscience.xyz/v1
+    maxUses: 100000
+    model: claude-opus-4-6
+
+- id: ui-theme
+  config:
+    preference: light
+
+- insert:
+    - id: preset-standard-glm
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: standard-glm
+        order: 2
+        name: "标准模式（子代理 deepseek-v4-pro）"
+        description: "同标准模式；subagent / subagent_fork 子代理固定使用 adam 网关的 deepseek-v4-pro。"
+        plugins:
+          # The `standard` agent preset: the full coding agent, mounted once per process.
+          #
+          # This file is an AGENT-PLANE composition. The roster mounts it ONCE under a
+          # standing scope; every session naming it joins by scope parentage, so the
+          # tools and prompt sections registered here cover each joined agent while a
+          # session's own state stays keyed per Session/Agent inside the plugins. The
+          # host composition (`base.cordis.yml` + `web.cordis.yml`) keeps everything a
+          # preset must not own: the registries themselves, the sandbox and approval
+          # stack, persistence, and the model route.
+          #
+          # A service row here MUST sit inside a group carrying an `isolate` realm.
+          # Without one it publishes into the root realm, where it is process-global —
+          # another preset publishing the same name collides, and a host reader would
+          # resolve one preset's instance for every session; `dsh-agent-presets` rejects
+          # that at mount. `true` means an entry-local realm: this standing mount's own
+          # private instance, apart from every other preset's. (A shared label does NOT
+          # pool instances — `provide()` throws on the second registration under the
+          # same realm symbol; labels join REALMS, and are not what this file needs.)
+
+          # ── identity ────────────────────────────────────────────────────────────────
+
+          # The preset's own persona, shadowing the deployment default for this agent.
+          # `{{model}}` and `{{cwd}}` resolve from the agent's own route and workspace.
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: >-
+                You are a coding agent powered by the {{model}} model. Your
+                working directory is {{cwd}}.
+
+          - id: agent-instructions
+            name: '@deepseek-ai/dsh-agent-instructions'
+            config:
+              maxBytes: 65536
+
+          # ── shell ───────────────────────────────────────────────────────────────────
+
+          # `shell-env` stays in the HOST composition: `apps/cli/src/web.ts` injects it to
+          # publish `DSH_WEB_URL`/`DSH_WEB_MODE`, and a host row that injects a service is
+          # the criterion for host-plane ownership — injection resolves before any session
+          # exists, so there is no agent to key by. Behind a preset realm those variables
+          # never reached the model's shell at all. Both shell tools consume the host
+          # registry from here; their executors (`bash-sandbox`/`pwsh-sandbox`) are
+          # host-plane too.
+          - id: tool-bash
+            name: '@deepseek-ai/dsh-tool-bash'
+            disabled: !!js process.platform === 'win32'
+
+          - id: tool-pwsh
+            name: '@deepseek-ai/dsh-tool-pwsh'
+            disabled: !!js process.platform !== 'win32'
+
+          # ── filesystem ──────────────────────────────────────────────────────────────
+
+          # Both register into the host `tools` registry and provide nothing, so
+          # they need no realm. The `fs` service and its policy stay in the host.
+          - id: tool-fs
+            name: '@deepseek-ai/dsh-tool-fs'
+
+          - id: tool-fs-search
+            name: '@deepseek-ai/dsh-tool-fs-search'
+            config:
+              sampleOverCapGlobResults: false
+
+          # ── background jobs ────────────────────────────────────────────────────────
+
+          # Only the model-facing controls. The task REGISTRY stays on the host plane:
+          # its producers sit outside any realm this file could put it in — `tool-bash`
+          # above resolves it with `ctx.get`, and an entry-local realm here is invisible
+          # to every sibling row, so `run_in_background` would answer "background jobs
+          # unavailable" while these controls sat in the catalog. The registry is keyed by
+          # owning agent anyway, so one host instance serves every session. What a preset
+          # chooses is whether its agent can collect and stop background work at all.
+          - id: tool-jobs
+            name: '@deepseek-ai/dsh-tool-jobs'
+
+          # ── skills ──────────────────────────────────────────────────────────────────
+
+          # The skill REGISTRY lives in the host composition and is layered per scope:
+          # these rows register into THIS preset's layer of it, so they need no realm.
+          # `skill-filesystem` contributes local-root discovery for agents on this preset, and
+          # `tool-skill` gives them the catalog and loader; the merged catalog also
+          # carries whatever the deployment registered globally (repository plugins).
+          - id: skill-filesystem
+            name: '@deepseek-ai/dsh-skill-filesystem'
+
+          - id: tool-skill
+            name: '@deepseek-ai/dsh-tool-skill'
+
+          # ── goals ───────────────────────────────────────────────────────────────────
+
+          # Only the model-facing tool. The goal SERVICE, its session driver, and the
+          # `/goal` command stay on the host plane: the Gateway serves the goal domain as
+          # Remote endpoints whose receiver comes from a generated descriptor, so it
+          # resolves `goals` on the host and an entry-local realm here would hide it. The
+          # registry is keyed by session anyway, so one host instance serves every
+          # session. What a preset chooses is whether its agent can call the goal tool.
+          - id: tool-goal
+            name: '@deepseek-ai/dsh-tool-goal'
+
+          # ── plan mode ───────────────────────────────────────────────────────────────
+
+          # Plan state is per-agent by nature, so an entry-local realm is not a
+          # workaround here — it is the correct lifetime.
+          - id: planning
+            name: cordis:group
+            group: true
+            isolate:
+              planMode: true
+            config:
+              - id: plan-mode
+                name: '@deepseek-ai/dsh-plan-mode'
+                config:
+                  section: |
+                    You are in plan mode. Stay in plan mode until exit_plan_mode succeeds or the user switches the session mode. Imperative language to implement changes means plan the implementation, not execute it. A user's conversational agreement — including an answer confirming something you asked — approves nothing and does not end plan mode; fold the confirmed decision into the plan and submit it through exit_plan_mode.
+
+                    Explore first. Use non-mutating reads, searches, static analysis, and checks to ground the plan in the actual repository. Do not edit or write files, change configuration, run formatters or code generation that rewrites tracked files, commit, or otherwise carry out the plan. Prefer existing functions and patterns over new machinery.
+
+                    The tool catalog stays the same across modes for request-cache stability. These plan-mode rules override any later tool description or guidance that suggests using mutation tools; those tools remain listed to keep the tool catalog unchanged. Do not use todo_write to track this planning phase: it tracks implementation after an approved plan, while the plan itself belongs in exit_plan_mode.
+
+                    Resolve discoverable facts by inspection. Use ask_user_question only for user-owned choices or material ambiguity that inspection cannot answer. Do not ask the user where code lives or how current behavior works when you can find out.
+
+                    Make the plan decision-complete: state the goal and success criteria; group implementation changes by subsystem; identify public API, schema, and data-flow changes; cover edge cases, failure modes, tests, acceptance criteria, and explicit assumptions. Keep it concise enough to review but detailed enough that another engineer can implement it without making design decisions.
+
+                    When ready, call exit_plan_mode with the complete plan markdown, starting with a # title. Make exit_plan_mode the only and final tool call in that assistant response: it presents the plan for approval, and implementation begins only in a later step after approval. Do not paste the final plan as a plain reply or ask "should I proceed?" through prose or ask_user_question. If review rejects it, incorporate the feedback and present again. If the review channel is unavailable or aborted, stay in plan mode and ask the user to switch modes manually; do not proceed with implementation.
+
+          # ── compaction ──────────────────────────────────────────────────────────────
+
+          # `compaction-basic` reads `toolResultPrune` through `ctx.get`, so the pruner must
+          # share this realm rather than sit outside it.
+          #
+          # `tokenMeter` is deliberately NOT in this realm: the meter stays on the HOST
+          # plane, and the rows here resolve that one instance. It takes no configuration,
+          # keys every fold by Session, and owns the context-meter projection units the
+          # browser reads for every session — behind a realm those units would come and go
+          # with whichever presets happen to be mounted. What a preset chooses is whether
+          # its agent compacts at all, which is `compaction-basic` below.
+          - id: compaction
+            name: cordis:group
+            group: true
+            isolate:
+              compaction: true
+              toolResultPruner: true
+            config:
+              - id: compaction-basic
+                name: '@deepseek-ai/dsh-compaction-basic'
+
+              - id: command-compact
+                name: '@deepseek-ai/dsh-command-compact'
+
+              - id: tool-result-pruner
+                name: '@deepseek-ai/dsh-compaction-tool-result-pruner'
+                config:
+                  thresholdChars: 8192
+                  headChars: 4096
+                  tailChars: 1024
+
+          # ── delegation and workflows ────────────────────────────────────────────────
+
+          # The `subagents` registry and its spawn/fork backends live in the HOST
+          # composition: the registry is a process singleton whose cross-session queries
+          # the api-proxy serves to the browser, and a provider name may only be
+          # registered once. This preset contributes the delegation TOOLS, which resolve
+          # that host registry.
+          #
+          # `workflows` is different — nothing outside an agent reads it — so every row
+          # that reaches it shares one entry-local realm here, and a consumer left
+          # outside would resolve a host registry this preset does not populate.
+          #
+          # `tool-subagent-report` is host-plane for the same reason as the registry,
+          # not because a preset may not want it: it registers a CONTINUABLE SETUP on
+          # that singleton rather than a tool this agent calls, and the setup list is
+          # not scope-aware — one copy per mounted preset means every child gets
+          # `report` registered once per live session, which throws on the second.
+          - id: delegation
+            name: cordis:group
+            group: true
+            isolate:
+              workflowEngine: true
+            config:
+              - id: tool-subagent-control
+                name: '@deepseek-ai/dsh-tool-subagent-control'
+
+              - id: tool-subagent-list-agents
+                name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
+
+              - id: tool-subagent
+                name: '@deepseek-ai/dsh-tool-subagent'
+                config:
+                  provider: spawn
+                  toolName: subagent
+                  backgroundMode: continuable
+                  # 子代理固定走 adam 网关的 deepseek-v4-pro，不随主会话模型变化。
+                  agentOptions:
+                    provider: adam
+                    model: deepseek-v4-pro
+
+              - id: tool-subagent-fork
+                name: '@deepseek-ai/dsh-tool-subagent'
+                config:
+                  provider: fork
+                  toolName: subagent_fork
+                  backgroundMode: continuable
+                  # 同上：fork 子代理固定 deepseek-v4-pro。
+                  agentOptions:
+                    provider: adam
+                    model: deepseek-v4-pro
+
+              # Production dsh does not install these optional providers. Install the
+              # matching Bundle in this Profile and restart the Host, then copy this
+              # preset and remove `disabled` from the matching tool row. Host availability
+              # alone grants no tool.
+              - id: tool-subagent-codex
+                name: '@deepseek-ai/dsh-tool-subagent'
+                disabled: true
+                config:
+                  provider: codex
+                  toolName: subagent_codex
+                  backgroundMode: one-shot
+                  maxDepth: provider-managed
+
+              - id: tool-subagent-claude-code
+                name: '@deepseek-ai/dsh-tool-subagent'
+                disabled: true
+                config:
+                  provider: claude-code
+                  toolName: subagent_claude_code
+                  backgroundMode: one-shot
+                  maxDepth: provider-managed
+
+              - id: workflow-ptc
+                name: '@deepseek-ai/dsh-workflow-ptc'
+                config:
+                  provider: spawn
+
+              - id: tool-workflow
+                name: '@deepseek-ai/dsh-tool-workflow'
+
+              - id: tool-ralph
+                name: '@deepseek-ai/dsh-tool-ralph'
+                config:
+                  subagentProvider: spawn
+                  maxRounds: 64
+
+          # ── remaining model-facing rows ─────────────────────────────────────────────
+
+          - id: tool-ask-user
+            name: '@deepseek-ai/dsh-tool-ask-user'
+
+          - id: tool-todo
+            name: '@deepseek-ai/dsh-tool-todo'
+            config:
+              allowParallelInProgress: true
+
+          # The `web` service and its search provider stay in the host composition; only
+          # the model-facing tool is per-session.
+          - id: tool-web
+            name: '@deepseek-ai/dsh-tool-web'
+            config:
+              fetch: false
+              searchTimeoutMs: 60000
+
+- id: web
+  config:
+    searchProvider: deepseek-sse
+    fetchProvider: http
+
+# ── N13（0.1.5+ 回归）：dsh-client-connection 静态 inject 退化为 ["credentials"]，
+# 而第三方 rpc.handle 的 owner.webServer 解析基点=connection fiber ⇒ 必须让它重新 inject webServer。
+# 依据 reports/upgrade-n13-crosscheck.md §5/§8：**不写 name**（include 的 name 守卫）、
+# **不写 credentials**（entry 层与静态层是并集，写了反而把静态 intercept 值置 null）。
+- id: connection
+  inject: [ webRuntime, webServer ]
+- id: usage
+  name: "@local/dsh-usage"
+  config:
+    heatmap:
+      levels: 3
+    ui:
+      tooltip: false
+- id: session-log-deepseek
+  name: "@deepseek-ai/dsh-session-log-deepseek"
+  config:
+    enabled: false

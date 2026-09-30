@@ -1,0 +1,62 @@
+## ENV (this probe process)
+  DSH_HOME = /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home
+  DSH_AGENTS_HOME = (unset)
+  DSH_BUNDLED_SKILL_DIR = (unset)
+  DSH_PPT_DESIGN_SYSTEM_ROOT = (unset)
+  DSH_WORKBUDDY_PPT_SKILL_ROOT = (unset)
+  HOME = /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home
+
+## SKILLS TREE HASH (content-addressed copy fidelity)
+  ~/.dsh/skills      exists=true sha256=046e663545e8453ea378f09be3cbde9887fcd3c89e662dba1d16277c5dcdd663
+  ~/.dsh-017/skills  exists=true sha256=046e663545e8453ea378f09be3cbde9887fcd3c89e662dba1d16277c5dcdd663
+  $A/home/skills     exists=true sha256=046e663545e8453ea378f09be3cbde9887fcd3c89e662dba1d16277c5dcdd663
+
+## @local/dsh-pptmaster: ctx.skills.registerProvider(...) call sites
+  :192  ctx.skills.registerProvider(() => provider);
+  :80043  ctx.skills.registerProvider(() => provider);
+  :80819  ctx.skills.registerProvider(() => provider);
+
+## D1: DSH_HOME/skills contents (the 4 dirs)
+  grill-me           SKILL.md=true bytes=2394
+  ppt-master         SKILL.md=true bytes=6721
+  program-notebook   SKILL.md=true bytes=5360
+  session-handoff    SKILL.md=true bytes=4600
+  undeclared extras in $DSH_HOME/skills: ["grill-me","ppt-master","program-notebook","session-handoff"]
+
+## D2: $DSH_HOME/.agent-presets/standard-glm
+  agent.cordis.yml   assembly=4db474a7b68d369e051eff8b3b35eaab  ~/.dsh=b3de3aaf979421e356971664b0b5c07e  ~/.dsh-017=b3de3aaf979421e356971664b0b5c07e
+  preset.yml         assembly=f81531b68141aeb2ccf294ef3a80d8b0  ~/.dsh=f81531b68141aeb2ccf294ef3a80d8b0  ~/.dsh-017=f81531b68141aeb2ccf294ef3a80d8b0
+
+## D3: preset selector row id
+  assembly           :24 - id: agent-preset-registry -> next: config: / default: standard-glm
+  ~/.dsh (0.1.1)     :16 - id: agent-presets -> next: config: / default: standard-glm
+  ~/.dsh-017 (0.1.7) :16 - id: agent-preset-registry -> next: config: / default: standard-glm
+
+## D4: profile bundles + catalog reservation
+  bundles = ["@deepseek-ai/dsh-base","@deepseek-ai/dsh-web-app"]
+  sdk-app in bundles = false
+
+## ASSET PRESENCE MATRIX (skill-visibility lens)
+  skills/            $DSH_HOME=HIT   ~/.dsh=HIT   ~/.dsh-017=HIT   $HOME(real)=MISS
+  .agent-presets/    $DSH_HOME=HIT   ~/.dsh=HIT   ~/.dsh-017=HIT   $HOME(real)=MISS
+  wallpapers/        $DSH_HOME=HIT   ~/.dsh=HIT   ~/.dsh-017=MISS   $HOME(real)=MISS
+  taste/             $DSH_HOME=HIT   ~/.dsh=HIT   ~/.dsh-017=HIT   $HOME(real)=MISS
+  office-ppt/        $DSH_HOME=MISS   ~/.dsh=MISS   ~/.dsh-017=HIT   $HOME(real)=MISS
+  AGENTS.md          $DSH_HOME=MISS   ~/.dsh=HIT   ~/.dsh-017=HIT   $HOME(real)=MISS
+  .agents/skills     $DSH_HOME=MISS   ~/.dsh=MISS   ~/.dsh-017=MISS   $HOME(real)=MISS
+
+## office-ppt reference roots
+  ~/.dsh-017/office-ppt  exists=true entries=0
+  ~/.dsh/office-ppt      exists=false entries=-
+  $A/home/office-ppt     exists=false entries=-
+
+## repo distribution snapshot
+  /home/CNS2026495165/dsh/agent-skills:
+    session-handoff
+  git-tracked? 5 files
+
+## DSH_BUNDLED_SKILL_DIR occurrences in prefix tree (writer search)
+  $A/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/lib/types/index.d.ts:40:    /** Bundled skill root; defaults to `$DSH_BUNDLED_SKILL_DIR` when default roots are included, otherwise mounts none. */
+  $A/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/lib/index.js:84:		const bundledSkillDir = config.bundledSkillDir ?? (this.includeDefaultRoots ? process.env.DSH_BUNDLED_SKILL_DIR : void 0);
+  $A/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/README.md:56:The project root is the nearest ancestor containing `.git`; without one, the current cwd is used. The user DSH root skips its `.system` child. `includeDefaultRoots: false` omits the project and user rows plus the `$DSH_BUNDLED_SKILL_DIR` default so an isolated provider sees only its own configured roots; `bundledSkillDir` adds a bundled root at rank 600.
+  $A/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-skill-filesystem/README.zh.md:56:项目根目录是包含 `.git` 的最近祖先目录；如果不存在，则使用当前 cwd。用户 DSH 根目录会跳过其 `.system` 子目录。`includeDefaultRoots: false` 会省略项目根、用户根以及 `$DSH_BUNDLED_SKILL_DIR` 默认值，使隔离提供方只看到自身配置的根；`bundledSkillDir` 会按 rank 600 添加一个随包提供的根目录。

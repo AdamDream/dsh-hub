@@ -1,0 +1,42 @@
+## B1  真实 schemastery 解析：.volatile() 字段在运行时 config 里是 cosmokit 引用对象
+     依据 $B/schemastery/lib/index.mjs:265 = "if (schema.meta?.volatile) { ... return [createVolatile(value), adapted]; }"
+     subagent-model 运行时 config：provider typeof=object isVolatile=true get()="adam"
+     model    typeof=object isVolatile=true
+   PASS  volatile 字段在运行时是引用对象（不是字符串）
+
+## B2  subagent-model apply() 日志：同一份 volatile 运行时 config 喂给改前/改后模块
+     [改前模块 + 改前 schema（普通字符串，修复前真实形态）] apply() 日志 = "dsh-subagent-model: entry \"subagent-model\" effective route = adam/deepseek-v4-pro"
+   PASS  改前模块 + 改前 schema：日志仍是 adam/deepseek-v4-pro（修复前不坏，因为根本没有 volatile）
+     [改前模块 + volatile 运行时 config] apply() 日志 = "dsh-subagent-model: entry \"subagent-model\" effective route = [object Object]/[object Object]"
+   PASS  改前模块 + volatile config：日志被拼成 [object Object]/[object Object]（证明'加 volatile 必须配套解包'）   "dsh-subagent-model: entry \"subagent-model\" effective route = [object Object]/[object Object]"
+     [改后模块 + volatile 运行时 config] apply() 日志 = "dsh-subagent-model: entry \"subagent-model\" effective route = adam/deepseek-v4-pro"
+   PASS  改后模块：日志仍是 adam/deepseek-v4-pro（void 引用解包生效）   {"provider":"adam","model":"deepseek-v4-pro"}
+
+## B3  vision-adam current() → resolveOptions()：两条路径都必须是普通标量（真跑 apply + execute，stub fs/fetch）
+     vision-adam 运行时 config volatile 字段 = apiKeyEnv, baseURL, model, maxTokens
+     [反证①] credentialRef(运行时 config 的 apiKeyEnv 引用对象) ⇒ credential ref "[object Object]" must match /^[A-Za-z_][A-Za-z0-9_]*$/
+   PASS  反证成立：不先解包，apiKeyEnv 引用对象直接进 credentialRef 会抛 TypeError
+     [反证②] resolveOptions({...运行时 config, apiKeyEnv 换成标量}) ⇒ baseURL typeof=object model typeof=object maxTokens typeof=object；typeof baseURL.replace = undefined
+   PASS  反证成立：不解包时 baseURL/model/maxTokens 仍是引用对象，analyzeImageBytes 的 baseURL.replace() 必然 TypeError
+     [路径①有 settings 描述符] execute 抛错（预期，stub 传输）= stub-transport
+   PASS  baseURL 是普通字符串（settings 层覆盖生效，尾斜杠已归一）   https://settings.example/v1/chat/completions
+   PASS  body.model 是普通字符串   "from-settings"
+   PASS  body.max_tokens 是 number   4242
+     [路径②无 settings 描述符（回落基线）] execute 抛错（预期，stub 传输）= stub-transport
+   PASS  baseURL 回落基线且是普通字符串   https://llmapi.roboscience.xyz/v1/chat/completions
+   PASS  body.model 回落基线且是普通字符串   "gpt-6-astra"
+   PASS  body.max_tokens 回落基线且是 number   393216
+     [路径③走 credentials.resolve（验 apiKeyEnv 标量）] execute 抛错（预期，stub 传输）= stub-transport
+   PASS  credentials.resolve 收到的是普通字符串 apiKeyEnv（= settings 层的 SETTINGS_KEY）   got typeof=string value=SETTINGS_KEY
+   PASS  credentialsRef 不是 cosmokit 引用对象
+     [对照：改前模块 + 改前 schema] execute 抛错（预期，stub 传输）= stub-transport
+   PASS  改前模块在'无 volatile'schema 下同样工作（说明修复前不是功能回归，而是设置面缺口）   https://settings.example/v1/chat/completions "from-settings"
+
+## B4  消费侧真跑：dsh-tool-subagent/lib/index.js:68-88 effectiveConfiguredAgentOptions 源码文本实例化
+     [改后（volatile）] describe().value = {"provider":"adam","model":"deepseek-v4-pro"} ⇒ consumer 结果 = {"provider":"adam","model":"deepseek-v4-pro"}
+   PASS  改后（volatile）：消费侧拿到字符串并成功覆盖 preset   {"provider":"adam","model":"deepseek-v4-pro"}
+     (改前（普通字符串）: volatileForm === undefined ⇒ describe() 不产出该 ns，消费侧一路回落 preset)
+     [改前（普通字符串）] describe().value = null ⇒ consumer 结果 = {"provider":"preset-provider","model":"preset-model"}
+   PASS  改前（普通字符串）：未收录 ⇒ 消费侧原样回落 preset（无报错、无字符串破损）   {"provider":"preset-provider","model":"preset-model"}
+
+## B 全项 PASS

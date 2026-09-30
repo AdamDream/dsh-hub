@@ -1,0 +1,60 @@
+
+########## SCENARIO 1 = assembled deployment (host/preset skill-filesystem, no customSkillDirs) ##########
+config: {}
+
+########## SCENARIO 2 = shipped web-app preset default (customSkillDirs = dsh-agent-preset/skills) ##########
+config: {"customSkillDirs":["/home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-preset/skills"]}
+
+########## SCENARIO 3 = DSH_BUNDLED_SKILL_DIR explicitly set to dsh-agent-preset/skills ##########
+config: {"bundledSkillDir":"/home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-preset/skills"}
+
+===== ROOTS / SCENARIO 1 (deployment) / cwd=/home/CNS2026495165/dsh =====
+  rank=100 source=project-dsh    skipSystem=false hit=MISSING  /home/CNS2026495165/dsh/.dsh/skills
+  rank=200 source=project-agents skipSystem=false hit=MISSING  /home/CNS2026495165/dsh/.agents/skills
+  rank=400 source=user-dsh       skipSystem=true hit=dir, 4 visible entries  /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/skills
+  rank=500 source=user-agents    skipSystem=false hit=MISSING  /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/.agents/skills
+
+===== ROOTS / SCENARIO 2 (shipped preset customSkillDirs) / cwd=/home/CNS2026495165/dsh =====
+  rank=100 source=project-dsh    skipSystem=false hit=MISSING  /home/CNS2026495165/dsh/.dsh/skills
+  rank=200 source=project-agents skipSystem=false hit=MISSING  /home/CNS2026495165/dsh/.agents/skills
+  rank=300 source=custom         skipSystem=false hit=dir, 4 visible entries  /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-preset/skills
+  rank=400 source=user-dsh       skipSystem=true hit=dir, 4 visible entries  /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/skills
+  rank=500 source=user-agents    skipSystem=false hit=MISSING  /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/.agents/skills
+
+===== ROOTS / SCENARIO 3 (bundledSkillDir) / cwd=/home/CNS2026495165/dsh =====
+  rank=100 source=project-dsh    skipSystem=false hit=MISSING  /home/CNS2026495165/dsh/.dsh/skills
+  rank=200 source=project-agents skipSystem=false hit=MISSING  /home/CNS2026495165/dsh/.agents/skills
+  rank=400 source=user-dsh       skipSystem=true hit=dir, 4 visible entries  /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/skills
+  rank=500 source=user-agents    skipSystem=false hit=MISSING  /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/.agents/skills
+  rank=600 source=bundled        skipSystem=false hit=dir, 4 visible entries  /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-preset/skills
+
+
+########## WP4-B: per-skill load (SCENARIO 1, real provider) ##########
+list() complete=(plain array => complete) candidates=4
+  grill-me                   rank=400 source=user-dsh   OK        model=false user=true version=(none) meta=[(none)] bodyLen=2221
+  ppt-master                 rank=400 source=user-dsh   OK        model=true user=true version=6.1.0 meta=[version,copyright,license,official_repository] bodyLen=5567
+  program-notebook           rank=400 source=user-dsh   OK        model=true user=true version=(none) meta=[(none)] bodyLen=2383
+  session-handoff            rank=400 source=user-dsh   OK        model=true user=true version=1.0.1 meta=[version,author,updated] bodyLen=2064
+
+== provider warnings (SCENARIO 1): 0 ==
+
+########## SCENARIO 2 candidates (8) ##########
+  agent-experience               rank=300 source=custom     /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-preset/skills/agent-experience/SKILL.md
+  cordis-composition-reference   rank=300 source=custom     /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-preset/skills/cordis-composition-reference/SKILL.md
+  cordis-plugin-development      rank=300 source=custom     /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-preset/skills/cordis-plugin-development/SKILL.md
+  editing-cordis-compositions    rank=300 source=custom     /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/prefix-cli-rc2/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-agent-preset/skills/editing-cordis-compositions/SKILL.md
+  grill-me                       rank=400 source=user-dsh   /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/skills/grill-me/SKILL.md
+  ppt-master                     rank=400 source=user-dsh   /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/skills/ppt-master/SKILL.md
+  program-notebook               rank=400 source=user-dsh   /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/skills/program-notebook/SKILL.md
+  session-handoff                rank=400 source=user-dsh   /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home/skills/session-handoff/SKILL.md
+
+
+########## machinery ##########
+findProjectRoot semantics come from the CLI build: function
+cwd .git present: true -> project root for cwd is /home/CNS2026495165/dsh
+.dsh/skills under repo root: MISSING
+.agents/skills under repo root: MISSING
+DSH_AGENTS_HOME env: (unset)
+homedir(): /home/CNS2026495165/dsh/.workspace/audit-020/assembly-020/home
+DSH_BUNDLED_SKILL_DIR env: (unset)
+repo agent-skills/: dir, 1 visible entries

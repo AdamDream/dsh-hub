@@ -1,0 +1,109 @@
+# ══════════════════════════════════════════════════════════════════════════════════
+# WP5 · Route B：办公入口（外部事件 → 0.2.0 工作区会话）
+#
+# 用法：把下面全部内容 **追加到 `$A/home/profiles/web/cordis.patch.yml` 末尾**
+#       （该文件是协调者独占写入；本工单只产出这段文本，不落地）。
+#       追加后无需再补任何东西 —— 它就是两个 loader patch entry。
+#
+# 为什么是**两**条而不是一条：
+#   1) `@deepseek-ai/dsh-webhook` —— **官方件**，提供 `ctx.webhookRuntime`。
+#      它**没有** Config（`lib/index.js` 里没有 `Config` 导出），也**没有**
+#      YAML 配置规则的入口：规则只能由插件 `ctx.webhookRuntime.register()` 提供。
+#      ⇒ 它自己**不会**建会话，只是把"外部事件 → 会话"的创建+回滚原语摆好。
+#   2) `@local/dsh-office-route-b` —— **本工单唯一的自建件**（草案在
+#      `p0c/plugin-draft/`），做两件事：
+#        a. 注册**一条规则**（已授权投递 → `WebhookSessionRequest`）；
+#        b. 注册**一个非 `/api` 的精确路由**（Bearer 令牌鉴权 + 请求体限长 +
+#           目标目录/扩展名/大小三重白名单，全以 realpath/lstat **事实**为准）。
+#
+# 顺序：`webhook-runtime` 必须排在使用者之前（cordis 的 `inject` 会等它）。
+#
+# 落点与鉴权面（必须与 D17 的判决一起读）：
+#   * 路由注册在**现有 web bundle 的 webServer** 上（本部署 3098，默认 loopback）
+#     ⇒ `http://127.0.0.1:3098/office-handoff`；
+#   * 该路径**不在 `/api` 前缀下**，因此**不经** `dsh-client-connection` 的
+#     `admit()` cookie 门（admit 只在 `/api` 前缀 handler 与 `connection.rpc`
+#     通道上被调用）。**鉴权 100% 由 `office-route-b` 自己的 Bearer 令牌实现。**
+#   * ⚠️ **绝不**为了这个入口把 `webserver` 的 `host` 改成 `0.0.0.0`
+#     （`dsh-host-webserver` 的自注册路由不带任何 TLS / 认证 / Origin 策略）。
+#
+# `workspaceRoots` 的取值必须与投递侧的 `--workspace` /
+# `$DSH_OFFICE_HANDOFF_WORKSPACE` **完全一致**（同一个绝对路径），否则投递侧
+# 复制到 A、宿主侧只放行 B ⇒ 每一次投递都被 `workspace-path-outside-allowlist`
+# 拒绝。Runbook §3 有一行命令把两侧钉成同一个值。
+#
+# secret：`tokenRef: DSH_OFFICE_ROUTE_B_TOKEN` **只是引用名**（POSIX 标识符），
+#   值经 0.2.0 的 credentials 服务解析（分层：启动环境 > `$DSH_HOME/.credentials.yaml`
+#   的 `refs:` > 项目 `.env` > home `.env`）。配置里**永远不出现明文**。
+# ══════════════════════════════════════════════════════════════════════════════════
+
+- insert:
+    - id: webhook-runtime
+      name: '@deepseek-ai/dsh-webhook'
+
+- insert:
+    # 条目 id = 0.2.0 的 **settings 命名空间**（本部署已确认：命名空间 = profile 条目 id）。
+    # Config 除 `path` 外全部标了 `.volatile()` ⇒ 设置页可热改且不重挂插件
+    # （没标 volatile 的条目会被 dsh-settings 整条跳过，就是「设置命名空间未注册」那个报错）。
+    - id: office-route-b
+      name: '@local/dsh-office-route-b'
+      config:
+        # 适配器实例 id：进投递的 `kind`/`source`，并写进会话消息来源，便于会话内追溯。
+        source: office-handoff
+        # 非 `/api` 的精确路径（绝对、非根、无尾斜杠/查询/片段）。
+        path: /office-handoff
+        # 令牌的**凭据引用名**（不是值）。值放启动环境变量或
+        # `$DSH_HOME/.credentials.yaml` 的 `refs:` 段，见 Runbook §3。
+        tokenRef: DSH_OFFICE_ROUTE_B_TOKEN
+        # 请求体上限：256 KiB（投递信封只有"目标目录 + 文件名列表 + 附注"）。
+        maxBodyBytes: 262144
+        # 目标目录**白名单根**：投递的 workspacePath 必须落在其中。
+        # 取值刻意复用投递器**已有的**环境变量名 `DSH_OFFICE_HANDOFF_WORKSPACE`
+        # （`~/.local/lib/dsh-office-handoff/lib/cli.js:52`）⇒ **一个变量同时钉住两侧**：
+        #   宿主侧  = 本行的 `!!js` 表达式（启动 dsh 时求值一次）
+        #   投递侧  = `--workspace` > $DSH_OFFICE_HANDOFF_WORKSPACE > ~/DSH-办公投递
+        # 未设置时回落到 `$HOME/DSH-办公投递`（投递器的同款默认）。
+        # ⚠️ 若用 `assembly-020/boot-web.sh` 启动：它做 `env -i`，会**丢掉**这个变量；
+        #    此时生效值是 `$HOME/DSH-办公投递`（该脚本把 HOME 设为 `$A/home`）——
+        #    投递侧必须显式给同一个 `--workspace`。见 Runbook §3 的一致性断言。
+        workspaceRoots:
+          - !!js (process.env.DSH_OFFICE_HANDOFF_WORKSPACE ?? ((process.env.HOME ?? '/tmp') + '/DSH-办公投递'))
+        # 扩展名白名单，与投递器 `lib/paths.js` 的 DEFAULT_EXTENSIONS 逐项一致。
+        extensions:
+          - .docx
+          - .doc
+          - .xlsx
+          - .xls
+          - .pptx
+          - .ppt
+          - .pdf
+          - .odt
+          - .ods
+          - .odp
+          - .csv
+          - .md
+          - .txt
+          - .rtf
+        # 单文件上限 64 MiB；单次投递最多 32 项。
+        maxFileBytes: 67108864
+        maxFiles: 32
+        # 会话的 agent / 权限预设（两者都已在 0.2.0 组合里注册：
+        # agentPreset 默认值 = 本 profile patch 的 `default: standard-glm`；
+        # permissionPreset 取值来自 dsh-base 的 presets 表）。
+        agentPreset: standard-glm
+        permissionPreset: workspace-write
+        titlePrefix: 办公投递
+
+# ══════════════════════════════════════════════════════════════════════════════════
+# 回滚（三条任一即可，均为热面）：
+#   1) 删掉上面这两个 insert（最干净，路由与规则一起消失）；
+#   2) 只删 `office-route-b` —— 保留官方 webhook runtime，但入口与规则都没了
+#      （此时没有任何东西会调用 `dispatch()`，等价于关闭 Route B）；
+#   3) 把 `office-route-b` 的 `config.workspaceRoots` 改成 `[]`
+#      ⇒ 插件在 `apply()` 阶段抛错、条目加载失败（fail-closed），
+#      但**不推荐**：卸载比改坏更干净。
+#
+# 注意：删除 `webhook-runtime` 而保留 `office-route-b` 会让后者
+# `inject: ["webhookRuntime"]` 悬空 —— cordis 会把它挂着不 apply（不会崩，
+# 但路由不会注册）。所以"只关 Route B"请删 `office-route-b` 那一条。
+# ══════════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,39 @@
+{
+  "name": "@local/dsh-office-route-b",
+  "version": "0.1.0-draft",
+  "private": true,
+  "description": "DSH 办公入口 Route B 薄插件（草案）：在 ctx.webServer 上注册一个非 /api 的精确路由（Bearer 令牌鉴权 + 请求体限长），做目标目录/扩展名/大小三重白名单，然后把已授权的投递经官方 @deepseek-ai/dsh-webhook 的 ctx.webhookRuntime 变成 Workspace 支撑的会话。",
+  "license": "MIT",
+  "author": "CNS2026495165",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "office",
+    "handoff",
+    "webhook",
+    "route-b"
+  ],
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./core": "./lib/core.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.4",
+    "@deepseek-ai/schemastery": "^3.18.4",
+    "@deepseek-ai/dsh-credentials": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-host-webserver": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-webhook": "0.2.0-rc.2"
+  }
+}
