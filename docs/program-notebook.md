@@ -6,7 +6,11 @@
 它不是正文仓库：每个专题的完整内容在 `docs/architecture/`，证据在 `.workspace/reports/` 与
 `.workspace/` 下的部署批次目录里。
 
-> **数据时点**：2026-09-23（§0/§1/§2/§3/§4/§5 仍为 2026-09-20 基线；§6 索引、**§7 缺陷表（含 D18–D28）**与 §8 已按 2026-09-23 的性能专项收尾更新）。
+> **数据时点**：2026-09-30（**§5.5 DSH 0.2.0 迁移线为 2026-09-30 新增，取代 §5.4 成为当前升级主线**；§7 追加 D34/D35）。更早基线：2026-09-25（§0/§1/§2/§3/§4 仍为 2026-09-20 基线；§5.1–§5.3 为 2026-09-23 性能专项；**§5.4 办公投递与升级线为 2026-09-25 新增，其状态口径以 `workbuddy-reverse-proxy/reports/office-upgrade-coordinator-status.md` 与 `upgrade-next-isolated-exec.md` 为准，本页只记结论**；§6 索引、§7 缺陷表（含 D18–D28）、§8 为 2026-09-23，2026-09-25 仅追加 §5.4 与 §6 若干索引行）。
+> **2026-09-28 复核定稿（只动 §5.4 状态口径）**：§5.4 现以三档为准 —— `workbuddy-reverse-proxy/reports/office-upgrade-current-adjudication.md`（**当前协调裁决**）、
+> `.../office-upgrade-coordinator-status.md`（放行状态 + 用户裁决）、`.../upgrade-integrated-isolation-exec.md`（层 A 私有组合实测）；
+> P0/P1 的最新实测另见 `.../office-upgrade-p0-exec-20260929.md`（P0 执行档，判定"机制/局部通过、**目标未通过**"）与 `.../office-upgrade-p1-current-audit.md`（P1 在途）。
+> 注：`*20260929.md` 的日期后缀系命名错误，采样日期为 2026-09-28。本轮只改结论行与引用，未改 §0–§4、§5.1–§5.3、§7 其它条目。
 > 所有架构事实均取自**当前源码/配置/git**，逐条给出 `path:line` 证据；
 > 无法验证的一律标 **未知**，不猜测补全（依据：`program-notebook` skill 的
 > `references/maintenance-playbook.md`「不推测」条）。
@@ -21,9 +25,10 @@
 | 文档写作约定（状态词汇 / 诚实边界 / 导航表 / 代码块规范） | 根 `DOC-STYLE.md`（Tier 0） |
 | 每项能力的**状态与起点**（带日期） | 根 `FEATURE-MAP.md`（Tier 2） |
 | **结构/数据流/运行流/配置链/缺陷摘要 + 全库索引** | **本页 `docs/program-notebook.md`（Tier 0 中枢）** |
-| 展开型专题（程序结构 / 插件体系 / 模型路由 / 运维部署 / **性能与操作体验专项**） | `docs/architecture/01..05` |
+| 展开型专题（程序结构 / 插件体系 / 模型路由 / 运维部署 / **性能与操作体验专项** / **办公投递与 0.1.7 升级闸门**） | `docs/architecture/` 下的 `01-architecture-overview.md` … `05-performance-and-ux-program.md` + **`office-handoff.md`（2026-09-25 新增）**；**专题一律按文件名引用，不按编号区间**——新增件不占编号，写"编号连续区间"会指向不存在的文件 |
 | 操作手册（按场景照做） | `docs/runbooks/` |
 | 审计 / 执行 / 复核 / 调研 / 事故 / 验收**证据**与其机器可读产物 | `.workspace/reports/`（Tier 3） |
+| **办公线 / 升级线**的审计、执行、裁决、调研证据与其议题入口 | `workbuddy-reverse-proxy/reports/` + 根 `office-upgrade_NEXT_SESSION_PROMPT.md`（**整目录未被 git 跟踪**，见 §5.4；与 `.workspace/reports/` 是**两个独立证据库**，勿混引） |
 | 部署包、补丁批次、重放脚本 | `.workspace/workstreams/deploy/` |
 | 探针脚本、一次性捕获、预览图 | `.workspace/probes/` |
 | 备份（已 gitignore） | `.workspace/backups/` |
@@ -54,13 +59,23 @@ graph LR
   profiles --> loader
   replay["重放脚本 backup/apply/verify"] -->|写 lib 文件| globaltree
   restartd["dsh-restart SIGTERM→重启→冒烟200"] -->|进程层| host
+  nautilus["Nautilus 右键（办公投递）"] -->|URIS/argv| receiver["dsh-office-handoff 接收器<br/>零插件 Route A"]
+  receiver -->|"① 本机 staging + link 复制（不经 /api）"| officews["~/DSH-办公投递"]
+  receiver -->|"② 后：POST /api/workspace.create —— 仅登记，不传文件"| host
+  receiver -.->|journal 逐副本记录（先于 ②）；失败自动补偿 + 手工 CLI 回滚| receiver
+  upgrade["0.1.7 隔离升级面（试验场在位：~/.dsh-017 + 隔离 3097 监听；P0/P1 私有组合在 _audit/ 私有根内推进）"] -.->|STOP，未切换| host
   evidence[".workspace/reports 证据档"] -.->|结论来源| localplugins
   evidence -.->|结论来源| replay
+  officeev["workbuddy-reverse-proxy/reports 证据档"] -.->|结论来源| receiver
+  officeev -.->|结论来源| upgrade
 ```
 
 （实现关系用 `-.->` 与调用/数据流区分。数据流的完整展开见
 `docs/architecture/01-architecture-overview.md`；图像链路的 fail-closed 细节见
-`docs/architecture/03-model-routing-gateway.md` §图像能力检测。）
+`docs/architecture/03-model-routing-gateway.md` §图像能力检测；办公投递链与升级闸门的展开见
+`docs/architecture/office-handoff.md`——**办公入口已于 2026-09-28 受控安装并经用户确认验收，升级线 NOT READY / STOP，节点只表示结构，不代表已切现役**。
+办公面另有两条纪律：① **文件复制由接收器在本机完成（①），`/api` 只做工作区登记（②）、不传输也不复制文件**，
+不得写成"API 复制了文件"；② **journal 逐副本记录发生在 ② 之前**，回滚有"失败自动补偿"与"手工 CLI `--rollback`"两条路径。）
 
 ---
 
@@ -76,8 +91,12 @@ graph TD
   notebook --> arch03[docs/architecture/03 模型路由与网关]
   notebook --> arch04[docs/architecture/04 运维与部署]
   notebook --> arch05["docs/architecture/05 性能与操作体验专项"]
+  notebook --> arch06["docs/architecture/office-handoff.md：办公投递与 0.1.7 升级闸门（2026-09-25 新增，不占编号）"]
   arch05 --> perfidx[".workspace/lag-fix/program/FINDINGS-INDEX.md"]
   arch05 --> restartbook[".workspace/lag-fix/COLD-RESTART-RUNBOOK.md"]
+  arch06 --> ohdocs["workbuddy-reverse-proxy/office-handoff/"]
+  arch06 --> ohreports["workbuddy-reverse-proxy/reports/ 终审与隔离审计"]
+  arch06 --> stopgate["workbuddy-reverse-proxy/UPGRADE-STOP-0.1.7.md（STOP 闸门）"]
   notebook --> runbooks[docs/runbooks/]
   notebook --> reports[".workspace/reports 证据库"]
   arch02 --> btw[dsh-btw]
@@ -108,6 +127,11 @@ graph TD
   `dsh.bundle.patch`——不要按「官方包」描述它。
 - `pi-taste-analysis/` **不是插件**（无 `package.json`），是调研分析档 + vendored 上游 TS 源码。
   证据见 `docs/architecture/01-architecture-overview.md` §模块清单。
+- **跟踪面 / 未跟踪面**：本页 §5.1/§5.2 与 `docs/architecture/01..05` 描述的是**已跟踪面**；
+  `workbuddy-reverse-proxy/`（办公投递交付树 + 办公/升级线证据库）是**未跟踪面**——`git ls-files` 命中 0；
+  **ignore 覆盖须逐路径看**（`git check-ignore -v`，2026-09-28 复核）：`office-handoff/bin/**` 命中 `.gitignore:10`（`**/bin/`）、
+  `_audit/**` 命中 `.gitignore:35`、`_migration/**` 命中 `.gitignore:37`，而 **`proto/**` 与 `reports/**` 无命中 ⇒ 会随 `git add -A` 入库**。
+  它不是"空目录"，也不随常规操作入库；详见 §5.4。
 
 ---
 
@@ -200,6 +224,122 @@ sequenceDiagram
 
 完整内容：`docs/architecture/05-performance-and-ux-program.md`；程序级索引与回滚地图：`.workspace/lag-fix/program/FINDINGS-INDEX.md`。
 
+### 5.4 办公投递与 0.1.7 升级线摘要（2026-09-25）
+
+> **2026-09-29 文档补记（以下旧轮次叙述保留为历史）**：U 私有产品组装完成（seal `393ccfd…`），非现役部署。统一 UI 在已审计 Attempt9 截面停于首次引导 `first-use configuration dialog`，未通过；后续 UI 执行已授权，不能把授权当验收。A 私有副本验证已授权在途（`ask a-private-admission`，`28876bf8`），最终发布准入仍待验证和另裁，真实发布/白名单/共享/现役切换未授权；依据 `workbuddy-reverse-proxy/reports/office-upgrade-finish-delivery-audit.md`，本次小修见 `workbuddy-reverse-proxy/reports/office-upgrade-finish-doc-exec.md`，新轮结论须另追加，不抹掉 Attempt9。
+
+> **2026-09-29 16:36 追加（不抹掉上面两条）**：① **统一私有组合 U 组装完成并封存**（`workbuddy-reverse-proxy/_audit/unified-assembly-20260929-121756/`，`CURRENT-MANIFEST.json` → seal `393ccfd83edd7f01e3fe777daa2d9c17bc737b6e9bb18b43118d37fe201c8814`；usage 合成 55/55、恢复脚本 154/154、23 件源→U 哈希一致），**非现役部署**；② **A 旧会话私有验证基本通过**：654 键四桶逐键相等（`9930047 / 748788 / 221614208 / 0`）、官方 v3→v4 全链 4484 记录深等、二次 reopen、真实历史/reload/索引与 usage 页均通过（`workbuddy-reverse-proxy/reports/office-upgrade-a-reopen-ui-exec.md`）；**引用有效性未通过**（私有副本只复制三代日志、缺附件对象 ⇒ `ATTACHMENT_NOT_FOUND`，属副本缺资源，非已证损坏）；③ **用户三项新裁决**：UI 验收**必须以统一 U 真机正负例为准**；**接受"只保证冻结基线字节与可验证增量"边界并批准 A329 精确分类**；下个会话**只做私有收口与切换预案（不含实际切换）**；④ 统一 U 自身 UI 仍**未通过**（修订驱动已就绪未跑），A329 分类尚未落地。入口见根 `office-upgrade_NEXT_SESSION_PROMPT.md`（2026-09-29 16:36 重写，旧版归档 `.dsh/handoffs/`）。
+>
+> **升级线仍 NOT READY / STOP**；办公投递**已于 2026-09-28 受控安装并经用户确认验收**（人工验收为准，**不以桌面截图为重新验收门禁**）。
+> 本节只做索引与状态摘要，**不**代表升级线任何一项"已通过"；展开见 `docs/architecture/office-handoff.md`。
+
+**两个独立议题，同一个未跟踪面**
+
+| 项 | 事实 |
+| --- | --- |
+| 交付树 | `workbuddy-reverse-proxy/office-handoff/`（接收器 `bin/dsh-office-handoff`、`desktop/` 桌面入口、`lib/`、`scripts/`、`install.sh`/`uninstall.sh`、`tests/`、`.iso/` 隔离证据） |
+| 议题入口 | 仓库根 `office-upgrade_NEXT_SESSION_PROMPT.md`（`generated_at 2026-09-28 17:15:39`、`prefix: office-upgrade`、`git_head: 651b1712`；上一版归档 `.dsh/handoffs/office-upgrade_20260928-171539.md`） |
+| 证据库 | `workbuddy-reverse-proxy/reports/`（协调者状态、终审三档、残余风险裁决、隔离审计/执行、迁移细档、办公能力调研）。**与 `.workspace/reports/` 是两个独立证据库，勿混引** |
+| 跟踪状态 | **整目录未被 git 跟踪**（`git ls-files workbuddy-reverse-proxy` = 0）。**是否 ignore 须逐路径看**（2026-09-28 逐路径复跑）：`bin/dsh-office-handoff` 被 `workbuddy-reverse-proxy/.gitignore:10` 的 `**/bin/` 命中、`_audit/**` 被 `.gitignore:35` 命中、`_migration/**` 被 `.gitignore:37` 命中，而 **`proto/**`、`reports/**` 无命中** ⇒ 不能笼统写"整目录不被 ignore"，也不能写"已被忽略"；`git add -A` 会把未被 ignore 的路径**一并入库**（登记见本节「工具脚本写面登记」） |
+| **状态口径（只认三档）** | `reports/office-upgrade-current-adjudication.md`（**当前协调裁决**）+ `reports/office-upgrade-coordinator-status.md`（放行状态 + 用户裁决）+ `reports/upgrade-integrated-isolation-exec.md`（层 A 私有组合实测）；本轮 P0/P1 另见 `reports/office-upgrade-p0-exec-20260929.md` / `office-upgrade-p1-current-audit.md`。本节与专题**只保留结论**，避免每次状态变化扩写整段 |
+
+**办公投递（Route A：零插件 / 零重启 / 零 MIME 足迹）**
+
+- **链路（职责分离，不得混述）**：Nautilus 右键脚本 → 接收器（URIS 优先、argv 回退）→ 探测宿主内置 `/api`（不可达 ⇒ 只入 spool + 通知 + 非零退出）
+  → 独立确认（zenity 主通道，无通道即拒绝）→ **读/校验阶段**持有源 fd（`O_NOATIME`，**发布前即 close**）→
+  **① 接收器在本机**做同文件系统 staging + link 发布（同名绝不覆盖，**不经过 `/api`、不经过宿主进程**）→
+  **逐副本写 journal（先于 ②）** → **② `POST /api/workspace.create {"path"}` 仅把已存在的目标目录登记为 DSH 工作区**
+  （**不传输、不复制任何文件**）。
+- **回滚有两条路径（不可混述）**：① **交付失败时的自动补偿**（按 identity 回滚本次已发布副本 + 尽力补记 `rollback`）；
+  ② **手工 CLI `--rollback=<opId>`**（须显式 opId，校验最强）。两者都**只作用于本接收器创建的那一个副本，源永不被删除**；
+  **不得**注册为宿主/LLM 工具。
+- **权限边界（不得美化）**：进工作区的授权 = **DAC/UMask + 用户的一次确认**，`/api` 通道本身**不提供鉴权**；
+  `dev:ino` + `sha256` + `workspace_root` + seal 只是 **best-effort 一致性校验**，**不是鉴权、不是防伪**；
+  本机第二个账户 `itadm` 可调用 `workspace.create`——该风险按裁决**被告知而非被修复**。
+- **依赖姿态（不得写成"零依赖/无兼容债"）**：仍**动态加载**宿主的 `@deepseek-ai/dsh-atomic-write`（`withFileLock`，找不到即 fail-closed），
+  且 `/api` 方法名/参数形状构成**版本契约**；真正没有的只是**插件面耦合**（无 `cordis.patch.yml`、`lib/**` 对 cordis 零引用）。
+- **当前状态（2026-09-28 复核定稿）**：**已部署** —— `~/.local/bin/dsh-office-handoff` → `~/.local/lib/dsh-office-handoff/bin/dsh-office-handoff`
+  （symlink，09-28 11:15）、Nautilus 脚本 `DSH-纳入工作区`（0755）、安装副本 19 文件 + 归属标记 `.dsh-office-handoff-owner`；
+  安装副本与仓库源 `bin/` 本地复跑 `cmp` 逐字节相同。**仍无** DSH `.desktop`；`application/pdf` 默认仍为 `org.gnome.Evince.desktop`（旧描述此两项仍成立）。
+  **验收口径**：**用户已确认验收**（协调者状态档 `:5` "验收可以了"）—— 办公面以人工验收为准；仓库内**未做真机 Nautilus 点击取证**
+  （`reports/office-lock-resolution-exec.md:177`，属**如实登记的事实缺口**，**不作为重新验收门禁**，也不得写成"真机点击验收通过"）。
+  `W-1`/`W-2`/`W-3`/`A-03`/`U4` 代码修订已由 W/I 终验关闭（`office-wi-final-verification.md` 全量 169/169 + W/I 配方 66/66；
+  协调者独立 44/44、matrix+rollback-surface 10/10、disclosure 38/38；安装副本 `npm test` 187/187 —— **均为报告口径引用，本轮未重跑**）。
+  计数须带版本标识与时点，不得写成"当前"的通用事实。
+
+**升级线（`0.1.7-rc.2`，NOT READY / STOP）**
+
+- **权威闸门**：`workbuddy-reverse-proxy/UPGRADE-STOP-0.1.7.md`（"本文件是安全闸门，不是升级授权"；
+  其内引用的旧切换/回滚命令在勘误完成前**不得复制执行**）。
+- **硬阻断**：① 旧会话格式迁移——"能读"≠"能打开"：**离线工件面已在 2062 采样规模闭合**（工件产出 / 逐件真 v3 回读 / 契约 / 幂等 = B1/B3/B4/B9 通过；**B2 dry-run 缺陷已修**，`session-dryrun-fix-exec.md`：退出码 `2→0`、`ok 0→2062`），**但样本通过 ≠ 全局冻结**；
+  **P0 core resume / 冷 adopt 机制已在私有组合内以零模型复现（`office-upgrade-p0-exec-20260929.md` U-D1，A/B/C 三样本），同一实验同时复现出 A 的缩水**：adopt 后 v4 视图 `Δ行 −613`、**`Δoutput −614139`**、`v4 == v3`（v0 的 613 行不进入 v4）⇒ **"无损"目标未通过，禁止写成"无损通过/冷恢复已通过"**（协调者裁决：执行档单元级 PASS 仅覆盖机制与局部测试，不代表目标通过；**不照搬单元 PASS**）；
+  **仍未做**："能打开"三项（B5 隔离实例真 `open` / B6 0.1.1 官方 v3 回归对照 / B7 `v3→v4` 续写边）、U-A2（R-1 分类改判，A 仍 `held`）、空库首采陈旧 v3（F-3，HIGH，待裁决）、真实浏览器/页面侧与 C10（BLOCKED）；
+  **用户在 `p0-decisions` 选择保守方案继续 P1**：**不继续** agent-level resume/cold-adopt、**不改**真实会话树、**不改** A 白名单、**保持 `held`**、**不落共享/现役**；空库 usage 首采亦复现同量缺失，**E-2 既有 usage DB 种子与 E-7 全局外置闸未被空库实验替代**；
+  ② 插件——**层 A 私有组合内已大面积落位（各单元 PASS，但不等于可切换）**：btw 整目录换（D7）已闭（L0，`10/10` after 相符、boot 后 `btw` 由 failed 转 active）；wallpaper client-store（C-R5-1）已闭（L0，活实例 served 字节含 `e3000eeb…`、require 解析失败 0）；vision 四个已核验值经平台写路径落位（`options()` 由 legacy → 网关值、重启后仍在、零外呼）；pptmaster client 半边按"删 require + 逐字内联谓词"落位（`e2b5d28b…`→`4241c4fb…`、离线 17/17、活实例解析失败 0）；btw 受审副本 peer 已装入（Q2），**Q1 图标 R8-01 未验**；
+  **仍未闭（阻断总升级）**：`usage`/`usage-v4`（`settingsCtx.settings.register is not a function` 仍在、`ingest done: scanned=0`；**不修、不绕、不作为通过项**）、pptmaster 类型面 MU-3 与元数据面 MU-4（**不在授权内，未做**）、CE-4 真实浏览器 DOM 席位未证；
+  **P1 已在途（未执行）**：`reports/office-upgrade-p1-current-audit.md`（只读准备档，2026-09-28 17:58）判"'7 个 Mode-A 未做'口径已过期：源码迁移已完成，剩余为部署进交付组合 + 第 7 个 `dsh-subagent-model` 下线处置 + 第 8 个同类 `@local/dsh-usage` 双半边 + PPT MU-3/MU-4 + C10"，并给出可执行单元；**该口径不解除 `usage` 对总升级的阻断**；
+  ③ 配置——0.1.7 读 `settings.yaml` 前会先改名 `.imported`（**置空挡不住 rename**），且迁移输入**每轮必须重取**（2026-09-28 复核现值：现役 patch `513413e7…`、现役 settings `919fab5e…`（相对 `32bb98d1…` 漂移，仅 `agent-default-model.model` = `gpt-6-astra`，登记为活值不回滚）、隔离 patch `61adb8ae…`、隔离会话 27 件）——**不得据旧哈希写入**。
+- **Q3（已裁决）**：在**隔离 0.1.7 副本迁移本地 SSE 插件、保留 SSE/citations**，不以有缺陷的官方回退冒充通过。
+  **已做（2026-09-28 复核）**：副本已迁移到 `_migration/web-search-sse-017/`，隔离实例内跑通静态/动态 import 冒烟 + **离线 9/9 功能自证** + 真机 A/B，且隔离副本内已取到**真实 10 条 citations**（含 N13 端点 / Host 边界证据）；
+  **仍未做**：新组合/现役搜索页端到端验收与 C10 真实浏览器 DOM 席位 ⇒ 该路线**仍不能称"验收通过"**。
+- **隔离面（2026-09-28 复核定稿）**：`~/.dsh-017` 与 `~/.npm-global-dsh017` **当前在位**（本地复跑：两目录存在、隔离 patch `61adb8ae…`、隔离会话 `find -maxdepth 3` = **27 件**、3097 `LISTEN 127.0.0.1`）；
+  历史上曾于 2026-09-25 16:42–16:56 建立、16:56–16:57 被建立它的执行档**自行删除**（越界，未获授权），后经用户授权（`rebuild-isolated-017`）**重建并保留** ⇒ **既不得写"不存在"，也不得擅自删除**；越界史**一并保留记载**。
+  现役 `~/.dsh` / 3080 **始终不得作为试验场**；P0/P1 的私有组合在仓库内 `_audit/` 私有根下推进（3098 于 17:55 曾监听、P0 执行后已释放；2026-09-28 18:28 复核 3098/3099 空闲）。
+- **三项用户裁决均为"已裁决 ≠ 已放行"**：`N1`（保留独立默认目录）、`N2`（`--mode ref` 非 dry-run 拒绝，不静默转 copy）、
+  `Q1/Q2/Q3`（见上）——凭据档 `reports/office-upgrade-coordinator-status.md`。
+- **排序纪律**：办公接入（P0）> 现役接入（P1）> 升级修复（P2）；且**任何新插件/新 patch 行落地前必须先过 0.1.7 兼容核对**
+  （当日落地当日进现役 patch、报告覆盖为零的本地插件即为反面先例）。
+
+**工具脚本写面登记（2026-09-28 首次登记；响应协调者 `office-upgrade-coordinator-status.md` §「升级证据边界」的 notebook 登记项）**
+
+> **gitignore 精度（本页 2026-09-28 本地逐路径复跑 `git check-ignore -v`）**：`git ls-files workbuddy-reverse-proxy` = **0**；
+> `office-handoff/bin/**` 命中 `.gitignore:10`（`**/bin/`）、`_audit/**` 命中 `.gitignore:35`、`_migration/**` 命中 `.gitignore:37`；
+> **`proto/**` 与 `reports/**` 无命中 ⇒ 会随 `git add -A` 入库**。
+> ⇒ 登记**不得**写成"已入库/会随提交入库"，也不得写成"整目录被忽略"。（`_migration/` 命中一条系本页实测，纠正"未被 ignore"的旧推断。）
+
+| 脚本 | 写面 | 写闸门（脚本自身实现） |
+| --- | --- | --- |
+| `proto/session-copy-repair/repair.mjs`（**会话副本修复器：有写入语义**） | `repair --apply` 才落盘（产出 `session.v3.jsonl.zstd` 等工件 + manifest，原子写 `.tmp-<pid>` + rename） | 默认 **dry-run 零写**；`--src`/`--out` 必须同时显式且互异；**不得落在现役 `~/.dsh` 下**；默认拒绝未被 gitignore 的 git 工作树输出路径（可显式 `--allow-git-tracked-out`）；运行前后**冻结源指纹必须一致**；拒绝软链根 / 硬链源 / 非规范工件名 |
+| `proto/session-copy-repair/lib/guards.mjs` | 只读闸门库 | 导出 `assertNotUnderLiveHome` / `assertDistinctRoots` / `assertSafeSourceFile` / `assertRootNotSymlink` / `assertOutNotGitTrackable` / `assertCanonicalArtifactName` / `assertFingerprintsUnchanged` |
+| `proto/session-copy-repair/selftest.mjs` | 合成用例自测（`mkdtemp` 内落盘） | T7 负例断言拒绝现役 home / 软链 / `src==out` / 非规范名；T8 dry-run 零写；T9 `--apply` 两遍逐字节相同 |
+| `proto/session-copy-repair/selftest-dry-run.mjs` | small / full 两模式，写**全新** out 目录 | full 必须显式传**全新** out 目录；**不删旧产物**；缺 0.1.7 真实发布物即显式报错，不假装通过 |
+| `proto/session-copy-repair/selftest-b4-b9.mjs`、`lib/header-contract.mjs` | 合成语料自测 / **只读 header 探针** | 只用合成事件、不读真实会话、不改 `repair.mjs`/`lib/*` 行为 |
+| `proto/generation-preservation/run-p0-freeze.mjs` | 私有根（**0700**）副本 + DB 预映像（只读连接 `VACUUM INTO`） | 私有根必须**不存在**（拒绝复用）；普通复制并断言**共享 inode 0 / nlink 1**；真实 DB 仅 `{readOnly:true}`；现役/隔离 home **零访问**；源指纹前后不变 |
+| `proto/generation-preservation/run-p1-p9.mjs`、`run-verify-invariants.mjs` | 只写 `<私有根>/evidence/*.json` | 真实 DB 仅只读；唯一写操作 = P0 那次只读连接上的 `VACUUM INTO`；双口径不一致即记录并停止 |
+| `proto/generation-preservation/run-p5-p6-p8.mjs` | 私有根内 `0700` 目录（`cpSync`/`mkdirSync`） | 全部落私有根 |
+| `proto/generation-preservation/run-a329-attribution.mjs` | 只读归因复算 | 未见写调用（脚本末段自述"不裁决"） |
+| `proto/generation-preservation/run-p7-restore-drill.mjs` | 还原演练只写 `<私有根>/db/restore-drill.db`（或 `--dest`） | 目标已存在即 **fail-closed 退出 2**，须显式 `--force`；源仅只读 |
+| `proto/dsh-0.1.7-isolated-home.sh` | 只写 `$NEWHOME` / `$SNAP` | **从不写现役 `~/.dsh`**；不起实例、不装包；目标已存在则拒绝（除非 `--force`） |
+| `proto/dsh-017-migrate-config.py` | 生成迁移后配置（隔离/私有组合） | 5 段逐字搬运 + 现值形状哈希；**未**声明写现役 |
+| `proto/dsh-0.1.7-preflight.sh`、`plugin-import-smoke.mjs`、`peerdeps-semver-check.mjs`、`sse-citations-probe.mjs` | 只读预检 / 冒烟 / 探针 | **未逐行核**（登记点只给路径与用途；如需写面断言须另行审计） |
+
+### 5.5 DSH 0.2.0 迁移线摘要（2026-09-30）
+
+> 本行取代 §5.4 成为**当前升级主线**；§5.4 的 0.1.7 线为历史。
+> 事实基线以 `.workspace/audit-020/reports/` 下的报告与 `assembly-020/` 隔离组合为准，本页只记结论。
+> 交接件：根 `dsh-020_NEXT_SESSION_PROMPT.md`。
+
+| 事项 | 结论（含证据） |
+| --- | --- |
+| 目标版本 | **`@deepseek-ai/dsh@0.2.0-rc.2`**（npm `latest`+`next`，2026-09-29T09:56Z）。0.1.7 中间版本**明确不追** |
+| 迁移面为何极小 | **CLI `lib/**` 在 0.1.1 / 0.1.7 / 0.2.0 三版逐字节相同**（15 文件 sha256 全等）；**225/280 个官方包 `lib/` 零改动**，仅 55 个有真实改动（`.workspace/audit-020/churn-lib-017-020.txt`） |
+| 隔离组合 | `.workspace/audit-020/assembly-020/`：`prefix-cli-rc2/`（rc.2 CLI）+ `home/`（伪装 DSH_HOME）+ **`boot-web.sh`（生产形态；token 直接打终端）**。实测 `--dump-config` **rc=0 / 200 条目** |
+| 启动纪律 | **必须传 `--port`**（0.2.0 组合默认端口**硬编码 3080 = 现役端口**）；**生产不要 `unshare -rn`**（否则浏览器访问不到）；零外呼由 `env -i` + `DSH_TELEMETRY_MODE=DISABLED` 保证 |
+| peer 闸门（**0.2.0 的静默陷阱**） | 启动时对 peer 不满足的插件行**静默加 `disabled`**（仅打 stderr）。解药是 `<profile>/compatibility.json` 的**精确版本豁免**（`name@version → [精确运行时版本]`）。**豁免值必须随内核版本改**：升 rc.2 时未改会让 10 个条目被禁 |
+| 组合层差异（0.1.7→0.2.0） | 新增 `otel` / `desktop-product-telemetry` / `product-analytics` / `ui-settings-log`；移除 `time-context` / `schedule` / `ui-schedule`（自动化任务降级为可选 bundle）；遥测端点改 `dsh-otel-collector.deepseeksvc.com` |
+| 本地插件（13 个） | 宿主半 **13/13 import 成功**；两处客户端半已迁 `settingsScope` → **`configForms`**（见 D34）。WE 升 **0.2.2**（含本地补丁回流 + 13 条 peer 放宽 + `ssh2` 链接） |
+| N2 子代理路由 | 官方 `dsh-tool-subagent` **无** settings 读取逻辑 ⇒ 「热路由」是**本地补丁**。rc.2 上已重打（`lib/index.js` **691 行**，官方 662），读 **`subagent-model` 条目的实时值**（`settings.describe()` 即热生效通道） |
+| settings 机制变更 | 0.1.7+ 删除 `installSettingsSection`/`settingsNamespace`；命名空间 = **profile 条目 id**；`settings.yaml` **只读一次即改名 `.imported`**，故**投放次序不可反** |
+| 历史会话可读性 | **N17（最高优先级未闭项）**：0.2.0 读不了 0.1.1 写出的历史。实测抽样 **3% 可读**；修 `descriptor v2→3` 后 **60%**；余 40% 卡在三种**顶层打包行**（`text-chunks`/`reasoning-chunks`/`tool-call-chunks`）。**根因**：packing 从 `dsh-session` 顶层行迁到 `dsh-llm` 的 `event.data.stream`，且旧位置解码器被移除。**用户已裁决：尝试把历史全部迁到 0.2.0** |
+| 转换工具（已实测可用） | `zstd` CLI（**按帧解码**；`zlib.zstdDecompressSync` 只解第一帧，会把 12 MB 读成 190 B）；0.1.1 的 `decodeStorageRecord`（零错误展开 65 145 打包行 → 1 364 372 事件）；0.2.0 的 `expandAssistantStream` |
+| GUI 实测状态 | **已实证**：实例 HTTP 200/37KB 真 UI、token→303/无 token→401、GUI 内对话成功（6 秒）。**未实证**：设置页表单可编辑保存、识图工具调用、btw 侧聊面板、SSH 远端子功能 |
+| 办公入口 Route B | 已查明**官方已有现成件** `@deepseek-ai/dsh-webhook`（内置动作入参 `{workspacePath,title,prompt,agentPreset,permissionPreset,model?}`），配套 `dsh-webhook-github` 给出**非 `/api` 精确路由**范式（绕开 cookie 门）。`workspace.list` 在 0.2.0 的替代品是 **`workspace/follow`（stream）** |
+| 现役 / 隔离 | `3080`=0.1.1-rc.2、`3097`=0.1.7-rc.2 **全程未动**；`~/.dsh/sessions` = **2507 份日志 / 21 工作区 / 1.2 GB**、`attachments` = **995 对象 / 205 MB** |
+
+**证据入口**：`.workspace/audit-020/reports/DELIVERY-020-FINAL.md`（交付状态）、`MIGRATION-RC2-DONE.md`（rc.2 验收）、`DECISIONS-BEFORE-CUTOVER.md`（**25 条裁决**）、`MIGRATION-ASSESSMENT.md`（N1–N17 门禁）、`RUNBOOK-020.md`（操作手册）、`STAGE2-WORK-ORDER.md`（82 个执行单元）、`CUTOVER-PLAN-dual-instance.md`（切换预案）、`OFFICE-ROUTE-B-CAPABILITY-PROBE.md`（Route B 勘查）。
+
+---
+
 ---
 
 ## 6. 参考资料索引
@@ -216,6 +356,20 @@ sequenceDiagram
 | `docs/architecture/03-model-routing-gateway.md` | provider/model 配置链、子代理路由合并层、网关、图像能力检测 |
 | `docs/architecture/04-ops-deploy.md` | 补丁重放 fail-closed 契约、重启、验收矩阵、测试架构、备份布局 |
 | `docs/architecture/05-performance-and-ux-program.md` | **性能与操作体验专项**：四问题前后对照、16 项落地、五条跨线重大发现、13 条更正清单、判据与口径纪律、落地/回滚地图 |
+| `docs/architecture/office-handoff.md`（文件名如此，**不占编号**，不存在"06-…"文件） | **办公投递与 0.1.7 升级闸门（2026-09-25 新增）**：Route A 运行流（含"本机复制 vs `/api` 仅登记"的职责分离、fd 作用域、journal 先于登记、两条回滚路径）、依赖与版本契约、权限边界、已裁决前提（N1/N2/Q1/Q2/Q3 凭据）、当前状态与残余必修项、证据索引、维护触发条件 |
+| `office-upgrade_NEXT_SESSION_PROMPT.md`（仓库根） | **办公/升级线的议题入口（跨会话交接件）**：事实基线、任务优先级 P0–P2、已裁决与权威四层、死路、历史坑、关键文件索引与开工只读核对 |
+| `workbuddy-reverse-proxy/office-handoff/README.md` | 办公投递交付物自身口径：链路、权限边界、`O_NOATIME` 诚实语义、风险表、自回滚边界 |
+| `workbuddy-reverse-proxy/reports/office-audit-adjudication.md` | 办公线**唯一权威输入**（r3）：G1 Route A、G2 同 UID 边界、G3 隔离写入验证计划、G4 精确单元、§12 实测回灌与勘误 |
+| `workbuddy-reverse-proxy/reports/office-final-audit-protocol.md` · `-security.md` · `-docs.md` | 办公交付的**三份只读终审**（协议/集成/安装面 · 安全 · 文档与事实一致性）：各档 §0 总裁决、`A-01`–`A-15` 与 `D-0x`/`F-x` 清单、返工边界与人工验收清单 |
+| `workbuddy-reverse-proxy/reports/upgrade-next-isolated-audit.md` | 升级"下一步"**独立只读审计**：全库旧会话真链实测、btw R1–R10 现状、web-search-sse 收敛、**G-01…G-13 闸门**、A–F 交付单元与先后闸门 |
+| `workbuddy-reverse-proxy/reports/office-upgrade-gates-audit.md` | 升级闸门审计：只读预检计数、备份复验、六阶段门与需用户裁决项 |
+| `workbuddy-reverse-proxy/reports/office-upgrade-coordinator-status.md` | **放行状态 + 用户裁决凭据档**：办公入口**已部署且用户已确认验收**（真机点击取证未做，非门禁）/ 0.1.7 **NOT READY · STOP**；已决事项 N1 / N2 / Q1（图标 R8-01）/ Q2（受审副本 peer）/ Q3（迁移本地 SSE）与各自 `ask_user_question` id；B 线 2062 采样结论与 B5/B6/B7 未做；W/I/A03/U4 修订关闭与唯一写入者边界 |
+| `workbuddy-reverse-proxy/reports/office-residual-risk-adjudication.md` | **残余风险裁决**：`W-1`/`W-2`/`W-3` **必修**判定与交付单元、S1–S3 复现、锁域（K6）可达性口径、"首版前不做"清单 |
+| `workbuddy-reverse-proxy/reports/upgrade-next-isolated-exec.md` | 升级线实测/执行档（**历史口径；已被 2026-09-28 起的层 A 组合实测与 P0 执行档取代**）：隔离面建立与**越界删除**时间线、SSE 副本迁移与离线自证、快照来源与"置空挡不住 rename"门禁 |
+| `workbuddy-reverse-proxy/reports/office-upgrade-current-adjudication.md`（**当前协调裁决**） | 授权与所有权（私有 P0/P1 写者边界）、R0 裁决（现值哈希、PID 判据）、P0 当前裁决（A +3B 定位、usage-v4 未部署、冷恢复两级口径）、**进度与退出条件**：P0 目标**未通过**（core resume 机制已复现、A 仍损失 614139）、P1 在途、NOT READY。**注：文件名日期后缀 `20260929` 系命名错误，采样日 2026-09-28** |
+| `workbuddy-reverse-proxy/reports/office-upgrade-p0-exec-20260929.md` · `office-upgrade-p1-current-audit.md` | **P0 执行档**（U-A1/U-A3/U-B1/U-C1/U-D1 机制级 PASS + BLOCKED 清单 + F-3/F-4 新事实；**目标未通过**）与 **P1 在途准备档**（剩余单元：部署进交付组合、第 7/第 8 个 Mode-A 处置、PPT MU-3/MU-4、C10 真实浏览器 DOM） |
+| `workbuddy-reverse-proxy/UPGRADE-STOP-0.1.7.md` | **升级线权威安全闸门（STOP）**：已验证/未完成清单、允许继续的工作、验收必含项 |
+| `workbuddy-reverse-proxy/reports/19-3x..19-5x-*.md` · `20-0x-*.md` | 迁移细档（会话修复、btw 0.1.7、凭据/设置/路由/静默失败、升级冒烟 Runbook）与办公能力三线事实调研 |
 | `.workspace/lag-fix/program/FINDINGS-INDEX.md` | **性能专项程序级索引**：四问题前后实测、16 项落地总表、**13 条更正清单**、诚实口径（加速比只认同窗对照等） |
 | `.workspace/lag-fix/COLD-RESTART-RUNBOOK.md` | **重启批次手册**：落地顺序、分离式重启命令、重启后验收链、逐单元回滚、为何"客户端改动要与重启合批" |
 | `.workspace/lag-fix/program/w01..w29/` | 逐线审计正文（`audit.md` + 原始 JSON）；结论的唯一出处 |
@@ -240,6 +394,8 @@ sequenceDiagram
 | `.workspace/btw-question/exec-d30/report.md` | D30 修法落地报告（U1–U6 逐条、新增 10 测试、反向验真 3 处、构建产物 md5/体积对照、边界合规） |
 | `.workspace/btw-question/push-plan.md` | **推送就绪审计**：T1 `.gitignore` 增补逐行 + T2、提交切分方案、风险表 R1–R12（含 D3/R10 仓卫生欠账） |
 | `.workspace/btw-question/e2e-cover/report.md` | **四项补测（T1 多选 / T2 换题重挂 / T3 窄屏选项行 / T4 键盘焦点序）真机报告** + D33 几何取证（`raw-*-T3-extra.json`、`t3-geometry-probe.mjs`）；被测版本取证与诚实清单（5 条仍未判定） |
+| `workbuddy-reverse-proxy/proto/`（**未跟踪、未被 ignore ⇒ 会随 `git add -A` 入库**） | 两条线的工具脚本：`session-copy-repair/`（**会话副本修复器** + 闸门库 + 自测）、`generation-preservation/`（P0 冻结/代次选择/不变量/还原演练/归因）、`dsh-0.1.7-isolated-home.sh`、`dsh-017-migrate-config.py` 等；**逐个写面与闸门见 §5.4「工具脚本写面登记」** |
+| `workbuddy-reverse-proxy/_audit/`（**被 `.gitignore:35` 命中 ⇒ 不入库**） | 私有证据根：`integrated-isolation-*/`、`ppt-vision-integration-*/`、`generation-preservation-*/`、`usage-v4-*/`、`settings-deploy-20260928-174103/`（**P0**，3098 已释放）、`p1-settings-deploy-20260928-182223/`（**P1 在途**）等，可重建、不入库 |
 
 ---
 
@@ -282,6 +438,8 @@ sequenceDiagram
 | D30 | **btw `btw_ask_user` 的题目项 schema 与 read 结果的 codec 宽度不一致**：工具侧 item schema 是 `additionalProperties: true`（`dsh-btw/src/host/side-chat-service.ts:916` 题目项、`:926` 选项项），`execute` 用**类型断言**（`:961`）把模型参数直接塞进 pending（`:980`），而下发走 **strict codec**（`dsh-btw/src/remote-descriptors.ts:32-34` 的 `result.mode='strict'` → `readSideChatResultSchema` → `btwQuestionSchema`/`btwPendingQuestionSchema` 均 `.strict()`，`dsh-btw/src/shared/remote.ts:146,153`）⇒ 模型多带一个未声明键（例如照抄官方心智写驼峰 `multiSelect`、或加官方才有的 `detail`）会**穿过工具校验、存进 `entry.pendingQuestion.questions`，然后在 `sideChat/read` 的结果校验上炸掉**（宿主抛 `TypertGatewayError(code='result-invalid')`，经 `rpcFailure` 泛化成 `code:"internal"` + "business result failed boundary validation"）。**精度修正（2026-09-23 实测）**：修复前只有**题目项**外层有 `.strict()`，`options` **内层非 strict** ⇒ **选项项**多余键是被 **静默 strip（不炸、丢字段）**，**爆点只在题目项层**；本轮已给选项项补 `.strict()`，两层语义一致。另：工具 schema 的 JSON-schema DSL **不支持 `minLength`/`minItems`** ⇒ `id:''` / `question:''` / `options[].label:''` / `questions:[]` 这类**值维度**宽度差**关不掉 `additionalProperties`**，只能靠 `execute` 内 codec 自校验。**真机实测后果（2026-09-23，已构造出条件）**：模型多带未声明键后该 btw 的 `sideChat/read` **整体**失败（不是只丢这一问）⇒ 客户端 `poll()` 只 `console.warn` + 1 200 ms 退避、**不 publish**（`dsh-btw/src/client/controller.ts:774-787`，原 D29 版为 `:741-746`）⇒ 抽屉**冻结在最后一次成功快照**：跑马灯恒停「输出中… · 当前动作: btw_ask_user」、**无问答卡片、无报错、无消息更新**，**唯一出路是按「停止」**（按下后 14 s 内零失败读、DOM 回到 `running:false`，证明 read 恢复）；**「收起→重开抽屉」无效**（走 `open()` 早退分支 `:126-130`）。实测数字：**27 次失败读 / 45 s 观测窗**、warn 间隔**中位 1.475 s**（min 1.203 / max 3.132）、`questionCard=false`、子代理阻塞。**修法（用户裁决：工具边界 codec 自校验 fail-closed）**：① `execute` 内用与下发同一 schema（`btwPendingQuestionSchema.safeParse`）自校验，失败抛**可纠正**错误（含 issue path/code + 合法键清单 + `multi_select` snake_case 提示、**不回显 payload**）且**不写 pending**；② 选项项补 `.strict()`；③ 值维度必须走该 codec（DSL 表达不了）。客户端同批加固：连续 read 失败阈值 3 时给出**非阻塞**提示「实时更新已暂停，正在重试」（locale 键 `drawer.readRetrying`），成功读自动清除、`phase` 仍为 `open`（保持轮询与自愈）。 | **已修（源码 + 构建 + 部署就位）；宿主侧 ⇒ 待重启生效**（`dsh-btw/lib/index.js` 已部署但宿主进程启动于 10:09:52，早于 18:23 的部署 ⇒ **未生效**）；客户端面热已生效 | `dsh-btw/src/host/side-chat-service.ts:916,926,961,980`（修法落点 `:55` import、`:397` 错误文案、`:1004-1005` `safeParse`+throw、`:1021` 存校验后对象）；`dsh-btw/src/remote-descriptors.ts:32-34`；`dsh-btw/src/shared/remote.ts:141-148,146,153`；`dsh-btw/src/client/controller.ts:38,73,107,659,709,754,761,774-787`（catch 分支：`:775` `console.warn`、`:781-784` 阈值 publish、`:786` 退避 `1_200`）；`dsh-btw/src/client/SideChatSurface.tsx:515-519`；`dsh-btw/src/client/locales.ts:8,38,78`；`dsh-btw/tests/host-opening.spec.ts:490-614`（新 7 例）；`dsh-btw/tests/controller.spec.ts:805-893`（新 2 例）；`dsh-btw/tests/side-chat-surface.spec.tsx:893-913`（新 1 例）。实测取证：`.workspace/btw-question/d30-consequence.md`、`.workspace/btw-question/d30/`（`exp1/exp2/exp3/exp6/exp7/exp8` 输出 + `probe3/probe4` 截图）、`.workspace/btw-question/exec-d30/report.md`；审计原文 `.workspace/btw-question/audit-b-official-ui.md` §4.3。**构建产物**：`dsh-btw/lib/client.js` = `66beb3455c59f4991355f3918228e495` / 365 269 B / `?rev=887a12106dcd`（**served == 部署位 == 仓库**，热面已生效）；`dsh-btw/lib/index.js` = `e1437b3ba7de953811e65c47d5b392e5` / 67 542 B（**已部署，宿主未重启 ⇒ 未生效**）；上一版 `88de97e6c22fc6de9ebd61cb27e5779f` / 363 814 B 与 `6ae7bfcf42fe49763a192c54c5f87c02` / 65 970 B。**回滚钩子**（现场 pre-image，仅本机、不入库）：`.workspace/btw-question/preimage-lib-20260923-182907-pre-D30/`（含 `SHA256SUMS.txt`） |
 | D31 | **btw `answer` 方向缺"语义校验"**（登记项，与 D30 无因果）：官方 `ask_user_question` 在答案侧除宽度校验外还有 `matchesQuestions` 语义校验——答案条数必须等于题数、逐条 `id` 顺序一致、`selected` 不得重复、`custom` trim 后不得为空、非多选时最多 1 项且不得与 custom 并存、`selected` 的每个 label 必须存在于该题 `options[].label` 集合中（官方 `@deepseek-ai/dsh-api-gateway/lib/index.js:1379-1393`）。btw 的 `answer`（`dsh-btw/src/host/side-chat-service.ts:1157-1172`）**唯一校验是 `:1162-1164` 的 `questionId` 是否匹配**，上述任何一条都没有。宽度方向**一致**（请求 codec `dsh-btw/src/shared/remote.ts:215-219` 内嵌 `:157-161` 全 `.strict()`；工具 output schema `dsh-btw/src/host/side-chat-service.ts:938-957` 两层 `additionalProperties: false`；宿主在 `:984-987` 又显式重建三键对象）⇒ **不是 D30 同类通道**，属"照抄官方时有一步没抄"的登记 | **未修**（登记；对 D30 无因果） | `.workspace/btw-question/d30-consequence.md` §F.0「额外发现」与 §F.4(b)；官方 `@deepseek-ai/dsh-api-gateway/lib/index.js:1379-1393`；btw `dsh-btw/src/host/side-chat-service.ts:1157-1172` |
 | D33 | **窄屏 bottom-sheet 下抽屉内容溢出、控件不可达**（**用户裁决：本轮不修、另开一轮**）：640×800 下 `#dsh-btw-drawer` `clientHeight≈370` vs `scrollHeight≈633`（**transcript 只剩 54 px 滚动窗**；泳道高度两次独立会话均 ≈372 px）⇒ **「停止」按钮与抽屉输入框的中心点落在视口外**（`elementFromPoint=null`，实测**中心点 y≈995 / 986**，即二者 box 顶边 `y=980 / 962` ＋ h/2；卡片「发送回答」box 顶边 `y=872` 同样在视口外），必须滚动才能看到完整卡片；**1440×900（`right` 模式）一切正常**（`drawer 12..888`、`stop y 817..847`，全部 `centerInViewport=true`）。**根因（本档已核对源码）**：自动路径的车道高度沿用既有公式 `BOTTOM_SHEET_RATIO=0.48`×可用高度，并夹在 `clamp(…, min(280, available), 560)`（`dsh-btw/src/client/overlay-placement.ts:86-88` 常量、`:396-407` `sheetHeight()`，`:402-406` 为非显式分支），**而抽屉自身内容高度可超过该值**；`HANDLE_MIN_VIEWPORT=720` 以下**刻意沿用旧行为**（`dsh-btw/src/client/drawer-size.ts:41-46`：不渲染拖拽手柄、渲染时不套用显式尺寸 ⇒ 正好落回公式泳道）⇒ 与 HEAD 逐字相同，**不是本批引入的回归**。**不是「scrim 吞点击」**：scrim 是抽屉的前一个兄弟、选项行与「发送回答」均命中自身（T3 PASS），故本条与 T3 的 PASS 不矛盾。**未判定**：其它窄屏尺寸/高度是否复现、边界位置、以及"滚动抽屉内部容器能否把 composer 带回视口"（实测滚到底后 `submit`/`composer`/`stop` 仍在视口外） | **未修**（已实测；用户裁决另开一轮） | `.workspace/btw-question/e2e-cover/report.md` §2.4 + 同目录 `raw-2026-09-23T10-45-10-835Z-T3-extra.json`（三态几何：1440×900 / 640×800 / 滚到底）与复现脚本 `t3-geometry-probe.mjs`；旁证 `raw-2026-09-23T10-40-44-836Z-T3.json` 的 `hitTests.stop`；源码锚点 `dsh-btw/src/client/overlay-placement.ts:86-88,396-407`、`dsh-btw/src/client/drawer-size.ts:41-46` |
+| D34 | **0.2.0 客户端插件因 `settingsScope` 已删除而整块 pending**：`@local/dsh-subagent-model` 与 `@deepseek-ai/dsh-vision-adam` 的客户端 bundle 声明 `inject = ["slots","settingsScope"]`，而 **`settingsScope` 在 0.2.0 全树 0 命中**（0.1.7 即已删除）⇒ 注入不满足 ⇒ **客户端插件永久 pending**，GUI 顶部显示 `web boot: 2 entries did not activate ... pending (waiting for service: settingsScope)`。**已修**：① inject 去掉 `settingsScope`、加 `configForms`；② 新增 `adaptSettingsScope(raw)` 适配器把官方 `ctx.configForms.get(entryId)` 的 `SettingsFormScope`（`getSnapshot`/`subscribe`/`update(ops,revision)`）桥接成组件期望的旧形状（补 `mode: writable?'host':'memory'`、把 `set/unset(field)` 转成 `update([{op,path:[field]}], revision)`）。**教训**：「宿主半 import 成功」**不等于**插件在 0.2.0 上可用 —— 客户端半的服务注入是**独立**的一道门 | **已修（inject + 适配器均已落盘并 `node --check` 通过）**；设置页表单的实际读写**未在 GUI 中逐一验证** | 隔离件 `assembly-020/home/profiles/node_modules/{@local/dsh-subagent-model,@deepseek-ai/dsh-vision-adam}/lib/client.js`；官方契约 `dsh-client-ui-primitives/lib/types/settings-form/form-model.d.ts:17-30,41-52,89-126,148-185`；官方样例 `dsh-client-ui-settings-subagent/lib/client.js:484-506,801-844` |
+| D35 | **0.2.0 的 peer 闸门豁免值绑死内核精确版本**：`<profile>/compatibility.json` 的豁免值是「**精确 DSH 版本数组**」，与运行时版本做 `includes` 比对（`dsh-app-boot` 的 `evaluatePluginCompatibility`）。0.2.0-rc.1 → rc.2 升级时若不同步改，原本豁免的条目会**重新被静默禁用**（实测 rc.2 冷启动出现 **10 条 `disabling profile plugin row`**，改值后归 **0**）。**每次内核版本变更都必须同步此文件**，且它**不接受范围**（只接受精确版本） | **已修**（6 条豁免值升为 `0.2.0-rc.2`） | `assembly-020/home/profiles/web/compatibility.json`；机制 `@deepseek-ai/dsh-app-boot/lib/index.js` 的 `evaluatePluginCompatibility` / `readProfileCompatibility`
 
 
 ---
@@ -320,5 +478,15 @@ sequenceDiagram
 - 缺陷被修复或被推翻 → 更新 §7（删除已失效条目，或在状态列标注「已修复」并附当前证据）。
 - **性能专项的落地项被回滚/替换/推翻** → 同步 `docs/architecture/05-performance-and-ux-program.md` §3/§7 与 `.workspace/lag-fix/program/FINDINGS-INDEX.md`。
 - **上游升级（`npm i -g` / profile 重建）之后** → 必须重跑漂移校验器并重标 §7 中所有"已修并落地"条目的证据时点（见 D25：6 类补丁会被静默覆盖）。
+- **办公投递被安装/被放行或被拒、或 `A-01`–`A-05`、`W-1`/`W-2`/`W-3` 状态变化** →
+  更新 §5.4 的**结论行**与 `docs/architecture/office-handoff.md` §5.1/§6；**只改结论与引用，不复述进展细节**
+  （细节以 `office-upgrade-coordinator-status.md` 为准），**不得**沿用返工前冻结的计数与行号。
+- **办公入口的"真实 Nautilus 点击取证"补齐或被证伪** → 更新 §5.4 的结论行；该取证是**事实缺口登记，不是重新验收门禁**（办公面以用户确认为准）。
+- **P0/P1 私有组合的机制级 PASS 或目标判定变化** → 同步 §5.4 硬阻断 ①/② 与 `docs/architecture/office-handoff.md` §5.2；
+  **不得**把机制/局部 PASS 写成"无损迁移通过"（口径以 `office-upgrade-current-adjudication.md` 为准）。
+- **升级线状态变化（STOP 解除 / 隔离实例验收完成 / Q1/Q2/Q3 的**实施与验收**完成）** → 更新 §5.4 与专题 §5.2/§5.3，
+  并同步 `workbuddy-reverse-proxy/UPGRADE-STOP-0.1.7.md`（后者是权威闸门，本页只做索引）。
+- **用户给出新裁决** → 同批更新 §5.4 与专题 §4 前提表，并核对 `reports/office-upgrade-coordinator-status.md` 的凭据口径（**不得**把已裁决项写回"待裁决/未知"）。
+- **新增宿主插件或新 patch 行** → 先过 0.1.7 兼容核对（见 §5.4 排序纪律），结论落进专题 §5.3。
 - **宿主或客户端渲染链结构性改动** → 复核 `docs/architecture/05` §6 的判据口径（`[data-slot]` 面积、`>33ms` 阈值、"机器安静"门禁等可能随之失效）。
 - 纯格式化、拼写、无行为影响的局部重命名 → 无需更新（但要在提交说明里给出判据）。

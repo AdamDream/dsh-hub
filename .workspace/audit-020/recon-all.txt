@@ -1,0 +1,382 @@
+==============================================================================
+### dsh-btw
+  DEPLOYED: /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-btw
+  deployed files (excl node_modules/.git): 89
+--------------------------------------------------------------------------
+  CANDIDATE [repo-source]: /home/CNS2026495165/dsh/dsh-btw
+    candidate files: 112
+    identical      : 48
+    differing      : 38
+    only-deployed  : 3
+    only-candidate : 26
+    -- identical files: .github/workflows/ci.yml, .gitignore, CONTRIBUTING.md, LICENSE, README.zh.md, SECURITY.md, THIRD_PARTY_NOTICES.md, cordis.patch.yml, docs/ARCHITECTURE.md, docs/OVERLAY-PLACEMENT.md, docs/assets/brand-board.png, docs/assets/campaign-statement.png, docs/assets/concept-surface.png, docs/assets/hero-dark.png, docs/assets/hero.png, docs/assets/installed-overview-en.png, docs/assets/installed.png, docs/assets/sign-on-dark.svg, docs/assets/sign-on-light.svg, docs/assets/social-card.png ...
+    -- DIFFERING:
+       CHANGELOG.md  dep=e56083a21c1b cand=2282f95fcea5
+       README.md  dep=d1859659d540 cand=2d24d261387f
+       lib/client.js  dep=d9dda3bbf907 cand=078ef49d3940
+       lib/index.d.ts  dep=243f24ec9c2e cand=e0f193d52144
+       lib/index.js  dep=9634c6eac09b cand=75e7416f27ed
+       lib/typert.host.js  dep=d68b59d5e2f3 cand=3266bc591dbc
+       lib/typert.remote-client.d.ts  dep=83b2a4529855 cand=ffaddfc56bd0
+       lib/typert.remote-client.js  dep=b15e7acb76cb cand=d42a9b5cd839
+       scripts/smoke-build.mjs  dep=f7fa6369da2b cand=876cbd728251
+       src/client/SideChatDrawer.tsx  dep=7708345051c4 cand=b531f2af3916
+       src/client/SideChatSurface.tsx  dep=e7a7a7980b78 cand=dc0ab22c2129
+       src/client/controller.ts  dep=f7df5e7adf08 cand=6df94518a977
+       src/client/index.ts  dep=3e4c690ae8da cand=92c6e6475473
+       src/client/locales.ts  dep=db45dde86235 cand=2b98511d3968
+       src/client/overlay-placement.ts  dep=7fdc0f0601c0 cand=44b5118abef4
+       src/client/presentation.tsx  dep=3aa8cbb79bb2 cand=204438115211
+       src/client/remote.ts  dep=37e0dcf1f013 cand=6c2c111fd05f
+       src/client/side-chat.module.css  dep=c623bd133da1 cand=7a4ca4590396
+       src/client/use-overlay-placement.ts  dep=157584ac5885 cand=e38789961884
+       src/client/view-store.ts  dep=d9ee7a614d75 cand=719df7719b13
+       src/host/btw-registry.ts  dep=9ec9311a7914 cand=1b340f3f0811
+       src/host/side-chat-service.ts  dep=7c6bf4424ec9 cand=393a66c3c68a
+       src/index.ts  dep=cd1c4748008f cand=7857630cdd09
+       src/remote-descriptors.ts  dep=2a03bfe395e0 cand=0418edc22cac
+       src/shared/remote.ts  dep=20c96451d60c cand=7c0a4f093793
+       ... 13 more
+    -- ONLY IN DEPLOYED: lib/remote-C2Gojj6I.js, lib/remote-D8pzPah2.d.ts, lib/remote-descriptors-Cu5331mU.js
+    -- ONLY IN CANDIDATE: .workbuddy-btw-exec-report.md, lib/remote-DkypAFlI.d.ts, lib/remote-bQu4rpiV.js, lib/remote-descriptors-BNvafF-2.js, package-lock.json, scripts/verify-btw-model-hotread.mjs, src/client/SideChatJumpList.tsx, src/client/SideChatResizeHandle.tsx, src/client/SideChatToolRow.tsx, src/client/btw-settings.ts, src/client/drawer-size-store.ts, src/client/drawer-size.ts, src/host/prompt-transform.ts, src/host/vision.ts, src/shared/dsh-attachment.d.ts, src/shared/vision-adam.d.ts, tests/banner-theme.spec.ts, tests/capability-detect.spec.ts, tests/host-activity.spec.ts, tests/host-image.spec.ts, tests/host-list.spec.ts, tests/host-recovery.spec.ts, tests/jump-list.spec.tsx, tests/overlay-placement-explicit.spec.ts, tests/prompt-transform.spec.ts ...
+
+==============================================================================
+### dsh-usage
+  DEPLOYED: /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-usage
+  deployed files (excl node_modules/.git): 14
+--------------------------------------------------------------------------
+  CANDIDATE [repo-source]: /home/CNS2026495165/dsh/dsh-usage
+    candidate files: 23
+    identical      : 5
+    differing      : 7
+    only-deployed  : 2
+    only-candidate : 11
+    -- identical files: LICENSE, README.md, cordis.patch.yml, lib/ingest-dsh.js, lib/zstd.js
+    -- DIFFERING:
+       lib/charts.js  dep=57b23e271a56 cand=d0fbee8b394c
+       lib/client.js  dep=51fd8d9b0cb6 cand=43be06b640ee
+       lib/db.js  dep=ecb86c235731 cand=48ea5758fd79
+       lib/index.js  dep=b67c064b8123 cand=3779c9a65e25
+       lib/ingest-cc.js  dep=25f3560e578e cand=7b58d5ac500c
+       lib/rpc.js  dep=6a3e774181d2 cand=16e8c6caca16
+       package.json  dep=d69600ea782a cand=34ec1a94d486
+    -- ONLY IN DEPLOYED: lib/ingest-runner.js, lib/ingest-worker.js
+    -- ONLY IN CANDIDATE: AUDIT.md, DESIGN.md, REVIEW.md, VERIFY.md, data/.gitignore, data/verify.db, scripts/install-web2.sh, smoke.mjs, test/bundle-smoke.mjs, test/verify-result.json, test/verify.mjs
+--------------------------------------------------------------------------
+  CANDIDATE [ws-workstreams-src]: /home/CNS2026495165/dsh/.workspace/workstreams/sources/dsh-usage-src
+    candidate files: 43
+    identical      : 6
+    differing      : 6
+    only-deployed  : 2
+    only-candidate : 31
+    -- identical files: LICENSE, cordis.patch.yml, lib/charts.js, lib/ingest-dsh.js, lib/zstd.js, package.json
+    -- DIFFERING:
+       README.md  dep=c6a8ba670b76 cand=a373cddd60a6
+       lib/client.js  dep=51fd8d9b0cb6 cand=a4f5a529f391
+       lib/db.js  dep=ecb86c235731 cand=802834b56ab3
+       lib/index.js  dep=b67c064b8123 cand=49f648c45221
+       lib/ingest-cc.js  dep=25f3560e578e cand=9fcaab44a529
+       lib/rpc.js  dep=6a3e774181d2 cand=3c91ac22f486
+    -- ONLY IN DEPLOYED: lib/ingest-runner.js, lib/ingest-worker.js
+    -- ONLY IN CANDIDATE: dev/charts-loader.mjs, dev/dump-grid.mjs, dev/dump-trend-v2.mjs, dev/dump-trend.mjs, dev/grid.json, dev/labels-preview-dark.png, dev/labels-preview-light.png, dev/peak-preview-dark.png, dev/peak-preview-light.png, dev/render-preview.py, dev/render-tooltip-preview.py, dev/render-trend-v2.py, dev/strip2-preview-dark.png, dev/strip2-preview-light.png, dev/strip3-preview-dark.png, dev/strip3-preview-light.png, dev/trend-24h-light.png, dev/trend-v2-area-light.png, dev/trend-v2-bars-light.png, dev/trend-v2-zoom-3 小时合并.png, dev/trend-v2-zoom-6 小时合并.png, dev/trend-v2-zoom-B.png, dev/trend-v2-zoom-D.png, dev/trend-v2-zoom-完整窗口.png, dev/trend-v2.json ...
+
+==============================================================================
+### dsh-wallpaper
+  DEPLOYED: /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-wallpaper
+  deployed files (excl node_modules/.git): 12
+--------------------------------------------------------------------------
+  CANDIDATE [repo-wallpaper-local]: /home/CNS2026495165/dsh/dsh-wallpaper-local
+    candidate files: 12
+    identical      : 11
+    differing      : 1
+    only-deployed  : 0
+    only-candidate : 0
+    -- identical files: LICENSE, README.md, README.zh-CN.md, assets/wallpaper-effect.png, assets/wallpaper-settings.png, cordis.patch.yml, install.sh, lib/index.js, lib/types/client/index.d.ts, lib/types/index.d.ts, package.json
+    -- DIFFERING:
+       lib/client.js  dep=0fc4fd87fe4e cand=28141d52c252
+
+==============================================================================
+### dsh-taste
+  DEPLOYED: /home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-taste
+  deployed files (excl node_modules/.git): 31
+--------------------------------------------------------------------------
+  CANDIDATE [repo-source]: /home/CNS2026495165/dsh/dsh-taste
+    candidate files: 31
+    identical      : 31
+    differing      : 0
+    only-deployed  : 0
+    only-candidate : 0
+    -- identical files: README.md, REVIEW-custom-routing.md, REVIEW-gui.md, REVIEW-unified-chinese-taste.md, REVIEW.md, config.example.json, lib/backfill.js, lib/bridge.js, lib/client.js, lib/collector.js, lib/commands.js, lib/config.js, lib/index.js, lib/learner-tools.js, lib/learner.js, lib/model-registry.js, lib/queue.js, lib/storage.js, package.json, scripts/migrate-chinese-single-track.mjs ...
+
+==============================================================================
+### dsh-vision-adam
+  DEPLOYED: /home/CNS2026495165/.dsh/profiles/node_modules/@deepseek-ai/dsh-vision-adam
+  deployed files (excl node_modules/.git): 5
+--------------------------------------------------------------------------
+  CANDIDATE [home-src]: /home/CNS2026495165/dsh-vision-adam
+    candidate files: 3
+    identical      : 0
+    differing      : 3
+    only-deployed  : 2
+    only-candidate : 0
+    -- DIFFERING:
+       README.md  dep=a50c7966f1d2 cand=22fea7c9ba15
+       lib/index.js  dep=f331b3d8a077 cand=6dd85463526e
+       package.json  dep=a9005cf716a3 cand=624006f3b641
+    -- ONLY IN DEPLOYED: lib/client.js, lib/index.js.bak-restore-20260912-161015
+--------------------------------------------------------------------------
+  CANDIDATE [upgrade-backup-0.2.0]: /home/CNS2026495165/dsh-upgrade-backup/dsh-vision-adam-0.2.0/dsh-vision-adam
+    candidate files: 3
+    identical      : 1
+    differing      : 2
+    only-deployed  : 2
+    only-candidate : 0
+    -- identical files: README.md
+    -- DIFFERING:
+       lib/index.js  dep=f331b3d8a077 cand=94e95b473be5
+       package.json  dep=a9005cf716a3 cand=1b3d68cbf35d
+    -- ONLY IN DEPLOYED: lib/client.js, lib/index.js.bak-restore-20260912-161015
+
+==============================================================================
+### dsh-workspace-enhancement
+  DEPLOYED: /home/CNS2026495165/.dsh/profiles/node_modules/dsh-workspace-enhancement
+  deployed files (excl node_modules/.git): 119
+--------------------------------------------------------------------------
+  CANDIDATE [research-repos-0.1.4]: /home/CNS2026495165/dsh/.workspace/workstreams/research/repos/dsh-workspace-enhancement
+    candidate files: 218
+    identical      : 2
+    differing      : 4
+    only-deployed  : 113
+    only-candidate : 212
+    -- identical files: LICENSE, cordis.patch.yml
+    -- DIFFERING:
+       README.md  dep=a5abbccb8cc1 cand=37737895bc54
+       README.zh.md  dep=fda4d3e32d63 cand=458cca4b383c
+       package-lock.json  dep=025e2fd94d08 cand=0fa94b898867
+       package.json  dep=8f097a4630b5 cand=368601983c2b
+    -- ONLY IN DEPLOYED: lib/client.js, lib/client.js.map, lib/client/flow.d.ts, lib/client/flow.js, lib/client/flow.js.map, lib/client/form.d.ts, lib/client/form.js, lib/client/form.js.map, lib/client/icons.d.ts, lib/client/icons.js, lib/client/icons.js.map, lib/client/index.d.ts, lib/client/index.js, lib/client/index.js.map, lib/client/machine-form.d.ts, lib/client/machine-form.js, lib/client/machine-form.js.map, lib/client/machine-payload.d.ts, lib/client/machine-payload.js, lib/client/machine-payload.js.map, lib/client/row-badges.d.ts, lib/client/row-badges.js, lib/client/row-badges.js.map, lib/client/settings.d.ts, lib/client/settings.js ...
+    -- ONLY IN CANDIDATE: .cursor/rules/project.mdc, .gitattributes, .github/ISSUE_TEMPLATE/bug.yml, .github/ISSUE_TEMPLATE/config.yml, .github/ISSUE_TEMPLATE/feature.yml, .github/PULL_REQUEST_TEMPLATE.md, .github/workflows/ci.yml, .github/workflows/release.yml, .github/workflows/upstream.yml, .gitignore, .npmrc, AGENTS.md, CHANGELOG.md, CLAUDE.md, CONTRIBUTING.md, SECURITY.md, cordis.yml.example, docs/README.md, docs/ROADMAP.md, docs/agents.md, docs/agents/dsw-round.yml, docs/agents/dsw-spike.yml, docs/architecture.md, docs/backlog.md, docs/compatibility.md ...
+--------------------------------------------------------------------------
+  CANDIDATE [tgz-0.1.2-package]: /home/CNS2026495165/dsh/.workspace/workstreams/research/research/tgz/x-we-0.1.2/package
+    candidate files: 118
+    identical      : 116
+    differing      : 2
+    only-deployed  : 1
+    only-candidate : 0
+    -- identical files: LICENSE, README.md, README.zh.md, cordis.patch.yml, lib/client.js.map, lib/client/flow.d.ts, lib/client/flow.js, lib/client/flow.js.map, lib/client/form.d.ts, lib/client/form.js, lib/client/form.js.map, lib/client/icons.d.ts, lib/client/icons.js, lib/client/icons.js.map, lib/client/index.d.ts, lib/client/index.js, lib/client/index.js.map, lib/client/machine-form.d.ts, lib/client/machine-form.js, lib/client/machine-form.js.map ...
+    -- DIFFERING:
+       lib/client.js  dep=56faaf956705 cand=aef0a3e663af
+       package.json  dep=8f097a4630b5 cand=3c85869215f9
+    -- ONLY IN DEPLOYED: package-lock.json
+--------------------------------------------------------------------------
+  CANDIDATE [tgz-0.1.3-package]: /home/CNS2026495165/dsh/.workspace/workstreams/research/research/tgz/x-we-0.1.3/package
+    candidate files: 84
+    identical      : 64
+    differing      : 16
+    only-deployed  : 39
+    only-candidate : 4
+    -- identical files: LICENSE, cordis.patch.yml, lib/client/flow.d.ts, lib/client/flow.js, lib/client/form.d.ts, lib/client/form.js, lib/client/icons.d.ts, lib/client/icons.js, lib/client/index.d.ts, lib/client/index.js, lib/client/machine-form.d.ts, lib/client/machine-payload.d.ts, lib/client/machine-payload.js, lib/client/row-badges.d.ts, lib/client/row-badges.js, lib/client/settings.d.ts, lib/client/settings.js, lib/client/side-workspaces.d.ts, lib/client/side-workspaces.js, lib/client/status.d.ts ...
+    -- DIFFERING:
+       README.md  dep=a5abbccb8cc1 cand=9343c6afbe40
+       README.zh.md  dep=fda4d3e32d63 cand=03478bdd0661
+       lib/client.js  dep=56faaf956705 cand=908b8cfec834
+       lib/client/machine-form.js  dep=851c6beec7c9 cand=58945480136c
+       lib/exec-tools.d.ts  dep=9e92e7558671 cand=1a9de9bee9fb
+       lib/exec-tools.js  dep=9911d7f7ac53 cand=500fbecab45f
+       lib/locale/dsw.d.ts  dep=af696bfbba01 cand=8e8c93393684
+       lib/locale/dsw.en.js  dep=ef819f2d5e55 cand=1f76cc6bae06
+       lib/locale/dsw.js  dep=bbd09c762c33 cand=d6a4b83ad27e
+       lib/mixed.d.ts  dep=067ffad5d9ce cand=cc09a8b4cd0b
+       lib/mixed.js  dep=eb310d1d8900 cand=fe1cbde24447
+       lib/session-workspaces.d.ts  dep=2455e9ccbeeb cand=45b816fbb65f
+       lib/session-workspaces.js  dep=4c90aa51060d cand=f02662c5241c
+       lib/tools.d.ts  dep=d0c2b45767f6 cand=9bf05379769f
+       lib/tools.js  dep=84f7ef004884 cand=b2bd6802e1ec
+       package.json  dep=8f097a4630b5 cand=f317977d8acc
+    -- ONLY IN DEPLOYED: lib/client.js.map, lib/client/flow.js.map, lib/client/form.js.map, lib/client/icons.js.map, lib/client/index.js.map, lib/client/machine-form.js.map, lib/client/machine-payload.js.map, lib/client/row-badges.js.map, lib/client/settings.js.map, lib/client/side-workspaces.js.map, lib/client/status.js.map, lib/client/ui.js.map, lib/connection.js.map, lib/credential.js.map, lib/environment.js.map, lib/exec-tools.js.map, lib/filesystem.js.map, lib/hostkey.js.map, lib/index.js.map, lib/listing.js.map, lib/locale/dsw.en.js.map, lib/locale/dsw.js.map, lib/locale/host.js.map, lib/locale/index.js.map, lib/mixed.js.map ...
+    -- ONLY IN CANDIDATE: lib/model-prompts.d.ts, lib/model-prompts.js, lib/session-remote-context.d.ts, lib/session-remote-context.js
+--------------------------------------------------------------------------
+  CANDIDATE [tgz-0.1.4-package]: /home/CNS2026495165/dsh/.workspace/workstreams/research/research/tgz/x-we-0.1.4/package
+    candidate files: 106
+    identical      : 42
+    differing      : 38
+    only-deployed  : 39
+    only-candidate : 26
+    -- identical files: LICENSE, cordis.patch.yml, lib/client/flow.d.ts, lib/client/flow.js, lib/client/form.d.ts, lib/client/form.js, lib/client/icons.d.ts, lib/client/icons.js, lib/client/settings.d.ts, lib/client/status.d.ts, lib/client/status.js, lib/client/ui.d.ts, lib/client/ui.js, lib/connection.js, lib/credential.d.ts, lib/credential.js, lib/environment.d.ts, lib/environment.js, lib/hostkey.d.ts, lib/hostkey.js ...
+    -- DIFFERING:
+       README.md  dep=a5abbccb8cc1 cand=37737895bc54
+       README.zh.md  dep=fda4d3e32d63 cand=458cca4b383c
+       lib/client.js  dep=56faaf956705 cand=f22181122304
+       lib/client/index.d.ts  dep=a5362db47708 cand=39a0f12bd6f0
+       lib/client/index.js  dep=ad686ddceb65 cand=357d4ed27c1a
+       lib/client/machine-form.d.ts  dep=3e164b0204fe cand=63a7970e5943
+       lib/client/machine-form.js  dep=851c6beec7c9 cand=31ebab65b70e
+       lib/client/machine-payload.d.ts  dep=41d6ceebf537 cand=f1721bc0c535
+       lib/client/machine-payload.js  dep=07e1fd3befd9 cand=c2f52e132221
+       lib/client/row-badges.d.ts  dep=866045086f6b cand=35e29c64bfa9
+       lib/client/row-badges.js  dep=62642fc390db cand=c2e848c4f616
+       lib/client/settings.js  dep=8bf5c93d2900 cand=f3729e8ab280
+       lib/client/side-workspaces.d.ts  dep=be11c8074596 cand=ec4d877795c0
+       lib/client/side-workspaces.js  dep=7330637b5dd6 cand=06a99c0dda3d
+       lib/connection.d.ts  dep=d5de1d04c47c cand=2080a41d1632
+       lib/exec-tools.d.ts  dep=9e92e7558671 cand=145003fca50d
+       lib/exec-tools.js  dep=9911d7f7ac53 cand=f7c1609519cf
+       lib/filesystem.d.ts  dep=4b34f5d6a0e7 cand=47c66fc9b238
+       lib/filesystem.js  dep=5391ef3ba27d cand=16cb4f66333d
+       lib/locale/dsw.d.ts  dep=af696bfbba01 cand=51c93d592070
+       lib/locale/dsw.en.js  dep=ef819f2d5e55 cand=18c1cebc74d1
+       lib/locale/dsw.js  dep=bbd09c762c33 cand=3134f7de72f4
+       lib/mixed.d.ts  dep=067ffad5d9ce cand=31ed670b2716
+       lib/mixed.js  dep=eb310d1d8900 cand=d452413c53b4
+       lib/plugin.js  dep=34ffd74751cd cand=15fbdc5feb86
+       ... 13 more
+    -- ONLY IN DEPLOYED: lib/client.js.map, lib/client/flow.js.map, lib/client/form.js.map, lib/client/icons.js.map, lib/client/index.js.map, lib/client/machine-form.js.map, lib/client/machine-payload.js.map, lib/client/row-badges.js.map, lib/client/settings.js.map, lib/client/side-workspaces.js.map, lib/client/status.js.map, lib/client/ui.js.map, lib/connection.js.map, lib/credential.js.map, lib/environment.js.map, lib/exec-tools.js.map, lib/filesystem.js.map, lib/hostkey.js.map, lib/index.js.map, lib/listing.js.map, lib/locale/dsw.en.js.map, lib/locale/dsw.js.map, lib/locale/host.js.map, lib/locale/index.js.map, lib/mixed.js.map ...
+    -- ONLY IN CANDIDATE: lib/client/cockpit.d.ts, lib/client/cockpit.js, lib/client/local-directory.d.ts, lib/client/local-directory.js, lib/client/remote-status-entry.d.ts, lib/client/remote-status-entry.js, lib/client/remote-status.d.ts, lib/client/remote-status.js, lib/client/route-id.d.ts, lib/client/route-id.js, lib/client/sandbox-badge.d.ts, lib/client/sandbox-badge.js, lib/model-prompts.d.ts, lib/model-prompts.js, lib/remote-approval-gate.d.ts, lib/remote-approval-gate.js, lib/remote-sandbox-fence.d.ts, lib/remote-sandbox-fence.js, lib/remote-sandbox.d.ts, lib/remote-sandbox.js, lib/session-connections.d.ts, lib/session-connections.js, lib/session-remote-context.d.ts, lib/session-remote-context.js, lib/web-channel.d.ts ...
+
+==============================================================================
+### dsh-logfile
+  DEPLOYED: /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-logfile
+  deployed files (excl node_modules/.git): 4
+--------------------------------------------------------------------------
+  CANDIDATE [lagfix-candidate]: /home/CNS2026495165/dsh/.workspace/lag-fix/exec-logdrift/candidates/dsh-logfile
+    candidate files: 4
+    identical      : 4
+    differing      : 0
+    only-deployed  : 0
+    only-candidate : 0
+    -- identical files: lib/index.js, lib/jsonl-sink.js, lib/orphan-settings.js, package.json
+
+==============================================================================
+### dsh-pptmaster
+  DEPLOYED: /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-pptmaster
+  deployed files (excl node_modules/.git): 62
+--------------------------------------------------------------------------
+  CANDIDATE [ws-deploy-source]: /home/CNS2026495165/dsh/.workspace/workstreams/deploy/deploy-pptmaster/plugin/dsh-pptmaster
+    candidate files: 61
+    identical      : 59
+    differing      : 2
+    only-deployed  : 1
+    only-candidate : 0
+    -- identical files: LICENSE, PORT-NOTES.md, README.md, README.zh.md, cordis.patch.yml, lib/bin.js, lib/index.js, lib/invariant.js, lib/pptd.js, lib/runtime-staging.js, lib/types/archive.d.ts, lib/types/bin.d.ts, lib/types/client.d.ts, lib/types/client/OfficePptHero.d.ts, lib/types/client/OfficePptToolRow.d.ts, lib/types/client/curated-preview-data-analysis.d.ts, lib/types/client/curated-preview-vitality-blue.d.ts, lib/types/client/curated-previews.d.ts, lib/types/client/index.d.ts, lib/types/client/locales.d.ts ...
+    -- DIFFERING:
+       lib/client.js  dep=e2b5d28b4517 cand=8b6563f776ed
+       package.json  dep=8efeba94d4f3 cand=7babd8cc3c4f
+    -- ONLY IN DEPLOYED: lib/client.js.bak
+--------------------------------------------------------------------------
+  CANDIDATE [migration-ppt-017]: /home/CNS2026495165/dsh/workbuddy-reverse-proxy/_migration/ppt-017/dsh-pptmaster
+    candidate files: 63
+    identical      : 56
+    differing      : 6
+    only-deployed  : 0
+    only-candidate : 1
+    -- identical files: LICENSE, PORT-NOTES.md, README.md, README.zh.md, cordis.patch.yml, lib/bin.js, lib/client.js.bak, lib/index.js, lib/invariant.js, lib/pptd.js, lib/runtime-staging.js, lib/types/archive.d.ts, lib/types/bin.d.ts, lib/types/client.d.ts, lib/types/client/OfficePptToolRow.d.ts, lib/types/client/curated-preview-data-analysis.d.ts, lib/types/client/curated-preview-vitality-blue.d.ts, lib/types/client/curated-previews.d.ts, lib/types/client/locales.d.ts, lib/types/client/outline.d.ts ...
+    -- DIFFERING:
+       lib/client.js  dep=e2b5d28b4517 cand=d21906483454
+       lib/types/client/OfficePptHero.d.ts  dep=769d3c7722ad cand=a25a0ea750bb
+       lib/types/client/index.d.ts  dep=63886f534cfe cand=f5e67ea44f4f
+       lib/types/client/rpc.d.ts  dep=f3016f247868 cand=5731a04bea44
+       lib/types/client/turn-delivery.d.ts  dep=34d4233313ec cand=f0397952f3cc
+       package.json  dep=8efeba94d4f3 cand=90422fd9071e
+    -- ONLY IN CANDIDATE: lib/client.js.preimage-e2b5d28b
+
+==============================================================================
+### dsh-ssh-gui
+  DEPLOYED: /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-ssh-gui
+  deployed files (excl node_modules/.git): 8
+--------------------------------------------------------------------------
+  CANDIDATE [ws-deploy-source]: /home/CNS2026495165/dsh/.workspace/workstreams/deploy/deploy-ssh-gui/dsh-ssh-gui
+    candidate files: 8
+    identical      : 7
+    differing      : 1
+    only-deployed  : 0
+    only-candidate : 0
+    -- identical files: LICENSE, README.md, cordis.patch.yml, lib/core.js, lib/index.js, lib/serial-tcp.js, package.json
+    -- DIFFERING:
+       lib/client.js  dep=b3e0c225b3da cand=5e23bc192d14
+--------------------------------------------------------------------------
+  CANDIDATE [migration-settings-017]: /home/CNS2026495165/dsh/workbuddy-reverse-proxy/_migration/settings-017/dsh-ssh-gui
+    candidate files: 8
+    identical      : 6
+    differing      : 2
+    only-deployed  : 0
+    only-candidate : 0
+    -- identical files: LICENSE, README.md, cordis.patch.yml, lib/client.js, lib/serial-tcp.js, package.json
+    -- DIFFERING:
+       lib/core.js  dep=fd7b764df482 cand=00f95216fb08
+       lib/index.js  dep=ccb51fafbdf4 cand=e060db973451
+
+==============================================================================
+### dsh-subagent-model
+  DEPLOYED: /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-subagent-model
+  deployed files (excl node_modules/.git): 3
+--------------------------------------------------------------------------
+  CANDIDATE [ws-deploy-source]: /home/CNS2026495165/dsh/.workspace/workstreams/deploy/deploy-subagent-model
+    candidate files: 18
+    identical      : 3
+    differing      : 0
+    only-deployed  : 0
+    only-candidate : 15
+    -- identical files: lib/client.js, lib/index.js, package.json
+    -- ONLY IN CANDIDATE: README.md, dsh-tool-subagent.index.js.patched, dsh-tool-subagent.p0.diff, evidence/child-1-override.glm-5.3.session-records.txt, evidence/child-2-fallback.deepseek-v4.1-flash.session-records.txt, evidence/describe-observations.txt, evidence/parent-tool-call.txt, evidence/prompt1.json, evidence/prompt2.json, evidence/settings.before.yaml, evidence/settings.cleared.yaml, evidence/settings.with-section.yaml, evidence/test-instance.log, settings.example.yaml, smoke-client.mjs
+--------------------------------------------------------------------------
+  CANDIDATE [migration-settings-017-0.2.0-017]: /home/CNS2026495165/dsh/workbuddy-reverse-proxy/_migration/settings-017/dsh-subagent-model
+    candidate files: 3
+    identical      : 0
+    differing      : 3
+    only-deployed  : 0
+    only-candidate : 0
+    -- DIFFERING:
+       lib/client.js  dep=5f16927be1db cand=9ef30b1de59a
+       lib/index.js  dep=e93de18da406 cand=0d202894ffa5
+       package.json  dep=11df864f7225 cand=acbdf18434a1
+
+==============================================================================
+### dsh-workerspace
+  DEPLOYED: /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-workerspace
+  deployed files (excl node_modules/.git): 11
+--------------------------------------------------------------------------
+  CANDIDATE [ws-deploy-source]: /home/CNS2026495165/dsh/.workspace/workstreams/deploy/deploy-workerspace/dsh-workerspace
+    candidate files: 10
+    identical      : 9
+    differing      : 1
+    only-deployed  : 1
+    only-candidate : 0
+    -- identical files: LICENSE, README.md, lib/core.js, lib/flash.js, lib/serial.js, package.json, test/core.test.mjs, test/flash.test.mjs, test/serial.test.mjs
+    -- DIFFERING:
+       lib/index.js  dep=4362201dacb9 cand=3a8b5dcfe9f2
+    -- ONLY IN DEPLOYED: lib/index.js.bak
+--------------------------------------------------------------------------
+  CANDIDATE [migration-settings-017]: /home/CNS2026495165/dsh/workbuddy-reverse-proxy/_migration/settings-017/dsh-workerspace
+    candidate files: 11
+    identical      : 10
+    differing      : 1
+    only-deployed  : 0
+    only-candidate : 0
+    -- identical files: LICENSE, README.md, lib/core.js, lib/flash.js, lib/index.js.bak, lib/serial.js, package.json, test/core.test.mjs, test/flash.test.mjs, test/serial.test.mjs
+    -- DIFFERING:
+       lib/index.js  dep=4362201dacb9 cand=839116b37531
+
+==============================================================================
+### dsh-web-search-sse
+  DEPLOYED: /home/CNS2026495165/.dsh/profiles/node_modules/@local/dsh-web-search-sse
+  deployed files (excl node_modules/.git): 2
+--------------------------------------------------------------------------
+  CANDIDATE [dexterous-hand-src]: /home/CNS2026495165/Dexterous_Hand_23Dof/.research/hybrid-imu-emf/local-plugins/dsh-web-search-sse
+    candidate files: 2
+    identical      : 2
+    differing      : 0
+    only-deployed  : 0
+    only-candidate : 0
+    -- identical files: lib/index.js, package.json
+--------------------------------------------------------------------------
+  CANDIDATE [migration-web-search-sse-017]: /home/CNS2026495165/dsh/workbuddy-reverse-proxy/_migration/web-search-sse-017
+    candidate files: 3
+    identical      : 0
+    differing      : 2
+    only-deployed  : 0
+    only-candidate : 1
+    -- DIFFERING:
+       lib/index.js  dep=88d6387e351a cand=5947d0909550
+       package.json  dep=20a79999867a cand=83f4ef9c72ce
+    -- ONLY IN CANDIDATE: verify.mjs
+

@@ -1,0 +1,585 @@
+# ============================================================================
+# 0.2.0 profile patch layer — T06 DRAFT (审查用，勿直接覆盖现役 profile)
+# 依据：reports/T06-official-patch-layer-020.md
+# 目标 profile：@deepseek-ai/dsh 0.2.0-rc.1 + dsh-base/dsh-web-app 0.2.0-rc.1
+#
+# 加载顺序（app-boot `readProfilePatches`）：dsh-base → dsh-web-app（含
+# presets/standard|ptc|minimal|cordis）→ 本文件 → $DSH_HOME/cordis.patch.yml
+# → `--patch` 覆盖层 → telemetry 开关。
+# 语义要点：`config` 是**整体替换**而非深合并 ⇒ 覆盖某行必须复述它拥有的全部键。
+#
+# 每条条目的依据类型（见报告 §2.4）：
+#   [lib全等]  目标包不在 churn-lib-017-020.txt 的 55 个改动包内 ⇒ lib/ 逐字节
+#              相同 ⇒ 其 id/导出/注册点/Config schema 必然未变
+#   [源码实读] 目标包在 55 改动包内 ⇒ 已读 0.2.0 源码逐键确认
+#   [组合复算] 用与 app-boot 同一份 applyEntryPatches 算法叠加到 0.2.0 官方
+#              组合（183 行）上复算，结果 0 warning
+# ============================================================================
+
+# ── A. 可直接落地（0.2.0 上 id/name/peer 全部核实通过）────────────────────
+# [lib全等] 以下 5 个 @local/* 包均不在 55 改动包内（它们是本地包，不在官方树），
+#           peer 判定见报告 §5.1；行本身为新增 insert，不依赖官方 id。
+
+# 本地插件：peer 与 0.2.0 兼容，仅需把包装进新 profile 的 node_modules。
+- insert:
+    - id: btw
+      name: '@local/dsh-btw'
+- insert:
+    - id: wallpaper
+      name: '@local/dsh-wallpaper'
+- insert:
+    - id: usage
+      name: '@local/dsh-usage'
+- insert:
+    - id: ssh-gui
+      name: '@local/dsh-ssh-gui'
+- insert:
+    - id: logfile
+      name: '@local/dsh-logfile'
+      config:
+        level: 2
+        maxBytes: 8388608
+        maxFiles: 3
+        orphanWatch: true
+
+# 官方行定向覆盖：0.2.0 组合里这些 id 均存在且 name 未变。
+# [组合复算] 0.1.7→0.2.0 官方组合 id 差集仅 {time-context, schedule, ui-schedule}，
+#           本层定向的 id 一个都不在其中。
+# [lib全等] dsh-agent-preset-registry 虽在 55 名单（churn 4.2%），但改动文件是
+#          lib/typert.host.js；承载 Config 的 lib/index.js 逐字节相同 ⇒ default 键未变。
+- id: agent-preset-registry
+  config:
+    default: standard-glm
+# [lib全等] 同上：只有 lib/client.js 变，lib/index.js 相同 ⇒ welcomeNoticeVersion 键未变。
+- id: ui-settings-general
+  config:
+    welcomeNoticeVersion: 2026-08-13.1
+# [lib全等] 只有 lib/client.js 变，lib/index.js 相同 ⇒ preference 键未变。
+- id: ui-theme
+  config:
+    preference: light
+# [lib全等] dsh-agent-default-model 不在 55 名单内。
+- id: agent-default-model
+  config:
+    provider: adam
+    model: gpt-6-astra
+# [源码实读] dsh-web-search-deepseek 是本层唯一 churn 75% 的目标包：已读 0.2.0
+#          lib/index.js，apiKeyEnv（默认 DEEPSEEK_API_KEY）/baseURL/maxUses/model
+#          四个键仍在；153/163 行仍是无条件 response.json()（SSE fork 的理由未消失）。
+- id: web-search-deepseek
+  config:
+    # apiKeyEnv 必须复述：0.2.0 官方值就是 DEEPSEEK_API_KEY（也是插件默认值）
+    apiKeyEnv: DEEPSEEK_API_KEY
+    baseURL: https://llmapi.roboscience.xyz/v1
+    maxUses: 100000
+    model: claude-opus-4-6
+# [lib全等] dsh-web 不在 55 名单内；searchProvider/fetchProvider 均为 z.string()。
+- id: web
+  config:
+    searchProvider: deepseek-sse
+    fetchProvider: http
+
+# 目录选择器：官方 directory-picker（@deepseek-ai/dsh-host-directory-picker-auto）
+# 在 0.1.1/0.1.7/0.2.0 三层中 id 与 name 均未变；browse 后端在 0.2.0 仍是
+# dsh-web-app 的依赖但**未被官方组合挂载**，故本地仍须自行 insert。
+# [lib全等] dsh-host-directory-picker-auto 不在 55 名单内。
+- id: directory-picker
+  disabled: true
+# [lib全等] dsh-host-directory-picker-browse 不在 55 名单内（须装 0.2.0-rc.1 版包）。
+- insert:
+    - id: directory-picker-browse
+      name: '@deepseek-ai/dsh-host-directory-picker-browse'
+
+# N13：0.2.0 的 dsh-client-connection 静态 inject 仍是 ["credentials"]，
+# 而 web-app 层已把该行覆盖为 inject: [webRuntime]；本层再补 webServer
+# ⇒ 写成 [webRuntime, webServer]（entry 层与静态层取并集，故不写 credentials）。
+# [lib全等] dsh-client-connection 不在 55 名单内；webServer 服务名在 dsh-host-webserver
+#          0.2.0 中仍是 super(ctx, "webServer")。
+- id: connection
+  inject: [webRuntime, webServer]
+
+# ── B. 语义型风险（装了也不生效，须先处理消费侧）──────────────────────────
+# `@local/dsh-subagent-model` 注册的 `dsh-subagent` 设置命名空间，其**读取方**
+# 是本地改造过的 dsh-tool-subagent（现役 0.1.1 安装里 695 行 vs 官方 pristine
+# 0.1.1 的 296 行；0.1.7/0.2.0 官方包均无该读取点）。在全新 0.2.0 上装这个插件
+# 只会出现一个无人消费的设置页 ⇒ 静默无效。二选一：
+#   (a) 退役该插件 + 用下面 preset-standard-glm 的 `agentOptions` 钉死子代理路由；
+#   (b) 继续维护 dsh-tool-subagent 的本地改造（0.2.0 版基线；该包 lib/ 零改动，
+#       0.1.7 的官方实现即 pristine 基线，改造点只有 settings.get("dsh-subagent")）。
+# - insert:
+#     - id: dsh-subagent-model
+#       name: '@local/dsh-subagent-model'
+
+# ── C. 条件项：peer 与 0.2.0 不兼容，直接搬过来会被 preflight 静默 disable ──
+# app-boot `preflight` 会给 peer 冲突的行加 `disabled: true`，只在 stderr 打印
+# `dsh: disabling profile plugin "row <id>": ...`，**不阻断启动**。
+# 处置：重建包并把 @deepseek-ai/dsh-* peer 放宽到含 0.2.0，或为每个
+# 包名@精确版本 在 profile 目录写 compatibility.json 授予豁免。
+#   @deepseek-ai/dsh-vision-adam 0.2.0         peers ^0.1.0-rc.7   → 需放宽
+#   @deepseek-ai/dsh-taste 0.1.0               peers ^0.1.1-rc.2   → 需放宽
+#   dsh-workspace-enhancement 0.1.2（3 行）     peers ^0.1.1-rc.2   → 需重建
+#   @local/dsh-workerspace 0.1.0               peers ^0.1.1-rc.2   → 需重建
+#   @local/dsh-pptmaster 0.1.0                 peers ^0.1.1-rc.2   → 需重建
+#   @local/dsh-web-search-sse 0.1.0            peers ^0.1.1-rc.2   → 需重建
+#   @local/dsh-session-board 0.1.0             peers >=0.1.1-rc.2 <0.2.0 → 兼容，可直接装
+# - insert:
+#     - id: vision-adam
+#       name: '@deepseek-ai/dsh-vision-adam'
+# - insert:
+#     - id: taste
+#       name: '@deepseek-ai/dsh-taste'
+# - insert:
+#     - id: session-status-board
+#       name: '@deepseek-ai/dsh-session-board'
+# - insert:
+#     - id: ssh-remote
+#       name: dsh-workspace-enhancement
+#       config:
+#         host: 127.0.0.1
+#         port: 22
+#         username: ssh
+#         cwd: /tmp
+# - insert:
+#     - id: directory-picker-ssh
+#       name: dsh-workspace-enhancement/picker
+#       config:
+#         maxEntries: 1000
+# - insert:
+#     - id: ssh-web-channel
+#       name: dsh-workspace-enhancement/web
+#       config:
+#         maxEntries: 1000
+# - id: directory-picker-ssh
+#   disabled: true
+# - insert:
+#     - id: workerspace
+#       name: '@local/dsh-workerspace'
+# - insert:
+#     - id: dsh-pptmaster
+#       name: '@local/dsh-pptmaster'
+#       config:
+#         root: !!js dshHomePath('office-ppt')
+# - insert:
+#     - id: web-search-sse
+#       name: '@local/dsh-web-search-sse'
+#       config:
+#         apiKeyEnv: DEEPSEEK_API_KEY
+#         baseURL: https://llmapi.roboscience.xyz/v1
+#         model: claude-opus-4-6
+#         maxUses: 100000
+
+# ── C2. 日程/自动化开关（迁移决策项，见报告 §5.4；默认不启用）──────────────
+# 事实：0.1.7 官方组合含 time-context / schedule / ui-schedule 三行（均 disabled: true），
+#      0.2.0 把这三行整体搬进新包 @deepseek-ai/dsh-experimental-schedule-bundle
+#      （0.2.0 才进入 CLI 直接依赖，也是 app-boot OPTIONAL_BUNDLES 的新成员）；
+#      该 bundle 不在本 profile 的 dsh.profile.bundles 里 ⇒ 默认不挂载。
+#      现役 0.1.1 组合本就没有这三行 ⇒ 相对现役无行为退化。
+# 二选一（都需要显式裁决，不要用 `- id: schedule` + `disabled: false`，
+#          那在 0.2.0 上只会得到 "patch: entry 'schedule' not found" 的 warn 后被丢弃）：
+#   (1) 首选（bundle 级）：profile package.json →
+#         "dsh": { "profile": { "bundles": ["@deepseek-ai/dsh-base",
+#                                          "@deepseek-ai/dsh-web-app",
+#                                          "@deepseek-ai/dsh-experimental-schedule-bundle"] } }
+#   (2) 备选（patch 级）：取消下面三行的注释，效果等价
+# - insert:
+#     - id: time-context
+#       name: '@deepseek-ai/dsh-time-context'
+#     - id: schedule
+#       name: '@deepseek-ai/dsh-schedule'
+#     - id: ui-schedule
+#       name: '@deepseek-ai/dsh-client-ui-schedule'
+
+# ── D. 退役：0.2.0 官方组合已提供，或本地层从未生效 ────────────────────────
+#  * `- id: agent-presets`（0.1.1 层的写法）→ 0.2.0 无此 id，官方改名
+#    `agent-preset-registry`（`@deepseek-ai/dsh-agent-preset-registry`，0.1.7 起），
+#    本草案已改为新 id；旧写法在 0.2.0 只会得到一条 warn 并被丢弃。
+#    [组合复算] 旧 id 打到 0.2.0 上的实测输出：patch: entry 'agent-presets' not found。
+#  * `- id: ui-settings-general` / `ui-theme` 的 welcomeNoticeVersion、preference
+#    在 0.2.0 仍是该插件 Config 的合法键（源码核实），保留。
+
+# ── E. llm-pi-ai：46 个 providers 的 config **逐字**照抄 0.1.7 层（整体替换语义）
+#   0.2.0 @deepseek-ai/dsh-llm-pi-ai 的 provider schema 仍是
+#   {apiKeyEnv, api, baseURL, models[{id, contextWindow, maxTokens, input}]}，
+#   本块在 0.2.0 上可原样校验通过。
+#   [lib全等] dsh-llm-pi-ai 不在 55 改动包名单内 ⇒ provider/model 子 schema 必然未变。
+
+- id: llm-pi-ai
+  config:
+      providers:
+        adam:
+          apiKeyEnv: ADAM_API_KEY
+          api: openai-completions
+          baseURL: https://llmapi.roboscience.xyz/v1
+          models:
+            - id: deepseek-v4-flash
+              contextWindow: 1000000
+              maxTokens: 990000
+            - id: deepseek-v4-pro
+              contextWindow: 1000000
+              input:
+                - text
+                - image
+            - id: glm-5.1
+              contextWindow: 202752
+            - id: glm-5.2
+              contextWindow: 1000000
+            - id: glm-4.7
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 204800
+            - id: glm-5
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 204800
+            - id: kimi-k3
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 1048576
+            - id: qwen3.7-max
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 1000000
+            - id: qwen3.7-plus
+              input:
+                - text
+                - image
+              contextWindow: 1000000
+            - id: glm-5.3
+              contextWindow: 1000000
+              maxTokens: 1000000
+            - id: glm-5.3-flash
+              contextWindow: 1000000
+              maxTokens: 1000000
+            - id: qwen3.8-flash
+              input:
+                - text
+                - image
+              contextWindow: 1000000
+            - id: qwen3.8-max
+              input:
+                - text
+                - image
+              contextWindow: 1000000
+            - id: claude-haiku-4-5-20251001
+              contextWindow: 200000
+            - id: claude-opus-4-5-20251101
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 200000
+            - id: claude-opus-4-6
+              contextWindow: 1000000
+            - id: claude-opus-4-7
+              contextWindow: 1000000
+            - id: claude-opus-4-8
+              contextWindow: 1000000
+            - id: claude-opus-5
+              contextWindow: 1000000
+            - id: claude-sonnet-4-5-20250929
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 1000000
+            - id: claude-sonnet-4-6
+              input:
+                - text
+                - image
+              contextWindow: 1000000
+            - id: claude-sonnet-5
+              contextWindow: 1000000
+            - id: gpt-5.4
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 272000
+            - id: gpt-5.4-mini
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 400000
+            - id: gpt-5.4-openai-compact
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 1000000
+            - id: gpt-5.5-openai-compact
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 1000000
+            - id: gpt-5.6-sol
+              input:
+                - text
+                - image
+              contextWindow: 272000
+            - id: gpt-5.6-terra
+              input:
+                - text
+                - image
+              contextWindow: 272000
+            - id: gpt-6-astra
+              input:
+                - text
+                - image
+              contextWindow: 1000000
+              maxTokens: 1000000
+            - id: gpt-5.5
+              input:
+                - text
+                - image
+              contextWindow: 272000
+            - id: gpt-5.6-luna
+              input:
+                - text
+                - image
+              contextWindow: 272000
+            - id: gemini-3.1-flash-image-preview
+              input:
+                - text
+                - image
+            - id: gemini-3.1-flash-image-preview-2k
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+            - id: gemini-3.1-flash-image-preview-4k
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+            - id: gemini-3.1-flash-lite
+              contextWindow: 1048576
+            - id: gemini-3.1-pro-preview
+              input:
+                - text
+                - image
+              contextWindow: 1048576
+            - id: gemini-3.5-flash
+              input:
+                - text
+                - image
+              contextWindow: 1048576
+            - id: gemini-3.5-flash-lite
+              input:
+                - text
+                - image
+              contextWindow: 1048576
+            - id: gemini-3.6-flash
+              input:
+                - text
+                - image
+              contextWindow: 1048576
+            - id: gemini-3-flash-preview
+              input:
+                - text
+                - image
+              contextWindow: 1048576
+            - id: gemini-3-pro-image-preview
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 1048576
+            - id: gemini-3-pro-image-preview-2k
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 1048576
+            - id: gemini-3-pro-image-preview-4k
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 1048576
+            - id: gemini-3-flash
+              input:
+                - text
+                - image
+              contextWindow: 1048576
+            - id: kimi-k2.7-code
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 262144
+            - id: kimi-k2.7-code-highspeed
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+              contextWindow: 262144
+            - id: veo3.1-fast
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+            - id: veo3.1-pro
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+            - id: deepseek-v4.1-flash
+              contextWindow: 1000000
+              input:
+                - text
+                - image
+            - id: deepseek-v4-flash-vision-exp
+              contextWindow: 1000000
+              input:
+                - text
+                - image
+            - id: claude-opus-5-5
+              # 网关无渠道（2026-09-25 实测：HTTP 500『分组 auto 下模型 ... 的可用渠道不存在』／HTTP 503 model_not_found，且不在 /v1/models 自报清单）
+              # 保留备用，勿据此判断模型能力；渠道恢复后删掉本注释即可。
+            - id: gpt-6-sol
+              input:
+                - text
+                - image
+            - id: qwen3.8-max-0902
+              input:
+                - text
+                - image
+
+# ── G. 默认 agent preset：standard-glm = 0.2.0 官方 standard 行 + 子代理路由钉死 ──
+#    依 0.2.0 官方 presets/standard.patch.yml 逐字生成，故自动带上 0.2.0 新增的
+#    present / command-goal / tool-plugin-manager 三行（0.1.7 层缺这三行）。
+# after the web patch. Edits saved from the Web editor override this row's
+# `config.plugins` by id from the profile patch.
+- insert:
+    - id: preset-standard-glm
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: standard-glm
+        order: 5   # 官方 standard=1 / ptc=2 / minimal=3 / cordis=4；取 5 避免与 ptc 并列
+        name: "标准模式（子代理 deepseek-v4-pro）"
+        description: "同 0.2.0 官方标准模式；subagent / subagent_fork 子代理固定使用 adam 网关的 deepseek-v4-pro。"
+        plugins:
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              suffix: Your working directory is {{cwd}}.
+              prefix: You are a coding agent powered by the {{model}} model.
+          - id: agent-instructions
+            name: '@deepseek-ai/dsh-agent-instructions'
+            config:
+              maxBytes: 65536
+          - id: tool-bash
+            name: '@deepseek-ai/dsh-tool-bash'
+            disabled: !!js process.platform === 'win32'
+          - id: tool-pwsh
+            name: '@deepseek-ai/dsh-tool-pwsh'
+            disabled: !!js process.platform !== 'win32'
+          - id: tool-fs
+            name: '@deepseek-ai/dsh-tool-fs'
+          - id: tool-fs-search
+            name: '@deepseek-ai/dsh-tool-fs-search'
+            config:
+              sampleOverCapGlobResults: false
+          - id: tool-jobs
+            name: '@deepseek-ai/dsh-tool-jobs'
+          - id: skill-filesystem
+            name: '@deepseek-ai/dsh-skill-filesystem'
+          - id: tool-skill
+            name: '@deepseek-ai/dsh-tool-skill'
+          - id: command-goal
+            name: '@deepseek-ai/dsh-command-goal'
+          - id: tool-goal
+            name: '@deepseek-ai/dsh-tool-goal'
+          - id: planning
+            name: cordis:group
+            group: true
+            isolate:
+              planMode: true
+            config:
+              - id: plan-mode
+                name: '@deepseek-ai/dsh-plan-mode'
+                config:
+                  section: |
+                    You are in plan mode. Stay in plan mode until exit_plan_mode succeeds or the user switches the session mode. Imperative language to implement changes means plan the implementation, not execute it. A user's conversational agreement — including an answer confirming something you asked — approves nothing and does not end plan mode; fold the confirmed decision into the plan and submit it through exit_plan_mode.
+
+                    Explore first. Use non-mutating reads, searches, static analysis, and checks to ground the plan in the actual repository. Do not edit or write files, change configuration, run formatters or code generation that rewrites tracked files, commit, or otherwise carry out the plan. Prefer existing functions and patterns over new machinery.
+
+                    The tool catalog stays the same across modes for request-cache stability. These plan-mode rules override any later tool description or guidance that suggests using mutation tools; those tools remain listed to keep the tool catalog unchanged. Do not use todo_write to track this planning phase: it tracks implementation after an approved plan, while the plan itself belongs in exit_plan_mode.
+
+                    Resolve discoverable facts by inspection. Use ask_user_question only for user-owned choices or material ambiguity that inspection cannot answer. Do not ask the user where code lives or how current behavior works when you can find out.
+
+                    Make the plan decision-complete: state the goal and success criteria; group implementation changes by subsystem; identify public API, schema, and data-flow changes; cover edge cases, failure modes, tests, acceptance criteria, and explicit assumptions. Keep it concise enough to review but detailed enough that another engineer can implement it without making design decisions.
+
+                    When ready, call exit_plan_mode with the complete plan markdown, starting with a # title. Make exit_plan_mode the only and final tool call in that assistant response: it presents the plan for approval, and implementation begins only in a later step after approval. Do not paste the final plan as a plain reply or ask "should I proceed?" through prose or ask_user_question. If review rejects it, incorporate the feedback and present again. If the review channel is unavailable or aborted, stay in plan mode and ask the user to switch modes manually; do not proceed with implementation.
+          - id: compaction
+            name: cordis:group
+            group: true
+            isolate:
+              compaction: true
+              toolResultPruner: true
+            config:
+              - id: compaction-basic
+                name: '@deepseek-ai/dsh-compaction-basic'
+              - id: command-compact
+                name: '@deepseek-ai/dsh-command-compact'
+              - id: tool-result-pruner
+                name: '@deepseek-ai/dsh-compaction-tool-result-pruner'
+                config:
+                  thresholdChars: 8192
+                  headChars: 4096
+                  tailChars: 1024
+          - id: delegation
+            name: cordis:group
+            group: true
+            isolate:
+              workflowEngine: true
+            config:
+              - id: tool-subagent-control
+                name: '@deepseek-ai/dsh-tool-subagent-control'
+              - id: tool-subagent-list-agents
+                name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
+              - id: tool-subagent
+                name: '@deepseek-ai/dsh-tool-subagent'
+                config:
+                  provider: spawn
+                  toolName: subagent
+                  # T06：把子代理路由钉死在 adam / deepseek-v4-pro（替代被退役的
+                  # @local/dsh-subagent-model + 被本地改造的 dsh-tool-subagent 读取点）。
+                  agentOptions:
+                    provider: adam
+                    model: deepseek-v4-pro
+                  modelSelectionSettings: true
+                  backgroundMode: continuable
+              - id: tool-subagent-fork
+                name: '@deepseek-ai/dsh-tool-subagent'
+                config:
+                  provider: fork
+                  toolName: subagent_fork
+                  # T06：把子代理路由钉死在 adam / deepseek-v4-pro（替代被退役的
+                  # @local/dsh-subagent-model + 被本地改造的 dsh-tool-subagent 读取点）。
+                  agentOptions:
+                    provider: adam
+                    model: deepseek-v4-pro
+                  backgroundMode: continuable
+              - id: tool-subagent-codex
+                name: '@deepseek-ai/dsh-tool-subagent'
+                disabled: true
+                config:
+                  provider: codex
+                  toolName: subagent_codex
+                  backgroundMode: one-shot
+                  maxDepth: provider-managed
+              - id: tool-subagent-claude-code
+                name: '@deepseek-ai/dsh-tool-subagent'
+                disabled: true
+                config:
+                  provider: claude-code
+                  toolName: subagent_claude_code
+                  backgroundMode: one-shot
+                  maxDepth: provider-managed
+              - id: workflow-ptc
+                name: '@deepseek-ai/dsh-workflow-ptc'
+                config:
+                  provider: spawn
+              - id: tool-workflow
+                name: '@deepseek-ai/dsh-tool-workflow'
+              - id: tool-ralph
+                name: '@deepseek-ai/dsh-tool-ralph'
+                disabled: true
+                config:
+                  subagentProvider: spawn
+                  maxRounds: 64
+          - id: tool-ask-user
+            name: '@deepseek-ai/dsh-tool-ask-user'
+          - id: tool-todo
+            name: '@deepseek-ai/dsh-tool-todo'
+            config:
+              allowParallelInProgress: true
+          - id: tool-web
+            name: '@deepseek-ai/dsh-tool-web'
+            config:
+              fetch: true
+              searchTimeoutMs: 60000
+          - id: present
+            name: '@deepseek-ai/dsh-tool-present'
+          - id: tool-plugin-manager
+            name: '@deepseek-ai/dsh-plugin-manager/tools'
+            disabled: true
+
+# ── F. 尾部说明 ───────────────────────────────────────────────────────────
+# 1) `config` 整体替换：上面每个 id 定向条目都复述了目标行拥有的全部键。
+# 2) 未知 id / name 不符：仅打一条 logger.warn 后跳过，**不报错**。0.2.0 新增了
+#    `dsh --dump-config` 之外的组合审计（auditStartupEntries），但那条也只写 stderr。
+# 3) 插件名无法解析 = 启动期致命（Loader import 失败）；peer 冲突 = 静默 disable。
